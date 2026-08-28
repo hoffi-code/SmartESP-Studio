@@ -162,3 +162,22 @@ Noch offen:
 - Aktives Node war `v10.24.1` (nvm-windows), umgestellt auf `v22.23.2`. Vite 8 braucht Node ≥ 20 → `.nvmrc`/`engines` (F6) macht das explizit.
 - Globale `~/.npmrc` zeigt auf einen privaten Registry-Proxy (`npmregistry.le.eps:4873`), dem Pakete fehlen (`vue-router@4.6.4`). Lokaler Workaround: `npm install --registry https://registry.npmjs.org/`. Dauerhafte Lösung: Projekt-`.npmrc` (E2).
 - Baseline vor Umbau grün: `npm run build` ok; `python -m pytest tests/` → 29 passed (identisch unter `unittest`).
+
+## 6. Fortschritt
+
+Branch `refactor/overhaul`.
+
+### Phase 0 — erledigt
+
+| Schritt | Ergebnis |
+|---|---|
+| F2 | `esp-config-designer-frontend/eslint.config.js` (flat, `vue/flat/essential` + `no-unused-vars` als Warnung). `npm run lint` / `lint:fix`. 3 echte Fehler behoben (`no-unsafe-finally` in `SchemaRenderer.vue`, `vue/valid-define-props` in `DashboardSearchField.vue`, `vue/no-mutating-props` in `DisplayBuilder.vue` bewusst per Kommentar unterdrückt — Shared-Model-Pattern). `no-useless-escape` bis zu den `schemaYaml`-Tests auf Warnung. Stand: 0 Fehler, 112 Warnungen. |
+| F3 | Vitest 4. `npm test` / `test:watch`. Erste Suites: `busInstances.spec.js`, `schemaVisibility.spec.js`, `schemaYaml.spec.js` (`formatYamlValue`). 35 Tests grün. |
+| B9 | `esp-config-designer/pyproject.toml` (`pytest`, `ruff` — `E/F/W/I`, `E501` bis zum Formatter-Lauf ignoriert). Bestehende `unittest`-Tests laufen unverändert unter `pytest` (29 grün). Import-Blöcke sortiert. |
+| R3 | `.github/workflows/checks.yml` — Frontend (`lint`, `test`, `build`) + Backend (`ruff`, `pytest`). |
+| F6 | `engines.node` (`^20.19.0 || >=22.12.0`), `esp-config-designer-frontend/.nvmrc` (`22`). |
+| E1 | `.gitattributes` (`* text=auto eol=lf`, `*.sh eol=lf` — schützt `run.sh` gegen `core.autocrlf`). |
+| E2 | `esp-config-designer-frontend/.npmrc` → öffentliche Registry. |
+| — | `.editorconfig` im Repo-Root. |
+
+Offen aus Phase 0 als Warnungen sichtbar, nicht blockierend: 112 ESLint-Warnungen (davon ~90 `no-useless-escape` in `schemaYaml.js`, Rest `no-unused-vars`); 52 `E501` in `server.py`.
