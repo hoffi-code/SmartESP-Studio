@@ -31,7 +31,7 @@ Use this option if your Home Assistant installation has the add-on store.
 4. Add this repository URL:
 
    ```text
-   https://github.com/sokolsok/ESPConfig-Designer
+   https://github.com/hoffi-code/ESPConfig-Designer
    ```
 
 5. Find ESPConfig Designer in the add-on store.

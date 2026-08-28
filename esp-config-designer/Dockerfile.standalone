@@ -5,7 +5,7 @@ ARG VCS_REF=unknown
 
 LABEL org.opencontainers.image.title="ESPConfig Designer"
 LABEL org.opencontainers.image.description="Standalone Docker image for ESPConfig Designer"
-LABEL org.opencontainers.image.source="https://github.com/sokolsok/ESPConfig-Designer"
+LABEL org.opencontainers.image.source="https://github.com/hoffi-code/ESPConfig-Designer"
 LABEL org.opencontainers.image.version="$BUILD_VERSION"
 LABEL org.opencontainers.image.revision="$VCS_REF"
 LABEL org.opencontainers.image.licenses="MIT"

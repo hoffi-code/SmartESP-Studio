@@ -1,6 +1,6 @@
 services:
   esp-config-designer:
-    image: ghcr.io/sokolsok/esp-config-designer:latest
+    image: ghcr.io/hoffi-code/esp-config-designer:latest
     container_name: esp-config-designer
     restart: unless-stopped
 
