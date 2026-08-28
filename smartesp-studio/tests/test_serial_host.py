@@ -14,24 +14,28 @@ SPEC = importlib.util.spec_from_file_location("ses_server_serial", SERVER_PATH)
 server = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(server)
 
+from ses import serial_ports  # noqa: E402  (server import must run first)
+
 
 class SerialHostTests(unittest.TestCase):
     def test_allowed_serial_port_paths_are_restricted(self):
-        self.assertTrue(server.is_allowed_serial_port("/dev/ttyUSB0"))
-        self.assertTrue(server.is_allowed_serial_port("/dev/ttyACM0"))
-        self.assertTrue(server.is_allowed_serial_port("/dev/serial/by-id/usb-device"))
-        self.assertFalse(server.is_allowed_serial_port("/dev/sda"))
-        self.assertFalse(server.is_allowed_serial_port("/tmp/serial"))
+        self.assertTrue(serial_ports.is_allowed_serial_port("/dev/ttyUSB0"))
+        self.assertTrue(serial_ports.is_allowed_serial_port("/dev/ttyACM0"))
+        self.assertTrue(serial_ports.is_allowed_serial_port("/dev/serial/by-id/usb-device"))
+        self.assertFalse(serial_ports.is_allowed_serial_port("/dev/sda"))
+        self.assertFalse(serial_ports.is_allowed_serial_port("/tmp/serial"))
 
     def test_validate_host_serial_port_requires_currently_enumerated_port(self):
         with patch.object(
-            server,
+            serial_ports,
             "list_host_serial_ports",
             return_value=[{"path": "/dev/ttyACM0"}],
         ):
-            self.assertEqual("/dev/ttyACM0", server.validate_host_serial_port("/dev/ttyACM0"))
+            self.assertEqual(
+                "/dev/ttyACM0", serial_ports.validate_host_serial_port("/dev/ttyACM0")
+            )
             with self.assertRaises(ValueError):
-                server.validate_host_serial_port("/dev/ttyUSB0")
+                serial_ports.validate_host_serial_port("/dev/ttyUSB0")
 
     def test_serial_ports_endpoint_returns_backend_devices(self):
         original_mode = server.SES_MODE
@@ -40,7 +44,7 @@ class SerialHostTests(unittest.TestCase):
             server.SES_MODE = "standalone"
             server.SES_AUTH_MODE = "none"
             ports = [{"path": "/dev/ttyUSB0", "description": "USB UART"}]
-            with patch.object(server, "list_host_serial_ports", return_value=ports):
+            with patch.object(serial_ports, "list_host_serial_ports", return_value=ports):
                 response = server.app.test_client().get("/api/serial/ports")
             self.assertEqual(200, response.status_code)
             self.assertEqual(ports, response.json["ports"])
@@ -54,7 +58,7 @@ class SerialHostTests(unittest.TestCase):
         try:
             server.SES_MODE = "standalone"
             server.SES_AUTH_MODE = "none"
-            with patch.object(server, "list_host_serial_ports", return_value=[]):
+            with patch.object(serial_ports, "list_host_serial_ports", return_value=[]):
                 response = server.app.test_client().post(
                     "/api/install",
                     json={"yaml": "device.yaml", "action": "serial", "port": "/dev/ttyUSB0"},
@@ -82,7 +86,7 @@ class SerialHostTests(unittest.TestCase):
                 )
                 commands = []
                 manager._run_esphome = lambda current_job, args: commands.append(args) or 0
-                with patch.object(server, "validate_host_serial_port", return_value="/dev/ttyACM0"):
+                with patch.object(serial_ports, "validate_host_serial_port", return_value="/dev/ttyACM0"):
                     manager._run_job(job)
                 self.assertEqual(
                     [

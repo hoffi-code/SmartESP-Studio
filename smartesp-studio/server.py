@@ -38,6 +38,7 @@ except Exception:
     IPVersion = None
     Zeroconf = None
 
+from ses import serial_ports
 from ses.config import (
     ASSET_ALLOWED_EXTENSIONS,
     ASSET_ALLOWED_MIME,
@@ -75,7 +76,6 @@ from ses.config import (
     SECRETS_FILENAME,
     SECRETS_RAW_MAX_BYTES,
     SEED_ROOT,
-    SERIAL_PORT_PREFIXES,
     SES_AUTH_MODE,
     SES_AUTH_PASSWORD,
     SES_AUTH_PASSWORD_FILE,
@@ -113,49 +113,6 @@ from ses.io import (
     write_text_file_atomic,
 )
 from ses.logging import log
-
-
-def is_allowed_serial_port(path: str) -> bool:
-    normalized = str(path or "").strip()
-    if re.fullmatch(r"COM[0-9]+", normalized, re.IGNORECASE):
-        return True
-    return normalized.startswith(SERIAL_PORT_PREFIXES)
-
-
-def list_host_serial_ports() -> List[dict]:
-    try:
-        from serial.tools.list_ports import comports
-    except ImportError as exc:
-        raise RuntimeError("pyserial is not available") from exc
-
-    ports = []
-    seen = set()
-    for port in comports(include_links=True):
-        path = str(getattr(port, "device", "") or "").strip()
-        if not path or path in seen or not is_allowed_serial_port(path):
-            continue
-        seen.add(path)
-        ports.append(
-            {
-                "path": path,
-                "description": str(getattr(port, "description", "") or ""),
-                "vid": getattr(port, "vid", None),
-                "pid": getattr(port, "pid", None),
-                "serial_number": getattr(port, "serial_number", None),
-            }
-        )
-    ports.sort(key=lambda item: item["path"])
-    return ports
-
-
-def validate_host_serial_port(path: str) -> str:
-    normalized = str(path or "").strip()
-    if not normalized or not is_allowed_serial_port(normalized):
-        raise ValueError("Invalid serial port")
-    available = {port["path"] for port in list_host_serial_ports()}
-    if normalized not in available:
-        raise ValueError("Serial port is not available")
-    return normalized
 
 
 def normalize_asset_label(filename: str) -> str:
@@ -1633,7 +1590,7 @@ class JobManager:
             exit_code = self._run_esphome(job, ["clean", yaml_path])
         elif job.action == "serial":
             try:
-                serial_port = validate_host_serial_port(job.serial_port)
+                serial_port = serial_ports.validate_host_serial_port(job.serial_port)
             except (RuntimeError, ValueError) as exc:
                 message = str(exc)
                 job.push_log(f"ERROR {message}")
@@ -3278,7 +3235,7 @@ def api_serial_ports():
     if access:
         return access
     try:
-        ports = list_host_serial_ports()
+        ports = serial_ports.list_host_serial_ports()
     except RuntimeError as exc:
         return jsonify({"status": "error", "message": str(exc)}), 503
     return jsonify({"status": "ok", "ports": ports})
@@ -3308,7 +3265,7 @@ def api_install():
     serial_port = ""
     if action == "serial":
         try:
-            serial_port = validate_host_serial_port(str(payload.get("port", "")))
+            serial_port = serial_ports.validate_host_serial_port(str(payload.get("port", "")))
         except (RuntimeError, ValueError) as exc:
             return jsonify({"status": "error", "message": str(exc)}), 400
 
