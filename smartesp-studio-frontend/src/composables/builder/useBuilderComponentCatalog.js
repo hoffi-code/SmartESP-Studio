@@ -16,14 +16,6 @@ const toApiErrorMessage = (payload, fallback) => {
   return message || fallback;
 };
 
-export const catalogHasUnavailableComponents = (catalog) =>
-  (catalog?.categories || []).some((category) => {
-    if ((category.items || []).some((item) => item?.available === false)) return true;
-    return (category.subcategories || []).some((subcategory) =>
-      (subcategory.items || []).some((item) => item?.available === false)
-    );
-  });
-
 export const useBuilderComponentCatalog = ({
   config,
   activeTab,
@@ -39,7 +31,6 @@ export const useBuilderComponentCatalog = ({
   const resolveLocalCatalogUrl = () =>
     typeof localComponentCatalogUrl === "function" ? localComponentCatalogUrl() : localComponentCatalogUrl;
   const componentsQuery = ref("");
-  const componentsAvailableOnly = ref(false);
   const activeComponentSlot = ref(null);
   const isComponentPickerOpen = ref(false);
   const componentCatalog = ref({ categories: [] });
@@ -121,10 +112,6 @@ export const useBuilderComponentCatalog = ({
 
   const isComponentCatalogReady = computed(
     () => !isComponentCatalogLoading.value && !componentCatalogError.value
-  );
-
-  const hasUnavailableCatalogComponents = computed(() =>
-    catalogHasUnavailableComponents(componentCatalog.value)
   );
 
   const componentIndex = computed(() => {
@@ -354,7 +341,6 @@ export const useBuilderComponentCatalog = ({
     componentCatalogItemsById,
     componentCatalogLabel,
     componentLabel,
-    componentsAvailableOnly,
     componentsQuery,
     componentsZipInput,
     deleteSavedCustomComponent,
@@ -364,7 +350,6 @@ export const useBuilderComponentCatalog = ({
     importSummaryModalMessage,
     importSummaryModalOpen,
     importSummaryModalRows,
-    hasUnavailableCatalogComponents,
     isComponentCatalogLoading,
     isComponentCatalogReady,
     isComponentPickerOpen,

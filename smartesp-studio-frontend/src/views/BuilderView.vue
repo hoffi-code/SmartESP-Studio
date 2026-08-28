@@ -438,18 +438,15 @@
             <BuilderComponentPicker
               v-if="isComponentPickerOpen"
               :components-query="componentsQuery"
-              :components-available-only="componentsAvailableOnly"
               :component-catalog-error="componentCatalogError"
               :components-import-error="customComponentSaveError"
               :filtered-categories="filteredCategories"
-              :notices="componentPickerNotices"
               :selected-component-keys="selectedComponentKeys"
               :is-component-available="isComponentAvailable"
               :is-resolving-component-selection="isResolvingComponentSelection"
               :is-saved-custom-component-item="isSavedCustomComponentItem"
               :deleting-custom-component-id="deletingCustomComponentId"
               @update:components-query="componentsQuery = $event"
-              @update:components-available-only="componentsAvailableOnly = $event"
               @select-component="selectComponent"
               @delete-saved-custom-component="requestDeleteSavedCustomComponentWithConfirm"
             />
@@ -1492,14 +1489,12 @@ const {
   componentCatalogItemsById,
   componentCatalogLabel,
   componentLabel,
-  componentsAvailableOnly,
   componentsQuery,
   componentsZipInput,
   deleteSavedCustomComponent,
   deletingCustomComponentId,
   filteredCategories,
   handleComponentsZipSelected,
-  hasUnavailableCatalogComponents,
   importSummaryModalMessage,
   importSummaryModalOpen,
   importSummaryModalRows,
@@ -1573,27 +1568,13 @@ const getRootMapConflictDomain = (componentId, slotToIgnore = -1) => {
   return hasConflict ? domain : "";
 };
 
+// A root_map component can only be added once; its section would otherwise
+// collide with the existing one in the project.
 const isComponentAvailable = (item) => {
-  if (item?.available === false) return false;
   const componentId = String(item?.id || "").trim();
   if (!componentId) return false;
   return !getRootMapConflictDomain(componentId, activeComponentSlot.value ?? -1);
 };
-
-const componentPickerNotices = computed(() => {
-  const notices = [];
-  if (hasUnavailableCatalogComponents.value) {
-    notices.push({
-      id: "components-pack",
-      title: "Components Pack",
-      message: "Add more ready-to-use components to your library.",
-      actionLabel: "Get Pack",
-      href: "https://store.smartsolutions4home.com/product/components-pack-for-ecd/",
-      icon: "https://cdn.jsdelivr.net/npm/@mdi/svg/svg/puzzle.svg"
-    });
-  }
-  return notices;
-});
 
 const componentsHeader = computed(() => {
   if (activeComponentSlot.value === null) return "Components";
