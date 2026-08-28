@@ -6,7 +6,6 @@ import types
 import unittest
 from unittest.mock import patch
 
-
 SERVER_PATH = pathlib.Path(__file__).resolve().parents[1] / "server.py"
 sys.modules.setdefault(
     "pty", types.SimpleNamespace(openpty=lambda: (_ for _ in ()).throw(NotImplementedError()))

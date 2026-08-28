@@ -1,21 +1,21 @@
 import base64
 import hmac
+import io
 import json
 import mimetypes
 import os
+import posixpath
+import pty
 import queue
 import re
-import io
 import select
-import subprocess
-import shutil
-import threading
-import uuid
-import pty
-import time
-import socket
 import shlex
-import posixpath
+import shutil
+import socket
+import subprocess
+import threading
+import time
+import uuid
 import zipfile
 from collections import deque
 from datetime import datetime
