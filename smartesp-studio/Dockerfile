@@ -17,4 +17,8 @@ COPY logo.png /logo.png
 COPY web /web
 RUN chmod a+x /run.sh
 
+# Override the esphome base image healthcheck (it probes the dashboard on :6052).
+HEALTHCHECK --interval=30s --timeout=5s --start-period=20s \
+    CMD curl -fsS http://localhost:8099/api/health || exit 1
+
 ENTRYPOINT ["/run.sh"]
