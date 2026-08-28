@@ -1,0 +1,16 @@
+# Backend is shipped as a flat script copied into the image, not an installed
+# package. This file only carries tooling config for local dev and CI.
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+extend-exclude = ["web", "seed_esphome"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+# server.py has ~50 long lines in the existing style. Leave line length to a
+# formatter pass rather than hand-wrapping now.
+ignore = ["E501"]
