@@ -24,6 +24,7 @@ RUN python3 -m venv /opt/designer-venv \
     && /opt/designer-venv/bin/python -m pip install --no-cache-dir -r /requirements.txt
 
 COPY server.py /server.py
+COPY ecd /ecd
 COPY run.sh /run.sh
 COPY seed_esphome /seed_esphome
 COPY logo.png /logo.png
