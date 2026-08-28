@@ -2,6 +2,7 @@ import base64
 import hmac
 import io
 import json
+import logging
 import mimetypes
 import os
 import posixpath
@@ -29,6 +30,12 @@ try:
 except Exception:
     IPVersion = None
     Zeroconf = None
+
+logging.basicConfig(
+    level=os.environ.get("ECD_LOG_LEVEL", "INFO").upper(),
+    format="%(asctime)s %(levelname)s %(name)s: %(message)s",
+)
+log = logging.getLogger("ecd")
 
 TRUTHY_VALUES = {"1", "true", "yes", "on"}
 
@@ -1795,6 +1802,15 @@ class JobManager:
                 serial_lock.acquire()
             try:
                 self._run_job(job)
+            except Exception:
+                # Keep the worker alive; a single failing job must not stall the queue.
+                log.exception("job %s (%s) crashed", job.id, job.action)
+                job.state = "failed"
+                job.exit_code = 1
+                job.error_summary = job.error_summary or "Internal error"
+                job.ended_at = utc_now()
+                job.save_status()
+                job.notify_done()
             finally:
                 if serial_lock is not None:
                     serial_lock.release()
