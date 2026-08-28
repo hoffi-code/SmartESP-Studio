@@ -79,7 +79,7 @@ Bewertung: **Auswirkung** (Wartbarkeit/Risiko) × **Aufwand** (S ≤ 0,5 d, M �
 | F4 | API-Zugriff nicht gekapselt: 11 verteilte `fetch`-Aufrufe, dreifach reimplementierte Base-URL-/Ingress-/`credentials`-Logik. Kein einheitliches Fehler-/Timeout-/Retry-Verhalten. | mittel | M |
 | F5 | `DashboardView.vue` (3093 Z.) und `DisplayInspector.vue` (2114 Z.) über der sinnvollen Grenze für eine Datei. | mittel | L |
 | F6 | Kein `engines`/`.nvmrc`. Vite 8 braucht Node ≥ 20 — nirgends festgehalten. | niedrig | S |
-| F7 | `js-yaml: ^5.2.1`: 5.x ist eine zurückgezogene/fehlerhafte Linie, die stabile aktuelle Version ist 4.x. CHANGELOG 1.3.1 dokumentiert den Sprung „4.1.1 → 5.2.1" als absichtlich — vermutlich Versehen. Prüfen und auf `^4.1.0` zurück. | mittel | S |
+| F7 | ~~`js-yaml: ^5.2.1` sei eine zurückgezogene Linie~~ — **Fehleinschätzung.** `js-yaml` hat die Mainline auf 5.x gehoben (`latest: 5.4.1`, dist-tags `v4-legacy`/`v3-legacy`), Maintainer `vitaly`, Repo `nodeca/js-yaml`. Der CHANGELOG-Sprung 1.3.1 war korrekt. Verwendete Exporte (`load`, `YAML11_SCHEMA`, `defineScalarTag`) in 5.2.1 vorhanden. Kein Handlungsbedarf; Versionspflege → dependabot (R4). | — | — |
 | F8 | `npm run generate:actions` verweist auf nicht eingecheckten Code. Entweder Script ins Repo holen oder Target entfernen. | niedrig | S |
 | F9 | Kein `<style>` in `BuilderView.vue`; Styling-Strategie (global `style.css` vs. scoped) ist uneinheitlich über die Komponenten. | niedrig | M |
 
@@ -181,3 +181,14 @@ Branch `refactor/overhaul`.
 | — | `.editorconfig` im Repo-Root. |
 
 Offen aus Phase 0 als Warnungen sichtbar, nicht blockierend: 112 ESLint-Warnungen (davon ~90 `no-useless-escape` in `schemaYaml.js`, Rest `no-unused-vars`); 52 `E501` in `server.py`.
+
+### Phase 1 — erledigt
+
+| Schritt | Ergebnis |
+|---|---|
+| F7 | Kein Change — Analyse-Annahme war falsch (js-yaml 5.x ist die aktuelle Mainline). Befund oben korrigiert. |
+| F8 | `generate:actions` aus `package.json` entfernt; „Generators"-Abschnitt in `HOW_TO_CREATE_SCHEMA_EXTENDED.md` auf den tatsächlichen Stand gebracht (Definitionen werden direkt gepflegt, kein Generator im Repo). |
+| B10 | `server.py`: `datetime.utcnow()` / `utcfromtimestamp()` → `datetime.now(timezone.utc)` / `fromtimestamp(..., timezone.utc)`. `replace(tzinfo=None)` erhält das `"<iso>Z"`-Format byte-genau. Inline-Duplikat bei `import_yaml_candidates` durch `timestamp_to_utc()` ersetzt. pytest jetzt ohne DeprecationWarnings. |
+| B7 | `esp-config-designer/requirements.txt` (`flask==3.1.2`, `pyserial==3.5`) + `requirements-dev.txt` (`+pytest`, `ruff`). Beide Dockerfiles installieren via `-r requirements.txt` — `Dockerfile.standalone` bekommt damit `pyserial` (Venv ohne `--system-site-packages` sah die Base-Image-Version nicht → Host-Serial im Standalone war defekt). CI nutzt `requirements-dev.txt`. Container-Lauf lokal nicht verifiziert (kein Docker-Daemon), CI-Build `docker-standalone.yml` deckt das ab. |
+| B4 | 30 × `if request.method == "OPTIONS": return make_response("", 204)` aus den Views entfernt, ein `@app.before_request handle_options_preflight` stattdessen. Verhalten geprüft: OPTIONS → 204 leer für alle Routen, normale Requests unverändert. −90/+7 Zeilen. |
+| R5 | `sokolsok` → `hoffi-code` in `repository.yaml`, `README.md` (Add-on-Repo-URL), `docker/compose*.yaml`, `.github/workflows/docker-standalone.yml` (GHCR-Image), `Dockerfile.standalone` (OCI-`source`-Label). |
