@@ -126,7 +126,7 @@ Prinzip: erst Sicherheitsnetz (Lint + Tests + CI), dann strukturelle Umbauten. O
 16. **B1** `server.py` in Blueprints/Module aufteilen entlang der bestehenden Routengruppen:
     `projects`, `yaml`, `assets`, `components` (Katalog/Import), `devices` (+ mDNS/Ping), `jobs` (+ `Job`/`JobManager`), `import`, `secrets`, `ui`. Reine Helfer nach `ecd/` (io, validation, esphome).
 17. **B3** Einheitliches Fehlerschema über `errorhandler` + konsequente Nutzung von `json_error()`.
-18. **B5** Produktions-WSGI-Server: `waitress` (pure-Python, keine C-Abhängigkeit, brauchbar mit SSE über genug Threads). `app.run` nur noch für lokal. `run.sh` ruft `waitress-serve`/`python -m waitress` statt `python /server.py`.
+18. **B5** Produktions-WSGI-Server: `waitress` (pure-Python, keine C-Abhängigkeit, brauchbar mit SSE über genug Threads). `app.run` nur noch als lokaler Fallback. Umsetzung: `__main__` wählt waitress selbst, `run.sh` bleibt bei `python /server.py`.
 
 ### Phase 3 — Frontend-Struktur
 
@@ -192,3 +192,42 @@ Offen aus Phase 0 als Warnungen sichtbar, nicht blockierend: 112 ESLint-Warnunge
 | B7 | `esp-config-designer/requirements.txt` (`flask==3.1.2`, `pyserial==3.5`) + `requirements-dev.txt` (`+pytest`, `ruff`). Beide Dockerfiles installieren via `-r requirements.txt` — `Dockerfile.standalone` bekommt damit `pyserial` (Venv ohne `--system-site-packages` sah die Base-Image-Version nicht → Host-Serial im Standalone war defekt). CI nutzt `requirements-dev.txt`. Container-Lauf lokal nicht verifiziert (kein Docker-Daemon), CI-Build `docker-standalone.yml` deckt das ab. |
 | B4 | 30 × `if request.method == "OPTIONS": return make_response("", 204)` aus den Views entfernt, ein `@app.before_request handle_options_preflight` stattdessen. Verhalten geprüft: OPTIONS → 204 leer für alle Routen, normale Requests unverändert. −90/+7 Zeilen. |
 | R5 | `sokolsok` → `hoffi-code` in `repository.yaml`, `README.md` (Add-on-Repo-URL), `docker/compose*.yaml`, `.github/workflows/docker-standalone.yml` (GHCR-Image), `Dockerfile.standalone` (OCI-`source`-Label). |
+
+### Phase 2 — teilweise erledigt
+
+| Schritt | Ergebnis |
+|---|---|
+| B2 | `logging.basicConfig` (Level über `ECD_LOG_LEVEL`), Modul-Logger `log = getLogger("ecd")`. `JobManager._worker` fängt jetzt Exceptions aus `_run_job`: Job wird als `failed` markiert und geloggt, der Worker-Thread lebt weiter (vorher: eine unerwartete Exception legte die komplette Job-Queue still). Startlog in `__main__`. |
+| B3 | `handle_http_exception` / `handle_unexpected_exception` — jede nicht abgefangene Exception → `{status, message}` als JSON 500, Traceback ins Log, kein Stack zum Client. `HTTPException` → JSON mit passendem Code. Unbekannte `/api/...`-Routen → JSON 404. Geprüft per Smoke-Test. |
+| B5 | `waitress==3.0.2` in `requirements.txt`. `__main__` startet `waitress.serve(app, threads=ECD_THREADS|8)`, Fallback auf `app.run` wenn waitress fehlt (lokal). `run.sh` bleibt bei `python /server.py` — ein Entrypoint, Dev/Prod-Parität. |
+| B6 | `create_app() -> Flask`. Routen als `Blueprint("ecd")` (43 `@app.route` + 2 `@app.before_request` umgestellt), Error-Handler über `register_error_handler`. Modul-Level `app = create_app()` bleibt für die bestehenden Tests. Zweite unabhängige Instanz per Smoke-Test verifiziert. |
+| **B1** | **Offen.** Physische Aufteilung von `server.py` (jetzt ~3830 Z., eine Datei, ein Blueprint) in `ecd/`-Module. Braucht einen eigenen Durchgang — siehe unten. |
+
+#### B1 — Aufteilungsplan (noch nicht umgesetzt)
+
+Zielstruktur:
+
+```
+esp-config-designer/
+  server.py                 # nur noch: from ecd import create_app; app = create_app()
+  ecd/
+    __init__.py             # create_app(): Blueprints + Error-Handler registrieren
+    config.py               # ECD_*, *_DIR, ASSET_*, VALID_* Regex, is_truthy, normalize_*
+    logging.py              # basicConfig + get_logger
+    errors.py               # handle_http_exception, handle_unexpected_exception, json_error
+    io.py                   # read/write_json(_atomic), write_text_file_atomic, seed_*
+    esphome.py              # Job, JobManager, run_esphome, Serial-Port-Helfer
+    devices.py              # MDNSProbe, ping_host, evaluate_device_connectivity, Registry
+    catalog.py              # Komponenten-Katalog: normalize/merge/import-zip, custom components
+    assets.py               # Asset-Index, Manifest, Upload/Rename/Delete
+    routes/
+      health.py  runtime.py  projects.py  yaml.py  assets.py
+      components.py  devices.py  jobs.py  import_.py  secrets.py  ui.py
+```
+
+Blocker und Vorgehen:
+
+1. **Test-Monkeypatching.** Die drei Testdateien patchen `server.TARGET_DIR` / `PROJECT_DIR` / `ESPHOME_CONFIG_DIR` zur Laufzeit. Sobald Code aus `server.py` in `ecd/`-Module wandert, greift dieses Patching dort nicht mehr. Umstellung nötig: Config über `ecd.config`-Attribute lesen und Tests `ecd.config.TARGET_DIR` patchen lassen — oder Tests auf `create_app()` mit Env/`app.config` umstellen. Das ist die eigentliche Arbeit an B1.
+2. **Reihenfolge:** erst `config.py` + `logging.py` + `errors.py` herausziehen (kleine, blattnahe Module), Tests auf `ecd.config` umstellen, grün. Dann je ein Route-Modul + zugehörige Helfer, einzeln, jeweils mit grünem `pytest`/Smoke-Test.
+3. **Testabdeckung zuerst erhöhen.** Aktuell decken 29 Tests ~6 Endpunkte ab. Vor dem Zerlegen der Routengruppen mindestens ein Smoke-Test pro Blueprint (Statuscode + Grundform der Antwort), damit ein falscher Import beim Verschieben sofort auffällt.
+4. `Dockerfile` / `Dockerfile.standalone`: `COPY server.py` → zusätzlich `COPY ecd /ecd` (bzw. Paket unter `/`). `run.sh` unverändert.
