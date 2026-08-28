@@ -290,14 +290,14 @@ class RuntimeAccessTests(unittest.TestCase):
         self.client = server.app.test_client()
 
     def tearDown(self):
-        server.SES_MODE = self.original_mode
-        server.SES_AUTH_MODE = self.original_auth_mode
-        server.SES_AUTH_USERNAME = self.original_auth_username
-        server.SES_AUTH_PASSWORD = self.original_auth_password
+        config.SES_MODE = self.original_mode
+        config.SES_AUTH_MODE = self.original_auth_mode
+        config.SES_AUTH_USERNAME = self.original_auth_username
+        config.SES_AUTH_PASSWORD = self.original_auth_password
 
     def test_addon_mode_still_requires_ingress_headers_for_api(self):
-        server.SES_MODE = "addon"
-        server.SES_AUTH_MODE = "none"
+        config.SES_MODE = "addon"
+        config.SES_AUTH_MODE = "none"
 
         response = self.client.get("/api/runtime")
 
@@ -305,8 +305,8 @@ class RuntimeAccessTests(unittest.TestCase):
         self.assertEqual("Ingress required", response.json["message"])
 
     def test_standalone_mode_allows_api_without_ingress_headers(self):
-        server.SES_MODE = "standalone"
-        server.SES_AUTH_MODE = "none"
+        config.SES_MODE = "standalone"
+        config.SES_AUTH_MODE = "none"
 
         response = self.client.get("/api/runtime")
 
@@ -314,10 +314,10 @@ class RuntimeAccessTests(unittest.TestCase):
         self.assertEqual("standalone", response.json["mode"])
 
     def test_standalone_basic_auth_rejects_missing_credentials(self):
-        server.SES_MODE = "standalone"
-        server.SES_AUTH_MODE = "basic"
-        server.SES_AUTH_USERNAME = "admin"
-        server.SES_AUTH_PASSWORD = "secret"
+        config.SES_MODE = "standalone"
+        config.SES_AUTH_MODE = "basic"
+        config.SES_AUTH_USERNAME = "admin"
+        config.SES_AUTH_PASSWORD = "secret"
 
         response = self.client.get("/api/runtime")
 
@@ -325,10 +325,10 @@ class RuntimeAccessTests(unittest.TestCase):
         self.assertEqual("Basic", response.headers["WWW-Authenticate"].split()[0])
 
     def test_health_stays_public_when_standalone_basic_auth_is_enabled(self):
-        server.SES_MODE = "standalone"
-        server.SES_AUTH_MODE = "basic"
-        server.SES_AUTH_USERNAME = "admin"
-        server.SES_AUTH_PASSWORD = "secret"
+        config.SES_MODE = "standalone"
+        config.SES_AUTH_MODE = "basic"
+        config.SES_AUTH_USERNAME = "admin"
+        config.SES_AUTH_PASSWORD = "secret"
 
         response = self.client.get("/api/health")
 
@@ -336,10 +336,10 @@ class RuntimeAccessTests(unittest.TestCase):
         self.assertEqual("ok", response.json["status"])
 
     def test_standalone_basic_auth_accepts_valid_credentials(self):
-        server.SES_MODE = "standalone"
-        server.SES_AUTH_MODE = "basic"
-        server.SES_AUTH_USERNAME = "admin"
-        server.SES_AUTH_PASSWORD = "secret"
+        config.SES_MODE = "standalone"
+        config.SES_AUTH_MODE = "basic"
+        config.SES_AUTH_USERNAME = "admin"
+        config.SES_AUTH_PASSWORD = "secret"
         token = b64encode(b"admin:secret").decode("ascii")
 
         response = self.client.get("/api/runtime", headers={"Authorization": f"Basic {token}"})

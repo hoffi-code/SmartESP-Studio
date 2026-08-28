@@ -37,54 +37,7 @@ except Exception:
     IPVersion = None
     Zeroconf = None
 
-from ses import catalog, serial_ports
-from ses.config import (
-    ASSET_ALLOWED_EXTENSIONS,
-    ASSET_ALLOWED_MIME,
-    ASSET_AUDIO_DIR,
-    ASSET_AUDIO_JSON,
-    ASSET_FONTS_DIR,
-    ASSET_FONTS_JSON,
-    ASSET_GFONTS_JSON,
-    ASSET_GLYPH_SUBS,
-    ASSET_IMAGES_DIR,
-    ASSET_IMAGES_JSON,
-    ASSET_LOCK,
-    ASSET_MAX_SIZE_BYTES,
-    ASSET_ROOT,
-    COMPONENTS_BASE_LIST_PATH,
-    COMPONENTS_IMPORT_MAX_FILES,
-    COMPONENTS_IMPORT_MAX_ITEM_ERRORS,
-    COMPONENTS_IMPORT_MAX_UNPACKED_BYTES,
-    COMPONENTS_IMPORT_MAX_UPLOAD_BYTES,
-    COMPONENTS_LOCK,
-    DEVICES_PATH,
-    ESPHOME_BIN,
-    ESPHOME_BUILD_PATH,
-    ESPHOME_CONFIG_DIR,
-    ESPHOME_DATA_DIR,
-    ESPHOME_IS_HA_ADDON,
-    JOB_DIR,
-    PING_PORT,
-    PING_TIMEOUT,
-    PORT,
-    PROJECT_DIR,
-    SECRETS_FILENAME,
-    SECRETS_RAW_MAX_BYTES,
-    SEED_ROOT,
-    SES_AUTH_MODE,
-    SES_AUTH_PASSWORD,
-    SES_AUTH_PASSWORD_FILE,
-    SES_AUTH_USERNAME,
-    SES_MODE,
-    SES_STATUS_USE_PING,
-    SES_STORAGE_MODE,
-    SES_VERSION,
-    TARGET_DIR,
-    VALID_DEVICE,
-    WEB_ROOT,
-    is_truthy,
-)
+from ses import catalog, config, serial_ports
 from ses.errors import (
     handle_http_exception,
     handle_unexpected_exception,
@@ -154,11 +107,11 @@ def sync_asset_index(key: str, folder: str, json_path: str) -> dict:
 def sync_assets(kind: str = "all") -> dict:
     result = {}
     if kind in ("all", "fonts"):
-        result["fonts"] = sync_asset_index("fonts", ASSET_FONTS_DIR, ASSET_FONTS_JSON)
+        result["fonts"] = sync_asset_index("fonts", config.ASSET_FONTS_DIR, config.ASSET_FONTS_JSON)
     if kind in ("all", "images"):
-        result["images"] = sync_asset_index("images", ASSET_IMAGES_DIR, ASSET_IMAGES_JSON)
+        result["images"] = sync_asset_index("images", config.ASSET_IMAGES_DIR, config.ASSET_IMAGES_JSON)
     if kind in ("all", "audio"):
-        result["audio"] = sync_asset_index("audio", ASSET_AUDIO_DIR, ASSET_AUDIO_JSON)
+        result["audio"] = sync_asset_index("audio", config.ASSET_AUDIO_DIR, config.ASSET_AUDIO_JSON)
     return result
 
 
@@ -178,29 +131,29 @@ def asset_meta_for_kind(kind: str) -> dict:
     if kind == "images":
         return {
             "key": "images",
-            "folder": ASSET_IMAGES_DIR,
-            "json_path": ASSET_IMAGES_JSON,
-            "max_bytes": ASSET_MAX_SIZE_BYTES["images"],
-            "extensions": ASSET_ALLOWED_EXTENSIONS["images"],
-            "mime": ASSET_ALLOWED_MIME["images"],
+            "folder": config.ASSET_IMAGES_DIR,
+            "json_path": config.ASSET_IMAGES_JSON,
+            "max_bytes": config.ASSET_MAX_SIZE_BYTES["images"],
+            "extensions": config.ASSET_ALLOWED_EXTENSIONS["images"],
+            "mime": config.ASSET_ALLOWED_MIME["images"],
         }
     if kind == "fonts":
         return {
             "key": "fonts",
-            "folder": ASSET_FONTS_DIR,
-            "json_path": ASSET_FONTS_JSON,
-            "max_bytes": ASSET_MAX_SIZE_BYTES["fonts"],
-            "extensions": ASSET_ALLOWED_EXTENSIONS["fonts"],
-            "mime": ASSET_ALLOWED_MIME["fonts"],
+            "folder": config.ASSET_FONTS_DIR,
+            "json_path": config.ASSET_FONTS_JSON,
+            "max_bytes": config.ASSET_MAX_SIZE_BYTES["fonts"],
+            "extensions": config.ASSET_ALLOWED_EXTENSIONS["fonts"],
+            "mime": config.ASSET_ALLOWED_MIME["fonts"],
         }
     if kind == "audio":
         return {
             "key": "audio",
-            "folder": ASSET_AUDIO_DIR,
-            "json_path": ASSET_AUDIO_JSON,
-            "max_bytes": ASSET_MAX_SIZE_BYTES["audio"],
-            "extensions": ASSET_ALLOWED_EXTENSIONS["audio"],
-            "mime": ASSET_ALLOWED_MIME["audio"],
+            "folder": config.ASSET_AUDIO_DIR,
+            "json_path": config.ASSET_AUDIO_JSON,
+            "max_bytes": config.ASSET_MAX_SIZE_BYTES["audio"],
+            "extensions": config.ASSET_ALLOWED_EXTENSIONS["audio"],
+            "mime": config.ASSET_ALLOWED_MIME["audio"],
         }
     return {}
 
@@ -291,31 +244,31 @@ def build_asset_entries(kind: str) -> List[dict]:
 def build_assets_manifest(kind: str, refresh: bool) -> dict:
     result = {}
     kinds = ["images", "fonts", "audio"] if kind == "all" else [kind]
-    with ASSET_LOCK:
+    with config.ASSET_LOCK:
         if refresh:
             sync_assets(kind if kind in ("images", "fonts", "audio") else "all")
         for current_kind in kinds:
             result[current_kind] = {
                 "kind": current_kind,
-                "maxBytes": ASSET_MAX_SIZE_BYTES[current_kind],
-                "extensions": sorted(list(ASSET_ALLOWED_EXTENSIONS[current_kind])),
+                "maxBytes": config.ASSET_MAX_SIZE_BYTES[current_kind],
+                "extensions": sorted(list(config.ASSET_ALLOWED_EXTENSIONS[current_kind])),
                 "items": build_asset_entries(current_kind),
             }
         if kind in ("all", "fonts"):
-            gfonts_payload = read_json_file(ASSET_GFONTS_JSON) or {}
+            gfonts_payload = read_json_file(config.ASSET_GFONTS_JSON) or {}
             families = gfonts_payload.get("families", [])
             result["googleFonts"] = families if isinstance(families, list) else []
     return result
 
 
 def load_mdi_glyph_substitutions() -> dict:
-    if not os.path.isfile(ASSET_GLYPH_SUBS):
+    if not os.path.isfile(config.ASSET_GLYPH_SUBS):
         return {}
 
     result = {}
     pattern = re.compile(r'^\s{2}([^:\s][^:]*):\s+"([^"]+)"\s*$')
     try:
-        with open(ASSET_GLYPH_SUBS, "r", encoding="utf-8") as handle:
+        with open(config.ASSET_GLYPH_SUBS, "r", encoding="utf-8") as handle:
             for raw_line in handle:
                 line = raw_line.rstrip("\r\n")
                 match = pattern.match(line)
@@ -331,19 +284,19 @@ def load_mdi_glyph_substitutions() -> dict:
 
 
 def bootstrap_storage() -> None:
-    os.makedirs(TARGET_DIR, exist_ok=True)
+    os.makedirs(config.TARGET_DIR, exist_ok=True)
     # Seed initial project/asset structure once at startup.
-    seed_tree(SEED_ROOT, TARGET_DIR)
+    seed_tree(config.SEED_ROOT, config.TARGET_DIR)
     seed_assets()
     os.makedirs(catalog.components_runtime_schemas_root(), exist_ok=True)
     sync_assets("all")
 
 
 def load_devices() -> List[dict]:
-    if not os.path.isfile(DEVICES_PATH):
+    if not os.path.isfile(config.DEVICES_PATH):
         return []
     try:
-        with open(DEVICES_PATH, "r", encoding="utf-8") as handle:
+        with open(config.DEVICES_PATH, "r", encoding="utf-8") as handle:
             data = json.load(handle)
         if isinstance(data, list):
             return [item for item in data if isinstance(item, dict)]
@@ -353,14 +306,14 @@ def load_devices() -> List[dict]:
 
 
 def save_devices(devices: List[dict]) -> None:
-    os.makedirs(os.path.dirname(DEVICES_PATH), exist_ok=True)
-    with open(DEVICES_PATH, "w", encoding="utf-8") as handle:
+    os.makedirs(os.path.dirname(config.DEVICES_PATH), exist_ok=True)
+    with open(config.DEVICES_PATH, "w", encoding="utf-8") as handle:
         json.dump(devices, handle, ensure_ascii=False, indent=2)
         handle.write("\n")
 
 
 def projects_index_path() -> str:
-    return os.path.join(PROJECT_DIR, "projects.json")
+    return os.path.join(config.PROJECT_DIR, "projects.json")
 
 
 def load_projects_index() -> dict:
@@ -544,7 +497,7 @@ def normalize_device_key(value: str) -> str:
         raw = raw[:-5]
     if raw.endswith(".json"):
         raw = raw[:-5]
-    if not raw or not VALID_DEVICE.match(raw):
+    if not raw or not config.VALID_DEVICE.match(raw):
         return ""
     return raw
 
@@ -641,7 +594,7 @@ class MDNSProbe:
         self.zc = None
 
 
-def ping_host(host: str, port: int = PING_PORT, timeout: float = PING_TIMEOUT) -> bool:
+def ping_host(host: str, port: int = config.PING_PORT, timeout: float = config.PING_TIMEOUT) -> bool:
     if not host:
         return False
     try:
@@ -684,9 +637,9 @@ def evaluate_device_connectivity(
 def find_firmware_path(node_name: str, variant: str = "ota") -> str:
     build_roots = []
     for root in (
-        ESPHOME_BUILD_PATH,
+        config.ESPHOME_BUILD_PATH,
         "/data/build",
-        os.path.join(ESPHOME_DATA_DIR, "build"),
+        os.path.join(config.ESPHOME_DATA_DIR, "build"),
     ):
         if root and root not in build_roots and os.path.isdir(root):
             build_roots.append(root)
@@ -745,26 +698,26 @@ def find_firmware_path(node_name: str, variant: str = "ota") -> str:
 
 
 def resolve_web_root() -> str:
-    if WEB_ROOT and os.path.isdir(WEB_ROOT):
-        return WEB_ROOT
+    if config.WEB_ROOT and os.path.isdir(config.WEB_ROOT):
+        return config.WEB_ROOT
     return ""
 
 
 def resolve_secrets_path() -> str:
-    return os.path.join(TARGET_DIR, SECRETS_FILENAME)
+    return os.path.join(config.TARGET_DIR, config.SECRETS_FILENAME)
 
 
 def is_standalone_mode() -> bool:
-    return SES_MODE == "standalone"
+    return config.SES_MODE == "standalone"
 
 
 def read_auth_password() -> str:
-    if SES_AUTH_PASSWORD:
-        return SES_AUTH_PASSWORD
-    if not SES_AUTH_PASSWORD_FILE:
+    if config.SES_AUTH_PASSWORD:
+        return config.SES_AUTH_PASSWORD
+    if not config.SES_AUTH_PASSWORD_FILE:
         return ""
     try:
-        with open(SES_AUTH_PASSWORD_FILE, "r", encoding="utf-8") as handle:
+        with open(config.SES_AUTH_PASSWORD_FILE, "r", encoding="utf-8") as handle:
             return handle.read().strip()
     except Exception:
         return ""
@@ -778,12 +731,12 @@ def basic_auth_challenge(message: str = "Authentication required"):
 
 
 def standalone_basic_auth_response():
-    if not is_standalone_mode() or SES_AUTH_MODE != "basic":
+    if not is_standalone_mode() or config.SES_AUTH_MODE != "basic":
         return None
     if request.method == "OPTIONS" or request.path == "/api/health":
         return None
 
-    expected_username = SES_AUTH_USERNAME
+    expected_username = config.SES_AUTH_USERNAME
     expected_password = read_auth_password()
     if not expected_username or not expected_password:
         return basic_auth_challenge("Basic authentication is not configured")
@@ -845,8 +798,8 @@ class Job:
         self.exit_code = exit_code
         self.error_summary = error_summary
 
-        self.log_path = os.path.join(JOB_DIR, f"{self.id}.log")
-        self.json_path = os.path.join(JOB_DIR, f"{self.id}.json")
+        self.log_path = os.path.join(config.JOB_DIR, f"{self.id}.log")
+        self.json_path = os.path.join(config.JOB_DIR, f"{self.id}.json")
 
         self.lock = threading.Lock()
         self.listeners = set()
@@ -889,7 +842,7 @@ class Job:
         }
 
     def save_status(self) -> None:
-        os.makedirs(JOB_DIR, exist_ok=True)
+        os.makedirs(config.JOB_DIR, exist_ok=True)
         with open(self.json_path, "w", encoding="utf-8") as handle:
             json.dump(self.to_dict(), handle, ensure_ascii=False, indent=2)
             handle.write("\n")
@@ -948,16 +901,16 @@ class JobManager:
         self.serial_locks = {}
         self.serial_locks_lock = threading.Lock()
         self.queue = queue.Queue()
-        os.makedirs(JOB_DIR, exist_ok=True)
+        os.makedirs(config.JOB_DIR, exist_ok=True)
         self._load_jobs()
         self.worker = threading.Thread(target=self._worker, daemon=True)
         self.worker.start()
 
     def _load_jobs(self) -> None:
-        for name in os.listdir(JOB_DIR):
+        for name in os.listdir(config.JOB_DIR):
             if not name.endswith(".json"):
                 continue
-            path = os.path.join(JOB_DIR, name)
+            path = os.path.join(config.JOB_DIR, name)
             try:
                 with open(path, "r", encoding="utf-8") as handle:
                     data = json.load(handle)
@@ -972,7 +925,7 @@ class JobManager:
         job = Job(job_id, yaml_name, action, device, serial_port=serial_port)
         with self.lock:
             self.jobs[job.id] = job
-        os.makedirs(JOB_DIR, exist_ok=True)
+        os.makedirs(config.JOB_DIR, exist_ok=True)
         with open(job.log_path, "w", encoding="utf-8"):
             pass
         job.save_status()
@@ -1033,7 +986,7 @@ class JobManager:
         job.started_at = utc_now()
         job.save_status()
 
-        yaml_path = os.path.join(TARGET_DIR, job.yaml_name)
+        yaml_path = os.path.join(config.TARGET_DIR, job.yaml_name)
         if job.action == "logs":
             exit_code = self._run_esphome(job, ["logs", yaml_path, "--device", job.device])
         elif job.action == "validate":
@@ -1088,16 +1041,16 @@ class JobManager:
 
     def _run_esphome(self, job: Job, args: List[str]) -> int:
         try:
-            cmd_prefix = shlex.split(ESPHOME_BIN)
+            cmd_prefix = shlex.split(config.ESPHOME_BIN)
         except ValueError as exc:
-            message = f"Invalid ESPHOME_BIN: {exc}"
+            message = f"Invalid config.ESPHOME_BIN: {exc}"
             job.push_log(message)
             job.last_log_line = message
             job.error_summary = message
             return 1
 
         if not cmd_prefix:
-            message = "Invalid ESPHOME_BIN: empty command"
+            message = "Invalid config.ESPHOME_BIN: empty command"
             job.push_log(message)
             job.last_log_line = message
             job.error_summary = message
@@ -1245,7 +1198,7 @@ def enforce_standalone_auth():
 
 @bp.route("/api/health", methods=["GET"])
 def api_health():
-    return jsonify({"status": "ok", "ok": True, "mode": SES_MODE, "ts": utc_now()})
+    return jsonify({"status": "ok", "ok": True, "mode": config.SES_MODE, "ts": utc_now()})
 
 
 @bp.route("/api/runtime", methods=["GET"])
@@ -1256,25 +1209,25 @@ def api_runtime():
 
     payload = {
         "status": "ok",
-        "mode": SES_MODE,
-        "isHaAddon": ESPHOME_IS_HA_ADDON,
-        "storageMode": SES_STORAGE_MODE,
-        "authMode": SES_AUTH_MODE,
-        "version": SES_VERSION,
-        "port": PORT,
+        "mode": config.SES_MODE,
+        "isHaAddon": config.ESPHOME_IS_HA_ADDON,
+        "storageMode": config.SES_STORAGE_MODE,
+        "authMode": config.SES_AUTH_MODE,
+        "version": config.SES_VERSION,
+        "port": config.PORT,
     }
 
-    debug = is_truthy(request.args.get("debug", ""))
+    debug = config.is_truthy(request.args.get("debug", ""))
     if debug:
         payload.update(
             {
-                "targetDir": TARGET_DIR,
-                "projectDir": PROJECT_DIR,
-                "assetRoot": ASSET_ROOT,
-                "jobDir": JOB_DIR,
-                "esphomeConfigDir": ESPHOME_CONFIG_DIR,
-                "esphomeDataDir": ESPHOME_DATA_DIR,
-                "webRoot": WEB_ROOT,
+                "targetDir": config.TARGET_DIR,
+                "projectDir": config.PROJECT_DIR,
+                "assetRoot": config.ASSET_ROOT,
+                "jobDir": config.JOB_DIR,
+                "esphomeConfigDir": config.ESPHOME_CONFIG_DIR,
+                "esphomeDataDir": config.ESPHOME_DATA_DIR,
+                "webRoot": config.WEB_ROOT,
             }
         )
 
@@ -1287,7 +1240,7 @@ def api_component_catalog():
     if access:
         return access
 
-    base_catalog = catalog.load_components_catalog(COMPONENTS_BASE_LIST_PATH)
+    base_catalog = catalog.load_components_catalog(config.COMPONENTS_BASE_LIST_PATH)
     runtime_path = catalog.components_runtime_list_path()
     runtime_catalog = catalog.load_components_catalog(runtime_path) if os.path.isfile(runtime_path) else None
     merged = catalog.merge_component_catalogs(base_catalog, runtime_catalog)
@@ -1305,7 +1258,7 @@ def api_component_schema(relpath):
         return json_error("Invalid schema path", "COMPONENTS_SCHEMA_PATH_INVALID", 400)
 
     runtime_base = os.path.join(catalog.components_runtime_root(), "schemas")
-    base_base = os.path.join(WEB_ROOT, "schemas")
+    base_base = os.path.join(config.WEB_ROOT, "schemas")
 
     runtime_candidate = catalog.resolve_component_schema_path(runtime_base, schema_relpath)
     if runtime_candidate and os.path.isfile(runtime_candidate):
@@ -1332,8 +1285,8 @@ def api_components_import_zip():
     if not filename.endswith(".zip"):
         return json_error("Only .zip imports are supported", "COMPONENTS_ZIP_REQUIRED", 400)
 
-    raw = upload.stream.read(COMPONENTS_IMPORT_MAX_UPLOAD_BYTES + 1)
-    if len(raw) > COMPONENTS_IMPORT_MAX_UPLOAD_BYTES:
+    raw = upload.stream.read(config.COMPONENTS_IMPORT_MAX_UPLOAD_BYTES + 1)
+    if len(raw) > config.COMPONENTS_IMPORT_MAX_UPLOAD_BYTES:
         return json_error("Zip file too large", "COMPONENTS_ZIP_TOO_LARGE", 413)
     if not raw:
         return json_error("Empty zip file", "COMPONENTS_EMPTY_ZIP", 400)
@@ -1356,7 +1309,7 @@ def api_components_import_zip():
         raw_member_name = str(info.filename or "")
         if info.is_dir() or raw_member_name.endswith("/") or raw_member_name.endswith("\\"):
             continue
-        if len(safe_members) >= COMPONENTS_IMPORT_MAX_FILES:
+        if len(safe_members) >= config.COMPONENTS_IMPORT_MAX_FILES:
             archive.close()
             return json_error("Too many files in zip", "COMPONENTS_ZIP_TOO_MANY_FILES", 400)
 
@@ -1369,7 +1322,7 @@ def api_components_import_zip():
             return json_error("Duplicate file path in zip package", "COMPONENTS_ZIP_DUPLICATE_PATH", 400)
 
         total_unpacked += max(0, int(info.file_size or 0))
-        if total_unpacked > COMPONENTS_IMPORT_MAX_UNPACKED_BYTES:
+        if total_unpacked > config.COMPONENTS_IMPORT_MAX_UNPACKED_BYTES:
             archive.close()
             return json_error("Zip unpacked size is too large", "COMPONENTS_ZIP_UNPACKED_TOO_LARGE", 400)
 
@@ -1404,7 +1357,7 @@ def api_components_import_zip():
                     "imported": 0,
                     "updated": 0,
                     "skipped": 0,
-                    "errors": entry_errors[:COMPONENTS_IMPORT_MAX_ITEM_ERRORS],
+                    "errors": entry_errors[:config.COMPONENTS_IMPORT_MAX_ITEM_ERRORS],
                 },
             }
         ), 400
@@ -1412,9 +1365,9 @@ def api_components_import_zip():
     imported = 0
     updated = 0
     skipped = 0
-    errors = list(entry_errors[:COMPONENTS_IMPORT_MAX_ITEM_ERRORS])
+    errors = list(entry_errors[:config.COMPONENTS_IMPORT_MAX_ITEM_ERRORS])
 
-    with COMPONENTS_LOCK:
+    with config.COMPONENTS_LOCK:
         runtime_path = catalog.components_runtime_list_path()
         runtime_catalog = catalog.load_components_catalog(runtime_path) if os.path.isfile(runtime_path) else catalog.default_components_catalog()
         runtime_items = catalog.extract_catalog_items(runtime_catalog)
@@ -1431,7 +1384,7 @@ def api_components_import_zip():
             member_info = safe_members.get(schema_member)
             if not member_info:
                 skipped += 1
-                if len(errors) < COMPONENTS_IMPORT_MAX_ITEM_ERRORS:
+                if len(errors) < config.COMPONENTS_IMPORT_MAX_ITEM_ERRORS:
                     errors.append(f"Missing schema file for {comp_id}: {schema_member}")
                 continue
 
@@ -1440,14 +1393,14 @@ def api_components_import_zip():
                 schema_obj = json.loads(schema_raw.decode("utf-8"))
             except Exception:
                 skipped += 1
-                if len(errors) < COMPONENTS_IMPORT_MAX_ITEM_ERRORS:
+                if len(errors) < config.COMPONENTS_IMPORT_MAX_ITEM_ERRORS:
                     errors.append(f"Invalid schema JSON for {comp_id}: {schema_member}")
                 continue
 
             schema_target = catalog.runtime_schema_target_path(entry["schemaPath"])
             if not schema_target:
                 skipped += 1
-                if len(errors) < COMPONENTS_IMPORT_MAX_ITEM_ERRORS:
+                if len(errors) < config.COMPONENTS_IMPORT_MAX_ITEM_ERRORS:
                     errors.append(f"Invalid schema path for {comp_id}")
                 continue
 
@@ -1543,7 +1496,7 @@ def api_custom_components_create():
     elif not isinstance(schema_data, (dict, list)):
         return json_error("Invalid schema", "COMPONENTS_SCHEMA_INVALID", 400)
 
-    with COMPONENTS_LOCK:
+    with config.COMPONENTS_LOCK:
         runtime_path = catalog.components_runtime_list_path()
         runtime_catalog = catalog.load_components_catalog(runtime_path) if os.path.isfile(runtime_path) else catalog.default_components_catalog()
 
@@ -1606,7 +1559,7 @@ def api_custom_components_update(id_or_key):
         return json_error("Invalid custom component key", "COMPONENTS_CUSTOM_KEY_INVALID", 400)
     new_id = f"custom/{new_key}"
 
-    with COMPONENTS_LOCK:
+    with config.COMPONENTS_LOCK:
         runtime_path = catalog.components_runtime_list_path()
         if not os.path.isfile(runtime_path):
             return json_error("Component not found", "COMPONENTS_NOT_FOUND", 404)
@@ -1688,7 +1641,7 @@ def api_custom_components_delete(id_or_key):
     if not component_id:
         return json_error("Invalid component id", "COMPONENTS_ID_INVALID", 400)
 
-    with COMPONENTS_LOCK:
+    with config.COMPONENTS_LOCK:
         runtime_path = catalog.components_runtime_list_path()
         if not os.path.isfile(runtime_path):
             return json_error("Component not found", "COMPONENTS_NOT_FOUND", 404)
@@ -1719,7 +1672,7 @@ def api_assets_refresh():
     if kind not in ("all", "fonts", "images", "audio"):
         return jsonify({"status": "error", "message": "Invalid kind"}), 400
 
-    with ASSET_LOCK:
+    with config.ASSET_LOCK:
         payload = sync_assets(kind)
     return jsonify({"status": "ok", **payload})
 
@@ -1745,7 +1698,7 @@ def api_assets_mdi_substitutions():
     if access:
         return access
 
-    with ASSET_LOCK:
+    with config.ASSET_LOCK:
         substitutions = load_mdi_glyph_substitutions()
     return jsonify({"status": "ok", "substitutions": substitutions})
 
@@ -1782,7 +1735,7 @@ def api_assets_upload():
     if not raw:
         return json_error("Empty file", "ASSET_EMPTY_FILE", 400)
 
-    with ASSET_LOCK:
+    with config.ASSET_LOCK:
         os.makedirs(meta["folder"], exist_ok=True)
         filename = ensure_asset_filename_available(meta["folder"], original_name)
         path = os.path.join(meta["folder"], filename)
@@ -1825,7 +1778,7 @@ def api_assets_rename():
     if not validate_asset_extension(target_name, meta["extensions"]):
         return json_error("Unsupported target extension", "ASSET_UNSUPPORTED_EXTENSION", 400)
 
-    with ASSET_LOCK:
+    with config.ASSET_LOCK:
         source_path = os.path.join(meta["folder"], source_name)
         if not os.path.isfile(source_path):
             return json_error("Source not found", "ASSET_NOT_FOUND", 404)
@@ -1876,7 +1829,7 @@ def api_assets_file(kind, filename):
             return send_from_directory(meta["folder"], safe_name, mimetype=guessed)
         return send_from_directory(meta["folder"], safe_name)
 
-    with ASSET_LOCK:
+    with config.ASSET_LOCK:
         target = os.path.join(meta["folder"], safe_name)
         if not os.path.isfile(target):
             return json_error("Not found", "ASSET_NOT_FOUND", 404)
@@ -1901,8 +1854,8 @@ def save_yaml():
     if not isinstance(yaml_text, str):
         return jsonify({"status": "error", "message": "Invalid yaml"}), 400
 
-    os.makedirs(TARGET_DIR, exist_ok=True)
-    path = os.path.join(TARGET_DIR, filename)
+    os.makedirs(config.TARGET_DIR, exist_ok=True)
+    path = os.path.join(config.TARGET_DIR, filename)
     with open(path, "w", encoding="utf-8") as handle:
         handle.write(yaml_text)
         if not yaml_text.endswith("\n"):
@@ -1922,7 +1875,7 @@ def load_yaml():
     if not filename:
         return jsonify({"status": "error", "message": "Invalid name"}), 400
 
-    path = os.path.join(TARGET_DIR, filename)
+    path = os.path.join(config.TARGET_DIR, filename)
     if not os.path.isfile(path):
         return jsonify({"status": "error", "message": "Not found"}), 404
 
@@ -1941,15 +1894,15 @@ def import_yaml_candidates():
     if access:
         return access
 
-    if not os.path.isdir(ESPHOME_CONFIG_DIR):
+    if not os.path.isdir(config.ESPHOME_CONFIG_DIR):
         return jsonify({"status": "ok", "items": []})
 
     items = []
-    for entry in os.listdir(ESPHOME_CONFIG_DIR):
+    for entry in os.listdir(config.ESPHOME_CONFIG_DIR):
         filename = normalize_yaml_filename(str(entry))
-        if not filename or filename.lower() == SECRETS_FILENAME:
+        if not filename or filename.lower() == config.SECRETS_FILENAME:
             continue
-        path = os.path.join(ESPHOME_CONFIG_DIR, filename)
+        path = os.path.join(config.ESPHOME_CONFIG_DIR, filename)
         if not os.path.isfile(path):
             continue
         project_name = normalize_filename(f"{filename[:-5]}.json", ".json")
@@ -1966,7 +1919,7 @@ def import_yaml_candidates():
                 "size": size,
                 "mtime": mtime,
                 "projectName": project_name,
-                "projectExists": bool(project_name and os.path.isfile(os.path.join(PROJECT_DIR, project_name))),
+                "projectExists": bool(project_name and os.path.isfile(os.path.join(config.PROJECT_DIR, project_name))),
             }
         )
 
@@ -1981,21 +1934,21 @@ def import_targets():
         return access
 
     yaml_names = []
-    if os.path.isdir(TARGET_DIR):
-        for entry in os.listdir(TARGET_DIR):
+    if os.path.isdir(config.TARGET_DIR):
+        for entry in os.listdir(config.TARGET_DIR):
             filename = normalize_yaml_filename(str(entry))
-            if not filename or filename.lower() == SECRETS_FILENAME:
+            if not filename or filename.lower() == config.SECRETS_FILENAME:
                 continue
-            if os.path.isfile(os.path.join(TARGET_DIR, filename)):
+            if os.path.isfile(os.path.join(config.TARGET_DIR, filename)):
                 yaml_names.append(filename)
 
     project_names = []
-    if os.path.isdir(PROJECT_DIR):
-        for entry in os.listdir(PROJECT_DIR):
+    if os.path.isdir(config.PROJECT_DIR):
+        for entry in os.listdir(config.PROJECT_DIR):
             filename = normalize_filename(str(entry), ".json")
             if not filename or filename.lower() == "projects.json":
                 continue
-            if os.path.isfile(os.path.join(PROJECT_DIR, filename)):
+            if os.path.isfile(os.path.join(config.PROJECT_DIR, filename)):
                 project_names.append(filename)
 
     return jsonify(
@@ -2014,10 +1967,10 @@ def import_yaml_load():
         return access
 
     filename = normalize_yaml_filename(str(request.args.get("name") or request.args.get("filename") or ""))
-    if not filename or filename.lower() == SECRETS_FILENAME:
+    if not filename or filename.lower() == config.SECRETS_FILENAME:
         return jsonify({"status": "error", "message": "Invalid name"}), 400
 
-    path = os.path.join(ESPHOME_CONFIG_DIR, filename)
+    path = os.path.join(config.ESPHOME_CONFIG_DIR, filename)
     if not os.path.isfile(path):
         return jsonify({"status": "error", "message": "Not found"}), 404
 
@@ -2043,7 +1996,7 @@ def import_project_bundle():
         return jsonify({"status": "error", "message": "Invalid projectName"}), 400
     if project_name.lower() == "projects.json":
         return jsonify({"status": "error", "message": "Reserved project index name"}), 400
-    if not yaml_name or yaml_name.lower() == SECRETS_FILENAME:
+    if not yaml_name or yaml_name.lower() == config.SECRETS_FILENAME:
         return jsonify({"status": "error", "message": "Invalid yamlName"}), 400
 
     project_data = payload.get("projectData")
@@ -2059,7 +2012,7 @@ def import_project_bundle():
     source_yaml_name = ""
     if payload.get("sourceYamlName") is not None:
         source_yaml_name = normalize_yaml_filename(str(payload.get("sourceYamlName") or ""))
-        if not source_yaml_name or source_yaml_name.lower() == SECRETS_FILENAME:
+        if not source_yaml_name or source_yaml_name.lower() == config.SECRETS_FILENAME:
             return jsonify({"status": "error", "message": "Invalid sourceYamlName"}), 400
 
     import_report = payload.get("importReport")
@@ -2067,11 +2020,11 @@ def import_project_bundle():
         return jsonify({"status": "error", "message": "importReport must be an object"}), 400
 
     overwrite = bool(payload.get("overwrite") is True)
-    project_path = os.path.join(PROJECT_DIR, project_name)
-    yaml_path = os.path.join(TARGET_DIR, yaml_name)
+    project_path = os.path.join(config.PROJECT_DIR, project_name)
+    yaml_path = os.path.join(config.TARGET_DIR, yaml_name)
     allow_existing_source_yaml = False
     if source_yaml_name:
-        source_yaml_path = os.path.join(ESPHOME_CONFIG_DIR, source_yaml_name)
+        source_yaml_path = os.path.join(config.ESPHOME_CONFIG_DIR, source_yaml_name)
         if not os.path.isfile(source_yaml_path):
             return jsonify(
                 {
@@ -2109,8 +2062,8 @@ def import_project_bundle():
         project_payload["importReport"] = import_report
 
     try:
-        os.makedirs(PROJECT_DIR, exist_ok=True)
-        os.makedirs(TARGET_DIR, exist_ok=True)
+        os.makedirs(config.PROJECT_DIR, exist_ok=True)
+        os.makedirs(config.TARGET_DIR, exist_ok=True)
         write_json_file_atomic(project_path, project_payload)
         if not allow_existing_source_yaml:
             write_text_file_atomic(yaml_path, yaml_text)
@@ -2159,7 +2112,7 @@ def api_secrets_raw_post():
     if not isinstance(content, str):
         return jsonify({"error": "Field 'content' must be a string"}), 400
 
-    if len(content.encode("utf-8")) > SECRETS_RAW_MAX_BYTES:
+    if len(content.encode("utf-8")) > config.SECRETS_RAW_MAX_BYTES:
         return jsonify({"error": "File too large"}), 400
 
     path = resolve_secrets_path()
@@ -2207,8 +2160,8 @@ def save_project():
     except Exception:
         return jsonify({"status": "error", "message": "Invalid JSON"}), 400
 
-    os.makedirs(PROJECT_DIR, exist_ok=True)
-    path = os.path.join(PROJECT_DIR, filename)
+    os.makedirs(config.PROJECT_DIR, exist_ok=True)
+    path = os.path.join(config.PROJECT_DIR, filename)
     with open(path, "w", encoding="utf-8") as handle:
         handle.write(body)
         if not body.endswith("\n"):
@@ -2223,14 +2176,14 @@ def list_projects():
     if access:
         return access
 
-    if not os.path.isdir(PROJECT_DIR):
+    if not os.path.isdir(config.PROJECT_DIR):
         return jsonify({"status": "ok", "projects": []})
 
     files = [
         entry
-        for entry in os.listdir(PROJECT_DIR)
+        for entry in os.listdir(config.PROJECT_DIR)
         if entry.lower().endswith(".json")
-        and os.path.isfile(os.path.join(PROJECT_DIR, entry))
+        and os.path.isfile(os.path.join(config.PROJECT_DIR, entry))
     ]
     files.sort()
 
@@ -2248,7 +2201,7 @@ def load_project():
     if not filename:
         return jsonify({"status": "error", "message": "Invalid name"}), 400
 
-    path = os.path.join(PROJECT_DIR, filename)
+    path = os.path.join(config.PROJECT_DIR, filename)
     if not os.path.isfile(path):
         return jsonify({"status": "error", "message": "Not found"}), 404
 
@@ -2273,7 +2226,7 @@ def delete_project():
     if not filename:
         return jsonify({"status": "error", "message": "Invalid name"}), 400
 
-    path = os.path.join(PROJECT_DIR, filename)
+    path = os.path.join(config.PROJECT_DIR, filename)
     if not os.path.isfile(path):
         return jsonify({"status": "error", "message": "Not found"}), 404
 
@@ -2302,8 +2255,8 @@ def purge_project_bundle():
     if not yaml_filename:
         return jsonify({"status": "error", "message": "Invalid derived yaml name"}), 400
 
-    project_path = os.path.join(PROJECT_DIR, project_filename)
-    yaml_path = os.path.join(TARGET_DIR, yaml_filename)
+    project_path = os.path.join(config.PROJECT_DIR, project_filename)
+    yaml_path = os.path.join(config.TARGET_DIR, yaml_filename)
 
     placement_updated = remove_project_from_index(project_filename)
 
@@ -2365,10 +2318,10 @@ def rename_project():
     if not old_yaml or not new_yaml:
         return jsonify({"status": "error", "message": "Invalid derived yaml name"}), 400
 
-    old_path = os.path.join(PROJECT_DIR, old_name)
-    new_path = os.path.join(PROJECT_DIR, new_name)
-    old_yaml_path = os.path.join(TARGET_DIR, old_yaml)
-    new_yaml_path = os.path.join(TARGET_DIR, new_yaml)
+    old_path = os.path.join(config.PROJECT_DIR, old_name)
+    new_path = os.path.join(config.PROJECT_DIR, new_name)
+    old_yaml_path = os.path.join(config.TARGET_DIR, old_yaml)
+    new_yaml_path = os.path.join(config.TARGET_DIR, new_yaml)
     if not os.path.isfile(old_path):
         return jsonify({"status": "error", "message": "Source not found"}), 404
     if os.path.exists(new_path):
@@ -2426,7 +2379,7 @@ def delete_yaml():
     if not filename:
         return jsonify({"status": "error", "message": "Invalid name"}), 400
 
-    path = os.path.join(TARGET_DIR, filename)
+    path = os.path.join(config.TARGET_DIR, filename)
     if not os.path.isfile(path):
         return jsonify({"status": "error", "message": "Not found"}), 404
 
@@ -2475,14 +2428,14 @@ def api_devices_register():
     name = str(payload.get("name", "")).strip()
     if key:
         name = key
-    if not name or not VALID_DEVICE.match(name):
+    if not name or not config.VALID_DEVICE.match(name):
         return jsonify({"status": "error", "message": "Invalid name"}), 400
     name = name.strip().lower()
     if not key:
         key = normalize_device_key(name)
 
     host = str(payload.get("host", "")).strip()
-    if host and not VALID_DEVICE.match(host):
+    if host and not config.VALID_DEVICE.match(host):
         host = ""
 
     devices = load_devices()
@@ -2536,7 +2489,7 @@ def api_devices_list():
 
     devices = load_devices()
     refresh = str(request.args.get("refresh", "0")).strip() in ("1", "true", "yes")
-    deep = str(request.args.get("deep", "0")).strip() in ("1", "true", "yes") or SES_STATUS_USE_PING
+    deep = str(request.args.get("deep", "0")).strip() in ("1", "true", "yes") or config.SES_STATUS_USE_PING
     response_devices = []
     normalized_any = False
 
@@ -2642,7 +2595,7 @@ def api_device_status():
         return jsonify({"status": "ok", "device": None})
 
     refresh = str(request.args.get("refresh", "0")).strip() in ("1", "true", "yes")
-    deep = str(request.args.get("deep", "0")).strip() in ("1", "true", "yes") or SES_STATUS_USE_PING
+    deep = str(request.args.get("deep", "0")).strip() in ("1", "true", "yes") or config.SES_STATUS_USE_PING
     if not refresh:
         return jsonify({"status": "ok", "device": build_device_response(target)})
 
@@ -2721,7 +2674,7 @@ def api_install():
         except (RuntimeError, ValueError) as exc:
             return jsonify({"status": "error", "message": str(exc)}), 400
 
-    yaml_path = os.path.join(TARGET_DIR, yaml_name)
+    yaml_path = os.path.join(config.TARGET_DIR, yaml_name)
     if not os.path.isfile(yaml_path):
         return jsonify({"status": "error", "message": "YAML not found"}), 404
 
@@ -2990,18 +2943,18 @@ app = create_app()
 
 
 if __name__ == "__main__":
-    log.info("Starting SmartESP Studio %s on :%s (mode=%s)", SES_VERSION or "dev", PORT, SES_MODE)
+    log.info("Starting SmartESP Studio %s on :%s (mode=%s)", config.SES_VERSION or "dev", config.PORT, config.SES_MODE)
     try:
         from waitress import serve
     except ImportError:
         # Local dev without waitress installed.
-        app.run(host="0.0.0.0", port=PORT)
+        app.run(host="0.0.0.0", port=config.PORT)
     else:
         # Streaming log endpoints hold a thread each while a job runs, so keep a
         # generous pool.
         serve(
             app,
             host="0.0.0.0",
-            port=PORT,
+            port=config.PORT,
             threads=int(os.environ.get("SES_THREADS", "8")),
         )

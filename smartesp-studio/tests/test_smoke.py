@@ -18,6 +18,8 @@ SPEC = importlib.util.spec_from_file_location("ses_server_smoke", SERVER_PATH)
 server = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(server)
 
+import ses.config as config  # noqa: E402
+
 INGRESS = {"X-Ingress-Path": "/smoke"}
 
 # path -> accepted status codes. A group that loses its blueprint returns 404 for

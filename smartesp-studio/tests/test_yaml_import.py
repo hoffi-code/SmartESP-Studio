@@ -12,12 +12,14 @@ SPEC = importlib.util.spec_from_file_location("ses_server_import_tests", SERVER_
 server = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(server)
 
+import ses.config as config  # noqa: E402
+
 
 class YamlImportEndpointTests(unittest.TestCase):
     def setUp(self):
-        self.original_target_dir = server.TARGET_DIR
-        self.original_project_dir = server.PROJECT_DIR
-        self.original_esphome_config_dir = server.ESPHOME_CONFIG_DIR
+        self.original_target_dir = config.TARGET_DIR
+        self.original_project_dir = config.PROJECT_DIR
+        self.original_esphome_config_dir = config.ESPHOME_CONFIG_DIR
         self.temp_dir = tempfile.TemporaryDirectory()
         self.target_dir = pathlib.Path(self.temp_dir.name) / "smartesp"
         self.esphome_config_dir = pathlib.Path(self.temp_dir.name) / "esphome"
@@ -25,16 +27,16 @@ class YamlImportEndpointTests(unittest.TestCase):
         self.target_dir.mkdir()
         self.esphome_config_dir.mkdir()
         self.project_dir.mkdir()
-        server.TARGET_DIR = str(self.target_dir)
-        server.PROJECT_DIR = str(self.project_dir)
-        server.ESPHOME_CONFIG_DIR = str(self.esphome_config_dir)
+        config.TARGET_DIR = str(self.target_dir)
+        config.PROJECT_DIR = str(self.project_dir)
+        config.ESPHOME_CONFIG_DIR = str(self.esphome_config_dir)
         self.client = server.app.test_client()
         self.headers = {"X-Ingress-Path": "/test"}
 
     def tearDown(self):
-        server.TARGET_DIR = self.original_target_dir
-        server.PROJECT_DIR = self.original_project_dir
-        server.ESPHOME_CONFIG_DIR = self.original_esphome_config_dir
+        config.TARGET_DIR = self.original_target_dir
+        config.PROJECT_DIR = self.original_project_dir
+        config.ESPHOME_CONFIG_DIR = self.original_esphome_config_dir
         self.temp_dir.cleanup()
 
     def test_yaml_candidates_reads_esphome_config_dir_and_marks_existing_projects(self):
@@ -149,7 +151,7 @@ class YamlImportEndpointTests(unittest.TestCase):
         self.assertFalse((self.project_dir / "living_room.json").exists())
 
     def test_import_project_reports_yaml_conflict_for_changed_source_in_shared_path_mode(self):
-        server.ESPHOME_CONFIG_DIR = str(self.target_dir)
+        config.ESPHOME_CONFIG_DIR = str(self.target_dir)
         (self.target_dir / "living_room.yaml").write_text("esphome:\n  name: changed\n", encoding="utf-8")
         payload = {
             "projectName": "living_room.json",
