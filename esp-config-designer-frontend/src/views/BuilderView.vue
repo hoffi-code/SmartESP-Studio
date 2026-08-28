@@ -604,6 +604,7 @@ import {
 } from "../utils/displayImageEncoding";
 import { deriveGoogleFontStyle as deriveVariantStyle } from "../utils/displayFonts";
 import { isDevOffline } from "../utils/devFlags";
+import { apiFetch, apiUrl } from "../utils/api";
 
 // BuilderView is now mainly the orchestration shell for the schema-driven editor.
 // UI-heavy sections, preview logic, catalog flow, schema loading, and validation are
@@ -4128,18 +4129,11 @@ const ADDON_ROOT_FOLDER_ID = "root";
 const ADDON_ROOT_FOLDER_LABEL = "Projects";
 const PROJECTS_UPDATED_STORAGE_KEY = "vebProjectsUpdatedSignal";
 const PROJECTS_UPDATED_CHANNEL = "ecd-projects";
-const addonBaseUrl = new URL("./", window.location.href).toString();
-const assetsBase = new URL("api/assets/", addonBaseUrl).toString();
+const assetsBase = apiUrl("api/assets/");
 const localComponentCatalogUrl = new URL("components_list/components_list.json", window.location.href).toString();
 
-const buildAddonUrl = (path) => new URL(path, addonBaseUrl).toString();
-
-const addonFetch = async (path, options = {}) => {
-  return fetch(buildAddonUrl(path), {
-    credentials: "include",
-    ...options
-  });
-};
+const buildAddonUrl = apiUrl;
+const addonFetch = apiFetch;
 
 const encodePathSegments = (value) =>
   String(value || "")

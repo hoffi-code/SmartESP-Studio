@@ -192,6 +192,7 @@ import {
 import {
   normalizeProjectKey,
 } from "../utils/deviceStatusCache";
+import { apiUrl } from "../utils/api";
 import {
   computePendingPromotion,
   computePostInstallDeploymentUpdate,
@@ -317,8 +318,7 @@ const viewMode = ref("all");
 const SIDEBAR_MIN_WIDTH = 210;
 const SIDEBAR_MAX_WIDTH = 520;
 
-const baseUrl = new URL("./", window.location.href).toString();
-const componentCatalogUrl = new URL("components_list/components_list.json", baseUrl).toString();
+const componentCatalogUrl = apiUrl("components_list/components_list.json");
 const useLocalRuntime = import.meta.env.DEV || import.meta.env.VITE_DASHBOARD_STORAGE === "local";
 const staticProjectsIndexUrl = `${import.meta.env.BASE_URL || "/"}runtime/esp_projects/projects.json`;
 const DEFAULT_TILE_ICON_NAME = "memory";
@@ -332,7 +332,7 @@ const CHEVRON_DOWN_ICON_URL = "https://cdn.jsdelivr.net/npm/@mdi/svg/svg/chevron
 const ARROW_UP_ICON_URL = "https://cdn.jsdelivr.net/npm/@mdi/svg/svg/arrow-up.svg";
 const SEARCH_ICON_URL = "https://cdn.jsdelivr.net/npm/@mdi/svg/svg/magnify.svg";
 
-const getApiUrl = (path) => new URL(path, baseUrl).toString();
+const getApiUrl = apiUrl;
 // In development we use local runtime files via Vite middleware.
 // In production we switch to add-on endpoints without changing UI logic.
 const projectsListUrl = useLocalRuntime ? "/dev/projects/list" : getApiUrl("projects/list");
