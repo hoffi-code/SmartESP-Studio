@@ -317,15 +317,31 @@ Sweep-Bug behoben: 5 Stellen hatten `var(--…)`-Strings in **JS-Farbwerte** ges
 
 ## 8. Aktueller Stand (Save-Punkt)
 
-- **Branch:** `refactor/overhaul`, 38 Commits über `main` (Tag `6f01ed6` = Upstream 1.3.3), **nichts gepusht**.
-- **Checks grün:** Frontend `npm run lint` (0 Fehler / 112 Warnungen, davon ~90 `no-useless-escape` in `schemaYaml.js`), `npm test` (76), `npm run build`. Backend `ruff check` (sauber), `pytest` (32 + 16 subtests).
-- **Lokaler Container:** `smartesp-studio-test` läuft `Up (healthy)` auf `http://localhost:8099` (Image `smartesp-studio:local`).
-- **`CLAUDE.md`** im Repo-Root ist weiterhin **untracked** (bewusst, siehe frühere Entscheidung) — enthält Rollen-Prompt + „Schreibstil" + „Versionierung".
+- **Branch:** `refactor/overhaul`, ~45 Commits über `main` (Tag `6f01ed6` = Upstream 1.3.3), **nichts gepusht**.
+- **Checks grün:** Frontend `npm run lint` (0 Fehler / 112 Warnungen), `npm test` (76), `npm run build`. Backend `ruff check` (sauber), `pytest` (32 + 16 subtests).
+- **Lokaler Container:** `smartesp-studio-test`, Image `smartesp-studio:local` (Stand: vor B1 gebaut; nach B1-Fortschritt neu bauen).
+- **`CLAUDE.md`** im Repo-Root ist weiterhin **untracked** (bewusst) — Rollen-Prompt + „Schreibstil" + „Versionierung".
+- **Gesamtplan mit Meilenstein-/Commit-Tabelle:** `plans/nimm-in-die-planung-swirling-pike.md`.
 
-### Nächste Schritte (Reihenfolge offen)
+### B1 — in Arbeit (6 von ~10 Commits)
 
-1. `icon.png` (quadratisch) für den HA-Add-on-Store — braucht Asset vom Nutzer.
-2. **B1** Route-/Helfer-Split von `server.py` (Fundament steht: `ses/config|logging|errors`, `test_smoke.py`) — nächster konkreter Schritt: Config-Reads in `server.py` auf `config.NAME` umstellen, Tests migrieren, dann Module einzeln. Siehe §6 „B1".
-3. **F1/F5** View-Zerlegung — erst `@vue/test-utils`+jsdom + Charakterisierungstests. Siehe §6 „F1/F5".
-4. **Phase 4** Repo-Hygiene: R1 (eine Schema-Quelle, `web/` aus dem Repo), R2 (Build in CI/Docker statt eingecheckt), R4 (dependabot), R6 (CONTRIBUTING/Doku). Der wiederkehrende Commit „Rebuild add-on web bundle" verschwindet damit.
-5. Push + PR, sobald der Nutzer grünes Licht gibt.
+`server.py`: **3747 → 2599 Z.** Erledigt: `ses/io.py`, `ses/serial_ports.py`, `ses/catalog.py`,
+`ses/assets.py`, `ses/projects.py` extrahiert; **Config-Namespace vereinheitlicht** — `server.py`
+liest ausschließlich `config.NAME`, alle 4 Testdateien patchen `ses.config.<NAME>` (einziger
+Patch-Punkt). Jeder Schritt einzeln committet, `ruff`+`pytest` durchgehend grün.
+
+**Nächster konkreter Schritt:** `ses/devices.py` (siehe Plan-Milestone-Tabelle — Modul als
+`from ses import devices as dev` importieren wegen lokaler `devices`-Variablen in den Routen),
+dann `ses/auth.py`, `ses/esphome.py` (Job/JobManager), zuletzt `ses/routes/*` + `server.py` →
+Dünn-Einstieg. Werkzeug `$CLAUDE_JOB_DIR/tmp/extract.py` nur für kollisionsfreie Funktionsblöcke.
+
+### Danach (Reihenfolge fix, Entscheidungen getroffen)
+
+1. **B1 fertigstellen** → Gate (curl-Sweep aller Endpunkte + Container-Kurzcheck).
+2. **F1** (BuilderView: 4 Seams) + **F5** (DashboardView, DisplayInspector) — erst `@vue/test-utils`+jsdom,
+   dann Charakterisierungstests je Extraktion. Gate: voller Browser-Durchlauf.
+3. **Phase 4** — Docker-Multistage (Frontend im Image, `smartesp-studio/web/` raus), `dependabot.yml`,
+   `CONTRIBUTING.md` + Modul-Doku. Gate.
+4. **Abschluss-Feature-Prüfung** (11-Punkte-Checkliste, `plans/…` „Feature-Prüfung").
+5. `icon.png` (quadratisch, HA-Add-on-Store) — braucht Asset vom Nutzer.
+6. Push + PR, sobald der Nutzer grünes Licht gibt.
