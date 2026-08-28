@@ -112,40 +112,53 @@ Prinzip: erst Sicherheitsnetz (Lint + Tests + CI), dann strukturelle Umbauten. O
 
 6. **F7** `js-yaml` prüfen und ggf. auf `^4.x` zurück (mit Test-Absicherung aus Phase 0).
 7. **F8** `generate:actions`-Target klären.
-8. **B10** `datetime.now(timezone.utc)` statt `utcnow()`.
+8. **B10** `datetime.now(timezone.utc)` statt `utcnow()` — 2 Stellen (`server.py:143` `utc_now()`, `server.py:2764` `utcfromtimestamp`).
 9. **B7** `requirements.txt` einführen, Standalone-Dockerfile-Deps angleichen, Serial-Feature im Standalone verifizieren.
 10. **B4** OPTIONS-/CORS-Boilerplate in `after_request` bzw. Decorator zusammenziehen.
-11. **R5** Fork-Metadaten klären (Entscheidung nötig: eigener Namespace oder Upstream-Angleich).
+11. **R5** Fork-Metadaten auf `hoffi-code` umstellen (`repository.yaml`, `config.json`, README-Install-URL, CI-Image-Namespace, Dockerfile-`LABEL … source`).
+12. **E1** `.gitattributes` mit `* text=auto eol=lf` (Repo hat keins; `git` meldet LF→CRLF beim Commit unter Windows).
+13. **E2** `esp-config-designer-frontend/.npmrc` mit `registry=https://registry.npmjs.org/` (lokale Umgebung hat einen unvollständigen privaten Proxy; OSS-Fork soll gegen die öffentliche Registry bauen).
 
 ### Phase 2 — Backend-Struktur
 
-12. **B2** `logging` einführen (strukturiert, Level über Env), `print`-freie Baseline halten.
-13. **B6** App-Factory `create_app()`, Konfiguration in ein `Config`-Objekt, Tests auf Factory umstellen.
-14. **B1** `server.py` in Blueprints/Module aufteilen entlang der bestehenden Routengruppen:
+14. **B2** `logging` einführen (strukturiert, Level über Env), `print`-freie Baseline halten.
+15. **B6** App-Factory `create_app()`, Konfiguration in ein `Config`-Objekt, Tests auf Factory umstellen.
+16. **B1** `server.py` in Blueprints/Module aufteilen entlang der bestehenden Routengruppen:
     `projects`, `yaml`, `assets`, `components` (Katalog/Import), `devices` (+ mDNS/Ping), `jobs` (+ `Job`/`JobManager`), `import`, `secrets`, `ui`. Reine Helfer nach `ecd/` (io, validation, esphome).
-15. **B3** Einheitliches Fehlerschema über `errorhandler` + konsequente Nutzung von `json_error()`.
-16. **B5** Produktions-WSGI-Server (`gunicorn` mit Threads oder `waitress`), `app.run` nur noch für lokal.
+17. **B3** Einheitliches Fehlerschema über `errorhandler` + konsequente Nutzung von `json_error()`.
+18. **B5** Produktions-WSGI-Server: `waitress` (pure-Python, keine C-Abhängigkeit, brauchbar mit SSE über genug Threads). `app.run` nur noch für lokal. `run.sh` ruft `waitress-serve`/`python -m waitress` statt `python /server.py`.
 
 ### Phase 3 — Frontend-Struktur
 
-17. **F4** `utils/api.js`: eine `request()`-Funktion mit Base-URL-/Ingress-/`credentials`-Logik, einheitlicher Fehlerbehandlung. Alle 11 `fetch`-Stellen darüber führen.
-18. **F1** `BuilderView.vue` weiter zerlegen: Preview-Pipeline, Deployment-State, Asset-Flow, Display-Sync je in ein Composable mit eigener Testabdeckung. Ziel: Script-Setup < 1500 Zeilen.
-19. **F5** `DashboardView.vue`, `DisplayInspector.vue` analog entlang funktionaler Schnitte.
-20. **F3-Ausbau** Testabdeckung für `yamlProjectImport.js`, `schemaLoader.js`, die neuen Composables.
+19. **F4** `utils/api.js`: eine `request()`-Funktion mit Base-URL-/Ingress-/`credentials`-Logik, einheitlicher Fehlerbehandlung. Alle 11 `fetch`-Stellen darüber führen.
+20. **F1** `BuilderView.vue` weiter zerlegen: Preview-Pipeline, Deployment-State, Asset-Flow, Display-Sync je in ein Composable mit eigener Testabdeckung. Ziel: Script-Setup < 1500 Zeilen.
+21. **F5** `DashboardView.vue`, `DisplayInspector.vue` analog entlang funktionaler Schnitte.
+22. **F3-Ausbau** Testabdeckung für `yamlProjectImport.js`, `schemaLoader.js`, die neuen Composables.
 
 ### Phase 4 — Repo-Hygiene
 
-21. **R1** Einzige Schema-Quelle festlegen (`frontend/public/`), `web/`-Kopie im CI-Build erzeugen statt einchecken. Übergangsweise Sync-Check als CI-Job.
-22. **R2** Frontend-Build aus dem Repo nehmen, im Docker-Build bzw. CI erzeugen.
-23. **R4** `dependabot.yml` (npm + pip + github-actions).
-24. **R6** `CONTRIBUTING.md`, Backend-Modul-Doku, Frontend-`README`.
+23. **R1** Einzige Schema-Quelle festlegen (`frontend/public/`), `web/`-Kopie im CI-Build erzeugen statt einchecken. Übergangsweise Sync-Check als CI-Job.
+24. **R2** Frontend-Build aus dem Repo nehmen, im Docker-Build bzw. CI erzeugen.
+25. **R4** `dependabot.yml` (npm + pip + github-actions).
+26. **R6** `CONTRIBUTING.md`, Backend-Modul-Doku, Frontend-`README`.
 
 ---
 
-## 4. Offene Entscheidungen
+## 4. Entscheidungen
 
-- **R1/R2**: Build im Docker-Multistage bauen (Node-Stage → Python-Stage) oder in CI ein Artefakt erzeugen und ins Image kopieren? Betrifft Add-on-Build (`Dockerfile`) und Standalone (`Dockerfile.standalone`) gleichermaßen.
-- **R5**: Fork als eigenständiges Produkt (`hoffi-code`-Namespace überall) oder nah an Upstream halten (Angleich zurück auf `sokolsok` für spätere PRs)?
-- **B5**: `gunicorn` (mehr Verbreitung, braucht `gthread`-Worker wegen SSE) vs. `waitress` (pure-Python, einfacher im HA-Add-on-Kontext)?
-- **B1**: Blueprints im selben Paket oder Umzug auf ein installierbares `ecd`-Package mit `pyproject.toml`? Letzteres macht das `COPY server.py`-Muster in beiden Dockerfiles hinfällig.
-- Scope dieser Iteration: Phasen 0–1 zuerst abschließen und bewerten, oder direkt bis Phase 2 durchplanen?
+Getroffen (2026-08-28):
+
+- **Scope**: Alle Phasen 0–4 werden durchgeplant und abgearbeitet.
+- **R5 (Fork)**: Eigenständiges Produkt. `hoffi-code`-Namespace in allen Metadaten. Kein Zwang zur PR-Kompatibilität mit `sokolsok`.
+- **B5 (WSGI)**: `waitress`.
+
+Noch offen:
+
+- **R1/R2**: Build im Docker-Multistage (Node-Stage → Python-Stage) oder CI-Artefakt, das ins Image kopiert wird? Betrifft `Dockerfile` und `Dockerfile.standalone`. Entscheidung spätestens zu Beginn Phase 4.
+- **B1**: Blueprints im vorhandenen Layout (`COPY server.py` bleibt, wird zu `COPY ecd/`) oder installierbares `ecd`-Package mit eigenem `pyproject.toml`. Entscheidung zu Beginn Phase 2, sobald der Schnitt der Module steht.
+
+## 5. Umgebungsnotizen (lokal)
+
+- Aktives Node war `v10.24.1` (nvm-windows), umgestellt auf `v22.23.2`. Vite 8 braucht Node ≥ 20 → `.nvmrc`/`engines` (F6) macht das explizit.
+- Globale `~/.npmrc` zeigt auf einen privaten Registry-Proxy (`npmregistry.le.eps:4873`), dem Pakete fehlen (`vue-router@4.6.4`). Lokaler Workaround: `npm install --registry https://registry.npmjs.org/`. Dauerhafte Lösung: Projekt-`.npmrc` (E2).
+- Baseline vor Umbau grün: `npm run build` ok; `python -m pytest tests/` → 29 passed (identisch unter `unittest`).
