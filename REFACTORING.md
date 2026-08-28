@@ -275,3 +275,57 @@ Wie B1: erst Netz, dann schneiden. Es gibt aktuell **keine** Komponententests, u
 2. Charakterisierungstests für die stabilen Teilkomponenten, die schon existieren (`BuilderCoreTab`, `SchemaField`, `BuilderComponentPicker` …) — Rendern + Kern-Interaktionen.
 3. Aus `BuilderView.vue` je ein Composable herausziehen, einzeln, mit eigener Suite: `useBuilderPreview` (Preview-Pipeline), `useBuilderDeployment` (Deployment-State), `useBuilderAssets` (Asset-Flow), `useBuilderDisplaySync` (Display-Sync). Ziel Script-Setup < 1500 Z.
 4. `DashboardView.vue` / `DisplayInspector.vue` analog entlang funktionaler Schnitte.
+
+---
+
+## 7. Rebranding + Betrieb (nach Phase 3, vor dem ersten Push)
+
+Auf Wunsch vorgezogen, bevor die Refactoring-Phasen weiterlaufen. Alles auf `refactor/overhaul`, nichts gepusht.
+
+### Rename → SmartESP Studio
+
+| Bereich | Änderung |
+|---|---|
+| Name | `ESPConfig Designer` → `SmartESP Studio` überall (README, `config.json` name/slug `smartesp-studio`/panel_title/description, `repository.yaml`, `index.html`-Title, App.vue, Docs, Dockerfile-Labels, Log-Zeilen) |
+| Repo | `ESPConfig-Designer` → `SmartESP-Studio`, alle Links auf `github.com/hoffi-code/SmartESP-Studio` |
+| Verzeichnisse | `esp-config-designer/` → `smartesp-studio/`, `esp-config-designer-frontend/` → `smartesp-studio-frontend/`, Python-Paket `ecd/` → `ses/` (CI-Pfade, Dockerfiles, `.gitignore` nachgezogen) |
+| Env + Code | `ECD_*` → `SES_*` (Env-Strings **und** Python-Identifier), Blueprint-/Logger-Name `"ses"`, `SES_LOG_LEVEL`, `SES_THREADS` |
+| Storage | `/config/ecd` → `/config/smartesp`, `/config/.ecd` → `/config/.smartesp`, `independent_ecd` → `independent_smartesp` — **Breaking** für Bestandsinstallationen, im `CHANGELOG.md` als solches markiert |
+| Header-Links | YouTube + PayPal raus; übrig GitHub + Buy me a coffee (`buymeacoffee.com/smartcodestudio`) |
+| Logo/Favicon | `public/smartesp-logo.png` + `smartesp-studio/logo.png` = geliefertes SmartESP-Studio-Logo (zugeschnittene Fassung, 1958×469); Header-CSS `height: 30px`. Favicon von „VEB"-SVG auf markeneigenes `</>`-Chip-SVG. `index.html` `lang="pl"` → `"en"`. |
+| Version | `1.3.3` → `0.1.0` (`package.json` + `config.json`), SemVer-Abschnitt in `CLAUDE.md`, `0.1.0`-Eintrag im `CHANGELOG.md` |
+| `icon.png` | **offen** — 863×863 quadratisch, geliefertes Logo ist Querformat; braucht eigene quadratische Variante |
+
+### Component-Paywall entfernt
+
+`componentPickerNotices` (Store-Upsell „Get Pack" → `store.smartsolutions4home.com`), `catalogHasUnavailableComponents`, `hasUnavailableCatalogComponents`, `componentsAvailableOnly` (Toggle „Available only"), `visibleCategories`-Filter, zugehörige Props/Emits, `.components-picker-notice*`/`.components-available-filter*`-CSS. `isComponentAvailable` behält nur die `root_map`-Konfliktprüfung (echte Regel, keine Paywall). −232 Zeilen. Ausgelieferter Katalog hatte ohnehin 0 `available:false` — Feld `"available": true` steht noch 552× drin, wird nicht mehr gelesen (mit R1 aufräumen).
+
+### Docker verifiziert
+
+- `docker build --check` beide Dockerfiles: keine Warnungen. `docker compose config` alle 3 Compose-Dateien: valide.
+- Standalone-Image baut (`smartesp-studio:local`, ~1,47 GB), Container läuft `Up (healthy)`, waitress statt Dev-Server, `SES_*`/`/config/smartesp`/`version 0.1.0` korrekt.
+- **Fix:** Container war `(unhealthy)` — esphome-Base-Image bringt einen HEALTHCHECK auf `:6052` (Dashboard) mit. `HEALTHCHECK` auf `/api/health` in beide Dockerfiles ergänzt.
+- Sichtprüfung (Dashboard + Builder) im Browser ok: Branding, Links, Paywall weg.
+
+### UI-Retheme auf die Logo-Palette
+
+`style.css` `:root` hat jetzt Brand-Tokens (`--brand-navy/-blue/-cyan/-green/-amber`, `--brand-gradient`) + semantische Tokens (`--navy`, `--accent` = Teal `#0e7c8a`, `--accent-strong`, `--accent-line`, `--border`, `--ok`). Sweep der Periwinkle-Akzentfarben (`#6190d6`/`#6791d4`/…) → Tokens über `style.css` + 19 Scoped-Component-Styles. Signature: 2px-Verlaufslinie (`navy→blue→cyan→green`) unter der Topbar (`.builder-hero::after`). Body-Hintergrund von Indigo-Radial auf kühles Neutral. Fokus-Ring → Teal. Status-Farben (Rot/Grün/Amber) unangetastet. Typografie unverändert (Space Grotesk).
+
+Sweep-Bug behoben: 5 Stellen hatten `var(--…)`-Strings in **JS-Farbwerte** geschrieben (Canvas-`fillStyle`, Color-Picker-Swatches, Tile-Default) — auf Hex zurückgesetzt (`ColorPickerModal`, `DashboardModalHost`, `YamlBuilderImportModal`, `DisplayCanvas`, `DashboardView`).
+
+---
+
+## 8. Aktueller Stand (Save-Punkt)
+
+- **Branch:** `refactor/overhaul`, 38 Commits über `main` (Tag `6f01ed6` = Upstream 1.3.3), **nichts gepusht**.
+- **Checks grün:** Frontend `npm run lint` (0 Fehler / 112 Warnungen, davon ~90 `no-useless-escape` in `schemaYaml.js`), `npm test` (76), `npm run build`. Backend `ruff check` (sauber), `pytest` (32 + 16 subtests).
+- **Lokaler Container:** `smartesp-studio-test` läuft `Up (healthy)` auf `http://localhost:8099` (Image `smartesp-studio:local`).
+- **`CLAUDE.md`** im Repo-Root ist weiterhin **untracked** (bewusst, siehe frühere Entscheidung) — enthält Rollen-Prompt + „Schreibstil" + „Versionierung".
+
+### Nächste Schritte (Reihenfolge offen)
+
+1. `icon.png` (quadratisch) für den HA-Add-on-Store — braucht Asset vom Nutzer.
+2. **B1** Route-/Helfer-Split von `server.py` (Fundament steht: `ses/config|logging|errors`, `test_smoke.py`) — nächster konkreter Schritt: Config-Reads in `server.py` auf `config.NAME` umstellen, Tests migrieren, dann Module einzeln. Siehe §6 „B1".
+3. **F1/F5** View-Zerlegung — erst `@vue/test-utils`+jsdom + Charakterisierungstests. Siehe §6 „F1/F5".
+4. **Phase 4** Repo-Hygiene: R1 (eine Schema-Quelle, `web/` aus dem Repo), R2 (Build in CI/Docker statt eingecheckt), R4 (dependabot), R6 (CONTRIBUTING/Doku). Der wiederkehrende Commit „Rebuild add-on web bundle" verschwindet damit.
+5. Push + PR, sobald der Nutzer grünes Licht gibt.
