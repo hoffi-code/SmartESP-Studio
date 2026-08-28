@@ -201,9 +201,41 @@ Offen aus Phase 0 als Warnungen sichtbar, nicht blockierend: 112 ESLint-Warnunge
 | B3 | `handle_http_exception` / `handle_unexpected_exception` — jede nicht abgefangene Exception → `{status, message}` als JSON 500, Traceback ins Log, kein Stack zum Client. `HTTPException` → JSON mit passendem Code. Unbekannte `/api/...`-Routen → JSON 404. Geprüft per Smoke-Test. |
 | B5 | `waitress==3.0.2` in `requirements.txt`. `__main__` startet `waitress.serve(app, threads=ECD_THREADS|8)`, Fallback auf `app.run` wenn waitress fehlt (lokal). `run.sh` bleibt bei `python /server.py` — ein Entrypoint, Dev/Prod-Parität. |
 | B6 | `create_app() -> Flask`. Routen als `Blueprint("ecd")` (43 `@app.route` + 2 `@app.before_request` umgestellt), Error-Handler über `register_error_handler`. Modul-Level `app = create_app()` bleibt für die bestehenden Tests. Zweite unabhängige Instanz per Smoke-Test verifiziert. |
-| **B1** | **Offen.** Physische Aufteilung von `server.py` (jetzt ~3830 Z., eine Datei, ein Blueprint) in `ecd/`-Module. Braucht einen eigenen Durchgang — siehe unten. |
+| **B1** | **Angefangen.** Fundament steht: `tests/test_smoke.py` (16 Endpunkte, 1 pro Routengruppe), `ecd/`-Paket mit `config.py` / `logging.py` / `errors.py`, Dockerfiles kopieren `ecd`. `server.py` von ~3830 auf ~3700 Z. Der Route-/Helfer-Split steht noch aus — siehe unten. |
 
-#### B1 — Aufteilungsplan (noch nicht umgesetzt)
+#### B1 — Stand und nächster Schritt
+
+**Erledigt:**
+
+- `tests/test_smoke.py` — je ein erreichbarer Endpunkt pro künftigem Blueprint. Bricht ein Import beim Verschieben, wird die Gruppe 404/500 und der Test rot.
+- `ecd/config.py` (Env/Pfade/Regex/Locks/`is_truthy`), `ecd/logging.py` (`basicConfig` + `log` + `get_logger`), `ecd/errors.py` (`json_error` + die zwei Handler). `server.py` importiert daraus.
+- `server.py` behält `from ecd.config import <NAME>` als Namen im eigenen Namespace → die bestehenden Tests patchen weiter `server.TARGET_DIR` usw. **ohne Änderung**. Das gilt nur, solange der lesende Code in `server.py` bleibt.
+- `Dockerfile` + `Dockerfile.standalone`: `COPY ecd /ecd`.
+
+**Nächster Schritt (der eigentliche Split):**
+
+1. In `server.py` alle Config-Lesezugriffe von `NAME` auf `config.NAME` umstellen (`from ecd import config`), ~250 Stellen, wortgrenzensicher. Danach gibt es **einen** Patch-Punkt: `ecd.config`.
+2. Die drei Testdateien von `server.<NAME>` auf `ecd.config.<NAME>` umstellen; Helfer-Referenzen (`server.Job`, `server.is_allowed_serial_port`, `server.normalize_component_entry` …) auf die neuen Module zeigen lassen.
+3. Dann je ein Route-Modul + zugehörige Helfer nach `ecd/routes/` bzw. `ecd/esphome.py`, `ecd/catalog.py`, `ecd/devices.py`, `ecd/assets.py`, `ecd/io.py` — einzeln, jeweils `pytest` grün.
+4. `job_manager = JobManager()` und `bootstrap_storage()` bleiben in `server.py`/`create_app()` (Reihenfolge: erst `bootstrap_storage`, dann `JobManager()`), damit sich das Startverhalten nicht ändert.
+
+Zielstruktur:
+
+```
+esp-config-designer/
+  server.py                 # from ecd import create_app; app = create_app()
+  ecd/
+    __init__.py             # create_app(): Blueprints + Error-Handler
+    config.py logging.py errors.py     [erledigt]
+    io.py                   # read/write_json(_atomic), write_text_file_atomic, seed_*
+    esphome.py              # Job, JobManager, run_esphome, Serial-Port-Helfer
+    devices.py              # MDNSProbe, ping_host, evaluate_device_connectivity, Registry
+    catalog.py              # Komponenten-Katalog: normalize/merge/import-zip, custom components
+    assets.py               # Asset-Index, Manifest, Upload/Rename/Delete
+    routes/
+      health.py projects.py yaml.py assets.py components.py
+      devices.py jobs.py import_.py secrets.py ui.py
+```
 
 Zielstruktur:
 
