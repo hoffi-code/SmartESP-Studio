@@ -3778,4 +3778,18 @@ def serve_ui(path):
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=PORT)
+    log.info("Starting ECD %s on :%s (mode=%s)", ECD_VERSION or "dev", PORT, ECD_MODE)
+    try:
+        from waitress import serve
+    except ImportError:
+        # Local dev without waitress installed.
+        app.run(host="0.0.0.0", port=PORT)
+    else:
+        # Streaming log endpoints hold a thread each while a job runs, so keep a
+        # generous pool.
+        serve(
+            app,
+            host="0.0.0.0",
+            port=PORT,
+            threads=int(os.environ.get("ECD_THREADS", "8")),
+        )
