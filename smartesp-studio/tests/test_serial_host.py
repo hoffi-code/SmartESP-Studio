@@ -15,7 +15,6 @@ server = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(server)
 
 import ses.config as config  # noqa: E402
-
 from ses import serial_ports  # noqa: E402  (server import must run first)
 
 

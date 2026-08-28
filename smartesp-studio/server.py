@@ -6,7 +6,6 @@ import mimetypes
 import os
 import pty
 import queue
-import re
 import select
 import shlex
 import socket
@@ -17,7 +16,6 @@ import uuid
 import zipfile
 from collections import deque
 from typing import List, Optional, Tuple
-from urllib.parse import quote
 
 from flask import (
     Blueprint,
@@ -37,7 +35,7 @@ except Exception:
     IPVersion = None
     Zeroconf = None
 
-from ses import catalog, config, serial_ports
+from ses import assets, catalog, config, serial_ports
 from ses.errors import (
     handle_http_exception,
     handle_unexpected_exception,
@@ -48,7 +46,6 @@ from ses.io import (
     normalize_device,
     normalize_filename,
     normalize_yaml_filename,
-    read_json_file,
     read_log_tail,
     sanitize_log_line,
     seed_assets,
@@ -56,231 +53,10 @@ from ses.io import (
     should_skip_log_line,
     timestamp_to_utc,
     utc_now,
-    write_json_file,
     write_json_file_atomic,
     write_text_file_atomic,
 )
 from ses.logging import log
-
-
-def normalize_asset_label(filename: str) -> str:
-    base = os.path.splitext(filename)[0]
-    label = base.replace("_", " ").replace("-", " ").strip()
-    return label or filename
-
-
-def sync_asset_index(key: str, folder: str, json_path: str) -> dict:
-    """Build an index JSON from on-disk assets and preserve existing metadata."""
-    os.makedirs(folder, exist_ok=True)
-    existing = read_json_file(json_path) or {}
-    existing_list = existing.get(key, [])
-    if not isinstance(existing_list, list):
-        existing_list = []
-    existing_map = {
-        entry.get("file"): entry
-        for entry in existing_list
-        if isinstance(entry, dict) and entry.get("file")
-    }
-
-    files = [
-        name
-        for name in os.listdir(folder)
-        if os.path.isfile(os.path.join(folder, name))
-    ]
-    files.sort()
-
-    entries = []
-    for filename in files:
-        entry = existing_map.get(filename)
-        if entry:
-            entries.append(entry)
-        else:
-            entries.append({"label": normalize_asset_label(filename), "file": filename})
-
-    data = dict(existing) if isinstance(existing, dict) else {}
-    data[key] = entries
-    if data != existing:
-        write_json_file(json_path, data)
-    return data
-
-
-def sync_assets(kind: str = "all") -> dict:
-    result = {}
-    if kind in ("all", "fonts"):
-        result["fonts"] = sync_asset_index("fonts", config.ASSET_FONTS_DIR, config.ASSET_FONTS_JSON)
-    if kind in ("all", "images"):
-        result["images"] = sync_asset_index("images", config.ASSET_IMAGES_DIR, config.ASSET_IMAGES_JSON)
-    if kind in ("all", "audio"):
-        result["audio"] = sync_asset_index("audio", config.ASSET_AUDIO_DIR, config.ASSET_AUDIO_JSON)
-    return result
-
-
-def parse_asset_kind(value: str) -> str:
-    kind = str(value or "").strip().lower()
-    if kind in ("images", "fonts", "audio"):
-        return kind
-    return ""
-
-
-def parse_asset_refresh_flag(value: str) -> bool:
-    normalized = str(value or "0").strip().lower()
-    return normalized in ("1", "true", "yes", "on")
-
-
-def asset_meta_for_kind(kind: str) -> dict:
-    if kind == "images":
-        return {
-            "key": "images",
-            "folder": config.ASSET_IMAGES_DIR,
-            "json_path": config.ASSET_IMAGES_JSON,
-            "max_bytes": config.ASSET_MAX_SIZE_BYTES["images"],
-            "extensions": config.ASSET_ALLOWED_EXTENSIONS["images"],
-            "mime": config.ASSET_ALLOWED_MIME["images"],
-        }
-    if kind == "fonts":
-        return {
-            "key": "fonts",
-            "folder": config.ASSET_FONTS_DIR,
-            "json_path": config.ASSET_FONTS_JSON,
-            "max_bytes": config.ASSET_MAX_SIZE_BYTES["fonts"],
-            "extensions": config.ASSET_ALLOWED_EXTENSIONS["fonts"],
-            "mime": config.ASSET_ALLOWED_MIME["fonts"],
-        }
-    if kind == "audio":
-        return {
-            "key": "audio",
-            "folder": config.ASSET_AUDIO_DIR,
-            "json_path": config.ASSET_AUDIO_JSON,
-            "max_bytes": config.ASSET_MAX_SIZE_BYTES["audio"],
-            "extensions": config.ASSET_ALLOWED_EXTENSIONS["audio"],
-            "mime": config.ASSET_ALLOWED_MIME["audio"],
-        }
-    return {}
-
-
-def validate_asset_filename(filename: str) -> str:
-    name = str(filename or "").strip()
-    if not name:
-        return ""
-    if "\x00" in name:
-        return ""
-    if "/" in name or "\\" in name:
-        return ""
-    if name in (".", ".."):
-        return ""
-    if os.path.basename(name) != name:
-        return ""
-    return name
-
-
-def validate_asset_extension(filename: str, allowed_extensions: set) -> bool:
-    _, ext = os.path.splitext(filename)
-    return ext.lower() in allowed_extensions
-
-
-def ensure_asset_filename_available(folder: str, filename: str) -> str:
-    base, ext = os.path.splitext(filename)
-    candidate = filename
-    index = 1
-    while os.path.isfile(os.path.join(folder, candidate)):
-        candidate = f"{base}_{index}{ext}"
-        index += 1
-    return candidate
-
-
-def build_asset_entries(kind: str) -> List[dict]:
-    meta = asset_meta_for_kind(kind)
-    if not meta:
-        return []
-
-    folder = meta["folder"]
-    key = meta["key"]
-    json_path = meta["json_path"]
-    allowed_extensions = meta["extensions"]
-
-    os.makedirs(folder, exist_ok=True)
-    index_payload = read_json_file(json_path) or {}
-    indexed = index_payload.get(key, [])
-    indexed_map = {
-        item.get("file"): item
-        for item in indexed
-        if isinstance(item, dict) and item.get("file")
-    }
-
-    filenames = []
-    for name in os.listdir(folder):
-        path = os.path.join(folder, name)
-        if not os.path.isfile(path):
-            continue
-        if not validate_asset_extension(name, allowed_extensions):
-            continue
-        filenames.append(name)
-    filenames.sort(key=lambda item: item.lower())
-
-    entries = []
-    for name in filenames:
-        full_path = os.path.join(folder, name)
-        stats = os.stat(full_path)
-        indexed_item = indexed_map.get(name, {})
-        label = indexed_item.get("label") if isinstance(indexed_item, dict) else ""
-        if not label:
-            label = normalize_asset_label(name)
-        _, ext = os.path.splitext(name)
-        is_animation = kind == "images" and ext.lower() == ".gif"
-        entries.append(
-            {
-                "file": name,
-                "label": label,
-                "size": stats.st_size,
-                "mtime": timestamp_to_utc(stats.st_mtime),
-                "type": ext.lower().lstrip("."),
-                "isAnimation": is_animation,
-                "url": f"/api/assets/{kind}/{quote(name)}",
-            }
-        )
-    return entries
-
-
-def build_assets_manifest(kind: str, refresh: bool) -> dict:
-    result = {}
-    kinds = ["images", "fonts", "audio"] if kind == "all" else [kind]
-    with config.ASSET_LOCK:
-        if refresh:
-            sync_assets(kind if kind in ("images", "fonts", "audio") else "all")
-        for current_kind in kinds:
-            result[current_kind] = {
-                "kind": current_kind,
-                "maxBytes": config.ASSET_MAX_SIZE_BYTES[current_kind],
-                "extensions": sorted(list(config.ASSET_ALLOWED_EXTENSIONS[current_kind])),
-                "items": build_asset_entries(current_kind),
-            }
-        if kind in ("all", "fonts"):
-            gfonts_payload = read_json_file(config.ASSET_GFONTS_JSON) or {}
-            families = gfonts_payload.get("families", [])
-            result["googleFonts"] = families if isinstance(families, list) else []
-    return result
-
-
-def load_mdi_glyph_substitutions() -> dict:
-    if not os.path.isfile(config.ASSET_GLYPH_SUBS):
-        return {}
-
-    result = {}
-    pattern = re.compile(r'^\s{2}([^:\s][^:]*):\s+"([^"]+)"\s*$')
-    try:
-        with open(config.ASSET_GLYPH_SUBS, "r", encoding="utf-8") as handle:
-            for raw_line in handle:
-                line = raw_line.rstrip("\r\n")
-                match = pattern.match(line)
-                if not match:
-                    continue
-                key = match.group(1).strip()
-                value = match.group(2)
-                if key and value:
-                    result[key] = value
-    except Exception:
-        return {}
-    return result
 
 
 def bootstrap_storage() -> None:
@@ -289,7 +65,7 @@ def bootstrap_storage() -> None:
     seed_tree(config.SEED_ROOT, config.TARGET_DIR)
     seed_assets()
     os.makedirs(catalog.components_runtime_schemas_root(), exist_ok=True)
-    sync_assets("all")
+    assets.sync_assets("all")
 
 
 def load_devices() -> List[dict]:
@@ -1673,7 +1449,7 @@ def api_assets_refresh():
         return jsonify({"status": "error", "message": "Invalid kind"}), 400
 
     with config.ASSET_LOCK:
-        payload = sync_assets(kind)
+        payload = assets.sync_assets(kind)
     return jsonify({"status": "ok", **payload})
 
 
@@ -1687,8 +1463,8 @@ def api_assets_manifest():
     if kind not in ("all", "images", "fonts", "audio"):
         return json_error("Invalid kind", "ASSET_INVALID_KIND", 400)
 
-    refresh = parse_asset_refresh_flag(request.args.get("refresh", "0"))
-    payload = build_assets_manifest(kind, refresh)
+    refresh = assets.parse_asset_refresh_flag(request.args.get("refresh", "0"))
+    payload = assets.build_assets_manifest(kind, refresh)
     return jsonify({"status": "ok", **payload})
 
 
@@ -1699,7 +1475,7 @@ def api_assets_mdi_substitutions():
         return access
 
     with config.ASSET_LOCK:
-        substitutions = load_mdi_glyph_substitutions()
+        substitutions = assets.load_mdi_glyph_substitutions()
     return jsonify({"status": "ok", "substitutions": substitutions})
 
 
@@ -1709,7 +1485,7 @@ def api_assets_upload():
     if access:
         return access
 
-    kind = parse_asset_kind(request.args.get("kind", ""))
+    kind = assets.parse_asset_kind(request.args.get("kind", ""))
     if not kind:
         return json_error("Invalid kind", "ASSET_INVALID_KIND", 400)
 
@@ -1717,12 +1493,12 @@ def api_assets_upload():
         return json_error("Missing file", "ASSET_FILE_REQUIRED", 400)
 
     upload = request.files["file"]
-    original_name = validate_asset_filename(upload.filename)
+    original_name = assets.validate_asset_filename(upload.filename)
     if not original_name:
         return json_error("Invalid filename", "ASSET_INVALID_FILENAME", 400)
 
-    meta = asset_meta_for_kind(kind)
-    if not validate_asset_extension(original_name, meta["extensions"]):
+    meta = assets.asset_meta_for_kind(kind)
+    if not assets.validate_asset_extension(original_name, meta["extensions"]):
         return json_error("Unsupported extension", "ASSET_UNSUPPORTED_EXTENSION", 400)
 
     mime_type = str(upload.mimetype or "").lower().strip()
@@ -1737,12 +1513,12 @@ def api_assets_upload():
 
     with config.ASSET_LOCK:
         os.makedirs(meta["folder"], exist_ok=True)
-        filename = ensure_asset_filename_available(meta["folder"], original_name)
+        filename = assets.ensure_asset_filename_available(meta["folder"], original_name)
         path = os.path.join(meta["folder"], filename)
         with open(path, "wb") as handle:
             handle.write(raw)
-        sync_assets(kind)
-        entries = build_asset_entries(kind)
+        assets.sync_assets(kind)
+        entries = assets.build_asset_entries(kind)
         created = next((item for item in entries if item.get("file") == filename), None)
 
     return jsonify(
@@ -1763,19 +1539,19 @@ def api_assets_rename():
         return access
 
     payload = request.get_json(silent=True) or {}
-    kind = parse_asset_kind(payload.get("kind", ""))
+    kind = assets.parse_asset_kind(payload.get("kind", ""))
     if not kind:
         return json_error("Invalid kind", "ASSET_INVALID_KIND", 400)
 
-    source_name = validate_asset_filename(payload.get("from", ""))
-    target_name = validate_asset_filename(payload.get("to", ""))
+    source_name = assets.validate_asset_filename(payload.get("from", ""))
+    target_name = assets.validate_asset_filename(payload.get("to", ""))
     if not source_name or not target_name:
         return json_error("Invalid filename", "ASSET_INVALID_FILENAME", 400)
 
-    meta = asset_meta_for_kind(kind)
-    if not validate_asset_extension(source_name, meta["extensions"]):
+    meta = assets.asset_meta_for_kind(kind)
+    if not assets.validate_asset_extension(source_name, meta["extensions"]):
         return json_error("Unsupported source extension", "ASSET_UNSUPPORTED_EXTENSION", 400)
-    if not validate_asset_extension(target_name, meta["extensions"]):
+    if not assets.validate_asset_extension(target_name, meta["extensions"]):
         return json_error("Unsupported target extension", "ASSET_UNSUPPORTED_EXTENSION", 400)
 
     with config.ASSET_LOCK:
@@ -1783,11 +1559,11 @@ def api_assets_rename():
         if not os.path.isfile(source_path):
             return json_error("Source not found", "ASSET_NOT_FOUND", 404)
 
-        final_name = ensure_asset_filename_available(meta["folder"], target_name)
+        final_name = assets.ensure_asset_filename_available(meta["folder"], target_name)
         target_path = os.path.join(meta["folder"], final_name)
         os.rename(source_path, target_path)
-        sync_assets(kind)
-        entries = build_asset_entries(kind)
+        assets.sync_assets(kind)
+        entries = assets.build_asset_entries(kind)
         item = next((entry for entry in entries if entry.get("file") == final_name), None)
 
     return jsonify(
@@ -1808,16 +1584,16 @@ def api_assets_file(kind, filename):
     if access:
         return access
 
-    parsed_kind = parse_asset_kind(kind)
+    parsed_kind = assets.parse_asset_kind(kind)
     if not parsed_kind:
         return json_error("Invalid kind", "ASSET_INVALID_KIND", 400)
 
-    safe_name = validate_asset_filename(filename)
+    safe_name = assets.validate_asset_filename(filename)
     if not safe_name:
         return json_error("Invalid filename", "ASSET_INVALID_FILENAME", 400)
 
-    meta = asset_meta_for_kind(parsed_kind)
-    if not validate_asset_extension(safe_name, meta["extensions"]):
+    meta = assets.asset_meta_for_kind(parsed_kind)
+    if not assets.validate_asset_extension(safe_name, meta["extensions"]):
         return json_error("Unsupported extension", "ASSET_UNSUPPORTED_EXTENSION", 400)
 
     if request.method == "GET":
@@ -1834,7 +1610,7 @@ def api_assets_file(kind, filename):
         if not os.path.isfile(target):
             return json_error("Not found", "ASSET_NOT_FOUND", 404)
         os.remove(target)
-        sync_assets(parsed_kind)
+        assets.sync_assets(parsed_kind)
 
     return jsonify({"status": "ok", "kind": parsed_kind, "file": safe_name})
 
