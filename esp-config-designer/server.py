@@ -24,6 +24,7 @@ from typing import List, Optional, Tuple
 from urllib.parse import quote
 
 from flask import Flask, Response, jsonify, make_response, request, send_file, send_from_directory
+from werkzeug.exceptions import HTTPException
 
 try:
     from zeroconf import IPVersion, Zeroconf
@@ -2016,6 +2017,17 @@ bootstrap_storage()
 job_manager = JobManager()
 
 app = Flask(__name__)
+
+
+@app.errorhandler(HTTPException)
+def handle_http_exception(error):
+    return jsonify({"status": "error", "message": error.description}), error.code
+
+
+@app.errorhandler(Exception)
+def handle_unexpected_exception(error):
+    log.exception("unhandled error on %s %s", request.method, request.path)
+    return jsonify({"status": "error", "message": "Internal server error"}), 500
 
 
 @app.before_request
