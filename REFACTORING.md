@@ -257,9 +257,21 @@ esp-config-designer/
       components.py  devices.py  jobs.py  import_.py  secrets.py  ui.py
 ```
 
-Blocker und Vorgehen:
+Blocker und Vorgehen: siehe „B1 — Stand und nächster Schritt" oben.
 
-1. **Test-Monkeypatching.** Die drei Testdateien patchen `server.TARGET_DIR` / `PROJECT_DIR` / `ESPHOME_CONFIG_DIR` zur Laufzeit. Sobald Code aus `server.py` in `ecd/`-Module wandert, greift dieses Patching dort nicht mehr. Umstellung nötig: Config über `ecd.config`-Attribute lesen und Tests `ecd.config.TARGET_DIR` patchen lassen — oder Tests auf `create_app()` mit Env/`app.config` umstellen. Das ist die eigentliche Arbeit an B1.
-2. **Reihenfolge:** erst `config.py` + `logging.py` + `errors.py` herausziehen (kleine, blattnahe Module), Tests auf `ecd.config` umstellen, grün. Dann je ein Route-Modul + zugehörige Helfer, einzeln, jeweils mit grünem `pytest`/Smoke-Test.
-3. **Testabdeckung zuerst erhöhen.** Aktuell decken 29 Tests ~6 Endpunkte ab. Vor dem Zerlegen der Routengruppen mindestens ein Smoke-Test pro Blueprint (Statuscode + Grundform der Antwort), damit ein falscher Import beim Verschieben sofort auffällt.
-4. `Dockerfile` / `Dockerfile.standalone`: `COPY server.py` → zusätzlich `COPY ecd /ecd` (bzw. Paket unter `/`). `run.sh` unverändert.
+### Phase 3 — teilweise erledigt
+
+| Schritt | Ergebnis |
+|---|---|
+| F4 | `src/utils/api.js` — `apiUrl` / `apiFetch` / `unwrapJson` / `apiJson`. Das dreifach kopierte `new URL("./", window.location.href)` + `credentials: "include"` liegt jetzt an **einer** Stelle. `BuilderView.vue` (`buildAddonUrl`/`addonFetch`) und `DashboardView.vue` (`getApiUrl`) delegieren, Aufrufstellen unverändert. `unwrapJson` wandelt non-2xx in einen `Error` mit `{status, message, payload}`. Getestet (`api.spec.js`). Statische Asset-Loader (`schemaLoader.js`, `gpioData.js`) und CDN-Fetches (`IconPicker.vue`) bleiben außen vor — kein Ingress/Credentials-Bezug. |
+| F3-Ausbau | Neue Vitest-Suites: `schemaModeLevel`, `schemaTemplatable`, `schemaAuto` (Slug/SSID-Ableitung, `!secret`-Erkennung, Passwort-Generierung/-Validierung). Gesamt 76 Frontend-Tests (vorher 39). |
+| **F1 / F5** | **Offen.** `BuilderView.vue` (6318 Z.), `DashboardView.vue` (3093 Z.), `DisplayInspector.vue` (2114 Z.) zerlegen. Siehe unten. |
+
+#### F1 / F5 — Vorgehen (noch nicht umgesetzt)
+
+Wie B1: erst Netz, dann schneiden. Es gibt aktuell **keine** Komponententests, und die App lässt sich lokal nicht real starten (braucht Backend + HA-Ingress). Ein Blind-Split am 5800-Zeilen-`<script setup>` ist zu riskant.
+
+1. `@vue/test-utils` + `jsdom` als devDeps, `vitest.config.js` um ein `environment: "jsdom"`-Projekt für `*.spec.vue.js` erweitern.
+2. Charakterisierungstests für die stabilen Teilkomponenten, die schon existieren (`BuilderCoreTab`, `SchemaField`, `BuilderComponentPicker` …) — Rendern + Kern-Interaktionen.
+3. Aus `BuilderView.vue` je ein Composable herausziehen, einzeln, mit eigener Suite: `useBuilderPreview` (Preview-Pipeline), `useBuilderDeployment` (Deployment-State), `useBuilderAssets` (Asset-Flow), `useBuilderDisplaySync` (Display-Sync). Ziel Script-Setup < 1500 Z.
+4. `DashboardView.vue` / `DisplayInspector.vue` analog entlang funktionaler Schnitte.
