@@ -18,7 +18,7 @@ import time
 import uuid
 import zipfile
 from collections import deque
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List, Optional, Tuple
 from urllib.parse import quote
 
@@ -140,7 +140,8 @@ SERIAL_PORT_PREFIXES = ("/dev/ttyUSB", "/dev/ttyACM", "/dev/serial/by-id/")
 
 
 def utc_now() -> str:
-    return f"{datetime.utcnow().isoformat()}Z"
+    # tzinfo dropped so the serialized form stays "<iso>Z" as before
+    return f"{datetime.now(timezone.utc).replace(tzinfo=None).isoformat()}Z"
 
 
 def normalize_filename(value: str, extension: str) -> str:
@@ -446,7 +447,7 @@ def ensure_asset_filename_available(folder: str, filename: str) -> str:
 
 
 def timestamp_to_utc(value: float) -> str:
-    return f"{datetime.utcfromtimestamp(value).isoformat()}Z"
+    return f"{datetime.fromtimestamp(value, timezone.utc).replace(tzinfo=None).isoformat()}Z"
 
 
 def build_asset_entries(kind: str) -> List[dict]:
@@ -2761,7 +2762,7 @@ def import_yaml_candidates():
         try:
             stat = os.stat(path)
             size = stat.st_size
-            mtime = f"{datetime.utcfromtimestamp(stat.st_mtime).isoformat()}Z"
+            mtime = timestamp_to_utc(stat.st_mtime)
         except Exception:
             size = 0
             mtime = ""
