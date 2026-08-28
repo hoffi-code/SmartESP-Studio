@@ -247,12 +247,12 @@ onBeforeUnmount(() => {
   align-items: center;
   padding: 8px 10px;
   border-radius: 10px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
   background: #ffffff;
   text-align: left;
   font-size: 12px;
   cursor: pointer;
-  color: #0f172a;
+  color: var(--navy);
 }
 
 .icon-button img {

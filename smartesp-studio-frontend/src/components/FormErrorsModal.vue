@@ -97,7 +97,7 @@ watch(
 }
 
 .form-errors-modal-message {
-  color: #0f172a;
+  color: var(--navy);
   font-size: 16px;
 }
 
@@ -118,7 +118,7 @@ watch(
 }
 
 .form-errors-modal-line--neutral {
-  color: #0f172a;
+  color: var(--navy);
 }
 
 .form-errors-modal--neutral .form-errors-modal-message {

@@ -207,15 +207,15 @@ watch(
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  border: 1px solid #cbd5f5;
-  color: #0f172a;
+  border: 1px solid var(--accent-line);
+  color: var(--navy);
   text-decoration: none;
   font-weight: 700;
   font-size: 12px;
 }
 
 .filter-help:hover {
-  background: #e2e8f0;
+  background: var(--border);
 }
 
 .icon-picker-search {
@@ -285,8 +285,8 @@ watch(
   gap: 6px;
   padding: 12px 14px;
   border-radius: 4px;
-  border: 1px solid #6e93c4;
-  background: #6190d6;
+  border: 1px solid var(--accent-strong);
+  background: var(--accent);
   color: #ffffff;
   font-weight: 600;
 }

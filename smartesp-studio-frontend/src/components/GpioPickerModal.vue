@@ -239,7 +239,7 @@ onBeforeUnmount(() => {
 }
 
 .legend-item.used {
-  background: #e2e8f0;
+  background: var(--border);
   color: #64748b;
 }
 
@@ -257,7 +257,7 @@ onBeforeUnmount(() => {
   gap: 8px;
   padding: 8px 10px;
   border-radius: 10px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
   font-weight: 700;
   background: #f8fafc;
 }
@@ -296,7 +296,7 @@ onBeforeUnmount(() => {
 }
 
 .gpio-item.used {
-  background: #e2e8f0;
+  background: var(--border);
   color: #94a3b8;
 }
 

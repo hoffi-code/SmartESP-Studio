@@ -123,7 +123,7 @@
         <div class="customize-field-row">
           <label for="tileIconColorInput">Icon color</label>
           <div class="customize-field-inputs">
-            <input id="tileIconColorInput" type="text" :value="customizeDraft.iconColor" placeholder="#0F172A" @input="emit('update-customize-draft', 'iconColor', $event.target.value)" />
+            <input id="tileIconColorInput" type="text" :value="customizeDraft.iconColor" placeholder="#0F2E4C" @input="emit('update-customize-draft', 'iconColor', $event.target.value)" />
             <button type="button" class="btn-standard compact" @click="emit('open-customize-color-picker', 'icon')">Pick color</button>
           </div>
         </div>

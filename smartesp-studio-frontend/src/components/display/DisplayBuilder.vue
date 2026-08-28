@@ -1183,7 +1183,7 @@ onBeforeUnmount(() => {
 .display-config-panel--canvas,
 .display-config-panel--inspector {
   background: #f8fafc;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
   border-radius: 4px;
   padding: 12px;
 }
@@ -1195,7 +1195,7 @@ onBeforeUnmount(() => {
 
 .display-config-panel--layers {
   background: #f8fafc;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
   border-radius: 4px;
   padding: 12px;
   display: grid;
@@ -1218,12 +1218,12 @@ onBeforeUnmount(() => {
   grid-template-columns: auto 1fr;
   gap: 8px;
   align-items: center;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
   border-radius: 4px;
   background: #ffffff;
   padding: 6px 8px;
   font-size: 12px;
-  color: #0f172a;
+  color: var(--navy);
   text-align: left;
   cursor: grab;
 }
@@ -1255,7 +1255,7 @@ onBeforeUnmount(() => {
 
 .display-element-name {
   font-weight: 600;
-  color: #0f172a;
+  color: var(--navy);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

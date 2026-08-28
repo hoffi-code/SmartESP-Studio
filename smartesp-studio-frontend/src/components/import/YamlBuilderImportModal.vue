@@ -90,7 +90,7 @@ const importTileStyle = {
 };
 const importTileIconStyle = {
   "--project-icon-url": 'url("https://cdn.jsdelivr.net/npm/@mdi/svg/svg/memory.svg")',
-  color: "#0F172A"
+  color: "#0F2E4C"
 };
 
 const filteredItems = computed(() => {
@@ -150,10 +150,10 @@ watch(
 .yaml-builder-import-modal {
   width: min(1380px, calc(100vw - 48px));
   height: min(88vh, 900px);
-  border: 1px solid #dbe2ee;
+  border: 1px solid var(--border);
   border-radius: 4px;
   background: #fcfcfc;
-  color: #0f172a;
+  color: var(--navy);
   display: grid;
   grid-template-rows: auto minmax(340px, 1fr) auto;
   overflow: hidden;
@@ -208,7 +208,7 @@ watch(
 
 .yaml-builder-import-state {
   padding: 18px;
-  border: 1px solid #dbe2ee;
+  border: 1px solid var(--border);
   border-radius: 4px;
   background: #ffffff;
   color: #64748b;

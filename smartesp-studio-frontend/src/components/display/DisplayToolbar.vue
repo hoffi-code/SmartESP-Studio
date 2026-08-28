@@ -78,7 +78,7 @@ const actions = [
   flex-wrap: wrap;
   gap: 12px;
   background: #f8fafc;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
   border-radius: 12px;
   padding: 10px 12px;
 }
@@ -106,7 +106,7 @@ const actions = [
   padding: 0;
   border: 1px solid #537fbe;
   border-radius: 4px;
-  background: #6190d6;
+  background: var(--accent);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -130,7 +130,7 @@ const actions = [
   left: 50%;
   bottom: calc(100% + 6px);
   transform: translateX(-50%);
-  background: #0f172a;
+  background: var(--navy);
   color: #f8fafc;
   font-size: 11px;
   line-height: 1;

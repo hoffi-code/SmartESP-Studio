@@ -180,7 +180,7 @@ onBeforeUnmount(() => {
 .gpio-guide-tabs button {
   border-radius: 999px;
   padding: 6px 14px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
   background: #f8fafc;
   font-weight: 600;
   font-size: 12px;
@@ -195,7 +195,7 @@ onBeforeUnmount(() => {
 .gpio-guide-body {
   flex: 1;
   overflow: auto;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
   border-radius: 12px;
   padding: 12px;
   background: #f8fafc;
@@ -221,18 +221,18 @@ onBeforeUnmount(() => {
 .gpio-guide-table thead th {
   position: sticky;
   top: 0;
-  background: #e2e8f0;
+  background: var(--border);
   text-align: left;
   padding: 10px 12px;
-  border-bottom: 1px solid #cbd5f5;
+  border-bottom: 1px solid var(--accent-line);
   font-weight: 700;
 }
 
 .gpio-guide-table tbody td {
   padding: 10px 12px;
   vertical-align: top;
-  border-bottom: 1px solid #e2e8f0;
-  color: #0f172a;
+  border-bottom: 1px solid var(--border);
+  color: var(--navy);
 }
 
 .gpio-guide-table tbody tr:nth-child(even) {

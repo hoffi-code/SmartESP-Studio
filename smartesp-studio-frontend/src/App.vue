@@ -436,7 +436,7 @@ watch(
 
 .app-social-link:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px #6e93c4 inset;
+  box-shadow: 0 0 0 2px var(--accent-strong) inset;
 }
 
 .app-social-link img {
@@ -474,10 +474,10 @@ watch(
 .topbar-action-dropdown button {
   width: 100%;
   text-align: left;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
   border-radius: 4px;
   background: #f8fafc;
-  color: #0f172a;
+  color: var(--navy);
   font-size: 12px;
   font-weight: 600;
   padding: 7px 10px;

@@ -119,7 +119,7 @@ const emit = defineEmits([
 <style scoped>
 .dashboard-sidebar {
   background: #ffffff;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
   border-top: none;
   border-right: none;
   padding: 10px 8px;
@@ -159,9 +159,9 @@ const emit = defineEmits([
 }
 
 .folder-row-button.active {
-  background: #6190d6;
+  background: var(--accent);
   color: #ffffff;
-  border-color: #6e93c4;
+  border-color: var(--accent-strong);
 }
 
 .folder-row-button.drop-target {
@@ -281,7 +281,7 @@ const emit = defineEmits([
 .folder-menu button {
   width: 100%;
   text-align: left;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
   border-radius: 4px;
   background: #f8fafc;
   color: #334155;
@@ -317,8 +317,8 @@ const emit = defineEmits([
 }
 
 .project-tree-item.active {
-  box-shadow: inset 0 0 0 1px #6791d4;
-  border-color: #6791d4;
+  box-shadow: inset 0 0 0 1px var(--accent);
+  border-color: var(--accent);
 }
 
 .project-tree-label {

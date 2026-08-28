@@ -252,7 +252,7 @@ const toggleItemMenu = (item) => {
   max-height: 88vh;
   background: #fff;
   border-radius: 4px;
-  border: 1px solid #dbe2ee;
+  border: 1px solid var(--border);
   padding: 16px;
   display: flex;
   flex-direction: column;
@@ -288,7 +288,7 @@ const toggleItemMenu = (item) => {
   border-radius: 4px;
   border: 1px solid #cfd6e3;
   background: #eef1f6;
-  color: #0f172a;
+  color: var(--navy);
   font-size: 12px;
   font-weight: 700;
 }
@@ -334,8 +334,8 @@ const toggleItemMenu = (item) => {
 }
 
 .asset-manager__tab--active {
-  border-color: #6190d6;
-  background: #6190d6;
+  border-color: var(--accent);
+  background: var(--accent);
   color: #f8fafc;
 }
 
@@ -411,7 +411,7 @@ const toggleItemMenu = (item) => {
   display: grid;
   place-items: center;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--navy);
   font-size: 22px;
 }
 
@@ -492,7 +492,7 @@ const toggleItemMenu = (item) => {
   text-align: left;
   padding: 5px 8px;
   font-size: 12px;
-  color: #0f172a !important;
+  color: var(--navy) !important;
 }
 
 .asset-item__menu button:hover {

@@ -166,9 +166,9 @@ const emit = defineEmits([
   justify-content: center;
   gap: 10px;
   padding: 0 26px;
-  background: #6791d4;
+  background: var(--accent);
   color: #ffffff;
-  border: 1px solid #6791d4;
+  border: 1px solid var(--accent);
   border-radius: 24px;
   box-shadow: 0 10px 16px rgba(15, 23, 42, 0.247);
   font-size: 18px;
@@ -191,7 +191,7 @@ const emit = defineEmits([
   align-items: center;
   gap: 8px;
   background: #ffffff;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid var(--border);
   padding: 10px 12px;
 }
 

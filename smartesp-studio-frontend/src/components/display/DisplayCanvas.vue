@@ -349,7 +349,7 @@ const iconUrl = (element) => {
 
 const iconStyle = (element) => {
   const url = iconUrl(element);
-  const color = !props.isMonochrome && element.color ? colorToCss(element.color) : "#cbd5f5";
+  const color = !props.isMonochrome && element.color ? colorToCss(element.color) : "#cde7ea";
   return {
     backgroundColor: color,
     maskImage: `url(${url})`,
@@ -364,12 +364,12 @@ const iconStyle = (element) => {
 };
 
 const shapeStroke = (element) => {
-  if (props.isMonochrome) return "#cbd5f5";
+  if (props.isMonochrome) return "#cde7ea";
   return colorToCss(element.color);
 };
 
 const shapeFill = (element) => {
-  if (props.isMonochrome) return "#cbd5f5";
+  if (props.isMonochrome) return "#cde7ea";
   return colorToCss(element.color);
 };
 
@@ -498,7 +498,7 @@ const graphTraces = (element) => {
     const trace = traces[index] || {};
     const thickness = Math.max(1, Number(trace.lineThickness || 2));
     const color = props.isMonochrome
-      ? "#cbd5f5"
+      ? "#cde7ea"
       : trace.color || graphPalette[index % graphPalette.length];
     const lineType = trace.lineType || "SOLID";
     const continuous = trace.continuous !== false;
@@ -1165,7 +1165,7 @@ watch(
   position: absolute;
   border: 1px solid rgba(148, 163, 184, 0.7);
   background: rgba(15, 23, 42, 0.55);
-  color: #e2e8f0;
+  color: var(--border);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1240,7 +1240,7 @@ watch(
 }
 
 .display-graph__legend-text {
-  fill: #e2e8f0;
+  fill: var(--border);
 }
 
 

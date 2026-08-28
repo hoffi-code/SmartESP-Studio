@@ -1937,7 +1937,7 @@ const isBinaryDomain = (domain) => ["binary_sensor", "switch"].includes(domain);
 
 <style scoped>
 .display-inspector {
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
   border-radius: 14px;
   padding: 14px;
   background: #f8fafc;
@@ -1965,7 +1965,7 @@ const isBinaryDomain = (domain) => ["binary_sensor", "switch"].includes(domain);
 }
 
 .display-inspector__type {
-  background: #0f172a;
+  background: var(--navy);
   color: #f8fafc;
   font-size: 11px;
   padding: 4px 8px;
@@ -2008,7 +2008,7 @@ const isBinaryDomain = (domain) => ["binary_sensor", "switch"].includes(domain);
 .display-inspector__group-divider {
   width: 1px;
   height: 48px;
-  background: #e2e8f0;
+  background: var(--border);
   align-self: center;
 }
 
@@ -2024,7 +2024,7 @@ const isBinaryDomain = (domain) => ["binary_sensor", "switch"].includes(domain);
 }
 
 select.field-error {
-  color: #0f172a;
+  color: var(--navy);
 }
 
 .display-trace-list {
@@ -2040,7 +2040,7 @@ select.field-error {
 }
 
 .display-trace-card {
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
   border-radius: 10px;
   padding: 10px;
   background: #ffffff;
@@ -2056,7 +2056,7 @@ select.field-error {
 .display-legend {
   display: grid;
   gap: 10px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
   border-radius: 10px;
   padding: 10px;
   background: #ffffff;
@@ -2084,8 +2084,8 @@ select.field-error {
   aspect-ratio: 1 / 1;
   padding: 0;
   border-radius: 4px;
-  background: #6190d6;
-  border: 1px solid #6e93c4;
+  background: var(--accent);
+  border: 1px solid var(--accent-strong);
   display: inline-flex;
   align-items: center;
   justify-content: center;

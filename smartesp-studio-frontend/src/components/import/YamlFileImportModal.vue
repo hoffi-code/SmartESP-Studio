@@ -671,10 +671,10 @@ watch(
 .yaml-import-modal {
   width: min(1380px, calc(100vw - 48px));
   height: min(88vh, 900px);
-  border: 1px solid #dbe2ee;
+  border: 1px solid var(--border);
   border-radius: 4px;
   background: #fcfcfc;
-  color: #0f172a;
+  color: var(--navy);
   display: grid;
   grid-template-rows: auto minmax(340px, 1fr) auto;
   overflow: hidden;
@@ -863,7 +863,7 @@ watch(
   background: transparent;
   color: transparent;
   -webkit-text-fill-color: transparent;
-  caret-color: #e2e8f0;
+  caret-color: var(--border);
   text-shadow: none;
   z-index: 3;
 }
@@ -969,7 +969,7 @@ watch(
   min-width: 0;
   overflow: auto;
   padding: 10px 0;
-  color: #e2e8f0;
+  color: var(--border);
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   font-size: 12px;
   line-height: 1.35;
@@ -1038,7 +1038,7 @@ watch(
   box-sizing: border-box;
   overflow: auto;
   padding: 14px;
-  border: 1px solid #dbe2ee;
+  border: 1px solid var(--border);
   border-radius: 4px;
   background: #ffffff;
 }

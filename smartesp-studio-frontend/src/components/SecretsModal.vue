@@ -160,7 +160,7 @@ watch(
   width: min(760px, 92vw);
   height: min(520px, 88vh);
   background: #fcfcfc;
-  border: 1px solid #dbe2ee;
+  border: 1px solid var(--border);
   border-radius: 4px;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto auto;
@@ -208,7 +208,7 @@ watch(
   margin: 0;
   pointer-events: none;
   background: #101729;
-  color: #e2e8f0;
+  color: var(--border);
 }
 
 .secrets-modal-editor {
@@ -216,7 +216,7 @@ watch(
   background: transparent;
   color: transparent;
   -webkit-text-fill-color: transparent;
-  caret-color: #e2e8f0;
+  caret-color: var(--border);
   text-shadow: none;
 }
 

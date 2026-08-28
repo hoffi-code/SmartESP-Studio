@@ -322,7 +322,7 @@ const componentCatalogUrl = apiUrl("components_list/components_list.json");
 const useLocalRuntime = import.meta.env.DEV || import.meta.env.VITE_DASHBOARD_STORAGE === "local";
 const staticProjectsIndexUrl = `${import.meta.env.BASE_URL || "/"}runtime/esp_projects/projects.json`;
 const DEFAULT_TILE_ICON_NAME = "memory";
-const DEFAULT_TILE_ICON_COLOR = "#0F172A";
+const DEFAULT_TILE_ICON_COLOR = "#0F2E4C";
 const DEFAULT_TILE_BACKGROUND_COLOR = "#FFFFFF";
 const DEFAULT_TILE_TITLE_COLOR = "#1F3F6D";
 const DEFAULT_TILE_META_COLOR = "#7190B8";
@@ -2413,7 +2413,7 @@ onBeforeUnmount(() => {
 
 .dashboard-sidebar {
   background: #ffffff;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
   border-top: none;
   border-right: none;
   padding: 10px 8px;
@@ -2436,9 +2436,9 @@ onBeforeUnmount(() => {
   justify-content: center;
   gap: 10px;
   padding: 0 26px;
-  background: #6791d4;
+  background: var(--accent);
   color: #ffffff;
-  border: 1px solid #6791d4;
+  border: 1px solid var(--accent);
   border-radius: 24px;
   box-shadow: 0 10px 16px rgba(15, 23, 42, 0.247);
   font-size: 18px;
@@ -2477,9 +2477,9 @@ onBeforeUnmount(() => {
 }
 
 .folder-row-button.active {
-  background: #6190d6;
+  background: var(--accent);
   color: #ffffff;
-  border-color: #6e93c4;
+  border-color: var(--accent-strong);
 }
 
 .folder-row-button.drop-target {
@@ -2599,7 +2599,7 @@ onBeforeUnmount(() => {
 .folder-menu button {
   width: 100%;
   text-align: left;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
   border-radius: 4px;
   background: #f8fafc;
   color: #334155;
@@ -2635,8 +2635,8 @@ onBeforeUnmount(() => {
 }
 
 .project-tree-item.active {
-  box-shadow: inset 0 0 0 1px #6791d4;
-  border-color: #6791d4;
+  box-shadow: inset 0 0 0 1px var(--accent);
+  border-color: var(--accent);
 }
 
 .project-tree-label {
@@ -2703,7 +2703,7 @@ onBeforeUnmount(() => {
   bottom: 0;
   left: 3px;
   width: 2px;
-  background: #e2e8f0;
+  background: var(--border);
   transition: background-color 0.15s ease;
 }
 
@@ -2727,7 +2727,7 @@ onBeforeUnmount(() => {
   align-items: center;
   gap: 8px;
   background: #ffffff;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid var(--border);
   padding: 10px 12px;
 }
 

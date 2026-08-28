@@ -70,7 +70,7 @@ const swatches = [
   "#A855F7",
   "#F472B6",
   "#EF4444",
-  "#0F172A",
+  "#0F2E4C",
   "#94A3B8"
 ];
 
@@ -216,7 +216,7 @@ watch(
   width: 100%;
   aspect-ratio: 1 / 1;
   border-radius: 10px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--border);
   cursor: pointer;
 }
 
