@@ -2003,6 +2003,13 @@ app = Flask(__name__)
 
 
 @app.before_request
+def handle_options_preflight():
+    if request.method == "OPTIONS":
+        return make_response("", 204)
+    return None
+
+
+@app.before_request
 def enforce_standalone_auth():
     return standalone_basic_auth_response()
 
@@ -2047,9 +2054,6 @@ def api_runtime():
 
 @app.route("/api/component-catalog", methods=["GET", "OPTIONS"])
 def api_component_catalog():
-    if request.method == "OPTIONS":
-        return make_response("", 204)
-
     access = check_access()
     if access:
         return access
@@ -2063,9 +2067,6 @@ def api_component_catalog():
 
 @app.route("/api/component-schemas/<path:relpath>", methods=["GET", "OPTIONS"])
 def api_component_schema(relpath):
-    if request.method == "OPTIONS":
-        return make_response("", 204)
-
     access = check_access()
     if access:
         return access
@@ -2090,9 +2091,6 @@ def api_component_schema(relpath):
 
 @app.route("/api/components/import-zip", methods=["POST", "OPTIONS"])
 def api_components_import_zip():
-    if request.method == "OPTIONS":
-        return make_response("", 204)
-
     access = check_access()
     if access:
         return access
@@ -2259,9 +2257,6 @@ def api_components_import_zip():
 
 @app.route("/api/custom-components", methods=["POST", "OPTIONS"])
 def api_custom_components_create():
-    if request.method == "OPTIONS":
-        return make_response("", 204)
-
     access = check_access()
     if access:
         return access
@@ -2352,9 +2347,6 @@ def api_custom_components_create():
 
 @app.route("/api/custom-components/<path:id_or_key>", methods=["PUT", "OPTIONS"])
 def api_custom_components_update(id_or_key):
-    if request.method == "OPTIONS":
-        return make_response("", 204)
-
     access = check_access()
     if access:
         return access
@@ -2459,9 +2451,6 @@ def api_custom_components_update(id_or_key):
 
 @app.route("/api/custom-components/<path:id_or_key>", methods=["DELETE", "OPTIONS"])
 def api_custom_components_delete(id_or_key):
-    if request.method == "OPTIONS":
-        return make_response("", 204)
-
     access = check_access()
     if access:
         return access
@@ -2508,9 +2497,6 @@ def api_assets_refresh():
 
 @app.route("/api/assets/manifest", methods=["GET", "OPTIONS"])
 def api_assets_manifest():
-    if request.method == "OPTIONS":
-        return make_response("", 204)
-
     access = check_access()
     if access:
         return access
@@ -2526,9 +2512,6 @@ def api_assets_manifest():
 
 @app.route("/api/assets/mdi-substitutions", methods=["GET", "OPTIONS"])
 def api_assets_mdi_substitutions():
-    if request.method == "OPTIONS":
-        return make_response("", 204)
-
     access = check_access()
     if access:
         return access
@@ -2540,9 +2523,6 @@ def api_assets_mdi_substitutions():
 
 @app.route("/api/assets/upload", methods=["POST", "OPTIONS"])
 def api_assets_upload():
-    if request.method == "OPTIONS":
-        return make_response("", 204)
-
     access = check_access()
     if access:
         return access
@@ -2596,9 +2576,6 @@ def api_assets_upload():
 
 @app.route("/api/assets/rename", methods=["POST", "OPTIONS"])
 def api_assets_rename():
-    if request.method == "OPTIONS":
-        return make_response("", 204)
-
     access = check_access()
     if access:
         return access
@@ -2645,9 +2622,6 @@ def api_assets_rename():
 
 @app.route("/api/assets/<kind>/<path:filename>", methods=["GET", "DELETE", "OPTIONS"])
 def api_assets_file(kind, filename):
-    if request.method == "OPTIONS":
-        return make_response("", 204)
-
     access = check_access()
     if access:
         return access
@@ -2685,9 +2659,6 @@ def api_assets_file(kind, filename):
 
 @app.route("/save", methods=["POST", "OPTIONS"])
 def save_yaml():
-    if request.method == "OPTIONS":
-        return make_response("", 204)
-
     access = check_access()
     if access:
         return access
@@ -2713,9 +2684,6 @@ def save_yaml():
 
 @app.route("/yaml/load", methods=["GET", "OPTIONS"])
 def load_yaml():
-    if request.method == "OPTIONS":
-        return make_response("", 204)
-
     access = check_access()
     if access:
         return access
@@ -2740,9 +2708,6 @@ def load_yaml():
 
 @app.route("/api/import/yaml-candidates", methods=["GET", "OPTIONS"])
 def import_yaml_candidates():
-    if request.method == "OPTIONS":
-        return make_response("", 204)
-
     access = check_access()
     if access:
         return access
@@ -2782,9 +2747,6 @@ def import_yaml_candidates():
 
 @app.route("/api/import/targets", methods=["GET", "OPTIONS"])
 def import_targets():
-    if request.method == "OPTIONS":
-        return make_response("", 204)
-
     access = check_access()
     if access:
         return access
@@ -2818,9 +2780,6 @@ def import_targets():
 
 @app.route("/api/import/yaml", methods=["GET", "OPTIONS"])
 def import_yaml_load():
-    if request.method == "OPTIONS":
-        return make_response("", 204)
-
     access = check_access()
     if access:
         return access
@@ -2844,9 +2803,6 @@ def import_yaml_load():
 
 @app.route("/api/import/project", methods=["POST", "OPTIONS"])
 def import_project_bundle():
-    if request.method == "OPTIONS":
-        return make_response("", 204)
-
     access = check_access()
     if access:
         return access
@@ -2946,9 +2902,6 @@ def import_project_bundle():
 
 @app.route("/api/secrets/raw", methods=["GET", "OPTIONS"])
 def api_secrets_raw_get():
-    if request.method == "OPTIONS":
-        return make_response("", 204)
-
     access = check_access()
     if access:
         return access
@@ -2968,9 +2921,6 @@ def api_secrets_raw_get():
 
 @app.route("/api/secrets/raw", methods=["POST", "OPTIONS"])
 def api_secrets_raw_post():
-    if request.method == "OPTIONS":
-        return make_response("", 204)
-
     access = check_access()
     if access:
         return access
@@ -3005,9 +2955,6 @@ def api_secrets_raw_post():
 
 @app.route("/projects/save", methods=["POST", "OPTIONS"])
 def save_project():
-    if request.method == "OPTIONS":
-        return make_response("", 204)
-
     access = check_access()
     if access:
         return access
@@ -3043,9 +2990,6 @@ def save_project():
 
 @app.route("/projects/list", methods=["GET", "OPTIONS"])
 def list_projects():
-    if request.method == "OPTIONS":
-        return make_response("", 204)
-
     access = check_access()
     if access:
         return access
@@ -3066,9 +3010,6 @@ def list_projects():
 
 @app.route("/projects/load", methods=["GET", "OPTIONS"])
 def load_project():
-    if request.method == "OPTIONS":
-        return make_response("", 204)
-
     access = check_access()
     if access:
         return access
@@ -3094,9 +3035,6 @@ def load_project():
 
 @app.route("/projects/delete", methods=["DELETE", "OPTIONS"])
 def delete_project():
-    if request.method == "OPTIONS":
-        return make_response("", 204)
-
     access = check_access()
     if access:
         return access
@@ -3120,9 +3058,6 @@ def delete_project():
 
 @app.route("/api/projects/purge", methods=["DELETE", "OPTIONS"])
 def purge_project_bundle():
-    if request.method == "OPTIONS":
-        return make_response("", 204)
-
     access = check_access()
     if access:
         return access
@@ -3179,9 +3114,6 @@ def purge_project_bundle():
 
 @app.route("/projects/rename", methods=["POST", "OPTIONS"])
 def rename_project():
-    if request.method == "OPTIONS":
-        return make_response("", 204)
-
     access = check_access()
     if access:
         return access
@@ -3256,9 +3188,6 @@ def rename_project():
 
 @app.route("/yaml/delete", methods=["DELETE", "OPTIONS"])
 def delete_yaml():
-    if request.method == "OPTIONS":
-        return make_response("", 204)
-
     access = check_access()
     if access:
         return access
@@ -3282,9 +3211,6 @@ def delete_yaml():
 
 @app.route("/api/devices/unregister", methods=["DELETE", "OPTIONS"])
 def api_devices_unregister():
-    if request.method == "OPTIONS":
-        return make_response("", 204)
-
     access = check_access()
     if access:
         return access
@@ -3310,9 +3236,6 @@ def api_devices_unregister():
 
 @app.route("/api/devices/register", methods=["POST", "OPTIONS"])
 def api_devices_register():
-    if request.method == "OPTIONS":
-        return make_response("", 204)
-
     access = check_access()
     if access:
         return access
@@ -3543,9 +3466,6 @@ def api_serial_ports():
 
 @app.route("/api/install", methods=["POST", "OPTIONS"])
 def api_install():
-    if request.method == "OPTIONS":
-        return make_response("", 204)
-
     access = check_access()
     if access:
         return access
@@ -3793,9 +3713,6 @@ def api_job_stream(job_id):
 
 @app.route("/api/jobs/<job_id>/cancel", methods=["POST", "OPTIONS"])
 def api_job_cancel(job_id):
-    if request.method == "OPTIONS":
-        return make_response("", 204)
-
     access = check_access()
     if access:
         return access
