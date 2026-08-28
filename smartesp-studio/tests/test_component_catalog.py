@@ -15,6 +15,9 @@ SPEC = importlib.util.spec_from_file_location("ses_server", SERVER_PATH)
 server = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(server)
 
+import ses.config as config  # noqa: E402
+from ses import catalog as catalog_mod  # noqa: E402
+
 
 def component_entry(name, component_id, *, available=True, catalog_key=None):
     entry = {
@@ -44,13 +47,13 @@ def catalog_with_items(items):
 
 class ComponentCatalogTests(unittest.TestCase):
     def test_zip_member_validation_allows_only_root_license_markdown(self):
-        self.assertEqual("LICENSE.md", server.safe_zip_component_package_member_path("LICENSE.md"))
-        self.assertEqual("", server.safe_zip_component_package_member_path("license.md"))
-        self.assertEqual("", server.safe_zip_component_package_member_path("docs/LICENSE.md"))
-        self.assertEqual("", server.safe_zip_component_package_member_path("README.md"))
+        self.assertEqual("LICENSE.md", catalog_mod.safe_zip_component_package_member_path("LICENSE.md"))
+        self.assertEqual("", catalog_mod.safe_zip_component_package_member_path("license.md"))
+        self.assertEqual("", catalog_mod.safe_zip_component_package_member_path("docs/LICENSE.md"))
+        self.assertEqual("", catalog_mod.safe_zip_component_package_member_path("README.md"))
 
     def test_normalize_component_entry_preserves_catalog_key(self):
-        entry, error = server.normalize_component_entry(
+        entry, error = catalog_mod.normalize_component_entry(
             component_entry(
                 "Home Assistant",
                 "sensor/homeassistant",
@@ -60,7 +63,7 @@ class ComponentCatalogTests(unittest.TestCase):
 
         self.assertEqual("", error)
         self.assertEqual("sensor/homeassistant/home_assistant", entry["catalogKey"])
-        self.assertEqual("sensor/homeassistant/home_assistant", server.component_catalog_entry_key(entry))
+        self.assertEqual("sensor/homeassistant/home_assistant", catalog_mod.component_catalog_entry_key(entry))
 
     def test_merge_runtime_catalog_replaces_only_matching_variant(self):
         base = catalog_with_items(
@@ -90,10 +93,10 @@ class ComponentCatalogTests(unittest.TestCase):
             ]
         )
 
-        merged = server.merge_component_catalogs(base, runtime)
+        merged = catalog_mod.merge_component_catalogs(base, runtime)
         items = {
-            server.component_catalog_entry_key(item): item
-            for item in server.extract_catalog_items(merged)
+            catalog_mod.component_catalog_entry_key(item): item
+            for item in catalog_mod.extract_catalog_items(merged)
         }
 
         self.assertTrue(items["sensor/homeassistant/home_assistant"]["available"])
@@ -116,14 +119,14 @@ class ComponentCatalogTests(unittest.TestCase):
             ]
         )
 
-        removed = server.remove_catalog_item_all_by_key(catalog, "sensor/ltr501/ltr301")
-        items = server.extract_catalog_items(catalog)
+        removed = catalog_mod.remove_catalog_item_all_by_key(catalog, "sensor/ltr501/ltr301")
+        items = catalog_mod.extract_catalog_items(catalog)
 
         self.assertEqual(1, removed)
-        self.assertEqual(["sensor/ltr501/ltr501"], [server.component_catalog_entry_key(item) for item in items])
+        self.assertEqual(["sensor/ltr501/ltr501"], [catalog_mod.component_catalog_entry_key(item) for item in items])
 
     def test_normalize_component_entry_accepts_root_component_schema_location(self):
-        entry, error = server.normalize_component_entry(
+        entry, error = catalog_mod.normalize_component_entry(
             {
                 "name": "ESP32 Camera",
                 "path": "components/esp32_camera",
@@ -139,7 +142,7 @@ class ComponentCatalogTests(unittest.TestCase):
         self.assertEqual("components/miscellaneous/esp32_camera.json", entry["schemaPath"])
 
     def test_parse_zip_catalog_preserves_duplicate_category_placements(self):
-        entries, errors = server.parse_zip_components_catalog(
+        entries, errors = catalog_mod.parse_zip_components_catalog(
             catalog_with_items(
                 [
                     component_entry("Template Sensor", "sensor/template"),
@@ -160,8 +163,8 @@ class ComponentCatalogTests(unittest.TestCase):
             ]
         )
 
-        merged = server.merge_component_catalogs(base, runtime)
-        items = server.extract_catalog_items(merged)
+        merged = catalog_mod.merge_component_catalogs(base, runtime)
+        items = catalog_mod.extract_catalog_items(merged)
 
         self.assertEqual(2, len(items))
         self.assertTrue(all(item["available"] is True for item in items))
@@ -209,14 +212,14 @@ class ComponentCatalogTests(unittest.TestCase):
             buffer.seek(0)
             return buffer
 
-        original_target_dir = server.TARGET_DIR
-        original_base_list_path = server.COMPONENTS_BASE_LIST_PATH
+        original_target_dir = config.TARGET_DIR
+        original_base_list_path = config.COMPONENTS_BASE_LIST_PATH
         try:
             with tempfile.TemporaryDirectory() as temp_dir:
                 base_path = pathlib.Path(temp_dir) / "base_components_list.json"
                 base_path.write_text(json.dumps(base_catalog), encoding="utf-8")
-                server.TARGET_DIR = temp_dir
-                server.COMPONENTS_BASE_LIST_PATH = str(base_path)
+                config.TARGET_DIR = temp_dir
+                config.COMPONENTS_BASE_LIST_PATH = str(base_path)
 
                 client = server.app.test_client()
                 headers = {"X-Ingress-Path": "/test"}
@@ -234,15 +237,15 @@ class ComponentCatalogTests(unittest.TestCase):
                     self.assertEqual(200, response.status_code, response.get_data(as_text=True))
                     self.assertEqual(expected_summary, response.json["summary"])
 
-                runtime_catalog = json.loads(pathlib.Path(server.components_runtime_list_path()).read_text(encoding="utf-8"))
-                keys = [server.component_catalog_entry_key(item) for item in server.extract_catalog_items(runtime_catalog)]
+                runtime_catalog = json.loads(pathlib.Path(catalog_mod.components_runtime_list_path()).read_text(encoding="utf-8"))
+                keys = [catalog_mod.component_catalog_entry_key(item) for item in catalog_mod.extract_catalog_items(runtime_catalog)]
                 self.assertEqual(
                     ["sensor/homeassistant/home_assistant", "sensor/homeassistant/sensor"],
                     keys,
                 )
         finally:
-            server.TARGET_DIR = original_target_dir
-            server.COMPONENTS_BASE_LIST_PATH = original_base_list_path
+            config.TARGET_DIR = original_target_dir
+            config.COMPONENTS_BASE_LIST_PATH = original_base_list_path
 
     def test_import_zip_ignores_root_license_markdown(self):
         base_catalog = catalog_with_items([component_entry("Template Sensor", "sensor/template", available=False)])
@@ -255,14 +258,14 @@ class ComponentCatalogTests(unittest.TestCase):
             archive.writestr("schemas/components/sensor/template.json", json.dumps(schema))
         buffer.seek(0)
 
-        original_target_dir = server.TARGET_DIR
-        original_base_list_path = server.COMPONENTS_BASE_LIST_PATH
+        original_target_dir = config.TARGET_DIR
+        original_base_list_path = config.COMPONENTS_BASE_LIST_PATH
         try:
             with tempfile.TemporaryDirectory() as temp_dir:
                 base_path = pathlib.Path(temp_dir) / "base_components_list.json"
                 base_path.write_text(json.dumps(base_catalog), encoding="utf-8")
-                server.TARGET_DIR = temp_dir
-                server.COMPONENTS_BASE_LIST_PATH = str(base_path)
+                config.TARGET_DIR = temp_dir
+                config.COMPONENTS_BASE_LIST_PATH = str(base_path)
 
                 response = server.app.test_client().post(
                     "/api/components/import-zip",
@@ -274,8 +277,8 @@ class ComponentCatalogTests(unittest.TestCase):
                 self.assertEqual(200, response.status_code, response.get_data(as_text=True))
                 self.assertEqual({"imported": 1, "updated": 0, "skipped": 0, "errors": []}, response.json["summary"])
         finally:
-            server.TARGET_DIR = original_target_dir
-            server.COMPONENTS_BASE_LIST_PATH = original_base_list_path
+            config.TARGET_DIR = original_target_dir
+            config.COMPONENTS_BASE_LIST_PATH = original_base_list_path
 
 
 class RuntimeAccessTests(unittest.TestCase):
