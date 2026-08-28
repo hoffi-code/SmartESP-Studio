@@ -23,6 +23,9 @@ export default [
     },
     rules: {
       "no-unused-vars": ["warn", { args: "none", ignoreRestSiblings: true }],
+      // ~90 hits, all in schemaYaml.js code-generation strings. Cleaning them
+      // needs the YAML-emission tests first; keep visible as warnings until then.
+      "no-useless-escape": "warn",
       "vue/multi-word-component-names": "off"
     }
   },

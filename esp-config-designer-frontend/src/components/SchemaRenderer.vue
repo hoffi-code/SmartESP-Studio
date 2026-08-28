@@ -461,9 +461,10 @@ watch(
       }
       activeSchema.value = null;
     } finally {
-      if (requestId !== schemaLoadRequestId) return;
-      isLoading.value = false;
-      isLoaded.value = true;
+      if (requestId === schemaLoadRequestId) {
+        isLoading.value = false;
+        isLoaded.value = true;
+      }
     }
   },
   { immediate: true }

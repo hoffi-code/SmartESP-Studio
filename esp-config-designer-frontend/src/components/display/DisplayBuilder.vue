@@ -976,6 +976,9 @@ watch(
   () => elements.value,
   (value) => {
     if (!props.componentConfig) return;
+    // componentConfig is the shared runtime model the schema editor mutates in
+    // place across all builder components, not a one-way prop.
+    // eslint-disable-next-line vue/no-mutating-props
     props.componentConfig[layoutKey] = { elements: value };
   },
   { deep: true }

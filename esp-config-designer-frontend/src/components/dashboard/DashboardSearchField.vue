@@ -13,13 +13,14 @@
 </template>
 
 <script setup>
-const DEFAULT_SEARCH_ICON_URL = "https://cdn.jsdelivr.net/npm/@mdi/svg/svg/magnify.svg";
-
 defineProps({
   modelValue: { type: String, default: "" },
   inputId: { type: String, default: "dashboardSearch" },
   placeholder: { type: String, default: "Search files, folders" },
-  searchIconUrl: { type: String, default: DEFAULT_SEARCH_ICON_URL }
+  searchIconUrl: {
+    type: String,
+    default: "https://cdn.jsdelivr.net/npm/@mdi/svg/svg/magnify.svg"
+  }
 });
 
 const emit = defineEmits(["update:modelValue"]);
