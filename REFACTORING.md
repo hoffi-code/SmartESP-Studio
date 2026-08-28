@@ -1,7 +1,7 @@
-# Refactoring-Analyse ESPConfig Designer
+# Refactoring-Analyse SmartESP Studio
 
 Stand: 1.3.3 (`6f01ed6`), Analysebranch `refactor/analyse`.
-Grundlage: statische Durchsicht von `esp-config-designer/` (Backend), `esp-config-designer-frontend/` (Frontend), Build- und CI-Konfiguration.
+Grundlage: statische Durchsicht von `smartesp-studio/` (Backend), `smartesp-studio-frontend/` (Frontend), Build- und CI-Konfiguration.
 
 Diese Datei ist ein Arbeitsdokument für den Umbau und gehört nicht in einen Upstream-PR.
 
@@ -9,7 +9,7 @@ Diese Datei ist ein Arbeitsdokument für den Umbau und gehört nicht in einen Up
 
 ## 1. Ist-Stand
 
-### Backend (`esp-config-designer/`)
+### Backend (`smartesp-studio/`)
 
 - Ein Flask-Modul `server.py`, 3835 Zeilen, ~50 Routen, ~120 Modulfunktionen, zwei Klassen (`Job`, `JobManager`).
 - Kein App-Factory, kein Blueprint, kein Logging (0 `logging`-Aufrufe, 0 `print`), keine zentrale Fehlerbehandlung (`errorhandler`/`after_request` fehlen).
@@ -18,7 +18,7 @@ Diese Datei ist ein Arbeitsdokument für den Umbau und gehört nicht in einen Up
 - Tests: `tests/` mit 3 `unittest`-Dateien (676 Zeilen), Import von `server.py` per `importlib`. Keine `pytest.ini`/`pyproject.toml`, keine CI-Ausführung, `tests/` ist per `.dockerignore` aus dem Image ausgeschlossen.
 - Abhängigkeiten nur im Dockerfile gepinnt (`flask==3.1.2`, `pyserial==3.5`); kein `requirements.txt`. Standalone-Dockerfile installiert `pyserial` nicht.
 
-### Frontend (`esp-config-designer-frontend/`)
+### Frontend (`smartesp-studio-frontend/`)
 
 - Vue 3 (`^3.4.21`) + Vite 8 (`^8.1.3`), Composition API, `<script setup>`, kein TypeScript, kein State-Management-Paket (State über Composables + `localStorage`).
 - 35 700 Zeilen in `src/`. Größte Einheiten:
@@ -42,7 +42,7 @@ Diese Datei ist ein Arbeitsdokument für den Umbau und gehört nicht in einen Up
 
 ### Repo-Struktur / Daten
 
-- Schema- und Katalogdaten liegen doppelt: `esp-config-designer-frontend/public/` (1140 Dateien, 4,2 MB) und `esp-config-designer/web/` (1187 Dateien, 5,3 MB). `web/` enthält zusätzlich den eingecheckten Frontend-Build (`web/assets/*-<hash>.js`).
+- Schema- und Katalogdaten liegen doppelt: `smartesp-studio-frontend/public/` (1140 Dateien, 4,2 MB) und `smartesp-studio/web/` (1187 Dateien, 5,3 MB). `web/` enthält zusätzlich den eingecheckten Frontend-Build (`web/assets/*-<hash>.js`).
 - Sync erfolgt manuell (README „Deploy frontend into add-on": Build bauen, `dist/*` nach `web/` kopieren). Keine Automatisierung, kein Prüf-Check.
 - CI: ein Workflow (`docker-standalone.yml`), baut nur das Standalone-Image. Kein Lint-, Test- oder Frontend-Build-Job. `.gitignore` schließt `.github/workflows/validate.yml` explizit aus.
 - Bilder in `docs/screenshots/` existieren; README verweist zusätzlich auf nicht existierende `components_list/components_list.json`-Pfadangaben teils inkonsistent.
@@ -117,7 +117,7 @@ Prinzip: erst Sicherheitsnetz (Lint + Tests + CI), dann strukturelle Umbauten. O
 10. **B4** OPTIONS-/CORS-Boilerplate in `after_request` bzw. Decorator zusammenziehen.
 11. **R5** Fork-Metadaten auf `hoffi-code` umstellen (`repository.yaml`, `config.json`, README-Install-URL, CI-Image-Namespace, Dockerfile-`LABEL … source`).
 12. **E1** `.gitattributes` mit `* text=auto eol=lf` (Repo hat keins; `git` meldet LF→CRLF beim Commit unter Windows).
-13. **E2** `esp-config-designer-frontend/.npmrc` mit `registry=https://registry.npmjs.org/` (lokale Umgebung hat einen unvollständigen privaten Proxy; OSS-Fork soll gegen die öffentliche Registry bauen).
+13. **E2** `smartesp-studio-frontend/.npmrc` mit `registry=https://registry.npmjs.org/` (lokale Umgebung hat einen unvollständigen privaten Proxy; OSS-Fork soll gegen die öffentliche Registry bauen).
 
 ### Phase 2 — Backend-Struktur
 
@@ -171,13 +171,13 @@ Branch `refactor/overhaul`.
 
 | Schritt | Ergebnis |
 |---|---|
-| F2 | `esp-config-designer-frontend/eslint.config.js` (flat, `vue/flat/essential` + `no-unused-vars` als Warnung). `npm run lint` / `lint:fix`. 3 echte Fehler behoben (`no-unsafe-finally` in `SchemaRenderer.vue`, `vue/valid-define-props` in `DashboardSearchField.vue`, `vue/no-mutating-props` in `DisplayBuilder.vue` bewusst per Kommentar unterdrückt — Shared-Model-Pattern). `no-useless-escape` bis zu den `schemaYaml`-Tests auf Warnung. Stand: 0 Fehler, 112 Warnungen. |
+| F2 | `smartesp-studio-frontend/eslint.config.js` (flat, `vue/flat/essential` + `no-unused-vars` als Warnung). `npm run lint` / `lint:fix`. 3 echte Fehler behoben (`no-unsafe-finally` in `SchemaRenderer.vue`, `vue/valid-define-props` in `DashboardSearchField.vue`, `vue/no-mutating-props` in `DisplayBuilder.vue` bewusst per Kommentar unterdrückt — Shared-Model-Pattern). `no-useless-escape` bis zu den `schemaYaml`-Tests auf Warnung. Stand: 0 Fehler, 112 Warnungen. |
 | F3 | Vitest 4. `npm test` / `test:watch`. Erste Suites: `busInstances.spec.js`, `schemaVisibility.spec.js`, `schemaYaml.spec.js` (`formatYamlValue`). 35 Tests grün. |
-| B9 | `esp-config-designer/pyproject.toml` (`pytest`, `ruff` — `E/F/W/I`, `E501` bis zum Formatter-Lauf ignoriert). Bestehende `unittest`-Tests laufen unverändert unter `pytest` (29 grün). Import-Blöcke sortiert. |
+| B9 | `smartesp-studio/pyproject.toml` (`pytest`, `ruff` — `E/F/W/I`, `E501` bis zum Formatter-Lauf ignoriert). Bestehende `unittest`-Tests laufen unverändert unter `pytest` (29 grün). Import-Blöcke sortiert. |
 | R3 | `.github/workflows/checks.yml` — Frontend (`lint`, `test`, `build`) + Backend (`ruff`, `pytest`). |
-| F6 | `engines.node` (`^20.19.0 || >=22.12.0`), `esp-config-designer-frontend/.nvmrc` (`22`). |
+| F6 | `engines.node` (`^20.19.0 || >=22.12.0`), `smartesp-studio-frontend/.nvmrc` (`22`). |
 | E1 | `.gitattributes` (`* text=auto eol=lf`, `*.sh eol=lf` — schützt `run.sh` gegen `core.autocrlf`). |
-| E2 | `esp-config-designer-frontend/.npmrc` → öffentliche Registry. |
+| E2 | `smartesp-studio-frontend/.npmrc` → öffentliche Registry. |
 | — | `.editorconfig` im Repo-Root. |
 
 Offen aus Phase 0 als Warnungen sichtbar, nicht blockierend: 112 ESLint-Warnungen (davon ~90 `no-useless-escape` in `schemaYaml.js`, Rest `no-unused-vars`); 52 `E501` in `server.py`.
@@ -189,7 +189,7 @@ Offen aus Phase 0 als Warnungen sichtbar, nicht blockierend: 112 ESLint-Warnunge
 | F7 | Kein Change — Analyse-Annahme war falsch (js-yaml 5.x ist die aktuelle Mainline). Befund oben korrigiert. |
 | F8 | `generate:actions` aus `package.json` entfernt; „Generators"-Abschnitt in `HOW_TO_CREATE_SCHEMA_EXTENDED.md` auf den tatsächlichen Stand gebracht (Definitionen werden direkt gepflegt, kein Generator im Repo). |
 | B10 | `server.py`: `datetime.utcnow()` / `utcfromtimestamp()` → `datetime.now(timezone.utc)` / `fromtimestamp(..., timezone.utc)`. `replace(tzinfo=None)` erhält das `"<iso>Z"`-Format byte-genau. Inline-Duplikat bei `import_yaml_candidates` durch `timestamp_to_utc()` ersetzt. pytest jetzt ohne DeprecationWarnings. |
-| B7 | `esp-config-designer/requirements.txt` (`flask==3.1.2`, `pyserial==3.5`) + `requirements-dev.txt` (`+pytest`, `ruff`). Beide Dockerfiles installieren via `-r requirements.txt` — `Dockerfile.standalone` bekommt damit `pyserial` (Venv ohne `--system-site-packages` sah die Base-Image-Version nicht → Host-Serial im Standalone war defekt). CI nutzt `requirements-dev.txt`. Container-Lauf lokal nicht verifiziert (kein Docker-Daemon), CI-Build `docker-standalone.yml` deckt das ab. |
+| B7 | `smartesp-studio/requirements.txt` (`flask==3.1.2`, `pyserial==3.5`) + `requirements-dev.txt` (`+pytest`, `ruff`). Beide Dockerfiles installieren via `-r requirements.txt` — `Dockerfile.standalone` bekommt damit `pyserial` (Venv ohne `--system-site-packages` sah die Base-Image-Version nicht → Host-Serial im Standalone war defekt). CI nutzt `requirements-dev.txt`. Container-Lauf lokal nicht verifiziert (kein Docker-Daemon), CI-Build `docker-standalone.yml` deckt das ab. |
 | B4 | 30 × `if request.method == "OPTIONS": return make_response("", 204)` aus den Views entfernt, ein `@app.before_request handle_options_preflight` stattdessen. Verhalten geprüft: OPTIONS → 204 leer für alle Routen, normale Requests unverändert. −90/+7 Zeilen. |
 | R5 | `sokolsok` → `hoffi-code` in `repository.yaml`, `README.md` (Add-on-Repo-URL), `docker/compose*.yaml`, `.github/workflows/docker-standalone.yml` (GHCR-Image), `Dockerfile.standalone` (OCI-`source`-Label). |
 
@@ -197,9 +197,9 @@ Offen aus Phase 0 als Warnungen sichtbar, nicht blockierend: 112 ESLint-Warnunge
 
 | Schritt | Ergebnis |
 |---|---|
-| B2 | `logging.basicConfig` (Level über `ECD_LOG_LEVEL`), Modul-Logger `log = getLogger("ecd")`. `JobManager._worker` fängt jetzt Exceptions aus `_run_job`: Job wird als `failed` markiert und geloggt, der Worker-Thread lebt weiter (vorher: eine unerwartete Exception legte die komplette Job-Queue still). Startlog in `__main__`. |
+| B2 | `logging.basicConfig` (Level über `SES_LOG_LEVEL`), Modul-Logger `log = getLogger("ecd")`. `JobManager._worker` fängt jetzt Exceptions aus `_run_job`: Job wird als `failed` markiert und geloggt, der Worker-Thread lebt weiter (vorher: eine unerwartete Exception legte die komplette Job-Queue still). Startlog in `__main__`. |
 | B3 | `handle_http_exception` / `handle_unexpected_exception` — jede nicht abgefangene Exception → `{status, message}` als JSON 500, Traceback ins Log, kein Stack zum Client. `HTTPException` → JSON mit passendem Code. Unbekannte `/api/...`-Routen → JSON 404. Geprüft per Smoke-Test. |
-| B5 | `waitress==3.0.2` in `requirements.txt`. `__main__` startet `waitress.serve(app, threads=ECD_THREADS|8)`, Fallback auf `app.run` wenn waitress fehlt (lokal). `run.sh` bleibt bei `python /server.py` — ein Entrypoint, Dev/Prod-Parität. |
+| B5 | `waitress==3.0.2` in `requirements.txt`. `__main__` startet `waitress.serve(app, threads=SES_THREADS|8)`, Fallback auf `app.run` wenn waitress fehlt (lokal). `run.sh` bleibt bei `python /server.py` — ein Entrypoint, Dev/Prod-Parität. |
 | B6 | `create_app() -> Flask`. Routen als `Blueprint("ecd")` (43 `@app.route` + 2 `@app.before_request` umgestellt), Error-Handler über `register_error_handler`. Modul-Level `app = create_app()` bleibt für die bestehenden Tests. Zweite unabhängige Instanz per Smoke-Test verifiziert. |
 | **B1** | **Angefangen.** Fundament steht: `tests/test_smoke.py` (16 Endpunkte, 1 pro Routengruppe), `ecd/`-Paket mit `config.py` / `logging.py` / `errors.py`, Dockerfiles kopieren `ecd`. `server.py` von ~3830 auf ~3700 Z. Der Route-/Helfer-Split steht noch aus — siehe unten. |
 
@@ -209,7 +209,7 @@ Offen aus Phase 0 als Warnungen sichtbar, nicht blockierend: 112 ESLint-Warnunge
 
 - `tests/test_smoke.py` — je ein erreichbarer Endpunkt pro künftigem Blueprint. Bricht ein Import beim Verschieben, wird die Gruppe 404/500 und der Test rot.
 - `ecd/config.py` (Env/Pfade/Regex/Locks/`is_truthy`), `ecd/logging.py` (`basicConfig` + `log` + `get_logger`), `ecd/errors.py` (`json_error` + die zwei Handler). `server.py` importiert daraus.
-- `server.py` behält `from ecd.config import <NAME>` als Namen im eigenen Namespace → die bestehenden Tests patchen weiter `server.TARGET_DIR` usw. **ohne Änderung**. Das gilt nur, solange der lesende Code in `server.py` bleibt.
+- `server.py` behält `from ses.config import <NAME>` als Namen im eigenen Namespace → die bestehenden Tests patchen weiter `server.TARGET_DIR` usw. **ohne Änderung**. Das gilt nur, solange der lesende Code in `server.py` bleibt.
 - `Dockerfile` + `Dockerfile.standalone`: `COPY ecd /ecd`.
 
 **Nächster Schritt (der eigentliche Split):**
@@ -222,7 +222,7 @@ Offen aus Phase 0 als Warnungen sichtbar, nicht blockierend: 112 ESLint-Warnunge
 Zielstruktur:
 
 ```
-esp-config-designer/
+smartesp-studio/
   server.py                 # from ecd import create_app; app = create_app()
   ecd/
     __init__.py             # create_app(): Blueprints + Error-Handler
@@ -240,11 +240,11 @@ esp-config-designer/
 Zielstruktur:
 
 ```
-esp-config-designer/
+smartesp-studio/
   server.py                 # nur noch: from ecd import create_app; app = create_app()
   ecd/
     __init__.py             # create_app(): Blueprints + Error-Handler registrieren
-    config.py               # ECD_*, *_DIR, ASSET_*, VALID_* Regex, is_truthy, normalize_*
+    config.py               # SES_*, *_DIR, ASSET_*, VALID_* Regex, is_truthy, normalize_*
     logging.py              # basicConfig + get_logger
     errors.py               # handle_http_exception, handle_unexpected_exception, json_error
     io.py                   # read/write_json(_atomic), write_text_file_atomic, seed_*

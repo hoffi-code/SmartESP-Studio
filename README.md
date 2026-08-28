@@ -1,25 +1,23 @@
-# ESPConfig Designer v.1.3.3
-<a href="https://buymeacoffee.com/smartsolutionsforhome" target="_blank">
+# SmartESP Studio v0.1.0
+<a href="https://buymeacoffee.com/smartcodestudio" target="_blank">
 <img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee">
 </a>
 
 
-ESPConfig Designer is a Home Assistant ingress add-on for building, organizing, validating, compiling, and deploying ESPHome configurations through a schema-driven visual editor.
+SmartESP Studio is a Home Assistant ingress add-on for building, organizing, validating, compiling, and deploying ESPHome configurations through a schema-driven visual editor.
 
 The repository contains the full add-on:
 
-- `esp-config-designer/` -> backend Home Assistant add-on and API
-- `esp-config-designer-frontend/` -> Vue 3 frontend (Dashboard + Builder)
+- `smartesp-studio/` -> backend Home Assistant add-on and API
+- `smartesp-studio-frontend/` -> Vue 3 frontend (Dashboard + Builder)
 
 The add-on is designed to let users manage complete ESPHome projects without hand-editing YAML unless they want to.
-
-- [Tutorial](https://youtu.be/CrP15p8e_z8)
 
 ---
 
 ## Installation Options
 
-ESPConfig Designer can be installed in two supported modes from this same repository.
+SmartESP Studio can be installed in two supported modes from this same repository.
 
 ### Home Assistant OS / Supervised Add-On
 
@@ -31,21 +29,21 @@ Use this option if your Home Assistant installation has the add-on store.
 4. Add this repository URL:
 
    ```text
-   https://github.com/hoffi-code/ESPConfig-Designer
+   https://github.com/hoffi-code/SmartESP-Studio
    ```
 
-5. Find ESPConfig Designer in the add-on store.
+5. Find SmartESP Studio in the add-on store.
 6. Install it.
 7. Start the add-on.
-8. Open the ESPConfig Designer UI from the add-on page or sidebar.
+8. Open the SmartESP Studio UI from the add-on page or sidebar.
 
-This is the original installation mode. It uses Home Assistant ingress, the existing `esp-config-designer/config.json`, and the existing add-on `esp-config-designer/Dockerfile`. Existing add-on users keep the same update path through Home Assistant.
+This is the original installation mode. It uses Home Assistant ingress, the existing `smartesp-studio/config.json`, and the existing add-on `smartesp-studio/Dockerfile`. Existing add-on users keep the same update path through Home Assistant.
 
 ### Docker Standalone
 
-Use this option if you run Home Assistant Container, or if you want ESPConfig Designer as a separate Docker service outside the Home Assistant add-on system.
+Use this option if you run Home Assistant Container, or if you want SmartESP Studio as a separate Docker service outside the Home Assistant add-on system.
 
-Home Assistant Container does not support Home Assistant add-ons. In this setup ESPConfig Designer runs next to Home Assistant as a separate web application, available by default at:
+Home Assistant Container does not support Home Assistant add-ons. In this setup SmartESP Studio runs next to Home Assistant as a separate web application, available by default at:
 
 ```text
 http://<docker-host-ip>:8099
@@ -67,7 +65,7 @@ cp .env.example .env
 docker compose up -d
 ```
 
-Before starting the container, edit `docker/.env` and change `ECD_AUTH_PASSWORD=change-me`. After startup, open `http://localhost:8099` and log in with username `admin` and the password from `ECD_AUTH_PASSWORD`.
+Before starting the container, edit `docker/.env` and change `SES_AUTH_PASSWORD=change-me`. After startup, open `http://localhost:8099` and log in with username `admin` and the password from `SES_AUTH_PASSWORD`.
 
 For systems where host networking is not available, use the bridge example:
 
@@ -85,10 +83,10 @@ Bridge networking may require manual IP addresses for devices because `.local` m
 | Runtime access | Home Assistant ingress | Direct web app on port `8099` by default |
 | Supervisor required | Yes | No |
 | Recommended network | Managed by Home Assistant | `network_mode: host` on Linux |
-| Default storage | `/config/ecd` | `/config/ecd` inside the container volume |
-| Shared ESPHome path | `use_esphome_shared_path=true` -> `/config/esphome` | `ECD_USE_ESPHOME_SHARED_PATH=true` -> `/config/esphome` |
+| Default storage | `/config/smartesp` | `/config/smartesp` inside the container volume |
+| Shared ESPHome path | `use_esphome_shared_path=true` -> `/config/esphome` | `SES_USE_ESPHOME_SHARED_PATH=true` -> `/config/esphome` |
 | Updates | Home Assistant update flow | `docker compose pull && docker compose up -d` or optional external updater |
-| Authentication | Home Assistant ingress/session | Optional Basic Auth with `ECD_AUTH_MODE=basic` |
+| Authentication | Home Assistant ingress/session | Optional Basic Auth with `SES_AUTH_MODE=basic` |
 
 Do not expose the Docker standalone service directly to the internet. If you use Docker standalone on a LAN, change the default Basic Auth password in `docker/.env` or protect the service with another trusted access layer.
 
@@ -96,9 +94,9 @@ Do not expose the Docker standalone service directly to the internet. If you use
 
 ## Relationship With ESPHome
 
-ESPConfig Designer is an independent visual configuration tool for ESPHome. It is not affiliated with, endorsed by, sponsored by, or maintained by the ESPHome project or the Home Assistant project.
+SmartESP Studio is an independent visual configuration tool for ESPHome. It is not affiliated with, endorsed by, sponsored by, or maintained by the ESPHome project or the Home Assistant project.
 
-The purpose of ESPConfig Designer is to make ESPHome configuration easier to build and maintain through a graphical, schema-driven editor. Generated output is standard ESPHome YAML that can be validated, compiled, and installed using ESPHome tooling.
+The purpose of SmartESP Studio is to make ESPHome configuration easier to build and maintain through a graphical, schema-driven editor. Generated output is standard ESPHome YAML that can be validated, compiled, and installed using ESPHome tooling.
 
 ESPHome itself is a separate open-source project distributed under its own licenses. Please refer to the official ESPHome repository and documentation for ESPHome licensing, documentation, component behavior, and compatibility details.
 
@@ -108,7 +106,7 @@ The name "ESPHome" is used in this project only to describe compatibility with t
 
 ## What It Does
 
-ESPConfig Designer provides:
+SmartESP Studio provides:
 
 - a Dashboard for browsing projects in virtual folders
 - a Builder for editing device configuration through JSON schemas
@@ -168,20 +166,20 @@ Placeholder image should show:
 ### Root
 - `README.md` -> public repository overview
 
-### Backend (`esp-config-designer/`)
+### Backend (`smartesp-studio/`)
 - Flask app that serves the API and frontend bundle
 - persists project JSON, YAML, assets, devices, jobs, firmware artifacts
 - runs ESPHome CLI jobs and exposes logs through streaming endpoints
 
 Important files:
 
-- `esp-config-designer/server.py`
-- `esp-config-designer/config.json`
-- `esp-config-designer/run.sh`
-- `esp-config-designer/Dockerfile`
-- `esp-config-designer/web/`
+- `smartesp-studio/server.py`
+- `smartesp-studio/config.json`
+- `smartesp-studio/run.sh`
+- `smartesp-studio/Dockerfile`
+- `smartesp-studio/web/`
 
-### Frontend (`esp-config-designer-frontend/`)
+### Frontend (`smartesp-studio-frontend/`)
 - Vue 3 + Vite app embedded inside the add-on
 - contains:
   - Dashboard
@@ -192,11 +190,11 @@ Important files:
 
 Important files:
 
-- `esp-config-designer-frontend/src/App.vue`
-- `esp-config-designer-frontend/src/views/DashboardView.vue`
-- `esp-config-designer-frontend/src/views/BuilderView.vue`
-- `esp-config-designer-frontend/public/components_list/components_list.json`
-- `esp-config-designer-frontend/public/schemas/`
+- `smartesp-studio-frontend/src/App.vue`
+- `smartesp-studio-frontend/src/views/DashboardView.vue`
+- `smartesp-studio-frontend/src/views/BuilderView.vue`
+- `smartesp-studio-frontend/public/components_list/components_list.json`
+- `smartesp-studio-frontend/public/schemas/`
 
 ---
 
@@ -265,11 +263,11 @@ access to the host serial devices before this option can be used.
 The frontend is schema-driven.
 
 ### Main schema locations
-- general schemas: `esp-config-designer-frontend/public/schemas/general/`
-- component schemas: `esp-config-designer-frontend/public/schemas/components/<domain>/<platform>.json`
-- component catalog: `esp-config-designer-frontend/public/components_list/components_list.json`
-- action picker index: `esp-config-designer-frontend/public/action_list/base_actions.json`
-- condition picker index: `esp-config-designer-frontend/public/condition_list/base_conditions.json`
+- general schemas: `smartesp-studio-frontend/public/schemas/general/`
+- component schemas: `smartesp-studio-frontend/public/schemas/components/<domain>/<platform>.json`
+- component catalog: `smartesp-studio-frontend/public/components_list/components_list.json`
+- action picker index: `smartesp-studio-frontend/public/action_list/base_actions.json`
+- condition picker index: `smartesp-studio-frontend/public/condition_list/base_conditions.json`
 
 ### Core rules
 - schemas support `extends`
@@ -292,7 +290,7 @@ Detailed authoring documentation lives in:
 
 Base path depends on add-on option `use_esphome_shared_path`:
 
-- `false` -> `/config/ecd`
+- `false` -> `/config/smartesp`
 - `true` -> `/config/esphome`
 
 Derived storage:
@@ -356,7 +354,7 @@ Add-on runtime state:
 ## Local Development
 
 ### Frontend
-From `esp-config-designer-frontend/`:
+From `smartesp-studio-frontend/`:
 
 ```bash
 npm install
@@ -366,7 +364,7 @@ npm run build
 
 Optional offline schema mode:
 
-Create `esp-config-designer-frontend/.env.local`:
+Create `smartesp-studio-frontend/.env.local`:
 
 ```bash
 VITE_DEV_OFFLINE=1
@@ -377,26 +375,26 @@ In that mode the frontend reads catalog/schemas from `public/` and skips backend
 ### Backend
 The backend is packaged as a Home Assistant add-on. In normal development you edit:
 
-- `esp-config-designer/server.py`
-- `esp-config-designer/config.json`
-- `esp-config-designer/run.sh`
+- `smartesp-studio/server.py`
+- `smartesp-studio/config.json`
+- `smartesp-studio/run.sh`
 
 After backend changes you rebuild/restart the add-on.
 
 ### Deploy frontend into add-on
-1. build frontend in `esp-config-designer-frontend/`
-2. copy `dist/*` into `esp-config-designer/web/`
+1. build frontend in `smartesp-studio-frontend/`
+2. copy `dist/*` into `smartesp-studio/web/`
 3. rebuild/restart the add-on
 
 ---
 
 ## License
 
-ESPConfig Designer is released under the MIT License.
+SmartESP Studio is released under the MIT License.
 
 Unless explicitly stated otherwise, the MIT License applies to all files included in this public repository, including the backend, frontend, included free schemas, schema format, and schema authoring documentation.
 
-ESPHome is a separate project and remains governed by its own licenses. ESPConfig Designer does not grant any rights to ESPHome itself, its documentation, trademarks, or third-party dependencies.
+ESPHome is a separate project and remains governed by its own licenses. SmartESP Studio does not grant any rights to ESPHome itself, its documentation, trademarks, or third-party dependencies.
 
 ---
 

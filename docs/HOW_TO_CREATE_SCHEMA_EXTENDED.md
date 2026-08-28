@@ -1,6 +1,6 @@
 # HOW TO CREATE SCHEMA EXTENDED
 
-This document explains how schema authoring works in the ESPConfig Designer frontend.
+This document explains how schema authoring works in the SmartESP Studio frontend.
 
 The goal is simple:
 
