@@ -69,11 +69,10 @@ Important implications for schema authors:
 - condition picker index: `public/condition_list/base_conditions.json`
 - condition field definitions: `public/conditions/**/*.json`
 
-### Generators and docs
+### Action and condition definitions
 
-- action generator source of truth: `scripts/action-definition-generator.js`
-- action generator entrypoint: `scripts/generate-action-definitions.js`
-- generator notes: `scripts/README.md`
+Field definitions under `public/actions/**` and `public/conditions/**` are committed
+directly and edited by hand. This repository does not ship a generator for them.
 
 ### Typical examples
 
