@@ -18,9 +18,10 @@ ENV ECD_VERSION=$BUILD_VERSION
 ENV ECD_PORT=8099
 ENV PORT=8099
 
+COPY requirements.txt /requirements.txt
 RUN python3 -m venv /opt/designer-venv \
     && /opt/designer-venv/bin/python -m pip install --no-cache-dir -U pip \
-    && /opt/designer-venv/bin/python -m pip install --no-cache-dir flask==3.1.2
+    && /opt/designer-venv/bin/python -m pip install --no-cache-dir -r /requirements.txt
 
 COPY server.py /server.py
 COPY run.sh /run.sh

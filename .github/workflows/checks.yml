@@ -38,7 +38,7 @@ jobs:
         with:
           python-version: "3.11"
 
-      - run: pip install flask==3.1.2 pyserial==3.5 pytest ruff
+      - run: pip install -r requirements-dev.txt
 
       - run: ruff check .
       - run: python -m pytest
