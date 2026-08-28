@@ -23,7 +23,16 @@ from datetime import datetime, timezone
 from typing import List, Optional, Tuple
 from urllib.parse import quote
 
-from flask import Flask, Response, jsonify, make_response, request, send_file, send_from_directory
+from flask import (
+    Blueprint,
+    Flask,
+    Response,
+    jsonify,
+    make_response,
+    request,
+    send_file,
+    send_from_directory,
+)
 from werkzeug.exceptions import HTTPException
 
 try:
@@ -2016,38 +2025,36 @@ class JobManager:
 bootstrap_storage()
 job_manager = JobManager()
 
-app = Flask(__name__)
+bp = Blueprint("ecd", __name__)
 
 
-@app.errorhandler(HTTPException)
 def handle_http_exception(error):
     return jsonify({"status": "error", "message": error.description}), error.code
 
 
-@app.errorhandler(Exception)
 def handle_unexpected_exception(error):
     log.exception("unhandled error on %s %s", request.method, request.path)
     return jsonify({"status": "error", "message": "Internal server error"}), 500
 
 
-@app.before_request
+@bp.before_request
 def handle_options_preflight():
     if request.method == "OPTIONS":
         return make_response("", 204)
     return None
 
 
-@app.before_request
+@bp.before_request
 def enforce_standalone_auth():
     return standalone_basic_auth_response()
 
 
-@app.route("/api/health", methods=["GET"])
+@bp.route("/api/health", methods=["GET"])
 def api_health():
     return jsonify({"status": "ok", "ok": True, "mode": ECD_MODE, "ts": utc_now()})
 
 
-@app.route("/api/runtime", methods=["GET"])
+@bp.route("/api/runtime", methods=["GET"])
 def api_runtime():
     access = check_access()
     if access:
@@ -2080,7 +2087,7 @@ def api_runtime():
     return jsonify(payload)
 
 
-@app.route("/api/component-catalog", methods=["GET", "OPTIONS"])
+@bp.route("/api/component-catalog", methods=["GET", "OPTIONS"])
 def api_component_catalog():
     access = check_access()
     if access:
@@ -2093,7 +2100,7 @@ def api_component_catalog():
     return jsonify({"status": "ok", "catalog": merged})
 
 
-@app.route("/api/component-schemas/<path:relpath>", methods=["GET", "OPTIONS"])
+@bp.route("/api/component-schemas/<path:relpath>", methods=["GET", "OPTIONS"])
 def api_component_schema(relpath):
     access = check_access()
     if access:
@@ -2117,7 +2124,7 @@ def api_component_schema(relpath):
     return json_error("Schema not found", "COMPONENTS_SCHEMA_NOT_FOUND", 404)
 
 
-@app.route("/api/components/import-zip", methods=["POST", "OPTIONS"])
+@bp.route("/api/components/import-zip", methods=["POST", "OPTIONS"])
 def api_components_import_zip():
     access = check_access()
     if access:
@@ -2283,7 +2290,7 @@ def api_components_import_zip():
     )
 
 
-@app.route("/api/custom-components", methods=["POST", "OPTIONS"])
+@bp.route("/api/custom-components", methods=["POST", "OPTIONS"])
 def api_custom_components_create():
     access = check_access()
     if access:
@@ -2373,7 +2380,7 @@ def api_custom_components_create():
     return jsonify({"status": "ok", "item": entry})
 
 
-@app.route("/api/custom-components/<path:id_or_key>", methods=["PUT", "OPTIONS"])
+@bp.route("/api/custom-components/<path:id_or_key>", methods=["PUT", "OPTIONS"])
 def api_custom_components_update(id_or_key):
     access = check_access()
     if access:
@@ -2477,7 +2484,7 @@ def api_custom_components_update(id_or_key):
     )
 
 
-@app.route("/api/custom-components/<path:id_or_key>", methods=["DELETE", "OPTIONS"])
+@bp.route("/api/custom-components/<path:id_or_key>", methods=["DELETE", "OPTIONS"])
 def api_custom_components_delete(id_or_key):
     access = check_access()
     if access:
@@ -2508,7 +2515,7 @@ def api_custom_components_delete(id_or_key):
     return jsonify({"status": "ok", "removed": component_id})
 
 
-@app.route("/api/assets/refresh", methods=["POST"])
+@bp.route("/api/assets/refresh", methods=["POST"])
 def api_assets_refresh():
     access = check_access()
     if access:
@@ -2523,7 +2530,7 @@ def api_assets_refresh():
     return jsonify({"status": "ok", **payload})
 
 
-@app.route("/api/assets/manifest", methods=["GET", "OPTIONS"])
+@bp.route("/api/assets/manifest", methods=["GET", "OPTIONS"])
 def api_assets_manifest():
     access = check_access()
     if access:
@@ -2538,7 +2545,7 @@ def api_assets_manifest():
     return jsonify({"status": "ok", **payload})
 
 
-@app.route("/api/assets/mdi-substitutions", methods=["GET", "OPTIONS"])
+@bp.route("/api/assets/mdi-substitutions", methods=["GET", "OPTIONS"])
 def api_assets_mdi_substitutions():
     access = check_access()
     if access:
@@ -2549,7 +2556,7 @@ def api_assets_mdi_substitutions():
     return jsonify({"status": "ok", "substitutions": substitutions})
 
 
-@app.route("/api/assets/upload", methods=["POST", "OPTIONS"])
+@bp.route("/api/assets/upload", methods=["POST", "OPTIONS"])
 def api_assets_upload():
     access = check_access()
     if access:
@@ -2602,7 +2609,7 @@ def api_assets_upload():
     )
 
 
-@app.route("/api/assets/rename", methods=["POST", "OPTIONS"])
+@bp.route("/api/assets/rename", methods=["POST", "OPTIONS"])
 def api_assets_rename():
     access = check_access()
     if access:
@@ -2648,7 +2655,7 @@ def api_assets_rename():
     )
 
 
-@app.route("/api/assets/<kind>/<path:filename>", methods=["GET", "DELETE", "OPTIONS"])
+@bp.route("/api/assets/<kind>/<path:filename>", methods=["GET", "DELETE", "OPTIONS"])
 def api_assets_file(kind, filename):
     access = check_access()
     if access:
@@ -2685,7 +2692,7 @@ def api_assets_file(kind, filename):
     return jsonify({"status": "ok", "kind": parsed_kind, "file": safe_name})
 
 
-@app.route("/save", methods=["POST", "OPTIONS"])
+@bp.route("/save", methods=["POST", "OPTIONS"])
 def save_yaml():
     access = check_access()
     if access:
@@ -2710,7 +2717,7 @@ def save_yaml():
     return jsonify({"status": "ok", "path": path})
 
 
-@app.route("/yaml/load", methods=["GET", "OPTIONS"])
+@bp.route("/yaml/load", methods=["GET", "OPTIONS"])
 def load_yaml():
     access = check_access()
     if access:
@@ -2734,7 +2741,7 @@ def load_yaml():
     return jsonify({"status": "ok", "name": filename, "yaml": yaml_text})
 
 
-@app.route("/api/import/yaml-candidates", methods=["GET", "OPTIONS"])
+@bp.route("/api/import/yaml-candidates", methods=["GET", "OPTIONS"])
 def import_yaml_candidates():
     access = check_access()
     if access:
@@ -2773,7 +2780,7 @@ def import_yaml_candidates():
     return jsonify({"status": "ok", "items": items})
 
 
-@app.route("/api/import/targets", methods=["GET", "OPTIONS"])
+@bp.route("/api/import/targets", methods=["GET", "OPTIONS"])
 def import_targets():
     access = check_access()
     if access:
@@ -2806,7 +2813,7 @@ def import_targets():
     )
 
 
-@app.route("/api/import/yaml", methods=["GET", "OPTIONS"])
+@bp.route("/api/import/yaml", methods=["GET", "OPTIONS"])
 def import_yaml_load():
     access = check_access()
     if access:
@@ -2829,7 +2836,7 @@ def import_yaml_load():
     return jsonify({"status": "ok", "name": filename, "yaml": yaml_text})
 
 
-@app.route("/api/import/project", methods=["POST", "OPTIONS"])
+@bp.route("/api/import/project", methods=["POST", "OPTIONS"])
 def import_project_bundle():
     access = check_access()
     if access:
@@ -2928,7 +2935,7 @@ def import_project_bundle():
     )
 
 
-@app.route("/api/secrets/raw", methods=["GET", "OPTIONS"])
+@bp.route("/api/secrets/raw", methods=["GET", "OPTIONS"])
 def api_secrets_raw_get():
     access = check_access()
     if access:
@@ -2947,7 +2954,7 @@ def api_secrets_raw_get():
     return jsonify({"content": content})
 
 
-@app.route("/api/secrets/raw", methods=["POST", "OPTIONS"])
+@bp.route("/api/secrets/raw", methods=["POST", "OPTIONS"])
 def api_secrets_raw_post():
     access = check_access()
     if access:
@@ -2981,7 +2988,7 @@ def api_secrets_raw_post():
     return jsonify({"ok": True})
 
 
-@app.route("/projects/save", methods=["POST", "OPTIONS"])
+@bp.route("/projects/save", methods=["POST", "OPTIONS"])
 def save_project():
     access = check_access()
     if access:
@@ -3016,7 +3023,7 @@ def save_project():
     return jsonify({"status": "ok", "path": path})
 
 
-@app.route("/projects/list", methods=["GET", "OPTIONS"])
+@bp.route("/projects/list", methods=["GET", "OPTIONS"])
 def list_projects():
     access = check_access()
     if access:
@@ -3036,7 +3043,7 @@ def list_projects():
     return jsonify({"status": "ok", "projects": files})
 
 
-@app.route("/projects/load", methods=["GET", "OPTIONS"])
+@bp.route("/projects/load", methods=["GET", "OPTIONS"])
 def load_project():
     access = check_access()
     if access:
@@ -3061,7 +3068,7 @@ def load_project():
     return jsonify({"status": "ok", "name": filename, "data": data})
 
 
-@app.route("/projects/delete", methods=["DELETE", "OPTIONS"])
+@bp.route("/projects/delete", methods=["DELETE", "OPTIONS"])
 def delete_project():
     access = check_access()
     if access:
@@ -3084,7 +3091,7 @@ def delete_project():
     return jsonify({"status": "ok", "name": filename})
 
 
-@app.route("/api/projects/purge", methods=["DELETE", "OPTIONS"])
+@bp.route("/api/projects/purge", methods=["DELETE", "OPTIONS"])
 def purge_project_bundle():
     access = check_access()
     if access:
@@ -3140,7 +3147,7 @@ def purge_project_bundle():
     )
 
 
-@app.route("/projects/rename", methods=["POST", "OPTIONS"])
+@bp.route("/projects/rename", methods=["POST", "OPTIONS"])
 def rename_project():
     access = check_access()
     if access:
@@ -3214,7 +3221,7 @@ def rename_project():
     )
 
 
-@app.route("/yaml/delete", methods=["DELETE", "OPTIONS"])
+@bp.route("/yaml/delete", methods=["DELETE", "OPTIONS"])
 def delete_yaml():
     access = check_access()
     if access:
@@ -3237,7 +3244,7 @@ def delete_yaml():
     return jsonify({"status": "ok", "name": filename})
 
 
-@app.route("/api/devices/unregister", methods=["DELETE", "OPTIONS"])
+@bp.route("/api/devices/unregister", methods=["DELETE", "OPTIONS"])
 def api_devices_unregister():
     access = check_access()
     if access:
@@ -3262,7 +3269,7 @@ def api_devices_unregister():
     )
 
 
-@app.route("/api/devices/register", methods=["POST", "OPTIONS"])
+@bp.route("/api/devices/register", methods=["POST", "OPTIONS"])
 def api_devices_register():
     access = check_access()
     if access:
@@ -3327,7 +3334,7 @@ def api_devices_register():
     return jsonify({"status": "ok"})
 
 
-@app.route("/api/devices/list", methods=["GET"])
+@bp.route("/api/devices/list", methods=["GET"])
 def api_devices_list():
     access = check_access()
     if access:
@@ -3414,7 +3421,7 @@ def api_devices_list():
     return jsonify({"status": "ok", "devices": [build_device_response(device) for device in devices]})
 
 
-@app.route("/api/devices/status", methods=["GET"])
+@bp.route("/api/devices/status", methods=["GET"])
 def api_device_status():
     access = check_access()
     if access:
@@ -3480,7 +3487,7 @@ def api_device_status():
     return jsonify({"status": "ok", "device": build_device_response(target, checks=checks)})
 
 
-@app.route("/api/serial/ports", methods=["GET"])
+@bp.route("/api/serial/ports", methods=["GET"])
 def api_serial_ports():
     access = check_access()
     if access:
@@ -3492,7 +3499,7 @@ def api_serial_ports():
     return jsonify({"status": "ok", "ports": ports})
 
 
-@app.route("/api/install", methods=["POST", "OPTIONS"])
+@bp.route("/api/install", methods=["POST", "OPTIONS"])
 def api_install():
     access = check_access()
     if access:
@@ -3530,7 +3537,7 @@ def api_install():
 
 
 
-@app.route("/api/jobs/<job_id>", methods=["GET"])
+@bp.route("/api/jobs/<job_id>", methods=["GET"])
 def api_job_status(job_id):
     access = check_access()
     if access:
@@ -3543,7 +3550,7 @@ def api_job_status(job_id):
     return jsonify({"status": "ok", "job": job.to_dict()})
 
 
-@app.route("/api/jobs/<job_id>/tail", methods=["GET"])
+@bp.route("/api/jobs/<job_id>/tail", methods=["GET"])
 def api_job_tail(job_id):
     access = check_access()
     if access:
@@ -3582,7 +3589,7 @@ def api_job_tail(job_id):
     )
 
 
-@app.route("/api/jobs/<job_id>/tail-wait", methods=["GET"])
+@bp.route("/api/jobs/<job_id>/tail-wait", methods=["GET"])
 def api_job_tail_wait(job_id):
     access = check_access()
     if access:
@@ -3657,7 +3664,7 @@ def api_job_tail_wait(job_id):
     )
 
 
-@app.route("/api/firmware", methods=["GET"])
+@bp.route("/api/firmware", methods=["GET"])
 def api_firmware():
     access = check_access()
     if access:
@@ -3694,7 +3701,7 @@ def format_sse(event: str, data: str) -> str:
     return f"event: {event}\ndata: {data}\n\n"
 
 
-@app.route("/api/jobs/<job_id>/stream", methods=["GET"])
+@bp.route("/api/jobs/<job_id>/stream", methods=["GET"])
 def api_job_stream(job_id):
     access = check_access()
     if access:
@@ -3739,7 +3746,7 @@ def api_job_stream(job_id):
     return Response(generate(), mimetype="text/event-stream", headers=headers)
 
 
-@app.route("/api/jobs/<job_id>/cancel", methods=["POST", "OPTIONS"])
+@bp.route("/api/jobs/<job_id>/cancel", methods=["POST", "OPTIONS"])
 def api_job_cancel(job_id):
     access = check_access()
     if access:
@@ -3752,8 +3759,8 @@ def api_job_cancel(job_id):
     return jsonify({"status": "ok", "job": job.to_dict()})
 
 
-@app.route("/", defaults={"path": "index.html"})
-@app.route("/<path:path>")
+@bp.route("/", defaults={"path": "index.html"})
+@bp.route("/<path:path>")
 def serve_ui(path):
     if path.startswith("api/") or path in ("save", "projects", "projects/save", "projects/list", "projects/load"):
         return jsonify({"status": "error", "message": "Not found"}), 404
@@ -3775,6 +3782,17 @@ def serve_ui(path):
         return send_from_directory(web_root, "index.html")
 
     return jsonify({"status": "error", "message": "UI not found"}), 404
+
+
+def create_app() -> Flask:
+    app = Flask(__name__)
+    app.register_blueprint(bp)
+    app.register_error_handler(HTTPException, handle_http_exception)
+    app.register_error_handler(Exception, handle_unexpected_exception)
+    return app
+
+
+app = create_app()
 
 
 if __name__ == "__main__":
