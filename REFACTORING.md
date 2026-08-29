@@ -265,16 +265,18 @@ Blocker und Vorgehen: siehe „B1 — Stand und nächster Schritt" oben.
 |---|---|
 | F4 | `src/utils/api.js` — `apiUrl` / `apiFetch` / `unwrapJson` / `apiJson`. Das dreifach kopierte `new URL("./", window.location.href)` + `credentials: "include"` liegt jetzt an **einer** Stelle. `BuilderView.vue` (`buildAddonUrl`/`addonFetch`) und `DashboardView.vue` (`getApiUrl`) delegieren, Aufrufstellen unverändert. `unwrapJson` wandelt non-2xx in einen `Error` mit `{status, message, payload}`. Getestet (`api.spec.js`). Statische Asset-Loader (`schemaLoader.js`, `gpioData.js`) und CDN-Fetches (`IconPicker.vue`) bleiben außen vor — kein Ingress/Credentials-Bezug. |
 | F3-Ausbau | Neue Vitest-Suites: `schemaModeLevel`, `schemaTemplatable`, `schemaAuto` (Slug/SSID-Ableitung, `!secret`-Erkennung, Passwort-Generierung/-Validierung). Gesamt 76 Frontend-Tests (vorher 39). |
-| **F1 / F5** | **Offen.** `BuilderView.vue` (6318 Z.), `DashboardView.vue` (3093 Z.), `DisplayInspector.vue` (2114 Z.) zerlegen. Siehe unten. |
+| **F1 / F5** | **In Arbeit.** `BuilderView.vue` (6293 → 5512 Z.), `DashboardView.vue` (3093 Z.), `DisplayInspector.vue` (2114 Z.) zerlegen. Siehe unten. |
 
-#### F1 / F5 — Vorgehen (noch nicht umgesetzt)
+#### F1 / F5 — Vorgehen
 
-Wie B1: erst Netz, dann schneiden. Es gibt aktuell **keine** Komponententests, und die App lässt sich lokal nicht real starten (braucht Backend + HA-Ingress). Ein Blind-Split am 5800-Zeilen-`<script setup>` ist zu riskant.
+Wie B1: erst Netz, dann schneiden. Es gab **keine** Komponententests, und die App lässt sich lokal nicht real starten (braucht Backend + HA-Ingress). Ein Blind-Split am 5800-Zeilen-`<script setup>` wäre zu riskant.
 
-1. `@vue/test-utils` + `jsdom` als devDeps, `vitest.config.js` um ein `environment: "jsdom"`-Projekt für `*.spec.vue.js` erweitern.
-2. Charakterisierungstests für die stabilen Teilkomponenten, die schon existieren (`BuilderCoreTab`, `SchemaField`, `BuilderComponentPicker` …) — Rendern + Kern-Interaktionen.
-3. Aus `BuilderView.vue` je ein Composable herausziehen, einzeln, mit eigener Suite: `useBuilderPreview` (Preview-Pipeline), `useBuilderDeployment` (Deployment-State), `useBuilderAssets` (Asset-Flow), `useBuilderDisplaySync` (Display-Sync). Ziel Script-Setup < 1500 Z.
-4. `DashboardView.vue` / `DisplayInspector.vue` analog entlang funktionaler Schnitte.
+1. ✅ `@vue/test-utils` + `jsdom` als devDeps. `vitest.config.js` lädt jetzt `@vitejs/plugin-vue`; `*.spec.js` bleibt `node`, `*.spec.dom.js`/`*.spec.vue.js` opt-in per `// @vitest-environment jsdom`-Docblock (`environmentMatchGlobs` existiert in Vitest 4 nicht mehr — Docblock ist der offizielle Ersatz). Verifiziert mit einer Charakterisierungssuite für `BuilderComponentRequirementsNotice.vue`.
+2. Charakterisierungstests für die stabilen Teilkomponenten, die schon existieren (`BuilderCoreTab`, `SchemaField`, `BuilderComponentPicker` …) — Rendern + Kern-Interaktionen. **Noch offen**, wird bei Bedarf vor der jeweiligen Extraktion nachgezogen statt pauschal vorab.
+3. ✅ **Seam #1 — Validation-Regeln:** `buildValueRegistry`, `buildIdIndex`, `buildDuplicateErrors`, `buildIdRefErrors`, `buildDisplayElementIdErrors`, `buildValidationErrors`, `buildGpioUsageIndex` + die Predicates `isArrayLikeSchemaField`/`isObjectArrayLikeField` (letztere blieben in `BuilderView.vue` an 4 weiteren Stellen gebraucht, jetzt aus dem Modul importiert statt lokal dupliziert) nach `src/utils/builderValidationRules.js`. `useBuilderValidation.js` importiert die Funktionen jetzt direkt statt sie als Parameter zu bekommen. `buildGpioUsageIndex` bekam einen expliziten `componentIdFromEntry`-Parameter (Default = bisheriges Inline-Verhalten), weil `componentIdFromEntry` selbst ein Allzweck-Helfer bleibt, der weit außerhalb der Validierungs-Region in `BuilderView.vue` gebraucht wird und nicht mitgezogen wurde. 24 neue Vitest-Fälle (`builderValidationRules.spec.js`). Script-Setup 5783 → ~5000 Z. (roher Zeilenabzug: 6293 → 5512 Z. Gesamtdatei).
+4. Aus `BuilderView.vue` je ein weiteres Composable herausziehen, einzeln, mit eigener Suite: `useBuilderYamlPreview` (Preview-Pipeline), `useBuilderDeployment` (Deployment-State), `useBuilderProjectPersistence` (Projekt-Speichern/YAML/projects-index). Ziel Script-Setup < 1500 Z. — kein hartes Ziel, siehe Plan.
+5. Doppelten `watch(config, {deep:true}) → saveConfig` (BuilderView + `useBuilderComponentCatalog.js:325`) konsolidieren.
+6. `DashboardView.vue` / `DisplayInspector.vue` analog entlang funktionaler Schnitte.
 
 ---
 

@@ -62,14 +62,14 @@ und Klassen mit `self.`-Methoden **nicht** blind verwenden — Modul-Alias + gez
 
 ### F1 (Summe ~M–L)
 
-| Commit | Größe |
-|---|---|
-| `Add @vue/test-utils + jsdom, wire vitest jsdom project` | S |
-| `Extract builderValidationRules module + tests` | M |
-| `Extract useBuilderYamlPreview + snapshot tests` | M |
-| `Extract useBuilderDeployment + tests` | M |
-| `Extract useBuilderProjectPersistence + tests` | M |
-| `Consolidate duplicate config deep-watch` | S |
+| Commit | Größe | Status |
+|---|---|---|
+| `Add @vue/test-utils + jsdom, wire vitest jsdom project` | S | ✅ (per-file `// @vitest-environment jsdom` docblock — `environmentMatchGlobs` existiert in Vitest 4 nicht mehr) |
+| `Extract builderValidationRules module + tests` | M | ✅ |
+| `Extract useBuilderYamlPreview + snapshot tests` | M | ⬜ |
+| `Extract useBuilderDeployment + tests` | M | ⬜ |
+| `Extract useBuilderProjectPersistence + tests` | M | ⬜ |
+| `Consolidate duplicate config deep-watch` | S | ⬜ |
 
 ### F5 (Summe ~M–L)
 
