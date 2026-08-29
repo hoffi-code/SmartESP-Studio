@@ -319,7 +319,9 @@ Sweep-Bug behoben: 5 Stellen hatten `var(--…)`-Strings in **JS-Farbwerte** ges
 
 - **Branch:** `refactor/overhaul`, ~45 Commits über `main` (Tag `6f01ed6` = Upstream 1.3.3), **nichts gepusht**.
 - **Checks grün:** Frontend `npm run lint` (0 Fehler / 112 Warnungen), `npm test` (76), `npm run build`. Backend `ruff check` (sauber), `pytest` (32 + 16 subtests).
-- **Lokaler Container:** `smartesp-studio-test`, Image `smartesp-studio:local` (Stand: vor B1 gebaut; nach B1-Fortschritt neu bauen).
+- **Lokaler Container:** `smartesp-studio-test`, Image `smartesp-studio:local`, neu gebaut nach dem
+  Route-Split. Gate B1 (curl-Sweep aller Endpunkt-Gruppen + ein realer `validate`-Job-Durchlauf gegen
+  eine im Container geschriebene Test-YAML: submit → queued → success, Tail-Log lesbar) bestanden.
 - **`CLAUDE.md`** im Repo-Root ist weiterhin **untracked** (bewusst) — Rollen-Prompt + „Schreibstil" + „Versionierung".
 - **Gesamtplan mit Meilenstein-/Commit-Tabelle:** `plans/nimm-in-die-planung-swirling-pike.md`.
 
@@ -379,16 +381,11 @@ umgestellt (vorher `server.Job`/`server.JobManager`). `server.py` verlor damit `
 `shlex`/`subprocess`/`threading`/`collections.deque` mit — nur noch `queue`/`uuid` blieben (anderswo
 noch gebraucht).
 
-**Nächster konkreter Schritt:** Route-Gruppen als Per-Datei-Blueprints unter `ses/routes/` anlegen
-(`health`, `projects`, `yaml_files`, `assets`, `components`, `devices`, `jobs`, `imports`, `secrets`,
-`ui`), `bootstrap_storage()`/`job_manager` nach `create_app()`, `test_yaml_import.py` +
-`test_smoke.py` auf `from ses import create_app` umstellen. `server.py` → Dünn-Einstieg + `__main__`.
-Werkzeug `$CLAUDE_JOB_DIR/tmp/extract.py` nur für kollisionsfreie Funktionsblöcke ohne
-Namenskollision; Klassen mit `self.`-Methoden per Modul-Alias + gezielte Edits.
+Route-Split und Gate B1 siehe §8 oben — B1 ist komplett abgeschlossen.
 
 ### Danach (Reihenfolge fix, Entscheidungen getroffen)
 
-1. **B1 fertigstellen** → Gate (curl-Sweep aller Endpunkte + Container-Kurzcheck).
+1. ~~**B1 fertigstellen** → Gate~~ **erledigt** (curl-Sweep aller Endpunktgruppen + realer Job-Durchlauf im Container, siehe §8).
 2. **F1** (BuilderView: 4 Seams) + **F5** (DashboardView, DisplayInspector) — erst `@vue/test-utils`+jsdom,
    dann Charakterisierungstests je Extraktion. Gate: voller Browser-Durchlauf.
 3. **Phase 4** — Docker-Multistage (Frontend im Image, `smartesp-studio/web/` raus), `dependabot.yml`,

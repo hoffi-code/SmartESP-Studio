@@ -53,7 +53,7 @@ Grobe Größe: S ≤ ½ Tag, M ≤ 2 Tage, L ≤ 1 Woche.
 | `Move Job/JobManager into ses/esphome` (`Job`, `JobManager`, `format_sse`). `_run_job` löst `_run_esphome` über `self`, `validate_host_serial_port` über `serial_ports.` auf. `job_manager = JobManager()`-Singleton bleibt bewusst in `server.py` (Startreihenfolge nach `bootstrap_storage()` unverändert, wandert erst mit dem Route-Split in `create_app()`). | M | ✅ |
 | `Split routes into ses/routes/* blueprints`, `bootstrap_storage()` → `create_app()`, `server.py` → Dünn-Einstieg + `__main__`. **Abweichung:** `test_yaml_import.py`/`test_smoke.py` mussten nicht umgestellt werden — sie laden weiterhin `server.py` per `importlib`, das jetzt nur `app = create_app()` aufruft, macht also pro Testdatei automatisch eine frische App+JobManager. `job_manager` hängt als `app.extensions["job_manager"]` an der App-Instanz (`current_app.extensions[...]` in den Job-Routen), nicht als Modul-Global — vermeidet geteilten Zustand zwischen mehreren `create_app()`-Aufrufen. | L | ✅ |
 | `Add ses/ smoke coverage per blueprint` (ergänzt `test_smoke.py`) | S | ⬜ (bestehende `test_smoke.py` deckt bereits 1 Pfad/Blueprint ab, Ausbau optional) |
-| **Gate B1:** curl-Sweep aller Endpunkte + Container-Kurzcheck | S | ⬜ |
+| **Gate B1:** curl-Sweep aller Endpunkte + Container-Kurzcheck | S | ✅ |
 
 **Werkzeug:** `$CLAUDE_JOB_DIR/tmp/extract.py` (generisches Cut+Splice+Prefix) funktioniert für reine
 Funktionsblöcke ohne Namenskollision (io/catalog/assets/projects). Für `devices` (lokale `devices`-Var)
