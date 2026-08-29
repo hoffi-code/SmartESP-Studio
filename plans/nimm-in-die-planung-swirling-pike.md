@@ -68,8 +68,8 @@ und Klassen mit `self.`-Methoden **nicht** blind verwenden — Modul-Alias + gez
 | `Extract builderValidationRules module + tests` | M | ✅ |
 | `Extract useBuilderYamlPreview + snapshot tests` | M | ✅ |
 | `Extract useBuilderDeployment + tests` | M | ✅ |
-| `Extract useBuilderProjectPersistence + tests` | M | ⬜ |
-| `Consolidate duplicate config deep-watch` | S | ⬜ |
+| `Extract useBuilderProjectPersistence + tests` | M | ✅ |
+| `Consolidate duplicate config deep-watch` | S | ✅ |
 
 ### F5 (Summe ~M–L)
 
