@@ -1,20 +1,19 @@
 import { computed } from "vue";
-
-// This composable only assembles validation/indexing layers from helpers already
-// defined in BuilderView. Keeping the assembly here makes BuilderView easier to read
-// without changing the existing validation rules or their source of truth.
-
-export const useBuilderValidation = ({
-  schemaEntries,
-  displayImages,
-  mdiIcons,
-  buildValueRegistry,
-  buildIdIndex,
-  buildDuplicateErrors,
-  buildIdRefErrors,
+import {
   buildDisplayElementIdErrors,
-  buildValidationErrors
-}) => {
+  buildDuplicateErrors,
+  buildIdIndex,
+  buildIdRefErrors,
+  buildValidationErrors,
+  buildValueRegistry
+} from "../../utils/builderValidationRules";
+
+// This composable only assembles validation/indexing layers from the pure rule
+// builders in utils/builderValidationRules. Keeping the assembly here makes
+// BuilderView easier to read without changing the existing validation rules or
+// their source of truth.
+
+export const useBuilderValidation = ({ schemaEntries, displayImages, mdiIcons }) => {
   const idRegistry = computed(() =>
     buildValueRegistry(schemaEntries.value, (field, value) =>
       field.type === "id" && typeof value === "string" && value.trim()
