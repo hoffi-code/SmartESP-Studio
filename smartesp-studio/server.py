@@ -1,5 +1,3 @@
-import base64
-import hmac
 import io
 import json
 import mimetypes
@@ -28,7 +26,7 @@ from flask import (
 )
 from werkzeug.exceptions import HTTPException
 
-from ses import assets, catalog, config, projects, serial_ports
+from ses import assets, auth, catalog, config, projects, serial_ports
 from ses import devices as dev
 from ses.errors import (
     handle_http_exception,
@@ -123,80 +121,6 @@ def find_firmware_path(node_name: str, variant: str = "ota") -> str:
 
     candidates.sort(key=lambda item: item[0], reverse=True)
     return candidates[0][1]
-
-
-def resolve_web_root() -> str:
-    if config.WEB_ROOT and os.path.isdir(config.WEB_ROOT):
-        return config.WEB_ROOT
-    return ""
-
-
-def resolve_secrets_path() -> str:
-    return os.path.join(config.TARGET_DIR, config.SECRETS_FILENAME)
-
-
-def is_standalone_mode() -> bool:
-    return config.SES_MODE == "standalone"
-
-
-def read_auth_password() -> str:
-    if config.SES_AUTH_PASSWORD:
-        return config.SES_AUTH_PASSWORD
-    if not config.SES_AUTH_PASSWORD_FILE:
-        return ""
-    try:
-        with open(config.SES_AUTH_PASSWORD_FILE, "r", encoding="utf-8") as handle:
-            return handle.read().strip()
-    except Exception:
-        return ""
-
-
-def basic_auth_challenge(message: str = "Authentication required"):
-    response = jsonify({"status": "error", "message": message})
-    response.status_code = 401
-    response.headers["WWW-Authenticate"] = 'Basic realm="SmartESP Studio"'
-    return response
-
-
-def standalone_basic_auth_response():
-    if not is_standalone_mode() or config.SES_AUTH_MODE != "basic":
-        return None
-    if request.method == "OPTIONS" or request.path == "/api/health":
-        return None
-
-    expected_username = config.SES_AUTH_USERNAME
-    expected_password = read_auth_password()
-    if not expected_username or not expected_password:
-        return basic_auth_challenge("Basic authentication is not configured")
-
-    auth_header = request.headers.get("Authorization", "")
-    if not auth_header.lower().startswith("basic "):
-        return basic_auth_challenge()
-
-    token = auth_header.split(" ", 1)[1].strip()
-    try:
-        decoded = base64.b64decode(token, validate=True).decode("utf-8")
-    except Exception:
-        return basic_auth_challenge()
-
-    username, separator, password = decoded.partition(":")
-    if not separator:
-        return basic_auth_challenge()
-    if not hmac.compare_digest(username, expected_username):
-        return basic_auth_challenge()
-    if not hmac.compare_digest(password, expected_password):
-        return basic_auth_challenge()
-    return None
-
-
-def check_access():
-    if is_standalone_mode():
-        return None
-
-    if request.headers.get("X-Ingress-Path") or request.headers.get("X-HA-Ingress"):
-        return None
-
-    return jsonify({"status": "error", "message": "Ingress required"}), 403
 
 
 class Job:
@@ -621,7 +545,7 @@ def handle_options_preflight():
 
 @bp.before_request
 def enforce_standalone_auth():
-    return standalone_basic_auth_response()
+    return auth.standalone_basic_auth_response()
 
 
 @bp.route("/api/health", methods=["GET"])
@@ -631,7 +555,7 @@ def api_health():
 
 @bp.route("/api/runtime", methods=["GET"])
 def api_runtime():
-    access = check_access()
+    access = auth.check_access()
     if access:
         return access
 
@@ -664,7 +588,7 @@ def api_runtime():
 
 @bp.route("/api/component-catalog", methods=["GET", "OPTIONS"])
 def api_component_catalog():
-    access = check_access()
+    access = auth.check_access()
     if access:
         return access
 
@@ -677,7 +601,7 @@ def api_component_catalog():
 
 @bp.route("/api/component-schemas/<path:relpath>", methods=["GET", "OPTIONS"])
 def api_component_schema(relpath):
-    access = check_access()
+    access = auth.check_access()
     if access:
         return access
 
@@ -701,7 +625,7 @@ def api_component_schema(relpath):
 
 @bp.route("/api/components/import-zip", methods=["POST", "OPTIONS"])
 def api_components_import_zip():
-    access = check_access()
+    access = auth.check_access()
     if access:
         return access
 
@@ -867,7 +791,7 @@ def api_components_import_zip():
 
 @bp.route("/api/custom-components", methods=["POST", "OPTIONS"])
 def api_custom_components_create():
-    access = check_access()
+    access = auth.check_access()
     if access:
         return access
 
@@ -957,7 +881,7 @@ def api_custom_components_create():
 
 @bp.route("/api/custom-components/<path:id_or_key>", methods=["PUT", "OPTIONS"])
 def api_custom_components_update(id_or_key):
-    access = check_access()
+    access = auth.check_access()
     if access:
         return access
 
@@ -1061,7 +985,7 @@ def api_custom_components_update(id_or_key):
 
 @bp.route("/api/custom-components/<path:id_or_key>", methods=["DELETE", "OPTIONS"])
 def api_custom_components_delete(id_or_key):
-    access = check_access()
+    access = auth.check_access()
     if access:
         return access
 
@@ -1092,7 +1016,7 @@ def api_custom_components_delete(id_or_key):
 
 @bp.route("/api/assets/refresh", methods=["POST"])
 def api_assets_refresh():
-    access = check_access()
+    access = auth.check_access()
     if access:
         return access
 
@@ -1107,7 +1031,7 @@ def api_assets_refresh():
 
 @bp.route("/api/assets/manifest", methods=["GET", "OPTIONS"])
 def api_assets_manifest():
-    access = check_access()
+    access = auth.check_access()
     if access:
         return access
 
@@ -1122,7 +1046,7 @@ def api_assets_manifest():
 
 @bp.route("/api/assets/mdi-substitutions", methods=["GET", "OPTIONS"])
 def api_assets_mdi_substitutions():
-    access = check_access()
+    access = auth.check_access()
     if access:
         return access
 
@@ -1133,7 +1057,7 @@ def api_assets_mdi_substitutions():
 
 @bp.route("/api/assets/upload", methods=["POST", "OPTIONS"])
 def api_assets_upload():
-    access = check_access()
+    access = auth.check_access()
     if access:
         return access
 
@@ -1186,7 +1110,7 @@ def api_assets_upload():
 
 @bp.route("/api/assets/rename", methods=["POST", "OPTIONS"])
 def api_assets_rename():
-    access = check_access()
+    access = auth.check_access()
     if access:
         return access
 
@@ -1232,7 +1156,7 @@ def api_assets_rename():
 
 @bp.route("/api/assets/<kind>/<path:filename>", methods=["GET", "DELETE", "OPTIONS"])
 def api_assets_file(kind, filename):
-    access = check_access()
+    access = auth.check_access()
     if access:
         return access
 
@@ -1269,7 +1193,7 @@ def api_assets_file(kind, filename):
 
 @bp.route("/save", methods=["POST", "OPTIONS"])
 def save_yaml():
-    access = check_access()
+    access = auth.check_access()
     if access:
         return access
 
@@ -1294,7 +1218,7 @@ def save_yaml():
 
 @bp.route("/yaml/load", methods=["GET", "OPTIONS"])
 def load_yaml():
-    access = check_access()
+    access = auth.check_access()
     if access:
         return access
 
@@ -1318,7 +1242,7 @@ def load_yaml():
 
 @bp.route("/api/import/yaml-candidates", methods=["GET", "OPTIONS"])
 def import_yaml_candidates():
-    access = check_access()
+    access = auth.check_access()
     if access:
         return access
 
@@ -1357,7 +1281,7 @@ def import_yaml_candidates():
 
 @bp.route("/api/import/targets", methods=["GET", "OPTIONS"])
 def import_targets():
-    access = check_access()
+    access = auth.check_access()
     if access:
         return access
 
@@ -1390,7 +1314,7 @@ def import_targets():
 
 @bp.route("/api/import/yaml", methods=["GET", "OPTIONS"])
 def import_yaml_load():
-    access = check_access()
+    access = auth.check_access()
     if access:
         return access
 
@@ -1413,7 +1337,7 @@ def import_yaml_load():
 
 @bp.route("/api/import/project", methods=["POST", "OPTIONS"])
 def import_project_bundle():
-    access = check_access()
+    access = auth.check_access()
     if access:
         return access
 
@@ -1512,11 +1436,11 @@ def import_project_bundle():
 
 @bp.route("/api/secrets/raw", methods=["GET", "OPTIONS"])
 def api_secrets_raw_get():
-    access = check_access()
+    access = auth.check_access()
     if access:
         return access
 
-    path = resolve_secrets_path()
+    path = auth.resolve_secrets_path()
     if not os.path.isfile(path):
         return jsonify({"content": ""})
 
@@ -1531,7 +1455,7 @@ def api_secrets_raw_get():
 
 @bp.route("/api/secrets/raw", methods=["POST", "OPTIONS"])
 def api_secrets_raw_post():
-    access = check_access()
+    access = auth.check_access()
     if access:
         return access
 
@@ -1543,7 +1467,7 @@ def api_secrets_raw_post():
     if len(content.encode("utf-8")) > config.SECRETS_RAW_MAX_BYTES:
         return jsonify({"error": "File too large"}), 400
 
-    path = resolve_secrets_path()
+    path = auth.resolve_secrets_path()
     os.makedirs(os.path.dirname(path), exist_ok=True)
     temp_path = f"{path}.{uuid.uuid4().hex}.tmp"
 
@@ -1565,7 +1489,7 @@ def api_secrets_raw_post():
 
 @bp.route("/projects/save", methods=["POST", "OPTIONS"])
 def save_project():
-    access = check_access()
+    access = auth.check_access()
     if access:
         return access
 
@@ -1600,7 +1524,7 @@ def save_project():
 
 @bp.route("/projects/list", methods=["GET", "OPTIONS"])
 def list_projects():
-    access = check_access()
+    access = auth.check_access()
     if access:
         return access
 
@@ -1620,7 +1544,7 @@ def list_projects():
 
 @bp.route("/projects/load", methods=["GET", "OPTIONS"])
 def load_project():
-    access = check_access()
+    access = auth.check_access()
     if access:
         return access
 
@@ -1645,7 +1569,7 @@ def load_project():
 
 @bp.route("/projects/delete", methods=["DELETE", "OPTIONS"])
 def delete_project():
-    access = check_access()
+    access = auth.check_access()
     if access:
         return access
 
@@ -1668,7 +1592,7 @@ def delete_project():
 
 @bp.route("/api/projects/purge", methods=["DELETE", "OPTIONS"])
 def purge_project_bundle():
-    access = check_access()
+    access = auth.check_access()
     if access:
         return access
 
@@ -1724,7 +1648,7 @@ def purge_project_bundle():
 
 @bp.route("/projects/rename", methods=["POST", "OPTIONS"])
 def rename_project():
-    access = check_access()
+    access = auth.check_access()
     if access:
         return access
 
@@ -1798,7 +1722,7 @@ def rename_project():
 
 @bp.route("/yaml/delete", methods=["DELETE", "OPTIONS"])
 def delete_yaml():
-    access = check_access()
+    access = auth.check_access()
     if access:
         return access
 
@@ -1821,7 +1745,7 @@ def delete_yaml():
 
 @bp.route("/api/devices/unregister", methods=["DELETE", "OPTIONS"])
 def api_devices_unregister():
-    access = check_access()
+    access = auth.check_access()
     if access:
         return access
 
@@ -1846,7 +1770,7 @@ def api_devices_unregister():
 
 @bp.route("/api/devices/register", methods=["POST", "OPTIONS"])
 def api_devices_register():
-    access = check_access()
+    access = auth.check_access()
     if access:
         return access
 
@@ -1911,7 +1835,7 @@ def api_devices_register():
 
 @bp.route("/api/devices/list", methods=["GET"])
 def api_devices_list():
-    access = check_access()
+    access = auth.check_access()
     if access:
         return access
 
@@ -1998,7 +1922,7 @@ def api_devices_list():
 
 @bp.route("/api/devices/status", methods=["GET"])
 def api_device_status():
-    access = check_access()
+    access = auth.check_access()
     if access:
         return access
 
@@ -2064,7 +1988,7 @@ def api_device_status():
 
 @bp.route("/api/serial/ports", methods=["GET"])
 def api_serial_ports():
-    access = check_access()
+    access = auth.check_access()
     if access:
         return access
     try:
@@ -2076,7 +2000,7 @@ def api_serial_ports():
 
 @bp.route("/api/install", methods=["POST", "OPTIONS"])
 def api_install():
-    access = check_access()
+    access = auth.check_access()
     if access:
         return access
 
@@ -2114,7 +2038,7 @@ def api_install():
 
 @bp.route("/api/jobs/<job_id>", methods=["GET"])
 def api_job_status(job_id):
-    access = check_access()
+    access = auth.check_access()
     if access:
         return access
 
@@ -2127,7 +2051,7 @@ def api_job_status(job_id):
 
 @bp.route("/api/jobs/<job_id>/tail", methods=["GET"])
 def api_job_tail(job_id):
-    access = check_access()
+    access = auth.check_access()
     if access:
         return access
 
@@ -2166,7 +2090,7 @@ def api_job_tail(job_id):
 
 @bp.route("/api/jobs/<job_id>/tail-wait", methods=["GET"])
 def api_job_tail_wait(job_id):
-    access = check_access()
+    access = auth.check_access()
     if access:
         return access
 
@@ -2241,7 +2165,7 @@ def api_job_tail_wait(job_id):
 
 @bp.route("/api/firmware", methods=["GET"])
 def api_firmware():
-    access = check_access()
+    access = auth.check_access()
     if access:
         return access
 
@@ -2278,7 +2202,7 @@ def format_sse(event: str, data: str) -> str:
 
 @bp.route("/api/jobs/<job_id>/stream", methods=["GET"])
 def api_job_stream(job_id):
-    access = check_access()
+    access = auth.check_access()
     if access:
         return access
 
@@ -2323,7 +2247,7 @@ def api_job_stream(job_id):
 
 @bp.route("/api/jobs/<job_id>/cancel", methods=["POST", "OPTIONS"])
 def api_job_cancel(job_id):
-    access = check_access()
+    access = auth.check_access()
     if access:
         return access
 
@@ -2340,7 +2264,7 @@ def serve_ui(path):
     if path.startswith("api/") or path in ("save", "projects", "projects/save", "projects/list", "projects/load"):
         return jsonify({"status": "error", "message": "Not found"}), 404
 
-    web_root = resolve_web_root()
+    web_root = auth.resolve_web_root()
     if not web_root:
         return jsonify({"status": "error", "message": "UI not configured"}), 404
 

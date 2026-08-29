@@ -323,12 +323,13 @@ Sweep-Bug behoben: 5 Stellen hatten `var(--…)`-Strings in **JS-Farbwerte** ges
 - **`CLAUDE.md`** im Repo-Root ist weiterhin **untracked** (bewusst) — Rollen-Prompt + „Schreibstil" + „Versionierung".
 - **Gesamtplan mit Meilenstein-/Commit-Tabelle:** `plans/nimm-in-die-planung-swirling-pike.md`.
 
-### B1 — in Arbeit (7 von ~10 Commits)
+### B1 — in Arbeit (8 von ~10 Commits)
 
-`server.py`: **3747 → 2388 Z.** Erledigt: `ses/io.py`, `ses/serial_ports.py`, `ses/catalog.py`,
-`ses/assets.py`, `ses/projects.py`, `ses/devices.py` extrahiert; **Config-Namespace vereinheitlicht** — `server.py`
-liest ausschließlich `config.NAME`, alle 4 Testdateien patchen `ses.config.<NAME>` (einziger
-Patch-Punkt). Jeder Schritt einzeln committet, `ruff`+`pytest` durchgehend grün.
+`server.py`: **3747 → 2312 Z.** Erledigt: `ses/io.py`, `ses/serial_ports.py`, `ses/catalog.py`,
+`ses/assets.py`, `ses/projects.py`, `ses/devices.py`, `ses/auth.py` extrahiert; **Config-Namespace
+vereinheitlicht** — `server.py` liest ausschließlich `config.NAME`, alle 4 Testdateien patchen
+`ses.config.<NAME>` (einziger Patch-Punkt). Jeder Schritt einzeln committet, `ruff`+`pytest`
+durchgehend grün.
 
 `ses/devices.py`: Registry (`load_devices`/`save_devices`), Key-Normalisierung
 (`normalize_device_key`, `canonical_device_key`, `device_key_from_yaml`), `build_device_response`,
@@ -336,9 +337,16 @@ Patch-Punkt). Jeder Schritt einzeln committet, `ruff`+`pytest` durchgehend grün
 `from ses import devices as dev` (Routen haben lokale `devices`-Variablen). `zeroconf`-Optional-Import
 zog mit um, `server.py` verlor damit auch den `socket`-Import.
 
-**Nächster konkreter Schritt:** `ses/auth.py`, dann `ses/esphome.py` (Job/JobManager), zuletzt
-`ses/routes/*` + `server.py` → Dünn-Einstieg. Werkzeug `$CLAUDE_JOB_DIR/tmp/extract.py` nur für
-kollisionsfreie Funktionsblöcke.
+`ses/auth.py`: Ingress-Check (`check_access`) + Standalone-Basic-Auth (`is_standalone_mode`,
+`read_auth_password`, `basic_auth_challenge`, `standalone_basic_auth_response`), `resolve_web_root`/
+`resolve_secrets_path`. Keine Namenskollision mit lokalen Variablen, trotzdem `auth.`-Präfix für
+Konsistenz mit den anderen `ses/`-Modulen. `server.py` verlor `base64`/`hmac`-Imports mit.
+
+**Nächster konkreter Schritt:** `ses/esphome.py` (`Job`/`JobManager`/`format_sse`/`job_manager`-
+Singleton, `_run_job` löst `_run_esphome` über `self` und `validate_host_serial_port` über
+`serial_ports.` auf), zuletzt `ses/routes/*` + `server.py` → Dünn-Einstieg. Werkzeug
+`$CLAUDE_JOB_DIR/tmp/extract.py` nur für kollisionsfreie Funktionsblöcke ohne Namenskollision;
+Klassen mit `self.`-Methoden per Modul-Alias + gezielte Edits.
 
 ### Danach (Reihenfolge fix, Entscheidungen getroffen)
 
