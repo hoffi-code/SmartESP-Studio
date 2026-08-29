@@ -16,6 +16,7 @@ SPEC.loader.exec_module(server)
 
 import ses.config as config  # noqa: E402
 from ses import serial_ports  # noqa: E402  (server import must run first)
+from ses.esphome import Job, JobManager  # noqa: E402
 
 
 class SerialHostTests(unittest.TestCase):
@@ -77,8 +78,8 @@ class SerialHostTests(unittest.TestCase):
             with tempfile.TemporaryDirectory() as temp_dir:
                 config.JOB_DIR = temp_dir
                 config.TARGET_DIR = temp_dir
-                manager = object.__new__(server.JobManager)
-                job = server.Job(
+                manager = object.__new__(JobManager)
+                job = Job(
                     "serial-test",
                     "device.yaml",
                     "serial",

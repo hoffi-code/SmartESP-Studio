@@ -323,13 +323,13 @@ Sweep-Bug behoben: 5 Stellen hatten `var(--…)`-Strings in **JS-Farbwerte** ges
 - **`CLAUDE.md`** im Repo-Root ist weiterhin **untracked** (bewusst) — Rollen-Prompt + „Schreibstil" + „Versionierung".
 - **Gesamtplan mit Meilenstein-/Commit-Tabelle:** `plans/nimm-in-die-planung-swirling-pike.md`.
 
-### B1 — in Arbeit (8 von ~10 Commits)
+### B1 — in Arbeit (9 von ~10 Commits)
 
-`server.py`: **3747 → 2312 Z.** Erledigt: `ses/io.py`, `ses/serial_ports.py`, `ses/catalog.py`,
-`ses/assets.py`, `ses/projects.py`, `ses/devices.py`, `ses/auth.py` extrahiert; **Config-Namespace
-vereinheitlicht** — `server.py` liest ausschließlich `config.NAME`, alle 4 Testdateien patchen
-`ses.config.<NAME>` (einziger Patch-Punkt). Jeder Schritt einzeln committet, `ruff`+`pytest`
-durchgehend grün.
+`server.py`: **3747 → 1894 Z.** Erledigt: `ses/io.py`, `ses/serial_ports.py`, `ses/catalog.py`,
+`ses/assets.py`, `ses/projects.py`, `ses/devices.py`, `ses/auth.py`, `ses/esphome.py` extrahiert;
+**Config-Namespace vereinheitlicht** — `server.py` liest ausschließlich `config.NAME`, alle 4
+Testdateien patchen `ses.config.<NAME>` (einziger Patch-Punkt). Jeder Schritt einzeln committet,
+`ruff`+`pytest` durchgehend grün.
 
 `ses/devices.py`: Registry (`load_devices`/`save_devices`), Key-Normalisierung
 (`normalize_device_key`, `canonical_device_key`, `device_key_from_yaml`), `build_device_response`,
@@ -342,11 +342,22 @@ zog mit um, `server.py` verlor damit auch den `socket`-Import.
 `resolve_secrets_path`. Keine Namenskollision mit lokalen Variablen, trotzdem `auth.`-Präfix für
 Konsistenz mit den anderen `ses/`-Modulen. `server.py` verlor `base64`/`hmac`-Imports mit.
 
-**Nächster konkreter Schritt:** `ses/esphome.py` (`Job`/`JobManager`/`format_sse`/`job_manager`-
-Singleton, `_run_job` löst `_run_esphome` über `self` und `validate_host_serial_port` über
-`serial_ports.` auf), zuletzt `ses/routes/*` + `server.py` → Dünn-Einstieg. Werkzeug
-`$CLAUDE_JOB_DIR/tmp/extract.py` nur für kollisionsfreie Funktionsblöcke ohne Namenskollision;
-Klassen mit `self.`-Methoden per Modul-Alias + gezielte Edits.
+`ses/esphome.py`: `Job`, `JobManager` (Queue-Worker, `_run_job`/`_run_esphome`/`_run_command`,
+Serial-Locking), `format_sse`. `JobManager` löst `_run_esphome` weiterhin über `self` auf, Serial-
+Validierung über `serial_ports.validate_host_serial_port` (`from ses import serial_ports` bereits
+vorhanden). `job_manager = JobManager()` bleibt bewusst in `server.py` (Startreihenfolge nach
+`bootstrap_storage()` unverändert) — nur die Klassen zogen um, `server.py` importiert
+`JobManager`/`format_sse`. `test_serial_host.py` auf `from ses.esphome import Job, JobManager`
+umgestellt (vorher `server.Job`/`server.JobManager`). `server.py` verlor damit `pty`/`select`/
+`shlex`/`subprocess`/`threading`/`collections.deque` mit — nur noch `queue`/`uuid` blieben (anderswo
+noch gebraucht).
+
+**Nächster konkreter Schritt:** Route-Gruppen als Per-Datei-Blueprints unter `ses/routes/` anlegen
+(`health`, `projects`, `yaml_files`, `assets`, `components`, `devices`, `jobs`, `imports`, `secrets`,
+`ui`), `bootstrap_storage()`/`job_manager` nach `create_app()`, `test_yaml_import.py` +
+`test_smoke.py` auf `from ses import create_app` umstellen. `server.py` → Dünn-Einstieg + `__main__`.
+Werkzeug `$CLAUDE_JOB_DIR/tmp/extract.py` nur für kollisionsfreie Funktionsblöcke ohne
+Namenskollision; Klassen mit `self.`-Methoden per Modul-Alias + gezielte Edits.
 
 ### Danach (Reihenfolge fix, Entscheidungen getroffen)
 
