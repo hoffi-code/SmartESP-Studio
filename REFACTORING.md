@@ -265,7 +265,8 @@ Blocker und Vorgehen: siehe „B1 — Stand und nächster Schritt" oben.
 |---|---|
 | F4 | `src/utils/api.js` — `apiUrl` / `apiFetch` / `unwrapJson` / `apiJson`. Das dreifach kopierte `new URL("./", window.location.href)` + `credentials: "include"` liegt jetzt an **einer** Stelle. `BuilderView.vue` (`buildAddonUrl`/`addonFetch`) und `DashboardView.vue` (`getApiUrl`) delegieren, Aufrufstellen unverändert. `unwrapJson` wandelt non-2xx in einen `Error` mit `{status, message, payload}`. Getestet (`api.spec.js`). Statische Asset-Loader (`schemaLoader.js`, `gpioData.js`) und CDN-Fetches (`IconPicker.vue`) bleiben außen vor — kein Ingress/Credentials-Bezug. |
 | F3-Ausbau | Neue Vitest-Suites: `schemaModeLevel`, `schemaTemplatable`, `schemaAuto` (Slug/SSID-Ableitung, `!secret`-Erkennung, Passwort-Generierung/-Validierung). Gesamt 76 Frontend-Tests (vorher 39). |
-| **F1** | **Abgeschlossen** (6293 → 3904 Z.). **F5 offen.** `DashboardView.vue` (3093 Z.), `DisplayInspector.vue` (2114 Z.) zerlegen. Siehe unten. |
+| **F1** | **Abgeschlossen** (6293 → 3904 Z.). |
+| **F5** | **In Arbeit.** `DashboardView.vue` (3093 → 2592 Z.), `DisplayInspector.vue` (2114 Z.) zerlegen. Siehe unten. |
 
 #### F1 / F5 — Vorgehen
 
@@ -281,7 +282,11 @@ Wie B1: erst Netz, dann schneiden. Es gab **keine** Komponententests, und die Ap
 
 **F1 damit komplett.** `BuilderView.vue`: 6293 → 3904 Z. (−38 %). `npm run lint`/`test`/`build` nach jedem Schritt grün, kein einziger neuer Lint-Fehler über alle vier Seams.
 
-8. `DashboardView.vue` / `DisplayInspector.vue` analog entlang funktionaler Schnitte (F5, noch offen).
+#### F5 — DashboardView.vue / DisplayInspector.vue
+
+8. ✅ **DashboardView Seam #1 — YAML-Import-Flow:** `useDashboardYamlImport.js` — beide Import-Wege (lokale .yaml-Datei per Picker, ESPHome-Config-Verzeichnis per Kandidatenliste) münden in denselben Analyse-dann-Bestätigen-Modal-Flow (`importYamlToProjectConfig`). `openYamlFilePicker`/`openBuilderYamlImportModal` wurden aus dem Rückgabewert entfernt (waren nur intern über `handleTopbarImportOption` gebraucht, kein externer Aufrufer mehr in `DashboardView.vue`). 9 neue Tests (`useDashboardYamlImport.spec.dom.js`, jsdom wegen `FileReader`/`File`). `DashboardView.vue`: 3093 → 2778 Z.
+9. ✅ **DashboardView Seam #2 — Tile-Customization:** `useDashboardTileCustomization.js` — Icon/Farb-Overrides je Projekt lesen, im Draft bearbeiten, auf `ui.dashboardTile` im Projekt-JSON zurückschreiben. `DEFAULT_TILE_*`-Konstanten blieben in `DashboardView.vue` (auch von `resolveTileCustomization` außerhalb dieser Extraktion gebraucht) und wandern als Parameter rein statt dupliziert zu werden. `customizeProjectName`/`customizeColorTarget`/`openCustomizeModal` mussten nicht zurück nach `DashboardView.vue` destructured werden — extern wird nur `requestCustomizeProjectFromMenu` (liest das Ziel-Projekt aus dem offenen Kontextmenü) gebraucht. 7 neue Tests (`useDashboardTileCustomization.spec.js`, echtes `normalizeHexColor` importiert, Rest als treue Kurz-Reimplementierung der DashboardView-lokalen Helfer). `DashboardView.vue`: 2778 → 2592 Z. (gesamt 3093 → 2592, −16 %).
+10. **Offen:** `DisplayInspector.vue` (2114 Z.) Element-Typ-Split (Shape/Icon, Text/Image/Animation, Graph/GraphLegend) + neue Composables `useDisplayFontControls`/`useDisplayImageField`/`useGraphTraces`/`useElementPatch`. Anders als bisher: Split der **Template**-Struktur in Kind-Komponenten, nicht nur Script-Extraktion — neue Art von Risiko (Props/Emits/Slots statt nur JS-Closures).
 
 ---
 

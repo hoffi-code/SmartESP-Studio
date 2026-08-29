@@ -73,13 +73,13 @@ und Klassen mit `self.`-Methoden **nicht** blind verwenden — Modul-Alias + gez
 
 ### F5 (Summe ~M–L)
 
-| Commit | Größe |
-|---|---|
-| `Extract useDashboardYamlImport + tests` | M |
-| `Extract useDashboardTileCustomization + tests` | S–M |
-| `Split DisplayInspector: Shape + Icon panels` | S |
-| `Split DisplayInspector: Text + Image + Animation panels + useDisplayImageField/useDisplayFontControls` | M |
-| `Split DisplayInspector: Graph + GraphLegend + useGraphTraces` | M |
+| Commit | Größe | Status |
+|---|---|---|
+| `Extract useDashboardYamlImport + tests` | M | ✅ |
+| `Extract useDashboardTileCustomization + tests` | S–M | ✅ |
+| `Split DisplayInspector: Shape + Icon panels` | S | ⬜ |
+| `Split DisplayInspector: Text + Image + Animation panels + useDisplayImageField/useDisplayFontControls` | M | ⬜ |
+| `Split DisplayInspector: Graph + GraphLegend + useGraphTraces` | M | ⬜ |
 | **Gate F1+F5:** voller Browser-Durchlauf (Checkliste), Report | S |
 
 ### Phase 4 (Summe ~M)
