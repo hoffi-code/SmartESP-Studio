@@ -22,7 +22,6 @@ export const useBuilderComponentCatalog = ({
   componentIdFromEntry,
   componentCatalogKeyFromEntry,
   normalizeSchemaPath,
-  saveConfig,
   addonFetch,
   isDevOffline,
   localComponentCatalogUrl,
@@ -320,14 +319,6 @@ export const useBuilderComponentCatalog = ({
         componentsQuery.value = "";
       }
     }
-  );
-
-  watch(
-    () => config.value,
-    () => {
-      saveConfig();
-    },
-    { deep: true }
   );
 
   return {

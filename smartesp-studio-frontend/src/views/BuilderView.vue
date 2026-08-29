@@ -709,7 +709,6 @@ const {
   componentIdFromEntry: (entry) => componentIdFromEntry(entry),
   componentCatalogKeyFromEntry: (entry) => componentCatalogKeyFromEntry(entry),
   normalizeSchemaPath,
-  saveConfig: () => saveConfig(),
   addonFetch: (...args) => addonFetch(...args),
   isDevOffline,
   localComponentCatalogUrl: () => localComponentCatalogUrl,
@@ -2959,15 +2958,22 @@ watch(
   { immediate: true }
 );
 
+// Single deep watch for config autosave: persists to localStorage on every change and,
+// when editing an already-saved project, flips isSaved so the UI shows unsaved changes.
+// Used to be two separate deep watchers (here + useBuilderComponentCatalog) both calling
+// saveConfig() on every change; consolidated to avoid the double write.
 watch(
   () => config.value,
   () => {
-    if (isHydrating.value) return;
-    if (!isProjectSaved.value) return;
-    if (!persistedConfigFingerprint.value) return;
-    const currentFingerprint = buildConfigFingerprint(config.value);
-    if (currentFingerprint === persistedConfigFingerprint.value) return;
-    markProjectDirty();
+    const shouldMarkDirty =
+      !isHydrating.value &&
+      isProjectSaved.value &&
+      persistedConfigFingerprint.value &&
+      buildConfigFingerprint(config.value) !== persistedConfigFingerprint.value;
+    if (shouldMarkDirty) {
+      config.value.isSaved = false;
+    }
+    saveConfig();
   },
   { deep: true }
 );
