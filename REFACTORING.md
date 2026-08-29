@@ -323,17 +323,22 @@ Sweep-Bug behoben: 5 Stellen hatten `var(--…)`-Strings in **JS-Farbwerte** ges
 - **`CLAUDE.md`** im Repo-Root ist weiterhin **untracked** (bewusst) — Rollen-Prompt + „Schreibstil" + „Versionierung".
 - **Gesamtplan mit Meilenstein-/Commit-Tabelle:** `plans/nimm-in-die-planung-swirling-pike.md`.
 
-### B1 — in Arbeit (6 von ~10 Commits)
+### B1 — in Arbeit (7 von ~10 Commits)
 
-`server.py`: **3747 → 2599 Z.** Erledigt: `ses/io.py`, `ses/serial_ports.py`, `ses/catalog.py`,
-`ses/assets.py`, `ses/projects.py` extrahiert; **Config-Namespace vereinheitlicht** — `server.py`
+`server.py`: **3747 → 2388 Z.** Erledigt: `ses/io.py`, `ses/serial_ports.py`, `ses/catalog.py`,
+`ses/assets.py`, `ses/projects.py`, `ses/devices.py` extrahiert; **Config-Namespace vereinheitlicht** — `server.py`
 liest ausschließlich `config.NAME`, alle 4 Testdateien patchen `ses.config.<NAME>` (einziger
 Patch-Punkt). Jeder Schritt einzeln committet, `ruff`+`pytest` durchgehend grün.
 
-**Nächster konkreter Schritt:** `ses/devices.py` (siehe Plan-Milestone-Tabelle — Modul als
-`from ses import devices as dev` importieren wegen lokaler `devices`-Variablen in den Routen),
-dann `ses/auth.py`, `ses/esphome.py` (Job/JobManager), zuletzt `ses/routes/*` + `server.py` →
-Dünn-Einstieg. Werkzeug `$CLAUDE_JOB_DIR/tmp/extract.py` nur für kollisionsfreie Funktionsblöcke.
+`ses/devices.py`: Registry (`load_devices`/`save_devices`), Key-Normalisierung
+(`normalize_device_key`, `canonical_device_key`, `device_key_from_yaml`), `build_device_response`,
+`MDNSProbe`, `ping_host`/`resolve_host`/`evaluate_device_connectivity`. Import als
+`from ses import devices as dev` (Routen haben lokale `devices`-Variablen). `zeroconf`-Optional-Import
+zog mit um, `server.py` verlor damit auch den `socket`-Import.
+
+**Nächster konkreter Schritt:** `ses/auth.py`, dann `ses/esphome.py` (Job/JobManager), zuletzt
+`ses/routes/*` + `server.py` → Dünn-Einstieg. Werkzeug `$CLAUDE_JOB_DIR/tmp/extract.py` nur für
+kollisionsfreie Funktionsblöcke.
 
 ### Danach (Reihenfolge fix, Entscheidungen getroffen)
 

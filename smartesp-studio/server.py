@@ -8,7 +8,6 @@ import pty
 import queue
 import select
 import shlex
-import socket
 import subprocess
 import threading
 import time
@@ -29,13 +28,8 @@ from flask import (
 )
 from werkzeug.exceptions import HTTPException
 
-try:
-    from zeroconf import IPVersion, Zeroconf
-except Exception:
-    IPVersion = None
-    Zeroconf = None
-
 from ses import assets, catalog, config, projects, serial_ports
+from ses import devices as dev
 from ses.errors import (
     handle_http_exception,
     handle_unexpected_exception,
@@ -66,211 +60,6 @@ def bootstrap_storage() -> None:
     seed_assets()
     os.makedirs(catalog.components_runtime_schemas_root(), exist_ok=True)
     assets.sync_assets("all")
-
-
-def load_devices() -> List[dict]:
-    if not os.path.isfile(config.DEVICES_PATH):
-        return []
-    try:
-        with open(config.DEVICES_PATH, "r", encoding="utf-8") as handle:
-            data = json.load(handle)
-        if isinstance(data, list):
-            return [item for item in data if isinstance(item, dict)]
-    except Exception:
-        return []
-    return []
-
-
-def save_devices(devices: List[dict]) -> None:
-    os.makedirs(os.path.dirname(config.DEVICES_PATH), exist_ok=True)
-    with open(config.DEVICES_PATH, "w", encoding="utf-8") as handle:
-        json.dump(devices, handle, ensure_ascii=False, indent=2)
-        handle.write("\n")
-
-
-def unregister_device_record(
-    *,
-    yaml_name: str = "",
-    device_key: str = "",
-) -> Tuple[bool, int]:
-    normalized_yaml = normalize_yaml_filename(yaml_name) if yaml_name else ""
-    normalized_key = normalize_device_key(device_key) if device_key else ""
-    if not normalized_yaml and not normalized_key:
-        return False, 0
-
-    devices = load_devices()
-    kept = []
-    removed = 0
-    for device in devices:
-        remove = False
-        if normalized_yaml:
-            device_yaml = normalize_yaml_filename(str(device.get("yaml") or ""))
-            if device_yaml and device_yaml.lower() == normalized_yaml.lower():
-                remove = True
-        if not remove and normalized_key:
-            if canonical_device_key(device) == normalized_key:
-                remove = True
-        if remove:
-            removed += 1
-            continue
-        kept.append(device)
-
-    if removed:
-        save_devices(kept)
-        return True, removed
-    return False, 0
-
-
-def device_key_from_yaml(yaml_name: str) -> str:
-    normalized = normalize_yaml_filename(yaml_name)
-    if not normalized:
-        return ""
-    return normalized[:-5].strip().lower()
-
-
-def normalize_device_key(value: str) -> str:
-    raw = str(value or "").strip().lower()
-    if not raw:
-        return ""
-    if raw.endswith(".yaml"):
-        raw = raw[:-5]
-    if raw.endswith(".json"):
-        raw = raw[:-5]
-    if not raw or not config.VALID_DEVICE.match(raw):
-        return ""
-    return raw
-
-
-def canonical_device_key(device: dict) -> str:
-    yaml_name = str(device.get("yaml") or "").strip()
-    key_from_yaml = device_key_from_yaml(yaml_name)
-    if key_from_yaml:
-        return key_from_yaml
-    return normalize_device_key(str(device.get("name") or ""))
-
-
-def build_device_response(device: dict, checks: Optional[dict] = None) -> dict:
-    key = canonical_device_key(device)
-    yaml_name = normalize_yaml_filename(str(device.get("yaml") or ""))
-    name = str(device.get("name") or "").strip()
-    host = str(device.get("host") or "").strip()
-    status = str(device.get("status") or "").strip().lower()
-    if status not in ("online", "offline", "unknown"):
-        status = "unknown"
-    status_source = str(device.get("status_source") or "").strip().lower()
-    if status_source not in ("dns", "mdns", "ota", "unknown"):
-        status_source = "unknown"
-
-    payload = {
-        **device,
-        "device_key": key,
-        "yaml": yaml_name,
-        "name": name,
-        "host": host,
-        "status": status,
-        "status_source": status_source,
-        "checks": {
-            "dns": bool((checks or {}).get("dns", False)),
-            "mdns": bool((checks or {}).get("mdns", False)),
-            "ota": bool((checks or {}).get("ota", False)),
-        },
-    }
-    return payload
-
-
-class MDNSProbe:
-    def __init__(self) -> None:
-        self.cache = {}
-        self.zc = None
-        if Zeroconf is None:
-            return
-        try:
-            if IPVersion is not None:
-                self.zc = Zeroconf(ip_version=IPVersion.All)
-            else:
-                self.zc = Zeroconf()
-        except Exception:
-            self.zc = None
-
-    def is_online(self, host: str) -> bool:
-        normalized = str(host or "").strip().rstrip(".").lower()
-        if not normalized or not normalized.endswith(".local"):
-            return False
-        cached = self.cache.get(normalized)
-        if cached is not None:
-            return cached
-
-        if self.zc is None:
-            self.cache[normalized] = False
-            return False
-
-        node = normalized[:-6].strip()
-        if not node:
-            self.cache[normalized] = False
-            return False
-
-        online = False
-        for service_type in ("_esphomelib._tcp.local.", "_esphome._tcp.local."):
-            service_name = f"{node}.{service_type}"
-            try:
-                info = self.zc.get_service_info(service_type, service_name, timeout=1200)
-            except Exception:
-                info = None
-            if info is not None:
-                online = True
-                break
-
-        self.cache[normalized] = online
-        return online
-
-    def close(self) -> None:
-        if self.zc is None:
-            return
-        try:
-            self.zc.close()
-        except Exception:
-            pass
-        self.zc = None
-
-
-def ping_host(host: str, port: int = config.PING_PORT, timeout: float = config.PING_TIMEOUT) -> bool:
-    if not host:
-        return False
-    try:
-        with socket.create_connection((host, port), timeout=timeout):
-            return True
-    except Exception:
-        return False
-
-
-def resolve_host(host: str) -> bool:
-    if not host:
-        return False
-    try:
-        socket.getaddrinfo(host, None)
-        return True
-    except Exception:
-        return False
-
-
-def evaluate_device_connectivity(
-    host: str,
-    deep: bool = False,
-    mdns_probe: Optional[MDNSProbe] = None,
-) -> Tuple[bool, bool, bool, bool, str]:
-    """Return (online, dns_ok, mdns_ok, ota_ok, source) for a device host."""
-    dns_ok = resolve_host(host)
-    mdns_ok = mdns_probe.is_online(host) if mdns_probe else False
-    ota_ok = ping_host(host) if deep else False
-    online = dns_ok or mdns_ok or ota_ok
-    source = "unknown"
-    if dns_ok:
-        source = "dns"
-    elif mdns_ok:
-        source = "mdns"
-    elif ota_ok:
-        source = "ota"
-    return online, dns_ok, mdns_ok, ota_ok, source
 
 
 def find_firmware_path(node_name: str, variant: str = "ota") -> str:
@@ -1915,7 +1704,7 @@ def purge_project_bundle():
         except Exception:
             return jsonify({"status": "error", "message": "YAML delete failed"}), 500
 
-    unregistered, removed_count = unregister_device_record(yaml_name=yaml_filename)
+    unregistered, removed_count = dev.unregister_device_record(yaml_name=yaml_filename)
 
     return jsonify(
         {
@@ -2039,11 +1828,11 @@ def api_devices_unregister():
     yaml_value = request.args.get("yaml") or request.args.get("filename") or ""
     name_value = request.args.get("name") or request.args.get("device") or ""
     yaml_name = normalize_yaml_filename(str(yaml_value)) if yaml_value else ""
-    device_key = normalize_device_key(str(name_value)) if name_value else ""
+    device_key = dev.normalize_device_key(str(name_value)) if name_value else ""
     if not yaml_name and not device_key:
         return jsonify({"status": "error", "message": "Provide yaml or name"}), 400
 
-    removed, removed_count = unregister_device_record(yaml_name=yaml_name, device_key=device_key)
+    removed, removed_count = dev.unregister_device_record(yaml_name=yaml_name, device_key=device_key)
     return jsonify(
         {
             "status": "ok",
@@ -2063,7 +1852,7 @@ def api_devices_register():
 
     payload = request.get_json(silent=True) or {}
     yaml_name = normalize_yaml_filename(str(payload.get("yaml", "")))
-    key = device_key_from_yaml(yaml_name)
+    key = dev.device_key_from_yaml(yaml_name)
     name = str(payload.get("name", "")).strip()
     if key:
         name = key
@@ -2071,17 +1860,17 @@ def api_devices_register():
         return jsonify({"status": "error", "message": "Invalid name"}), 400
     name = name.strip().lower()
     if not key:
-        key = normalize_device_key(name)
+        key = dev.normalize_device_key(name)
 
     host = str(payload.get("host", "")).strip()
     if host and not config.VALID_DEVICE.match(host):
         host = ""
 
-    devices = load_devices()
+    devices = dev.load_devices()
     now = utc_now()
     updated = False
     for device in devices:
-        current_key = canonical_device_key(device)
+        current_key = dev.canonical_device_key(device)
         if current_key and current_key == key:
             device["device_key"] = key
             device["yaml"] = yaml_name or device.get("yaml", "")
@@ -2116,7 +1905,7 @@ def api_devices_register():
             }
         )
 
-    save_devices(devices)
+    dev.save_devices(devices)
     return jsonify({"status": "ok"})
 
 
@@ -2126,18 +1915,18 @@ def api_devices_list():
     if access:
         return access
 
-    devices = load_devices()
+    devices = dev.load_devices()
     refresh = str(request.args.get("refresh", "0")).strip() in ("1", "true", "yes")
     deep = str(request.args.get("deep", "0")).strip() in ("1", "true", "yes") or config.SES_STATUS_USE_PING
     response_devices = []
     normalized_any = False
 
     for device in devices:
-        key = canonical_device_key(device)
+        key = dev.canonical_device_key(device)
         yaml_name = normalize_yaml_filename(str(device.get("yaml") or ""))
         host = str(device.get("host") or "").strip()
         if not host:
-            fallback = key or normalize_device_key(str(device.get("name") or ""))
+            fallback = key or dev.normalize_device_key(str(device.get("name") or ""))
             if fallback:
                 host = f"{fallback}.local"
         status = str(device.get("status") or "").strip().lower()
@@ -2169,12 +1958,12 @@ def api_devices_list():
     if refresh:
         now = utc_now()
         updated_any = normalized_any
-        mdns_probe = MDNSProbe()
+        mdns_probe = dev.MDNSProbe()
         try:
             for device in devices:
-                key = canonical_device_key(device)
+                key = dev.canonical_device_key(device)
                 host = str(device.get("host") or "").strip() or (f"{key}.local" if key else "")
-                online, dns_ok, mdns_ok, ota_ok, source = evaluate_device_connectivity(
+                online, dns_ok, mdns_ok, ota_ok, source = dev.evaluate_device_connectivity(
                     host,
                     deep=deep,
                     mdns_probe=mdns_probe,
@@ -2193,18 +1982,18 @@ def api_devices_list():
                 if online:
                     device["last_seen"] = now
                 checks = {"dns": dns_ok, "mdns": mdns_ok, "ota": ota_ok}
-                response_devices.append(build_device_response(device, checks=checks))
+                response_devices.append(dev.build_device_response(device, checks=checks))
         finally:
             mdns_probe.close()
         if updated_any:
-            save_devices(devices)
+            dev.save_devices(devices)
 
         return jsonify({"status": "ok", "devices": response_devices})
 
     if normalized_any:
-        save_devices(devices)
+        dev.save_devices(devices)
 
-    return jsonify({"status": "ok", "devices": [build_device_response(device) for device in devices]})
+    return jsonify({"status": "ok", "devices": [dev.build_device_response(device) for device in devices]})
 
 
 @bp.route("/api/devices/status", methods=["GET"])
@@ -2214,15 +2003,15 @@ def api_device_status():
         return access
 
     yaml_query = normalize_yaml_filename(str(request.args.get("yaml", "")))
-    key_query = normalize_device_key(str(request.args.get("name", "")))
+    key_query = dev.normalize_device_key(str(request.args.get("name", "")))
     if not yaml_query and not key_query:
         return jsonify({"status": "error", "message": "Invalid device selector"}), 400
 
-    devices = load_devices()
+    devices = dev.load_devices()
     target = None
     for device in devices:
         device_yaml = normalize_yaml_filename(str(device.get("yaml") or ""))
-        device_key = canonical_device_key(device)
+        device_key = dev.canonical_device_key(device)
         if yaml_query and device_yaml and device_yaml.lower() == yaml_query.lower():
             target = device
             break
@@ -2236,14 +2025,14 @@ def api_device_status():
     refresh = str(request.args.get("refresh", "0")).strip() in ("1", "true", "yes")
     deep = str(request.args.get("deep", "0")).strip() in ("1", "true", "yes") or config.SES_STATUS_USE_PING
     if not refresh:
-        return jsonify({"status": "ok", "device": build_device_response(target)})
+        return jsonify({"status": "ok", "device": dev.build_device_response(target)})
 
     now = utc_now()
-    key = canonical_device_key(target)
+    key = dev.canonical_device_key(target)
     host = str(target.get("host") or "").strip() or (f"{key}.local" if key else "")
-    mdns_probe = MDNSProbe()
+    mdns_probe = dev.MDNSProbe()
     try:
-        online, dns_ok, mdns_ok, ota_ok, source = evaluate_device_connectivity(
+        online, dns_ok, mdns_ok, ota_ok, source = dev.evaluate_device_connectivity(
             host,
             deep=deep,
             mdns_probe=mdns_probe,
@@ -2267,10 +2056,10 @@ def api_device_status():
         target["last_seen"] = now
 
     if changed:
-        save_devices(devices)
+        dev.save_devices(devices)
 
     checks = {"dns": dns_ok, "mdns": mdns_ok, "ota": ota_ok}
-    return jsonify({"status": "ok", "device": build_device_response(target, checks=checks)})
+    return jsonify({"status": "ok", "device": dev.build_device_response(target, checks=checks)})
 
 
 @bp.route("/api/serial/ports", methods=["GET"])
