@@ -323,13 +323,40 @@ Sweep-Bug behoben: 5 Stellen hatten `var(--…)`-Strings in **JS-Farbwerte** ges
 - **`CLAUDE.md`** im Repo-Root ist weiterhin **untracked** (bewusst) — Rollen-Prompt + „Schreibstil" + „Versionierung".
 - **Gesamtplan mit Meilenstein-/Commit-Tabelle:** `plans/nimm-in-die-planung-swirling-pike.md`.
 
-### B1 — in Arbeit (9 von ~10 Commits)
+### B1 — abgeschlossen
 
-`server.py`: **3747 → 1894 Z.** Erledigt: `ses/io.py`, `ses/serial_ports.py`, `ses/catalog.py`,
-`ses/assets.py`, `ses/projects.py`, `ses/devices.py`, `ses/auth.py`, `ses/esphome.py` extrahiert;
-**Config-Namespace vereinheitlicht** — `server.py` liest ausschließlich `config.NAME`, alle 4
+`server.py`: **3747 → 24 Z.**, jetzt nur noch `from ses import config, create_app` + `app = create_app()`
++ `__main__` (waitress). Erledigt: `ses/io.py`, `ses/serial_ports.py`, `ses/catalog.py`,
+`ses/assets.py`, `ses/projects.py`, `ses/devices.py`, `ses/auth.py`, `ses/esphome.py`,
+`ses/routes/{health,components,assets,yaml_files,imports,secrets,projects,devices,jobs,ui}.py`
+extrahiert; **Config-Namespace vereinheitlicht** — Code liest ausschließlich `config.NAME`, alle 4
 Testdateien patchen `ses.config.<NAME>` (einziger Patch-Punkt). Jeder Schritt einzeln committet,
 `ruff`+`pytest` durchgehend grün.
+
+**Route-Split (letzter Commit):** `ses/routes/*.py` — ein Blueprint je Funktionsgruppe, `ses/__init__.py`
+hat jetzt `bootstrap_storage()` + `create_app()`: erzeugt die Flask-App, hängt `JobManager()` als
+`app.extensions["job_manager"]` ein (Job-Routen lesen ihn über `current_app.extensions["job_manager"]`
+statt eines Modul-Globals — läuft pro App-Instanz sauber isoliert, kein geteilter Zustand zwischen
+mehreren `create_app()`-Aufrufen/Testdateien), registriert die 10 Blueprints, die beiden
+`before_request`-Hooks (OPTIONS-Preflight, Standalone-Basic-Auth) jetzt app-weit statt
+blueprint-gebunden, sowie die Error-Handler. `find_firmware_path` (nur von `/api/firmware` gebraucht)
+liegt direkt in `ses/routes/jobs.py`, nicht in `ses/devices.py` — Bezug ist Firmware/Job, nicht
+Geräte-Registry (Abweichung von der Plan-Notiz, die es bei `ses/devices` gelistet hatte).
+
+**Test-Migration einfacher als geplant:** `test_yaml_import.py`/`test_smoke.py`/`test_component_catalog.py`
+mussten **nicht** auf `from ses import create_app` umgestellt werden — sie laden `server.py` weiterhin
+per `importlib.util.spec_from_file_location` unter einem eigenen Modulnamen, und da `server.py` jetzt
+nur noch `app = create_app()` aufruft, bekommt jede Testdatei bei ihrem eigenen Exec ohnehin eine frische
+App + einen frischen `JobManager` (exakt die bisherige Isolation). Nur `test_serial_host.py` wurde
+bereits beim `esphome.py`-Schritt auf `from ses.esphome import Job, JobManager` umgestellt.
+`ruff` + `pytest` (32 + 16 subtests) grün; manueller Abgleich der Blueprint-App gegen die Route-Tabelle
+(`/api/health`, `/api/runtime`, `/projects/list`, `/api/assets/manifest`, `/api/devices/list`,
+`/api/import/targets`, `/api/serial/ports`, `/`, `/api/jobs/<id>`, OPTIONS-Preflight) bestätigt.
+
+**Noch offen aus dem ursprünglichen B1-Umfang:** Gate-Schritt „curl-Sweep aller Endpunkte +
+Container-Kurzcheck" (Docker-Build lokal nicht ausgeführt in dieser Sitzung) sowie „Add ses/ smoke
+coverage per blueprint" (bestehende `test_smoke.py` deckt bereits 1 Pfad pro Blueprint ab — Ausbau
+optional).
 
 `ses/devices.py`: Registry (`load_devices`/`save_devices`), Key-Normalisierung
 (`normalize_device_key`, `canonical_device_key`, `device_key_from_yaml`), `build_device_response`,
