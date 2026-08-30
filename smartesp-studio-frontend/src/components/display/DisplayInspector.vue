@@ -8,83 +8,20 @@
     <div v-if="!selectedElement" class="note">Select an element on the canvas.</div>
 
     <div v-else class="display-inspector__form">
-      <template v-if="selectedElement.type === 'shape'">
-        <div>
-          <label for="shapeType">Shape</label>
-          <select id="shapeType" :value="selectedElement.shapeType" @change="updateText('shapeType', $event)">
-            <option value="line">Line</option>
-            <option value="rect">Rectangle</option>
-            <option value="circle">Circle</option>
-            <option value="triangle">Triangle</option>
-            <option value="polygon5">Pentagon</option>
-            <option value="polygon6">Hexagon</option>
-            <option value="polygon7">Heptagon</option>
-            <option value="polygon8">Octagon</option>
-          </select>
-        </div>
+      <DisplayInspectorShape
+        v-if="selectedElement.type === 'shape'"
+        :selected-element="selectedElement"
+        :is-monochrome="isMonochrome"
+        @update="handleUpdate"
+      />
 
-        <div>
-          <label for="rotation">Rotation</label>
-          <select id="rotation" :value="selectedElement.rotation" @change="updateNumber('rotation', $event)">
-            <option v-for="option in rotationOptions" :key="option" :value="option">{{ option }}</option>
-          </select>
-        </div>
-
-        <div v-if="selectedElement.shapeType !== 'line'">
-          <label for="filled">Filled</label>
-          <input
-            id="filled"
-            type="checkbox"
-            class="schema-checkbox"
-            :checked="selectedElement.filled"
-            @change="updateBool('filled', $event)"
-          />
-        </div>
-
-        <div class="display-inspector__row display-inspector__row--quad">
-          <div class="display-inspector__field">
-            <label for="posX">X</label>
-            <input id="posX" type="number" :value="selectedElement.x" @input="updateNumber('x', $event)" />
-          </div>
-          <div class="display-inspector__field">
-            <label for="posY">Y</label>
-            <input id="posY" type="number" :value="selectedElement.y" @input="updateNumber('y', $event)" />
-          </div>
-          <span class="display-inspector__group-divider"></span>
-          <div class="display-inspector__field">
-            <label for="sizeW">W</label>
-            <input id="sizeW" type="number" :value="selectedElement.w" @input="updateNumber('w', $event)" />
-          </div>
-          <div class="display-inspector__field">
-            <label for="sizeH">H</label>
-            <input id="sizeH" type="number" :value="selectedElement.h" @input="updateNumber('h', $event)" />
-          </div>
-        </div>
-
-        <div v-if="showColorPicker" class="display-icon-picker">
-          <label for="shapeColor">Color</label>
-          <div class="schema-icon-row">
-            <input
-              id="shapeColor"
-              type="text"
-              :value="colorInputValue"
-              placeholder="#RRGGBB"
-              @input="updateText('color', $event)"
-            />
-            <button type="button" class="secondary compact schema-icon-btn" @click="openColorPicker">
-              <span class="schema-color-icon" :style="{ backgroundColor: colorSwatch }"></span>
-            </button>
-          </div>
-          <ColorPickerModal
-            :open="colorPickerOpen"
-            :selected="colorInputValue"
-            @close="handleColorClose"
-            @select="handleColorSelect"
-          />
-        </div>
-
-        <div v-if="shapeHint" class="note">{{ shapeHint }}</div>
-      </template>
+      <DisplayInspectorIcon
+        v-else-if="selectedElement.type === 'icon'"
+        :selected-element="selectedElement"
+        :is-monochrome="isMonochrome"
+        :mdi-icons="mdiIcons"
+        @update="handleUpdate"
+      />
 
       <template v-else>
         <div class="display-inspector__row display-inspector__row--quad">
@@ -123,13 +60,6 @@
           <div v-if="graphSensorRequiredError" class="field-error-text">
             {{ graphSensorErrorText }}
           </div>
-        </div>
-
-        <div v-if="showRotation">
-          <label for="rotation">Rotation</label>
-          <select id="rotation" :value="selectedElement.rotation" @change="updateNumber('rotation', $event)">
-            <option v-for="option in rotationOptions" :key="option" :value="option">{{ option }}</option>
-          </select>
         </div>
 
         <div v-if="selectedElement.type === 'text'">
@@ -1081,57 +1011,6 @@
             </div>
           </div>
         </template>
-
-        <div v-if="selectedElement.type === 'icon'" class="display-icon-picker">
-          <label for="iconValue">Icon</label>
-          <div class="schema-icon-row">
-            <input
-              id="iconValue"
-              type="text"
-              :value="iconInputValue"
-              :class="{ 'field-error': iconRequiredError }"
-              placeholder="mdi:home-thermometer"
-              @input="updateText('icon', $event)"
-            />
-            <button type="button" class="secondary compact schema-icon-btn" @click="openIconPicker">
-              <img
-                :src="iconButtonUrl"
-                alt="Add icon"
-              />
-            </button>
-          </div>
-          <div v-if="iconRequiredError" class="field-error-text">
-            {{ iconErrorText }}
-          </div>
-          <IconPicker
-            :open="iconPickerOpen"
-            :selected="iconName"
-            :initial-query="iconQuery"
-            @close="handleIconClose"
-            @select="handleIconSelect"
-          />
-        </div>
-        <div v-if="selectedElement.type === 'icon' && !isMonochrome" class="display-icon-picker">
-          <label for="iconColor">Color</label>
-          <div class="schema-icon-row">
-            <input
-              id="iconColor"
-              type="text"
-              :value="colorInputValue"
-              placeholder="#RRGGBB"
-              @input="updateText('color', $event)"
-            />
-            <button type="button" class="secondary compact schema-icon-btn" @click="openColorPicker">
-              <span class="schema-color-icon" :style="{ backgroundColor: colorSwatch }"></span>
-            </button>
-          </div>
-          <ColorPickerModal
-            :open="colorPickerOpen"
-            :selected="colorInputValue"
-            @close="handleColorClose"
-            @select="handleColorSelect"
-          />
-        </div>
       </template>
     </div>
   </aside>
@@ -1139,8 +1018,9 @@
 
 <script setup>
 import { computed, ref } from "vue";
-import IconPicker from "../IconPicker.vue";
 import ColorPickerModal from "../ColorPickerModal.vue";
+import DisplayInspectorShape from "./DisplayInspectorShape.vue";
+import DisplayInspectorIcon from "./DisplayInspectorIcon.vue";
 import { colorToCss } from "../../utils/displayColor";
 import {
   DISPLAY_DITHER_VALUES,
@@ -1208,14 +1088,16 @@ const props = defineProps({
 
 const emit = defineEmits(["update"]);
 
+const handleUpdate = (patch) => {
+  emit("update", patch);
+};
+
 const PROTECTED_LOCAL_FONT_FILE = "materialdesignicons-webfont.ttf";
 
-const iconPickerOpen = ref(false);
 const colorPickerOpen = ref(false);
 const traceColorPickerOpen = ref(false);
 const activeTraceIndex = ref(null);
 
-const rotationOptions = [0, 90, 180, 270];
 const visibleLocalFonts = computed(() =>
   (props.localFonts || []).filter(
     (font) => String(font?.file || "").trim().toLowerCase() !== PROTECTED_LOCAL_FONT_FILE
@@ -1232,32 +1114,15 @@ const formatFileOptionLabel = (value, maxLength = 28) => {
   return `${text.slice(0, maxLength - 3)}...`;
 };
 
-const showRotation = computed(() =>
-  ["shape"].includes(props.selectedElement?.type)
-);
-
 const showColorPicker = computed(() => {
   if (props.isMonochrome) return false;
-  const type = props.selectedElement?.type;
-  return ["text", "shape"].includes(type);
-});
-
-const shapeHint = computed(() => {
-  const type = props.selectedElement?.type;
-  if (type !== "shape") return "";
-  const shape = props.selectedElement?.shapeType;
-  if (shape === "line") return "Line uses X/Y and W/H as end point.";
-  if (shape === "rect") return "Rectangle uses X/Y and W/H.";
-  if (shape === "circle") return "Circle uses X/Y and W/H as bounds.";
-  if (shape === "triangle") return "Triangle uses X/Y and W/H as bounds.";
-  if (shape?.startsWith("polygon")) return "Polygon uses X/Y and W/H as bounds.";
-  return "";
+  return props.selectedElement?.type === "text";
 });
 
 const updateNumber = (key, event) => {
   const value = Number(event.target.value);
   if (Number.isNaN(value)) return;
-  if (["w", "h"].includes(key) && ["image", "icon", "animation"].includes(props.selectedElement?.type)) {
+  if (["w", "h"].includes(key) && ["image", "animation"].includes(props.selectedElement?.type)) {
     const currentW = Number(props.selectedElement?.w || 0);
     const currentH = Number(props.selectedElement?.h || 0);
     const ratio = currentH ? currentW / currentH : 1;
@@ -1354,41 +1219,6 @@ const removeTrace = (index) => {
   next.splice(index, 1);
   emit("update", { traces: next });
 };
-
-const iconInputValue = computed(() => {
-  const value = props.selectedElement?.icon || "";
-  if (!value || value === "placeholder") return "";
-  return value;
-});
-
-const iconName = computed(() => {
-  const value = props.selectedElement?.icon || "";
-  if (!value || value === "placeholder") return "";
-  return value.startsWith("mdi:") ? value.slice(4) : value;
-});
-
-const iconQuery = computed(() => iconName.value);
-
-const iconButtonUrl = computed(() => {
-  if (!iconName.value) {
-    return "https://cdn.jsdelivr.net/npm/@mdi/svg/svg/emoticon-plus-outline.svg";
-  }
-  return `https://cdn.jsdelivr.net/npm/@mdi/svg/svg/${iconName.value}.svg`;
-});
-
-const iconRequiredError = computed(() => {
-  if (props.selectedElement?.type !== "icon") return false;
-  if (!props.mdiIcons?.length) return true;
-  const value = iconName.value || "";
-  if (!value.trim()) return true;
-  return !props.mdiIcons.some((icon) => icon.toLowerCase() === value.toLowerCase());
-});
-
-const iconErrorText = computed(() => {
-  if (!props.mdiIcons?.length) return "No MDI icons available.";
-  if (!iconName.value) return "Please select an icon.";
-  return "Invalid MDI icon name.";
-});
 
 const colorInputValue = computed(() => props.selectedElement?.color || "");
 
@@ -1504,19 +1334,6 @@ const imageFileErrorText = computed(() => {
 });
 
 
-
-const openIconPicker = () => {
-  iconPickerOpen.value = true;
-};
-
-const handleIconClose = () => {
-  iconPickerOpen.value = false;
-};
-
-const handleIconSelect = (name) => {
-  emit("update", { icon: name ? `mdi:${name}` : "" });
-  iconPickerOpen.value = false;
-};
 
 const openColorPicker = () => {
   colorPickerOpen.value = true;
