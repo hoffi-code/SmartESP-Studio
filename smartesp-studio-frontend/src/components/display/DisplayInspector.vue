@@ -23,6 +23,37 @@
         @update="handleUpdate"
       />
 
+      <DisplayInspectorText
+        v-else-if="selectedElement.type === 'text'"
+        :selected-element="selectedElement"
+        :is-monochrome="isMonochrome"
+        :local-fonts="localFonts"
+        :google-fonts="googleFonts"
+        :assets-base="assetsBase"
+        :dynamic-ids="dynamicIds"
+        @update="handleUpdate"
+      />
+
+      <DisplayInspectorImage
+        v-else-if="selectedElement.type === 'image'"
+        :selected-element="selectedElement"
+        :images="images"
+        :assets-base="assetsBase"
+        :screen-w="screenW"
+        :screen-h="screenH"
+        @update="handleUpdate"
+      />
+
+      <DisplayInspectorAnimation
+        v-else-if="selectedElement.type === 'animation'"
+        :selected-element="selectedElement"
+        :images="images"
+        :assets-base="assetsBase"
+        :screen-w="screenW"
+        :screen-h="screenH"
+        @update="handleUpdate"
+      />
+
       <template v-else>
         <div class="display-inspector__row display-inspector__row--quad">
           <div class="display-inspector__field">
@@ -61,410 +92,6 @@
             {{ graphSensorErrorText }}
           </div>
         </div>
-
-        <div v-if="selectedElement.type === 'text'">
-          <label for="textMode">Mode</label>
-          <select
-            id="textMode"
-            :value="selectedElement.textMode || 'static'"
-            @change="updateText('textMode', $event)"
-          >
-            <option v-for="option in dynamicModeOptions" :key="option.value" :value="option.value">
-              {{ option.label }}
-            </option>
-          </select>
-        </div>
-
-        <div v-if="selectedElement.type === 'text' && (selectedElement.textMode || 'static') === 'static'">
-          <label for="textValue">Text</label>
-          <input
-            id="textValue"
-            type="text"
-            :value="selectedElement.text"
-            @input="updateText('text', $event)"
-          />
-        </div>
-
-        <div v-if="selectedElement.type === 'text' && (selectedElement.textMode || 'static') === 'dynamic'">
-          <label for="dynamicId">Source ID</label>
-          <select
-            id="dynamicId"
-            :value="selectedElement.dynamicId"
-            :class="{ 'field-error': dynamicIdRequiredError }"
-            @change="updateText('dynamicId', $event)"
-          >
-            <option value="">Select ID</option>
-            <option v-for="entry in dynamicIdOptions" :key="entry.id" :value="entry.id">
-              {{ entry.label }}
-            </option>
-          </select>
-          <div v-if="dynamicIdRequiredError" class="field-error-text">
-            {{ dynamicIdErrorText }}
-          </div>
-        </div>
-
-        <div
-          v-if="selectedElement.type === 'text' && (selectedElement.textMode || 'static') === 'dynamic'"
-          class="display-inspector__row"
-        >
-          <div>
-            <label for="prefix">Prefix</label>
-            <input id="prefix" type="text" :value="selectedElement.prefix" @input="updateText('prefix', $event)" />
-          </div>
-          <div>
-            <label for="suffix">Suffix</label>
-            <input id="suffix" type="text" :value="selectedElement.suffix" @input="updateText('suffix', $event)" />
-          </div>
-        </div>
-
-        <div
-          v-if="selectedElement.type === 'text' && (selectedElement.textMode || 'static') === 'dynamic'"
-          class="display-inspector__row"
-        >
-          <div v-if="isNumericDomain(selectedElement.dynamicDomain)">
-            <label for="format">Format</label>
-            <input id="format" type="text" :value="selectedElement.format" @input="updateText('format', $event)" />
-          </div>
-        </div>
-
-        <div
-          v-if="
-            selectedElement.type === 'text' &&
-            (selectedElement.textMode || 'static') === 'dynamic' &&
-            isBinaryDomain(selectedElement.dynamicDomain)
-          "
-          class="display-inspector__row"
-        >
-          <div>
-            <label for="onLabel">On label</label>
-            <input id="onLabel" type="text" :value="selectedElement.onLabel" @input="updateText('onLabel', $event)" />
-          </div>
-          <div>
-            <label for="offLabel">Off label</label>
-            <input id="offLabel" type="text" :value="selectedElement.offLabel" @input="updateText('offLabel', $event)" />
-          </div>
-        </div>
-
-        <div v-if="selectedElement.type === 'text'">
-          <label for="wrap">Wrap text</label>
-          <select
-            id="wrap"
-            :value="(selectedElement.wrap !== false).toString()"
-            @change="updateBoolSelect('wrap', $event)"
-          >
-            <option value="true">TRUE</option>
-            <option value="false">FALSE</option>
-          </select>
-        </div>
-
-        <div v-if="showColorPicker" class="display-icon-picker">
-          <label for="elementColor">Color</label>
-          <div class="schema-icon-row">
-            <input
-              id="elementColor"
-              type="text"
-              :value="colorInputValue"
-              placeholder="#RRGGBB"
-              @input="updateText('color', $event)"
-            />
-            <button type="button" class="secondary compact schema-icon-btn" @click="openColorPicker">
-              <span class="schema-color-icon" :style="{ backgroundColor: colorSwatch }"></span>
-            </button>
-          </div>
-          <ColorPickerModal
-            :open="colorPickerOpen"
-            :selected="colorInputValue"
-            @close="handleColorClose"
-            @select="handleColorSelect"
-          />
-        </div>
-
-        <div v-if="selectedElement.type === 'text'">
-          <label for="fontSource">Font source</label>
-          <select
-            id="fontSource"
-            :value="selectedElement.fontSource || 'local'"
-            @change="handleFontSourceChange"
-          >
-            <option value="local">Local</option>
-            <option value="google">Google Fonts</option>
-          </select>
-        </div>
-
-        <div v-if="selectedElement.type === 'text' && (selectedElement.fontSource || 'local') === 'local'">
-          <label for="fontLocal">Font</label>
-          <select id="fontLocal" :value="selectedElement.fontFile" @change="handleLocalFontChange">
-            <option v-for="font in visibleLocalFonts" :key="font.file" :value="font.file" :title="font.file">
-              {{ formatFileOptionLabel(font.file) }}
-            </option>
-          </select>
-        </div>
-
-        <div
-          v-if="selectedElement.type === 'text' && selectedElement.fontSource === 'google'"
-          class="display-inspector__row"
-        >
-          <div>
-            <label for="fontFamily">Font family</label>
-            <select id="fontFamily" :value="selectedElement.fontFamily" @change="handleGoogleFamilyChange">
-              <option v-for="font in googleFonts" :key="font.family" :value="font.family">
-                {{ font.family }}
-              </option>
-            </select>
-          </div>
-          <div>
-            <label for="fontVariant">Variant</label>
-            <select id="fontVariant" :value="selectedElement.fontVariant" @change="handleGoogleVariantChange">
-              <option
-                v-for="variant in googleFonts.find((item) => item.family === selectedElement.fontFamily)?.variants || []"
-                :key="variant"
-                :value="variant"
-              >
-                {{ variant }}
-              </option>
-            </select>
-          </div>
-        </div>
-
-        <div v-if="selectedElement.type === 'image'">
-          <label for="imageValue">Image</label>
-          <select
-            id="imageValue"
-            :value="selectedElement.image"
-            :class="{ 'field-error': imageFileRequiredError }"
-            @change="handleImageChange"
-          >
-            <option value="">Select image</option>
-            <option v-for="image in images" :key="image.file" :value="image.file" :title="image.file">
-              {{ formatFileOptionLabel(image.file) }}
-            </option>
-          </select>
-          <div v-if="imageFileRequiredError" class="field-error-text">
-            {{ imageFileErrorText }}
-          </div>
-        </div>
-
-        <div v-if="selectedElement.type === 'image'">
-          <label for="imageType">Image type</label>
-          <select
-            id="imageType"
-            :value="selectedImageType"
-            @change="handleImageTypeChange"
-          >
-            <option v-for="type in imageTypes" :key="`image-type-${type}`" :value="type">{{ type }}</option>
-          </select>
-        </div>
-
-        <div v-if="selectedElement.type === 'image'">
-          <label for="imageTransparency">Transparency</label>
-          <select
-            id="imageTransparency"
-            :value="selectedElement.imageTransparency || 'opaque'"
-            @change="updateText('imageTransparency', $event)"
-          >
-            <option v-for="value in imageTransparencyOptions" :key="`image-transparency-${value}`" :value="value">
-              {{ value }}
-            </option>
-          </select>
-        </div>
-
-        <div v-if="selectedElement.type === 'image' && imageSupportsInvertAlpha">
-          <label for="imageInvertAlpha">invert_alpha</label>
-          <select
-            id="imageInvertAlpha"
-            :value="Boolean(selectedElement.imageInvertAlpha ?? selectedElement.invert).toString()"
-            @change="updateBoolSelect('imageInvertAlpha', $event)"
-          >
-            <option value="true">TRUE</option>
-            <option value="false">FALSE</option>
-          </select>
-        </div>
-
-        <div v-if="selectedElement.type === 'image' && imageSupportsDither">
-          <label for="imageDither">Dither</label>
-          <select
-            id="imageDither"
-            :value="selectedElement.imageDither || 'NONE'"
-            @change="updateText('imageDither', $event)"
-          >
-            <option v-for="value in ditherValues" :key="`image-dither-${value}`" :value="value">{{ value }}</option>
-          </select>
-        </div>
-
-        <div v-if="selectedElement.type === 'image' && imageSupportsByteOrder">
-          <label for="imageByteOrder">byte_order</label>
-          <select
-            id="imageByteOrder"
-            :value="selectedElement.imageByteOrder || 'big_endian'"
-            @change="updateText('imageByteOrder', $event)"
-          >
-            <option v-for="value in byteOrderValues" :key="`image-byte-order-${value}`" :value="value">{{ value }}</option>
-          </select>
-        </div>
-
-        <template v-if="selectedElement.type === 'animation'">
-          <div>
-            <label for="animationId">Animation ID *</label>
-            <input
-              id="animationId"
-              type="text"
-              :value="selectedElement.animationId"
-              placeholder="animation_id"
-              :class="{ 'field-error': animationIdRequiredError }"
-              @input="updateText('animationId', $event)"
-            />
-            <div v-if="animationIdRequiredError" class="field-error-text">
-              Please provide an animation ID.
-            </div>
-          </div>
-
-          <div>
-            <label for="animationFile">Animation file *</label>
-            <select
-              id="animationFile"
-              :value="selectedElement.animationFile"
-              :class="{ 'field-error': animationFileRequiredError }"
-              @change="handleAnimationFileChange"
-            >
-              <option value="">Select animation</option>
-              <option v-for="file in animationFiles" :key="file" :value="file" :title="file">
-                {{ formatFileOptionLabel(file) }}
-              </option>
-            </select>
-            <div v-if="animationFileRequiredError" class="field-error-text">
-              {{ animationFileErrorText }}
-            </div>
-          </div>
-
-          <div>
-            <label for="animationType">Type</label>
-            <select
-              id="animationType"
-              :value="selectedAnimationType"
-              @change="handleAnimationTypeChange"
-            >
-              <option v-for="type in imageTypes" :key="`animation-type-${type}`" :value="type">{{ type }}</option>
-            </select>
-          </div>
-
-          <div>
-            <label for="animationTransparency">Transparency</label>
-            <select
-              id="animationTransparency"
-              :value="selectedElement.animationTransparency || 'opaque'"
-              @change="updateText('animationTransparency', $event)"
-            >
-              <option v-for="value in animationTransparencyOptions" :key="`animation-transparency-${value}`" :value="value">
-                {{ value }}
-              </option>
-            </select>
-          </div>
-
-          <div v-if="animationSupportsInvertAlpha">
-            <label for="animationInvertAlpha">invert_alpha</label>
-            <select
-              id="animationInvertAlpha"
-              :value="Boolean(selectedElement.animationInvertAlpha).toString()"
-              @change="updateBoolSelect('animationInvertAlpha', $event)"
-            >
-              <option value="true">TRUE</option>
-              <option value="false">FALSE</option>
-            </select>
-          </div>
-
-          <div v-if="animationSupportsDither">
-            <label for="animationDither">Dither</label>
-            <select
-              id="animationDither"
-              :value="selectedElement.animationDither || 'NONE'"
-              @change="updateText('animationDither', $event)"
-            >
-              <option v-for="value in ditherValues" :key="`animation-dither-${value}`" :value="value">{{ value }}</option>
-            </select>
-          </div>
-
-          <div v-if="animationSupportsByteOrder">
-            <label for="animationByteOrder">byte_order</label>
-            <select
-              id="animationByteOrder"
-              :value="selectedElement.animationByteOrder || 'big_endian'"
-              @change="updateText('animationByteOrder', $event)"
-            >
-              <option v-for="value in byteOrderValues" :key="`animation-byte-order-${value}`" :value="value">{{ value }}</option>
-            </select>
-          </div>
-
-
-          <div class="display-inspector__row">
-            <div>
-              <label for="animationLoop">Loop</label>
-              <select
-                id="animationLoop"
-                :value="Boolean(selectedElement.loopEnabled).toString()"
-                @change="updateBoolSelect('loopEnabled', $event)"
-              >
-                <option value="true">TRUE</option>
-                <option value="false">FALSE</option>
-              </select>
-            </div>
-            <div>
-              <label for="animationAuto">Auto animate</label>
-              <select
-                id="animationAuto"
-                :value="Boolean(selectedElement.autoAnimate).toString()"
-                @change="updateBoolSelect('autoAnimate', $event)"
-              >
-                <option value="true">TRUE</option>
-                <option value="false">FALSE</option>
-              </select>
-            </div>
-          </div>
-
-          <div v-if="selectedElement.autoAnimate">
-            <label for="animationInterval">Interval (ms)</label>
-            <input
-              id="animationInterval"
-              type="number"
-              :value="selectedElement.intervalMs"
-              placeholder="200"
-              @input="updateNumber('intervalMs', $event)"
-            />
-          </div>
-
-          <div v-if="selectedElement.loopEnabled" class="display-inspector__row">
-            <div>
-              <label for="animationLoopStart">Start frame</label>
-              <input
-                id="animationLoopStart"
-                type="number"
-                :value="selectedElement.loopStart"
-                placeholder="0"
-                @input="updateNumber('loopStart', $event)"
-              />
-            </div>
-            <div>
-              <label for="animationLoopEnd">End frame</label>
-              <input
-                id="animationLoopEnd"
-                type="number"
-                :value="selectedElement.loopEnd"
-                placeholder="10"
-                @input="updateNumber('loopEnd', $event)"
-              />
-            </div>
-          </div>
-
-          <div v-if="selectedElement.loopEnabled">
-            <label for="animationLoopRepeat">Repeat</label>
-            <input
-              id="animationLoopRepeat"
-              type="number"
-              :value="selectedElement.loopRepeat"
-              placeholder="0"
-              @input="updateNumber('loopRepeat', $event)"
-            />
-          </div>
-        </template>
 
         <template v-if="selectedElement.type === 'graph'">
           <div>
@@ -1021,19 +648,11 @@ import { computed, ref } from "vue";
 import ColorPickerModal from "../ColorPickerModal.vue";
 import DisplayInspectorShape from "./DisplayInspectorShape.vue";
 import DisplayInspectorIcon from "./DisplayInspectorIcon.vue";
+import DisplayInspectorText from "./DisplayInspectorText.vue";
+import DisplayInspectorImage from "./DisplayInspectorImage.vue";
+import DisplayInspectorAnimation from "./DisplayInspectorAnimation.vue";
 import { colorToCss } from "../../utils/displayColor";
-import {
-  DISPLAY_DITHER_VALUES,
-  DISPLAY_IMAGE_TYPES,
-  DISPLAY_BYTE_ORDER_VALUES,
-  allowedTransparencyForType,
-  normalizeAnimationElementEncoding,
-  normalizeImageElementEncoding,
-  supportsByteOrder,
-  supportsDither,
-  supportsInvertAlpha
-} from "../../utils/displayImageEncoding";
-import { deriveGoogleFontStyle as deriveVariantStyle } from "../../utils/displayFonts";
+import { useDisplayFontControls } from "../../composables/display/useDisplayFontControls";
 
 const props = defineProps({
   selectedElement: {
@@ -1092,50 +711,28 @@ const handleUpdate = (patch) => {
   emit("update", patch);
 };
 
-const PROTECTED_LOCAL_FONT_FILE = "materialdesignicons-webfont.ttf";
-
 const colorPickerOpen = ref(false);
 const traceColorPickerOpen = ref(false);
 const activeTraceIndex = ref(null);
 
-const visibleLocalFonts = computed(() =>
-  (props.localFonts || []).filter(
-    (font) => String(font?.file || "").trim().toLowerCase() !== PROTECTED_LOCAL_FONT_FILE
-  )
-);
-
-const findVisibleLocalFont = (file) => visibleLocalFonts.value.find((item) => item.file === file);
-
-const firstVisibleLocalFont = () => visibleLocalFonts.value[0];
-
-const formatFileOptionLabel = (value, maxLength = 28) => {
-  const text = String(value || "");
-  if (text.length <= maxLength) return text;
-  return `${text.slice(0, maxLength - 3)}...`;
-};
-
-const showColorPicker = computed(() => {
-  if (props.isMonochrome) return false;
-  return props.selectedElement?.type === "text";
+const {
+  visibleLocalFonts,
+  findVisibleLocalFont,
+  formatFileOptionLabel,
+  buildFontSourcePatch,
+  buildLocalFontPatch,
+  buildGoogleFamilyPatch,
+  buildGoogleVariantPatch,
+  buildDefaultFontDescriptor
+} = useDisplayFontControls({
+  localFonts: computed(() => props.localFonts),
+  googleFonts: computed(() => props.googleFonts),
+  assetsBase: computed(() => props.assetsBase)
 });
 
 const updateNumber = (key, event) => {
   const value = Number(event.target.value);
   if (Number.isNaN(value)) return;
-  if (["w", "h"].includes(key) && ["image", "animation"].includes(props.selectedElement?.type)) {
-    const currentW = Number(props.selectedElement?.w || 0);
-    const currentH = Number(props.selectedElement?.h || 0);
-    const ratio = currentH ? currentW / currentH : 1;
-    const nextValue = Math.max(1, Math.round(value));
-    if (key === "w") {
-      const nextH = Math.max(1, Math.round(nextValue / (ratio || 1)));
-      emit("update", { w: nextValue, h: nextH });
-      return;
-    }
-    const nextW = Math.max(1, Math.round(nextValue * (ratio || 1)));
-    emit("update", { w: nextW, h: nextValue });
-    return;
-  }
   emit("update", { [key]: value });
 };
 
@@ -1145,51 +742,6 @@ const updateText = (key, event) => {
 
 const updateBool = (key, event) => {
   emit("update", { [key]: event.target.checked });
-};
-
-const updateBoolSelect = (key, event) => {
-  const next = event.target.value === "true";
-  if (key === "imageInvertAlpha") {
-    emit("update", { imageInvertAlpha: next, invert: next });
-    return;
-  }
-  emit("update", { [key]: next });
-};
-
-const imageTypes = DISPLAY_IMAGE_TYPES;
-const ditherValues = DISPLAY_DITHER_VALUES;
-const byteOrderValues = DISPLAY_BYTE_ORDER_VALUES;
-
-const selectedImageType = computed(() => normalizeImageElementEncoding(props.selectedElement || {}).imageType);
-const selectedAnimationType = computed(() =>
-  normalizeAnimationElementEncoding(props.selectedElement || {}).animationType
-);
-
-const imageTransparencyOptions = computed(() => allowedTransparencyForType(selectedImageType.value));
-const animationTransparencyOptions = computed(() => allowedTransparencyForType(selectedAnimationType.value));
-
-const imageSupportsInvertAlpha = computed(() => supportsInvertAlpha(selectedImageType.value));
-const imageSupportsDither = computed(() => supportsDither(selectedImageType.value));
-const imageSupportsByteOrder = computed(() => supportsByteOrder(selectedImageType.value));
-
-const animationSupportsInvertAlpha = computed(() => supportsInvertAlpha(selectedAnimationType.value));
-const animationSupportsDither = computed(() => supportsDither(selectedAnimationType.value));
-const animationSupportsByteOrder = computed(() => supportsByteOrder(selectedAnimationType.value));
-
-const handleImageTypeChange = (event) => {
-  const patch = normalizeImageElementEncoding({
-    ...(props.selectedElement || {}),
-    imageType: event.target.value
-  });
-  emit("update", patch);
-};
-
-const handleAnimationTypeChange = (event) => {
-  const patch = normalizeAnimationElementEncoding({
-    ...(props.selectedElement || {}),
-    animationType: event.target.value
-  });
-  emit("update", patch);
 };
 
 const addTrace = () => {
@@ -1243,27 +795,6 @@ const graphSensorOptions = computed(() =>
     .sort((a, b) => a.label.localeCompare(b.label))
 );
 
-const dynamicIdOptions = computed(() => {
-  const domain = props.selectedElement?.dynamicDomain || "";
-  const list = props.dynamicIds || [];
-  if (!domain) return list;
-  return list.filter((entry) => entry.domain === domain);
-});
-
-const dynamicIdRequiredError = computed(() => {
-  if (props.selectedElement?.type !== "text") return false;
-  if ((props.selectedElement?.textMode || "static") !== "dynamic") return false;
-  if (!dynamicIdOptions.value.length) return true;
-  const selected = props.selectedElement?.dynamicId || "";
-  if (!selected) return true;
-  return !dynamicIdOptions.value.some((entry) => entry.id === selected);
-});
-
-const dynamicIdErrorText = computed(() => {
-  if (!dynamicIdOptions.value.length) return "No source IDs available.";
-  return "Please select a source ID.";
-});
-
 const graphIdRequiredError = computed(() => {
   if (props.selectedElement?.type !== "graph") return false;
   return !String(props.selectedElement?.graphId || "").trim();
@@ -1287,52 +818,6 @@ const graphSensorErrorText = computed(() => {
   if (!graphSensorOptions.value.length) return "No sensor IDs available.";
   return "Please select a sensor ID.";
 });
-
-const animationFiles = computed(() =>
-  (props.images || [])
-    .map((item) => item?.file || "")
-    .filter((file) => file.toLowerCase().endsWith(".gif"))
-    .sort((a, b) => a.localeCompare(b))
-);
-
-const imageFiles = computed(() =>
-  (props.images || [])
-    .map((item) => item?.file || "")
-    .filter((file) => Boolean(file))
-    .sort((a, b) => a.localeCompare(b))
-);
-
-const animationIdRequiredError = computed(() => {
-  if (props.selectedElement?.type !== "animation") return false;
-  return !String(props.selectedElement?.animationId || "").trim();
-});
-
-const animationFileRequiredError = computed(() => {
-  if (props.selectedElement?.type !== "animation") return false;
-  if (!animationFiles.value.length) return true;
-  const selected = props.selectedElement?.animationFile || "";
-  if (!selected) return true;
-  return !animationFiles.value.includes(selected);
-});
-
-const animationFileErrorText = computed(() => {
-  if (!animationFiles.value.length) return "No GIF animations available.";
-  return "Please select an animation file.";
-});
-
-const imageFileRequiredError = computed(() => {
-  if (props.selectedElement?.type !== "image") return false;
-  if (!imageFiles.value.length) return true;
-  const selected = props.selectedElement?.image || "";
-  if (!selected) return true;
-  return !imageFiles.value.includes(selected);
-});
-
-const imageFileErrorText = computed(() => {
-  if (!imageFiles.value.length) return "No image files available.";
-  return "Please select an image file.";
-});
-
 
 
 const openColorPicker = () => {
@@ -1367,329 +852,57 @@ const handleTraceColorSelect = (value) => {
   activeTraceIndex.value = null;
 };
 
-const updatePatch = (patch) => {
-  emit("update", patch);
-};
-
-const deriveLocalStyle = (label, fileName) => {
-  const value = `${label || ""} ${fileName || ""}`.toLowerCase();
-  const style = value.includes("italic") ? "italic" : "normal";
-  let weight = 400;
-  if (value.includes("thin")) weight = 100;
-  else if (value.includes("extralight") || value.includes("extra light")) weight = 200;
-  else if (value.includes("light")) weight = 300;
-  else if (value.includes("medium")) weight = 500;
-  else if (value.includes("semibold") || value.includes("semi bold")) weight = 600;
-  else if (value.includes("bold")) weight = 700;
-  else if (value.includes("extrabold") || value.includes("extra bold")) weight = 800;
-  else if (value.includes("black")) weight = 900;
-  return { weight, style };
-};
-
-const handleFontSourceChange = (event) => {
-  const source = event.target.value;
-  if (source === "google") {
-    const family = props.googleFonts[0];
-    const variant = family?.variants?.includes("regular") ? "regular" : family?.variants?.[0];
-    const url = family?.files?.[variant] || "";
-    const { weight, style } = deriveVariantStyle(variant);
-    updatePatch({
-      fontSource: "google",
-      fontFamily: family?.family || "",
-      fontVariant: variant || "regular",
-      fontUrl: url,
-      fontFile: "",
-      fontWeight: weight,
-      fontStyle: style
-    });
-    return;
-  }
-
-  const local = firstVisibleLocalFont();
-  const styleInfo = deriveLocalStyle(local?.label, local?.file);
-  updatePatch({
-    fontSource: "local",
-    fontFamily: local?.label || "",
-    fontFile: local?.file || "",
-    fontVariant: "regular",
-    fontUrl: local?.file ? `${props.assetsBase}fonts/${local.file}` : "",
-    fontWeight: styleInfo.weight,
-    fontStyle: styleInfo.style
-  });
-};
-
-const handleLocalFontChange = (event) => {
-  const file = event.target.value;
-  const font = findVisibleLocalFont(file);
-  const styleInfo = deriveLocalStyle(font?.label, font?.file);
-  updatePatch({
-    fontSource: "local",
-    fontFamily: font?.label || "",
-    fontFile: font?.file || "",
-    fontVariant: "regular",
-    fontUrl: font?.file ? `${props.assetsBase}fonts/${font.file}` : "",
-    fontWeight: styleInfo.weight,
-    fontStyle: styleInfo.style
-  });
-};
-
-const handleGoogleFamilyChange = (event) => {
-  const familyName = event.target.value;
-  const family = props.googleFonts.find((item) => item.family === familyName);
-  const variant = family?.variants?.includes("regular") ? "regular" : family?.variants?.[0];
-  const url = family?.files?.[variant] || "";
-  const { weight, style } = deriveVariantStyle(variant);
-  updatePatch({
-    fontSource: "google",
-    fontFamily: family?.family || "",
-    fontVariant: variant || "regular",
-    fontUrl: url,
-    fontFile: "",
-    fontWeight: weight,
-    fontStyle: style
-  });
-};
-
-const handleGoogleVariantChange = (event) => {
-  const variant = event.target.value;
-  const family = props.googleFonts.find((item) => item.family === props.selectedElement?.fontFamily);
-  const url = family?.files?.[variant] || "";
-  const { weight, style } = deriveVariantStyle(variant);
-  updatePatch({
-    fontSource: "google",
-    fontVariant: variant,
-    fontUrl: url,
-    fontWeight: weight,
-    fontStyle: style
-  });
-};
-
 const handleLegendNameFontSourceChange = (event) => {
-  const source = event.target.value;
-  if (source === "google") {
-    const family = props.googleFonts[0];
-    const variant = family?.variants?.includes("regular") ? "regular" : family?.variants?.[0];
-    const url = family?.files?.[variant] || "";
-    const { weight, style } = deriveVariantStyle(variant);
-    updatePatch({
-      legendNameFontSource: "google",
-      legendNameFontFamily: family?.family || "",
-      legendNameFontVariant: variant || "regular",
-      legendNameFontFile: "",
-      legendNameFontUrl: url,
-      legendNameFontWeight: weight,
-      legendNameFontStyle: style
-    });
-    return;
-  }
-  const local = firstVisibleLocalFont();
-  const styleInfo = deriveLocalStyle(local?.label, local?.file);
-  updatePatch({
-    legendNameFontSource: "local",
-    legendNameFontFamily: local?.label || "",
-    legendNameFontFile: local?.file || "",
-    legendNameFontVariant: "regular",
-    legendNameFontUrl: local?.file ? `${props.assetsBase}fonts/${local.file}` : "",
-    legendNameFontWeight: styleInfo.weight,
-    legendNameFontStyle: styleInfo.style
-  });
+  emit("update", buildFontSourcePatch("legendName", event.target.value));
 };
 
 const handleLegendValueFontSourceChange = (event) => {
-  const source = event.target.value;
-  if (source === "google") {
-    const family = props.googleFonts[0];
-    const variant = family?.variants?.includes("regular") ? "regular" : family?.variants?.[0];
-    const url = family?.files?.[variant] || "";
-    const { weight, style } = deriveVariantStyle(variant);
-    updatePatch({
-      legendValueFontSource: "google",
-      legendValueFontFamily: family?.family || "",
-      legendValueFontVariant: variant || "regular",
-      legendValueFontFile: "",
-      legendValueFontUrl: url,
-      legendValueFontWeight: weight,
-      legendValueFontStyle: style
-    });
-    return;
-  }
-  const local = firstVisibleLocalFont();
-  const styleInfo = deriveLocalStyle(local?.label, local?.file);
-  updatePatch({
-    legendValueFontSource: "local",
-    legendValueFontFamily: local?.label || "",
-    legendValueFontFile: local?.file || "",
-    legendValueFontVariant: "regular",
-    legendValueFontUrl: local?.file ? `${props.assetsBase}fonts/${local.file}` : "",
-    legendValueFontWeight: styleInfo.weight,
-    legendValueFontStyle: styleInfo.style
-  });
+  emit("update", buildFontSourcePatch("legendValue", event.target.value));
 };
 
 const handleLegendNameFontFileChange = (event) => {
-  const file = event.target.value;
-  const font = findVisibleLocalFont(file);
-  const styleInfo = deriveLocalStyle(font?.label, font?.file);
-  updatePatch({
-    legendNameFontSource: "local",
-    legendNameFontFamily: font?.label || "",
-    legendNameFontFile: font?.file || "",
-    legendNameFontVariant: "regular",
-    legendNameFontUrl: font?.file ? `${props.assetsBase}fonts/${font.file}` : "",
-    legendNameFontWeight: styleInfo.weight,
-    legendNameFontStyle: styleInfo.style
-  });
+  const font = findVisibleLocalFont(event.target.value);
+  emit("update", buildLocalFontPatch("legendName", font));
 };
 
 const handleLegendValueFontFileChange = (event) => {
-  const file = event.target.value;
-  const font = findVisibleLocalFont(file);
-  const styleInfo = deriveLocalStyle(font?.label, font?.file);
-  updatePatch({
-    legendValueFontSource: "local",
-    legendValueFontFamily: font?.label || "",
-    legendValueFontFile: font?.file || "",
-    legendValueFontVariant: "regular",
-    legendValueFontUrl: font?.file ? `${props.assetsBase}fonts/${font.file}` : "",
-    legendValueFontWeight: styleInfo.weight,
-    legendValueFontStyle: styleInfo.style
-  });
+  const font = findVisibleLocalFont(event.target.value);
+  emit("update", buildLocalFontPatch("legendValue", font));
 };
 
 const handleLegendNameFontFamilyChange = (event) => {
-  const familyName = event.target.value;
-  const family = props.googleFonts.find((item) => item.family === familyName);
-  const variant = family?.variants?.includes("regular") ? "regular" : family?.variants?.[0];
-  const url = family?.files?.[variant] || "";
-  const { weight, style } = deriveVariantStyle(variant);
-  updatePatch({
-    legendNameFontSource: "google",
-    legendNameFontFamily: family?.family || "",
-    legendNameFontVariant: variant || "regular",
-    legendNameFontFile: "",
-    legendNameFontUrl: url,
-    legendNameFontWeight: weight,
-    legendNameFontStyle: style
-  });
+  const family = props.googleFonts.find((item) => item.family === event.target.value);
+  emit("update", buildGoogleFamilyPatch("legendName", family));
 };
 
 const handleLegendValueFontFamilyChange = (event) => {
-  const familyName = event.target.value;
-  const family = props.googleFonts.find((item) => item.family === familyName);
-  const variant = family?.variants?.includes("regular") ? "regular" : family?.variants?.[0];
-  const url = family?.files?.[variant] || "";
-  const { weight, style } = deriveVariantStyle(variant);
-  updatePatch({
-    legendValueFontSource: "google",
-    legendValueFontFamily: family?.family || "",
-    legendValueFontVariant: variant || "regular",
-    legendValueFontFile: "",
-    legendValueFontUrl: url,
-    legendValueFontWeight: weight,
-    legendValueFontStyle: style
-  });
+  const family = props.googleFonts.find((item) => item.family === event.target.value);
+  emit("update", buildGoogleFamilyPatch("legendValue", family));
 };
 
 const handleLegendNameFontVariantChange = (event) => {
   const variant = event.target.value;
   const family = props.googleFonts.find((item) => item.family === props.selectedElement?.legendNameFontFamily);
-  const url = family?.files?.[variant] || "";
-  const { weight, style } = deriveVariantStyle(variant);
-  updatePatch({
-    legendNameFontSource: "google",
-    legendNameFontVariant: variant,
-    legendNameFontUrl: url,
-    legendNameFontWeight: weight,
-    legendNameFontStyle: style
-  });
+  emit("update", buildGoogleVariantPatch("legendName", family, variant));
 };
 
 const handleLegendValueFontVariantChange = (event) => {
   const variant = event.target.value;
   const family = props.googleFonts.find((item) => item.family === props.selectedElement?.legendValueFontFamily);
-  const url = family?.files?.[variant] || "";
-  const { weight, style } = deriveVariantStyle(variant);
-  updatePatch({
-    legendValueFontSource: "google",
-    legendValueFontVariant: variant,
-    legendValueFontUrl: url,
-    legendValueFontWeight: weight,
-    legendValueFontStyle: style
-  });
-};
-
-const handleAnimationFileChange = (event) => {
-  const file = event.target.value;
-  const animationUrl = file ? `${props.assetsBase}images/${file}` : "";
-  updatePatch({
-    animationFile: file,
-    animationUrl
-  });
-  if (!animationUrl) return;
-  const probe = new Image();
-  probe.src = animationUrl;
-  probe.onload = () => {
-    const width = probe.naturalWidth || probe.width || 0;
-    const height = probe.naturalHeight || probe.height || 0;
-    if (!width || !height) return;
-    let nextW = width;
-    let nextH = height;
-    const maxW = Number(props.screenW || 0);
-    const maxH = Number(props.screenH || 0);
-    if (maxW > 0 && maxH > 0 && (width > maxW || height > maxH)) {
-      const scale = Math.min(maxW / width, maxH / height, 1);
-      nextW = Math.max(1, Math.round(width * scale));
-      nextH = Math.max(1, Math.round(height * scale));
-    }
-    updatePatch({ w: nextW, h: nextH });
-  };
-};
-
-const getDefaultLegendFont = (size) => {
-  const local = firstVisibleLocalFont();
-  if (local) {
-    const styleInfo = deriveLocalStyle(local?.label, local?.file);
-    return {
-      source: "local",
-      family: local?.label || "",
-      file: local?.file || "",
-      variant: "regular",
-      url: local?.file ? `${props.assetsBase}fonts/${local.file}` : "",
-      weight: styleInfo.weight,
-      style: styleInfo.style,
-      size
-    };
-  }
-  const google = props.googleFonts[0];
-  if (google) {
-    const variant = google.variants?.includes("regular") ? "regular" : google.variants?.[0];
-    const url = google.files?.[variant] || "";
-    const { weight, style } = deriveVariantStyle(variant);
-    return {
-      source: "google",
-      family: google.family,
-      file: "",
-      variant: variant || "regular",
-      url,
-      weight,
-      style,
-      size
-    };
-  }
-  return null;
+  emit("update", buildGoogleVariantPatch("legendValue", family, variant));
 };
 
 const handleLegendToggle = (event) => {
   const enabled = event.target.checked;
   if (!enabled) {
-    updatePatch({ legendEnabled: false });
+    emit("update", { legendEnabled: false });
     return;
   }
   const patch = { legendEnabled: true };
   const nameSet = props.selectedElement?.legendNameFontFile || props.selectedElement?.legendNameFontFamily;
   const valueSet = props.selectedElement?.legendValueFontFile || props.selectedElement?.legendValueFontFamily;
   if (!nameSet) {
-    const font = getDefaultLegendFont(props.selectedElement?.legendNameFontSize || 10);
+    const font = buildDefaultFontDescriptor(props.selectedElement?.legendNameFontSize || 10);
     if (font) {
       patch.legendNameFontSource = font.source;
       patch.legendNameFontFamily = font.family;
@@ -1701,7 +914,7 @@ const handleLegendToggle = (event) => {
     }
   }
   if (!valueSet) {
-    const font = getDefaultLegendFont(props.selectedElement?.legendValueFontSize || 8);
+    const font = buildDefaultFontDescriptor(props.selectedElement?.legendValueFontSize || 8);
     if (font) {
       patch.legendValueFontSource = font.source;
       patch.legendValueFontFamily = font.family;
@@ -1712,44 +925,8 @@ const handleLegendToggle = (event) => {
       patch.legendValueFontStyle = font.style;
     }
   }
-  updatePatch(patch);
+  emit("update", patch);
 };
-
-const handleImageChange = (event) => {
-  const file = event.target.value;
-  const image = props.images.find((item) => item.file === file);
-  const imageUrl = image?.file ? `${props.assetsBase}images/${image.file}` : "";
-  updatePatch({
-    image: image?.file || "",
-    imageUrl
-  });
-  if (!imageUrl) return;
-  const probe = new Image();
-  probe.src = imageUrl;
-  probe.onload = () => {
-    const width = probe.naturalWidth || probe.width || 0;
-    const height = probe.naturalHeight || probe.height || 0;
-    if (!width || !height) return;
-    let nextW = width;
-    let nextH = height;
-    const maxW = Number(props.screenW || 0);
-    const maxH = Number(props.screenH || 0);
-    if (maxW > 0 && maxH > 0 && (width > maxW || height > maxH)) {
-      const scale = Math.min(maxW / width, maxH / height, 1);
-      nextW = Math.max(1, Math.round(width * scale));
-      nextH = Math.max(1, Math.round(height * scale));
-    }
-    updatePatch({ w: nextW, h: nextH });
-  };
-};
-
-const dynamicModeOptions = [
-  { value: "static", label: "Static text" },
-  { value: "dynamic", label: "Dynamic value" }
-];
-
-const isNumericDomain = (domain) => ["sensor", "number"].includes(domain);
-const isBinaryDomain = (domain) => ["binary_sensor", "switch"].includes(domain);
 </script>
 
 <style scoped>
