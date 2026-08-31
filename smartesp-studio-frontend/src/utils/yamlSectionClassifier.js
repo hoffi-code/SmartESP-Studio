@@ -6,6 +6,7 @@ const NETWORK_SECTIONS = new Set(["wifi", "ethernet", "captive_portal"]);
 const PROTOCOL_SECTIONS = new Set(["api", "ota", "mqtt", "espnow", "esp_now"]);
 const SYSTEM_SECTIONS = new Set(["logger", "debug", "psram", "status_led"]);
 const BUS_SECTIONS = new Set(["i2c", "spi", "uart", "one_wire", "modbus", "i2s", "i2s_audio", "canbus"]);
+const LVGL_SECTIONS = new Set(["lvgl"]);
 const RAW_FALLBACK_SECTIONS = new Set(["external_components", "includes", "packages"]);
 
 const makeSection = (key, kind, status, message) => ({
@@ -22,6 +23,7 @@ const classifySection = (key, componentDomains = new Set()) => {
   if (PROTOCOL_SECTIONS.has(key)) return makeSection(key, "protocol", "recognized", "Protocol section");
   if (SYSTEM_SECTIONS.has(key)) return makeSection(key, "system", "recognized", "System section");
   if (BUS_SECTIONS.has(key)) return makeSection(key, "bus", "recognized", "Bus section");
+  if (LVGL_SECTIONS.has(key)) return makeSection(key, "lvgl", "recognized", "LVGL section");
   if (COMPONENT_DOMAINS.has(key) || componentDomains.has(key)) {
     return makeSection(key, "component", "component", "Component domain");
   }
