@@ -29,7 +29,16 @@ export const LVGL_WIDGETS = [
   { type: "dropdown", label: "Dropdown", schemaPath: widgetPath("dropdown"), defaults: {} },
   { type: "roller", label: "Roller", schemaPath: widgetPath("roller"), defaults: {} },
   { type: "spinbox", label: "Spinbox", schemaPath: widgetPath("spinbox"), defaults: {} },
-  { type: "textarea", label: "Text area", schemaPath: widgetPath("textarea"), defaults: {} }
+  { type: "textarea", label: "Text area", schemaPath: widgetPath("textarea"), defaults: {} },
+  { type: "buttonmatrix", label: "Button matrix", schemaPath: widgetPath("buttonmatrix"), defaults: {} },
+  { type: "meter", label: "Meter", schemaPath: widgetPath("meter"), defaults: {} },
+  { type: "qrcode", label: "QR code", schemaPath: widgetPath("qrcode"), defaults: {} },
+  { type: "spinner", label: "Spinner", schemaPath: widgetPath("spinner"), defaults: {} },
+  { type: "animimg", label: "Animated image", schemaPath: widgetPath("animimg"), defaults: {} },
+  { type: "tabview", label: "Tab view", schemaPath: widgetPath("tabview"), defaults: {} },
+  { type: "tileview", label: "Tile view", schemaPath: widgetPath("tileview"), defaults: {} },
+  { type: "keyboard", label: "Keyboard", schemaPath: widgetPath("keyboard"), defaults: {} },
+  { type: "canvas", label: "Canvas", schemaPath: widgetPath("canvas"), defaults: {} }
 ];
 
 export const LVGL_WIDGET_TYPES = new Set(LVGL_WIDGETS.map((widget) => widget.type));

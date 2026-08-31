@@ -68,6 +68,17 @@ const dropdownSchema = {
   ]
 };
 
+const qrcodeSchema = {
+  fields: [
+    { key: "id", type: "id", required: false },
+    { key: "text", type: "text", required: false },
+    { key: "size", type: "text", required: false }
+  ]
+};
+
+// A widget with no flat fields at all -- only common + a nested block (scales).
+const meterSchema = { fields: [{ key: "id", type: "id", required: false }] };
+
 const schemaContext = {
   loadWidgetSchema: async (type) => {
     if (type === "label") return labelSchema;
@@ -76,6 +87,8 @@ const schemaContext = {
     if (type === "slider") return sliderSchema;
     if (type === "switch") return switchSchema;
     if (type === "dropdown") return dropdownSchema;
+    if (type === "qrcode") return qrcodeSchema;
+    if (type === "meter") return meterSchema;
     return null;
   },
   loadActionCatalog: async () => [{ id: "homeassistant.action", schemaUrl: "actions/homeassistant/action.json" }],
@@ -157,6 +170,33 @@ describe("parseWidgetNode", () => {
     expect(node.type).toBe("dropdown");
     expect(node.props.options).toEqual(["One", "Two", "Three"]);
     expect(node.props.selected_index).toBe(1);
+  });
+
+  it("keeps YAML keys the curated schema does not model in node.extra", async () => {
+    const node = await parseWidgetNode(
+      { slider: { id: "vol", value: 10, scales: [{ ticks: { count: 5 } }], flex_grow: 1 } },
+      schemaContext
+    );
+
+    expect(node.type).toBe("slider");
+    expect(node.props).toEqual({ value: 10 });
+    expect(node.extra).toEqual({ scales: [{ ticks: { count: 5 } }], flex_grow: 1 });
+  });
+
+  it("parses a qrcode widget's flat fields", async () => {
+    const node = await parseWidgetNode({ qrcode: { id: "qr", text: "https://x.y", size: 120 } }, schemaContext);
+    expect(node.type).toBe("qrcode");
+    expect(node.props).toEqual({ text: "https://x.y", size: 120 });
+  });
+
+  it("keeps a meter's nested scales block in node.extra rather than treating it as unsupported", async () => {
+    const node = await parseWidgetNode(
+      { meter: { id: "m", scales: [{ range_from: 0, range_to: 100, ticks: { count: 11 } }] } },
+      schemaContext
+    );
+    expect(node.type).toBe("meter");
+    expect(node.common).toMatchObject({ id: "m" });
+    expect(node.extra).toEqual({ scales: [{ range_from: 0, range_to: 100, ticks: { count: 11 } }] });
   });
 
   it("keeps a widget type outside the registry as an opaque raw-YAML node", async () => {

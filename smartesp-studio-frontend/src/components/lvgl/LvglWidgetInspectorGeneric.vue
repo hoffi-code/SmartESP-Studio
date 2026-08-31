@@ -14,6 +14,9 @@
     <p v-if="!settingFields.length && !triggerFields.length" class="note">
       No type-specific settings for this widget.
     </p>
+    <p v-if="extraKeys.length" class="note">
+      Kept as-is (not editable here): {{ extraKeys.join(", ") }}
+    </p>
     <details v-if="triggerFields.length" class="lvgl-widget-inspector-panel__events">
       <summary>Events</summary>
       <SchemaField
@@ -67,6 +70,7 @@ const isTriggerField = (field) =>
 
 const settingFields = computed(() => typeSpecificFields.value.filter((field) => !isTriggerField(field)));
 const triggerFields = computed(() => typeSpecificFields.value.filter(isTriggerField));
+const extraKeys = computed(() => Object.keys(props.node?.extra || {}));
 
 const handleCommonUpdate = (patch) => {
   emit("update", { ...props.node, common: { ...(props.node.common || {}), ...patch } });
