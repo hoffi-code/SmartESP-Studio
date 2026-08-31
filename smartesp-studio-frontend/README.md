@@ -17,18 +17,26 @@ state lives in composables + `localStorage`.
 Display-configurator UI lives under `components/display/` (`DisplayBuilder.vue` +
 `DisplayCanvas.vue` + `DisplayInspector*.vue`, backed by `composables/display/*`) -- a bespoke
 editor for the `display:` lambda, not part of the generic schema-field system. `components/lvgl/`
-is the same shell for `lvgl:` (`LvglBuilder.vue` = pages strip + widget tree + inspector, rendered
-inline in the config frame like every other Builder tab), but the per-widget inspector is
-schema-driven: `LvglWidgetInspectorGeneric.vue` renders the widget's JSON schema.
-`utils/lvglWidgets.js` is the registry -- adding a widget type = one schema JSON under
-`public/schemas/components/lvgl/widgets/` (`extends` `base_component/lvgl_widget_style.json` for the
-shared style fields) + one `LVGL_WIDGETS` entry; import (`utils/yamlLvglImport.js`) and export
-(`utils/schemaLvglYaml.js`) are generic. Widget schemas are curated subsets -- YAML keys they don't
-model are round-tripped verbatim via `node.extra`. The inspector groups `group: "style"` fields and
-`on_*` triggers into collapsible sections. A `Form` / `YAML` toggle in the tab header swaps the
-form for an editable textarea of just the `lvgl:` block; `Apply` re-parses it via `parseLvglSection`
-(same loaders as the project importer, pulled from `schemaLoader.js`) and replaces `config.lvgl` --
+is the same shell for `lvgl:` (`LvglBuilder.vue`, rendered inline in the config frame like every
+other Builder tab), but the per-widget inspector is schema-driven: `LvglWidgetInspectorGeneric.vue`
+renders the widget's JSON schema. `utils/lvglWidgets.js` is the registry -- adding a widget type =
+one schema JSON under `public/schemas/components/lvgl/widgets/` (`extends`
+`base_component/lvgl_widget_style.json` for the shared style fields) + one `LVGL_WIDGETS` entry;
+import (`utils/yamlLvglImport.js`) and export (`utils/schemaLvglYaml.js`) are generic. Widget
+schemas are curated subsets -- YAML keys they don't model are round-tripped verbatim via
+`node.extra`. The inspector groups `group: "style"` fields and `on_*` triggers into collapsible
+sections. Layout: row 1 is `Pages | Widgets` (tree), row 2 is `Canvas | Form` (the inspector), and
+a full-width `YAML` block sits below -- shown only from the `Advanced` mode level up.
+The `YAML` block is an editable textarea of just the `lvgl:` block; it mirrors canvas/form edits
+until you type into it, then `Apply` re-parses it via `parseLvglSection` (same loaders as the
+project importer, pulled from `schemaLoader.js`) and replaces `config.lvgl` (`Reset` re-syncs) --
 lossy for props outside a curated schema (kept in `node.extra`) and does not preserve comments.
+`Canvas` (`LvglCanvas.vue` + `utils/lvglLayout.js`) is an approximate visual preview:
+`resolveLvglPageLayout` walks the widget tree resolving `align` anchors + x/y offsets +
+px/%/`SIZE_CONTENT` sizes into screen boxes, rough per-type glyphs, style props -> CSS. Click
+selects (synced with the tree), drag patches `common.x`/`common.y` (snap grid). Flex/grid children
+get a stacked fallback + badge since LVGL ignores their x/y; `align_to` and unsupported widgets
+render but are not draggable. Canvas size is a guessed default, adjustable in the toolbar.
 `buildLvglYamlLines` stamps each widget's preview lines
 with an `lvgl:page:<i>:widget:<uiId>` origin, so clicking an LVGL line in the YAML preview selects
 that widget (`BuilderView.activateYamlOriginScope` -> `LvglBuilder.externalSelect`) and an inspector

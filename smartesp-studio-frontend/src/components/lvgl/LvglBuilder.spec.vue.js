@@ -57,7 +57,19 @@ describe("LvglBuilder", () => {
     });
     // Rendered inline in the config frame -- no modal backdrop.
     expect(wrapper.find(".lvgl-config-backdrop").exists()).toBe(false);
-    expect(wrapper.find(".lvgl-pages-bar").exists()).toBe(true);
+    expect(wrapper.find(".lvgl-page-list").exists()).toBe(true);
+  });
+
+  it("shows the YAML block only from the Advanced mode level up", () => {
+    const lvglConfig = { displays: [], touchscreens: [], bufferSize: "", bgColor: "", pages: [] };
+    const simple = mount(LvglBuilder, { props: { lvglConfig, widgetSchemas, activeModeLevel: "Simple" } });
+    expect(simple.find("textarea.lvgl-yaml-editor").exists()).toBe(false);
+
+    const normal = mount(LvglBuilder, { props: { lvglConfig, widgetSchemas, activeModeLevel: "Normal" } });
+    expect(normal.find("textarea.lvgl-yaml-editor").exists()).toBe(false);
+
+    const advanced = mount(LvglBuilder, { props: { lvglConfig, widgetSchemas, activeModeLevel: "Advanced" } });
+    expect(advanced.find("textarea.lvgl-yaml-editor").exists()).toBe(true);
   });
 
   it("does not re-seed an existing lvgl config", () => {
@@ -137,12 +149,10 @@ describe("LvglBuilder", () => {
     expect(wrapper.get("#schema-text").element.value).toBe("B");
   });
 
-  it("seeds the YAML editor from the current lvgl config when switched to YAML view", async () => {
+  it("mirrors the current lvgl config into the YAML editor", () => {
     const widget = { uiId: "w1", type: "label", common: { id: "hi" }, props: { text: "Couch" }, children: [] };
     const lvglConfig = { displays: [], touchscreens: [], bufferSize: "", bgColor: "", pages: [{ id: "main_page", widgets: [widget] }] };
-    const wrapper = mount(LvglBuilder, { props: { lvglConfig, widgetSchemas } });
-
-    await clickByText(wrapper, "YAML");
+    const wrapper = mount(LvglBuilder, { props: { lvglConfig, widgetSchemas, activeModeLevel: "Advanced" } });
 
     const text = wrapper.get("textarea.lvgl-yaml-editor").element.value;
     expect(text).toContain("lvgl:");
@@ -153,9 +163,8 @@ describe("LvglBuilder", () => {
 
   it("applies edited YAML back into config.lvgl", async () => {
     const lvglConfig = { displays: [], touchscreens: [], bufferSize: "", bgColor: "", pages: [{ id: "main_page", widgets: [] }] };
-    const wrapper = mount(LvglBuilder, { props: { lvglConfig, widgetSchemas } });
+    const wrapper = mount(LvglBuilder, { props: { lvglConfig, widgetSchemas, activeModeLevel: "Advanced" } });
 
-    await clickByText(wrapper, "YAML");
     await wrapper.get("textarea.lvgl-yaml-editor").setValue(
       ["lvgl:", "  buffer_size: 25%", "  pages:", "    - id: renamed", "      widgets:", "        - label:", '            text: "Hi"'].join("\n")
     );
@@ -166,21 +175,17 @@ describe("LvglBuilder", () => {
     expect(patch.bufferSize).toBe("25%");
     expect(patch.pages[0].id).toBe("renamed");
     expect(patch.pages[0].widgets[0]).toMatchObject({ type: "label", props: { text: "Hi" } });
-    // back to the form view after a successful apply
-    expect(wrapper.find("textarea.lvgl-yaml-editor").exists()).toBe(false);
   });
 
-  it("shows an error and keeps editing when the YAML is invalid", async () => {
+  it("shows an error and keeps the draft when the YAML is invalid", async () => {
     const lvglConfig = { displays: [], touchscreens: [], bufferSize: "", bgColor: "", pages: [] };
-    const wrapper = mount(LvglBuilder, { props: { lvglConfig, widgetSchemas } });
+    const wrapper = mount(LvglBuilder, { props: { lvglConfig, widgetSchemas, activeModeLevel: "Advanced" } });
 
-    await clickByText(wrapper, "YAML");
     await wrapper.get("textarea.lvgl-yaml-editor").setValue("lvgl:\n  pages:\n   - id: x\n  bad: [unclosed");
     await clickByText(wrapper, "Apply");
     await new Promise((r) => setTimeout(r, 0));
 
     expect(wrapper.get(".lvgl-yaml-editor__error").text().length).toBeGreaterThan(0);
-    expect(wrapper.find("textarea.lvgl-yaml-editor").exists()).toBe(true);
     expect(wrapper.emitted("update")).toBeUndefined();
   });
 

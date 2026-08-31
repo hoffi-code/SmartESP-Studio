@@ -12,63 +12,38 @@
         ?
       </a>
     </div>
-    <div class="lvgl-view-toggle">
-      <button type="button" class="secondary compact" :class="{ active: viewMode === 'form' }" @click="setViewMode('form')">
-        Form
-      </button>
-      <button type="button" class="secondary compact" :class="{ active: viewMode === 'yaml' }" @click="setViewMode('yaml')">
-        YAML
-      </button>
-    </div>
   </div>
 
-  <div v-if="viewMode === 'yaml'" class="module-card__body lvgl-builder">
-    <p class="note">
-      Edits the <code>lvgl:</code> block only. Applying re-parses it against the widget schemas --
-      keys outside a curated schema are kept verbatim, comments and formatting are not preserved.
-    </p>
-    <textarea
-      v-model="yamlDraft"
-      class="lvgl-yaml-editor"
-      spellcheck="false"
-      autocomplete="off"
-      autocapitalize="off"
-    ></textarea>
-    <div class="lvgl-yaml-editor__bar">
-      <button type="button" class="secondary compact" :disabled="applying" @click="applyYaml">Apply</button>
-      <button type="button" class="secondary compact" @click="setViewMode('form')">Discard</button>
-      <span v-if="yamlError" class="lvgl-yaml-editor__error">{{ yamlError }}</span>
-    </div>
-  </div>
-
-  <div v-else class="module-card__body lvgl-builder">
-    <div class="lvgl-pages-bar">
-      <span class="lvgl-pages-bar__label">Pages</span>
-      <div class="lvgl-page-list">
+  <div class="module-card__body lvgl-builder">
+    <div class="lvgl-grid">
+      <section class="lvgl-config-panel">
+        <div class="lvgl-config-panel__header">
+          <h4>Pages</h4>
+          <button type="button" class="secondary compact" @click="addPage">Add page</button>
+        </div>
+        <div class="lvgl-page-list">
+          <button
+            v-for="(page, index) in pages"
+            :key="`${page.id || 'page'}-${index}`"
+            type="button"
+            class="lvgl-page-item"
+            :class="{ active: index === activePageIndex }"
+            @click="selectPage(index)"
+          >
+            {{ page.id || `page_${index}` }}
+          </button>
+          <span v-if="!pages.length" class="note">No pages yet.</span>
+        </div>
         <button
-          v-for="(page, index) in pages"
-          :key="`${page.id || 'page'}-${index}`"
+          v-if="activePageIndex >= 0 && pages.length"
           type="button"
-          class="lvgl-page-item"
-          :class="{ active: index === activePageIndex }"
-          @click="selectPage(index)"
+          class="secondary compact"
+          @click="removeActivePage"
         >
-          {{ page.id || `page_${index}` }}
+          Remove page
         </button>
-        <span v-if="!pages.length" class="note">No pages yet.</span>
-      </div>
-      <button type="button" class="secondary compact" @click="addPage">Add page</button>
-      <button
-        v-if="activePageIndex >= 0 && pages.length"
-        type="button"
-        class="secondary compact"
-        @click="removeActivePage"
-      >
-        Remove page
-      </button>
-    </div>
+      </section>
 
-    <div class="lvgl-config-body__cols">
       <section class="lvgl-config-panel">
         <div class="lvgl-config-panel__header">
           <h4>Widgets</h4>
@@ -100,10 +75,27 @@
           Remove widget
         </button>
       </section>
+    </div>
+
+    <div class="lvgl-grid">
+      <section class="lvgl-config-panel">
+        <div class="lvgl-config-panel__header">
+          <h4>Canvas</h4>
+        </div>
+        <LvglCanvas
+          :page="pages[activePageIndex] || null"
+          :canvas-width="canvasW"
+          :canvas-height="canvasH"
+          :selected-id="selectedWidgetId"
+          @select="selectedWidgetId = $event"
+          @move="handleCanvasMove"
+          @resize-canvas="handleCanvasResize"
+        />
+      </section>
 
       <section class="lvgl-config-panel lvgl-config-panel--inspector">
         <div class="lvgl-config-panel__header">
-          <h4>Inspector</h4>
+          <h4>Form</h4>
         </div>
         <LvglWidgetInspector
           :node="selectedWidget"
@@ -115,6 +107,29 @@
         />
       </section>
     </div>
+
+    <section v-if="showYaml" class="lvgl-config-panel lvgl-yaml-section">
+      <div class="lvgl-config-panel__header">
+        <h4>YAML</h4>
+        <button type="button" class="secondary compact" :disabled="!yamlDirty" @click="resetYaml">Reset</button>
+      </div>
+      <p class="note">
+        Edits the <code>lvgl:</code> block only. Applying re-parses it against the widget schemas --
+        keys outside a curated schema are kept verbatim, comments and formatting are not preserved.
+      </p>
+      <textarea
+        v-model="yamlDraft"
+        class="lvgl-yaml-editor"
+        spellcheck="false"
+        autocomplete="off"
+        autocapitalize="off"
+        @input="yamlDirty = true"
+      ></textarea>
+      <div class="lvgl-yaml-editor__bar">
+        <button type="button" class="secondary compact" :disabled="applying || !yamlDirty" @click="applyYaml">Apply</button>
+        <span v-if="yamlError" class="lvgl-yaml-editor__error">{{ yamlError }}</span>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -122,10 +137,12 @@
 import { computed, onMounted, ref, watch } from "vue";
 import LvglWidgetTreeItem from "./LvglWidgetTreeItem.vue";
 import LvglWidgetInspector from "./LvglWidgetInspector.vue";
+import LvglCanvas from "./LvglCanvas.vue";
 import { LVGL_WIDGETS, lvglWidgetDefaults } from "../../utils/lvglWidgets";
 import { buildLvglYamlLines } from "../../utils/schemaLvglYaml";
 import { parseLvglSection } from "../../utils/yamlLvglImport";
 import { parseYamlText } from "../../utils/yamlProjectImport";
+import { modeLevelRank } from "../../utils/schemaModeLevel";
 import {
   loadActionCatalog,
   loadActionDefinition,
@@ -153,6 +170,11 @@ const props = defineProps({
   externalSelect: {
     type: Object,
     default: null
+  },
+  // Builder mode level -- the YAML block only shows from "Advanced" up.
+  activeModeLevel: {
+    type: String,
+    default: "Simple"
   }
 });
 
@@ -162,10 +184,36 @@ const activePageIndex = ref(0);
 const selectedWidgetId = ref("");
 const widgetTypeToAdd = ref(LVGL_WIDGETS[0]?.type || "label");
 
-const viewMode = ref("form"); // "form" | "yaml"
 const yamlDraft = ref("");
+const yamlDirty = ref(false);
 const yamlError = ref("");
 const applying = ref(false);
+const canvasW = ref(240);
+const canvasH = ref(320);
+
+const showYaml = computed(() => modeLevelRank(props.activeModeLevel) >= modeLevelRank("Advanced"));
+
+const serializedLvgl = computed(() =>
+  buildLvglYamlLines(props.lvglConfig, props.widgetSchemas)
+    .map((line) => line.text)
+    .join("\n")
+);
+
+// Keep the YAML box mirroring canvas/form edits until the user types into it;
+// then it holds their draft until Apply or Reset.
+watch(
+  serializedLvgl,
+  (next) => {
+    if (!yamlDirty.value) yamlDraft.value = next;
+  },
+  { immediate: true }
+);
+
+const resetYaml = () => {
+  yamlDirty.value = false;
+  yamlError.value = "";
+  yamlDraft.value = serializedLvgl.value;
+};
 
 // Same loader bundle importYamlToProjectConfig feeds parseLvglSection, but built
 // straight from the (cached) schema loaders so the LVGL tab stays self-contained.
@@ -175,17 +223,6 @@ const lvglSchemaContext = {
   loadActionDefinition,
   loadConditionCatalog,
   loadConditionDefinition
-};
-
-const setViewMode = (mode) => {
-  if (mode === viewMode.value) return;
-  if (mode === "yaml") {
-    yamlError.value = "";
-    yamlDraft.value = buildLvglYamlLines(props.lvglConfig, props.widgetSchemas)
-      .map((line) => line.text)
-      .join("\n");
-  }
-  viewMode.value = mode;
 };
 
 const applyYaml = async () => {
@@ -210,7 +247,7 @@ const applyYaml = async () => {
     emit("update", next);
     selectedWidgetId.value = "";
     activePageIndex.value = Math.min(activePageIndex.value, Math.max(0, next.pages.length - 1));
-    viewMode.value = "form";
+    yamlDirty.value = false;
   } finally {
     applying.value = false;
   }
@@ -321,6 +358,26 @@ const handleInspectorUpdate = (nextNode) => {
   );
   emit("update", { ...current, pages: nextPages });
 };
+
+const handleCanvasMove = ({ uiId, x, y }) => {
+  const current = props.lvglConfig;
+  if (!current || !uiId) return;
+  const target = findWidgetById(pages.value[activePageIndex.value]?.widgets, uiId);
+  if (!target) return;
+  const nextNode = { ...target, common: { ...(target.common || {}), x, y } };
+  const nextPages = current.pages.map((page, index) =>
+    index === activePageIndex.value ? { ...page, widgets: replaceWidgetById(page.widgets, uiId, nextNode) } : page
+  );
+  emit("update", { ...current, pages: nextPages });
+  const scopeId = `lvgl:page:${activePageIndex.value}:widget:${uiId}`;
+  emit("field-edit", { scopeId, path: ["x"] });
+  emit("field-edit", { scopeId, path: ["y"] });
+};
+
+const handleCanvasResize = ({ dim, value }) => {
+  if (dim === "width") canvasW.value = value;
+  else if (dim === "height") canvasH.value = value;
+};
 </script>
 
 <style scoped>
@@ -328,20 +385,25 @@ const handleInspectorUpdate = (nextNode) => {
   min-width: 0;
 }
 
-.lvgl-view-toggle {
-  display: flex;
-  gap: 4px;
+.lvgl-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 240px) minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
 }
 
-.lvgl-view-toggle .active {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: #fff;
+.lvgl-grid + .lvgl-grid {
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+
+.lvgl-yaml-section {
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
 }
 
 .lvgl-yaml-editor {
-  flex: 1;
-  min-height: 320px;
+  min-height: 260px;
   width: 100%;
   resize: vertical;
   font-family: var(--mono, ui-monospace, SFMono-Regular, Menlo, monospace);
@@ -366,24 +428,16 @@ const handleInspectorUpdate = (nextNode) => {
   font-size: 12px;
 }
 
-.lvgl-pages-bar {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.lvgl-pages-bar__label {
-  font-weight: 600;
-  font-size: 13px;
-}
-
 .lvgl-page-list {
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
-  flex: 1;
   min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px;
+  min-height: 120px;
+  align-content: flex-start;
 }
 
 .lvgl-page-item {
@@ -404,13 +458,6 @@ const handleInspectorUpdate = (nextNode) => {
   background: var(--accent);
   border-color: var(--accent);
   color: #fff;
-}
-
-.lvgl-config-body__cols {
-  display: grid;
-  grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
-  gap: 14px;
-  align-items: start;
 }
 
 .lvgl-config-panel {
@@ -453,7 +500,7 @@ const handleInspectorUpdate = (nextNode) => {
 }
 
 @media (max-width: 900px) {
-  .lvgl-config-body__cols {
+  .lvgl-grid {
     grid-template-columns: minmax(0, 1fr);
   }
 }
