@@ -1,4 +1,16 @@
+import { dump } from "js-yaml";
 import { pushYamlLine, renderYamlObject } from "./schemaYaml";
+
+// Re-emit widget keys the curated schema doesn't model (see parseWidgetNode's
+// `extra`). Rendered as raw YAML at the widget's field indent so a partial
+// schema still round-trips losslessly.
+const renderExtraLines = (extra, indent) => {
+  if (!extra || !Object.keys(extra).length) return [];
+  return dump(extra)
+    .trimEnd()
+    .split("\n")
+    .map((line) => (line ? `${" ".repeat(indent)}${line}` : ""));
+};
 
 // Reconstructs a widget's own flat field object (common + type-specific props) for the schema
 // field renderer. Only fields with a value survive -- renderYamlObject already skips undefined
@@ -36,14 +48,16 @@ const serializeWidgetNode = (node, dashIndent, lines, widgetSchemas) => {
   const value = buildWidgetFieldValue(node);
   const objectLines = [];
   renderYamlObject(value, schema.fields, dashIndent + 4, objectLines, value, null);
+  const extraLines = renderExtraLines(node.extra, dashIndent + 4);
 
-  if (!objectLines.length && !(node.children || []).length) {
+  if (!objectLines.length && !extraLines.length && !(node.children || []).length) {
     pushYamlLine(lines, `${" ".repeat(dashIndent)}- ${node.type}: {}`);
     return;
   }
 
   pushYamlLine(lines, `${" ".repeat(dashIndent)}- ${node.type}:`);
   objectLines.forEach((line) => lines.push(line));
+  extraLines.forEach((line) => pushYamlLine(lines, line));
 
   if ((node.children || []).length) {
     pushYamlLine(lines, `${" ".repeat(dashIndent + 4)}widgets:`);

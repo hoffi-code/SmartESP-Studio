@@ -159,6 +159,17 @@ describe("parseWidgetNode", () => {
     expect(node.props.selected_index).toBe(1);
   });
 
+  it("keeps YAML keys the curated schema does not model in node.extra", async () => {
+    const node = await parseWidgetNode(
+      { slider: { id: "vol", value: 10, scales: [{ ticks: { count: 5 } }], flex_grow: 1 } },
+      schemaContext
+    );
+
+    expect(node.type).toBe("slider");
+    expect(node.props).toEqual({ value: 10 });
+    expect(node.extra).toEqual({ scales: [{ ticks: { count: 5 } }], flex_grow: 1 });
+  });
+
   it("keeps a widget type outside the registry as an opaque raw-YAML node", async () => {
     const node = await parseWidgetNode({ chart: { id: "chart_1", width: 110 } }, schemaContext);
 

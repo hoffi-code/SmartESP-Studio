@@ -174,6 +174,33 @@ describe("buildLvglYamlLines", () => {
     expect(text).toContain('- homeassistant.action: "light.toggle"');
   });
 
+  it("re-emits node.extra keys the curated schema does not model", () => {
+    const sliderSchema = { fields: [{ key: "id", type: "id" }, { key: "value", type: "text" }] };
+    const lvgl = {
+      pages: [
+        {
+          id: "main_page",
+          widgets: [
+            {
+              uiId: "w1",
+              type: "slider",
+              common: { id: "vol" },
+              props: { value: 10 },
+              extra: { scales: [{ ticks: { count: 5 } }], flex_grow: 1 },
+              children: []
+            }
+          ]
+        }
+      ]
+    };
+
+    const text = buildLvglYamlLines(lvgl, { slider: sliderSchema }).join("\n");
+    expect(text).toContain("value: 10");
+    expect(text).toContain("scales:");
+    expect(text).toContain("count: 5");
+    expect(text).toContain("flex_grow: 1");
+  });
+
   it("skips a widget whose schema has not been loaded rather than emitting it wrong", () => {
     const lvgl = {
       pages: [{ id: "main_page", widgets: [{ uiId: "w1", type: "label", common: {}, props: {}, children: [] }] }]
