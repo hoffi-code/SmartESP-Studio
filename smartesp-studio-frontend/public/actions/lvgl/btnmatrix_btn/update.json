@@ -1,0 +1,14 @@
+{
+  "id": "lvgl.btnmatrix_btn.update",
+  "fields": [
+    {
+      "key": "id",
+      "label": "LVGL btnmatrix_btn",
+      "type": "id_ref",
+      "required": true,
+      "placeholder": "my_btnmatrix_btn",
+      "domain": "",
+      "lvl": "normal"
+    }
+  ]
+}

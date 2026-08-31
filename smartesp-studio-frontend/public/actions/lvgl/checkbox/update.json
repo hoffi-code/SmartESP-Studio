@@ -1,0 +1,22 @@
+{
+  "id": "lvgl.checkbox.update",
+  "fields": [
+    {
+      "key": "id",
+      "label": "LVGL checkbox",
+      "type": "id_ref",
+      "required": true,
+      "placeholder": "my_checkbox",
+      "domain": "",
+      "lvl": "normal"
+    },
+    {
+      "key": "text",
+      "label": "Text",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "templatable": true
+    }
+  ]
+}

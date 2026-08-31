@@ -1,0 +1,62 @@
+{
+  "id": "lvgl.canvas.draw_image",
+  "fields": [
+    {
+      "key": "id",
+      "label": "LVGL canvas",
+      "type": "id_ref",
+      "required": true,
+      "placeholder": "my_canvas",
+      "domain": "",
+      "lvl": "normal"
+    },
+    {
+      "key": "x",
+      "label": "X",
+      "type": "number",
+      "required": true,
+      "lvl": "normal",
+      "templatable": true
+    },
+    {
+      "key": "y",
+      "label": "Y",
+      "type": "number",
+      "required": true,
+      "lvl": "normal",
+      "templatable": true
+    },
+    {
+      "key": "src",
+      "label": "Image",
+      "type": "id_ref",
+      "required": true,
+      "lvl": "normal",
+      "domain": "image"
+    },
+    {
+      "key": "angle",
+      "label": "Angle",
+      "type": "number",
+      "required": false,
+      "lvl": "normal",
+      "templatable": true
+    },
+    {
+      "key": "zoom",
+      "label": "Zoom",
+      "type": "number",
+      "required": false,
+      "lvl": "normal",
+      "templatable": true
+    },
+    {
+      "key": "opa",
+      "label": "Opacity",
+      "type": "number",
+      "required": false,
+      "lvl": "normal",
+      "templatable": true
+    }
+  ]
+}

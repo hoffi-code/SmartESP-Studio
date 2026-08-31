@@ -1,0 +1,23 @@
+{
+  "id": "lvgl.qrcode.update",
+  "fields": [
+    {
+      "key": "id",
+      "label": "LVGL qrcode",
+      "type": "id_ref",
+      "required": true,
+      "placeholder": "my_qrcode",
+      "domain": "",
+      "lvl": "normal"
+    },
+    {
+      "key": "text",
+      "label": "Text",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "templatable": true,
+      "placeholder": "https://esphome.io"
+    }
+  ]
+}

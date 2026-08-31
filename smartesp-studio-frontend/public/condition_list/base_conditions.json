@@ -5,14 +5,6 @@
   "fields": [],
   "conditions": [
     {
-      "id": "lambda",
-      "label": "Lambda",
-      "description": "Run a custom boolean lambda condition.",
-      "category": "logic",
-      "helpUrl": "https://esphome.io/automations/templates/",
-      "schemaUrl": "conditions/lambda.json"
-    },
-    {
       "id": "and",
       "label": "All (AND)",
       "description": "All nested conditions must pass.",
@@ -21,36 +13,12 @@
       "schemaUrl": "conditions/and.json"
     },
     {
-      "id": "or",
-      "label": "Any (OR)",
-      "description": "At least one nested condition must pass.",
-      "category": "logic",
-      "helpUrl": "https://esphome.io/automations/actions/#or-condition",
-      "schemaUrl": "conditions/or.json"
-    },
-    {
-      "id": "not",
-      "label": "Not",
-      "description": "Invert the nested condition result.",
-      "category": "logic",
-      "helpUrl": "https://esphome.io/automations/actions/#not-condition",
-      "schemaUrl": "conditions/not.json"
-    },
-    {
-      "id": "for",
-      "label": "For",
-      "description": "Require a condition to stay true for a duration.",
-      "category": "logic",
-      "helpUrl": "https://esphome.io/automations/actions/#for-condition",
-      "schemaUrl": "conditions/for.json"
-    },
-    {
-      "id": "binary_sensor.is_on",
-      "label": "Binary Sensor Is On",
-      "description": "Check whether a binary sensor is ON.",
-      "category": "state",
-      "helpUrl": "https://esphome.io/components/binary_sensor/index.html#binary-sensor-is-on-condition",
-      "schemaUrl": "conditions/binary_sensor/is_on.json"
+      "id": "api.connected",
+      "label": "API Connected",
+      "description": "Check whether the native API is connected.",
+      "category": "connectivity",
+      "helpUrl": "https://esphome.io/components/api/index.html#api-connected-condition",
+      "schemaUrl": "conditions/api/connected.json"
     },
     {
       "id": "binary_sensor.is_off",
@@ -61,44 +29,12 @@
       "schemaUrl": "conditions/binary_sensor/is_off.json"
     },
     {
-      "id": "switch.is_on",
-      "label": "Switch Is On",
-      "description": "Check whether a switch is ON.",
+      "id": "binary_sensor.is_on",
+      "label": "Binary Sensor Is On",
+      "description": "Check whether a binary sensor is ON.",
       "category": "state",
-      "helpUrl": "https://esphome.io/components/switch/index.html#switch-is-on-condition",
-      "schemaUrl": "conditions/switch/is_on.json"
-    },
-    {
-      "id": "switch.is_off",
-      "label": "Switch Is Off",
-      "description": "Check whether a switch is OFF.",
-      "category": "state",
-      "helpUrl": "https://esphome.io/components/switch/index.html#switch-is-off-condition",
-      "schemaUrl": "conditions/switch/is_off.json"
-    },
-    {
-      "id": "light.is_on",
-      "label": "Light Is On",
-      "description": "Check whether a light is ON.",
-      "category": "state",
-      "helpUrl": "https://esphome.io/components/light/index.html#light-is-on-condition",
-      "schemaUrl": "conditions/light/is_on.json"
-    },
-    {
-      "id": "light.is_off",
-      "label": "Light Is Off",
-      "description": "Check whether a light is OFF.",
-      "category": "state",
-      "helpUrl": "https://esphome.io/components/light/index.html#light-is-off-condition",
-      "schemaUrl": "conditions/light/is_off.json"
-    },
-    {
-      "id": "cover.is_open",
-      "label": "Cover Is Open",
-      "description": "Check whether a cover is open.",
-      "category": "state",
-      "helpUrl": "https://esphome.io/components/cover/index.html#cover-is-open-condition",
-      "schemaUrl": "conditions/cover/is_open.json"
+      "helpUrl": "https://esphome.io/components/binary_sensor/index.html#binary-sensor-is-on-condition",
+      "schemaUrl": "conditions/binary_sensor/is_on.json"
     },
     {
       "id": "cover.is_closed",
@@ -109,12 +45,100 @@
       "schemaUrl": "conditions/cover/is_closed.json"
     },
     {
-      "id": "api.connected",
-      "label": "API Connected",
-      "description": "Check whether the native API is connected.",
-      "category": "connectivity",
-      "helpUrl": "https://esphome.io/components/api/index.html#api-connected-condition",
-      "schemaUrl": "conditions/api/connected.json"
+      "id": "cover.is_open",
+      "label": "Cover Is Open",
+      "description": "Check whether a cover is open.",
+      "category": "state",
+      "helpUrl": "https://esphome.io/components/cover/index.html#cover-is-open-condition",
+      "schemaUrl": "conditions/cover/is_open.json"
+    },
+    {
+      "id": "for",
+      "label": "For",
+      "description": "Require a condition to stay true for a duration.",
+      "category": "logic",
+      "helpUrl": "https://esphome.io/automations/actions/#for-condition",
+      "schemaUrl": "conditions/for.json"
+    },
+    {
+      "id": "lambda",
+      "label": "Lambda",
+      "description": "Run a custom boolean lambda condition.",
+      "category": "logic",
+      "helpUrl": "https://esphome.io/automations/templates/",
+      "schemaUrl": "conditions/lambda.json"
+    },
+    {
+      "id": "light.is_off",
+      "label": "Light Is Off",
+      "description": "Check whether a light is OFF.",
+      "category": "state",
+      "helpUrl": "https://esphome.io/components/light/index.html#light-is-off-condition",
+      "schemaUrl": "conditions/light/is_off.json"
+    },
+    {
+      "id": "light.is_on",
+      "label": "Light Is On",
+      "description": "Check whether a light is ON.",
+      "category": "state",
+      "helpUrl": "https://esphome.io/components/light/index.html#light-is-on-condition",
+      "schemaUrl": "conditions/light/is_on.json"
+    },
+    {
+      "id": "lvgl.is_idle",
+      "label": "Lvgl Is Idle",
+      "description": "Check whether the LVGL display has been idle for a timeout.",
+      "category": "state",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "conditions/lvgl/is_idle.json"
+    },
+    {
+      "id": "lvgl.is_paused",
+      "label": "Lvgl Is Paused",
+      "description": "Check whether LVGL rendering is currently paused.",
+      "category": "state",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "conditions/lvgl/is_paused.json"
+    },
+    {
+      "id": "lvgl.page.is_showing",
+      "label": "Lvgl Page Is Showing",
+      "description": "Check whether a given LVGL page is currently shown.",
+      "category": "state",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "conditions/lvgl/page/is_showing.json"
+    },
+    {
+      "id": "not",
+      "label": "Not",
+      "description": "Invert the nested condition result.",
+      "category": "logic",
+      "helpUrl": "https://esphome.io/automations/actions/#not-condition",
+      "schemaUrl": "conditions/not.json"
+    },
+    {
+      "id": "or",
+      "label": "Any (OR)",
+      "description": "At least one nested condition must pass.",
+      "category": "logic",
+      "helpUrl": "https://esphome.io/automations/actions/#or-condition",
+      "schemaUrl": "conditions/or.json"
+    },
+    {
+      "id": "switch.is_off",
+      "label": "Switch Is Off",
+      "description": "Check whether a switch is OFF.",
+      "category": "state",
+      "helpUrl": "https://esphome.io/components/switch/index.html#switch-is-off-condition",
+      "schemaUrl": "conditions/switch/is_off.json"
+    },
+    {
+      "id": "switch.is_on",
+      "label": "Switch Is On",
+      "description": "Check whether a switch is ON.",
+      "category": "state",
+      "helpUrl": "https://esphome.io/components/switch/index.html#switch-is-on-condition",
+      "schemaUrl": "conditions/switch/is_on.json"
     },
     {
       "id": "wifi.connected",

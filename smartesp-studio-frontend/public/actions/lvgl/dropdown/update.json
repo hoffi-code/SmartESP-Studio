@@ -1,0 +1,22 @@
+{
+  "id": "lvgl.dropdown.update",
+  "fields": [
+    {
+      "key": "id",
+      "label": "LVGL dropdown",
+      "type": "id_ref",
+      "required": true,
+      "placeholder": "my_dropdown",
+      "domain": "",
+      "lvl": "normal"
+    },
+    {
+      "key": "selected_index",
+      "label": "Selected index",
+      "type": "number",
+      "required": false,
+      "lvl": "normal",
+      "templatable": true
+    }
+  ]
+}

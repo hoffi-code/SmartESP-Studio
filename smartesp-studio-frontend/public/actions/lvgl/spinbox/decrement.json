@@ -1,0 +1,14 @@
+{
+  "id": "lvgl.spinbox.decrement",
+  "fields": [
+    {
+      "key": "id",
+      "label": "LVGL spinbox",
+      "type": "id_ref",
+      "required": true,
+      "placeholder": "my_spinbox",
+      "domain": "",
+      "lvl": "normal"
+    }
+  ]
+}

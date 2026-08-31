@@ -1,0 +1,14 @@
+{
+  "id": "lvgl.animation.stop",
+  "fields": [
+    {
+      "key": "id",
+      "label": "LVGL animation",
+      "type": "id_ref",
+      "required": true,
+      "placeholder": "my_animation",
+      "domain": "",
+      "lvl": "normal"
+    }
+  ]
+}

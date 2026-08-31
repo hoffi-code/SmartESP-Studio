@@ -1,0 +1,14 @@
+{
+  "id": "lvgl.meter.update",
+  "fields": [
+    {
+      "key": "id",
+      "label": "LVGL meter",
+      "type": "id_ref",
+      "required": true,
+      "placeholder": "my_meter",
+      "domain": "",
+      "lvl": "normal"
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "id": "lvgl.canvas.draw_arc",
+  "fields": [
+    {
+      "key": "id",
+      "label": "LVGL canvas",
+      "type": "id_ref",
+      "required": true,
+      "placeholder": "my_canvas",
+      "domain": "",
+      "lvl": "normal"
+    },
+    {
+      "key": "x",
+      "label": "X",
+      "type": "number",
+      "required": true,
+      "lvl": "normal",
+      "templatable": true
+    },
+    {
+      "key": "y",
+      "label": "Y",
+      "type": "number",
+      "required": true,
+      "lvl": "normal",
+      "templatable": true
+    },
+    {
+      "key": "radius",
+      "label": "Radius",
+      "type": "number",
+      "required": true,
+      "lvl": "normal",
+      "templatable": true
+    },
+    {
+      "key": "start_angle",
+      "label": "Start angle",
+      "type": "number",
+      "required": true,
+      "lvl": "normal",
+      "templatable": true
+    },
+    {
+      "key": "end_angle",
+      "label": "End angle",
+      "type": "number",
+      "required": true,
+      "lvl": "normal",
+      "templatable": true
+    },
+    {
+      "key": "color",
+      "label": "Color",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "#ffffff"
+    },
+    {
+      "key": "width",
+      "label": "Width",
+      "type": "number",
+      "required": false,
+      "lvl": "normal",
+      "templatable": true
+    },
+    {
+      "key": "opa",
+      "label": "Opacity",
+      "type": "number",
+      "required": false,
+      "lvl": "normal",
+      "templatable": true
+    }
+  ]
+}

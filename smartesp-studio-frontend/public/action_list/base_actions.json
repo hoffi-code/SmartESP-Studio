@@ -1616,6 +1616,303 @@
       "schemaUrl": "actions/logger/set_level.json"
     },
     {
+      "id": "lvgl.animation.start",
+      "label": "Lvgl Animation Start",
+      "description": "ESPHome action `lvgl.animation.start`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.animation",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/animation/start.json"
+    },
+    {
+      "id": "lvgl.animation.stop",
+      "label": "Lvgl Animation Stop",
+      "description": "ESPHome action `lvgl.animation.stop`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.animation",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/animation/stop.json"
+    },
+    {
+      "id": "lvgl.animimg.start",
+      "label": "Lvgl Animimg Start",
+      "description": "ESPHome action `lvgl.animimg.start`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.animimg",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/animimg/start.json"
+    },
+    {
+      "id": "lvgl.animimg.stop",
+      "label": "Lvgl Animimg Stop",
+      "description": "ESPHome action `lvgl.animimg.stop`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.animimg",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/animimg/stop.json"
+    },
+    {
+      "id": "lvgl.animimg.update",
+      "label": "Lvgl Animimg Update",
+      "description": "ESPHome action `lvgl.animimg.update`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.animimg",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/animimg/update.json"
+    },
+    {
+      "id": "lvgl.arc.update",
+      "label": "Lvgl Arc Update",
+      "description": "ESPHome action `lvgl.arc.update`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.arc",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/arc/update.json"
+    },
+    {
+      "id": "lvgl.bar.update",
+      "label": "Lvgl Bar Update",
+      "description": "ESPHome action `lvgl.bar.update`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.bar",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/bar/update.json"
+    },
+    {
+      "id": "lvgl.btnmatrix_btn.update",
+      "label": "Lvgl Btnmatrix Btn Update",
+      "description": "ESPHome action `lvgl.btnmatrix_btn.update`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.btnmatrix_btn",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/btnmatrix_btn/update.json"
+    },
+    {
+      "id": "lvgl.button.update",
+      "label": "Lvgl Button Update",
+      "description": "ESPHome action `lvgl.button.update`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.button",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/button/update.json"
+    },
+    {
+      "id": "lvgl.buttonmatrix.update",
+      "label": "Lvgl Buttonmatrix Update",
+      "description": "ESPHome action `lvgl.buttonmatrix.update`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.buttonmatrix",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/buttonmatrix/update.json"
+    },
+    {
+      "id": "lvgl.canvas.draw_arc",
+      "label": "Lvgl Canvas Draw Arc",
+      "description": "ESPHome action `lvgl.canvas.draw_arc`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.canvas",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/canvas/draw_arc.json"
+    },
+    {
+      "id": "lvgl.canvas.draw_image",
+      "label": "Lvgl Canvas Draw Image",
+      "description": "ESPHome action `lvgl.canvas.draw_image`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.canvas",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/canvas/draw_image.json"
+    },
+    {
+      "id": "lvgl.canvas.draw_line",
+      "label": "Lvgl Canvas Draw Line",
+      "description": "ESPHome action `lvgl.canvas.draw_line`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.canvas",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/canvas/draw_line.json"
+    },
+    {
+      "id": "lvgl.canvas.draw_polygon",
+      "label": "Lvgl Canvas Draw Polygon",
+      "description": "ESPHome action `lvgl.canvas.draw_polygon`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.canvas",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/canvas/draw_polygon.json"
+    },
+    {
+      "id": "lvgl.canvas.draw_rectangle",
+      "label": "Lvgl Canvas Draw Rectangle",
+      "description": "ESPHome action `lvgl.canvas.draw_rectangle`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.canvas",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/canvas/draw_rectangle.json"
+    },
+    {
+      "id": "lvgl.canvas.draw_text",
+      "label": "Lvgl Canvas Draw Text",
+      "description": "ESPHome action `lvgl.canvas.draw_text`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.canvas",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/canvas/draw_text.json"
+    },
+    {
+      "id": "lvgl.canvas.fill",
+      "label": "Lvgl Canvas Fill",
+      "description": "ESPHome action `lvgl.canvas.fill`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.canvas",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/canvas/fill.json"
+    },
+    {
+      "id": "lvgl.canvas.set_pixels",
+      "label": "Lvgl Canvas Set Pixels",
+      "description": "ESPHome action `lvgl.canvas.set_pixels`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.canvas",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/canvas/set_pixels.json"
+    },
+    {
+      "id": "lvgl.canvas.update",
+      "label": "Lvgl Canvas Update",
+      "description": "ESPHome action `lvgl.canvas.update`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.canvas",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/canvas/update.json"
+    },
+    {
+      "id": "lvgl.checkbox.update",
+      "label": "Lvgl Checkbox Update",
+      "description": "ESPHome action `lvgl.checkbox.update`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.checkbox",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/checkbox/update.json"
+    },
+    {
+      "id": "lvgl.container.update",
+      "label": "Lvgl Container Update",
+      "description": "ESPHome action `lvgl.container.update`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.container",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/container/update.json"
+    },
+    {
+      "id": "lvgl.display.set_rotation",
+      "label": "Lvgl Display Set Rotation",
+      "description": "ESPHome action `lvgl.display.set_rotation`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.display",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/display/set_rotation.json"
+    },
+    {
+      "id": "lvgl.dropdown.update",
+      "label": "Lvgl Dropdown Update",
+      "description": "ESPHome action `lvgl.dropdown.update`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.dropdown",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/dropdown/update.json"
+    },
+    {
+      "id": "lvgl.dropdown_list.update",
+      "label": "Lvgl Dropdown List Update",
+      "description": "ESPHome action `lvgl.dropdown_list.update`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.dropdown_list",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/dropdown_list/update.json"
+    },
+    {
+      "id": "lvgl.image.update",
+      "label": "Lvgl Image Update",
+      "description": "ESPHome action `lvgl.image.update`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.image",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/image/update.json"
+    },
+    {
+      "id": "lvgl.indicator.update",
+      "label": "Lvgl Indicator Update",
+      "description": "ESPHome action `lvgl.indicator.update`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.indicator",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/indicator/update.json"
+    },
+    {
+      "id": "lvgl.keyboard.update",
+      "label": "Lvgl Keyboard Update",
+      "description": "ESPHome action `lvgl.keyboard.update`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.keyboard",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/keyboard/update.json"
+    },
+    {
+      "id": "lvgl.label.update",
+      "label": "Lvgl Label Update",
+      "description": "ESPHome action `lvgl.label.update`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.label",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/label/update.json"
+    },
+    {
+      "id": "lvgl.led.update",
+      "label": "Lvgl Led Update",
+      "description": "ESPHome action `lvgl.led.update`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.led",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/led/update.json"
+    },
+    {
+      "id": "lvgl.line.update",
+      "label": "Lvgl Line Update",
+      "description": "ESPHome action `lvgl.line.update`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.line",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/line/update.json"
+    },
+    {
+      "id": "lvgl.lv_tileview_tile_t.update",
+      "label": "Lvgl Lv Tileview Tile T Update",
+      "description": "ESPHome action `lvgl.lv_tileview_tile_t.update`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.lv_tileview_tile_t",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/lv_tileview_tile_t/update.json"
+    },
+    {
+      "id": "lvgl.meter.update",
+      "label": "Lvgl Meter Update",
+      "description": "ESPHome action `lvgl.meter.update`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.meter",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/meter/update.json"
+    },
+    {
+      "id": "lvgl.obj.update",
+      "label": "Lvgl Obj Update",
+      "description": "ESPHome action `lvgl.obj.update`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.obj",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/obj/update.json"
+    },
+    {
       "id": "lvgl.page.next",
       "label": "Lvgl Page Next",
       "description": "ESPHome action `lvgl.page.next`.",
@@ -1643,6 +1940,15 @@
       "schemaUrl": "actions/lvgl/page/show.json"
     },
     {
+      "id": "lvgl.page.update",
+      "label": "Lvgl Page Update",
+      "description": "ESPHome action `lvgl.page.update`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.page",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/page/update.json"
+    },
+    {
       "id": "lvgl.pause",
       "label": "Lvgl Pause",
       "description": "ESPHome action `lvgl.pause`.",
@@ -1650,6 +1956,15 @@
       "actionDomain": "lvgl",
       "helpUrl": "https://esphome.io/components/lvgl/",
       "schemaUrl": "actions/lvgl/pause.json"
+    },
+    {
+      "id": "lvgl.qrcode.update",
+      "label": "Lvgl Qrcode Update",
+      "description": "ESPHome action `lvgl.qrcode.update`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.qrcode",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/qrcode/update.json"
     },
     {
       "id": "lvgl.resume",
@@ -1661,6 +1976,60 @@
       "schemaUrl": "actions/lvgl/resume.json"
     },
     {
+      "id": "lvgl.roller.update",
+      "label": "Lvgl Roller Update",
+      "description": "ESPHome action `lvgl.roller.update`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.roller",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/roller/update.json"
+    },
+    {
+      "id": "lvgl.slider.update",
+      "label": "Lvgl Slider Update",
+      "description": "ESPHome action `lvgl.slider.update`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.slider",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/slider/update.json"
+    },
+    {
+      "id": "lvgl.spinbox.decrement",
+      "label": "Lvgl Spinbox Decrement",
+      "description": "ESPHome action `lvgl.spinbox.decrement`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.spinbox",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/spinbox/decrement.json"
+    },
+    {
+      "id": "lvgl.spinbox.increment",
+      "label": "Lvgl Spinbox Increment",
+      "description": "ESPHome action `lvgl.spinbox.increment`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.spinbox",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/spinbox/increment.json"
+    },
+    {
+      "id": "lvgl.spinbox.update",
+      "label": "Lvgl Spinbox Update",
+      "description": "ESPHome action `lvgl.spinbox.update`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.spinbox",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/spinbox/update.json"
+    },
+    {
+      "id": "lvgl.spinner.update",
+      "label": "Lvgl Spinner Update",
+      "description": "ESPHome action `lvgl.spinner.update`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.spinner",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/spinner/update.json"
+    },
+    {
       "id": "lvgl.style.update",
       "label": "Lvgl Style Update",
       "description": "ESPHome action `lvgl.style.update`.",
@@ -1668,6 +2037,69 @@
       "actionDomain": "lvgl.style",
       "helpUrl": "https://esphome.io/components/lvgl/",
       "schemaUrl": "actions/lvgl/style/update.json"
+    },
+    {
+      "id": "lvgl.switch.update",
+      "label": "Lvgl Switch Update",
+      "description": "ESPHome action `lvgl.switch.update`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.switch",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/switch/update.json"
+    },
+    {
+      "id": "lvgl.tabview.select",
+      "label": "Lvgl Tabview Select",
+      "description": "ESPHome action `lvgl.tabview.select`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.tabview",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/tabview/select.json"
+    },
+    {
+      "id": "lvgl.tabview.update",
+      "label": "Lvgl Tabview Update",
+      "description": "ESPHome action `lvgl.tabview.update`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.tabview",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/tabview/update.json"
+    },
+    {
+      "id": "lvgl.textarea.update",
+      "label": "Lvgl Textarea Update",
+      "description": "ESPHome action `lvgl.textarea.update`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.textarea",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/textarea/update.json"
+    },
+    {
+      "id": "lvgl.theme.update",
+      "label": "Lvgl Theme Update",
+      "description": "ESPHome action `lvgl.theme.update`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.theme",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/theme/update.json"
+    },
+    {
+      "id": "lvgl.tileview.select",
+      "label": "Lvgl Tileview Select",
+      "description": "ESPHome action `lvgl.tileview.select`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.tileview",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/tileview/select.json"
+    },
+    {
+      "id": "lvgl.tileview.update",
+      "label": "Lvgl Tileview Update",
+      "description": "ESPHome action `lvgl.tileview.update`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.tileview",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/tileview/update.json"
     },
     {
       "id": "lvgl.update",
@@ -1731,6 +2163,15 @@
       "actionDomain": "lvgl.widget",
       "helpUrl": "https://esphome.io/components/lvgl/",
       "schemaUrl": "actions/lvgl/widget/refresh.json"
+    },
+    {
+      "id": "lvgl.widget.set_z_index",
+      "label": "Lvgl Widget Set Z Index",
+      "description": "ESPHome action `lvgl.widget.set_z_index`.",
+      "domain": "lvgl",
+      "actionDomain": "lvgl.widget",
+      "helpUrl": "https://esphome.io/components/lvgl/",
+      "schemaUrl": "actions/lvgl/widget/set_z_index.json"
     },
     {
       "id": "lvgl.widget.show",

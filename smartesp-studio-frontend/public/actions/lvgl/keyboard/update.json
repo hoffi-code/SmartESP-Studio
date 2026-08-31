@@ -1,0 +1,14 @@
+{
+  "id": "lvgl.keyboard.update",
+  "fields": [
+    {
+      "key": "id",
+      "label": "LVGL keyboard",
+      "type": "id_ref",
+      "required": true,
+      "placeholder": "my_keyboard",
+      "domain": "",
+      "lvl": "normal"
+    }
+  ]
+}

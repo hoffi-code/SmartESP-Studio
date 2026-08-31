@@ -1,0 +1,23 @@
+{
+  "id": "lvgl.label.update",
+  "fields": [
+    {
+      "key": "id",
+      "label": "LVGL label",
+      "type": "id_ref",
+      "required": true,
+      "placeholder": "my_label",
+      "domain": "",
+      "lvl": "normal"
+    },
+    {
+      "key": "text",
+      "label": "Text",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "templatable": true,
+      "placeholder": "Updated label"
+    }
+  ]
+}

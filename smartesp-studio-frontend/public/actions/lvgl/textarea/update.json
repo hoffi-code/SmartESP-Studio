@@ -1,0 +1,22 @@
+{
+  "id": "lvgl.textarea.update",
+  "fields": [
+    {
+      "key": "id",
+      "label": "LVGL textarea",
+      "type": "id_ref",
+      "required": true,
+      "placeholder": "my_textarea",
+      "domain": "",
+      "lvl": "normal"
+    },
+    {
+      "key": "text",
+      "label": "Text",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "templatable": true
+    }
+  ]
+}

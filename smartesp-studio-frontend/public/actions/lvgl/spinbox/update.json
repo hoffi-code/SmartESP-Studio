@@ -1,0 +1,22 @@
+{
+  "id": "lvgl.spinbox.update",
+  "fields": [
+    {
+      "key": "id",
+      "label": "LVGL spinbox",
+      "type": "id_ref",
+      "required": true,
+      "placeholder": "my_spinbox",
+      "domain": "",
+      "lvl": "normal"
+    },
+    {
+      "key": "value",
+      "label": "Value",
+      "type": "number",
+      "required": false,
+      "lvl": "normal",
+      "templatable": true
+    }
+  ]
+}

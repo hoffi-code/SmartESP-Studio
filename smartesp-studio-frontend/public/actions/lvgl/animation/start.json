@@ -1,0 +1,38 @@
+{
+  "id": "lvgl.animation.start",
+  "fields": [
+    {
+      "key": "id",
+      "label": "LVGL animation",
+      "type": "id_ref",
+      "required": true,
+      "placeholder": "my_animation",
+      "domain": "",
+      "lvl": "normal"
+    },
+    {
+      "key": "duration",
+      "label": "Duration",
+      "type": "duration",
+      "required": false,
+      "lvl": "normal",
+      "templatable": true,
+      "placeholder": "1s"
+    },
+    {
+      "key": "loop",
+      "label": "Loop",
+      "type": "boolean",
+      "required": false,
+      "lvl": "normal"
+    },
+    {
+      "key": "start_delay",
+      "label": "Start delay",
+      "type": "duration",
+      "required": false,
+      "lvl": "advanced",
+      "templatable": true
+    }
+  ]
+}

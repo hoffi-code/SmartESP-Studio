@@ -1,0 +1,14 @@
+{
+  "id": "lvgl.is_idle",
+  "fields": [
+    {
+      "key": "timeout",
+      "label": "Timeout",
+      "type": "duration",
+      "required": true,
+      "lvl": "normal",
+      "templatable": true,
+      "placeholder": "5s"
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "id": "lvgl.canvas.draw_text",
+  "fields": [
+    {
+      "key": "id",
+      "label": "LVGL canvas",
+      "type": "id_ref",
+      "required": true,
+      "placeholder": "my_canvas",
+      "domain": "",
+      "lvl": "normal"
+    },
+    {
+      "key": "x",
+      "label": "X",
+      "type": "number",
+      "required": true,
+      "lvl": "normal",
+      "templatable": true
+    },
+    {
+      "key": "y",
+      "label": "Y",
+      "type": "number",
+      "required": true,
+      "lvl": "normal",
+      "templatable": true
+    },
+    {
+      "key": "max_width",
+      "label": "Max width",
+      "type": "number",
+      "required": true,
+      "lvl": "normal",
+      "templatable": true
+    },
+    {
+      "key": "text",
+      "label": "Text",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "templatable": true
+    },
+    {
+      "key": "color",
+      "label": "Color",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "#ffffff"
+    },
+    {
+      "key": "font",
+      "label": "Font",
+      "type": "id_ref",
+      "required": false,
+      "lvl": "normal",
+      "domain": "font"
+    },
+    {
+      "key": "align",
+      "label": "Align",
+      "type": "select",
+      "required": false,
+      "lvl": "normal",
+      "options": [
+        "LEFT",
+        "CENTER",
+        "RIGHT"
+      ]
+    },
+    {
+      "key": "opa",
+      "label": "Opacity",
+      "type": "number",
+      "required": false,
+      "lvl": "normal",
+      "templatable": true
+    }
+  ]
+}
