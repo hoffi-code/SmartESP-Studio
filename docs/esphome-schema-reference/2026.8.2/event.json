@@ -1,0 +1,142 @@
+{
+  "event": {
+    "action": {
+      "trigger": {
+        "schema": {
+          "extends": [
+            "event.TRIGGER_EVENT_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action allows for the triggering of an event from within an automation."
+      }
+    },
+    "components": {
+      "template": {
+        "docs": "The `template` event platform enables you to define events that trigger specific automations or actions within Home Assistant. These custom events can be utilized to orchestrate complex behaviors across your smart home ecosystem based on conditions or sequences defined in your ESPHome configuration.\n\n*See also: [Template Event](https://esphome.io/components/event/template)*"
+      },
+      "uart": {
+        "dependencies": [
+          "uart"
+        ]
+      }
+    },
+    "schemas": {
+      "TRIGGER_EVENT_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "event_type": {
+              "key": "Required",
+              "templatable": true,
+              "type": "string",
+              "docs": "**string**: The type of event to trigger.\n\n*See also: [Event Component](https://esphome.io/components/event#eventtrigger-action)*"
+            },
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "event::Event",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the event.\n\n*See also: [Event Component](https://esphome.io/components/event#eventtrigger-action)*"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "_EVENT_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "device_class": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "button": {
+                  "docs": null
+                },
+                "doorbell": {
+                  "docs": null
+                },
+                "": null,
+                "motion": {
+                  "docs": null
+                }
+              },
+              "visibility": "advanced",
+              "docs": "**string**: The device class for the event. The following device classes are supported by event entities:\n\n*See also: [Event Component](https://esphome.io/components/event#example-event-configuration)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "event::Event",
+                "parents": [
+                  "EntityBase"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation. At least one of **id** and **name** must be specified.\n\n*See also: [Event Component](https://esphome.io/components/event#example-event-configuration)*"
+            },
+            "mqtt_id": {
+              "id_type": {
+                "class": "mqtt::MQTTEventComponent",
+                "parents": [
+                  "mqtt::MQTTComponent",
+                  "Component"
+                ]
+              },
+              "key": "Optional"
+            },
+            "on_event": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform when an event is triggered.\n\n*See also: [Event Component](https://esphome.io/components/event#example-event-configuration)*"
+            },
+            "web_server": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "sorting_group_id": {
+                    "key": "Optional",
+                    "type": "use_id",
+                    "use_id_type": "int"
+                  },
+                  "sorting_weight": {
+                    "key": "Optional"
+                  },
+                  "web_server_id": {
+                    "key": "Optional",
+                    "type": "use_id",
+                    "use_id_type": "web_server::WebServer"
+                  }
+                }
+              },
+              "type": "schema",
+              "visibility": "advanced"
+            },
+            "name": {
+              "key": "Optional",
+              "docs": "**string**: The name for the event. At least one of **id** and **name** must be specified.\n\n*See also: [Event Component](https://esphome.io/components/event#example-event-configuration)*"
+            },
+            "icon": {
+              "key": "Optional",
+              "docs": "**icon**: Manually set the icon to use for the event in the frontend.\n\n*See also: [Event Component](https://esphome.io/components/event#example-event-configuration)*"
+            },
+            "internal": {
+              "key": "Optional",
+              "docs": "**boolean**: Mark this component as internal. Internal components will not be exposed to the frontend (like Home Assistant). Only specifying an `id` without a `name` will implicitly set this to true.\n\n*See also: [Event Component](https://esphome.io/components/event#example-event-configuration)*"
+            },
+            "disabled_by_default": {
+              "key": "Optional",
+              "docs": "**boolean**: If true, then this entity should not be added to any client's frontend, (usually Home Assistant) without the user manually enabling it (via the Home Assistant UI).\n\n*See also: [Event Component](https://esphome.io/components/event#example-event-configuration)*"
+            },
+            "entity_category": {
+              "key": "Optional",
+              "docs": "**string**: The category of the entity. See [https://developers.home-assistant.io/docs/core/entity/#generic-properties](https://developers.home-assistant.io/docs/core/entity/#generic-properties) for a list of available options. Set to `\"\"` to remove the default entity category.\n\n*See also: [Event Component](https://esphome.io/components/event#example-event-configuration)*"
+            }
+          },
+          "extends": [
+            "core.ENTITY_BASE_SCHEMA",
+            "core.MQTT_COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

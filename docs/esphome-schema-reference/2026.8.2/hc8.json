@@ -1,0 +1,100 @@
+{
+  "hc8": {
+    "action": {
+      "calibrate": {
+        "schema": {
+          "config_vars": {
+            "baseline": {
+              "data_type": "uint16_t",
+              "key": "Required",
+              "templatable": true,
+              "type": "integer"
+            },
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "hc8::HC8Component"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) executes baseline calibration command on the sensor with the given ID."
+      }
+    }
+  },
+  "hc8.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "co2": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "carbon_dioxide"
+                  },
+                  "icon": {
+                    "default": "mdi:molecule-co2"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "ppm"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The CO\u2082 data from the sensor in parts per million (ppm). All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [HC8 CO\u2082 Sensor](https://esphome.io/components/sensor/hc8#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "hc8::HC8Component",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "uart::UARTDevice"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for actions.\n\n*See also: [HC8 CO\u2082 Sensor](https://esphome.io/components/sensor/hc8#configuration-variables)*"
+            },
+            "uart_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "uart::UARTComponent",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the [UART Component](https://esphome.io/components/uart) if you want to use multiple UART buses.\n\n*See also: [HC8 CO\u2082 Sensor](https://esphome.io/components/sensor/hc8#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`.\n\n*See also: [HC8 CO\u2082 Sensor](https://esphome.io/components/sensor/hc8#configuration-variables)*"
+            },
+            "warmup_time": {
+              "default": "75s",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_seconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The sensor has a warmup period during which it returns inaccurate readings (e.g., 500ppm, 505ppm). This setting discards readings until the warmup time has elapsed (returning `NaN` during warmup). The datasheet specifies a 10-minute preheating time for full accuracy, with 90% accuracy achieved after 3 minutes. Empirical evidence shows that reasonable values are usually returned after about 1 minute. Defaults to `75s`.\n\n*See also: [HC8 CO\u2082 Sensor](https://esphome.io/components/sensor/hc8#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

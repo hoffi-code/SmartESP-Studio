@@ -1,0 +1,82 @@
+{
+  "i2c": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "device": {
+              "key": "Optional"
+            },
+            "frequency": {
+              "default": "50kHz",
+              "key": "Optional",
+              "docs": "**frequency**: Set the frequency the I\u00b2C bus should operate on. Defaults to `50kHz`. Values are `10kHz`, `50kHz`, `100kHz`, `200kHz`, ... `800kHz`.\n\n*See also: [I\u00b2C Bus](https://esphome.io/components/i2c#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "i2c::I2CBus",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID for this I\u00b2C bus if you need multiple I\u00b2C buses.\n\n*See also: [I\u00b2C Bus](https://esphome.io/components/i2c#configuration-variables)*"
+            },
+            "low_power_mode": {
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Enable the low-power (master only) I\u00b2C bus. Only available on ESP32C5, ESP32C6 and ESP32P4. Defaults to `false` unless required.\n\n*See also: [I\u00b2C Bus](https://esphome.io/components/i2c#configuration-variables)*"
+            },
+            "scan": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: If ESPHome should do a search of the I\u00b2C address space on startup. Defaults to `true`.\n\n*See also: [I\u00b2C Bus](https://esphome.io/components/i2c#configuration-variables)*"
+            },
+            "scl": {
+              "default": "SCL",
+              "internal": true,
+              "key": "Optional",
+              "modes": [],
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The pin for the clock line of the I\u00b2C bus. Defaults to the default of your board (usually GPIO22 for ESP32 and GPIO5 for ESP8266).\n\n*See also: [I\u00b2C Bus](https://esphome.io/components/i2c#configuration-variables)*"
+            },
+            "scl_pullup_enabled": {
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Enable the internal pullup resistor for the SCL pin. Defaults to `true`.\n\n*See also: [I\u00b2C Bus](https://esphome.io/components/i2c#configuration-variables)*"
+            },
+            "sda": {
+              "default": "SDA",
+              "internal": true,
+              "key": "Optional",
+              "modes": [],
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The pin for the data line of the I\u00b2C bus. Defaults to the default of your board (usually GPIO21 for ESP32 and GPIO4 for ESP8266).\n\n*See also: [I\u00b2C Bus](https://esphome.io/components/i2c#configuration-variables)*"
+            },
+            "sda_pullup_enabled": {
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Enable the internal pullup resistor for the SDA pin. Defaults to `true`.\n\n*See also: [I\u00b2C Bus](https://esphome.io/components/i2c#configuration-variables)*"
+            },
+            "timeout": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: Set the I\u00b2C bus timeout. Defaults to the framework defaults (`100us` on `esp32`, `1s` on `esp8266` and `1s` on `rp2040`). Maximum on `esp32` is 13ms.\n\n*See also: [I\u00b2C Bus](https://esphome.io/components/i2c#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

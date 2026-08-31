@@ -1,0 +1,68 @@
+{
+  "spi_device": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "bit_order": {
+              "default": "msb_first",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "msb_first": null,
+                "lsb_first": null
+              }
+            },
+            "cs_pin": {
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin"
+            },
+            "data_rate": {
+              "default": "1MHz",
+              "key": "Optional"
+            },
+            "id": {
+              "id_type": {
+                "class": "spi_device::SPIDeviceComponent",
+                "parents": [
+                  "Component",
+                  "spi::SPIDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "release_device": {
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "spi_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "spi::SPIComponent"
+            },
+            "spi_mode": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "MODE0": null,
+                "MODE1": null,
+                "MODE2": null,
+                "MODE3": null,
+                "0": null,
+                "1": null,
+                "2": null,
+                "3": null
+              }
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

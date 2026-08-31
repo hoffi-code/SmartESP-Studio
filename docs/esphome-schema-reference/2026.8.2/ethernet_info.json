@@ -1,0 +1,158 @@
+{
+  "ethernet_info.text_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "dns_address": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "ethernet_info::DNSAddressEthernetInfo",
+                      "parents": [
+                        "text_sensor::TextSensor",
+                        "EntityBase",
+                        "Component"
+                      ]
+                    }
+                  }
+                },
+                "extends": [
+                  "text_sensor._TEXT_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Expose the DNS Address of the ESP as text sensor. [Text Sensor](https://esphome.io/components/text_sensor#config-text_sensor).\n\n*See also: [Ethernet Info Text Sensor](https://esphome.io/components/text_sensor/ethernet_info#configuration-variables)*"
+            },
+            "ip_address": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "address_0": {
+                    "key": "Optional",
+                    "schema": {
+                      "config_vars": {
+                        "entity_category": {
+                          "default": "diagnostic"
+                        }
+                      },
+                      "extends": [
+                        "text_sensor._TEXT_SENSOR_SCHEMA"
+                      ]
+                    },
+                    "type": "schema"
+                  },
+                  "address_1": {
+                    "key": "Optional",
+                    "schema": {
+                      "config_vars": {
+                        "entity_category": {
+                          "default": "diagnostic"
+                        }
+                      },
+                      "extends": [
+                        "text_sensor._TEXT_SENSOR_SCHEMA"
+                      ]
+                    },
+                    "type": "schema"
+                  },
+                  "address_2": {
+                    "key": "Optional",
+                    "schema": {
+                      "config_vars": {
+                        "entity_category": {
+                          "default": "diagnostic"
+                        }
+                      },
+                      "extends": [
+                        "text_sensor._TEXT_SENSOR_SCHEMA"
+                      ]
+                    },
+                    "type": "schema"
+                  },
+                  "address_3": {
+                    "key": "Optional",
+                    "schema": {
+                      "config_vars": {
+                        "entity_category": {
+                          "default": "diagnostic"
+                        }
+                      },
+                      "extends": [
+                        "text_sensor._TEXT_SENSOR_SCHEMA"
+                      ]
+                    },
+                    "type": "schema"
+                  },
+                  "address_4": {
+                    "key": "Optional",
+                    "schema": {
+                      "config_vars": {
+                        "entity_category": {
+                          "default": "diagnostic"
+                        }
+                      },
+                      "extends": [
+                        "text_sensor._TEXT_SENSOR_SCHEMA"
+                      ]
+                    },
+                    "type": "schema"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "ethernet_info::IPAddressEthernetInfo",
+                      "parents": [
+                        "text_sensor::TextSensor",
+                        "EntityBase",
+                        "Component"
+                      ]
+                    }
+                  }
+                },
+                "extends": [
+                  "text_sensor._TEXT_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Expose the IP Address of the ESP as a text sensor. All options from [Text Sensor](https://esphome.io/components/text_sensor#config-text_sensor).\n\n*See also: [Ethernet Info Text Sensor](https://esphome.io/components/text_sensor/ethernet_info#configuration-variables)*"
+            },
+            "mac_address": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "ethernet_info::MACAddressEthernetInfo",
+                      "parents": [
+                        "text_sensor::TextSensor",
+                        "EntityBase",
+                        "Component"
+                      ]
+                    }
+                  }
+                },
+                "extends": [
+                  "text_sensor._TEXT_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Expose the MAC Address of the ESP as text sensor. [Text Sensor](https://esphome.io/components/text_sensor#config-text_sensor).\n\n*See also: [Ethernet Info Text Sensor](https://esphome.io/components/text_sensor/ethernet_info#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "interval": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "has_required_var": true,
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "interval::IntervalTrigger",
+                "parents": [
+                  "Trigger<>",
+                  "Trigger",
+                  "PollingComponent",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "interval": {
+              "key": "Required",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to execute the action with.\n\n*See also: [Interval Component](https://esphome.io/components/interval#configuration-variables)*"
+            },
+            "setup_priority": {
+              "key": "Optional",
+              "visibility": "yaml_only"
+            },
+            "startup_delay": {
+              "default": "0s",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: An optional startup delay - defaults to zero.\n\n*See also: [Interval Component](https://esphome.io/components/interval#configuration-variables)*"
+            },
+            "then": {
+              "type": "trigger",
+              "key": "Required",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action to perform.\n\n*See also: [Interval Component](https://esphome.io/components/interval#configuration-variables)*"
+            }
+          }
+        },
+        "type": "trigger"
+      }
+    }
+  }
+}

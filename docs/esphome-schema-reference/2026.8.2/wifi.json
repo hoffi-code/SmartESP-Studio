@@ -1,0 +1,391 @@
+{
+  "wifi": {
+    "action": {
+      "configure": {
+        "schema": {
+          "config_vars": {
+            "on_connect": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An action to be performed when a connection is established.\n\n*See also: [WiFi Component](https://esphome.io/components/wifi#configuration-variables)*"
+            },
+            "on_error": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An action to be performed when the connection fails.\n\n*See also: [WiFi Component](https://esphome.io/components/wifi#configuration-variables)*"
+            },
+            "password": {
+              "key": "Required",
+              "sensitive": true,
+              "sensitive_source": "explicit",
+              "templatable": true,
+              "docs": "**string**: The password of the WiFi access point. Leave empty for no password.\n\n*See also: [WiFi Component](https://esphome.io/components/wifi#configuration-variables)*"
+            },
+            "save": {
+              "default": "True",
+              "key": "Optional",
+              "templatable": true,
+              "type": "boolean",
+              "docs": "**boolean**: If set to `true`, the SSID and password will be saved in persistent memory. Defaults to `true`.\n\n*See also: [WiFi Component](https://esphome.io/components/wifi#configuration-variables)*"
+            },
+            "ssid": {
+              "key": "Required",
+              "sensitive": true,
+              "sensitive_source": "explicit",
+              "templatable": true,
+              "docs": "**string**: The name of the WiFi access point.\n\n*See also: [WiFi Component](https://esphome.io/components/wifi#configuration-variables)*"
+            },
+            "timeout": {
+              "default": "30000ms",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "templatable": true,
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The time to wait for the connection to be established. Defaults to 30 seconds.\n\n*See also: [WiFi Component](https://esphome.io/components/wifi#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This action connects to an SSID and password, optionally saving it in persistent memory so that the next time the WiFi interface is enabled, it will connect to the stored access point."
+      },
+      "disable": {
+        "docs": "This action turns off the WiFi interface on demand."
+      },
+      "enable": {
+        "docs": "This action turns on the WiFi interface on demand."
+      }
+    },
+    "condition": {
+      "ap_active": {
+        "docs": "This [Condition](https://esphome.io/automations/actions#all-conditions) checks if WiFi AP is currently active or not."
+      },
+      "connected": {
+        "docs": "This [Condition](https://esphome.io/automations/actions#all-conditions) checks if the WiFi client is currently connected to a station."
+      },
+      "enabled": {
+        "docs": "This [Condition](https://esphome.io/automations/actions#all-conditions) checks if WiFi is currently enabled or not."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "ap": {
+              "key": "Optional",
+              "docs": "Enable an access point mode on the node.\n\n*See also: [WiFi Component](https://esphome.io/components/wifi#configuration-variables)*"
+            },
+            "band_mode": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "AUTO": null,
+                "2.4GHZ": null,
+                "5GHZ": null
+              },
+              "docs": "**string**: Only on `esp32-c5`. Controls which WiFi frequency band the device uses. Possible values are `AUTO` (use both 2.4 GHz and 5 GHz), `2.4GHZ` (2.4 GHz only), and `5GHZ` (5 GHz only). If not specified, it defaults to `AUTO`.\n\n*See also: [WiFi Component](https://esphome.io/components/wifi#configuration-variables)*"
+            },
+            "domain": {
+              "default": ".local",
+              "key": "Optional",
+              "docs": "**string**: Set the domain of the node hostname used for uploading. For example, if it's set to `.local`, all uploads will be sent to `<HOSTNAME>.local`. Defaults to `.local`.\n\n*See also: [WiFi Component](https://esphome.io/components/wifi#configuration-variables)*"
+            },
+            "eap": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "wifi.EAP_AUTH_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "See [Enterprise Authentication](https://esphome.io/components/wifi#eap).\n\n*See also: [WiFi Component](https://esphome.io/components/wifi#configuration-variables)*"
+            },
+            "enable_btm": {
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**bool**: Only on `esp32`. Enable 802.11v BSS Transition Management support.\n\n*See also: [WiFi Component](https://esphome.io/components/wifi#configuration-variables)*"
+            },
+            "enable_on_boot": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: If enabled, the WiFi interface will be enabled on boot. Defaults to `true`.\n\n*See also: [WiFi Component](https://esphome.io/components/wifi#configuration-variables)*"
+            },
+            "enable_rrm": {
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**bool**: Only on `esp32`. Enable 802.11k Radio Resource Management support.\n\n*See also: [WiFi Component](https://esphome.io/components/wifi#configuration-variables)*"
+            },
+            "fast_connect": {
+              "default": "False",
+              "key": "Optional",
+              "docs": "**boolean**: If enabled, directly connects to WiFi network without doing a full scan first. This can significantly improve connection times (thus reducing power consumption). Defaults to `off`. The downside is that this option connects to the first network the ESP sees, even if that network is very far away and better ones are available. If multiple networks are configured, the last successfully connected one is tested first. In case it fails, all networks are then tested one after the other in their declared order, starting with the first one in the list. Instead of a boolean, this option also accepts a settings block: ```yaml wifi:\n\n*See also: [WiFi Component](https://esphome.io/components/wifi#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "wifi::WiFiComponent",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [WiFi Component](https://esphome.io/components/wifi#configuration-variables)*"
+            },
+            "manual_ip": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "wifi.STA_MANUAL_IP_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Manually configure the static IP of the node when using this network. Note that when using different static IP addresses on each network, it is required to set `use_address`, as ESPHome cannot infer to which network the node is connected.\n\n*See also: [WiFi Component](https://esphome.io/components/wifi#configuration-variables)*"
+            },
+            "min_auth_mode": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "WPA": {
+                  "docs": "Allows WPA, WPA2, and WPA3 networks (least secure, uses TKIP encryption with known vulnerabilities)"
+                },
+                "WPA2": {
+                  "docs": "Allows WPA2 and WPA3 networks (recommended, uses AES encryption)"
+                },
+                "WPA3": {
+                  "docs": "Only allows WPA3 networks (most secure, ESP32 only)"
+                }
+              },
+              "docs": "**string**: Only on `esp32` and `esp8266`. Sets the minimum WiFi authentication mode that the device will accept when connecting to access points. This controls the weakest encryption your device will allow. Possible values are:\n\n*See also: [WiFi Component](https://esphome.io/components/wifi#configuration-variables)*"
+            },
+            "networks": {
+              "is_list": true,
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "bssid": {
+                    "key": "Optional"
+                  },
+                  "eap": {
+                    "key": "Optional",
+                    "schema": {
+                      "extends": [
+                        "wifi.EAP_AUTH_SCHEMA"
+                      ]
+                    },
+                    "type": "schema"
+                  },
+                  "hidden": {
+                    "key": "Optional",
+                    "type": "boolean"
+                  },
+                  "priority": {
+                    "default": "0",
+                    "key": "Optional",
+                    "type": "integer"
+                  }
+                },
+                "extends": [
+                  "wifi.WIFI_NETWORK_BASE"
+                ]
+              },
+              "type": "schema",
+              "docs": "Configure multiple WiFi networks to connect to, the best one that is reachable will be connected to. See [Connecting to Multiple Networks](https://esphome.io/components/wifi#wifi-networks).\n\n*See also: [WiFi Component](https://esphome.io/components/wifi#configuration-variables)*"
+            },
+            "on_connect": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An action to be performed when a connection is established.\n\n*See also: [WiFi Component](https://esphome.io/components/wifi#configuration-variables)*"
+            },
+            "on_disconnect": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An action to be performed when the connection is dropped.\n\n*See also: [WiFi Component](https://esphome.io/components/wifi#configuration-variables)*"
+            },
+            "output_power": {
+              "default": "20.0",
+              "key": "Optional",
+              "docs": "**string**: The amount of TX power for the WiFi interface from 8.5dB to 20.5dB. Default for ESP8266 is 20dB, 20.5dB might cause unexpected restarts.\n\n*See also: [WiFi Component](https://esphome.io/components/wifi#configuration-variables)*"
+            },
+            "passive_scan": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: If enabled, then the device will perform WiFi scans in a passive fashion. Defaults to `false`.\n\n*See also: [WiFi Component](https://esphome.io/components/wifi#configuration-variables)*"
+            },
+            "password": {
+              "key": "Optional",
+              "sensitive": true,
+              "sensitive_source": "explicit",
+              "docs": "**string**: The password to present to the authentication server. For EAP-TLS this password may be set to decrypt to private key instead.\n\n*See also: [WiFi Component](https://esphome.io/components/wifi#configuration-variables)*"
+            },
+            "phy_mode": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "AUTO": null,
+                "11B": null,
+                "11G": null,
+                "11N": null
+              },
+              "docs": "**string**: Only on `esp8266`. Pins the radio to a specific 802.11 PHY mode. Possible values are `AUTO`, `11B`, `11G`, and `11N`. Defaults to `AUTO`, which leaves the SDK at its default behavior. There is a known compatibility issue with some routers when ESP8266 devices use 802.11n; you can work around it by limiting the ESP to 802.11g with `phy_mode: 11G`.\n\n*See also: [WiFi Component](https://esphome.io/components/wifi#configuration-variables)*"
+            },
+            "post_connect_roaming": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**bool**: Enable basic post-connect roaming for stationary devices. After connecting to a non-hidden network, the device will periodically check for better access points with the same SSID and switch if one is found with significantly better signal (+10 dB). This helps devices recover from scenarios where they connect to a suboptimal AP (e.g., after an AP reboot or site power loss). Automatically disabled if `enable_btm` or `enable_rrm` is enabled. See [Post-Connect Roaming](https://esphome.io/components/wifi#post-connect-roaming). Defaults to `true`.\n\n*See also: [WiFi Component](https://esphome.io/components/wifi#configuration-variables)*"
+            },
+            "power_save_mode": {
+              "default": "none",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "NONE": null,
+                "LIGHT": null,
+                "HIGH": null
+              },
+              "docs": "**string**: The power save mode for the WiFi interface. See [Power Save Mode](https://esphome.io/components/wifi#power-save-mode)\n\n*See also: [WiFi Component](https://esphome.io/components/wifi#configuration-variables)*"
+            },
+            "reboot_timeout": {
+              "default": "15min",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The amount of time to wait before rebooting when no WiFi connection exists. Can be disabled by setting this to `0s`, but note that the low level IP stack currently seems to have issues with WiFi where a full reboot is required to get the interface back working. Defaults to `15min`. Does not apply when in access point mode.\n\n*See also: [WiFi Component](https://esphome.io/components/wifi#configuration-variables)*"
+            },
+            "ssid": {
+              "key": "Optional",
+              "sensitive": true,
+              "sensitive_source": "explicit",
+              "docs": "**string**: The SSID or WiFi network name.\n\n*See also: [WiFi Component](https://esphome.io/components/wifi#configuration-variables)*"
+            },
+            "use_address": {
+              "key": "Optional",
+              "type": "string",
+              "docs": "**string**: Manually override what address to use to connect to the ESP. Defaults to auto-generated value. Example, if you have changed your static IP and want to flash OTA to the previously configured IP address.\n\n*See also: [WiFi Component](https://esphome.io/components/wifi#configuration-variables)*"
+            },
+            "use_psram": {
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: For ESP32 only, requests that the WiFi libraries try to allocate memory from PSRAM. Defaults to `false`. Requires PSRAM to be configured.\n\n*See also: [WiFi Component](https://esphome.io/components/wifi#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "EAP_AUTH_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "certificate": {
+              "key": "Optional"
+            },
+            "certificate_authority": {
+              "key": "Optional"
+            },
+            "identity": {
+              "key": "Optional",
+              "type": "string"
+            },
+            "key": {
+              "key": "Optional"
+            },
+            "password": {
+              "key": "Optional",
+              "sensitive": true,
+              "sensitive_source": "explicit",
+              "type": "string"
+            },
+            "ttls_phase_2": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "pap": null,
+                "chap": null,
+                "mschap": null,
+                "mschapv2": null,
+                "eap": null
+              }
+            },
+            "username": {
+              "key": "Optional",
+              "type": "string"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "STA_MANUAL_IP_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "dns1": {
+              "default": "0.0.0.0",
+              "key": "Optional",
+              "docs": "**IPv4 address**: The main DNS server to use.\n\n*See also: [WiFi Component](https://esphome.io/components/wifi#configuration-variables)*"
+            },
+            "dns2": {
+              "default": "0.0.0.0",
+              "key": "Optional",
+              "docs": "**IPv4 address**: The backup DNS server to use.\n\n*See also: [WiFi Component](https://esphome.io/components/wifi#configuration-variables)*"
+            },
+            "gateway": {
+              "key": "Required",
+              "docs": "**IPv4 address**: The gateway of the local network.\n\n*See also: [WiFi Component](https://esphome.io/components/wifi#configuration-variables)*"
+            },
+            "static_ip": {
+              "key": "Required",
+              "docs": "**IPv4 address**: The static IP of your node.\n\n*See also: [WiFi Component](https://esphome.io/components/wifi#configuration-variables)*"
+            },
+            "subnet": {
+              "key": "Required",
+              "docs": "**IPv4 address**: The subnet of the local network.\n\n*See also: [WiFi Component](https://esphome.io/components/wifi#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "WIFI_NETWORK_BASE": {
+        "schema": {
+          "config_vars": {
+            "channel": {
+              "key": "Optional"
+            },
+            "id": {
+              "id_type": {
+                "class": "wifi::WiFiAP",
+                "parents": []
+              },
+              "key": "GeneratedID"
+            },
+            "manual_ip": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "wifi.STA_MANUAL_IP_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "password": {
+              "key": "Optional",
+              "sensitive": true,
+              "sensitive_source": "explicit"
+            },
+            "ssid": {
+              "key": "Optional",
+              "sensitive": true,
+              "sensitive_source": "explicit"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

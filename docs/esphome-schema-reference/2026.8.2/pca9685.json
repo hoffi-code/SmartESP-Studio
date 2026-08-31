@@ -1,0 +1,95 @@
+{
+  "pca9685": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "64",
+              "key": "Optional",
+              "docs": "**int**: The I\u00b2C address of the driver.\n\n*See also: [PCA9685](https://esphome.io/components/output/pca9685#configuration-variables)*"
+            },
+            "external_clock_input": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**bool**: Enable external clock input. PRE_SCALE register will by set to 3. Default to `false`.\n\n*See also: [PCA9685](https://esphome.io/components/output/pca9685#configuration-variables)*"
+            },
+            "frequency": {
+              "key": "Optional",
+              "docs": "**frequency**: The frequency to let the\n\n*See also: [PCA9685](https://esphome.io/components/output/pca9685#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "pca9685::PCA9685Output",
+                "parents": [
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id to use for\n\n*See also: [PCA9685](https://esphome.io/components/output/pca9685#configuration-variables)*"
+            },
+            "phase_balancer": {
+              "default": "linear",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "none": null,
+                "linear": null
+              },
+              "docs": "**string**: The phase balancer algorithm to use. See [Phase Balancer](https://esphome.io/components/output/pca9685#phase-balancer) below.\n\n*See also: [PCA9685](https://esphome.io/components/output/pca9685#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "pca9685.output": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "channel": {
+              "key": "Required",
+              "type": "integer",
+              "docs": "**int**: Choose the channel of the PCA9685 of this output component. Must be in range from 0 to 15.\n\n*See also: [PCA9685](https://esphome.io/components/output/pca9685#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "pca9685::PCA9685Channel",
+                "parents": [
+                  "output::FloatOutput",
+                  "output::BinaryOutput"
+                ]
+              },
+              "key": "Required",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id to use for this output component.\n\n*See also: [PCA9685](https://esphome.io/components/output/pca9685#configuration-variables)*"
+            },
+            "pca9685_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "pca9685::PCA9685Output",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the [PCA9685 hub](https://esphome.io/components/output/pca9685#pca9685-component). Use this if you have multiple PCA9685s you want to use at the same time.\n\n*See also: [PCA9685](https://esphome.io/components/output/pca9685#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "output.FLOAT_OUTPUT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

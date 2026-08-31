@@ -1,0 +1,51 @@
+{
+  "ble_nus": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "debug": {
+              "key": "Optional",
+              "docs": "**mapping**: Options for debugging communication on the UART hub, see [Debugging](https://esphome.io/components/uart#debugging).\n\n*See also: [Nordic UART Service (NUS)](https://esphome.io/components/ble_nus#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "ble_nus::BLENUS",
+                "parents": [
+                  "Component",
+                  "uart::UARTComponent"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "rx_buffer_size": {
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Size of the receive buffer in bytes. Range: 160-8192. Defaults to `512`. Valid only for mode `uart`.\n\n*See also: [Nordic UART Service (NUS)](https://esphome.io/components/ble_nus#configuration-variables)*"
+            },
+            "tx_buffer_size": {
+              "default": "512",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Size of the transmit buffer in bytes. Range: 160-8192. Defaults to `512`.\n\n*See also: [Nordic UART Service (NUS)](https://esphome.io/components/ble_nus#configuration-variables)*"
+            },
+            "type": {
+              "default": "logs",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "logs": null,
+                "uart": null
+              },
+              "docs": "**string**: Mode of operation. One of `logs` or `uart`. `logs` streams ESPHome logs. `uart` provides bi-directional communication. Defaults to `logs`.\n\n*See also: [Nordic UART Service (NUS)](https://esphome.io/components/ble_nus#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

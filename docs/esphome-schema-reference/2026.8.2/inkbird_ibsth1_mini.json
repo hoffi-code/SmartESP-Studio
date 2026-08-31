@@ -1,0 +1,130 @@
+{
+  "inkbird_ibsth1_mini.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "battery_level": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "battery"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "%"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the battery level sensor\n\n*See also: [Inkbird IBS-TH1, IBS-TH1 Mini, and IBS-TH2 BLE Sensor](https://esphome.io/components/sensor/inkbird_ibsth1_mini#configuration-variables)*"
+            },
+            "external_temperature": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the external temperature sensor.\n\n*See also: [Inkbird IBS-TH1, IBS-TH1 Mini, and IBS-TH2 BLE Sensor](https://esphome.io/components/sensor/inkbird_ibsth1_mini#configuration-variables)*"
+            },
+            "humidity": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "humidity"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "%"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the humidity sensor\n\n*See also: [Inkbird IBS-TH1, IBS-TH1 Mini, and IBS-TH2 BLE Sensor](https://esphome.io/components/sensor/inkbird_ibsth1_mini#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "inkbird_ibsth1_mini::InkbirdIbstH1Mini",
+                "parents": [
+                  "ble_device_base::ESPBTDeviceListener",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "mac_address": {
+              "key": "Required",
+              "docs": "**MAC Address**: The MAC address of the Inkbird IBS-TH1 device.\n\n*See also: [Inkbird IBS-TH1, IBS-TH1 Mini, and IBS-TH2 BLE Sensor](https://esphome.io/components/sensor/inkbird_ibsth1_mini#configuration-variables)*"
+            },
+            "temperature": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the temperature sensor.\n\n*See also: [Inkbird IBS-TH1, IBS-TH1 Mini, and IBS-TH2 BLE Sensor](https://esphome.io/components/sensor/inkbird_ibsth1_mini#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA",
+            "ble_device_base.BLE_DEVICE_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

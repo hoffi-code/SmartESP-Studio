@@ -1,0 +1,194 @@
+{
+  "nau7802": {
+    "action": {
+      "calibrate_external_offset": {
+        "schema": {
+          "extends": [
+            "nau7802.sensor.NAU7802_CALIBRATE_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "calibrate_gain": {
+        "schema": {
+          "extends": [
+            "nau7802.sensor.NAU7802_CALIBRATE_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "calibrate_internal_offset": {
+        "schema": {
+          "extends": [
+            "nau7802.sensor.NAU7802_CALIBRATE_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "nau7802.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "0"
+            },
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "42",
+              "key": "Optional"
+            },
+            "gain": {
+              "default": "128",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "128": {
+                  "docs": null
+                },
+                "64": {
+                  "docs": null
+                },
+                "32": {
+                  "docs": null
+                },
+                "16": {
+                  "docs": null
+                },
+                "8": {
+                  "docs": null
+                },
+                "4": {
+                  "docs": null
+                },
+                "2": {
+                  "docs": null
+                },
+                "1": {
+                  "docs": null
+                }
+              },
+              "docs": "**enum**: ADC gain.\n\n*See also: [NAU7802 24-bit ADC](https://esphome.io/components/sensor/nau7802#configuration-variables)*"
+            },
+            "gain_calibration": {
+              "default": "1.0",
+              "key": "Optional",
+              "docs": "**float**: Pre calibrated gain value, range 0 to 511.9999998807907\n\n*See also: [NAU7802 24-bit ADC](https://esphome.io/components/sensor/nau7802#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "icon": {
+              "default": "mdi:scale"
+            },
+            "id": {
+              "id_type": {
+                "class": "nau7802::NAU7802Sensor",
+                "parents": [
+                  "sensor::Sensor",
+                  "EntityBase",
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              }
+            },
+            "ldo_voltage": {
+              "default": "3.0V",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "2.4V": {
+                  "docs": null
+                },
+                "2.7V": {
+                  "docs": null
+                },
+                "3.0V": {
+                  "docs": null
+                },
+                "3.3V": {
+                  "docs": null
+                },
+                "3.6V": {
+                  "docs": null
+                },
+                "3.9V": {
+                  "docs": null
+                },
+                "4.2V": {
+                  "docs": null
+                },
+                "4.5V": {
+                  "docs": null
+                },
+                "EXTERNAL": null,
+                "EXT": null
+              },
+              "docs": "**enum**: Voltage used for reference, should be less than `VCC`\n\n*See also: [NAU7802 24-bit ADC](https://esphome.io/components/sensor/nau7802#configuration-variables)*"
+            },
+            "offset_calibration": {
+              "default": "0",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Pre calibrated offset value, range -8388608 to 8388607\n\n*See also: [NAU7802 24-bit ADC](https://esphome.io/components/sensor/nau7802#configuration-variables)*"
+            },
+            "samples_per_second": {
+              "default": "10",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "320": {
+                  "docs": null
+                },
+                "80": {
+                  "docs": null
+                },
+                "40": {
+                  "docs": null
+                },
+                "20": {
+                  "docs": null
+                },
+                "10": {
+                  "docs": null
+                }
+              },
+              "docs": "**enum**: Sets the internal chip sample rate\n\n*See also: [NAU7802 24-bit ADC](https://esphome.io/components/sensor/nau7802#configuration-variables)*"
+            },
+            "state_class": {
+              "default": "measurement"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`.\n\n*See also: [NAU7802 24-bit ADC](https://esphome.io/components/sensor/nau7802#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "NAU7802_CALIBRATE_SCHEMA": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "nau7802::NAU7802Sensor"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "mitsubishi.climate": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "horizontal_default": {
+              "default": "middle",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "left": null,
+                "middle-left": null,
+                "middle": null,
+                "middle-right": null,
+                "right": null,
+                "split": null
+              }
+            },
+            "humidity_sensor": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "sensor::Sensor"
+            },
+            "id": {
+              "id_type": {
+                "class": "mitsubishi::MitsubishiClimate",
+                "parents": [
+                  "climate_ir::ClimateIR",
+                  "climate::Climate",
+                  "EntityBase",
+                  "Component",
+                  "remote_base::RemoteReceiverListener",
+                  "remote_base::RemoteTransmittable"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "receiver_id": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "remote_base::RemoteReceiverBase"
+            },
+            "sensor": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "sensor::Sensor"
+            },
+            "set_fan_mode": {
+              "default": "3levels",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "quiet_4levels": null,
+                "4levels": null,
+                "3levels": null
+              }
+            },
+            "supports_cool": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "supports_dry": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "supports_fan_only": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "supports_heat": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "transmitter_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "remote_base::RemoteTransmitterBase"
+            },
+            "vertical_default": {
+              "default": "middle",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "auto": null,
+                "up": null,
+                "middle-up": null,
+                "middle": null,
+                "middle-down": null,
+                "down": null
+              }
+            }
+          },
+          "extends": [
+            "climate._CLIMATE_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

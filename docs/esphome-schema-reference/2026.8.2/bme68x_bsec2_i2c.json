@@ -1,0 +1,37 @@
+{
+  "bme68x_bsec2_i2c": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "118",
+              "key": "Optional"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "bme68x_bsec2_i2c::BME68xBSEC2I2CComponent",
+                "parents": [
+                  "bme68x_bsec2::BME68xBSEC2Component",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              }
+            }
+          },
+          "extends": [
+            "bme68x_bsec2.CONFIG_SCHEMA_BASE"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

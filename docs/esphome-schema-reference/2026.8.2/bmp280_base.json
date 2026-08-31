@@ -1,0 +1,104 @@
+{
+  "bmp280_base": {
+    "schemas": {
+      "CONFIG_SCHEMA_BASE": {
+        "schema": {
+          "config_vars": {
+            "iir_filter": {
+              "default": "OFF",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "OFF": null,
+                "2X": null,
+                "4X": null,
+                "8X": null,
+                "16X": null
+              }
+            },
+            "pressure": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "pressure"
+                  },
+                  "oversampling": {
+                    "default": "16X",
+                    "key": "Optional",
+                    "type": "enum",
+                    "values": {
+                      "NONE": null,
+                      "1X": null,
+                      "2X": null,
+                      "4X": null,
+                      "8X": null,
+                      "16X": null
+                    }
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "hPa"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "temperature": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "oversampling": {
+                    "default": "16X",
+                    "key": "Optional",
+                    "type": "enum",
+                    "values": {
+                      "NONE": null,
+                      "1X": null,
+                      "2X": null,
+                      "4X": null,
+                      "8X": null,
+                      "16X": null
+                    }
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

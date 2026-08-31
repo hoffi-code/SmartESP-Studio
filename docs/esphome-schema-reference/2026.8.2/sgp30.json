@@ -1,0 +1,186 @@
+{
+  "sgp30.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "88",
+              "key": "Optional",
+              "docs": "**int**: Manually specify the I\u00b2C address of the sensor. Defaults to `0x58`.\n\n*See also: [SGP30 CO\u2082 and Volatile Organic Compound Sensor](https://esphome.io/components/sensor/sgp30#configuration-variables)*"
+            },
+            "baseline": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "eco2_baseline": {
+                    "data_type": "hex_uint16_t",
+                    "key": "Required",
+                    "docs": "**int**: The eCO2 baseline for calibration purposes. After OTA, this value is used to calibrate the sensor.\n\n*See also: [SGP30 CO\u2082 and Volatile Organic Compound Sensor](https://esphome.io/components/sensor/sgp30#configuration-variables)*"
+                  },
+                  "tvoc_baseline": {
+                    "data_type": "hex_uint16_t",
+                    "key": "Required",
+                    "docs": "**int**: The TVOC baseline for calibration purposes. After OTA, this value is used to calibrate the sensor.\n\n*See also: [SGP30 CO\u2082 and Volatile Organic Compound Sensor](https://esphome.io/components/sensor/sgp30#configuration-variables)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "The block containing baselines for calibration purposes. See [Calibrating Baseline](https://esphome.io/components/sensor/sgp30#sgp30-calibrating) for more info.\n\n*See also: [SGP30 CO\u2082 and Volatile Organic Compound Sensor](https://esphome.io/components/sensor/sgp30#configuration-variables)*"
+            },
+            "compensation": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "humidity_source": {
+                    "key": "Required",
+                    "type": "use_id",
+                    "use_id_type": "sensor::Sensor",
+                    "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Give an external relative humidity sensor ID here. This can improve the sensor's internal calculations.\n\n*See also: [SGP30 CO\u2082 and Volatile Organic Compound Sensor](https://esphome.io/components/sensor/sgp30#configuration-variables)*"
+                  },
+                  "temperature_source": {
+                    "key": "Required",
+                    "type": "use_id",
+                    "use_id_type": "sensor::Sensor",
+                    "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Give an external temperature sensor ID here. The data must be in Celsius. This can improve the sensor's internal calculations.\n\n*See also: [SGP30 CO\u2082 and Volatile Organic Compound Sensor](https://esphome.io/components/sensor/sgp30#configuration-variables)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "The block containing sensors used for compensation. Both values must be supplied in order to be able to generate the absolute humidity to be reported to the sensor.\n\n*See also: [SGP30 CO\u2082 and Volatile Organic Compound Sensor](https://esphome.io/components/sensor/sgp30#configuration-variables)*"
+            },
+            "eco2": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "carbon_dioxide"
+                  },
+                  "icon": {
+                    "default": "mdi:molecule-co2"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "ppm"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the CO\u2082eq. sensor.\n\n*See also: [SGP30 CO\u2082 and Volatile Organic Compound Sensor](https://esphome.io/components/sensor/sgp30#configuration-variables)*"
+            },
+            "eco2_baseline": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "icon": {
+                    "default": "mdi:molecule-co2"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the CO\u2082eq. baseline value sensor. Baseline value is published in decimals.\n\n*See also: [SGP30 CO\u2082 and Volatile Organic Compound Sensor](https://esphome.io/components/sensor/sgp30#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "sgp30::SGP30Component",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "sensirion_common::SensirionI2CDevice",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "store_baseline": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Store the sensor baselines persistently when calculated or updated. Defaults to `true`.\n\n*See also: [SGP30 CO\u2082 and Volatile Organic Compound Sensor](https://esphome.io/components/sensor/sgp30#configuration-variables)*"
+            },
+            "tvoc": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "volatile_organic_compounds_parts"
+                  },
+                  "icon": {
+                    "default": "mdi:radiator"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "ppb"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the total Volatile Organic Compounds sensor.\n\n*See also: [SGP30 CO\u2082 and Volatile Organic Compound Sensor](https://esphome.io/components/sensor/sgp30#configuration-variables)*"
+            },
+            "tvoc_baseline": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "icon": {
+                    "default": "mdi:radiator"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the TVOC baseline value sensor. Baseline value is published in decimals.\n\n*See also: [SGP30 CO\u2082 and Volatile Organic Compound Sensor](https://esphome.io/components/sensor/sgp30#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`.\n\n*See also: [SGP30 CO\u2082 and Volatile Organic Compound Sensor](https://esphome.io/components/sensor/sgp30#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

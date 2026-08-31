@@ -1,0 +1,40 @@
+{
+  "ssd1327_base": {
+    "schemas": {
+      "SSD1327_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "brightness": {
+              "default": "1.0",
+              "key": "Optional",
+              "docs": "**percentage**: Set display brightness in %. Defaults to `100%`\n\n*See also: [SSD1327 OLED Display](https://esphome.io/components/display/ssd1327#configuration-variables)*"
+            },
+            "model": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "SSD1327_128X128": null
+              },
+              "docs": "The model of the display. At present, only one option is available:\n\n*See also: [SSD1327 OLED Display](https://esphome.io/components/display/ssd1327#configuration-variables)*"
+            },
+            "reset_pin": {
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The RESET pin. Defaults to not connected.\n\n*See also: [SSD1327 OLED Display](https://esphome.io/components/display/ssd1327#configuration-variables)*"
+            },
+            "update_interval": {}
+          },
+          "extends": [
+            "display.FULL_DISPLAY_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

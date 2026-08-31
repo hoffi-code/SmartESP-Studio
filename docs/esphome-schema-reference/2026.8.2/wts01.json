@@ -1,0 +1,41 @@
+{
+  "wts01.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "1"
+            },
+            "device_class": {
+              "default": "temperature"
+            },
+            "id": {
+              "id_type": {
+                "class": "wts01::WTS01Sensor",
+                "parents": [
+                  "Component",
+                  "uart::UARTDevice",
+                  "sensor::Sensor",
+                  "EntityBase"
+                ]
+              }
+            },
+            "state_class": {
+              "default": "measurement"
+            },
+            "unit_of_measurement": {
+              "default": "\u00b0C"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA",
+            "uart.UART_DEVICE_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

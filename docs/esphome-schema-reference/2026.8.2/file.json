@@ -1,0 +1,116 @@
+{
+  "file.image": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "byte_order": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "BIG_ENDIAN": null,
+                "LITTLE_ENDIAN": null
+              },
+              "docs": "**string**: For RGB565 images, the pixels are converted to 16 bit values. By default these will be stored in little endian byte order (LSB first), but you can override this by setting `byte_order` to `big_endian`. Options are `little_endian` (default) and `big_endian`. Not applicable to other image formats. Images used in displays and LVGL are expected to be in little endian format.\n\n*See also: [File](https://esphome.io/components/image/file#configuration-variables)*"
+            },
+            "dither": {
+              "default": "NONE",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "NONE": {
+                  "docs": null
+                },
+                "FLOYDSTEINBERG": {
+                  "docs": null
+                }
+              },
+              "docs": "Specifies which dither method is used to process the image, only used for `BINARY` type images. Defaults to `NONE`. You can read more about it on the [Pillow documentation](https://pillow.readthedocs.io/en/stable/reference/Image.html?highlight=Dither#PIL.Image.Image.convert) and on [Wikipedia](https://en.wikipedia.org/wiki/Dither).\n\n*See also: [File](https://esphome.io/components/image/file#configuration-variables)*"
+            },
+            "file": {
+              "key": "Required",
+              "type": "typed",
+              "typed_key": "source",
+              "types": {
+                "local": {
+                  "config_vars": {
+                    "path": {
+                      "key": "Required"
+                    }
+                  }
+                },
+                "mdi": {
+                  "config_vars": {
+                    "icon": {
+                      "key": "Required",
+                      "type": "string"
+                    }
+                  }
+                },
+                "mdil": {
+                  "config_vars": {
+                    "icon": {
+                      "key": "Required",
+                      "type": "string"
+                    }
+                  }
+                },
+                "memory": {
+                  "config_vars": {
+                    "icon": {
+                      "key": "Required",
+                      "type": "string"
+                    }
+                  }
+                },
+                "web": {
+                  "config_vars": {
+                    "url": {
+                      "key": "Required",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "id": {
+              "id_type": {
+                "class": "image::Image",
+                "parents": []
+              },
+              "key": "Required",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID with which you will be able to reference the image later in your display code.\n\n*See also: [File](https://esphome.io/components/image/file#configuration-variables)*"
+            },
+            "invert_alpha": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Applicable to binary and grayscale only, this will invert the colors, i.e. make black white and vice versa. Useful for e-ink displays. Defaults to `false`.\n\n*See also: [File](https://esphome.io/components/image/file#configuration-variables)*"
+            },
+            "raw_data_id": {
+              "id_type": {
+                "class": "uint8_t",
+                "parents": null
+              },
+              "key": "GeneratedID"
+            },
+            "resize": {
+              "key": "Optional",
+              "docs": "**string**: If set, this will resize the image to fit inside the given dimensions `WIDTHxHEIGHT` and preserve the aspect ratio.\n\n*See also: [File](https://esphome.io/components/image/file#configuration-variables)*"
+            },
+            "transparency": {
+              "default": "opaque",
+              "key": "Optional",
+              "docs": "If set the alpha channel of the input image will be taken into account. The possible values are `opaque` (default), `chroma_key` and `alpha_channel`. Binary images do not support `alpha_channel`. See the discussion on transparency in the [image component](https://esphome.io/components/image#transparency-options).\n\n*See also: [File](https://esphome.io/components/image/file#configuration-variables)*"
+            },
+            "type": {
+              "key": "Required",
+              "docs": "Specifies how to encode image internally.\n\n*See also: [File](https://esphome.io/components/image/file#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

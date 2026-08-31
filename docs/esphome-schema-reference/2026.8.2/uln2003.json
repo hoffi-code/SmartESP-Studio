@@ -1,0 +1,87 @@
+{
+  "uln2003.stepper": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "uln2003::ULN2003",
+                "parents": [
+                  "stepper::Stepper",
+                  "Component"
+                ]
+              },
+              "key": "Required",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Specify the ID of the stepper so that you can control it.\n\n*See also: [Stepper Component](https://esphome.io/components/stepper#example-configuration-entry)*"
+            },
+            "pin_a": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin **a** of the stepper control board.\n\n*See also: [Stepper Component](https://esphome.io/components/stepper#example-configuration-entry)*"
+            },
+            "pin_b": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin **b** of the stepper control board.\n\n*See also: [Stepper Component](https://esphome.io/components/stepper#example-configuration-entry)*"
+            },
+            "pin_c": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin **c** of the stepper control board.\n\n*See also: [Stepper Component](https://esphome.io/components/stepper#example-configuration-entry)*"
+            },
+            "pin_d": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin **d** of the stepper control board.\n\n*See also: [Stepper Component](https://esphome.io/components/stepper#example-configuration-entry)*"
+            },
+            "sleep_when_done": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Whether to turn off all coils when the stepper has reached the target position\n\n*See also: [Stepper Component](https://esphome.io/components/stepper#example-configuration-entry)*"
+            },
+            "step_mode": {
+              "default": "FULL_STEP",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "FULL_STEP": {
+                  "docs": "Default"
+                },
+                "HALF_STEP": {
+                  "docs": null
+                },
+                "WAVE_DRIVE": {
+                  "docs": null
+                }
+              },
+              "docs": "**string**: The step mode to operate the motor with. One of:\n\n*See also: [Stepper Component](https://esphome.io/components/stepper#example-configuration-entry)*"
+            }
+          },
+          "extends": [
+            "stepper.STEPPER_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

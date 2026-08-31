@@ -1,0 +1,164 @@
+{
+  "libretiny": {
+    "schemas": {
+      "BASE_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "board": {
+              "key": "Required",
+              "type": "string"
+            },
+            "family": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "BK7231N": null,
+                "BK7231Q": null,
+                "BK7231T": null,
+                "BK7238": null,
+                "BK7251": null,
+                "LN882H": null,
+                "RTL8710B": null,
+                "RTL8720C": null
+              }
+            },
+            "framework": {
+              "default": "{}",
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "debug": {
+                    "default": "[]",
+                    "is_list": true,
+                    "key": "Optional",
+                    "type": "enum",
+                    "values": {
+                      "NONE": null,
+                      "WIFI": null,
+                      "CLIENT": null,
+                      "SERVER": null,
+                      "SSL": null,
+                      "OTA": null,
+                      "FDB": null,
+                      "MDNS": null,
+                      "LWIP": null,
+                      "LWIP_ASSERT": null
+                    }
+                  },
+                  "gpio_recover": {
+                    "default": "True",
+                    "key": "Optional",
+                    "type": "boolean"
+                  },
+                  "loglevel": {
+                    "default": "warn",
+                    "key": "Optional",
+                    "type": "enum",
+                    "values": {
+                      "VERBOSE": null,
+                      "TRACE": null,
+                      "DEBUG": null,
+                      "INFO": null,
+                      "WARN": null,
+                      "ERROR": null,
+                      "FATAL": null,
+                      "NONE": null
+                    }
+                  },
+                  "options": {
+                    "default": "{}",
+                    "key": "String",
+                    "key_type": "string_strict",
+                    "schema": {
+                      "config_vars": {
+                        "string": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "type": "schema"
+                  },
+                  "sdk_silent": {
+                    "default": "all",
+                    "key": "Optional",
+                    "type": "enum",
+                    "values": {
+                      "all": null,
+                      "auto": null,
+                      "none": null
+                    }
+                  },
+                  "source": {
+                    "key": "Optional",
+                    "type": "string",
+                    "visibility": "yaml_only"
+                  },
+                  "uart_port": {
+                    "key": "Optional",
+                    "type": "enum",
+                    "values": {
+                      "0": null,
+                      "1": null,
+                      "2": null
+                    }
+                  },
+                  "version": {
+                    "default": "recommended",
+                    "key": "Optional",
+                    "type": "string"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "id": {
+              "id_type": {
+                "class": "libretiny::LTComponent",
+                "parents": [
+                  "PollingComponent",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "CONFIG_SCHEMA": {}
+    }
+  },
+  "libretiny.text_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "libretiny": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "libretiny::LTComponent"
+            },
+            "version": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "icon": {
+                    "default": "mdi:cellphone-arrow-down"
+                  }
+                },
+                "extends": [
+                  "text_sensor._TEXT_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

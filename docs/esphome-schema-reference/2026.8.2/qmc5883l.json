@@ -1,0 +1,168 @@
+{
+  "qmc5883l.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "13",
+              "key": "Optional",
+              "docs": "**int**: Manually specify the I\u00b2c address of the sensor. Defaults to `0x0D`.\n\n*See also: [QMC5883L Magnetometer](https://esphome.io/components/sensor/qmc5883l#configuration-variables)*"
+            },
+            "data_rate": {
+              "default": "200hz",
+              "key": "Optional",
+              "docs": "**enum**: The data rate parameter for the sensor.\n\n*See also: [QMC5883L Magnetometer](https://esphome.io/components/sensor/qmc5883l#configuration-variables)*"
+            },
+            "drdy_pin": {
+              "key": "Optional",
+              "modes": [
+                "input"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The data ready pin. It is recommended to connect the data ready pin when using a low `update_interval`.\n\n*See also: [QMC5883L Magnetometer](https://esphome.io/components/sensor/qmc5883l#configuration-variables)*"
+            },
+            "field_strength_x": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "qmc5883l.sensor.field_strength_schema"
+                ]
+              },
+              "type": "schema",
+              "docs": "The field strength in microtesla along the X-Axis. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [QMC5883L Magnetometer](https://esphome.io/components/sensor/qmc5883l#configuration-variables)*"
+            },
+            "field_strength_y": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "qmc5883l.sensor.field_strength_schema"
+                ]
+              },
+              "type": "schema",
+              "docs": "The field strength in microtesla along the Y-Axis. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [QMC5883L Magnetometer](https://esphome.io/components/sensor/qmc5883l#configuration-variables)*"
+            },
+            "field_strength_z": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "qmc5883l.sensor.field_strength_schema"
+                ]
+              },
+              "type": "schema",
+              "docs": "The field strength in microtesla along the Z-Axis. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [QMC5883L Magnetometer](https://esphome.io/components/sensor/qmc5883l#configuration-variables)*"
+            },
+            "heading": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "icon": {
+                    "default": "mdi:screen-rotation"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The heading of the sensor in degrees. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [QMC5883L Magnetometer](https://esphome.io/components/sensor/qmc5883l#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "qmc5883l::QMC5883LComponent",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [QMC5883L Magnetometer](https://esphome.io/components/sensor/qmc5883l#configuration-variables)*"
+            },
+            "oversampling": {
+              "default": "512x",
+              "key": "Optional",
+              "docs": "**enum**: The oversampling parameter for the sensor.\n\n*See also: [QMC5883L Magnetometer](https://esphome.io/components/sensor/qmc5883l#configuration-variables)*"
+            },
+            "range": {
+              "default": "200\u00b5T",
+              "key": "Optional",
+              "docs": "**enum**: The range parameter for the sensor.\n\n*See also: [QMC5883L Magnetometer](https://esphome.io/components/sensor/qmc5883l#configuration-variables)*"
+            },
+            "temperature": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The temperature of the sensor. Per the datasheet: \"Temperature sensor gain is factory-calibrated, but its offset has not been compensated, only relative temperature value is accurate\". Above example has an offset that you need to calibrate. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [QMC5883L Magnetometer](https://esphome.io/components/sensor/qmc5883l#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. To achieve the highest date rate of `200Hz` this can be set to zero when `drdy_pin` is configured. Defaults to `60s`.\n\n*See also: [QMC5883L Magnetometer](https://esphome.io/components/sensor/qmc5883l#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "field_strength_schema": {
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "1"
+            },
+            "icon": {
+              "default": "mdi:magnet"
+            },
+            "state_class": {
+              "default": "measurement"
+            },
+            "unit_of_measurement": {
+              "default": "\u00b5T"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

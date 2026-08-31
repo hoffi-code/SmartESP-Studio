@@ -1,0 +1,244 @@
+{
+  "waveshare_epaper.display": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "busy_pin": {
+              "key": "Optional",
+              "modes": [
+                "input"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The BUSY pin. Defaults to not connected.\n\n*See also: [Waveshare E-Paper Display](https://esphome.io/components/display/waveshare_epaper#configuration-variables)*"
+            },
+            "cs_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The CS pin.\n\n*See also: [Waveshare E-Paper Display](https://esphome.io/components/display/waveshare_epaper#configuration-variables)*"
+            },
+            "data_rate": {
+              "key": "Optional"
+            },
+            "dc_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The DC pin.\n\n*See also: [Waveshare E-Paper Display](https://esphome.io/components/display/waveshare_epaper#configuration-variables)*"
+            },
+            "full_update_every": {
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: E-Paper displays have two modes of switching to the next image: A partial update that only changes the pixels that have changed and a full update mode that first clears the entire display and then re-draws the image. The former is much quicker and nicer, but every so often a full update needs to happen because artifacts accumulate. On the `1.54in`, `1.54inv2`, `2.13in`, `2.13inv2`, `2.90in`, `2.90inv2`, `7.50inV2p` and `gdew029t5` models, you have the option to only do a full-redraw every x-th time using this option. Defaults to `30` on the described models and a full update for all other models.\n\n*See also: [Waveshare E-Paper Display](https://esphome.io/components/display/waveshare_epaper#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "waveshare_epaper::WaveshareEPaperBase",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "spi::SPIDevice",
+                  "display::DisplayBuffer",
+                  "display::Display",
+                  "PollingComponent",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [Waveshare E-Paper Display](https://esphome.io/components/display/waveshare_epaper#configuration-variables)*"
+            },
+            "model": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "1.54in": {
+                  "docs": null
+                },
+                "1.54inv2": {
+                  "docs": null
+                },
+                "1.54inv2-b": {
+                  "docs": "Black/White/Red"
+                },
+                "2.13in": {
+                  "docs": "not tested"
+                },
+                "2.13inv2": {
+                  "docs": "2.13in V2 display (Pico e-Paper 2.13v2 and Cloud Module)"
+                },
+                "2.13in-ttgo": {
+                  "docs": "T5_V2.3 tested. Also works for Wemos D1 Mini ePaper Shield 2.13 1.0.0 \"LOLIN\""
+                },
+                "2.13in-ttgo-b1": {
+                  "docs": "T5_V2.3 with B1 display tested"
+                },
+                "2.13in-ttgo-b73": {
+                  "docs": "T5_V2.3 with B73 display tested"
+                },
+                "2.13in-ttgo-b74": {
+                  "docs": "T5_V2.3.1 with B74 display tested"
+                },
+                "2.90in": {
+                  "docs": null
+                },
+                "2.90inv2": {
+                  "docs": null
+                },
+                "gdew029t5": {
+                  "docs": "GooDisplay GDEW029T5, as used on the AdaFruit MagTag and Pimoroni Badger"
+                },
+                "2.70in": {
+                  "docs": "currently not working with the HAT Rev 2.1 version"
+                },
+                "2.70in-b": {
+                  "docs": "Black/White/Red"
+                },
+                "2.70in-bv2": {
+                  "docs": "Black/White/Red"
+                },
+                "2.70inv2": {
+                  "docs": null
+                },
+                "2.90in-b": {
+                  "docs": "B/W rendering only"
+                },
+                "2.90in-bv3": null,
+                "gdey029t94": {
+                  "docs": "GooDisplay GDEY029t94, as used in the monochrome 2.9inch display from seeedstudio"
+                },
+                "2.90inv2-r2": {
+                  "docs": "2.9in V2 display, but with different initialization and full/partial display refresh management than `2.90inv2`"
+                },
+                "2.90in-d": null,
+                "2.90in-dke": {
+                  "docs": null
+                },
+                "gdey042t81": {
+                  "docs": "GoodDisplay GDEY042T81 4.2\" B/W"
+                },
+                "4.20in": {
+                  "docs": null
+                },
+                "4.20in-bv2": null,
+                "4.20in-bv2-bwr": null,
+                "5.65in-f": null,
+                "5.83in": {
+                  "docs": null
+                },
+                "5.83inv2": {
+                  "docs": null
+                },
+                "gdey0583t81": {
+                  "docs": "GoodDisplay GDEY0583T81 5.83\" B/W"
+                },
+                "7.30in-f": {
+                  "docs": "7.3in 7-color display (black, white, red, yellow, blue, green, and orange)"
+                },
+                "7.50in": {
+                  "docs": null
+                },
+                "7.50in-bv2": null,
+                "7.50in-bv3": null,
+                "7.50in-bv3-bwr": null,
+                "7.50in-bc": {
+                  "docs": "display with version sticker '(C)' on the back, B/W rendering only"
+                },
+                "7.50inv2": null,
+                "7.50inv2alt": null,
+                "7.50inv2p": null,
+                "7.50in-hd-b": {
+                  "docs": "Can't use with an ESP8266 as it runs out of RAM"
+                },
+                "2.13in-ttgo-dke": {
+                  "docs": "T5_V2.3 with DKE group display (DEPG0213BN) tested"
+                },
+                "2.13inv3": {
+                  "docs": "2.13in V3 display (Pico e-Paper 2.13v3)"
+                },
+                "1.54in-m5coreink-m09": {
+                  "docs": "GoodDisplay gdew0154m09, as used in the M5Stack Core Ink"
+                },
+                "13.3in-k": {
+                  "docs": "13.3in, with the K model, 960x680, B/W rendering only"
+                }
+              },
+              "docs": "The model of the E-Paper display. Options are:\n\n*See also: [Waveshare E-Paper Display](https://esphome.io/components/display/waveshare_epaper#configuration-variables)*"
+            },
+            "release_device": {
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "reset_duration": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: Duration for the display reset operation. Defaults to `200ms`. Setting this value to `2ms` may resolve issues with newer e-Paper Driver modules (e.g. Rev 2.1).\n\n*See also: [Waveshare E-Paper Display](https://esphome.io/components/display/waveshare_epaper#configuration-variables)*"
+            },
+            "reset_pin": {
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The RESET pin. Defaults to not connected. Make sure you pull this pin high (by connecting it to 3.3V with a resistor) if not connected to a GPIO pin. The 2.13\" B74 and V2 display variants require the reset pin.\n\n*See also: [Waveshare E-Paper Display](https://esphome.io/components/display/waveshare_epaper#configuration-variables)*"
+            },
+            "spi_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "spi::SPIComponent",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the [SPI Component](https://esphome.io/components/spi) if you want to use multiple SPI buses.\n\n*See also: [Waveshare E-Paper Display](https://esphome.io/components/display/waveshare_epaper#configuration-variables)*"
+            },
+            "spi_mode": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "MODE0": null,
+                "MODE1": null,
+                "MODE2": null,
+                "MODE3": null,
+                "0": null,
+                "1": null,
+                "2": null,
+                "3": null
+              }
+            },
+            "update_interval": {
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to re-draw the screen. Defaults to `1s`, use `never` to only manually update the screen via `component.update`.\n\n*See also: [Waveshare E-Paper Display](https://esphome.io/components/display/waveshare_epaper#configuration-variables)*"
+            },
+            "rotation": {
+              "key": "Optional",
+              "docs": "Set the rotation of the display. Everything you draw in `lambda:` will be rotated by this option. One of `0\u00b0` (default), `90\u00b0`, `180\u00b0`, `270\u00b0`.\n\n*See also: [Waveshare E-Paper Display](https://esphome.io/components/display/waveshare_epaper#configuration-variables)*"
+            },
+            "lambda": {
+              "key": "Optional",
+              "docs": "**[lambda](https://esphome.io/automations/templates#config-lambda)**: The lambda to use for rendering the content on the display. See [Display Rendering Engine](https://esphome.io/components/display#display-engine) for more information.\n\n*See also: [Waveshare E-Paper Display](https://esphome.io/components/display/waveshare_epaper#configuration-variables)*"
+            },
+            "pages": {
+              "key": "Optional",
+              "docs": "**list**: Show pages instead of a single lambda. See [Display Pages](https://esphome.io/components/display#display-pages).\n\n*See also: [Waveshare E-Paper Display](https://esphome.io/components/display/waveshare_epaper#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "display.FULL_DISPLAY_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

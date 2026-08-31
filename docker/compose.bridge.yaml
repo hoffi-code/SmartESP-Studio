@@ -1,21 +1,21 @@
 services:
-  esp-config-designer:
-    image: ghcr.io/sokolsok/esp-config-designer:latest
-    container_name: esp-config-designer
+  smartesp-studio:
+    image: ghcr.io/hoffi-code/smartesp-studio:latest
+    container_name: smartesp-studio
     restart: unless-stopped
 
     ports:
-      - "${ECD_PORT:-8099}:${ECD_PORT:-8099}"
+      - "${SES_PORT:-8099}:${SES_PORT:-8099}"
 
     environment:
       TZ: ${TZ:-Europe/Warsaw}
-      ECD_MODE: standalone
-      ECD_PORT: ${ECD_PORT:-8099}
-      ECD_USE_ESPHOME_SHARED_PATH: ${ECD_USE_ESPHOME_SHARED_PATH:-false}
-      ECD_STATUS_USE_PING: "true"
-      ECD_AUTH_MODE: ${ECD_AUTH_MODE:-basic}
-      ECD_AUTH_USERNAME: ${ECD_AUTH_USERNAME:-admin}
-      ECD_AUTH_PASSWORD: ${ECD_AUTH_PASSWORD:-change-me}
+      SES_MODE: standalone
+      SES_PORT: ${SES_PORT:-8099}
+      SES_USE_ESPHOME_SHARED_PATH: ${SES_USE_ESPHOME_SHARED_PATH:-false}
+      SES_STATUS_USE_PING: "true"
+      SES_AUTH_MODE: ${SES_AUTH_MODE:-basic}
+      SES_AUTH_USERNAME: ${SES_AUTH_USERNAME:-admin}
+      SES_AUTH_PASSWORD: ${SES_AUTH_PASSWORD:-change-me}
 
     volumes:
       - ./config:/config

@@ -1,0 +1,55 @@
+{
+  "rgbw.light": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "blue": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "output::FloatOutput",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id of the float [Output Component](https://esphome.io/components/output/) to use for the blue channel.\n\n*See also: [RGBW Light](https://esphome.io/components/light/rgbw#configuration-variables)*"
+            },
+            "color_interlock": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: When enabled, this will prevent white leds being on at the same time as RGB leds. See [Color Interlock](https://esphome.io/components/light/rgbw#color-interlock) for more information. Defaults to `false`.\n\n*See also: [RGBW Light](https://esphome.io/components/light/rgbw#configuration-variables)*"
+            },
+            "green": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "output::FloatOutput",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id of the float [Output Component](https://esphome.io/components/output/) to use for the green channel.\n\n*See also: [RGBW Light](https://esphome.io/components/light/rgbw#configuration-variables)*"
+            },
+            "output_id": {
+              "id_type": {
+                "class": "rgbw::RGBWLightOutput",
+                "parents": [
+                  "light::LightOutput"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "red": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "output::FloatOutput",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id of the float [Output Component](https://esphome.io/components/output/) to use for the red channel.\n\n*See also: [RGBW Light](https://esphome.io/components/light/rgbw#configuration-variables)*"
+            },
+            "white": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "output::FloatOutput",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id of the float [Output Component](https://esphome.io/components/output/) to use for the white channel.\n\n*See also: [RGBW Light](https://esphome.io/components/light/rgbw#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "light.RGB_LIGHT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

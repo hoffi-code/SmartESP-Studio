@@ -1,0 +1,279 @@
+{
+  "hydreon_rgxx.binary_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "em_sat": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "problem"
+                  }
+                },
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "`true` if the sensor reports the Emitter being saturated.\n\n*See also: [Hydreon Rain Sensor Binary Sensor](https://esphome.io/components/binary_sensor/hydreon_rgxx#configuration-variables)*"
+            },
+            "hydreon_rgxx_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "hydreon_rgxx::HydreonRGxxComponent",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the Hydreon Rain Sensor display.\n\n*See also: [Hydreon Rain Sensor Binary Sensor](https://esphome.io/components/binary_sensor/hydreon_rgxx#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "hydreon_rgxx::HydreonRGxxBinaryComponent",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "lens_bad": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "problem"
+                  }
+                },
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "`true` if the sensor reports the lens being bad.\n\n*See also: [Hydreon Rain Sensor Binary Sensor](https://esphome.io/components/binary_sensor/hydreon_rgxx#configuration-variables)*"
+            },
+            "too_cold": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "cold"
+                  }
+                },
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "`true` if the sensor reports being too cold. Hydreon only mentions this feature for the RG-9.\n\n*See also: [Hydreon Rain Sensor Binary Sensor](https://esphome.io/components/binary_sensor/hydreon_rgxx#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "hydreon_rgxx.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "acc": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "precipitation"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "mm"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Amount of rain since last message (see `update_interval`  ), in `mm`. Only on RG-15.\n\n*See also: [Hydreon Rain Sensor](https://esphome.io/components/sensor/hydreon_rgxx#configuration-variables)*"
+            },
+            "disable_led": {
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "Disables the on-board LED. Defaults to `false`. Only on RG-9 firmware version 1.200-onwards.\n\n*See also: [Hydreon Rain Sensor](https://esphome.io/components/sensor/hydreon_rgxx#configuration-variables)*"
+            },
+            "event_acc": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "precipitation"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "mm"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Amount of rain for this event (i.e. since it last stopped raining), in `mm`. Only on RG-15.\n\n*See also: [Hydreon Rain Sensor](https://esphome.io/components/sensor/hydreon_rgxx#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "hydreon_rgxx::HydreonRGxxComponent",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "uart::UARTDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "model": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "RG_9": null,
+                "RG_15": null
+              },
+              "docs": "**string**: Specify which rain sensor you have connected. Must be either `RG_9` or `RG_15`.\n\n*See also: [Hydreon Rain Sensor](https://esphome.io/components/sensor/hydreon_rgxx#configuration-variables)*"
+            },
+            "moisture": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "icon": {
+                    "default": "mdi:weather-rainy"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "intensity"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Rain intensity level from 0-7 ([more detail](https://rainsensors.com/support/rg-9-rg-15-faq/#RG-9RValue)). Only on RG-9.\n\n*See also: [Hydreon Rain Sensor](https://esphome.io/components/sensor/hydreon_rgxx#configuration-variables)*"
+            },
+            "r_int": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "precipitation_intensity"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "mm/h"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Current rain intensity in `mm/h`. Only on RG-15.\n\n*See also: [Hydreon Rain Sensor](https://esphome.io/components/sensor/hydreon_rgxx#configuration-variables)*"
+            },
+            "resolution": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "low": null,
+                "high": null
+              },
+              "docs": "**string**: Specify rain sensor resolution. Must be either `low` or `high`. Default resolution is `high`. Only applies to RG-15.\n\n*See also: [Hydreon Rain Sensor](https://esphome.io/components/sensor/hydreon_rgxx#configuration-variables)*"
+            },
+            "temperature": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "icon": {
+                    "default": "mdi:thermometer"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Device internal temperature in Celsius. Accuracy is \u00b15\u00b0C. Only on RG-9 firmware version 1.100-onwards.\n\n*See also: [Hydreon Rain Sensor](https://esphome.io/components/sensor/hydreon_rgxx#configuration-variables)*"
+            },
+            "total_acc": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "precipitation"
+                  },
+                  "state_class": {
+                    "default": "total_increasing"
+                  },
+                  "unit_of_measurement": {
+                    "default": "mm"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Total amount of rain this sensor has ever measured, in `mm`. Only on RG-15.\n\n*See also: [Hydreon Rain Sensor](https://esphome.io/components/sensor/hydreon_rgxx#configuration-variables)*"
+            },
+            "uart_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "uart::UARTComponent",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the [UART Component](https://esphome.io/components/uart) if you want to use multiple UART buses.\n\n*See also: [Hydreon Rain Sensor](https://esphome.io/components/sensor/hydreon_rgxx#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`.\n\n*See also: [Hydreon Rain Sensor](https://esphome.io/components/sensor/hydreon_rgxx#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

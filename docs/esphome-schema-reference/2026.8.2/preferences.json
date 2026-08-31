@@ -1,0 +1,35 @@
+{
+  "preferences": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "flash_write_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: Customize the frequency in which data is flushed to the flash. This setting helps to prevent rapid changes to a component from being quickly written to the flash and wearing it out. Defaults to `1min`. Set to `never` to disable this feature.\n\n*See also: [ESPHome Core Configuration](https://esphome.io/components/esphome#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "preferences::IntervalSyncer",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**string**: Unique identifier for the device.\n\n*See also: [ESPHome Core Configuration](https://esphome.io/components/esphome#configuration-variables)*"
+            },
+            "rtc_storage": {
+              "key": "Optional",
+              "docs": "**boolean**: Only useful on ESP32. Compile RTC-memory-backed preference storage into the firmware even when no other option selects it (options such as `safe_mode`'s and `fast_connect`'s `storage: rtc` enable it automatically). This is intended for external components that request RTC storage through the C++ preferences API; without it, such requests fall back to flash (NVS) with a warning in the log. Not available on ESP32 variants without RTC memory (C2 and C61). On ESP8266, RTC storage is integral and always enabled: `true` is accepted (and does nothing), while `false` is rejected since it cannot be disabled.\n\n*See also: [ESPHome Core Configuration](https://esphome.io/components/esphome#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "remote_base": {
+    "dumper": {
+      "abbwelcome": {},
+      "aeha": {},
+      "beo4": {},
+      "brennenstuhl": {},
+      "byronsx": {},
+      "canalsat": {},
+      "canalsatld": {},
+      "coolix": {},
+      "dish": {},
+      "dooya": {},
+      "drayton": {},
+      "dyson": {},
+      "gobox": {},
+      "haier": {},
+      "jvc": {},
+      "keeloq": {},
+      "lg": {},
+      "magiquest": {},
+      "midea": {},
+      "mirage": {},
+      "nec": {},
+      "nexa": {},
+      "panasonic": {},
+      "pioneer": {},
+      "pronto": {},
+      "raw": {},
+      "rc5": {},
+      "rc6": {},
+      "rc_switch": {},
+      "roomba": {},
+      "samsung": {},
+      "samsung36": {},
+      "sony": {},
+      "symphony": {},
+      "toshiba_ac": {},
+      "toto": {}
+    },
+    "schemas": {
+      "BASE_REMOTE_TRANSMITTER_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "repeat": {
+              "key": "Optional"
+            }
+          },
+          "extends": [
+            "remote_base.REMOTE_TRANSMITTABLE_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "RC_SWITCH_PROTOCOL_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "inverted": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "one": {
+              "data_type": "RC_SWITCH_TIMING_SCHEMA",
+              "default": "[3, 1]",
+              "key": "Optional"
+            },
+            "pulse_length": {
+              "data_type": "uint32_t",
+              "key": "Required",
+              "type": "integer"
+            },
+            "sync": {
+              "data_type": "RC_SWITCH_TIMING_SCHEMA",
+              "default": "[1, 31]",
+              "key": "Optional"
+            },
+            "zero": {
+              "data_type": "RC_SWITCH_TIMING_SCHEMA",
+              "default": "[1, 3]",
+              "key": "Optional"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "REMOTE_TRANSMITTABLE_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "transmitter_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "remote_base::RemoteTransmitterBase"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

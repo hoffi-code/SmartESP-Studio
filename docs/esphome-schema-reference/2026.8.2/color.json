@@ -1,0 +1,59 @@
+{
+  "color": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "blue": {
+              "key": "Optional"
+            },
+            "blue_int": {
+              "data_type": "uint8_t",
+              "key": "Optional",
+              "type": "integer"
+            },
+            "green": {
+              "key": "Optional"
+            },
+            "green_int": {
+              "data_type": "uint8_t",
+              "key": "Optional",
+              "type": "integer"
+            },
+            "hex": {
+              "key": "Optional"
+            },
+            "id": {
+              "id_type": {
+                "class": "Color",
+                "parents": []
+              },
+              "key": "Required"
+            },
+            "red": {
+              "key": "Optional"
+            },
+            "red_int": {
+              "data_type": "uint8_t",
+              "key": "Optional",
+              "type": "integer"
+            },
+            "white": {
+              "key": "Optional"
+            },
+            "white_int": {
+              "data_type": "uint8_t",
+              "key": "Optional",
+              "type": "integer"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

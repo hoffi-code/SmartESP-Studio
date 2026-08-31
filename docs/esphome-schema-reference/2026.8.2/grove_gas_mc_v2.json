@@ -1,0 +1,148 @@
+{
+  "grove_gas_mc_v2.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "8",
+              "key": "Optional",
+              "docs": "**int**: The [I\u00b2C](https://esphome.io/components/i2c) address of the sensor. Defaults to `0x08`\n\n*See also: [Grove Multichannel Gas Sensor V2](https://esphome.io/components/sensor/grove_gas_mc_v2#configuration-variables)*"
+            },
+            "carbon_monoxide": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "carbon_monoxide"
+                  },
+                  "icon": {
+                    "default": "mdi:molecule-co"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "ppm"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The Carbon Monoxide sensor data. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Grove Multichannel Gas Sensor V2](https://esphome.io/components/sensor/grove_gas_mc_v2#configuration-variables)*"
+            },
+            "ethanol": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "icon": {
+                    "default": "mdi:flask-round-bottom"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "ppm"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The Ethanol (C2H5OH) sensor data. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Grove Multichannel Gas Sensor V2](https://esphome.io/components/sensor/grove_gas_mc_v2#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "grove_gas_mc_v2::GroveGasMultichannelV2Component",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "nitrogen_dioxide": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "nitrogen_dioxide"
+                  },
+                  "icon": {
+                    "default": "mdi:gas-cylinder"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b5g/m\u00b3"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The Nitrogen Dioxide sensor data. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Grove Multichannel Gas Sensor V2](https://esphome.io/components/sensor/grove_gas_mc_v2#configuration-variables)*"
+            },
+            "tvoc": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "volatile_organic_compounds"
+                  },
+                  "icon": {
+                    "default": "mdi:air-filter"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b5g/m\u00b3"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The Total Volatile Organic Compounds (TVOC) sensor data. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Grove Multichannel Gas Sensor V2](https://esphome.io/components/sensor/grove_gas_mc_v2#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`.\n\n*See also: [Grove Multichannel Gas Sensor V2](https://esphome.io/components/sensor/grove_gas_mc_v2#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

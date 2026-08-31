@@ -1,0 +1,30 @@
+{
+  "zephyr_ble_server": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "zephyr_ble_server::BLEServer",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "on_numeric_comparison_request": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to compare the passkeys shown on the two BLE devices. See [`on_numeric_comparison_request`](https://esphome.io/components/zephyr_ble_server#on_numeric_comparison_request).\n\n*See also: [Zephyr BLE Server](https://esphome.io/components/zephyr_ble_server#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

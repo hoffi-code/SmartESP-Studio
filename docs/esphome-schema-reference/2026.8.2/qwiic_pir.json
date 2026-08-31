@@ -1,0 +1,62 @@
+{
+  "qwiic_pir.binary_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "18",
+              "key": "Optional"
+            },
+            "debounce": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.time_period"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: Only valid when using `NATIVE` debounce mode. Configures the debounce time on the sensor to reduce noise and false detections. Defaults to `1ms`.\n\n*See also: [Qwiic PIR Motion Binary Sensor](https://esphome.io/components/binary_sensor/qwiic_pir#configuration-variables)*"
+            },
+            "debounce_mode": {
+              "default": "HYBRID",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "RAW": null,
+                "NATIVE": null,
+                "HYBRID": null
+              },
+              "docs": "**enum**: How the component debounces the motion sensor's signal. Must be one of `HYBRID`, `NATIVE`, or `RAW`. See [Debounce Modes](https://esphome.io/components/binary_sensor/qwiic_pir#debounce-modes) for details. Defaults to `HYBRID`.\n\n*See also: [Qwiic PIR Motion Binary Sensor](https://esphome.io/components/binary_sensor/qwiic_pir#configuration-variables)*"
+            },
+            "device_class": {
+              "default": "motion"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "qwiic_pir::QwiicPIRComponent",
+                "parents": [
+                  "Component",
+                  "i2c::I2CDevice",
+                  "binary_sensor::BinarySensor",
+                  "EntityBase"
+                ]
+              }
+            }
+          },
+          "extends": [
+            "binary_sensor._BINARY_SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

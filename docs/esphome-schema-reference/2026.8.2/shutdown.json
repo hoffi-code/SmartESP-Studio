@@ -1,0 +1,66 @@
+{
+  "shutdown.button": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "entity_category": {
+              "default": "config"
+            },
+            "icon": {
+              "default": "mdi:power"
+            },
+            "id": {
+              "id_type": {
+                "class": "shutdown::ShutdownButton",
+                "parents": [
+                  "button::Button",
+                  "EntityBase",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            }
+          },
+          "extends": [
+            "button._BUTTON_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "shutdown.switch": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "entity_category": {
+              "default": "config"
+            },
+            "icon": {
+              "default": "mdi:power"
+            },
+            "id": {
+              "id_type": {
+                "class": "shutdown::ShutdownSwitch",
+                "parents": [
+                  "switch_::Switch",
+                  "EntityBase",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            }
+          },
+          "extends": [
+            "switch._SWITCH_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

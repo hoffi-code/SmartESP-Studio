@@ -1,0 +1,185 @@
+{
+  "button": {
+    "action": {
+      "press": {
+        "schema": {
+          "extends": [
+            "button.BUTTON_PRESS_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This is an [Action](https://esphome.io/automations/actions#all-actions) for pressing a button in an Automation."
+      }
+    },
+    "components": {
+      "atm90e32": {
+        "docs": "None\n\n*See also: [ATM90E32 Power Sensor](https://esphome.io/components/sensor/atm90e32#button)*"
+      },
+      "bl0940": {
+        "docs": "The `bl0940` button platform allows to reset all external calibration values to their initial state.\n\n*See also: [Belling BL0940 Energy Monitor](https://esphome.io/components/sensor/bl0940#button)*"
+      },
+      "copy": {
+        "docs": "None\n\n*See also: [Copy Component](https://esphome.io/components/copy#copy-button)*"
+      },
+      "factory_reset": {},
+      "haier": {
+        "docs": "Additional buttons for Haier AC cleaning. **These buttons are supported only by the hOn protocol**.\n\n*See also: [Haier Climate Buttons](https://esphome.io/components/button/haier)*"
+      },
+      "ld2410": {
+        "docs": "The `ld2410` button allows you to perform actions on your sensor.\n\n*See also: [LD2410 Sensor](https://esphome.io/components/sensor/ld2410#button)*"
+      },
+      "ld2412": {
+        "docs": "The `ld2412` button allows you to perform actions on your sensor.\n\n*See also: [LD2412 Sensor](https://esphome.io/components/sensor/ld2412#button)*"
+      },
+      "ld2420": {
+        "docs": "None\n\n*See also: [LD2420 24GHz mmWave Radar Sensor](https://esphome.io/components/sensor/ld2420#button)*"
+      },
+      "ld2450": {
+        "docs": "The `ld2450` button allows you to perform `restart` and `factory reset` actions on your [Ld2450](https://esphome.io/components/sensor/ld2450/).\n\n*See also: [LD2450 Sensor](https://esphome.io/components/sensor/ld2450#button)*"
+      },
+      "ld6002b": {
+        "dependencies": [
+          "ld6002b"
+        ],
+        "docs": "The `ld6002b` button platform exposes configuration and diagnostic commands.\n\n*See also: [LD6002B 3D Presence Radar](https://esphome.io/components/sensor/ld6002b#button)*"
+      },
+      "micronova": {},
+      "output": {
+        "docs": "The `output` button platform allows you to use any output component as a button. This can for example be used to momentarily set a GPIO pin using a button.\n\n*See also: [Generic Output Button](https://esphome.io/components/button/output)*"
+      },
+      "restart": {
+        "docs": "The `restart` button platform allows you to restart your node remotely through Home Assistant.\n\n*See also: [Restart Button](https://esphome.io/components/button/restart)*"
+      },
+      "safe_mode": {
+        "dependencies": [
+          "safe_mode"
+        ]
+      },
+      "seeed_mr24hpc1": {
+        "docs": "The `seeed_mr24hpc1` button allows you to perform actions.\n\n*See also: [Seeed Studio MR24HPC1 mmWave (Kit)](https://esphome.io/components/seeed_mr24hpc1#button)*"
+      },
+      "seeed_mr60fda2": {
+        "dependencies": [
+          "seeed_mr60fda2"
+        ],
+        "docs": "The `seeed_mr60fda2` button allows you to perform actions.\n\n*See also: [Seeed Studio MR60FDA2 60GHz mmWave Fall Detection Sensor Kit](https://esphome.io/components/seeed_mr60fda2#button)*"
+      },
+      "shutdown": {
+        "docs": "The `shutdown` button platform allows you to shutdown your node remotely through Home Assistant. It does this by putting the node into deep sleep mode with no wakeup source selected. After enabling, the only way to startup the ESP again is by pressing the reset button or restarting the power supply.\n\n*See also: [Shutdown Button](https://esphome.io/components/button/shutdown)*"
+      },
+      "template": {
+        "docs": "The `template` button platform allows you to create simple buttons out of just actions. Once defined, it will automatically appear in Home Assistant as a button and can be controlled through the frontend.\n\n*See also: [Template Button](https://esphome.io/components/button/template)*"
+      },
+      "uart": {
+        "dependencies": [
+          "uart"
+        ]
+      },
+      "wake_on_lan": {
+        "dependencies": [
+          "network"
+        ],
+        "docs": "The `wake_on_lan` button platform allows you to send a Wake-on-LAN magic packet to a computer on the network by specifying its MAC address.\n\n*See also: [Wake-on-LAN Button](https://esphome.io/components/button/wake_on_lan)*"
+      }
+    },
+    "schemas": {
+      "BUTTON_PRESS_SCHEMA": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "button::Button",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the button to set.\n\n*See also: [Button Component](https://esphome.io/components/button#buttonpress-action)*"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "_BUTTON_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "device_class": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "": null,
+                "identify": null,
+                "restart": null,
+                "update": null
+              },
+              "visibility": "advanced",
+              "docs": "**string**: The device class for the button. See [https://www.home-assistant.io/integrations/button/#device-class](https://www.home-assistant.io/integrations/button/#device-class) for a list of available options.\n\n*See also: [Button Component](https://esphome.io/components/button#example-button-configuration)*"
+            },
+            "mqtt_id": {
+              "id_type": {
+                "class": "mqtt::MQTTButtonComponent",
+                "parents": [
+                  "mqtt::MQTTComponent",
+                  "Component"
+                ]
+              },
+              "key": "Optional"
+            },
+            "on_press": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform when the button is pressed. See [`on_press`](https://esphome.io/components/button#button-on_press).\n\n*See also: [Button Component](https://esphome.io/components/button#example-button-configuration)*"
+            },
+            "web_server": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "sorting_group_id": {
+                    "key": "Optional",
+                    "type": "use_id",
+                    "use_id_type": "int"
+                  },
+                  "sorting_weight": {
+                    "key": "Optional"
+                  },
+                  "web_server_id": {
+                    "key": "Optional",
+                    "type": "use_id",
+                    "use_id_type": "web_server::WebServer"
+                  }
+                }
+              },
+              "type": "schema",
+              "visibility": "advanced"
+            },
+            "id": {
+              "docs": "**string**: Manually specify the ID for code generation. At least one of **id** and **name** must be specified.\n\n*See also: [Button Component](https://esphome.io/components/button#example-button-configuration)*"
+            },
+            "name": {
+              "key": "Optional",
+              "docs": "**string**: The name for the button. At least one of **id** and **name** must be specified.\n\n*See also: [Button Component](https://esphome.io/components/button#example-button-configuration)*"
+            },
+            "icon": {
+              "key": "Optional",
+              "docs": "**icon**: Manually set the icon to use for the button in the frontend.\n\n*See also: [Button Component](https://esphome.io/components/button#example-button-configuration)*"
+            },
+            "internal": {
+              "key": "Optional",
+              "docs": "**boolean**: Mark this component as internal. Internal components will not be exposed to the frontend (like Home Assistant). Only specifying an `id` without a `name` will implicitly set this to true.\n\n*See also: [Button Component](https://esphome.io/components/button#example-button-configuration)*"
+            },
+            "disabled_by_default": {
+              "key": "Optional",
+              "docs": "**boolean**: If true, then this entity should not be added to any client's frontend, (usually Home Assistant) without the user manually enabling it (via the Home Assistant UI).\n\n*See also: [Button Component](https://esphome.io/components/button#example-button-configuration)*"
+            },
+            "entity_category": {
+              "key": "Optional",
+              "docs": "**string**: The category of the entity. See [https://developers.home-assistant.io/docs/core/entity/#generic-properties](https://developers.home-assistant.io/docs/core/entity/#generic-properties) for a list of available options. Set to `\"\"` to remove the default entity category.\n\n*See also: [Button Component](https://esphome.io/components/button#example-button-configuration)*"
+            }
+          },
+          "extends": [
+            "core.ENTITY_BASE_SCHEMA",
+            "core.MQTT_COMMAND_COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

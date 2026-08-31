@@ -1,0 +1,134 @@
+{
+  "sml": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "sml::Sml",
+                "parents": [
+                  "Component",
+                  "uart::UARTDevice"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [SML (Smart Message Language)](https://esphome.io/components/sml#configuration-variables)*"
+            },
+            "on_data": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "uart_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "uart::UARTComponent",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the [UART Component](https://esphome.io/components/uart) if you want to use multiple UART buses.\n\n*See also: [SML (Smart Message Language)](https://esphome.io/components/sml#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "sml.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "sml::SmlSensor",
+                "parents": [
+                  "sensor::Sensor",
+                  "EntityBase",
+                  "Component"
+                ]
+              }
+            },
+            "obis_code": {
+              "key": "Required",
+              "docs": "**string**: Specify the OBIS code you want to retrieve data for from the device. The format must be (A-B:C.D.E, e.g. 1-0:1.8.0)\n\n*See also: [SML (Smart Message Language)](https://esphome.io/components/sml#configuration-variables)*"
+            },
+            "server_id": {
+              "default": "",
+              "key": "Optional",
+              "type": "string",
+              "docs": "**string**: Specify the device's server_id to retrieve the OBIS code from. Should be specified if more then one device is connected to the same hardware sensor component.\n\n*See also: [SML (Smart Message Language)](https://esphome.io/components/sml#configuration-variables)*"
+            },
+            "sml_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "sml::Sml",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the [SML platform](https://esphome.io/components/sml#sml-platform)\n\n*See also: [SML (Smart Message Language)](https://esphome.io/components/sml#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "sml.text_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "format": {
+              "default": "",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "text": null,
+                "bool": null,
+                "int": null,
+                "uint": null,
+                "hex": null,
+                "": null
+              },
+              "docs": "**string**: Override the automatic interpretation of the transmitted binary data value. Possible values (`int`, `uint`, `bool`, `hex`, `text`).\n\n*See also: [SML (Smart Message Language)](https://esphome.io/components/sml#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "sml::SmlTextSensor",
+                "parents": [
+                  "text_sensor::TextSensor",
+                  "EntityBase",
+                  "Component"
+                ]
+              }
+            },
+            "obis_code": {
+              "key": "Required",
+              "docs": "**string**: Specify the OBIS code you want to retrieve data for from the device. The format must be (A-B:C.D.E, e.g. 1-0:1.8.0)\n\n*See also: [SML (Smart Message Language)](https://esphome.io/components/sml#configuration-variables)*"
+            },
+            "server_id": {
+              "default": "",
+              "key": "Optional",
+              "type": "string",
+              "docs": "**string**: Specify the device's server_id to retrieve the OBIS code from. Should be specified if more then one device is connected to the same hardware sensor component.\n\n*See also: [SML (Smart Message Language)](https://esphome.io/components/sml#configuration-variables)*"
+            },
+            "sml_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "sml::Sml",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the [SML platform](https://esphome.io/components/sml#sml-platform)\n\n*See also: [SML (Smart Message Language)](https://esphome.io/components/sml#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "text_sensor._TEXT_SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

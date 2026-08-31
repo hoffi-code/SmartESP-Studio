@@ -1,0 +1,178 @@
+{
+  "modbus_server": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "address": {
+              "default": "1",
+              "key": "Required",
+              "docs": "**integer**: The Modbus address of the server device. Address `0` is reserved for broadcasts and cannot be assigned to a server device.\n\n*See also: [Modbus Server](https://esphome.io/components/modbus_server#configuration-variables)*"
+            },
+            "bits": {
+              "is_list": true,
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "address": {
+                    "data_type": "hex_uint16_t",
+                    "key": "Required",
+                    "docs": "**integer**: the address of this bit.\n\n*See also: [Modbus Server](https://esphome.io/components/modbus_server#configuration-variables)*"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "modbus_server::ServerBit",
+                      "parents": []
+                    },
+                    "key": "GeneratedID"
+                  },
+                  "read_lambda": {
+                    "key": "Required",
+                    "docs": "**[lambda](https://esphome.io/automations/templates#config-lambda)**: Lambda that returns the value of this bit, as a `bool`. `address` is provided with the address of this bit. Anything that converts to `bool` is accepted, and that conversion is implicit: an entity such as `return id(my_switch);` hands back a pointer, which is always `true`, and the bit reads `1` forever. Make sure the lambda returns the state you mean \u2014 `return id(my_switch).state;` for a switch, or the value of a `globals` bool. Returning an empty optional (`return {};`) declines the read, and the client's **whole** request is answered with a `SERVICE_DEVICE_FAILURE` (code `4`) exception instead of a value - the other bits in the same request go unread, so this is not a per-bit \"not ready\" signal.\n\n*See also: [Modbus Server](https://esphome.io/components/modbus_server#configuration-variables)*"
+                  },
+                  "write_lambda": {
+                    "key": "Optional",
+                    "docs": "**[lambda](https://esphome.io/automations/templates#config-lambda)**: Lambda that sets the value of this bit. A `bool` variable `x` is provided with the new value, as well as `address` containing the address of this bit. You must return `true` if the operation was successful, `false` otherwise, in which case a `SERVICE_DEVICE_FAILURE` (code `4`) exception will be sent to the client. If this is not set, the bit can be read but not written.\n\n*See also: [Modbus Server](https://esphome.io/components/modbus_server#configuration-variables)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "A list of bits that are responded to when acting as a server. Bits answer the coil and discrete-input function codes - `0x01` and `0x02` to read, `0x05` and `0x0F` to write - from one shared table: a coil and a discrete input at the same address are the same bit, the same way holding and input registers share the register table above. A client can read a bit as a coil or as a discrete input and gets the same value either way. Each bit address must be unique within the `bits` list. Bit addresses are independent of register addresses: a bit at `0x0000` and a register at `0x0000` are different things and do not collide.\n\n*See also: [Modbus Server](https://esphome.io/components/modbus_server#configuration-variables)*"
+            },
+            "courtesy_response": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "enabled": {
+                    "default": "False",
+                    "key": "Optional",
+                    "type": "boolean",
+                    "docs": "**boolean**: Whether to enable the courtesy response feature. Defaults to `false`.\n\n*See also: [Modbus Server](https://esphome.io/components/modbus_server#configuration-variables)*"
+                  },
+                  "register_last_address": {
+                    "data_type": "hex_uint16_t",
+                    "default": "65535",
+                    "key": "Optional",
+                    "docs": "**integer**: The highest Modbus register address (inclusive) up to which undefined registers are allowed to be read and will be padded with a default value. Any read request that includes undefined registers within this range will return the value specified by `register_value` instead of triggering an exception. Defaults to `65535`\n\n*See also: [Modbus Server](https://esphome.io/components/modbus_server#configuration-variables)*"
+                  },
+                  "register_value": {
+                    "data_type": "hex_uint16_t",
+                    "default": "0",
+                    "key": "Optional",
+                    "docs": "**integer**: The 16-bit value (range: 0\u201365535) to return for undefined registers within the address range defined by `register_last_address`. Defaults to `0`.\n\n*See also: [Modbus Server](https://esphome.io/components/modbus_server#configuration-variables)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "Configuration block to enable the courtesy response feature when the device is acting as a Modbus server.\n\n*See also: [Modbus Server](https://esphome.io/components/modbus_server#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "modbus_server::ModbusServer",
+                "parents": [
+                  "Component",
+                  "modbus::ModbusServerDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "modbus_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "modbus::ModbusServerHub",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the `modbus` hub.\n\n*See also: [Modbus Server](https://esphome.io/components/modbus_server#configuration-variables)*"
+            },
+            "registers": {
+              "is_list": true,
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "address": {
+                    "data_type": "hex_uint16_t",
+                    "key": "Required",
+                    "docs": "**integer**: start address of the first register in a range.\n\n*See also: [Modbus Server](https://esphome.io/components/modbus_server#configuration-variables)*"
+                  },
+                  "allow_partial_read": {
+                    "default": "False",
+                    "key": "Optional",
+                    "type": "boolean",
+                    "docs": "**boolean**: For a multi-register value type (`U_DWORD`, `S_QWORD`, `FP32`, \u2026), allow a read request to cover only part of the value \u2014 starting inside it or stopping short of its end \u2014 and return just the requested registers. When `false` the value is treated as atomic and any read that does not cover the whole value is rejected with an `ILLEGAL_DATA_ADDRESS` exception. Has no effect on single-register types (`U_WORD`/`S_WORD`). Defaults to `false`. > [!NOTE] > Even with `allow_partial_read` enabled, the `read_lambda` is still > evaluated **once per request**, so the registers returned within a single > request are always consistent with each other. A client that reads the > parts of a value in *separate* requests may observe a value that changed > in between \u2014 this is inherent to register-by-register Modbus access. > > This option affects reads only. Writes are always atomic: a write must > cover a whole value, since a partial value cannot be reconstructed for the > `write_lambda`.\n\n*See also: [Modbus Server](https://esphome.io/components/modbus_server#configuration-variables)*"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "modbus_server::ServerRegister",
+                      "parents": []
+                    },
+                    "key": "GeneratedID"
+                  },
+                  "read_lambda": {
+                    "key": "Required",
+                    "docs": "**[lambda](https://esphome.io/automations/templates#config-lambda)**: Lambda that returns the value of this register. `address` is provided with this register's own start address, which is not necessarily the address the client asked for: under `allow_partial_read` a request may start inside the value. Returning an empty optional (`return {};`) declines the read, and the client's **whole** request is answered with a `SERVICE_DEVICE_FAILURE` (code `4`) exception instead - any other register in the same request goes unread. This is useful when the value isn't available right now, for example while a sensor is still warming up. A plain `return <value>;` still works as before and does not need to change.\n\n*See also: [Modbus Server](https://esphome.io/components/modbus_server#configuration-variables)*"
+                  },
+                  "value_type": {
+                    "default": "U_WORD",
+                    "key": "Optional",
+                    "type": "enum",
+                    "values": {
+                      "U_WORD": {
+                        "docs": null
+                      },
+                      "U_WORD_S": {
+                        "docs": null
+                      },
+                      "S_WORD": {
+                        "docs": null
+                      },
+                      "S_WORD_S": {
+                        "docs": null
+                      },
+                      "U_DWORD": {
+                        "docs": null
+                      },
+                      "U_DWORD_R": {
+                        "docs": null
+                      },
+                      "S_DWORD": {
+                        "docs": null
+                      },
+                      "S_DWORD_R": {
+                        "docs": null
+                      },
+                      "U_QWORD": {
+                        "docs": null
+                      },
+                      "U_QWORD_R": {
+                        "docs": null
+                      },
+                      "S_QWORD": {
+                        "docs": null
+                      },
+                      "S_QWORD_R": {
+                        "docs": null
+                      },
+                      "FP32": {
+                        "docs": null
+                      },
+                      "FP32_R": {
+                        "docs": null
+                      }
+                    },
+                    "docs": "data type of the Modbus register data. The default data type for Modbus is a 16-bit integer in **big endian** format (network byte order, MSB first).\n\n*See also: [Modbus Server](https://esphome.io/components/modbus_server#configuration-variables)*"
+                  },
+                  "write_lambda": {
+                    "key": "Optional",
+                    "docs": "**[lambda](https://esphome.io/automations/templates#config-lambda)**: Lambda that sets the value of this register. A variable `x` of the appropriate type (`uint16_t`, `int32_t`, etc, see above) is provided with the value, as well as `address` containing the address of this register. You must return `true` if the operation was successful, `false` otherwise, in which case a `SERVICE_DEVICE_FAILURE` (code `4`) exception will be sent to the client. > [!NOTE] > Before any `write_lambda` runs, the whole request is validated: every targeted register must exist and be > writable, or it is rejected with an `ILLEGAL_DATA_ADDRESS` (code `2`) exception and nothing is written. A > register write that does not supply a complete value for a wide type (`U_DWORD`, `FP32`, \u2026) \u2014 including a\n\n*See also: [Modbus Server](https://esphome.io/components/modbus_server#configuration-variables)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "A list of registers that are responded to when acting as a server.\n\n*See also: [Modbus Server](https://esphome.io/components/modbus_server#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "resistance.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "1"
+            },
+            "configuration": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "DOWNSTREAM": null,
+                "UPSTREAM": null
+              },
+              "docs": "**string**: The type of circuit, one of `DOWNSTREAM` or `UPSTREAM`.\n\n*See also: [Resistance Sensor](https://esphome.io/components/sensor/resistance#configuration-variables)*"
+            },
+            "icon": {
+              "default": "mdi:flash"
+            },
+            "id": {
+              "id_type": {
+                "class": "resistance::ResistanceSensor",
+                "parents": [
+                  "Component",
+                  "sensor::Sensor",
+                  "EntityBase"
+                ]
+              }
+            },
+            "reference_voltage": {
+              "default": "3.3V",
+              "key": "Optional",
+              "docs": "**float**: The reference voltage. Defaults to `3.3V`.\n\n*See also: [Resistance Sensor](https://esphome.io/components/sensor/resistance#configuration-variables)*"
+            },
+            "resistor": {
+              "key": "Required",
+              "docs": "**float**: The value of the resistor with a constant value.\n\n*See also: [Resistance Sensor](https://esphome.io/components/sensor/resistance#configuration-variables)*"
+            },
+            "sensor": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "sensor::Sensor",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The sensor to read the voltage values from to convert to resistance readings.\n\n*See also: [Resistance Sensor](https://esphome.io/components/sensor/resistance#configuration-variables)*"
+            },
+            "state_class": {
+              "default": "measurement"
+            },
+            "unit_of_measurement": {
+              "default": "\u03a9"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "mapping": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "from": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "int": null,
+                "string": null
+              },
+              "docs": "**string**: The type of the keys in the mapping. Can be one of `string` or `int`.\n\n*See also: [Mapping Component](https://esphome.io/components/mapping#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "mapping::Mapping",
+                "parents": []
+              },
+              "key": "Required",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Give the mapping an ID so that you can refer to it later in [lambdas](https://esphome.io/automations/templates#config-lambda).\n\n*See also: [Mapping Component](https://esphome.io/components/mapping#configuration-variables)*"
+            },
+            "to": {
+              "key": "Required",
+              "type": "string",
+              "docs": "**string**: The type of values in the map. May be one of `string` or `int` or a class specifier as discussed below.\n\n*See also: [Mapping Component](https://esphome.io/components/mapping#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

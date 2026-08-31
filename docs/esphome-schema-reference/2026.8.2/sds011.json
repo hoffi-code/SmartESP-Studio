@@ -1,0 +1,102 @@
+{
+  "sds011.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "sds011::SDS011Component",
+                "parents": [
+                  "uart::UARTDevice",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "pm_10_0": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "pm10"
+                  },
+                  "icon": {
+                    "default": "mdi:chemical-weapon"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b5g/m\u00b3"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the concentration of particulates of size less than 10.0\u00b5m in \u00b5g per cubic meter. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [SDS011 Particulate Matter Sensor](https://esphome.io/components/sensor/sds011#configuration-variables)*"
+            },
+            "pm_2_5": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "pm25"
+                  },
+                  "icon": {
+                    "default": "mdi:chemical-weapon"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b5g/m\u00b3"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the concentration of particulates of size less than 2.5\u00b5m in \u00b5g per cubic meter. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [SDS011 Particulate Matter Sensor](https://esphome.io/components/sensor/sds011#configuration-variables)*"
+            },
+            "rx_only": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Whether the sensor is connected **only by RX pin** to the UART bus. Since the SDS011 can not be configured in RX-only mode, `update_interval` has no effect and the sensor must be configured separately. Defaults to `false`.\n\n*See also: [SDS011 Particulate Matter Sensor](https://esphome.io/components/sensor/sds011#configuration-variables)*"
+            },
+            "uart_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "uart::UARTComponent",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the [UART Component](https://esphome.io/components/uart) if you want to use multiple UART buses.\n\n*See also: [SDS011 Particulate Matter Sensor](https://esphome.io/components/sensor/sds011#configuration-variables)*"
+            },
+            "update_interval": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_minutes"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor in minutes. This affects the working period of the SDS011 sensor. Defaults to `0min`.\n\n*See also: [SDS011 Particulate Matter Sensor](https://esphome.io/components/sensor/sds011#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

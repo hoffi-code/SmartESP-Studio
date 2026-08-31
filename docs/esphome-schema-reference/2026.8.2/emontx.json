@@ -1,0 +1,92 @@
+{
+  "emontx": {
+    "action": {
+      "send_command": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "esp32_ble_server::BLECharacteristic",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the EmonTx hub.\n\n*See also: [OpenEnergyMonitor EmonTx Sensors](https://esphome.io/components/sensor/emontx#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Send a command string to the EmonTx device via UART. A newline character is appended automatically."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "emontx::EmonTx",
+                "parents": [
+                  "Component",
+                  "uart::UARTDevice"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation or multiple hubs.\n\n*See also: [OpenEnergyMonitor EmonTx Sensors](https://esphome.io/components/sensor/emontx#configuration-variables)*"
+            },
+            "on_data": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "An automation that will be triggered for every serial line received from the EmonTx (both plain text and JSON). Within this trigger, the `data` variable (string type) contains the received line. This is useful for debugging, logging all serial output, or handling configuration responses from the EmonTx.\n\n*See also: [OpenEnergyMonitor EmonTx Sensors](https://esphome.io/components/sensor/emontx#configuration-variables)*"
+            },
+            "on_json": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "An automation that will be triggered whenever new JSON data is received from the EmonTx. Within this trigger, the `raw_json` variable (string type) contains the received JSON data as a string. A parsed JSON object is also available as the `json` variable (JsonObject type), which can be used to access and manipulate specific fields in the JSON data.\n\n*See also: [OpenEnergyMonitor EmonTx Sensors](https://esphome.io/components/sensor/emontx#configuration-variables)*"
+            },
+            "uart_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "uart::UARTComponent",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the [UART Component](https://esphome.io/components/uart) if you want to use multiple UART buses.\n\n*See also: [OpenEnergyMonitor EmonTx Sensors](https://esphome.io/components/sensor/emontx#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "emontx.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "emontx_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "emontx::EmonTx"
+            },
+            "id": {
+              "id_type": {
+                "class": "emontx::EmonTxSensor",
+                "parents": [
+                  "sensor::Sensor",
+                  "EntityBase",
+                  "Component"
+                ]
+              }
+            },
+            "tag_name": {
+              "key": "Required",
+              "type": "string"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

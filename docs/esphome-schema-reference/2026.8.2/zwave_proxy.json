@@ -1,0 +1,27 @@
+{
+  "zwave_proxy": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "zwave_proxy::ZWaveProxy",
+                "parents": [
+                  "Component",
+                  "uart::UARTDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA",
+            "uart.UART_DEVICE_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

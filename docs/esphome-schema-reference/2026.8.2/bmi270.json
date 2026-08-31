@@ -1,0 +1,138 @@
+{
+  "bmi270.motion": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accelerometer_odr": {
+              "default": "100HZ",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "12_5HZ": null,
+                "25HZ": null,
+                "50HZ": null,
+                "100HZ": null,
+                "200HZ": null,
+                "400HZ": null,
+                "800HZ": null,
+                "1600HZ": null
+              },
+              "docs": "**string**: The output data rate of the accelerometer. One of `12_5HZ`, `25HZ`, `50HZ`, `100HZ`, `200HZ`, `400HZ`, `800HZ`, `1600HZ`. Defaults to `100HZ`.\n\n*See also: [BMI270 Accelerometer/Gyroscope Sensor](https://esphome.io/components/motion/bmi270#configuration-variables)*"
+            },
+            "accelerometer_range": {
+              "default": "4G",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "2G": null,
+                "4G": null,
+                "8G": null,
+                "16G": null
+              },
+              "docs": "**string**: The full-scale range of the accelerometer. One of `2G`, `4G`, `8G`, `16G`. Defaults to `4G`.\n\n*See also: [BMI270 Accelerometer/Gyroscope Sensor](https://esphome.io/components/motion/bmi270#configuration-variables)*"
+            },
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "104",
+              "key": "Optional",
+              "docs": "**int**: Manually specify the I\u00b2C address of the sensor. Defaults to `0x68`. The BMI270 supports `0x68` (SDO to GND) and `0x69` (SDO to VDDIO).\n\n*See also: [BMI270 Accelerometer/Gyroscope Sensor](https://esphome.io/components/motion/bmi270#configuration-variables)*"
+            },
+            "gyroscope_odr": {
+              "default": "200HZ",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "25HZ": null,
+                "50HZ": null,
+                "100HZ": null,
+                "200HZ": null,
+                "400HZ": null,
+                "800HZ": null,
+                "1600HZ": null,
+                "3200HZ": null
+              },
+              "docs": "**string**: The output data rate of the gyroscope. One of `25HZ`, `50HZ`, `100HZ`, `200HZ`, `400HZ`, `800HZ`, `1600HZ`, `3200HZ`. Defaults to `200HZ`.\n\n*See also: [BMI270 Accelerometer/Gyroscope Sensor](https://esphome.io/components/motion/bmi270#configuration-variables)*"
+            },
+            "gyroscope_range": {
+              "default": "2000DPS",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "2000DPS": null,
+                "1000DPS": null,
+                "500DPS": null,
+                "250DPS": null,
+                "125DPS": null
+              },
+              "docs": "**string**: The full-scale range of the gyroscope. One of `125DPS`, `250DPS`, `500DPS`, `1000DPS`, `2000DPS`. Defaults to `2000DPS`.\n\n*See also: [BMI270 Accelerometer/Gyroscope Sensor](https://esphome.io/components/motion/bmi270#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "bmi270::BMI270Component",
+                "parents": [
+                  "motion::MotionComponent",
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            }
+          },
+          "extends": [
+            "motion._CONFIG_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "bmi270.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "2"
+            },
+            "bmi270_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "bmi270::BMI270Component"
+            },
+            "device_class": {
+              "default": "temperature"
+            },
+            "icon": {
+              "default": "mdi:thermometer"
+            },
+            "state_class": {
+              "default": "measurement"
+            },
+            "type": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "temperature": null
+              },
+              "docs": "**string**: Must be set to `temperature`, or simply omitted.\n\n*See also: [BMI270 Temperature Sensor](https://esphome.io/components/sensor/bmi270#configuration-variables)*"
+            },
+            "unit_of_measurement": {
+              "default": "\u00b0C"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

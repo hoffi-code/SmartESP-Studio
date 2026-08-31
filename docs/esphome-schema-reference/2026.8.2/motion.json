@@ -1,0 +1,379 @@
+{
+  "motion": {
+    "action": {
+      "calibrate_heading": {
+        "schema": {
+          "extends": [
+            "motion.CALIBRATE_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) corrects the heading (rotation around Z) after a prior level calibration. Tilt the device around its Y axis only (pitch forward or backward) and trigger this action. It composes a Z-rotation correction with the existing matrix so that the horizontal acceleration component falls entirely on the X axis, with its sign preserved."
+      },
+      "calibrate_level": {
+        "schema": {
+          "extends": [
+            "motion.CALIBRATE_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) computes a calibration matrix so that the current accelerometer reading maps to `[0, 0, 1]` (device flat, Z pointing up). Place the device on a level surface and trigger this action. It replaces the current `transform_matrix`."
+      },
+      "clear_calibration": {
+        "schema": {
+          "extends": [
+            "motion.CLEAR_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) discards any runtime calibration and restores the build-time matrix defined by `axis_map` or `transform_matrix` (or the identity matrix if neither is configured). Use it to undo a `motion.calibrate_level` / `motion.calibrate_heading` sequence without re-flashing."
+      }
+    },
+    "components": {
+      "bmi270": {
+        "dependencies": [
+          "i2c"
+        ],
+        "docs": "The `bmi270` motion platform allows you to use your BMI270 Accelerometer/Gyroscope ([datasheet](https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bmi270-ds000.pdf)) sensors with ESPHome. The [I\u00b2C Bus](https://esphome.io/components/i2c) is required to be set up in your configuration for this sensor to work.\n\n*See also: [BMI270 Accelerometer/Gyroscope Sensor](https://esphome.io/components/motion/bmi270)*"
+      },
+      "lsm6ds": {
+        "dependencies": [
+          "i2c"
+        ],
+        "docs": "The `lsm6ds` motion platform allows you to use your LSM6DS Accelerometer/Gyroscope ([datasheet](https://www.st.com/resource/en/datasheet/lsm6ds3tr-c.pdf)) sensors with ESPHome. The [I\u00b2C Bus](https://esphome.io/components/i2c) is required to be set up in your configuration for this sensor to work.\n\n*See also: [LSM6DS Accelerometer/Gyroscope Sensor](https://esphome.io/components/motion/lsm6ds)*"
+      },
+      "qmi8658": {}
+    },
+    "schemas": {
+      "CALIBRATE_ACTION_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "motion::MotionComponent"
+            },
+            "on_error": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "on_success": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "save": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "CLEAR_ACTION_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "motion::MotionComponent"
+            },
+            "save": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "SENSOR_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "motion_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "motion::MotionComponent"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "_CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "axis_map": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "x": {
+                    "key": "Required",
+                    "type": "string"
+                  },
+                  "y": {
+                    "key": "Required",
+                    "type": "string"
+                  },
+                  "z": {
+                    "key": "Required",
+                    "type": "string"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "transform_matrix": {
+              "key": "Optional"
+            },
+            "update_interval": {
+              "default": "250ms",
+              "key": "Optional"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "motion.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "type": "typed",
+        "typed_key": "type",
+        "types": {
+          "acceleration_x": {
+            "config_vars": {
+              "accuracy_decimals": {
+                "default": "2"
+              },
+              "icon": {
+                "default": "mdi:axis-arrow"
+              },
+              "state_class": {
+                "default": "measurement"
+              },
+              "unit_of_measurement": {
+                "default": "G"
+              }
+            },
+            "extends": [
+              "sensor._SENSOR_SCHEMA",
+              "motion.SENSOR_SCHEMA"
+            ]
+          },
+          "acceleration_y": {
+            "config_vars": {
+              "accuracy_decimals": {
+                "default": "2"
+              },
+              "icon": {
+                "default": "mdi:axis-arrow"
+              },
+              "state_class": {
+                "default": "measurement"
+              },
+              "unit_of_measurement": {
+                "default": "G"
+              }
+            },
+            "extends": [
+              "sensor._SENSOR_SCHEMA",
+              "motion.SENSOR_SCHEMA"
+            ]
+          },
+          "acceleration_z": {
+            "config_vars": {
+              "accuracy_decimals": {
+                "default": "2"
+              },
+              "icon": {
+                "default": "mdi:axis-arrow"
+              },
+              "state_class": {
+                "default": "measurement"
+              },
+              "unit_of_measurement": {
+                "default": "G"
+              }
+            },
+            "extends": [
+              "sensor._SENSOR_SCHEMA",
+              "motion.SENSOR_SCHEMA"
+            ]
+          },
+          "angular_rate_x": {
+            "config_vars": {
+              "accuracy_decimals": {
+                "default": "2"
+              },
+              "icon": {
+                "default": "mdi:rotate-right"
+              },
+              "state_class": {
+                "default": "measurement"
+              },
+              "unit_of_measurement": {
+                "default": "\u00b0/s"
+              }
+            },
+            "extends": [
+              "sensor._SENSOR_SCHEMA",
+              "motion.SENSOR_SCHEMA"
+            ]
+          },
+          "angular_rate_y": {
+            "config_vars": {
+              "accuracy_decimals": {
+                "default": "2"
+              },
+              "icon": {
+                "default": "mdi:rotate-right"
+              },
+              "state_class": {
+                "default": "measurement"
+              },
+              "unit_of_measurement": {
+                "default": "\u00b0/s"
+              }
+            },
+            "extends": [
+              "sensor._SENSOR_SCHEMA",
+              "motion.SENSOR_SCHEMA"
+            ]
+          },
+          "angular_rate_z": {
+            "config_vars": {
+              "accuracy_decimals": {
+                "default": "2"
+              },
+              "icon": {
+                "default": "mdi:rotate-right"
+              },
+              "state_class": {
+                "default": "measurement"
+              },
+              "unit_of_measurement": {
+                "default": "\u00b0/s"
+              }
+            },
+            "extends": [
+              "sensor._SENSOR_SCHEMA",
+              "motion.SENSOR_SCHEMA"
+            ]
+          },
+          "gyroscope_x": {
+            "config_vars": {
+              "accuracy_decimals": {
+                "default": "2"
+              },
+              "icon": {
+                "default": "mdi:rotate-right"
+              },
+              "state_class": {
+                "default": "measurement"
+              },
+              "unit_of_measurement": {
+                "default": "\u00b0/s"
+              }
+            },
+            "extends": [
+              "sensor._SENSOR_SCHEMA",
+              "motion.SENSOR_SCHEMA"
+            ]
+          },
+          "gyroscope_y": {
+            "config_vars": {
+              "accuracy_decimals": {
+                "default": "2"
+              },
+              "icon": {
+                "default": "mdi:rotate-right"
+              },
+              "state_class": {
+                "default": "measurement"
+              },
+              "unit_of_measurement": {
+                "default": "\u00b0/s"
+              }
+            },
+            "extends": [
+              "sensor._SENSOR_SCHEMA",
+              "motion.SENSOR_SCHEMA"
+            ]
+          },
+          "gyroscope_z": {
+            "config_vars": {
+              "accuracy_decimals": {
+                "default": "2"
+              },
+              "icon": {
+                "default": "mdi:rotate-right"
+              },
+              "state_class": {
+                "default": "measurement"
+              },
+              "unit_of_measurement": {
+                "default": "\u00b0/s"
+              }
+            },
+            "extends": [
+              "sensor._SENSOR_SCHEMA",
+              "motion.SENSOR_SCHEMA"
+            ]
+          },
+          "pitch": {
+            "config_vars": {
+              "accuracy_decimals": {
+                "default": "2"
+              },
+              "icon": {
+                "default": "mdi:seesaw"
+              },
+              "state_class": {
+                "default": "measurement"
+              },
+              "unit_of_measurement": {
+                "default": "\u00b0"
+              }
+            },
+            "extends": [
+              "sensor._SENSOR_SCHEMA",
+              "motion.SENSOR_SCHEMA"
+            ]
+          },
+          "roll": {
+            "config_vars": {
+              "accuracy_decimals": {
+                "default": "2"
+              },
+              "icon": {
+                "default": "mdi:seesaw"
+              },
+              "state_class": {
+                "default": "measurement"
+              },
+              "unit_of_measurement": {
+                "default": "\u00b0"
+              }
+            },
+            "extends": [
+              "sensor._SENSOR_SCHEMA",
+              "motion.SENSOR_SCHEMA"
+            ]
+          }
+        }
+      },
+      "SENSOR_SCHEMA": {
+        "schema": {
+          "extends": [
+            "motion.SENSOR_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

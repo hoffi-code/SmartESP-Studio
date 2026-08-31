@@ -1,0 +1,64 @@
+{
+  "aic3204": {
+    "action": {
+      "set_auto_mute_mode": {
+        "maybe": "mode",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "aic3204::AIC3204",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the `aic3204` platform.\n\n*See also: [AIC3204](https://esphome.io/components/audio_dac/aic3204#aic3204set_auto_mute_mode-action)*"
+            },
+            "mode": {
+              "key": "Required",
+              "templatable": true,
+              "type": "integer",
+              "docs": "**int**: The auto-mute mode to be used; must be in the range of 0 (auto-mute disabled) to 7.\n\n*See also: [AIC3204](https://esphome.io/components/audio_dac/aic3204#aic3204set_auto_mute_mode-action)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This action sets the auto-mute mode of the AIC3204. See page 111 in the [reference manual](https://www.ti.com/lit/ml/slaa557/slaa557.pdf?ts=1727495047647&ref_url=ti.com) for more information."
+      }
+    }
+  },
+  "aic3204.audio_dac": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "24",
+              "key": "Optional",
+              "docs": "**int**: The I\u00b2C address of the driver. Defaults to `0x18`.\n\n*See also: [AIC3204](https://esphome.io/components/audio_dac/aic3204#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus",
+              "docs": "The ID of the [I\u00b2C bus](https://esphome.io/components/i2c) the AIC3204 is connected to.\n\n*See also: [AIC3204](https://esphome.io/components/audio_dac/aic3204#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "aic3204::AIC3204",
+                "parents": [
+                  "audio_dac::AudioDac",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

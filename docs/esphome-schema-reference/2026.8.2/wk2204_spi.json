@@ -1,0 +1,61 @@
+{
+  "wk2204_spi": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "cs_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin"
+            },
+            "data_rate": {
+              "key": "Optional"
+            },
+            "id": {
+              "id_type": {
+                "class": "weikai_spi::WeikaiComponentSPI",
+                "parents": [
+                  "weikai::WeikaiComponent",
+                  "Component",
+                  "spi::SPIDevice"
+                ]
+              }
+            },
+            "release_device": {
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "spi_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "spi::SPIComponent"
+            },
+            "spi_mode": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "MODE0": null,
+                "MODE1": null,
+                "MODE2": null,
+                "MODE3": null,
+                "0": null,
+                "1": null,
+                "2": null,
+                "3": null
+              }
+            }
+          },
+          "extends": [
+            "weikai.WKBASE_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

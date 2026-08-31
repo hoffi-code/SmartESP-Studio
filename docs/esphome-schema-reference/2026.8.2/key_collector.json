@@ -1,0 +1,157 @@
+{
+  "key_collector": {
+    "action": {
+      "disable": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "key_collector::KeyCollector"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This action deactivates a `key_collector`. It will stop accepting keys and will clear any already collected ones. If there is more than one key collector, you will need to provide the `id` of the one to disable."
+      },
+      "enable": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "key_collector::KeyCollector"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This action activates a `key_collector`. It will start accepting keys. If there is more than one key collector, you will need to provide the `id` of the one to enable."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "allowed_keys": {
+              "key": "Optional",
+              "type": "string",
+              "docs": "**string**: Keys allowed to be used. If not specified, then any otherwise unused keys will be allowed.\n\n*See also: [Key collector component](https://esphome.io/components/key_collector#configuration-variables)*"
+            },
+            "back_keys": {
+              "key": "Optional",
+              "type": "string",
+              "docs": "**string**: Keys used to delete the last pressed key. Like *Backspace* on a keyboard.\n\n*See also: [Key collector component](https://esphome.io/components/key_collector#configuration-variables)*"
+            },
+            "clear_keys": {
+              "key": "Optional",
+              "type": "string",
+              "docs": "**string**: Keys used to cancel building the key sequence.\n\n*See also: [Key collector component](https://esphome.io/components/key_collector#configuration-variables)*"
+            },
+            "enable_on_boot": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: If enabled, this key collector will be enabled on boot. Defaults to `true`.\n\n*See also: [Key collector component](https://esphome.io/components/key_collector#configuration-variables)*"
+            },
+            "end_key_required": {
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Only trigger `on_result` automation when one of the `end_keys` was pressed, and not when `max_length` characters have been entered. Defaults to `false`.\n\n*See also: [Key collector component](https://esphome.io/components/key_collector#configuration-variables)*"
+            },
+            "end_keys": {
+              "key": "Optional",
+              "type": "string",
+              "docs": "**string**: Keys used to *finish* the key sequence and trigger the `on_result` automation.\n\n*See also: [Key collector component](https://esphome.io/components/key_collector#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "key_collector::KeyCollector",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Set the ID of this entry for use in lambdas.\n\n*See also: [Key collector component](https://esphome.io/components/key_collector#configuration-variables)*"
+            },
+            "max_length": {
+              "data_type": "uint16_t",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**integer**: The maximum length of the desired key sequence. After this limit is reached, the collector will either ignore additional keys or trigger the `on_result` automation, depending on `end_key_required`.\n\n*See also: [Key collector component](https://esphome.io/components/key_collector#configuration-variables)*"
+            },
+            "min_length": {
+              "data_type": "uint16_t",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**integer**: The minimum length of the desired key sequence. Below this limit, `on_result` automation will not trigger even if any of the `end_keys` was pressed.\n\n*See also: [Key collector component](https://esphome.io/components/key_collector#configuration-variables)*"
+            },
+            "on_progress": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform when keys are pressed. The current key sequence is placed in a `vector<uint8_t>` variable `x` and `start` holds the start key that activated this key sequence or else `0`. Useful if you want to have a display showing the current value or number of key presses, or a speaker beeping when keys are being pressed.\n\n*See also: [Key collector component](https://esphome.io/components/key_collector#configuration-variables)*"
+            },
+            "on_result": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform when the key sequence has been finished (eg. `max_length` has been reached or one of the `end_keys` was pressed). The finalized key sequence is placed in a `vector<uint8_t>` variable `x`, `start` holds the start key that activated this key sequence or else `0`, and `end` holds the end key that terminated this key sequence or else `0`.\n\n*See also: [Key collector component](https://esphome.io/components/key_collector#configuration-variables)*"
+            },
+            "on_timeout": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform if the timeout happens. The current key sequence is placed in a `vector<uint8_t>` variable `x` and `start` holds the start key that activated this key sequence or else `0`.\n\n*See also: [Key collector component](https://esphome.io/components/key_collector#configuration-variables)*"
+            },
+            "source_id": {
+              "is_list": true,
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "key_provider::KeyProvider",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the key collector component to monitor.\n\n*See also: [Key Collector Text Sensor](https://esphome.io/components/text_sensor/key_collector#configuration-variables)*"
+            },
+            "start_keys": {
+              "key": "Optional",
+              "type": "string",
+              "docs": "**string**: Keys used to *start* the key sequence; when set, no keys will be accepted until one of the start keys is pressed.\n\n*See also: [Key collector component](https://esphome.io/components/key_collector#configuration-variables)*"
+            },
+            "timeout": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: Timeout after which to cancel building the key sequence.\n\n*See also: [Key collector component](https://esphome.io/components/key_collector#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "key_collector.text_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {},
+            "source_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "key_collector::KeyCollector"
+            }
+          },
+          "extends": [
+            "text_sensor._TEXT_SENSOR_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

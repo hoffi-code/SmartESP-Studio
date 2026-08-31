@@ -1,0 +1,70 @@
+{
+  "pcf85063": {
+    "action": {
+      "read_time": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "pcf85063::PCF85063Component"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [Action](https://esphome.io/automations/actions#all-actions) triggers a synchronization of the current system time from the RTC hardware."
+      },
+      "write_time": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "pcf85063::PCF85063Component"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [Action](https://esphome.io/automations/actions#all-actions) triggers a synchronization of the current system time to the RTC hardware."
+      }
+    }
+  },
+  "pcf85063.time": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "81",
+              "key": "Optional",
+              "docs": "**int**: Manually specify the I\u00b2C address of the RTC. Defaults to `0x51`.\n\n*See also: [PCF85063 Time Source](https://esphome.io/components/time/pcf85063#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "pcf85063::PCF85063Component",
+                "parents": [
+                  "time::RealTimeClock",
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            }
+          },
+          "extends": [
+            "time.TIME_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

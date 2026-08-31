@@ -1,0 +1,98 @@
+{
+  "id": "hub.modbus_controller",
+  "domain": "modbus_controller",
+  "platform": "",
+  "type": "object",
+  "requirements": [
+    {
+      "require": "bus:modbus"
+    }
+  ],
+  "fields": [
+    {
+      "key": "id",
+      "type": "id",
+      "required": true,
+      "lvl": "simple",
+      "default": "modbus_controller_hub",
+      "placeholder": "modbus_controller_hub",
+      "idDomain": "modbus_controller"
+    },
+    {
+      "key": "modbus_id",
+      "type": "id_ref",
+      "required": false,
+      "lvl": "simple",
+      "domain": "modbus",
+      "default": "modbus_id",
+      "placeholder": "modbus_id"
+    },
+    {
+      "key": "address",
+      "type": "text",
+      "required": true,
+      "lvl": "simple",
+      "placeholder": "0x01",
+      "suppressQuotes": true
+    },
+    {
+      "key": "update_interval",
+      "type": "duration",
+      "required": false,
+      "lvl": "normal",
+      "default": "60s",
+      "placeholder": "60s"
+    },
+    {
+      "key": "offline_skip_updates",
+      "type": "number",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "3"
+    },
+    {
+      "key": "max_cmd_retries",
+      "type": "number",
+      "required": false,
+      "lvl": "normal",
+      "default": 4,
+      "placeholder": "4"
+    },
+    {
+      "key": "on_command_sent",
+      "type": "list",
+      "required": false,
+      "lvl": "advanced",
+      "item": {
+        "type": "object",
+        "fields": [],
+        "extends": "base_actions.json"
+      },
+      "wrapThen": true
+    },
+    {
+      "key": "on_online",
+      "type": "list",
+      "required": false,
+      "lvl": "advanced",
+      "item": {
+        "type": "object",
+        "fields": [],
+        "extends": "base_actions.json"
+      },
+      "wrapThen": true
+    },
+    {
+      "key": "on_offline",
+      "type": "list",
+      "required": false,
+      "lvl": "advanced",
+      "item": {
+        "type": "object",
+        "fields": [],
+        "extends": "base_actions.json"
+      },
+      "wrapThen": true
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "status.binary_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "device_class": {
+              "default": "connectivity"
+            },
+            "entity_category": {
+              "default": "diagnostic"
+            },
+            "id": {
+              "id_type": {
+                "class": "status::StatusBinarySensor",
+                "parents": [
+                  "binary_sensor::BinarySensor",
+                  "EntityBase",
+                  "PollingComponent",
+                  "Component"
+                ]
+              }
+            },
+            "update_interval": {
+              "default": "1s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the connection status. Defaults to `1s`.\n\n*See also: [Status Binary Sensor](https://esphome.io/components/binary_sensor/status#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "binary_sensor._BINARY_SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

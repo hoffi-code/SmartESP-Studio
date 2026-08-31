@@ -1,0 +1,31 @@
+{
+  "monochromatic.light": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "output": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "output::FloatOutput",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id of the float [Output Component](https://esphome.io/components/output/) to use for this light.\n\n*See also: [Monochromatic Light](https://esphome.io/components/light/monochromatic#configuration-variables)*"
+            },
+            "output_id": {
+              "id_type": {
+                "class": "monochromatic::MonochromaticLightOutput",
+                "parents": [
+                  "light::LightOutput"
+                ]
+              },
+              "key": "GeneratedID"
+            }
+          },
+          "extends": [
+            "light.BRIGHTNESS_ONLY_LIGHT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

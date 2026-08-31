@@ -1,0 +1,370 @@
+{
+  "msa3xx": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "type": "typed",
+        "typed_key": "type",
+        "types": {
+          "MSA301": {
+            "config_vars": {
+              "address": {
+                "data_type": "hex_uint8_t",
+                "default": "38",
+                "key": "Optional"
+              },
+              "i2c_id": {
+                "key": "GeneratedID",
+                "type": "use_id",
+                "use_id_type": "i2c::I2CBus"
+              },
+              "resolution": {
+                "default": "14",
+                "key": "Optional",
+                "type": "enum",
+                "values": {
+                  "14": null,
+                  "12": null,
+                  "10": null,
+                  "8": null
+                },
+                "docs": "**int**: The ADC resolution of the sensor in bits. Supported values for `msa301` are `8`, `10`, `12`, `14` (*default*). For `msa311` the only resolution supported is `12` (and it is *default*).\n\n*See also: [MSA301 and MSA311 Sensors](https://esphome.io/components/sensor/msa3xx#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "msa3xx._COMMON_SCHEMA"
+            ]
+          },
+          "MSA311": {
+            "config_vars": {
+              "address": {
+                "data_type": "hex_uint8_t",
+                "default": "98",
+                "key": "Optional"
+              },
+              "i2c_id": {
+                "key": "GeneratedID",
+                "type": "use_id",
+                "use_id_type": "i2c::I2CBus"
+              },
+              "resolution": {
+                "default": "12",
+                "key": "Optional",
+                "type": "enum",
+                "values": {
+                  "12": null
+                },
+                "docs": "**int**: The ADC resolution of the sensor in bits. Supported values for `msa301` are `8`, `10`, `12`, `14` (*default*). For `msa311` the only resolution supported is `12` (and it is *default*).\n\n*See also: [MSA301 and MSA311 Sensors](https://esphome.io/components/sensor/msa3xx#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "msa3xx._COMMON_SCHEMA"
+            ]
+          }
+        },
+        "docs": "Sensor type. Either `msa301` or `msa311`."
+      },
+      "MSA_SENSOR_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "msa3xx_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "msa3xx::MSA3xxComponent"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "_COMMON_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "calibration": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "offset_x": {
+                    "default": "0",
+                    "key": "Optional"
+                  },
+                  "offset_y": {
+                    "default": "0",
+                    "key": "Optional"
+                  },
+                  "offset_z": {
+                    "default": "0",
+                    "key": "Optional"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "id": {
+              "id_type": {
+                "class": "msa3xx::MSA3xxComponent",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "on_active": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "on_double_tap": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "on_freefall": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "on_orientation": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "on_tap": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "range": {
+              "default": "2G",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "2G": null,
+                "4G": null,
+                "8G": null,
+                "16G": null
+              },
+              "docs": "**string**: The range of the sensor measurements. One of `2G`, `4G`, `8G`, `16G`. Defaults to `2G` which means it picks up accelerations between `-2g` and `2g`.\n\n*See also: [MSA301 and MSA311 Sensors](https://esphome.io/components/sensor/msa3xx#configuration-variables)*"
+            },
+            "transform": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "mirror_x": {
+                    "default": "False",
+                    "key": "Optional",
+                    "type": "boolean"
+                  },
+                  "mirror_y": {
+                    "default": "False",
+                    "key": "Optional",
+                    "type": "boolean"
+                  },
+                  "mirror_z": {
+                    "default": "False",
+                    "key": "Optional",
+                    "type": "boolean"
+                  },
+                  "swap_xy": {
+                    "default": "False",
+                    "key": "Optional",
+                    "type": "boolean"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "update_interval": {
+              "default": "10s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval for updating acceleration sensors. Defaults to `10s`.\n\n*See also: [MSA301 and MSA311 Sensors](https://esphome.io/components/sensor/msa3xx#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "msa3xx.binary_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "active": {
+              "key": "Optional",
+              "maybe": "name",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "vibration"
+                  },
+                  "icon": {
+                    "default": "mdi:vibrate"
+                  }
+                },
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Movement detection.\n\n*See also: [MSA301 and MSA311 Sensors](https://esphome.io/components/sensor/msa3xx#configuration-variables)*"
+            },
+            "double_tap": {
+              "key": "Optional",
+              "maybe": "name",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "vibration"
+                  },
+                  "icon": {
+                    "default": "mdi:gesture-double-tap"
+                  }
+                },
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Double tap detection.\n\n*See also: [MSA301 and MSA311 Sensors](https://esphome.io/components/sensor/msa3xx#configuration-variables)*"
+            },
+            "tap": {
+              "key": "Optional",
+              "maybe": "name",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "vibration"
+                  },
+                  "icon": {
+                    "default": "mdi:gesture-tap"
+                  }
+                },
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Single tap detection.\n\n*See also: [MSA301 and MSA311 Sensors](https://esphome.io/components/sensor/msa3xx#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "msa3xx.MSA_SENSOR_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "msa3xx.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "acceleration_x": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "msa3xx.sensor.accel_schema"
+                ]
+              },
+              "type": "schema",
+              "docs": "X-axis acceleration, m/s\u00b2.\n\n*See also: [MSA301 and MSA311 Sensors](https://esphome.io/components/sensor/msa3xx#configuration-variables)*"
+            },
+            "acceleration_y": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "msa3xx.sensor.accel_schema"
+                ]
+              },
+              "type": "schema",
+              "docs": "Y-axis acceleration, m/s\u00b2.\n\n*See also: [MSA301 and MSA311 Sensors](https://esphome.io/components/sensor/msa3xx#configuration-variables)*"
+            },
+            "acceleration_z": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "msa3xx.sensor.accel_schema"
+                ]
+              },
+              "type": "schema"
+            }
+          },
+          "extends": [
+            "msa3xx.MSA_SENSOR_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "accel_schema": {
+        "maybe": "name",
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "2"
+            },
+            "icon": {
+              "default": "mdi:briefcase-download"
+            },
+            "state_class": {
+              "default": "measurement"
+            },
+            "unit_of_measurement": {
+              "default": "m/s\u00b2"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "msa3xx.text_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "orientation_xy": {
+              "key": "Optional",
+              "maybe": "name",
+              "schema": {
+                "config_vars": {
+                  "icon": {
+                    "default": "mdi:screen-rotation"
+                  }
+                },
+                "extends": [
+                  "text_sensor._TEXT_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "XY orientation. Can be one of `Portrait Upright`, `Portrait Upside Down`, `Landscape Left`, `Landscape Right`.\n\n*See also: [MSA301 and MSA311 Sensors](https://esphome.io/components/sensor/msa3xx#configuration-variables)*"
+            },
+            "orientation_z": {
+              "key": "Optional",
+              "maybe": "name",
+              "schema": {
+                "config_vars": {
+                  "icon": {
+                    "default": "mdi:screen-rotation"
+                  }
+                },
+                "extends": [
+                  "text_sensor._TEXT_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Z orientation. Can be one of `Upwards looking`, `Downwards looking`\n\n*See also: [MSA301 and MSA311 Sensors](https://esphome.io/components/sensor/msa3xx#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "msa3xx.MSA_SENSOR_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "mmc5983.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "48",
+              "key": "Optional"
+            },
+            "field_strength_x": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "mmc5983.sensor.field_strength_schema"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the X-axis field sensor. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [MMC5983 Magnetometer](https://esphome.io/components/sensor/mmc5983#configuration-variables)*"
+            },
+            "field_strength_y": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "mmc5983.sensor.field_strength_schema"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the Y-axis field sensor. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [MMC5983 Magnetometer](https://esphome.io/components/sensor/mmc5983#configuration-variables)*"
+            },
+            "field_strength_z": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "mmc5983.sensor.field_strength_schema"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the Z-axis field sensor. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [MMC5983 Magnetometer](https://esphome.io/components/sensor/mmc5983#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "mmc5983::MMC5983Component",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`.\n\n*See also: [MMC5983 Magnetometer](https://esphome.io/components/sensor/mmc5983#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "field_strength_schema": {
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "4"
+            },
+            "icon": {
+              "default": "mdi:magnet"
+            },
+            "state_class": {
+              "default": "measurement"
+            },
+            "unit_of_measurement": {
+              "default": "\u00b5T"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

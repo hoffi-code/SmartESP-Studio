@@ -1,0 +1,372 @@
+{
+  "switch": {
+    "action": {
+      "control": {
+        "schema": {
+          "extends": [
+            "switch.SWITCH_CONTROL_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action allows you to control a switch with more flexibility than the basic `turn_on` and `turn_off` actions. It accepts a templatable `state` parameter, making it useful when the desired switch state is determined dynamically."
+      },
+      "toggle": {
+        "schema": {
+          "extends": [
+            "switch.SWITCH_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action toggles a switch with the given ID when executed."
+      },
+      "turn_off": {
+        "schema": {
+          "extends": [
+            "switch.SWITCH_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action turns a switch with the given ID off when executed."
+      },
+      "turn_on": {
+        "schema": {
+          "extends": [
+            "switch.SWITCH_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action turns a switch with the given ID on when executed."
+      }
+    },
+    "components": {
+      "at581x": {
+        "dependencies": [
+          "at581x"
+        ],
+        "docs": "[Switch components](https://esphome.io/components/switch#config-switch) are used to enable/disable radio frequency hardware.\n\n*See also: [AirTouch AT581x Radar](https://esphome.io/components/at581x#switch)*"
+      },
+      "ble_client": {},
+      "copy": {
+        "docs": "None\n\n*See also: [Copy Component](https://esphome.io/components/copy#copy-switch)*"
+      },
+      "dfrobot_sen0395": {
+        "dependencies": [
+          "dfrobot_sen0395"
+        ],
+        "docs": "[Switch components](https://esphome.io/components/switch#config-switch) are used to enable/disable various module features/functions.\n\n*See also: [DFRobot mmWave Radar](https://esphome.io/components/dfrobot_sen0395#switch)*"
+      },
+      "factory_reset": {},
+      "gpio": {
+        "docs": "The `gpio` switch platform allows you to use any pin on your node as a switch. You can for example hook up a relay to a GPIO pin and use it through this platform.\n\n*See also: [GPIO Switch](https://esphome.io/components/switch/gpio)*"
+      },
+      "gree": {},
+      "haier": {
+        "docs": "Additional switches to support additional features for Haier AC.\n\n*See also: [Haier Climate Switches](https://esphome.io/components/switch/haier)*"
+      },
+      "hbridge": {
+        "docs": "The `hbridge` switch platform allows you to drive an *h-bridge* controlled latching relay.\n\n*See also: [H-bridge Switch](https://esphome.io/components/switch/hbridge)*"
+      },
+      "homeassistant": {
+        "dependencies": [
+          "api"
+        ],
+        "docs": "The `homeassistant` Switch platform allows you to create Switch that **import** states and allow **control** via your Home Assistant instance using the [native API](https://esphome.io/components/api/).\n\n*See also: [Home Assistant Switch](https://esphome.io/components/switch/homeassistant)*"
+      },
+      "ld2410": {
+        "docs": "The `ld2410` switches allow you to enable or disable sensor features from the front end.\n\n*See also: [LD2410 Sensor](https://esphome.io/components/sensor/ld2410#switch)*"
+      },
+      "ld2412": {
+        "docs": "The `ld2412` switches allow you to enable or disable sensor features from the front end.\n\n*See also: [LD2412 Sensor](https://esphome.io/components/sensor/ld2412#switch)*"
+      },
+      "ld2450": {
+        "docs": "The `ld2450` switch allows you to control your [Ld2450](https://esphome.io/components/sensor/ld2450/) `Bluetooth` and `Multi/Single Target Tracking`.\n\n*See also: [LD2450 Sensor](https://esphome.io/components/sensor/ld2450#switch)*"
+      },
+      "ld6002b": {
+        "dependencies": [
+          "ld6002b"
+        ],
+        "docs": "The `ld6002b` switch platform enables low power mode, point-cloud output, and target reporting.\n\n*See also: [LD6002B 3D Presence Radar](https://esphome.io/components/sensor/ld6002b#switch)*"
+      },
+      "lvgl": {},
+      "micronova": {},
+      "modbus_controller": {
+        "dependencies": [
+          "modbus_controller"
+        ]
+      },
+      "nextion": {
+        "docs": "The `nextion` switch platform supports the many switched components in the Nextion as well as integer variables. It can be a component or variable in the Nextion display. It is best to set the components vscope to global in the Nextion Editor. This way the component will be available if the page is shown or not.\n\n*See also: [Nextion Switch Component](https://esphome.io/components/switch/nextion)*"
+      },
+      "opentherm": {
+        "dependencies": [
+          "opentherm"
+        ],
+        "docs": "Switches are available to allow manual toggling of any of the following seven status codes:\n\n*See also: [OpenTherm](https://esphome.io/components/opentherm#switch)*"
+      },
+      "output": {
+        "docs": "The `output` switch platform allows you to use any output component as a switch.\n\n*See also: [Generic Output Switch](https://esphome.io/components/switch/output)*"
+      },
+      "pcm5122": {
+        "docs": "The `pcm5122` switch platform provides a switch to place the PCM5122 into standby or powerdown mode.\n\n*See also: [PCM5122](https://esphome.io/components/audio_dac/pcm5122#switch)*"
+      },
+      "pipsolar": {
+        "dependencies": [
+          "uart"
+        ],
+        "docs": "Not all possible switches are exposed as they lead to the possibility to make serious damage. They should only be set at the physical device itself.\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#switch)*"
+      },
+      "restart": {
+        "docs": "The `restart` switch platform allows you to restart your node remotely through Home Assistant.\n\n*See also: [Restart Switch](https://esphome.io/components/switch/restart)*"
+      },
+      "safe_mode": {
+        "dependencies": [
+          "safe_mode"
+        ]
+      },
+      "seeed_mr24hpc1": {
+        "docs": "The `seeed_mr24hpc1` switch allows you to control your device.\n\n*See also: [Seeed Studio MR24HPC1 mmWave (Kit)](https://esphome.io/components/seeed_mr24hpc1#switch)*"
+      },
+      "shutdown": {
+        "docs": "The `shutdown` switch platform allows you to shutdown your node remotely through Home Assistant. It does this by putting the node into deep sleep mode with no wakeup source selected. After enabling, the only way to startup the ESP again is by pressing the reset button or restarting the power supply.\n\n*See also: [Shutdown Switch](https://esphome.io/components/switch/shutdown)*"
+      },
+      "template": {
+        "docs": "The `template` switch platform allows you to create simple switches out of just actions and an optional value lambda. Once defined, it will automatically appear in Home Assistant as a switch and can be controlled through the frontend.\n\n*See also: [Template Switch](https://esphome.io/components/switch/template)*"
+      },
+      "tm1638": {},
+      "tuya": {
+        "dependencies": [
+          "tuya"
+        ]
+      },
+      "uart": {
+        "dependencies": [
+          "uart"
+        ]
+      }
+    },
+    "condition": {
+      "is_off": {
+        "schema": {
+          "extends": [
+            "switch.SWITCH_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "is_on": {
+        "schema": {
+          "extends": [
+            "switch.SWITCH_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [Condition](https://esphome.io/automations/actions#all-conditions) checks if the given switch is ON (or OFF)."
+      }
+    },
+    "schemas": {
+      "SWITCH_ACTION_SCHEMA": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "switch_::Switch"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "SWITCH_CONTROL_ACTION_SCHEMA": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "switch_::Switch",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the switch to control.\n\n*See also: [Switch Component](https://esphome.io/components/switch#switchcontrol-action)*"
+            },
+            "state": {
+              "key": "Required",
+              "templatable": true,
+              "type": "boolean",
+              "docs": "**boolean**: The state to set the switch to. `true` turns the switch on, `false` turns it off.\n\n*See also: [Switch Component](https://esphome.io/components/switch#switchcontrol-action)*"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "_SWITCH_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "device_class": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "": null,
+                "outlet": null,
+                "switch": null
+              },
+              "visibility": "advanced",
+              "docs": "**string**: The device class for the switch. See [https://www.home-assistant.io/integrations/switch/#device-class](https://www.home-assistant.io/integrations/switch/#device-class) for a list of available options.\n\n*See also: [Switch Component](https://esphome.io/components/switch#base-switch-configuration)*"
+            },
+            "inverted": {
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Whether to invert the binary state, i.e.\u00a0report ON states as OFF and vice versa. Defaults to `false`.\n\n*See also: [Switch Component](https://esphome.io/components/switch#base-switch-configuration)*"
+            },
+            "mqtt_id": {
+              "id_type": {
+                "class": "mqtt::MQTTSwitchComponent",
+                "parents": [
+                  "mqtt::MQTTComponent",
+                  "Component"
+                ]
+              },
+              "key": "Optional"
+            },
+            "on_state": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "on_turn_off": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: An automation to perform when the switch is turned off. See [`switch.on_turn_on` / `switch.on_turn_off` Trigger](https://esphome.io/components/switch#switch-on_turn_on_off_trigger).\n\n*See also: [Switch Component](https://esphome.io/components/switch#base-switch-configuration)*"
+            },
+            "on_turn_on": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: An automation to perform when the switch is turned on. See [`switch.on_turn_on` / `switch.on_turn_off` Trigger](https://esphome.io/components/switch#switch-on_turn_on_off_trigger).\n\n*See also: [Switch Component](https://esphome.io/components/switch#base-switch-configuration)*"
+            },
+            "restore_mode": {
+              "default": "ALWAYS_OFF",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "RESTORE_DEFAULT_OFF": {
+                  "docs": "Attempt to restore state and default to OFF if not possible to restore."
+                },
+                "RESTORE_DEFAULT_ON": {
+                  "docs": "Attempt to restore state and default to ON."
+                },
+                "ALWAYS_OFF": {
+                  "docs": "Default"
+                },
+                "ALWAYS_ON": {
+                  "docs": "Always initialize the switch as ON on bootup."
+                },
+                "RESTORE_INVERTED_DEFAULT_OFF": {
+                  "docs": "Attempt to restore state inverted from the previous state and default to OFF."
+                },
+                "RESTORE_INVERTED_DEFAULT_ON": {
+                  "docs": "Attempt to restore state inverted from the previous state and default to ON."
+                },
+                "DISABLED": {
+                  "docs": "Does nothing and leaves it up to the downstream platform component to decide. For example, the component could read hardware and determine the state, or have a specific configuration option to regulate initial state."
+                }
+              },
+              "docs": "Control how the switch attempts to restore state on bootup. **NOTE** : Not all components consider **restore_mode**. Check the documentation of the specific component to understand how this feature works for a particular component or device. For restoring on ESP8266s, also see `restore_from_flash` in the [esp8266 section](https://esphome.io/components/esp8266/).\n\n*See also: [Switch Component](https://esphome.io/components/switch#base-switch-configuration)*"
+            },
+            "web_server": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "sorting_group_id": {
+                    "key": "Optional",
+                    "type": "use_id",
+                    "use_id_type": "int"
+                  },
+                  "sorting_weight": {
+                    "key": "Optional"
+                  },
+                  "web_server_id": {
+                    "key": "Optional",
+                    "type": "use_id",
+                    "use_id_type": "web_server::WebServer"
+                  }
+                }
+              },
+              "type": "schema",
+              "visibility": "advanced"
+            },
+            "zigbee_id": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "zigbee::ZigbeeComponent"
+            },
+            "zigbee_switch": {
+              "id_type": {
+                "class": "zigbee::ZigbeeSwitch",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "Optional"
+            },
+            "id": {
+              "docs": "**string**: Manually specify the ID for code generation. At least one of **id** and **name** must be specified.\n\n*See also: [Switch Component](https://esphome.io/components/switch#base-switch-configuration)*"
+            },
+            "name": {
+              "key": "Optional",
+              "docs": "**string**: The name of the switch. At least one of **id** and **name** must be specified.\n\n*See also: [Switch Component](https://esphome.io/components/switch#base-switch-configuration)*"
+            },
+            "icon": {
+              "key": "Optional",
+              "docs": "**icon**: Manually set the icon to use for the sensor in the frontend.\n\n*See also: [Switch Component](https://esphome.io/components/switch#base-switch-configuration)*"
+            },
+            "internal": {
+              "key": "Optional",
+              "docs": "**boolean**: Mark this component as internal. Internal components will not be exposed to the frontend (like Home Assistant). Only specifying an `id` without a `name` will implicitly set this to true.\n\n*See also: [Switch Component](https://esphome.io/components/switch#base-switch-configuration)*"
+            },
+            "disabled_by_default": {
+              "key": "Optional",
+              "docs": "**boolean**: If true, then this entity should not be added to any client's frontend, (usually Home Assistant) without the user manually enabling it (via the Home Assistant UI). Defaults to `false`.\n\n*See also: [Switch Component](https://esphome.io/components/switch#base-switch-configuration)*"
+            },
+            "entity_category": {
+              "key": "Optional",
+              "docs": "**string**: The category of the entity. See [https://developers.home-assistant.io/docs/core/entity/#generic-properties](https://developers.home-assistant.io/docs/core/entity/#generic-properties) for a list of available options. Set to `\"\"` to remove the default entity category.\n\n*See also: [Switch Component](https://esphome.io/components/switch#base-switch-configuration)*"
+            }
+          },
+          "extends": [
+            "core.ENTITY_BASE_SCHEMA",
+            "core.MQTT_COMMAND_COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "switch.binary_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "switch_::SwitchBinarySensor",
+                "parents": [
+                  "binary_sensor::BinarySensor",
+                  "EntityBase",
+                  "Component"
+                ]
+              }
+            },
+            "source_id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "switch_::Switch",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The source switch to observe.\n\n*See also: [Switch Binary Sensor](https://esphome.io/components/binary_sensor/switch#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "binary_sensor._BINARY_SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,148 @@
+{
+  "rotary_encoder.sensor": {
+    "action": {
+      "set_value": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "rotary_encoder::RotaryEncoderSensor",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the rotary encoder.\n\n*See also: [Rotary Encoder Sensor](https://esphome.io/components/sensor/rotary_encoder#in-some-trigger)*"
+            },
+            "value": {
+              "key": "Required",
+              "templatable": true,
+              "type": "integer",
+              "docs": "**int**: The value to set the internal counter to.\n\n*See also: [Rotary Encoder Sensor](https://esphome.io/components/sensor/rotary_encoder#in-some-trigger)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "The internal state of the rotary encoder can be manually changed to any value with this action. After executing this action, rotating the encoder further will increase/decrease the state relative to the newly set internal value."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "0"
+            },
+            "icon": {
+              "default": "mdi:rotate-right"
+            },
+            "id": {
+              "id_type": {
+                "class": "rotary_encoder::RotaryEncoderSensor",
+                "parents": [
+                  "sensor::Sensor",
+                  "EntityBase",
+                  "Component"
+                ]
+              }
+            },
+            "max_value": {
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: The maximum value this rotary encoder will go to, turning the knob further will not increase the number. Defaults to no maximum.\n\n*See also: [Rotary Encoder Sensor](https://esphome.io/components/sensor/rotary_encoder#configuration-variables)*"
+            },
+            "min_value": {
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: The minimum value this rotary encoder will go to, turning the knob further will not decrease the number. Defaults to no minimum.\n\n*See also: [Rotary Encoder Sensor](https://esphome.io/components/sensor/rotary_encoder#configuration-variables)*"
+            },
+            "on_anticlockwise": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: Actions to be performed when the knob is turned anticlockwise. See [`on_clockwise` and `on_anticlockwise` Triggers](https://esphome.io/components/sensor/rotary_encoder#sensor-rotary_encoder-triggers).\n\n*See also: [Rotary Encoder Sensor](https://esphome.io/components/sensor/rotary_encoder#configuration-variables)*"
+            },
+            "on_clockwise": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: Actions to be performed when the knob is turned clockwise. See [`on_clockwise` and `on_anticlockwise` Triggers](https://esphome.io/components/sensor/rotary_encoder#sensor-rotary_encoder-triggers).\n\n*See also: [Rotary Encoder Sensor](https://esphome.io/components/sensor/rotary_encoder#configuration-variables)*"
+            },
+            "pin_a": {
+              "internal": true,
+              "key": "Required",
+              "modes": [
+                "input"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The first pin for determining the step value. Must not be a pin from an external I/O expander.\n\n*See also: [Rotary Encoder Sensor](https://esphome.io/components/sensor/rotary_encoder#configuration-variables)*"
+            },
+            "pin_b": {
+              "internal": true,
+              "key": "Required",
+              "modes": [
+                "input"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The second pin for determining the step value. Must not be a pin from an external I/O expander.\n\n*See also: [Rotary Encoder Sensor](https://esphome.io/components/sensor/rotary_encoder#configuration-variables)*"
+            },
+            "pin_reset": {
+              "internal": true,
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: An optional pin that resets the step value. This is useful with rotary encoders that have a third pin. Defaults to no reset pin.\n\n*See also: [Rotary Encoder Sensor](https://esphome.io/components/sensor/rotary_encoder#configuration-variables)*"
+            },
+            "publish_initial_value": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Controls whether the value is published upon start of ESPHome. By default, the value is only published when it changes, causing an \"unknown\" value at first. If you set this option to true, the value is published once after boot and when it changes. Defaults to `false`.\n\n*See also: [Rotary Encoder Sensor](https://esphome.io/components/sensor/rotary_encoder#configuration-variables)*"
+            },
+            "resolution": {
+              "default": "1",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "1": {
+                  "docs": "(Default)"
+                },
+                "2": {
+                  "docs": null
+                },
+                "4": {
+                  "docs": null
+                }
+              },
+              "docs": "**string**: The resolution of the sensor, this controls how many pulses are generated by one step:\n\n*See also: [Rotary Encoder Sensor](https://esphome.io/components/sensor/rotary_encoder#configuration-variables)*"
+            },
+            "restore_mode": {
+              "default": "RESTORE_DEFAULT_ZERO",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "RESTORE_DEFAULT_ZERO": {
+                  "docs": "(Default) Attempt to restore state and default to zero (0) if not possible to restore."
+                },
+                "ALWAYS_ZERO": {
+                  "docs": "Always initialize the counter with value zero (0)."
+                }
+              },
+              "docs": "Control how the Rotary Encoder attempts to restore state on bootup.\n\n*See also: [Rotary Encoder Sensor](https://esphome.io/components/sensor/rotary_encoder#configuration-variables)*"
+            },
+            "state_class": {
+              "default": "measurement"
+            },
+            "unit_of_measurement": {
+              "default": "steps"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

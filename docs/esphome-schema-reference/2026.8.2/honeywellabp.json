@@ -1,0 +1,125 @@
+{
+  "honeywellabp.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "cs_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[SPI](https://esphome.io/components/spi)**: Chip select pin.\n\n*See also: [Honeywell ABP Pressure Sensors](https://esphome.io/components/sensor/honeywellabp#configuration-variables)*"
+            },
+            "data_rate": {
+              "key": "Optional"
+            },
+            "id": {
+              "id_type": {
+                "class": "honeywellabp::HONEYWELLABPSensor",
+                "parents": [
+                  "sensor::Sensor",
+                  "EntityBase",
+                  "PollingComponent",
+                  "Component",
+                  "spi::SPIDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "pressure": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "pressure"
+                  },
+                  "max_pressure": {
+                    "key": "Required",
+                    "docs": "**int or float**: Maximum pressure for the pressure sensor, default unit `psi`.\n\n*See also: [Honeywell ABP Pressure Sensors](https://esphome.io/components/sensor/honeywellabp#configuration-variables)*"
+                  },
+                  "min_pressure": {
+                    "key": "Required",
+                    "docs": "**int or float**: Minimum pressure for the pressure sensor, default unit `psi`.\n\n*See also: [Honeywell ABP Pressure Sensors](https://esphome.io/components/sensor/honeywellabp#configuration-variables)*"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "psi"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the pressure sensor.\n\n*See also: [Honeywell ABP Pressure Sensors](https://esphome.io/components/sensor/honeywellabp#configuration-variables)*"
+            },
+            "release_device": {
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "spi_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "spi::SPIComponent"
+            },
+            "spi_mode": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "MODE0": null,
+                "MODE1": null,
+                "MODE2": null,
+                "MODE3": null,
+                "0": null,
+                "1": null,
+                "2": null,
+                "3": null
+              }
+            },
+            "temperature": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the temperature sensor.\n\n*See also: [Honeywell ABP Pressure Sensors](https://esphome.io/components/sensor/honeywellabp#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`.\n\n*See also: [Honeywell ABP Pressure Sensors](https://esphome.io/components/sensor/honeywellabp#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

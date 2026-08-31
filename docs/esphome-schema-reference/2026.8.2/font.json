@@ -1,0 +1,151 @@
+{
+  "font": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "bpp": {
+              "default": "1",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "1": null,
+                "2": null,
+                "4": null,
+                "8": null
+              },
+              "docs": "**int**: The bit depth of the rendered font from OpenType/TrueType, for anti-aliasing. Can be `1`, `2`, `4`, `8`. Defaults to `1`. If set to 1 and the font has a bitmap version available at the requested size, that will be used. Otherwise the font will be rendered from the vector representation.\n\n*See also: [Font Renderer Component](https://esphome.io/components/font#configuration-variables)*"
+            },
+            "extras": {
+              "default": "[]",
+              "is_list": true,
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "file": {
+                    "key": "Required",
+                    "docs": "**string**: The path of the font file with the extra glyphs.\n\n*See also: [Font Renderer Component](https://esphome.io/components/font#configuration-variables)*"
+                  },
+                  "glyphs": {
+                    "is_list": true,
+                    "key": "Required",
+                    "type": "string",
+                    "docs": "**list**: A list of glyphs you want to include. Can't repeat the same glyph codepoint if it was declared in the level above.\n\n*See also: [Font Renderer Component](https://esphome.io/components/font#configuration-variables)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "**enum**: A list of font glyph configurations you'd like to include within this font, from other OpenType/TrueType files (eg. icons from other font, but at the same size as the main font):\n\n*See also: [Font Renderer Component](https://esphome.io/components/font#configuration-variables)*"
+            },
+            "file": {
+              "key": "Required",
+              "docs": "**string**: The path (relative to where the .yaml file is) of the font file. You can also use the `gfonts://` short form to use Google Fonts, or use the below structure:\n\n*See also: [Font Renderer Component](https://esphome.io/components/font#configuration-variables)*"
+            },
+            "glyphs": {
+              "default": "[]",
+              "is_list": true,
+              "key": "Optional",
+              "type": "string",
+              "docs": "**list**: A list of characters you plan to use, in addition to the characters defined by the **glyphsets** option above. Adjust this list if you need some special characters or want to reduce the size of the binary if you don't plan to use certain glyphs. Both single characters (`a, b, c`  ) or strings of characters (`abc, def`  ) are acceptable options. You can also specify glyphs by their codepoint (see below).\n\n*See also: [Font Renderer Component](https://esphome.io/components/font#configuration-variables)*"
+            },
+            "glyphsets": {
+              "default": "[]",
+              "is_list": true,
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "GF_Arabic_Core": null,
+                "GF_Arabic_Plus": null,
+                "GF_Cyrillic_Core": null,
+                "GF_Cyrillic_Historical": null,
+                "GF_Cyrillic_Plus": null,
+                "GF_Cyrillic_Pro": null,
+                "GF_Greek_AncientMusicalSymbols": null,
+                "GF_Greek_Archaic": null,
+                "GF_Greek_Coptic": null,
+                "GF_Greek_Core": null,
+                "GF_Greek_Expert": null,
+                "GF_Greek_Plus": null,
+                "GF_Greek_Pro": null,
+                "GF_Latin_African": null,
+                "GF_Latin_Beyond": null,
+                "GF_Latin_Core": null,
+                "GF_Latin_Kernel": null,
+                "GF_Latin_Plus": null,
+                "GF_Latin_PriAfrican": null,
+                "GF_Latin_Vietnamese": null,
+                "GF_Phonetics_APA": null,
+                "GF_Phonetics_DisorderedSpeech": null,
+                "GF_Phonetics_IPAHistorical": null,
+                "GF_Phonetics_IPAStandard": null,
+                "GF_Phonetics_SinoExt": null,
+                "GF_TransLatin_Arabic": null,
+                "GF_TransLatin_Pinyin": null
+              },
+              "docs": "**list**: A list of glyphsets you plan to use. Defaults to `GF_Latin_Kernel`, which contains the basic characters and necessary punctuation and symbols for the English language. `GF_Latin_Core` is a more extended set that includes glyphs for the languages of Europe and the Americas with over 5 million speakers. Other options include `GF_Arabic_Core`, `GF_Cyrillic_Core`, `GF_Greek_Core`, their `Plus` variants, as well as `GF_Latin_African`, `GF_Latin_PriAfrican` and `GF_Latin_Vietnamese`. See the [Google Fonts Glyphset documentation](https://github.com/googlefonts/glyphsets/blob/main/GLYPHSETS.md) for an extensive list of all possible sets, along with their names and the languages supported by each of those sets. Note that `GF_Latin_Kernel` may need to be included for glyphs for basic characters such as numbers (0-9) and whitespace to be present.\n\n*See also: [Font Renderer Component](https://esphome.io/components/font#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "font::Font",
+                "parents": []
+              },
+              "key": "Required",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID with which you will be able to reference the font later in your display code.\n\n*See also: [Font Renderer Component](https://esphome.io/components/font#configuration-variables)*"
+            },
+            "ignore_missing_glyphs": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: By default, warnings are generated for any glyph that is included in the defined **glyphsets** but not present in the configured font. Use this setting to suppress those warnings. Please note that the absence of any manually defined glyphs (specified via the **glyphs** option) will always be treated as an error and will not be influenced by this setting.\n\n*See also: [Font Renderer Component](https://esphome.io/components/font#configuration-variables)*"
+            },
+            "raw_data_id": {
+              "id_type": {
+                "class": "uint8_t",
+                "parents": null
+              },
+              "key": "GeneratedID"
+            },
+            "raw_glyph_id": {
+              "id_type": {
+                "class": "font::Glyph",
+                "parents": []
+              },
+              "key": "GeneratedID"
+            },
+            "size": {
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: The desired size of the font. This will be the size (height) of the font in pixels when rendered. If you want to use the same font in different sizes, create two font objects. Defaults to `20` for scalable fonts and the first available size for bitmap fonts. Requesting a size that is not available in a bitmap-only font will result in an error.\n\n*See also: [Font Renderer Component](https://esphome.io/components/font#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "EXTERNAL_FONT_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "italic": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "refresh": {
+              "default": "1d",
+              "key": "Optional",
+              "schema": {},
+              "type": "string"
+            },
+            "weight": {
+              "default": "regular",
+              "key": "Optional",
+              "schema": {},
+              "type": "integer"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "version.text_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "entity_category": {
+              "default": "diagnostic"
+            },
+            "hide_hash": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Allows you to hide the config hash from the version string. Defaults to `false`.\n\n*See also: [Version Text Sensor](https://esphome.io/components/text_sensor/version#configuration-variables)*"
+            },
+            "hide_timestamp": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Allows you to hide the compilation timestamp from the version string. Defaults to `false`.\n\n*See also: [Version Text Sensor](https://esphome.io/components/text_sensor/version#configuration-variables)*"
+            },
+            "icon": {
+              "default": "mdi:new-box"
+            },
+            "id": {
+              "id_type": {
+                "class": "version::VersionTextSensor",
+                "parents": [
+                  "text_sensor::TextSensor",
+                  "EntityBase",
+                  "Component"
+                ]
+              }
+            }
+          },
+          "extends": [
+            "text_sensor._TEXT_SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

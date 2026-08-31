@@ -1,0 +1,386 @@
+{
+  "sdm_meter.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "1",
+              "key": "Optional",
+              "docs": "**int**: The address of the sensor if multiple sensors are attached to the same UART bus. You will need to set the address of each device manually. Defaults to `1`.\n\n*See also: [Eastron SDM Energy Monitor](https://esphome.io/components/sensor/sdm_meter#configuration-variables)*"
+            },
+            "export_active_energy": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "energy"
+                  },
+                  "state_class": {
+                    "default": "total_increasing"
+                  },
+                  "unit_of_measurement": {
+                    "default": "kWh"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the export active energy value of the sensor in kilowatt hours (kWh). All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Eastron SDM Energy Monitor](https://esphome.io/components/sensor/sdm_meter#configuration-variables)*"
+            },
+            "export_reactive_energy": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "state_class": {
+                    "default": "total_increasing"
+                  },
+                  "unit_of_measurement": {
+                    "default": "kvarh"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the export reactive energy value of the sensor in kilovolt amps reactive hours (kVArh). All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Eastron SDM Energy Monitor](https://esphome.io/components/sensor/sdm_meter#configuration-variables)*"
+            },
+            "frequency": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "3"
+                  },
+                  "device_class": {
+                    "default": "frequency"
+                  },
+                  "icon": {
+                    "default": "mdi:current-ac"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "Hz"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the frequency value of the sensor in hertz. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Eastron SDM Energy Monitor](https://esphome.io/components/sensor/sdm_meter#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "sdm_meter::SDMMeter",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "modbus::ModbusClientDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "import_active_energy": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "energy"
+                  },
+                  "state_class": {
+                    "default": "total_increasing"
+                  },
+                  "unit_of_measurement": {
+                    "default": "kWh"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the import active energy value of the sensor in kilowatt hours (kWh). All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Eastron SDM Energy Monitor](https://esphome.io/components/sensor/sdm_meter#configuration-variables)*"
+            },
+            "import_reactive_energy": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "state_class": {
+                    "default": "total_increasing"
+                  },
+                  "unit_of_measurement": {
+                    "default": "kvarh"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the import reactive energy value of the sensor in kilovolt amps reactive hours (kVArh). All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Eastron SDM Energy Monitor](https://esphome.io/components/sensor/sdm_meter#configuration-variables)*"
+            },
+            "modbus_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "modbus::ModbusClientHub"
+            },
+            "phase_a": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "sdm_meter.sensor.PHASE_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The group of exposed sensors for Phase A/1.\n\n*See also: [Eastron SDM Energy Monitor](https://esphome.io/components/sensor/sdm_meter#configuration-variables)*"
+            },
+            "phase_b": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "sdm_meter.sensor.PHASE_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The group of exposed sensors for Phase B/2 on applicable meters. eg: SDM630\n\n*See also: [Eastron SDM Energy Monitor](https://esphome.io/components/sensor/sdm_meter#configuration-variables)*"
+            },
+            "phase_c": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "sdm_meter.sensor.PHASE_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The group of exposed sensors for Phase C/3 on applicable meters. eg: SDM630\n\n*See also: [Eastron SDM Energy Monitor](https://esphome.io/components/sensor/sdm_meter#configuration-variables)*"
+            },
+            "total_power": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "power"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "W"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the total power value of the sensor in watts (W). All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Eastron SDM Energy Monitor](https://esphome.io/components/sensor/sdm_meter#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "10s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`.\n\n*See also: [Eastron SDM Energy Monitor](https://esphome.io/components/sensor/sdm_meter#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "PHASE_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "active_power": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "power"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "W"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the (active) power value of the sensor in watts (W). All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Eastron SDM Energy Monitor](https://esphome.io/components/sensor/sdm_meter#configuration-variables)*"
+            },
+            "apparent_power": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "apparent_power"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "VA"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the apparent power value of the sensor in volt amps (VA). All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Eastron SDM Energy Monitor](https://esphome.io/components/sensor/sdm_meter#configuration-variables)*"
+            },
+            "current": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "3"
+                  },
+                  "device_class": {
+                    "default": "current"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "A"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the current value of the sensor in amperes. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Eastron SDM Energy Monitor](https://esphome.io/components/sensor/sdm_meter#configuration-variables)*"
+            },
+            "phase_angle": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "3"
+                  },
+                  "icon": {
+                    "default": "mdi:flash"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the phase angle value of the sensor in degrees (\u00b0). All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Eastron SDM Energy Monitor](https://esphome.io/components/sensor/sdm_meter#configuration-variables)*"
+            },
+            "power_factor": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "3"
+                  },
+                  "device_class": {
+                    "default": "power_factor"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the power factor value of the sensor. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Eastron SDM Energy Monitor](https://esphome.io/components/sensor/sdm_meter#configuration-variables)*"
+            },
+            "reactive_power": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "reactive_power"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "var"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the reactive power value of the sensor in volt amps reactive (VAR). All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Eastron SDM Energy Monitor](https://esphome.io/components/sensor/sdm_meter#configuration-variables)*"
+            },
+            "voltage": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "voltage"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "V"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the voltage value of the sensor in volts (V). All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Eastron SDM Energy Monitor](https://esphome.io/components/sensor/sdm_meter#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

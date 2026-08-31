@@ -1,0 +1,27 @@
+{
+  "airthings_ble": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "ble_hub_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "ble_device_base::BLEHub"
+            },
+            "id": {
+              "id_type": {
+                "class": "airthings_ble::AirthingsListener",
+                "parents": [
+                  "ble_device_base::ESPBTDeviceListener"
+                ]
+              },
+              "key": "GeneratedID"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

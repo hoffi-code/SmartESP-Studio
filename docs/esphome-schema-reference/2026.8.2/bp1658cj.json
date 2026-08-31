@@ -1,0 +1,94 @@
+{
+  "bp1658cj": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "clock_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin which CLK is\n\n*See also: [BP1658CJ LED driver](https://esphome.io/components/output/bp1658cj#configuration-variables)*"
+            },
+            "data_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin used for DATA.\n\n*See also: [BP1658CJ LED driver](https://esphome.io/components/output/bp1658cj#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "bp1658cj::BP1658CJ",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id to use for\n\n*See also: [BP1658CJ LED driver](https://esphome.io/components/output/bp1658cj#configuration-variables)*"
+            },
+            "max_power_color_channels": {
+              "default": "2",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int 0-15**: Adjusts the current supplied to the\n\n*See also: [BP1658CJ LED driver](https://esphome.io/components/output/bp1658cj#configuration-variables)*"
+            },
+            "max_power_white_channels": {
+              "default": "4",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int 0-15**: Adjusts the current supplied to the\n\n*See also: [BP1658CJ LED driver](https://esphome.io/components/output/bp1658cj#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "bp1658cj.output": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "bp1658cj_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "bp1658cj::BP1658CJ",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the [Component/Hub](https://esphome.io/components/output/bp1658cj#bp1658cj-component). Use this if you have multiple BP1658CJ chains you want to use at the same time.\n\n*See also: [BP1658CJ LED driver](https://esphome.io/components/output/bp1658cj#configuration-variables)*"
+            },
+            "channel": {
+              "key": "Required",
+              "type": "integer",
+              "docs": "**int**: Chose the channel of the BP1658CJ chain of this output component.\n\n*See also: [BP1658CJ LED driver](https://esphome.io/components/output/bp1658cj#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "bp1658cj::BP1658CJ::Channel",
+                "parents": [
+                  "output::FloatOutput",
+                  "output::BinaryOutput"
+                ]
+              },
+              "key": "Required",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id to use for this output component.\n\n*See also: [BP1658CJ LED driver](https://esphome.io/components/output/bp1658cj#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "output.FLOAT_OUTPUT_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "lc709203f.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "11",
+              "key": "Optional"
+            },
+            "battery_level": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "3"
+                  },
+                  "device_class": {
+                    "default": "battery"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "%"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Configuration for the battery level sensor. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [LC709203F Battery Monitor](https://esphome.io/components/sensor/lc709203f#configuration-variables)*"
+            },
+            "battery_voltage": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "3"
+                  },
+                  "device_class": {
+                    "default": "voltage"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "V"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Configuration for the voltage sensor. All options from [sensor](https://esphome.io/components/sensor).\n\n*See also: [LC709203F Battery Monitor](https://esphome.io/components/sensor/lc709203f#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "lc709203f::Lc709203f",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "size": {
+              "default": "500",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "Size of the battery in mAH.\n\n*See also: [LC709203F Battery Monitor](https://esphome.io/components/sensor/lc709203f#configuration-variables)*"
+            },
+            "temperature": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "b_constant": {
+                    "key": "Required",
+                    "type": "integer",
+                    "docs": "The B-constant of the thermistor you are using.\n\n*See also: [LC709203F Battery Monitor](https://esphome.io/components/sensor/lc709203f#configuration-variables)*"
+                  },
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Configuration for the battery temperature sensor.\n\n*See also: [LC709203F Battery Monitor](https://esphome.io/components/sensor/lc709203f#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`.\n\n*See also: [LC709203F Battery Monitor](https://esphome.io/components/sensor/lc709203f#configuration-variables)*"
+            },
+            "voltage": {
+              "default": "3.7",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "3.7": null,
+                "3.8": null
+              },
+              "docs": "nominal voltage of the battery pack in V.\n\n*See also: [LC709203F Battery Monitor](https://esphome.io/components/sensor/lc709203f#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

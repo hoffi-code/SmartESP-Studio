@@ -1,0 +1,238 @@
+{
+  "alarm_control_panel": {
+    "action": {
+      "arm_away": {
+        "schema": {
+          "extends": [
+            "alarm_control_panel.ALARM_CONTROL_PANEL_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action arms the alarm in away mode. The `code` is required when *requires_code_to_arm* is *true*."
+      },
+      "arm_home": {
+        "schema": {
+          "extends": [
+            "alarm_control_panel.ALARM_CONTROL_PANEL_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action arms the alarm in home mode. The `code` is required when *requires_code_to_arm* is *true*."
+      },
+      "arm_night": {
+        "schema": {
+          "extends": [
+            "alarm_control_panel.ALARM_CONTROL_PANEL_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action arms the alarm in night mode. The `code` is required when *requires_code_to_arm* is *true*."
+      },
+      "chime": {
+        "schema": {
+          "extends": [
+            "alarm_control_panel.ALARM_CONTROL_PANEL_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "disarm": {
+        "schema": {
+          "extends": [
+            "alarm_control_panel.ALARM_CONTROL_PANEL_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action disarms the alarm. The `code` is required when *codes* is not empty."
+      },
+      "pending": {
+        "schema": {
+          "extends": [
+            "alarm_control_panel.ALARM_CONTROL_PANEL_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action puts the alarm in pending state (the state before triggered after *pending_time*)."
+      },
+      "ready": {
+        "schema": {
+          "extends": [
+            "alarm_control_panel.ALARM_CONTROL_PANEL_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "triggered": {
+        "schema": {
+          "extends": [
+            "alarm_control_panel.ALARM_CONTROL_PANEL_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action puts the alarm in triggered state."
+      }
+    },
+    "components": {
+      "template": {
+        "docs": "The `template` alarm control panel platform allows you to turn your binary sensors into a state machine managed alarm control panel.\n\n*See also: [Template Alarm Control Panel](https://esphome.io/components/alarm_control_panel/template)*"
+      }
+    },
+    "condition": {
+      "is_armed": {
+        "schema": {
+          "extends": [
+            "alarm_control_panel.ALARM_CONTROL_PANEL_CONDITION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [Condition](https://esphome.io/automations/actions#all-conditions) checks if the alarm control panel is armed."
+      },
+      "ready": {
+        "schema": {
+          "extends": [
+            "alarm_control_panel.ALARM_CONTROL_PANEL_CONDITION_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    },
+    "schemas": {
+      "ALARM_CONTROL_PANEL_ACTION_SCHEMA": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "code": {
+              "key": "Optional",
+              "templatable": true,
+              "type": "string"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "alarm_control_panel::AlarmControlPanel"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "ALARM_CONTROL_PANEL_CONDITION_SCHEMA": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "alarm_control_panel::AlarmControlPanel"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "_ALARM_CONTROL_PANEL_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "mqtt_id": {
+              "id_type": {
+                "class": "mqtt::MQTTAlarmControlPanelComponent",
+                "parents": [
+                  "mqtt::MQTTComponent",
+                  "Component"
+                ]
+              },
+              "key": "Optional"
+            },
+            "on_armed_away": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: An automation to perform when the alarm state changes to `armed_away`. See [`on_armed_away` Trigger](https://esphome.io/components/alarm_control_panel#alarm_control_panel_on_armed_away_trigger).\n\n*See also: [Alarm Control Panel Component](https://esphome.io/components/alarm_control_panel)*"
+            },
+            "on_armed_home": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: An automation to perform when the alarm state changes to `armed_home`. See [`on_armed_home` Trigger](https://esphome.io/components/alarm_control_panel#alarm_control_panel_on_armed_home_trigger).\n\n*See also: [Alarm Control Panel Component](https://esphome.io/components/alarm_control_panel)*"
+            },
+            "on_armed_night": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: An automation to perform when the alarm state changes to `armed_night`. See [`on_armed_night` Trigger](https://esphome.io/components/alarm_control_panel#alarm_control_panel_on_armed_night_trigger).\n\n*See also: [Alarm Control Panel Component](https://esphome.io/components/alarm_control_panel)*"
+            },
+            "on_arming": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: An automation to perform when the alarm state changes to `arming`. See [`on_arming` Trigger](https://esphome.io/components/alarm_control_panel#alarm_control_panel_on_arming_trigger).\n\n*See also: [Alarm Control Panel Component](https://esphome.io/components/alarm_control_panel)*"
+            },
+            "on_chime": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: An automation to perform when a zone has been marked as chime in the configuration, and it changes from closed to open. See [`on_chime` Trigger](https://esphome.io/components/alarm_control_panel#alarm_control_panel_on_chime_trigger).\n\n*See also: [Alarm Control Panel Component](https://esphome.io/components/alarm_control_panel)*"
+            },
+            "on_cleared": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: An automation to perform when the alarm clears. See [`on_cleared` Trigger](https://esphome.io/components/alarm_control_panel#alarm_control_panel_on_cleared_trigger).\n\n*See also: [Alarm Control Panel Component](https://esphome.io/components/alarm_control_panel)*"
+            },
+            "on_disarmed": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: An automation to perform when the alarm state changes to `disarmed`. See [`on_disarmed` Trigger](https://esphome.io/components/alarm_control_panel#alarm_control_panel_on_disarmed_trigger).\n\n*See also: [Alarm Control Panel Component](https://esphome.io/components/alarm_control_panel)*"
+            },
+            "on_pending": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: An automation to perform when the alarm state changes to `pending`. See [`on_pending` Trigger](https://esphome.io/components/alarm_control_panel#alarm_control_panel_on_pending_trigger).\n\n*See also: [Alarm Control Panel Component](https://esphome.io/components/alarm_control_panel)*"
+            },
+            "on_ready": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: An automation to perform when the logical 'and' of all the zone sensors change state. See [`on_ready` Trigger](https://esphome.io/components/alarm_control_panel#alarm_control_panel_on_ready_trigger).\n\n*See also: [Alarm Control Panel Component](https://esphome.io/components/alarm_control_panel)*"
+            },
+            "on_state": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: An automation to perform when the alarm changes state. See [`on_state` Trigger](https://esphome.io/components/alarm_control_panel#alarm_control_panel_on_state_trigger).\n\n*See also: [Alarm Control Panel Component](https://esphome.io/components/alarm_control_panel)*"
+            },
+            "on_triggered": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: An automation to perform when the alarm triggers. See [`on_triggered` Trigger](https://esphome.io/components/alarm_control_panel#alarm_control_panel_on_triggered_trigger).\n\n*See also: [Alarm Control Panel Component](https://esphome.io/components/alarm_control_panel)*"
+            },
+            "web_server": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "sorting_group_id": {
+                    "key": "Optional",
+                    "type": "use_id",
+                    "use_id_type": "int"
+                  },
+                  "sorting_weight": {
+                    "key": "Optional"
+                  },
+                  "web_server_id": {
+                    "key": "Optional",
+                    "type": "use_id",
+                    "use_id_type": "web_server::WebServer"
+                  }
+                }
+              },
+              "type": "schema",
+              "visibility": "advanced"
+            },
+            "id": {
+              "docs": "**string**: Manually specify the ID for code generation. At least one of **id** and **name** must be specified.\n\n*See also: [Alarm Control Panel Component](https://esphome.io/components/alarm_control_panel)*"
+            },
+            "name": {
+              "key": "Optional",
+              "docs": "**string**: The name of the alarm control panel. At least one of **id** and **name** must be specified.\n\n*See also: [Alarm Control Panel Component](https://esphome.io/components/alarm_control_panel)*"
+            }
+          },
+          "extends": [
+            "core.ENTITY_BASE_SCHEMA",
+            "core.MQTT_COMMAND_COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

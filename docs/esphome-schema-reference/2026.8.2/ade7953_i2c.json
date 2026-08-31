@@ -1,0 +1,39 @@
+{
+  "ade7953_i2c.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "56",
+              "key": "Optional",
+              "docs": "**int**: Manually specify the I\u00b2C address of the sensor. Defaults to `0x38`.\n\n*See also: [ADE7953 Power Sensor](https://esphome.io/components/sensor/ade7953#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "ade7953_i2c::AdE7953I2c",
+                "parents": [
+                  "ade7953_base::ADE7953",
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            }
+          },
+          "extends": [
+            "ade7953_base.ADE7953_CONFIG_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

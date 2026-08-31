@@ -1,0 +1,146 @@
+{
+  "binary_sensor_map.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "type": "typed",
+        "typed_key": "type",
+        "types": {
+          "bayesian": {
+            "config_vars": {
+              "accuracy_decimals": {
+                "default": "2"
+              },
+              "id": {
+                "id_type": {
+                  "class": "binary_sensor_map::BinarySensorMap",
+                  "parents": [
+                    "Component",
+                    "sensor::Sensor",
+                    "EntityBase"
+                  ]
+                }
+              },
+              "observations": {
+                "is_list": true,
+                "key": "Required for bayesian type",
+                "schema": {
+                  "config_vars": {
+                    "binary_sensor": {
+                      "key": "Required",
+                      "type": "use_id",
+                      "use_id_type": "binary_sensor::BinarySensor",
+                      "docs": "The id of the [binary sensor](https://esphome.io/components/binary_sensor/) to add as an observation.\n\n*See also: [Binary Sensor Map](https://esphome.io/components/sensor/binary_sensor_map#configuration-variables)*"
+                    },
+                    "prob_given_false": {
+                      "key": "Required",
+                      "docs": "**float between 0 and 1**: Assuming the event is false, the probability this observation is on.\n\n*See also: [Binary Sensor Map](https://esphome.io/components/sensor/binary_sensor_map#configuration-variables)*"
+                    },
+                    "prob_given_true": {
+                      "key": "Required",
+                      "docs": "**float between 0 and 1**: Assuming the event is true, the probability this observation is on.\n\n*See also: [Binary Sensor Map](https://esphome.io/components/sensor/binary_sensor_map#configuration-variables)*"
+                    }
+                  }
+                },
+                "type": "schema",
+                "docs": "A list of observations that influence the Bayesian probability of the event.\n\n*See also: [Binary Sensor Map](https://esphome.io/components/sensor/binary_sensor_map#configuration-variables)*"
+              },
+              "prior": {
+                "key": "Required for bayesian type",
+                "docs": "**float between 0 and 1**: The prior probability of the event.\n\n*See also: [Binary Sensor Map](https://esphome.io/components/sensor/binary_sensor_map#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "sensor._SENSOR_SCHEMA"
+            ]
+          },
+          "group": {
+            "config_vars": {
+              "accuracy_decimals": {
+                "default": "0"
+              },
+              "channels": {
+                "is_list": true,
+                "key": "Required for group or sum types",
+                "schema": {
+                  "extends": [
+                    "binary_sensor_map.sensor.entry_one_parameter"
+                  ]
+                },
+                "type": "schema",
+                "docs": "A list of channels that are mapped to certain values.\n\n*See also: [Binary Sensor Map](https://esphome.io/components/sensor/binary_sensor_map#configuration-variables)*"
+              },
+              "icon": {
+                "default": "mdi:check-circle-outline"
+              },
+              "id": {
+                "id_type": {
+                  "class": "binary_sensor_map::BinarySensorMap",
+                  "parents": [
+                    "Component",
+                    "sensor::Sensor",
+                    "EntityBase"
+                  ]
+                }
+              }
+            },
+            "extends": [
+              "sensor._SENSOR_SCHEMA"
+            ]
+          },
+          "sum": {
+            "config_vars": {
+              "accuracy_decimals": {
+                "default": "0"
+              },
+              "channels": {
+                "is_list": true,
+                "key": "Required for group or sum types",
+                "schema": {
+                  "extends": [
+                    "binary_sensor_map.sensor.entry_one_parameter"
+                  ]
+                },
+                "type": "schema",
+                "docs": "A list of channels that are mapped to certain values.\n\n*See also: [Binary Sensor Map](https://esphome.io/components/sensor/binary_sensor_map#configuration-variables)*"
+              },
+              "icon": {
+                "default": "mdi:check-circle-outline"
+              },
+              "id": {
+                "id_type": {
+                  "class": "binary_sensor_map::BinarySensorMap",
+                  "parents": [
+                    "Component",
+                    "sensor::Sensor",
+                    "EntityBase"
+                  ]
+                }
+              }
+            },
+            "extends": [
+              "sensor._SENSOR_SCHEMA"
+            ]
+          }
+        },
+        "docs": "The sensor type. Should be one of: `BAYESIAN`, `GROUP`, or `SUM`."
+      },
+      "entry_one_parameter": {
+        "schema": {
+          "config_vars": {
+            "binary_sensor": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "binary_sensor::BinarySensor",
+              "docs": "The id of the [binary sensor](https://esphome.io/components/binary_sensor/) to add as a channel for this sensor.\n\n*See also: [Binary Sensor Map](https://esphome.io/components/sensor/binary_sensor_map#configuration-variables)*"
+            },
+            "value": {
+              "key": "Required",
+              "docs": "The value this channel should report when its binary sensor is active.\n\n*See also: [Binary Sensor Map](https://esphome.io/components/sensor/binary_sensor_map#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "jsn_sr04t.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "3"
+            },
+            "icon": {
+              "default": "mdi:arrow-expand-vertical"
+            },
+            "id": {
+              "id_type": {
+                "class": "jsn_sr04t::Jsnsr04tComponent",
+                "parents": [
+                  "sensor::Sensor",
+                  "EntityBase",
+                  "PollingComponent",
+                  "Component",
+                  "uart::UARTDevice"
+                ]
+              }
+            },
+            "model": {
+              "default": "jsn_sr04t",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "jsn_sr04t": null,
+                "aj_sr04m": null
+              },
+              "docs": "Sensor model. Available options: `jsn_sr04t` (default) and `aj_sr04m`.\n\n*See also: [JSN-SR04T Waterproof Ultrasonic Range Finder](https://esphome.io/components/sensor/jsn_sr04t#configuration-variables)*"
+            },
+            "state_class": {
+              "default": "measurement"
+            },
+            "uart_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "uart::UARTComponent",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the [UART bus](https://esphome.io/components/uart) you wish to use for this sensor. Use this if you want to use multiple UART buses at once.\n\n*See also: [JSN-SR04T Waterproof Ultrasonic Range Finder](https://esphome.io/components/sensor/jsn_sr04t#configuration-variables)*"
+            },
+            "unit_of_measurement": {
+              "default": "m"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`. Not applicable in mode 1.\n\n*See also: [JSN-SR04T Waterproof Ultrasonic Range Finder](https://esphome.io/components/sensor/jsn_sr04t#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,452 @@
+{
+  "sx126x": {
+    "action": {
+      "run_image_cal": {
+        "schema": {
+          "extends": [
+            "sx126x.NO_ARGS_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) runs the `sx126x` image calibration."
+      },
+      "send_packet": {
+        "maybe": "data",
+        "schema": {
+          "config_vars": {
+            "data": {
+              "key": "Required",
+              "templatable": true,
+              "docs": "**list**: The packet to send, length should match the configured payload_length.\n\n*See also: [SX126x Component](https://esphome.io/components/sx126x#configuration-variables)*"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "sx126x::SX126x"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) sends a packet."
+      },
+      "set_mode_rx": {
+        "schema": {
+          "extends": [
+            "sx126x.NO_ARGS_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) sets the `sx126x` mode to rx."
+      },
+      "set_mode_sleep": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "cold": {
+              "default": "False",
+              "key": "Optional",
+              "templatable": true,
+              "type": "boolean",
+              "docs": "If true, enter cold sleep instead of warm sleep. Defaults to `false`.\n\n*See also: [SX126x Component](https://esphome.io/components/sx126x#configuration-variables)*"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "sx126x::SX126x"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) sets the `sx126x` mode to sleep. By default the radio enters warm sleep \u2014 config registers are retained so that on wake it is ready for `sx126x.set_mode_rx` / `sx126x.set_mode_tx` again. For battery-powered nodes that pair the radio with deep sleep, `cold: true` switches to cold sleep (~0.6&nbsp;\u00b5A, vs ~600&nbsp;\u00b5A warm). Cold sleep does not retain config, so the radio must be reinitialized on wake. With deep sleep this happens automatically \u2014 the device reboots on wake and the component reinitializes the radio during startup."
+      },
+      "set_mode_standby": {
+        "schema": {
+          "extends": [
+            "sx126x.NO_ARGS_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) sets the `sx126x` mode to standby."
+      },
+      "set_mode_tx": {
+        "schema": {
+          "extends": [
+            "sx126x.NO_ARGS_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) sets the `sx126x` mode to tx."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "bandwidth": {
+              "default": "125_0kHz",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "4_8kHz": null,
+                "5_8kHz": null,
+                "7_3kHz": null,
+                "9_7kHz": null,
+                "11_7kHz": null,
+                "14_6kHz": null,
+                "19_5kHz": null,
+                "23_4kHz": null,
+                "29_3kHz": null,
+                "39_0kHz": null,
+                "46_9kHz": null,
+                "58_6kHz": null,
+                "78_2kHz": null,
+                "93_8kHz": null,
+                "117_3kHz": null,
+                "156_2kHz": null,
+                "187_2kHz": null,
+                "234_3kHz": null,
+                "312_0kHz": null,
+                "373_6kHz": null,
+                "467_0kHz": null,
+                "7_8kHz": null,
+                "10_4kHz": null,
+                "15_6kHz": null,
+                "20_8kHz": null,
+                "31_3kHz": null,
+                "41_7kHz": null,
+                "62_5kHz": null,
+                "125_0kHz": null,
+                "250_0kHz": null,
+                "500_0kHz": null
+              },
+              "docs": "**enum**: Bandwidth can be `4_8kHz`, `5_8kHz`, `7_3kHz`, `9_7kHz`, `11_7kHz`, `14_6kHz`, `19_5kHz`, `23_4kHz`, `29_3kHz`, `39_0kHz`, `46_9kHz`, `58_6kHz`, `78_2kHz`, `93_8kHz`, `117_3kHz`, `156_2kHz`, `187_2kHz`, `234_3kHz`, `312_0kHz`, `373_6kHz` or `467_0kHz`.\n\n*See also: [SX126x Component](https://esphome.io/components/sx126x#configuration-variables)*"
+            },
+            "bitrate": {
+              "default": "4800",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Bit rate of the signal. Normally the inverse of the bit duration, eg 1 / 208 us is 4800 bps.\n\n*See also: [SX126x Component](https://esphome.io/components/sx126x#configuration-variables)*"
+            },
+            "busy_pin": {
+              "key": "Required",
+              "modes": [
+                "input"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: Busy pin.\n\n*See also: [SX126x Component](https://esphome.io/components/sx126x#configuration-variables)*"
+            },
+            "coding_rate": {
+              "default": "CR_4_5",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "CR_4_5": null,
+                "CR_4_6": null,
+                "CR_4_7": null,
+                "CR_4_8": null
+              },
+              "docs": "**enum**: Coding rate, values can be `CR_4_5`, `CR_4_6`, `CR_4_7` or `CR_4_8`. Defaults to `CR_4_5`.\n\n*See also: [SX126x Component](https://esphome.io/components/sx126x#configuration-variables)*"
+            },
+            "crc_enable": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**bool**: Enables a 16 bit CRC calculation/check. Defaults to `false`.\n\n*See also: [SX126x Component](https://esphome.io/components/sx126x#configuration-variables)*"
+            },
+            "crc_initial": {
+              "default": "7439",
+              "key": "Optional",
+              "docs": "**int**: Initial CRC value as a hex integer. Defaults to 0x1D0F.\n\n*See also: [SX126x Component](https://esphome.io/components/sx126x#configuration-variables)*"
+            },
+            "crc_inverted": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**bool**: Inverts the CRC if enabled. Defaults to `true`.\n\n*See also: [SX126x Component](https://esphome.io/components/sx126x#configuration-variables)*"
+            },
+            "crc_polynomial": {
+              "default": "4129",
+              "key": "Optional",
+              "docs": "**int**: CRC polynomial as a hex integer. Defaults to 0x1021.\n\n*See also: [SX126x Component](https://esphome.io/components/sx126x#configuration-variables)*"
+            },
+            "crc_size": {
+              "default": "2",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Size of the CRC in bytes, either 1 or 2. Defaults to 2.\n\n*See also: [SX126x Component](https://esphome.io/components/sx126x#configuration-variables)*"
+            },
+            "cs_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: SPI chip select pin.\n\n*See also: [SX126x Component](https://esphome.io/components/sx126x#configuration-variables)*"
+            },
+            "data_rate": {
+              "default": "8000000.0",
+              "key": "Optional"
+            },
+            "deviation": {
+              "default": "5kHz",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**frequency**: Transmitter FSK frequency deviation, values range from 0 to 100 kHz. Defaults to `5kHz`.\n\n*See also: [SX126x Component](https://esphome.io/components/sx126x#configuration-variables)*"
+            },
+            "dio1_pin": {
+              "key": "Required",
+              "modes": [
+                "input"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: Digital IO pin 1.\n\n*See also: [SX126x Component](https://esphome.io/components/sx126x#configuration-variables)*"
+            },
+            "frequency": {
+              "key": "Required",
+              "type": "integer",
+              "docs": "**frequency**: Frequency in Hz of the transceiver.\n\n*See also: [SX126x Component](https://esphome.io/components/sx126x#configuration-variables)*"
+            },
+            "hw_version": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "sx1261": null,
+                "sx1262": null,
+                "sx1268": null,
+                "llcc68": null
+              },
+              "docs": "**enum**: Valid values are `sx1261`, `sx1262`, `sx1268` or `llcc68`.\n\n*See also: [SX126x Component](https://esphome.io/components/sx126x#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "sx126x::SX126x",
+                "parents": [
+                  "Component",
+                  "spi::SPIDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "modulation": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "LORA": null,
+                "FSK": null
+              },
+              "docs": "**enum**: Modulation can be `FSK` or `LORA`.\n\n*See also: [SX126x Component](https://esphome.io/components/sx126x#configuration-variables)*"
+            },
+            "on_packet": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform when a packet has been decoded. Variable x of type `std::vector<uint8_t>` and rssi of type `float` are passed to the automation for use in lambdas. In LoRa mode the variable snr is also available.\n\n*See also: [SX126x Component](https://esphome.io/components/sx126x#configuration-variables)*"
+            },
+            "pa_power": {
+              "default": "17",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Transmitter power, range is from -3 to 15 dBm when `hw_version` is `sx1261` and from -3 to 22 dBm otherwise.\n\n*See also: [SX126x Component](https://esphome.io/components/sx126x#configuration-variables)*"
+            },
+            "pa_ramp": {
+              "default": "40us",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "10us": null,
+                "20us": null,
+                "40us": null,
+                "80us": null,
+                "200us": null,
+                "800us": null,
+                "1700us": null,
+                "3400us": null
+              },
+              "docs": "**enum**: Transmitter PA ramp, can be `10us`, `20us`, `40us`, `80us`, `200us`, `800us`, `1700us` or `3400us`.\n\n*See also: [SX126x Component](https://esphome.io/components/sx126x#configuration-variables)*"
+            },
+            "payload_length": {
+              "default": "0",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Length of the packet. Maximum length is 255.\n\n*See also: [SX126x Component](https://esphome.io/components/sx126x#configuration-variables)*"
+            },
+            "preamble_detect": {
+              "default": "2",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Minimum length of the preamble in bytes required by the receiver. Preamble detector is disabled if the size is 0 and its value capped at 4.\n\n*See also: [SX126x Component](https://esphome.io/components/sx126x#configuration-variables)*"
+            },
+            "preamble_size": {
+              "default": "8",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Length of the preamble in bytes to be sent by the transmitter. This value should be larger than `preamble_detect` on the receive side to allow time for the receiver\u2019s AFC and AGC to adjust.\n\n*See also: [SX126x Component](https://esphome.io/components/sx126x#configuration-variables)*"
+            },
+            "release_device": {
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "rf_switch": {
+              "key": "Required",
+              "type": "boolean",
+              "docs": "**bool**: Used to indicate if DIO2 controls an external RF switch.\n\n*See also: [SX126x Component](https://esphome.io/components/sx126x#configuration-variables)*"
+            },
+            "rst_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: Reset pin.\n\n*See also: [SX126x Component](https://esphome.io/components/sx126x#configuration-variables)*"
+            },
+            "rx_start": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**bool**: Start the receiver automatically on boot or after transmitting.\n\n*See also: [SX126x Component](https://esphome.io/components/sx126x#configuration-variables)*"
+            },
+            "shaping": {
+              "default": "NONE",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "GAUSSIAN_BT_0_3": null,
+                "GAUSSIAN_BT_0_5": null,
+                "GAUSSIAN_BT_0_7": null,
+                "GAUSSIAN_BT_1_0": null,
+                "NONE": null
+              },
+              "docs": "**enum**: Transmitter data shaping can be `GAUSSIAN_BT_0_3`, `GAUSSIAN_BT_0_5`, `GAUSSIAN_BT_0_7`, `GAUSSIAN_BT_1_0` or `NONE`.\n\n*See also: [SX126x Component](https://esphome.io/components/sx126x#configuration-variables)*"
+            },
+            "spi_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "spi::SPIComponent"
+            },
+            "spi_mode": {
+              "default": "mode0",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "MODE0": null,
+                "MODE1": null,
+                "MODE2": null,
+                "MODE3": null,
+                "0": null,
+                "1": null,
+                "2": null,
+                "3": null
+              }
+            },
+            "spreading_factor": {
+              "default": "7",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Spreading factor, values range from 6 to 12. Defaults to 7.\n\n*See also: [SX126x Component](https://esphome.io/components/sx126x#configuration-variables)*"
+            },
+            "sync_value": {
+              "data_type": "hex_uint8_t",
+              "default": "[]",
+              "is_list": true,
+              "key": "Optional",
+              "docs": "**list**: Synchronization bytes, list of 1 to 8 bytes, found after the preamble and before the payload.\n\n*See also: [SX126x Component](https://esphome.io/components/sx126x#configuration-variables)*"
+            },
+            "tcxo_delay": {
+              "default": "5ms",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_microseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The time needed for the TCXO to stabilize.\n\n*See also: [SX126x Component](https://esphome.io/components/sx126x#configuration-variables)*"
+            },
+            "tcxo_voltage": {
+              "default": "NONE",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "1_6V": null,
+                "1_7V": null,
+                "1_8V": null,
+                "2_2V": null,
+                "2_4V": null,
+                "2_7V": null,
+                "3_0V": null,
+                "3_3V": null,
+                "NONE": null
+              },
+              "docs": "**enum**: Reference voltage of the external TCXO controlled by DIO3. If there is no TCXO this should be set to `NONE`. Values can be `1_6V`, `1_7V`, `1_8V`, `2_2V`, `2_4V`, `2_7V`, `3_0V`, `3_3V` or `NONE`.\n\n*See also: [SX126x Component](https://esphome.io/components/sx126x#configuration-variables)*"
+            },
+            "whitening_enable": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**bool**: Enables CCITT data whitening, with fixed polynomial `0x21`. Defaults to `false`.\n\n*See also: [SX126x Component](https://esphome.io/components/sx126x#configuration-variables)*"
+            },
+            "whitening_initial": {
+              "default": "256",
+              "key": "Optional",
+              "docs": "**int**: Initial value of whitening shift register.  Defaults to `0x100`.\n\n*See also: [SX126x Component](https://esphome.io/components/sx126x#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "NO_ARGS_ACTION_SCHEMA": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "sx126x::SX126x"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "sx126x.packet_transport": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "sx126x::SX126xTransport",
+                "parents": [
+                  "packet_transport::PacketTransport",
+                  "PollingComponent",
+                  "Component",
+                  "PollingComponent",
+                  "Component",
+                  "sx126x::SX126xListener"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "sx126x_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "sx126x::SX126x"
+            }
+          },
+          "extends": [
+            "packet_transport.TRANSPORT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

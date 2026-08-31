@@ -1,0 +1,63 @@
+{
+  "prometheus": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "prometheus::PrometheusHandler",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [Prometheus Component](https://esphome.io/components/prometheus#configuration-variables)*"
+            },
+            "include_internal": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Whether `internal` entities should be displayed on the web interface. Defaults to `false`.\n\n*See also: [Prometheus Component](https://esphome.io/components/prometheus#configuration-variables)*"
+            },
+            "relabel": {
+              "default": "{}",
+              "key": "Optional",
+              "key_type": "use_id.<locals>.validator",
+              "schema": {
+                "config_vars": {
+                  "string": {
+                    "schema": {
+                      "config_vars": {
+                        "id": {
+                          "key": "Optional",
+                          "type": "string"
+                        },
+                        "name": {
+                          "key": "Optional",
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "type": "schema"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "Override metric labels. See [`relabel`](https://esphome.io/components/prometheus#relabel)\n\n*See also: [Prometheus Component](https://esphome.io/components/prometheus#configuration-variables)*"
+            },
+            "web_server_base_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "web_server_base::WebServerBase"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

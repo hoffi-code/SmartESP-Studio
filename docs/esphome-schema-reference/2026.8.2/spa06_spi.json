@@ -1,0 +1,62 @@
+{
+  "spa06_spi.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "cs_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**SPI only**: Specify the chip select pin to use for this sensor.\n\n*See also: [SPA06-003 Temperature+Pressure Sensor](https://esphome.io/components/sensor/spa06#configuration-variables)*"
+            },
+            "data_rate": {
+              "key": "Optional"
+            },
+            "id": {
+              "id_type": {
+                "class": "spa06_spi::SPA06SPIComponent",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "spi::SPIDevice"
+                ]
+              }
+            },
+            "release_device": {
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "spi_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "spi::SPIComponent"
+            },
+            "spi_mode": {
+              "default": "mode3",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "MODE0": null,
+                "MODE1": null,
+                "MODE2": null,
+                "MODE3": null,
+                "0": null,
+                "1": null,
+                "2": null,
+                "3": null
+              }
+            }
+          },
+          "extends": [
+            "spa06_base.CONFIG_SCHEMA_BASE"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

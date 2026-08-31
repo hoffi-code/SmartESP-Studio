@@ -1,0 +1,38 @@
+{
+  "pn532_i2c": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "36",
+              "key": "Optional"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "pn532_i2c::PN532I2C",
+                "parents": [
+                  "pn532::PN532",
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              }
+            }
+          },
+          "extends": [
+            "pn532.PN532_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

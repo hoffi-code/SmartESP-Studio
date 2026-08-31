@@ -1,0 +1,99 @@
+{
+  "midea_ac": {
+    "action": {
+      "beeper_off": {
+        "schema": {
+          "extends": [
+            "midea.climate.MIDEA_ACTION_BASE_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action turn off beeper feedback."
+      },
+      "beeper_on": {
+        "schema": {
+          "extends": [
+            "midea.climate.MIDEA_ACTION_BASE_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action turn on beeper feedback."
+      },
+      "display_toggle": {
+        "schema": {
+          "extends": [
+            "midea.climate.MIDEA_ACTION_BASE_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action toggle ac screen. Works via UART if supported or [Remote Transmitter](https://esphome.io/components/remote_transmitter/)."
+      },
+      "follow_me": {
+        "schema": {
+          "config_vars": {
+            "beeper": {
+              "default": "False",
+              "key": "Optional",
+              "templatable": true,
+              "type": "boolean",
+              "docs": "**boolean**: Sets beep on update. Defaults to `false`.\n\n*See also: [Midea Air Conditioner](https://esphome.io/components/climate/midea#midea_acfollow_me-action)*"
+            },
+            "temperature": {
+              "key": "Required",
+              "templatable": true,
+              "docs": "**float**: Sets the value of an internal temperature sensor. The value will be **clamped** to the range:\n\n*See also: [Midea Air Conditioner](https://esphome.io/components/climate/midea#midea_acfollow_me-action)*"
+            },
+            "use_fahrenheit": {
+              "default": "False",
+              "key": "Optional",
+              "templatable": true,
+              "type": "boolean",
+              "docs": "**boolean**: Specifies if the `temperature` value is in Fahrenheit. When set to `true`, the temperature is parsed and sent in Fahrenheit. Defaults to `false` (Celsius).\n\n*See also: [Midea Air Conditioner](https://esphome.io/components/climate/midea#midea_acfollow_me-action)*"
+            }
+          },
+          "extends": [
+            "midea.climate.MIDEA_ACTION_BASE_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action transmits an IR FollowMe command telling the air conditioner a more accurate room temperature value to be used instead of the internal indoor unit sensor."
+      },
+      "power_off": {
+        "schema": {
+          "extends": [
+            "midea.climate.MIDEA_ACTION_BASE_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action turn off power."
+      },
+      "power_on": {
+        "schema": {
+          "extends": [
+            "midea.climate.MIDEA_ACTION_BASE_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action turn on power. The mode and preset will be restored to the last state before turned off."
+      },
+      "power_toggle": {
+        "schema": {
+          "extends": [
+            "midea.climate.MIDEA_ACTION_BASE_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action toggle the power state. Identical to pressing the power button on the remote control."
+      },
+      "swing_step": {
+        "schema": {
+          "extends": [
+            "midea.climate.MIDEA_ACTION_BASE_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action adjust the louver by one step. [Remote Transmitter](https://esphome.io/components/remote_transmitter/) required."
+      }
+    }
+  }
+}

@@ -1,0 +1,157 @@
+{
+  "update": {
+    "action": {
+      "check": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "update::UpdateEntity",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the update entity.\n\n*See also: [Update Core](https://esphome.io/components/update#updatecheck-action)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This action allows you to trigger the update entity to check for, but not install, updates."
+      },
+      "perform": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "force_update": {
+              "default": "False",
+              "key": "Optional",
+              "templatable": true,
+              "type": "boolean",
+              "visibility": "advanced",
+              "docs": "**boolean**: Perform the update even if the device is already running the same version. Defaults to `false`.\n\n*See also: [Update Core](https://esphome.io/components/update#updateperform-action)*"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "update::UpdateEntity",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the update entity.\n\n*See also: [Update Core](https://esphome.io/components/update#updateperform-action)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This action allows you to trigger the update entity to start the update process."
+      }
+    },
+    "components": {
+      "esp32_hosted": {
+        "dependencies": [
+          "esp32_hosted"
+        ]
+      },
+      "http_request": {
+        "dependencies": [
+          "ota.http_request"
+        ]
+      }
+    },
+    "condition": {
+      "is_available": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "update::UpdateEntity",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the update entity.\n\n*See also: [Update Core](https://esphome.io/components/update#updateis_available-condition)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This condition checks if an update is available for the device."
+      }
+    },
+    "schemas": {
+      "_UPDATE_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "device_class": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "": null,
+                "firmware": null
+              },
+              "visibility": "advanced",
+              "docs": "**string**: The device class for the update entity. See [https://www.home-assistant.io/integrations/binary_sensor/#device-class](https://www.home-assistant.io/integrations/binary_sensor/#device-class) for a list of available options.\n\n*See also: [Update Core](https://esphome.io/components/update#configuration-variables)*"
+            },
+            "entity_category": {
+              "default": "config",
+              "key": "Optional",
+              "docs": "**string**: The category of the update entity. See [https://developers.home-assistant.io/docs/core/entity/#generic-properties](https://developers.home-assistant.io/docs/core/entity/#generic-properties) for a list of available options.\n\n*See also: [Update Core](https://esphome.io/components/update#configuration-variables)*"
+            },
+            "mqtt_id": {
+              "id_type": {
+                "class": "mqtt::MQTTUpdateComponent",
+                "parents": [
+                  "mqtt::MQTTComponent",
+                  "Component"
+                ]
+              },
+              "key": "Optional"
+            },
+            "on_update_available": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: An automation to perform when an update is available.\n\n*See also: [Update Core](https://esphome.io/components/update#configuration-variables)*"
+            },
+            "web_server": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "sorting_group_id": {
+                    "key": "Optional",
+                    "type": "use_id",
+                    "use_id_type": "int"
+                  },
+                  "sorting_weight": {
+                    "key": "Optional"
+                  },
+                  "web_server_id": {
+                    "key": "Optional",
+                    "type": "use_id",
+                    "use_id_type": "web_server::WebServer"
+                  }
+                }
+              },
+              "type": "schema",
+              "visibility": "advanced"
+            },
+            "id": {
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation. At least one of **id** and **name** must be specified.\n\n*See also: [Update Core](https://esphome.io/components/update#configuration-variables)*"
+            },
+            "name": {
+              "key": "Optional",
+              "docs": "**string**: The name of the update entity. At least one of **id** and **name** must be specified.\n\n*See also: [Update Core](https://esphome.io/components/update#configuration-variables)*"
+            },
+            "disabled_by_default": {
+              "key": "Optional",
+              "docs": "**boolean**: If true, then this entity should not be added to any client's frontend (usually Home Assistant) without the user manually enabling it (via the Home Assistant UI). Defaults to `false`.\n\n*See also: [Update Core](https://esphome.io/components/update#configuration-variables)*"
+            },
+            "icon": {
+              "key": "Optional",
+              "docs": "**icon**: The icon to use for the update entity in the frontend.\n\n*See also: [Update Core](https://esphome.io/components/update#configuration-variables)*"
+            },
+            "internal": {
+              "key": "Optional",
+              "docs": "**boolean**: Mark this component as internal. Internal components will not be exposed to the frontend (like Home Assistant). Specifying an `id` without a `name` will\n\n*See also: [Update Core](https://esphome.io/components/update#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.ENTITY_BASE_SCHEMA",
+            "core.MQTT_COMMAND_COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,163 @@
+{
+  "time": {
+    "components": {
+      "bm8563": {
+        "dependencies": [
+          "i2c"
+        ],
+        "docs": "You first need to set up the [I2C](https://esphome.io/components/i2c/) component.\n\n*See also: [BM8563 Time Source](https://esphome.io/components/time/bm8563)*"
+      },
+      "ds1307": {
+        "dependencies": [
+          "i2c"
+        ],
+        "docs": "You first need to set up the [I2C](https://esphome.io/components/i2c/) component.\n\n*See also: [DS1307 Time Source](https://esphome.io/components/time/ds1307)*"
+      },
+      "gps": {
+        "dependencies": [
+          "gps"
+        ]
+      },
+      "homeassistant": {
+        "dependencies": [
+          "api"
+        ],
+        "docs": "The preferred way to get time in ESPHome is using Home Assistant. With the `homeassistant` time platform, the [native API](https://esphome.io/components/api/) connection to Home Assistant will be used to periodically synchronize the current time.\n\n*See also: [Home Assistant Time Source](https://esphome.io/components/time/homeassistant)*"
+      },
+      "host": {},
+      "pcf85063": {
+        "dependencies": [
+          "i2c"
+        ],
+        "docs": "You first need to set up the [I2C](https://esphome.io/components/i2c/) component.\n\n*See also: [PCF85063 Time Source](https://esphome.io/components/time/pcf85063)*"
+      },
+      "pcf8563": {
+        "dependencies": [
+          "i2c"
+        ],
+        "docs": "You first need to set up the [I2C](https://esphome.io/components/i2c/) component.\n\n*See also: [PCF8563 Time Source](https://esphome.io/components/time/pcf8563)*"
+      },
+      "rx8130": {
+        "dependencies": [
+          "i2c"
+        ],
+        "docs": "You first need to set up the [I2C](https://esphome.io/components/i2c/) component.\n\n*See also: [RX8130 Time Source](https://esphome.io/components/time/rx8130)*"
+      },
+      "sntp": {
+        "dependencies": [
+          "network"
+        ],
+        "docs": "None\n\n*See also: [SNTP Time Source](https://esphome.io/components/time/sntp)*"
+      },
+      "zigbee": {
+        "dependencies": [
+          "zigbee"
+        ]
+      }
+    },
+    "condition": {
+      "has_time": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "time::RealTimeClock"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [Condition](https://esphome.io/automations/actions#all-conditions) checks if time has been set and is valid."
+      }
+    },
+    "schemas": {
+      "TIME_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "on_time": {
+              "has_required_var": true,
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "at": {
+                    "key": "Optional"
+                  },
+                  "cron": {
+                    "key": "Optional"
+                  },
+                  "days_of_month": {
+                    "key": "Optional"
+                  },
+                  "days_of_week": {
+                    "key": "Optional"
+                  },
+                  "hours": {
+                    "key": "Optional"
+                  },
+                  "minutes": {
+                    "key": "Optional"
+                  },
+                  "months": {
+                    "key": "Optional"
+                  },
+                  "seconds": {
+                    "key": "Optional"
+                  },
+                  "then": {
+                    "type": "trigger"
+                  }
+                }
+              },
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: Automation to run at specific intervals using a cron-like syntax. See [`on_time` Trigger](https://esphome.io/components/time#time-on_time).\n\n*See also: [Time Component](https://esphome.io/components/time#configuration-variables)*"
+            },
+            "on_time_sync": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: Automation to run when the time source could be (re-)synchronized.. See [`on_time_sync` Trigger](https://esphome.io/components/time#time-on_time_sync).\n\n*See also: [Time Component](https://esphome.io/components/time#configuration-variables)*"
+            },
+            "timezone": {
+              "key": "Optional",
+              "docs": "**string**: Manually tell ESPHome what time zone to use with [this format](https://www.gnu.org/software/libc/manual/html_node/TZ-Variable.html) (warning: the format is quite complicated, see [examples](https://github.com/nayarsystems/posix_tz_db/blob/master/zones.csv)) or the simpler [TZ database name](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) in the form `<Region>/<City>`. ESPHome tries to automatically infer the time zone string based on the time zone of the computer that is running ESPHome, but this might not always be accurate. Not available on nRF52 platforms. An empty timezone (the empty string, `\"\"`) will mean no timezone handling will be compiled in, so the device will operate strictly on UTC.\n\n*See also: [Time Component](https://esphome.io/components/time#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "15min",
+              "key": "Optional",
+              "visibility": "advanced",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: How often to synchronize the device time from the source. Defaults to `15min`.\n\n*See also: [Time Component](https://esphome.io/components/time#configuration-variables)*"
+            },
+            "id": {
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Specify the ID of the time for use in lambdas.\n\n*See also: [Time Component](https://esphome.io/components/time#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "time.datetime": {
+    "action": {
+      "set": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "datetime::TimeEntity",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the datetime to set.\n\n*See also: [Datetime Component](https://esphome.io/components/datetime#using-a-lambda)*"
+            },
+            "time": {
+              "key": "Required",
+              "docs": "**string**: The value to set the datetime to.\n\n*See also: [Datetime Component](https://esphome.io/components/datetime#using-a-lambda)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This is an [Action](https://esphome.io/automations/actions#all-actions) for setting a datetime time state. The `time` provided can be in one of 3 formats:"
+      }
+    }
+  }
+}

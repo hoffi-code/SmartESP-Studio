@@ -1,0 +1,169 @@
+{
+  "bthome_mithermometer.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "battery_level": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "battery"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "%"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The battery level, in %. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [BTHome MiThermometer Sensor](https://esphome.io/components/sensor/bthome_mithermometer#configuration-variables)*"
+            },
+            "battery_voltage": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "3"
+                  },
+                  "device_class": {
+                    "default": "voltage"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "icon": {
+                    "default": "mdi:battery-plus"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "V"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The battery voltage, in V. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [BTHome MiThermometer Sensor](https://esphome.io/components/sensor/bthome_mithermometer#configuration-variables)*"
+            },
+            "bindkey": {
+              "key": "Optional",
+              "sensitive": true,
+              "sensitive_source": "explicit",
+              "docs": "**32-character hex string**: The encryption key for devices that broadcast encrypted BTHome advertisements. Omit it for unencrypted devices.\n\n*See also: [BTHome MiThermometer Sensor](https://esphome.io/components/sensor/bthome_mithermometer#configuration-variables)*"
+            },
+            "humidity": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "humidity"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "%"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The relative humidity, in %. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [BTHome MiThermometer Sensor](https://esphome.io/components/sensor/bthome_mithermometer#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "bthome_mithermometer::BTHomeMiThermometer",
+                "parents": [
+                  "ble_device_base::ESPBTDeviceListener",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "mac_address": {
+              "key": "Required",
+              "docs": "**MAC Address**: The MAC address of the device to receive data from.\n\n*See also: [BTHome MiThermometer Sensor](https://esphome.io/components/sensor/bthome_mithermometer#configuration-variables)*"
+            },
+            "signal_strength": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "signal_strength"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "dBm"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The signal strength (RSSI), in dBm. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [BTHome MiThermometer Sensor](https://esphome.io/components/sensor/bthome_mithermometer#configuration-variables)*"
+            },
+            "temperature": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The temperature, in \u00b0C. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [BTHome MiThermometer Sensor](https://esphome.io/components/sensor/bthome_mithermometer#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA",
+            "ble_device_base.BLE_DEVICE_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

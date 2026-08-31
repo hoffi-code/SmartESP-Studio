@@ -1,0 +1,81 @@
+{
+  "id": "lvgl.widget.label",
+  "domain": "lvgl",
+  "widgetType": "label",
+  "helpUrl": "https://esphome.io/components/lvgl/widgets/",
+  "fields": [
+    {
+      "key": "id",
+      "type": "id",
+      "required": false,
+      "lvl": "simple",
+      "placeholder": "label_id"
+    },
+    {
+      "key": "x",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "0"
+    },
+    {
+      "key": "y",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "0"
+    },
+    {
+      "key": "width",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "SIZE_CONTENT"
+    },
+    {
+      "key": "height",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "SIZE_CONTENT"
+    },
+    {
+      "key": "align",
+      "type": "select",
+      "required": false,
+      "lvl": "simple",
+      "options": [
+        "TOP_LEFT",
+        "TOP_MID",
+        "TOP_RIGHT",
+        "LEFT_MID",
+        "CENTER",
+        "RIGHT_MID",
+        "BOTTOM_LEFT",
+        "BOTTOM_MID",
+        "BOTTOM_RIGHT"
+      ]
+    },
+    {
+      "key": "text",
+      "type": "text",
+      "required": false,
+      "lvl": "simple",
+      "placeholder": "Label text"
+    },
+    {
+      "key": "text_color",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "0xFFFFFF"
+    },
+    {
+      "key": "bg_color",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "0x000000"
+    }
+  ]
+}

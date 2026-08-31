@@ -1,0 +1,391 @@
+{
+  "ade7880.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "56",
+              "key": "Optional"
+            },
+            "frequency": {
+              "default": "50Hz",
+              "key": "Optional",
+              "docs": "**frequency**: The AC line frequency of the supply voltage. The supported range is `45Hz` to `66Hz`. Defaults to `50Hz`.\n\n*See also: [ADE7880 Power Sensor](https://esphome.io/components/sensor/ade7880#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Specify the ID of the [I2C Component](https://esphome.io/components/i2c) if your configuration includes multiple I2C buses.\n\n*See also: [ADE7880 Power Sensor](https://esphome.io/components/sensor/ade7880#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "ade7880::ADE7880",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "irq0_pin": {
+              "internal": true,
+              "key": "Optional",
+              "modes": [
+                "input"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The GPIO pin that the ADE7880's IRQ0 output is connected to, if any. The `ade7880` component does not use this input, but if the IRQ0 output is connected to a GPIO and that GPIO is *not* configured as an `input`, the chip will produce excessive heat and its lifetime could be shortened. The simplest way to ensure that the GPIO pin is properly connected is to supply it here, but if you wish to configure it elsewhere in your configuration that is a reasonable alternative.\n\n*See also: [ADE7880 Power Sensor](https://esphome.io/components/sensor/ade7880#configuration-variables)*"
+            },
+            "irq1_pin": {
+              "internal": true,
+              "key": "Required",
+              "modes": [
+                "input"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The GPIO pin that the ADE7880's IRQ1 output is connected to. The `ade7880` component uses this input to determine when the ADE7880 chip has completed its power-up and reset cycles.\n\n*See also: [ADE7880 Power Sensor](https://esphome.io/components/sensor/ade7880#configuration-variables)*"
+            },
+            "neutral": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "calibration": {
+                    "key": "Required",
+                    "schema": {
+                      "config_vars": {
+                        "current_gain": {
+                          "key": "Required",
+                          "type": "integer",
+                          "docs": "**integer**: The value for the `NIGAIN` calibration register.\n\n*See also: [ADE7880 Power Sensor](https://esphome.io/components/sensor/ade7880#configuration-variables)*"
+                        }
+                      }
+                    },
+                    "type": "schema",
+                    "docs": "The calibration values necessary for this phase's sensors to report correct values.\n\n*See also: [ADE7880 Power Sensor](https://esphome.io/components/sensor/ade7880#configuration-variables)*"
+                  },
+                  "current": {
+                    "key": "Instantaneous) (required",
+                    "maybe": "name",
+                    "schema": {
+                      "config_vars": {
+                        "accuracy_decimals": {
+                          "default": "2"
+                        },
+                        "device_class": {
+                          "default": "current"
+                        },
+                        "state_class": {
+                          "default": "measurement"
+                        },
+                        "unit_of_measurement": {
+                          "default": "A"
+                        }
+                      },
+                      "extends": [
+                        "sensor._SENSOR_SCHEMA"
+                      ]
+                    },
+                    "type": "schema",
+                    "docs": "Report the RMS current value of the neutral in amperes (A). In detailed configuration mode, all options from [Sensor](https://esphome.io/components/sensor) are supported.\n\n*See also: [ADE7880 Power Sensor](https://esphome.io/components/sensor/ade7880#configuration-variables)*"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "ade7880::NeutralChannel",
+                      "parents": []
+                    },
+                    "key": "GeneratedID"
+                  },
+                  "name": {
+                    "key": "Optional",
+                    "type": "string",
+                    "docs": "**string**: The name of the phase, which will be used a prefix in the names of all of the phase's sensors.\n\n*See also: [ADE7880 Power Sensor](https://esphome.io/components/sensor/ade7880#configuration-variables)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "The configuration variables for the 'neutral' phase of the chip.\n\n*See also: [ADE7880 Power Sensor](https://esphome.io/components/sensor/ade7880#configuration-variables)*"
+            },
+            "phase_a": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "ade7880.sensor.POWER_CHANNEL_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The configuration variables for the 'A' phase inputs of the chip. Refer to the configuration examples below for the `simple` and `detailed` sensor configuration options.\n\n*See also: [ADE7880 Power Sensor](https://esphome.io/components/sensor/ade7880#configuration-variables)*"
+            },
+            "phase_b": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "ade7880.sensor.POWER_CHANNEL_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The configuration variables for the 'B' phase inputs of the chip. Identical to `phase_a`.\n\n*See also: [ADE7880 Power Sensor](https://esphome.io/components/sensor/ade7880#configuration-variables)*"
+            },
+            "phase_c": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "ade7880.sensor.POWER_CHANNEL_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The configuration variables for the 'C' phase inputs of the chip. Identical to `phase_a`.\n\n*See also: [ADE7880 Power Sensor](https://esphome.io/components/sensor/ade7880#configuration-variables)*"
+            },
+            "reset_pin": {
+              "internal": true,
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The GPIO pin that the ADE7880's RESET input is connected to, if any. If this pin is configured, the `ade7880` component will use it to initiate a 'hardware reset' of the chip when needed; if this pin is not configured, the component will attempt to initiate a 'software reset' of the chip when needed, but this could fail if the chip is not responding properly to the I2C bus.\n\n*See also: [ADE7880 Power Sensor](https://esphome.io/components/sensor/ade7880#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to report the sensor values. Defaults to `60s`.\n\n*See also: [ADE7880 Power Sensor](https://esphome.io/components/sensor/ade7880#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "POWER_CHANNEL_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "active_power": {
+              "key": "Instantaneous) (optional",
+              "maybe": "name",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "power"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "W"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Report the active (consumed) power value of this phase in watts (W). In detailed configuration mode, all options from [Sensor](https://esphome.io/components/sensor) are supported.\n\n*See also: [ADE7880 Power Sensor](https://esphome.io/components/sensor/ade7880#configuration-variables)*"
+            },
+            "apparent_power": {
+              "key": "Instantaneous) (optional",
+              "maybe": "name",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "apparent_power"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "VA"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Report the apparent (voltage multiplied by current) power value of this phase in volt-amperes (VA). In detailed configuration mode, all options from [Sensor](https://esphome.io/components/sensor) are supported.\n\n*See also: [ADE7880 Power Sensor](https://esphome.io/components/sensor/ade7880#configuration-variables)*"
+            },
+            "calibration": {
+              "key": "Required",
+              "schema": {
+                "config_vars": {
+                  "current_gain": {
+                    "key": "Required",
+                    "type": "integer",
+                    "docs": "**integer**: The value for the `AIGAIN` calibration register.\n\n*See also: [ADE7880 Power Sensor](https://esphome.io/components/sensor/ade7880#configuration-variables)*"
+                  },
+                  "phase_angle": {
+                    "key": "Required",
+                    "type": "integer",
+                    "docs": "**integer**: The value for the `APHCAL` calibration register.\n\n*See also: [ADE7880 Power Sensor](https://esphome.io/components/sensor/ade7880#configuration-variables)*"
+                  },
+                  "power_gain": {
+                    "key": "Required",
+                    "type": "integer",
+                    "docs": "**integer**: The value for the `APGAIN` calibration register.\n\n*See also: [ADE7880 Power Sensor](https://esphome.io/components/sensor/ade7880#configuration-variables)*"
+                  },
+                  "voltage_gain": {
+                    "key": "Required",
+                    "type": "integer",
+                    "docs": "**integer**: The value for the `AVGAIN` calibration register.\n\n*See also: [ADE7880 Power Sensor](https://esphome.io/components/sensor/ade7880#configuration-variables)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "The calibration values necessary for this phase's sensors to report correct values.\n\n*See also: [ADE7880 Power Sensor](https://esphome.io/components/sensor/ade7880#configuration-variables)*"
+            },
+            "current": {
+              "key": "Instantaneous) (optional",
+              "maybe": "name",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "current"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "A"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Report the RMS current value of this phase in amperes (A). In detailed configuration mode, all options from [Sensor](https://esphome.io/components/sensor) are supported.\n\n*See also: [ADE7880 Power Sensor](https://esphome.io/components/sensor/ade7880#configuration-variables)*"
+            },
+            "forward_active_energy": {
+              "key": "Accumulated) (optional",
+              "maybe": "name",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "energy"
+                  },
+                  "state_class": {
+                    "default": "total_increasing"
+                  },
+                  "unit_of_measurement": {
+                    "default": "Wh"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Report the forward active energy value of this phase in watt-hours (Wh). In detailed configuration mode, all options from [Sensor](https://esphome.io/components/sensor) are supported.\n\n*See also: [ADE7880 Power Sensor](https://esphome.io/components/sensor/ade7880#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "ade7880::PowerChannel",
+                "parents": []
+              },
+              "key": "GeneratedID"
+            },
+            "name": {
+              "key": "Optional",
+              "type": "string",
+              "docs": "**string**: The name of the phase, which will be used a prefix in the names of all of the phase's sensors.\n\n*See also: [ADE7880 Power Sensor](https://esphome.io/components/sensor/ade7880#configuration-variables)*"
+            },
+            "power_factor": {
+              "key": "Instantaneous) (optional",
+              "maybe": "name",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "power_factor"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "%"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Report the power factor value of this phase as a percentage (%). In detailed configuration mode, all options from [Sensor](https://esphome.io/components/sensor) are supported.\n\n*See also: [ADE7880 Power Sensor](https://esphome.io/components/sensor/ade7880#configuration-variables)*"
+            },
+            "reverse_active_energy": {
+              "key": "Accumulated) (optional",
+              "maybe": "name",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "energy"
+                  },
+                  "state_class": {
+                    "default": "total_increasing"
+                  },
+                  "unit_of_measurement": {
+                    "default": "varh"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Report the reverse active energy value of this phase in volt-ampere-reactive-hours (VARh). In detailed configuration mode, all options from [Sensor](https://esphome.io/components/sensor) are supported.\n\n*See also: [ADE7880 Power Sensor](https://esphome.io/components/sensor/ade7880#configuration-variables)*"
+            },
+            "voltage": {
+              "key": "Instantaneous) (optional",
+              "maybe": "name",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "voltage"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "V"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Report the RMS voltage value of this phase in volts (V). In detailed configuration mode, all options from [Sensor](https://esphome.io/components/sensor) are supported.\n\n*See also: [ADE7880 Power Sensor](https://esphome.io/components/sensor/ade7880#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

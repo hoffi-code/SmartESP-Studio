@@ -1,0 +1,48 @@
+{
+  "a02yyuw.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "0"
+            },
+            "device_class": {
+              "default": "distance"
+            },
+            "icon": {
+              "default": "mdi:arrow-expand-vertical"
+            },
+            "id": {
+              "id_type": {
+                "class": "a02yyuw::A02yyuwComponent",
+                "parents": [
+                  "sensor::Sensor",
+                  "EntityBase",
+                  "Component",
+                  "uart::UARTDevice"
+                ]
+              }
+            },
+            "state_class": {
+              "default": "measurement"
+            },
+            "uart_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "uart::UARTComponent",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the [UART bus](https://esphome.io/components/uart) you wish to use for this sensor. Use this if you want to use multiple UART buses at once.\n\n*See also: [A02YYUW Waterproof Ultrasonic Sensor](https://esphome.io/components/sensor/a02yyuw#configuration-variables)*"
+            },
+            "unit_of_measurement": {
+              "default": "mm"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

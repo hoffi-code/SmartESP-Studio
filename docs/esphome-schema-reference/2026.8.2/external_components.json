@@ -1,0 +1,52 @@
+{
+  "external_components": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "components": {
+              "default": "all",
+              "is_list": true,
+              "key": "Optional",
+              "type": "string"
+            },
+            "refresh": {
+              "default": "1d",
+              "key": "Optional",
+              "type": "string"
+            },
+            "source": {
+              "key": "Required",
+              "type": "typed",
+              "typed_key": "type",
+              "types": {
+                "git": {
+                  "extends": [
+                    "core.GIT_SCHEMA"
+                  ],
+                  "config_vars": {
+                    "path": {
+                      "key": "Required",
+                      "docs": "Path to use when using local components. See [Local](https://esphome.io/components/external_components#local).\n\n*See also: [External Components](https://esphome.io/components/external_components#configuration-variables)*"
+                    }
+                  }
+                },
+                "local": {
+                  "config_vars": {
+                    "path": {
+                      "key": "Required",
+                      "docs": "Path to use when using local components. See [Local](https://esphome.io/components/external_components#local).\n\n*See also: [External Components](https://esphome.io/components/external_components#configuration-variables)*"
+                    }
+                  }
+                }
+              },
+              "docs": "Repository type. One of `local`, `git`."
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

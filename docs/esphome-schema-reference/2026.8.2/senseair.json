@@ -1,0 +1,128 @@
+{
+  "senseair": {
+    "action": {
+      "abc_disable": {
+        "schema": {
+          "extends": [
+            "senseair.sensor.CALIBRATION_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) disables Automatic Baseline Calibration on the sensor with the given ID."
+      },
+      "abc_enable": {
+        "schema": {
+          "extends": [
+            "senseair.sensor.CALIBRATION_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) enables Automatic Baseline Calibration on the sensor with the given ID. ABC will be activated with the default interval of 180 hours."
+      },
+      "abc_get_period": {
+        "schema": {
+          "extends": [
+            "senseair.sensor.CALIBRATION_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) requests the currently configured ABC interval from the sensor with the given ID. The value will be printed in ESPHome logs."
+      },
+      "background_calibration": {
+        "schema": {
+          "extends": [
+            "senseair.sensor.CALIBRATION_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) initiates a background calibration on the sensor with the given ID: the current CO2 level will be used as a reference for the 400ppm threshold. Ensure that the sensor is in a stable environment with fresh ambient air, preferably near a window that has already been opened for a sufficient time."
+      },
+      "background_calibration_result": {
+        "schema": {
+          "extends": [
+            "senseair.sensor.CALIBRATION_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) requests the result of the background calibration procedure from the sensor with the given ID. The value will be printed in ESPHome logs."
+      }
+    }
+  },
+  "senseair.sensor": {
+    "schemas": {
+      "CALIBRATION_ACTION_SCHEMA": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "senseair::SenseAirComponent"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "co2": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "carbon_dioxide"
+                  },
+                  "icon": {
+                    "default": "mdi:molecule-co2"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "ppm"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The CO_2 data from the sensor in parts per million (ppm).\n\n*See also: [SenseAir CO_2 Sensor](https://esphome.io/components/sensor/senseair#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "senseair::SenseAirComponent",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "uart::UARTDevice"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for actions.\n\n*See also: [SenseAir CO_2 Sensor](https://esphome.io/components/sensor/senseair#configuration-variables)*"
+            },
+            "uart_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "uart::UARTComponent",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the [UART Component](https://esphome.io/components/uart) if you want to use multiple UART buses.\n\n*See also: [SenseAir CO_2 Sensor](https://esphome.io/components/sensor/senseair#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`.\n\n*See also: [SenseAir CO_2 Sensor](https://esphome.io/components/sensor/senseair#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,355 @@
+{
+  "i2s_audio": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "i2s_bclk_pin": {
+              "internal": true,
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The GPIO pin to use for the I\u00b2S `BCLK` *(Bit Clock)* signal, also referred to as `SCK` *(Serial Clock)*.\n\n*See also: [I\u00b2S Audio Component](https://esphome.io/components/i2s_audio#configuration-variables)*"
+            },
+            "i2s_lrclk_pin": {
+              "internal": true,
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The GPIO pin to use for the I\u00b2S `LRCLK` *(Left/Right Clock)* signal, also referred to as `WS` *(Word Select)* or `FS` *(Frame Sync)*.\n\n*See also: [I\u00b2S Audio Component](https://esphome.io/components/i2s_audio#configuration-variables)*"
+            },
+            "i2s_mclk_pin": {
+              "internal": true,
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The GPIO pin to use for the I\u00b2S `MCLK` *(Master Clock)* signal.\n\n*See also: [I\u00b2S Audio Component](https://esphome.io/components/i2s_audio#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "i2s_audio::I2SAudioComponent",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID for this I\u00b2S bus if you need multiple.\n\n*See also: [I\u00b2S Audio Component](https://esphome.io/components/i2s_audio#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "i2s_audio.microphone": {
+    "schemas": {
+      "BASE_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "bits_per_sample": {
+              "default": "32bit",
+              "type": "enum",
+              "values": {
+                "8": null,
+                "16": null,
+                "24": null,
+                "32": null
+              }
+            },
+            "channel": {
+              "default": "right",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "mono": null,
+                "left": null,
+                "right": null,
+                "stereo": null
+              }
+            },
+            "correct_dc_offset": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "i2s_audio_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2s_audio::I2SAudioComponent"
+            },
+            "i2s_mode": {
+              "default": "primary",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "primary": null,
+                "secondary": null
+              }
+            },
+            "id": {
+              "id_type": {
+                "class": "i2s_audio::I2SAudioMicrophone",
+                "parents": [
+                  "i2s_audio::I2SAudioIn",
+                  "i2s_audio::I2SAudioBase",
+                  "Parented<i2s_audio::I2SAudioComponent>",
+                  "Parented",
+                  "microphone::Microphone",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "mclk_multiple": {
+              "default": "256",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "128": null,
+                "256": null,
+                "384": null,
+                "512": null
+              }
+            },
+            "sample_rate": {
+              "default": "16000"
+            },
+            "use_apll": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean"
+            }
+          },
+          "extends": [
+            "microphone.MICROPHONE_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "CONFIG_SCHEMA": {
+        "type": "typed",
+        "typed_key": "adc_type",
+        "types": {
+          "external": {
+            "config_vars": {
+              "i2s_din_pin": {
+                "internal": true,
+                "key": "Required",
+                "modes": [
+                  "input"
+                ],
+                "type": "pin"
+              },
+              "pdm": {
+                "default": "False",
+                "key": "Optional",
+                "type": "boolean"
+              },
+              "pdm_dsr": {
+                "default": "8",
+                "key": "Optional",
+                "type": "enum",
+                "values": {
+                  "8": null,
+                  "16": null
+                }
+              }
+            },
+            "extends": [
+              "i2s_audio.microphone.BASE_SCHEMA"
+            ]
+          },
+          "internal": {
+            "config_vars": {
+              "adc_pin": {
+                "internal": true,
+                "key": "Required",
+                "modes": [
+                  "input"
+                ],
+                "type": "pin"
+              }
+            },
+            "extends": [
+              "i2s_audio.microphone.BASE_SCHEMA"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "i2s_audio.speaker": {
+    "schemas": {
+      "BASE_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "bits_per_sample": {
+              "default": "16bit",
+              "type": "enum",
+              "values": {
+                "8": null,
+                "16": null,
+                "24": null,
+                "32": null
+              }
+            },
+            "buffer_duration": {
+              "default": "500ms",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema"
+            },
+            "channel": {
+              "default": "mono",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "mono": null,
+                "left": null,
+                "right": null,
+                "stereo": null
+              }
+            },
+            "i2s_audio_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2s_audio::I2SAudioComponent"
+            },
+            "i2s_mode": {
+              "default": "primary",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "primary": null,
+                "secondary": null
+              }
+            },
+            "id": {
+              "id_type": {
+                "class": "i2s_audio::I2SAudioSpeaker",
+                "parents": [
+                  "i2s_audio::I2SAudioSpeakerBase",
+                  "Component",
+                  "speaker::Speaker",
+                  "i2s_audio::I2SAudioOut",
+                  "i2s_audio::I2SAudioBase",
+                  "Parented<i2s_audio::I2SAudioComponent>",
+                  "Parented"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "mclk_multiple": {
+              "default": "256",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "128": null,
+                "256": null,
+                "384": null,
+                "512": null
+              }
+            },
+            "sample_rate": {
+              "default": "16000"
+            },
+            "timeout": {
+              "default": "500ms",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "enum",
+              "values": {
+                "never": null
+              }
+            },
+            "use_apll": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean"
+            }
+          },
+          "extends": [
+            "speaker.SPEAKER_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "CONFIG_SCHEMA": {
+        "type": "typed",
+        "typed_key": "dac_type",
+        "types": {
+          "external": {
+            "config_vars": {
+              "i2s_comm_fmt": {
+                "default": "stand_i2s",
+                "key": "Optional",
+                "type": "enum",
+                "values": {
+                  "stand_i2s": null,
+                  "stand_msb": null,
+                  "stand_pcm_short": null,
+                  "stand_pcm_long": null,
+                  "stand_max": null,
+                  "i2s_msb": null,
+                  "i2s_lsb": null,
+                  "pcm": null,
+                  "pcm_short": null,
+                  "pcm_long": null
+                }
+              },
+              "i2s_dout_pin": {
+                "internal": true,
+                "key": "Required",
+                "modes": [
+                  "output"
+                ],
+                "type": "pin"
+              },
+              "spdif_mode": {
+                "default": "False",
+                "key": "Optional",
+                "type": "boolean"
+              }
+            },
+            "extends": [
+              "i2s_audio.speaker.BASE_SCHEMA"
+            ]
+          },
+          "internal": {
+            "config_vars": {
+              "mode": {
+                "key": "Required",
+                "type": "enum",
+                "values": {
+                  "left": null,
+                  "right": null,
+                  "stereo": null
+                }
+              }
+            },
+            "extends": [
+              "i2s_audio.speaker.BASE_SCHEMA"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

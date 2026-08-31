@@ -1,0 +1,25 @@
+{
+  "ble_server": {
+    "action": {
+      "numeric_comparison_reply": {
+        "schema": {
+          "config_vars": {
+            "accept": {
+              "key": "Required",
+              "templatable": true,
+              "type": "boolean",
+              "docs": "**boolean**: Should be `true` if the passkeys displayed on both BLE devices are matching.\n\n*See also: [Zephyr BLE Server](https://esphome.io/components/zephyr_ble_server#configuration-variables)*"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "zephyr_ble_server::BLEServer"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This action triggers an authentication attempt after a numeric comparison."
+      }
+    }
+  }
+}

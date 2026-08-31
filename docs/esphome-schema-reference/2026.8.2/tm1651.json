@@ -1,0 +1,151 @@
+{
+  "tm1651": {
+    "action": {
+      "set_brightness": {
+        "maybe": "brightness",
+        "schema": {
+          "config_vars": {
+            "brightness": {
+              "key": "Required",
+              "templatable": true,
+              "type": "enum",
+              "values": {
+                "1": null,
+                "2": null,
+                "3": null
+              },
+              "docs": "**int**: There is three levels of brightness (`1`, `2` or `3`  ) from lowest to highest brightness.\n\n*See also: [TM1651 Battery Display](https://esphome.io/components/tm1651#configuration-variables)*"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "tm1651::TM1651Display",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the TM1651.\n\n*See also: [TM1651 Battery Display](https://esphome.io/components/tm1651#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [Action](https://esphome.io/automations/actions#all-actions) allows you to manually change the brightness of the battery display at runtime."
+      },
+      "set_level": {
+        "maybe": "level",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "tm1651::TM1651Display",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the TM1651.\n\n*See also: [TM1651 Battery Display](https://esphome.io/components/tm1651#configuration-variables)*"
+            },
+            "level": {
+              "key": "Required",
+              "schema": {},
+              "templatable": true,
+              "type": "integer",
+              "docs": "**int**: Level from 0 to 7\n\n*See also: [TM1651 Battery Display](https://esphome.io/components/tm1651#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [Action](https://esphome.io/automations/actions#all-actions) changes the level of the battery display at runtime."
+      },
+      "set_level_percent": {
+        "maybe": "level_percent",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "tm1651::TM1651Display",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the TM1651.\n\n*See also: [TM1651 Battery Display](https://esphome.io/components/tm1651#configuration-variables)*"
+            },
+            "level_percent": {
+              "key": "Required",
+              "schema": {},
+              "templatable": true,
+              "type": "integer",
+              "docs": "**int**: Level from 0 to 100\n\n*See also: [TM1651 Battery Display](https://esphome.io/components/tm1651#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [Action](https://esphome.io/automations/actions#all-actions) changes the level of the battery display at runtime. Automatically calculates input level in percentages to actual level for the display."
+      },
+      "turn_off": {
+        "schema": {
+          "extends": [
+            "tm1651.BINARY_OUTPUT_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [Action](https://esphome.io/automations/actions#all-actions) turns off all the LEDs."
+      },
+      "turn_on": {
+        "schema": {
+          "extends": [
+            "tm1651.BINARY_OUTPUT_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [Action](https://esphome.io/automations/actions#all-actions) turns on the LEDs."
+      }
+    },
+    "schemas": {
+      "BINARY_OUTPUT_ACTION_SCHEMA": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "tm1651::TM1651Display",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the TM1651.\n\n*See also: [TM1651 Battery Display](https://esphome.io/components/tm1651#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "clk_pin": {
+              "internal": true,
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: CLK pin\n\n*See also: [TM1651 Battery Display](https://esphome.io/components/tm1651#configuration-variables)*"
+            },
+            "dio_pin": {
+              "internal": true,
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: DIO pin\n\n*See also: [TM1651 Battery Display](https://esphome.io/components/tm1651#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "tm1651::TM1651Display",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [TM1651 Battery Display](https://esphome.io/components/tm1651#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

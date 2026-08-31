@@ -1,0 +1,32 @@
+{
+  "bk72xx_ble": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "enable_on_boot": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Bring the BLE stack up during boot. Defaults to `false`: on the single-core BK72xx, stack init during boot competes with the WiFi connection handshake, so consumers enable the stack lazily on first use instead.\n\n*See also: [BK72xx Bluetooth Low Energy](https://esphome.io/components/bk72xx_ble#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "bk72xx_ble::BK72xxBLE",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used to reference this component.\n\n*See also: [BK72xx Bluetooth Low Energy](https://esphome.io/components/bk72xx_ble#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

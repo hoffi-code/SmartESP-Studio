@@ -1,0 +1,280 @@
+{
+  "mitsubishi_cn105": {
+    "action": {
+      "clear_remote_temperature": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "mitsubishi_cn105::MitsubishiCN105Component"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "set_remote_temperature": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "mitsubishi_cn105::MitsubishiCN105Component"
+            },
+            "temperature": {
+              "key": "Required",
+              "templatable": true
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "vane.control": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "mitsubishi_cn105::MitsubishiCN105Component",
+              "docs": "**ID**: The ID of the top-level `mitsubishi_cn105` hub.\n\n*See also: [Mitsubishi CN105 Climate](https://esphome.io/components/climate/mitsubishi_cn105#mitsubishi_cn105vanecontrol-action)*"
+            },
+            "vertical": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "direction": {
+                    "key": "Optional",
+                    "templatable": true,
+                    "type": "enum",
+                    "values": {
+                      "AUTO": null,
+                      "1": null,
+                      "2": null,
+                      "3": null,
+                      "4": null,
+                      "5": null,
+                      "SWING": null
+                    },
+                    "docs": "**string**: One of `AUTO`, `1`, `2`, `3`, `4`, `5`, or `SWING`.\n\n*See also: [Mitsubishi CN105 Climate](https://esphome.io/components/climate/mitsubishi_cn105#mitsubishi_cn105vanecontrol-action)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "Vertical vane settings.\n\n*See also: [Mitsubishi CN105 Climate](https://esphome.io/components/climate/mitsubishi_cn105#mitsubishi_cn105vanecontrol-action)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "The `mitsubishi_cn105.vane.control` action changes the vane direction. Its `id` must reference the top-level Mitsubishi CN105 hub. The currently supported setting is `vertical.direction`, which accepts `AUTO`, `1`, `2`, `3`, `4`, `5`, or `SWING`. It can also be a lambda returning one of the corresponding `VERTICAL_VANE_MODE_*` values. A lambda returning `VERTICAL_VANE_MODE_UNKNOWN` is ignored and does not change the vane direction."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "mitsubishi_cn105::MitsubishiCN105Component",
+                "parents": [
+                  "Component",
+                  "uart::UARTDevice"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of this Mitsubishi CN105 hub. Use this ID to reference the hub from climate entities and actions.\n\n*See also: [Mitsubishi CN105 Climate](https://esphome.io/components/climate/mitsubishi_cn105#configuration-variables)*"
+            },
+            "telemetry_request_min_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: Minimum time between consecutive telemetry reads. Defaults to `60s`. This allows keeping a low `update_interval` (to quickly reflect changes, e.g. when using an IR remote) while avoiding excessive telemetry requests (for example room temperature reads). Telemetry is still requested during regular polling cycles, so the effective update frequency is bounded by `update_interval`. Set to `never` to disable telemetry polling.\n\n*See also: [Mitsubishi CN105 Climate](https://esphome.io/components/climate/mitsubishi_cn105#configuration-variables)*"
+            },
+            "uart_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "uart::UARTComponent",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The UART bus to use.\n\n*See also: [Mitsubishi CN105 Climate](https://esphome.io/components/climate/mitsubishi_cn105#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "1s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: Interval between status updates. Defaults to `1s`. Lower values provide faster detection of external changes, for example when using the remote control.\n\n*See also: [Mitsubishi CN105 Climate](https://esphome.io/components/climate/mitsubishi_cn105#configuration-variables)*"
+            },
+            "vane": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "on_state": {
+                    "key": "Optional",
+                    "type": "trigger",
+                    "docs": "**[Automation](https://esphome.io/automations/)**: An automation to run whenever the hub publishes its current state. The automation receives the current vane state as `x`. See [`vane.on_state` Trigger](https://esphome.io/components/climate/mitsubishi_cn105#vane-on_state-trigger) for the available values and an example.\n\n*See also: [Mitsubishi CN105 Climate](https://esphome.io/components/climate/mitsubishi_cn105#configuration-variables)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "Vane state automation configuration.\n\n*See also: [Mitsubishi CN105 Climate](https://esphome.io/components/climate/mitsubishi_cn105#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "MITSUBISHI_CN105_DEVICE_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "mitsubishi_cn105_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "mitsubishi_cn105::MitsubishiCN105Component"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "mitsubishi_cn105.climate": {
+    "action": {
+      "clear_remote_temperature": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "mitsubishi_cn105::MitsubishiCN105Climate"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "set_remote_temperature": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "mitsubishi_cn105::MitsubishiCN105Climate"
+            },
+            "temperature": {
+              "key": "Required",
+              "templatable": true
+            }
+          }
+        },
+        "type": "schema"
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "mitsubishi_cn105::MitsubishiCN105Climate",
+                "parents": [
+                  "climate::Climate",
+                  "EntityBase",
+                  "Component",
+                  "Parented<mitsubishi_cn105::MitsubishiCN105Component>",
+                  "Parented"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "supported_swing_modes": {
+              "default": "OFF",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "OFF": null,
+                "BOTH": null,
+                "VERTICAL": null,
+                "HORIZONTAL": null
+              }
+            }
+          },
+          "extends": [
+            "climate._CLIMATE_SCHEMA",
+            "mitsubishi_cn105.MITSUBISHI_CN105_DEVICE_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "_BASE_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "mitsubishi_cn105::MitsubishiCN105Climate",
+                "parents": [
+                  "climate::Climate",
+                  "EntityBase",
+                  "Component",
+                  "Parented<mitsubishi_cn105::MitsubishiCN105Component>",
+                  "Parented"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "supported_swing_modes": {
+              "default": "OFF",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "OFF": null,
+                "BOTH": null,
+                "VERTICAL": null,
+                "HORIZONTAL": null
+              }
+            }
+          },
+          "extends": [
+            "climate._CLIMATE_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "mitsubishi_cn105.select": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "vertical_vane_direction": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "icon": {
+                    "default": "mdi:arrow-up-down"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "mitsubishi_cn105::MitsubishiCN105VerticalVaneDirectionSelect",
+                      "parents": [
+                        "select::Select",
+                        "EntityBase",
+                        "Component",
+                        "Parented<mitsubishi_cn105::MitsubishiCN105Component>",
+                        "Parented"
+                      ]
+                    }
+                  }
+                },
+                "extends": [
+                  "select._SELECT_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            }
+          },
+          "extends": [
+            "mitsubishi_cn105.MITSUBISHI_CN105_DEVICE_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

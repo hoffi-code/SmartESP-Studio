@@ -1,0 +1,580 @@
+{
+  "qspi_dbi.display": {
+    "schemas": {
+      "BASE_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "brightness": {
+              "default": "208",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: A brightness value in the range 0-255\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+            },
+            "cs_pin": {
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The chip select pin.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+            },
+            "data_rate": {
+              "default": "10000000.0",
+              "key": "Optional",
+              "docs": "**int**: Set the data rate of the SPI interface to the display. One of `80MHz`, `40MHz`, `20MHz`, `10MHz` (default), `5MHz`, `2MHz` or `1MHz`.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+            },
+            "dimensions": {
+              "key": "Required",
+              "schema": {
+                "config_vars": {
+                  "height": {
+                    "key": "Required",
+                    "docs": "**int**: Specifies height of display in pixels.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+                  },
+                  "offset_height": {
+                    "default": "0",
+                    "key": "Optional",
+                    "docs": "**int**: Specify an offset for the y-direction of the display. Default is 0.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+                  },
+                  "offset_width": {
+                    "default": "0",
+                    "key": "Optional",
+                    "docs": "**int**: Specify an offset for the x-direction of the display, typically used when a display is smaller than the maximum supported by the driver chip. Default is 0\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+                  },
+                  "width": {
+                    "key": "Required",
+                    "docs": "**int**: Specifies width of display.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "Dimensions of the screen, specified either as *width* **x** *height* (e.g `320x240`  ) or with separate config keys.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+            },
+            "draw_from_origin": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: When set, all partial display updates will start at the origin (0,0). Defaults to false.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+            },
+            "enable_pin": {
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The display enable pin.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "qspi_dbi::QspiDbi",
+                "parents": [
+                  "display::Display",
+                  "PollingComponent",
+                  "Component",
+                  "display::DisplayBuffer",
+                  "display::Display",
+                  "PollingComponent",
+                  "Component",
+                  "Component",
+                  "spi::SPIDevice"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+            },
+            "init_sequence": {
+              "is_list": true,
+              "key": "Optional",
+              "docs": "**A list of byte arrays**: Specifies the init sequence for the display. This is required when using the `CUSTOM` model - but may be empty. If specified for other models this data will be sent after the pre-configured sequence.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+            },
+            "release_device": {
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "reset_pin": {
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The RESET pin.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+            },
+            "spi_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "spi::QuadSPIComponent"
+            },
+            "spi_mode": {
+              "default": "MODE0",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "MODE0": null,
+                "MODE1": null,
+                "MODE2": null,
+                "MODE3": null,
+                "0": null,
+                "1": null,
+                "2": null,
+                "3": null
+              },
+              "docs": "Set the mode for the SPI interface to the display. Default is `MODE0`.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "display.FULL_DISPLAY_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "CONFIG_SCHEMA": {
+        "type": "typed",
+        "typed_key": "model",
+        "types": {
+          "AXS15231": {
+            "config_vars": {
+              "color_order": {
+                "default": "RGB",
+                "key": "Optional",
+                "type": "enum",
+                "values": {
+                  "RGB": null,
+                  "BGR": null
+                },
+                "docs": "Should be one of `rgb` (default) or `bgr`.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "draw_rounding": {
+                "default": "8",
+                "key": "Optional",
+                "docs": "**int**: Caters for display chips that require partial drawing to be aligned to certain boundaries. Default is 2, must be a power of 2.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "invert_colors": {
+                "default": "False",
+                "key": "Optional",
+                "type": "boolean",
+                "docs": "**boolean**: With this boolean option you can invert the display colors.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "transform": {
+                "key": "Optional",
+                "schema": {
+                  "config_vars": {
+                    "mirror_x": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean",
+                      "docs": "**boolean**: If true, mirror the x axis.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+                    },
+                    "mirror_y": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean",
+                      "docs": "**boolean**: If true, mirror the y axis.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+                    }
+                  }
+                },
+                "type": "schema",
+                "docs": "Transform the display presentation using hardware. All defaults are `false`. This option cannot be used with `rotation`.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "update_interval": {
+                "key": "Optional",
+                "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to re-draw the screen. Defaults to `5s`.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "auto_clear_enabled": {
+                "key": "Optional",
+                "docs": "**boolean**: Whether to automatically clear the display data before each lambda call, or to keep the existing display content (must overwrite explicitly, e.g., only on data change). Defaults to `true` if a lambda or pages are configured, false otherwise.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "pages": {
+                "key": "Optional",
+                "docs": "**list**: Show pages instead of a single lambda. See [Display Pages](https://esphome.io/components/display#display-pages).\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "rotation": {
+                "key": "Optional",
+                "docs": "Rotate the display presentation in software. Choose one of `0\u00b0`, `90\u00b0`, `180\u00b0`, or `270\u00b0`.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "lambda": {
+                "key": "Optional",
+                "docs": "**[lambda](https://esphome.io/automations/templates#config-lambda)**: The lambda to use for rendering the content on the display. See [Display Rendering Engine](https://esphome.io/components/display#display-engine) for more information.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "qspi_dbi.display.BASE_SCHEMA"
+            ]
+          },
+          "CUSTOM": {
+            "config_vars": {
+              "color_order": {
+                "default": "RGB",
+                "key": "Optional",
+                "type": "enum",
+                "values": {
+                  "RGB": null,
+                  "BGR": null
+                },
+                "docs": "Should be one of `rgb` (default) or `bgr`.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "draw_rounding": {
+                "default": "2",
+                "key": "Optional",
+                "docs": "**int**: Caters for display chips that require partial drawing to be aligned to certain boundaries. Default is 2, must be a power of 2.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "invert_colors": {
+                "default": "False",
+                "key": "Optional",
+                "type": "boolean",
+                "docs": "**boolean**: With this boolean option you can invert the display colors.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "transform": {
+                "key": "Optional",
+                "schema": {
+                  "config_vars": {
+                    "mirror_x": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean",
+                      "docs": "**boolean**: If true, mirror the x axis.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+                    },
+                    "mirror_y": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean",
+                      "docs": "**boolean**: If true, mirror the y axis.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+                    },
+                    "swap_xy": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean",
+                      "docs": "**boolean**: If true, exchange the x and y axes. Not available for some chips\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+                    }
+                  }
+                },
+                "type": "schema",
+                "docs": "Transform the display presentation using hardware. All defaults are `false`. This option cannot be used with `rotation`.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "update_interval": {
+                "key": "Optional",
+                "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to re-draw the screen. Defaults to `5s`.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "auto_clear_enabled": {
+                "key": "Optional",
+                "docs": "**boolean**: Whether to automatically clear the display data before each lambda call, or to keep the existing display content (must overwrite explicitly, e.g., only on data change). Defaults to `true` if a lambda or pages are configured, false otherwise.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "pages": {
+                "key": "Optional",
+                "docs": "**list**: Show pages instead of a single lambda. See [Display Pages](https://esphome.io/components/display#display-pages).\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "rotation": {
+                "key": "Optional",
+                "docs": "Rotate the display presentation in software. Choose one of `0\u00b0`, `90\u00b0`, `180\u00b0`, or `270\u00b0`.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "lambda": {
+                "key": "Optional",
+                "docs": "**[lambda](https://esphome.io/automations/templates#config-lambda)**: The lambda to use for rendering the content on the display. See [Display Rendering Engine](https://esphome.io/components/display#display-engine) for more information.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "qspi_dbi.display.BASE_SCHEMA"
+            ]
+          },
+          "JC3636W518": {
+            "config_vars": {
+              "color_order": {
+                "default": "RGB",
+                "key": "Optional",
+                "type": "enum",
+                "values": {
+                  "RGB": null,
+                  "BGR": null
+                },
+                "docs": "Should be one of `rgb` (default) or `bgr`.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "draw_rounding": {
+                "default": "2",
+                "key": "Optional",
+                "docs": "**int**: Caters for display chips that require partial drawing to be aligned to certain boundaries. Default is 2, must be a power of 2.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "invert_colors": {
+                "default": "True",
+                "key": "Optional",
+                "type": "boolean",
+                "docs": "**boolean**: With this boolean option you can invert the display colors.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "transform": {
+                "key": "Optional",
+                "schema": {
+                  "config_vars": {
+                    "mirror_x": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean",
+                      "docs": "**boolean**: If true, mirror the x axis.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+                    },
+                    "mirror_y": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean",
+                      "docs": "**boolean**: If true, mirror the y axis.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+                    },
+                    "swap_xy": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean",
+                      "docs": "**boolean**: If true, exchange the x and y axes. Not available for some chips\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+                    }
+                  }
+                },
+                "type": "schema",
+                "docs": "Transform the display presentation using hardware. All defaults are `false`. This option cannot be used with `rotation`.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "update_interval": {
+                "key": "Optional",
+                "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to re-draw the screen. Defaults to `5s`.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "auto_clear_enabled": {
+                "key": "Optional",
+                "docs": "**boolean**: Whether to automatically clear the display data before each lambda call, or to keep the existing display content (must overwrite explicitly, e.g., only on data change). Defaults to `true` if a lambda or pages are configured, false otherwise.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "pages": {
+                "key": "Optional",
+                "docs": "**list**: Show pages instead of a single lambda. See [Display Pages](https://esphome.io/components/display#display-pages).\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "rotation": {
+                "key": "Optional",
+                "docs": "Rotate the display presentation in software. Choose one of `0\u00b0`, `90\u00b0`, `180\u00b0`, or `270\u00b0`.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "lambda": {
+                "key": "Optional",
+                "docs": "**[lambda](https://esphome.io/automations/templates#config-lambda)**: The lambda to use for rendering the content on the display. See [Display Rendering Engine](https://esphome.io/components/display#display-engine) for more information.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "qspi_dbi.display.BASE_SCHEMA"
+            ]
+          },
+          "JC4832W535": {
+            "config_vars": {
+              "color_order": {
+                "default": "RGB",
+                "key": "Optional",
+                "type": "enum",
+                "values": {
+                  "RGB": null,
+                  "BGR": null
+                },
+                "docs": "Should be one of `rgb` (default) or `bgr`.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "draw_rounding": {
+                "default": "8",
+                "key": "Optional",
+                "docs": "**int**: Caters for display chips that require partial drawing to be aligned to certain boundaries. Default is 2, must be a power of 2.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "invert_colors": {
+                "default": "False",
+                "key": "Optional",
+                "type": "boolean",
+                "docs": "**boolean**: With this boolean option you can invert the display colors.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "transform": {
+                "key": "Optional",
+                "schema": {
+                  "config_vars": {
+                    "mirror_x": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean",
+                      "docs": "**boolean**: If true, mirror the x axis.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+                    },
+                    "mirror_y": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean",
+                      "docs": "**boolean**: If true, mirror the y axis.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+                    }
+                  }
+                },
+                "type": "schema",
+                "docs": "Transform the display presentation using hardware. All defaults are `false`. This option cannot be used with `rotation`.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "update_interval": {
+                "key": "Optional",
+                "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to re-draw the screen. Defaults to `5s`.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "auto_clear_enabled": {
+                "key": "Optional",
+                "docs": "**boolean**: Whether to automatically clear the display data before each lambda call, or to keep the existing display content (must overwrite explicitly, e.g., only on data change). Defaults to `true` if a lambda or pages are configured, false otherwise.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "pages": {
+                "key": "Optional",
+                "docs": "**list**: Show pages instead of a single lambda. See [Display Pages](https://esphome.io/components/display#display-pages).\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "rotation": {
+                "key": "Optional",
+                "docs": "Rotate the display presentation in software. Choose one of `0\u00b0`, `90\u00b0`, `180\u00b0`, or `270\u00b0`.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "lambda": {
+                "key": "Optional",
+                "docs": "**[lambda](https://esphome.io/automations/templates#config-lambda)**: The lambda to use for rendering the content on the display. See [Display Rendering Engine](https://esphome.io/components/display#display-engine) for more information.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "qspi_dbi.display.BASE_SCHEMA"
+            ]
+          },
+          "RM67162": {
+            "config_vars": {
+              "color_order": {
+                "default": "RGB",
+                "key": "Optional",
+                "type": "enum",
+                "values": {
+                  "RGB": null,
+                  "BGR": null
+                },
+                "docs": "Should be one of `rgb` (default) or `bgr`.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "draw_rounding": {
+                "default": "2",
+                "key": "Optional",
+                "docs": "**int**: Caters for display chips that require partial drawing to be aligned to certain boundaries. Default is 2, must be a power of 2.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "invert_colors": {
+                "default": "False",
+                "key": "Optional",
+                "type": "boolean",
+                "docs": "**boolean**: With this boolean option you can invert the display colors.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "transform": {
+                "key": "Optional",
+                "schema": {
+                  "config_vars": {
+                    "mirror_x": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean",
+                      "docs": "**boolean**: If true, mirror the x axis.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+                    },
+                    "mirror_y": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean",
+                      "docs": "**boolean**: If true, mirror the y axis.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+                    },
+                    "swap_xy": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean",
+                      "docs": "**boolean**: If true, exchange the x and y axes. Not available for some chips\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+                    }
+                  }
+                },
+                "type": "schema",
+                "docs": "Transform the display presentation using hardware. All defaults are `false`. This option cannot be used with `rotation`.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "update_interval": {
+                "key": "Optional",
+                "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to re-draw the screen. Defaults to `5s`.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "auto_clear_enabled": {
+                "key": "Optional",
+                "docs": "**boolean**: Whether to automatically clear the display data before each lambda call, or to keep the existing display content (must overwrite explicitly, e.g., only on data change). Defaults to `true` if a lambda or pages are configured, false otherwise.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "pages": {
+                "key": "Optional",
+                "docs": "**list**: Show pages instead of a single lambda. See [Display Pages](https://esphome.io/components/display#display-pages).\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "rotation": {
+                "key": "Optional",
+                "docs": "Rotate the display presentation in software. Choose one of `0\u00b0`, `90\u00b0`, `180\u00b0`, or `270\u00b0`.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "lambda": {
+                "key": "Optional",
+                "docs": "**[lambda](https://esphome.io/automations/templates#config-lambda)**: The lambda to use for rendering the content on the display. See [Display Rendering Engine](https://esphome.io/components/display#display-engine) for more information.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "qspi_dbi.display.BASE_SCHEMA"
+            ]
+          },
+          "RM690B0": {
+            "config_vars": {
+              "color_order": {
+                "default": "RGB",
+                "key": "Optional",
+                "type": "enum",
+                "values": {
+                  "RGB": null,
+                  "BGR": null
+                },
+                "docs": "Should be one of `rgb` (default) or `bgr`.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "draw_rounding": {
+                "default": "2",
+                "key": "Optional",
+                "docs": "**int**: Caters for display chips that require partial drawing to be aligned to certain boundaries. Default is 2, must be a power of 2.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "invert_colors": {
+                "default": "False",
+                "key": "Optional",
+                "type": "boolean",
+                "docs": "**boolean**: With this boolean option you can invert the display colors.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "transform": {
+                "key": "Optional",
+                "schema": {
+                  "config_vars": {
+                    "mirror_x": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean",
+                      "docs": "**boolean**: If true, mirror the x axis.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+                    },
+                    "mirror_y": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean",
+                      "docs": "**boolean**: If true, mirror the y axis.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+                    },
+                    "swap_xy": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean",
+                      "docs": "**boolean**: If true, exchange the x and y axes. Not available for some chips\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+                    }
+                  }
+                },
+                "type": "schema",
+                "docs": "Transform the display presentation using hardware. All defaults are `false`. This option cannot be used with `rotation`.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "update_interval": {
+                "key": "Optional",
+                "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to re-draw the screen. Defaults to `5s`.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "auto_clear_enabled": {
+                "key": "Optional",
+                "docs": "**boolean**: Whether to automatically clear the display data before each lambda call, or to keep the existing display content (must overwrite explicitly, e.g., only on data change). Defaults to `true` if a lambda or pages are configured, false otherwise.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "pages": {
+                "key": "Optional",
+                "docs": "**list**: Show pages instead of a single lambda. See [Display Pages](https://esphome.io/components/display#display-pages).\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "rotation": {
+                "key": "Optional",
+                "docs": "Rotate the display presentation in software. Choose one of `0\u00b0`, `90\u00b0`, `180\u00b0`, or `270\u00b0`.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              },
+              "lambda": {
+                "key": "Optional",
+                "docs": "**[lambda](https://esphome.io/automations/templates#config-lambda)**: The lambda to use for rendering the content on the display. See [Display Rendering Engine](https://esphome.io/components/display#display-engine) for more information.\n\n*See also: [Quad SPI Displays](https://esphome.io/components/display/qspi_dbi#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "qspi_dbi.display.BASE_SCHEMA"
+            ]
+          }
+        },
+        "docs": "One of"
+      }
+    }
+  }
+}

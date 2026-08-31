@@ -1,0 +1,31 @@
+{
+  "runtime_stats": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "runtime_stats::RuntimeStatsCollector",
+                "parents": []
+              },
+              "key": "GeneratedID"
+            },
+            "log_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: How often to log the statistics. Defaults to `60s`.\n\n*See also: [Runtime Statistics](https://esphome.io/components/runtime_stats#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,181 @@
+{
+  "as3935": {
+    "schemas": {
+      "AS3935_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "calibration": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Enable/disable oscillator calibration on startup. It is recommended to perform antenna tuning procedure first and adjust parameters, so that RLC antenna resonance is tuned within optimal range. Defaults to `True`.\n\n*See also: [AMS AS3935 Franklin Lightning Sensor](https://esphome.io/components/sensor/as3935#configuration-variables)*"
+            },
+            "capacitance": {
+              "default": "0",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: This setting will add capacitance to the series RLC antenna on the product to help tune its resonance. The datasheet specifies being within 3.5 percent of 500kHz to get optimal lightning detection and distance sensing. It's possible to add up to 120pF in steps of 8pF to the antenna. Defaults to `0`.\n\n*See also: [AMS AS3935 Franklin Lightning Sensor](https://esphome.io/components/sensor/as3935#configuration-variables)*"
+            },
+            "div_ratio": {
+              "default": "0",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "0": null,
+                "16": null,
+                "32": null,
+                "64": null,
+                "128": null
+              },
+              "docs": "**int**: The antenna is designed to resonate at 500kHz and so can be tuned with the following setting. The accuracy of the antenna must be within 3.5 percent of that value for proper signal validation and distance estimation. Defaults to `0`.\n\n*See also: [AMS AS3935 Franklin Lightning Sensor](https://esphome.io/components/sensor/as3935#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "as3935::AS3935Component",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "indoor": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Indicates if the sensor is used indoor. Defaults to `true`.\n\n*See also: [AMS AS3935 Franklin Lightning Sensor](https://esphome.io/components/sensor/as3935#configuration-variables)*"
+            },
+            "irq_pin": {
+              "key": "Required",
+              "modes": [
+                "input"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The IRQ pin, which indicates if a lightning strike has been detected.\n\n*See also: [AMS AS3935 Franklin Lightning Sensor](https://esphome.io/components/sensor/as3935#configuration-variables)*"
+            },
+            "lightning_threshold": {
+              "default": "1",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "1": null,
+                "5": null,
+                "9": null,
+                "16": null
+              },
+              "docs": "**int**: The number of lightnings that must appear in a 15-minute time window before a lightning storm is detected. 15 minutes is the window of time before the number of detected lightning events is reset. The number of lightning strikes can be set to 1,5,9, or 16. Defaults to `1`.\n\n*See also: [AMS AS3935 Franklin Lightning Sensor](https://esphome.io/components/sensor/as3935#configuration-variables)*"
+            },
+            "mask_disturber": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: This setting will return whether or not disturbers trigger the IRQ Pin. Defaults to `false`.\n\n*See also: [AMS AS3935 Franklin Lightning Sensor](https://esphome.io/components/sensor/as3935#configuration-variables)*"
+            },
+            "noise_level": {
+              "default": "2",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Noise floor level is compared to known reference voltage. If this level is exceeded the chip will issue an interrupt to the IRQ pin, broadcasting that it can not operate properly due to noise (INT_NH). Defaults to `2`.\n\n*See also: [AMS AS3935 Franklin Lightning Sensor](https://esphome.io/components/sensor/as3935#configuration-variables)*"
+            },
+            "spike_rejection": {
+              "default": "2",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Helps to differentiate between false events and actual lightning. Increasing this value increases robustness at the cost of sensitivity to distant events. Defaults to `2`.\n\n*See also: [AMS AS3935 Franklin Lightning Sensor](https://esphome.io/components/sensor/as3935#configuration-variables)*"
+            },
+            "tune_antenna": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Start sensor in antenna tuning mode. It will emit oscillator frequency to be read on the INT pin. Please follow AS3935 documentation. Note that while this mode is enabled, lightings will not be detected. It should be used for initial calibration only, in order to determine correct value of `capacitance` and/or `div_ratio` parameters. Defaults to `False`.\n\n*See also: [AMS AS3935 Franklin Lightning Sensor](https://esphome.io/components/sensor/as3935#configuration-variables)*"
+            },
+            "watchdog_threshold": {
+              "default": "2",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Determines the threshold for events that trigger the IRQ pin. Defaults to `2`.\n\n*See also: [AMS AS3935 Franklin Lightning Sensor](https://esphome.io/components/sensor/as3935#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "as3935.binary_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "as3935_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "as3935::AS3935Component"
+            }
+          },
+          "extends": [
+            "binary_sensor._BINARY_SENSOR_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "as3935.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "as3935_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "as3935::AS3935Component"
+            },
+            "distance": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "icon": {
+                    "default": "mdi:signal"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "km"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Distance in km to the front of the storm and not the distance to a lightning strike. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [AMS AS3935 Franklin Lightning Sensor](https://esphome.io/components/sensor/as3935#sensor)*"
+            },
+            "lightning_energy": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "icon": {
+                    "default": "mdi:flash"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Lightning energy value. According to the datasheet this is only a pure value that doesn't have any physical meaning. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [AMS AS3935 Franklin Lightning Sensor](https://esphome.io/components/sensor/as3935#sensor)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

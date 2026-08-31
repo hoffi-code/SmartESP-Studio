@@ -1,0 +1,70 @@
+{
+  "syslog": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "facility": {
+              "default": "16",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: The syslog facility to use. Defaults to `16` (corresponding to `local0`  ).\n\n*See also: [Syslog Component](https://esphome.io/components/syslog#configuration-options)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "syslog::Syslog",
+                "parents": [
+                  "Component",
+                  "Parented<udp::UDPComponent>",
+                  "Parented"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [Syslog Component](https://esphome.io/components/syslog#configuration-options)*"
+            },
+            "level": {
+              "default": "DEBUG",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "NONE": null,
+                "ERROR": null,
+                "WARN": null,
+                "INFO": null,
+                "DEBUG": null,
+                "VERBOSE": null,
+                "VERY_VERBOSE": null
+              },
+              "docs": "**string**: The highest log level to send to the syslog server. Defaults to `DEBUG`.\n\n*See also: [Syslog Component](https://esphome.io/components/syslog#configuration-options)*"
+            },
+            "port": {
+              "data_type": "port",
+              "default": "514",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: The port to send logs to. Defaults to `514`.\n\n*See also: [Syslog Component](https://esphome.io/components/syslog#configuration-options)*"
+            },
+            "strip": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "time_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "time::RealTimeClock",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the time client to use for time-stamping logs. May be omitted if only one time client is configured.\n\n*See also: [Syslog Component](https://esphome.io/components/syslog#configuration-options)*"
+            },
+            "udp_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "udp::UDPComponent",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the UDP client to use for sending logs. May be omitted if only one UDP client is configured.\n\n*See also: [Syslog Component](https://esphome.io/components/syslog#configuration-options)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

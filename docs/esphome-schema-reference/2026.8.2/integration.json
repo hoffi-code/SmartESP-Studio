@@ -1,0 +1,97 @@
+{
+  "integration.sensor": {
+    "action": {
+      "reset": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "integration::IntegrationSensor"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [Action](https://esphome.io/automations/actions#all-actions) allows you to reset the value of the integration sensor to zero. For example this can be used to reset the integration sensor to zero at midnight with a time-based automation."
+      },
+      "set_value": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "integration::IntegrationSensor",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the integration sensor.\n\n*See also: [Integration Sensor](https://esphome.io/components/sensor/integration#sensorintegrationset_value-action)*"
+            },
+            "value": {
+              "key": "Required",
+              "templatable": true,
+              "docs": "**float**: The value to set the integration sensor to.\n\n*See also: [Integration Sensor](https://esphome.io/components/sensor/integration#sensorintegrationset_value-action)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [Action](https://esphome.io/automations/actions#all-actions) allows you to set the integration sensor to a specific value. For example, it can be used to set the sensor to the battery capacity when it is fully charged."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "integration::IntegrationSensor",
+                "parents": [
+                  "sensor::Sensor",
+                  "EntityBase",
+                  "Component"
+                ]
+              }
+            },
+            "integration_method": {
+              "default": "trapezoid",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "trapezoid": null,
+                "left": null,
+                "right": null
+              },
+              "docs": "**string**: The integration method to use. One of `trapezoid`, `left` or `right`. Defaults to `trapezoid`.\n\n*See also: [Integration Sensor](https://esphome.io/components/sensor/integration#configuration-variables)*"
+            },
+            "restore": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Whether to store the intermediate result on the device so that the value can be restored upon power cycle or reboot. Warning: this option can wear out your flash. Defaults to `false`.\n\n*See also: [Integration Sensor](https://esphome.io/components/sensor/integration#configuration-variables)*"
+            },
+            "sensor": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "sensor::Sensor",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the sensor to integrate over time.\n\n*See also: [Integration Sensor](https://esphome.io/components/sensor/integration#configuration-variables)*"
+            },
+            "time_unit": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "ms": null,
+                "s": null,
+                "min": null,
+                "h": null,
+                "d": null
+              },
+              "docs": "**string**: The time unit to integrate with, one of `ms`, `s`, `min`, `h` or `d`.\n\n*See also: [Integration Sensor](https://esphome.io/components/sensor/integration#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

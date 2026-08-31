@@ -1,0 +1,56 @@
+{
+  "speed.fan": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "direction_output": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "output::BinaryOutput",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id of the [output](https://esphome.io/components/output/) to use for the direction state of the fan. Default is empty.\n\n*See also: [Speed Fan](https://esphome.io/components/fan/speed#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "speed::SpeedFan",
+                "parents": [
+                  "Component",
+                  "fan::Fan",
+                  "EntityBase"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "oscillation_output": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "output::BinaryOutput",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id of the [output](https://esphome.io/components/output/) to use for the oscillation state of this fan. Default is empty.\n\n*See also: [Speed Fan](https://esphome.io/components/fan/speed#configuration-variables)*"
+            },
+            "output": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "output::FloatOutput",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id of the [float output](https://esphome.io/components/output/) to use for this fan.\n\n*See also: [Speed Fan](https://esphome.io/components/fan/speed#configuration-variables)*"
+            },
+            "preset_modes": {
+              "key": "Optional",
+              "docs": "A list of preset modes for this fan. Preset modes can be used in automations (i.e. `on_preset_set`  ).\n\n*See also: [Speed Fan](https://esphome.io/components/fan/speed#configuration-variables)*"
+            },
+            "speed_count": {
+              "default": "100",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Set the number of supported discrete speed levels. The value is used to calculate the percentages for each speed. E.g. `2` means that you have 50% and 100% while `100` will allow 1% increments in the output. Defaults to `100`.\n\n*See also: [Speed Fan](https://esphome.io/components/fan/speed#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "fan._FAN_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

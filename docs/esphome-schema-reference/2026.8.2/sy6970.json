@@ -1,0 +1,422 @@
+{
+  "sy6970": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "106",
+              "key": "Optional",
+              "docs": "**int**: The I\u00b2C address of the device. Defaults to `0x6A`.\n\n*See also: [SY6970 Battery Management IC](https://esphome.io/components/sensor/sy6970#configuration-variables)*"
+            },
+            "charge_current": {
+              "default": "2048",
+              "key": "Optional",
+              "type": "integer"
+            },
+            "charge_enabled": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Enable or disable charging. Defaults to `true`.\n\n*See also: [SY6970 Battery Management IC](https://esphome.io/components/sensor/sy6970#configuration-variables)*"
+            },
+            "charge_voltage": {
+              "default": "4208",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Charge voltage in millivolts. Accepts values between 3840 and 4608. Defaults to `4208`.\n\n*See also: [SY6970 Battery Management IC](https://esphome.io/components/sensor/sy6970#configuration-variables)*"
+            },
+            "enable_adc": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Enable or disable the ADC. Defaults to `true`.\n\n*See also: [SY6970 Battery Management IC](https://esphome.io/components/sensor/sy6970#configuration-variables)*"
+            },
+            "enable_status_led": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Enable or disable the status LED on the IC. Defaults to `true`.\n\n*See also: [SY6970 Battery Management IC](https://esphome.io/components/sensor/sy6970#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "sy6970::SY6970Component",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [SY6970 Battery Management IC](https://esphome.io/components/sensor/sy6970#configuration-variables)*"
+            },
+            "input_current_limit": {
+              "default": "500",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Input current in milliamps. Accepts values between 100 and 3200. Defaults to `500`.\n\n*See also: [SY6970 Battery Management IC](https://esphome.io/components/sensor/sy6970#configuration-variables)*"
+            },
+            "precharge_current": {
+              "default": "128",
+              "key": "Optional",
+              "type": "integer"
+            },
+            "update_interval": {
+              "default": "5s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `5s`.\n\n*See also: [SY6970 Battery Management IC](https://esphome.io/components/sensor/sy6970#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "sy6970.binary_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "charge_done": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "power"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "sy6970::SY6970ChargeDoneBinarySensor",
+                      "parents": [
+                        "binary_sensor::BinarySensor",
+                        "EntityBase"
+                      ]
+                    }
+                  }
+                },
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "charging": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "power"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "sy6970::SY6970ChargingBinarySensor",
+                      "parents": [
+                        "binary_sensor::BinarySensor",
+                        "EntityBase"
+                      ]
+                    }
+                  }
+                },
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "sy6970_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "sy6970::SY6970Component"
+            },
+            "vbus_connected": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "connectivity"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "sy6970::SY6970VbusConnectedBinarySensor",
+                      "parents": [
+                        "binary_sensor::BinarySensor",
+                        "EntityBase"
+                      ]
+                    }
+                  }
+                },
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "sy6970.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "battery_voltage": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "voltage"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "sy6970::SY6970BatteryVoltageSensor",
+                      "parents": [
+                        "sensor::Sensor",
+                        "EntityBase"
+                      ]
+                    }
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "V"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "charge_current": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "current"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "sy6970::SY6970ChargeCurrentSensor",
+                      "parents": [
+                        "sensor::Sensor",
+                        "EntityBase"
+                      ]
+                    }
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "mA"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "precharge_current": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "current"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "sy6970::SY6970PrechargeCurrentSensor",
+                      "parents": [
+                        "sensor::Sensor",
+                        "EntityBase"
+                      ]
+                    }
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "mA"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "sy6970_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "sy6970::SY6970Component"
+            },
+            "system_voltage": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "voltage"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "sy6970::SY6970SystemVoltageSensor",
+                      "parents": [
+                        "sensor::Sensor",
+                        "EntityBase"
+                      ]
+                    }
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "V"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "vbus_voltage": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "voltage"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "sy6970::SY6970VbusVoltageSensor",
+                      "parents": [
+                        "sensor::Sensor",
+                        "EntityBase"
+                      ]
+                    }
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "V"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "sy6970.text_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "bus_status": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "id": {
+                    "id_type": {
+                      "class": "sy6970::SY6970BusStatusTextSensor",
+                      "parents": [
+                        "text_sensor::TextSensor",
+                        "EntityBase"
+                      ]
+                    }
+                  }
+                },
+                "extends": [
+                  "text_sensor._TEXT_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "charge_status": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "id": {
+                    "id_type": {
+                      "class": "sy6970::SY6970ChargeStatusTextSensor",
+                      "parents": [
+                        "text_sensor::TextSensor",
+                        "EntityBase"
+                      ]
+                    }
+                  }
+                },
+                "extends": [
+                  "text_sensor._TEXT_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "ntc_status": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "id": {
+                    "id_type": {
+                      "class": "sy6970::SY6970NtcStatusTextSensor",
+                      "parents": [
+                        "text_sensor::TextSensor",
+                        "EntityBase"
+                      ]
+                    }
+                  }
+                },
+                "extends": [
+                  "text_sensor._TEXT_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "sy6970_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "sy6970::SY6970Component"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

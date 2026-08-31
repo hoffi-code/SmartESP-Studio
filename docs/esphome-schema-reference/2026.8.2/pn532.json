@@ -1,0 +1,93 @@
+{
+  "pn532": {
+    "condition": {
+      "is_writing": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "pn532::PN532"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true
+      },
+      "PN532_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "pn532::PN532",
+                "parents": [
+                  "PollingComponent",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "on_finished_write": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "on_tag": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform when a tag is read. See [pn532-on_tag](https://esphome.io/components/binary_sensor/pn532#pn532-on_tag).\n\n*See also: [PN532 NFC/RFID](https://esphome.io/components/binary_sensor/pn532#configuration-variables)*"
+            },
+            "on_tag_removed": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform when a tag is removed. See [`on_tag_removed`](https://esphome.io/components/binary_sensor/pn532#pn532-on_tag_removed).\n\n*See also: [PN532 NFC/RFID](https://esphome.io/components/binary_sensor/pn532#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "1s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The duration of each scan on the PN532. This affects the duration that the individual binary sensors stay active when they're found. If a device is not found within this time window, it will be marked as not present. Defaults to 1s.\n\n*See also: [PN532 NFC/RFID](https://esphome.io/components/binary_sensor/pn532#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "pn532.binary_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "pn532::PN532BinarySensor",
+                "parents": [
+                  "binary_sensor::BinarySensor",
+                  "EntityBase"
+                ]
+              }
+            },
+            "pn532_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "pn532::PN532"
+            },
+            "uid": {
+              "key": "Required"
+            }
+          },
+          "extends": [
+            "binary_sensor._BINARY_SENSOR_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

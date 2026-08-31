@@ -1,0 +1,269 @@
+{
+  "esp32_hosted": {
+    "schemas": {
+      "BASE_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "active_high": {
+              "key": "Required",
+              "type": "boolean"
+            },
+            "reset_pin": {
+              "internal": true,
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "type": "pin"
+            },
+            "use_psram": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "variant": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "ESP32": null,
+                "ESP32C2": null,
+                "ESP32C3": null,
+                "ESP32C5": null,
+                "ESP32C6": null,
+                "ESP32C61": null,
+                "ESP32H2": null,
+                "ESP32H4": null,
+                "ESP32H21": null,
+                "ESP32P4": null,
+                "ESP32S2": null,
+                "ESP32S3": null,
+                "ESP32S31": null
+              }
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "CONFIG_SCHEMA": {
+        "type": "typed",
+        "typed_key": "type",
+        "types": {
+          "sdio": {
+            "config_vars": {
+              "bus_width": {
+                "default": "4",
+                "key": "Optional",
+                "type": "enum",
+                "values": {
+                  "1": null,
+                  "4": null
+                }
+              },
+              "clk_pin": {
+                "internal": true,
+                "key": "Required",
+                "modes": [
+                  "output"
+                ],
+                "type": "pin"
+              },
+              "cmd_pin": {
+                "internal": true,
+                "key": "Required",
+                "modes": [
+                  "output"
+                ],
+                "type": "pin"
+              },
+              "d0_pin": {
+                "internal": true,
+                "key": "Required",
+                "modes": [
+                  "output"
+                ],
+                "type": "pin"
+              },
+              "d1_pin": {
+                "internal": true,
+                "key": "Optional",
+                "modes": [
+                  "output"
+                ],
+                "type": "pin"
+              },
+              "d2_pin": {
+                "internal": true,
+                "key": "Optional",
+                "modes": [
+                  "output"
+                ],
+                "type": "pin"
+              },
+              "d3_pin": {
+                "internal": true,
+                "key": "Optional",
+                "modes": [
+                  "output"
+                ],
+                "type": "pin"
+              },
+              "sdio_frequency": {
+                "default": "40MHz",
+                "key": "Optional"
+              },
+              "slot": {
+                "default": "1",
+                "key": "Optional",
+                "type": "integer"
+              }
+            },
+            "extends": [
+              "esp32_hosted.BASE_SCHEMA"
+            ]
+          },
+          "spi": {
+            "config_vars": {
+              "clk_pin": {
+                "internal": true,
+                "key": "Required",
+                "modes": [
+                  "output"
+                ],
+                "type": "pin"
+              },
+              "cs_pin": {
+                "internal": true,
+                "key": "Required",
+                "modes": [
+                  "output"
+                ],
+                "type": "pin"
+              },
+              "data_ready_active_high": {
+                "default": "True",
+                "key": "Optional",
+                "type": "boolean"
+              },
+              "data_ready_pin": {
+                "internal": true,
+                "key": "Required",
+                "modes": [
+                  "input"
+                ],
+                "type": "pin"
+              },
+              "frequency": {
+                "key": "Optional"
+              },
+              "handshake_active_high": {
+                "default": "True",
+                "key": "Optional",
+                "type": "boolean"
+              },
+              "handshake_pin": {
+                "internal": true,
+                "key": "Required",
+                "modes": [
+                  "input"
+                ],
+                "type": "pin"
+              },
+              "miso_pin": {
+                "internal": true,
+                "key": "Required",
+                "modes": [
+                  "input"
+                ],
+                "type": "pin"
+              },
+              "mosi_pin": {
+                "internal": true,
+                "key": "Required",
+                "modes": [
+                  "output"
+                ],
+                "type": "pin"
+              },
+              "spi_mode": {
+                "key": "Optional",
+                "type": "integer"
+              }
+            },
+            "extends": [
+              "esp32_hosted.BASE_SCHEMA"
+            ]
+          }
+        },
+        "docs": "The update mode to use. Must be either `embedded` or `http`."
+      }
+    }
+  },
+  "esp32_hosted.update": {
+    "schemas": {
+      "BASE_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "device_class": {
+              "default": "firmware"
+            },
+            "id": {
+              "id_type": {
+                "class": "esp32_hosted::Esp32HostedUpdate",
+                "parents": [
+                  "update::UpdateEntity",
+                  "EntityBase",
+                  "PollingComponent",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "update_interval": {
+              "default": "6h",
+              "key": "Optional"
+            }
+          },
+          "extends": [
+            "update._UPDATE_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "CONFIG_SCHEMA": {
+        "type": "typed",
+        "typed_key": "type",
+        "types": {
+          "embedded": {
+            "config_vars": {
+              "path": {
+                "key": "Required"
+              },
+              "sha256": {
+                "key": "Required"
+              }
+            },
+            "extends": [
+              "esp32_hosted.update.BASE_SCHEMA"
+            ]
+          },
+          "http": {
+            "config_vars": {
+              "http_request_id": {
+                "key": "GeneratedID",
+                "type": "use_id",
+                "use_id_type": "http_request::HttpRequestComponent"
+              },
+              "source": {
+                "key": "Required"
+              }
+            },
+            "extends": [
+              "esp32_hosted.update.BASE_SCHEMA"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

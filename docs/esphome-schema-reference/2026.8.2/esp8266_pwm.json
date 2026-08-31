@@ -1,0 +1,67 @@
+{
+  "esp8266_pwm.output": {
+    "action": {
+      "set_frequency": {
+        "schema": {
+          "config_vars": {
+            "frequency": {
+              "data_type": "output",
+              "key": "Required",
+              "templatable": true,
+              "docs": "The frequency to set in Hz.\n\n*See also: [ESP8266 Software PWM Output](https://esphome.io/components/output/esp8266_pwm#outputesp8266_pwmset_frequency-action)*"
+            },
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "esp8266_pwm::ESP8266PWM",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the PWM output to change.\n\n*See also: [ESP8266 Software PWM Output](https://esphome.io/components/output/esp8266_pwm#outputesp8266_pwmset_frequency-action)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [Action](https://esphome.io/automations/actions#all-actions) allows you to manually change the frequency of an ESP8266 PWM channel at runtime. Use cases include controlling a passive buzzer (for pitch control)."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "frequency": {
+              "data_type": "output",
+              "default": "1kHz",
+              "key": "Optional",
+              "docs": "**frequency**: The frequency to run the PWM with. Lower frequencies have more visual artifacts, but can represent much more colors. Defaults to `1kHz`.\n\n*See also: [ESP8266 Software PWM Output](https://esphome.io/components/output/esp8266_pwm#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "esp8266_pwm::ESP8266PWM",
+                "parents": [
+                  "output::FloatOutput",
+                  "output::BinaryOutput",
+                  "Component"
+                ]
+              },
+              "key": "Required",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id to use for this output component.\n\n*See also: [ESP8266 Software PWM Output](https://esphome.io/components/output/esp8266_pwm#configuration-variables)*"
+            },
+            "pin": {
+              "internal": true,
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin to use PWM on.\n\n*See also: [ESP8266 Software PWM Output](https://esphome.io/components/output/esp8266_pwm#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "output.FLOAT_OUTPUT_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

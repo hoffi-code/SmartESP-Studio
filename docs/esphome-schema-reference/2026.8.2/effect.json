@@ -1,0 +1,43 @@
+{
+  "effect.light": {
+    "action": {
+      "next": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "light::LightState"
+            },
+            "include_none": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "These [Actions](https://esphome.io/automations/actions#all-actions) cycle through the effects configured for a light. `light.effect.next` advances to the next effect; `light.effect.previous` steps back to the previous one. The cycle wraps around at either end."
+      },
+      "previous": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "light::LightState"
+            },
+            "include_none": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

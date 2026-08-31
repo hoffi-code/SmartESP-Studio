@@ -1,0 +1,212 @@
+{
+  "bmi160.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "acceleration_x": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "icon": {
+                    "default": "mdi:axis-x-arrow"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "m/s\u00b2"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the X-Axis of the Accelerometer. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [BMI160 Accelerometer/Gyroscope Sensor](https://esphome.io/components/sensor/bmi160#configuration-variables)*"
+            },
+            "acceleration_y": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "icon": {
+                    "default": "mdi:axis-y-arrow"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "m/s\u00b2"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the Y-Axis of the Accelerometer. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [BMI160 Accelerometer/Gyroscope Sensor](https://esphome.io/components/sensor/bmi160#configuration-variables)*"
+            },
+            "acceleration_z": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "icon": {
+                    "default": "mdi:axis-z-arrow"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "m/s\u00b2"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the Z-Axis of the Accelerometer. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [BMI160 Accelerometer/Gyroscope Sensor](https://esphome.io/components/sensor/bmi160#configuration-variables)*"
+            },
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "104",
+              "key": "Optional",
+              "docs": "**int**: Manually specify the I\u00b2C address of the sensor. Defaults to `0x68`. Use `0x68` when SDO is connected to GND, or `0x69` when SDO is connected to VCC.\n\n*See also: [BMI160 Accelerometer/Gyroscope Sensor](https://esphome.io/components/sensor/bmi160#configuration-variables)*"
+            },
+            "gyroscope_x": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "icon": {
+                    "default": "mdi:axis-x-rotate-clockwise"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0/s"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the X-Axis of the Gyroscope. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [BMI160 Accelerometer/Gyroscope Sensor](https://esphome.io/components/sensor/bmi160#configuration-variables)*"
+            },
+            "gyroscope_y": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "icon": {
+                    "default": "mdi:axis-y-rotate-clockwise"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0/s"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the Y-Axis of the Gyroscope. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [BMI160 Accelerometer/Gyroscope Sensor](https://esphome.io/components/sensor/bmi160#configuration-variables)*"
+            },
+            "gyroscope_z": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "icon": {
+                    "default": "mdi:axis-z-rotate-clockwise"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0/s"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the Z-Axis of the Gyroscope. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [BMI160 Accelerometer/Gyroscope Sensor](https://esphome.io/components/sensor/bmi160#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "bmi160::BMI160Component",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [BMI160 Accelerometer/Gyroscope Sensor](https://esphome.io/components/sensor/bmi160#configuration-variables)*"
+            },
+            "temperature": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the internal temperature of the sensor. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [BMI160 Accelerometer/Gyroscope Sensor](https://esphome.io/components/sensor/bmi160#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`.\n\n*See also: [BMI160 Accelerometer/Gyroscope Sensor](https://esphome.io/components/sensor/bmi160#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,230 @@
+{
+  "sim800l": {
+    "action": {
+      "connect": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "sim800l::Sim800LComponent"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Answers an incoming call."
+      },
+      "dial": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "sim800l::Sim800LComponent",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the SIM800L if you have multiple components.\n\n*See also: [Sim800L Component](https://esphome.io/components/sim800l#configuration-variables)*"
+            },
+            "recipient": {
+              "key": "Required",
+              "templatable": true,
+              "type": "string",
+              "docs": "**string**: The number to dial.\n\n*See also: [Sim800L Component](https://esphome.io/components/sim800l#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Dial to a phone recipient using this action in automations."
+      },
+      "disconnect": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "sim800l::Sim800LComponent"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Disconnects a call, either dialed in or received."
+      },
+      "send_sms": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "sim800l::Sim800LComponent",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the SIM800L if you have multiple components.\n\n*See also: [Sim800L Component](https://esphome.io/components/sim800l#configuration-variables)*"
+            },
+            "message": {
+              "key": "Required",
+              "templatable": true,
+              "type": "string",
+              "docs": "**string**: The message content.\n\n*See also: [Sim800L Component](https://esphome.io/components/sim800l#configuration-variables)*"
+            },
+            "recipient": {
+              "key": "Required",
+              "templatable": true,
+              "type": "string",
+              "docs": "**string**: The message recipient. number.\n\n*See also: [Sim800L Component](https://esphome.io/components/sim800l#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Send a SMS message to a phone recipient using this action in automations."
+      },
+      "send_ussd": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "sim800l::Sim800LComponent"
+            },
+            "ussd": {
+              "key": "Required",
+              "templatable": true,
+              "type": "string"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Sends a ussd code to the network."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "sim800l::Sim800LComponent",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [Sim800L Component](https://esphome.io/components/sim800l#configuration-variables)*"
+            },
+            "on_call_connected": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An action to be performed when a call is connected, either because an outgoing call accepted is accepted or an incoming call answered.\n\n*See also: [Sim800L Component](https://esphome.io/components/sim800l#configuration-variables)*"
+            },
+            "on_call_disconnected": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An action to be performed when a call is disconnected.\n\n*See also: [Sim800L Component](https://esphome.io/components/sim800l#configuration-variables)*"
+            },
+            "on_incoming_call": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An action to be performed when a call is received. See [`on_incoming_call` Trigger](https://esphome.io/components/sim800l#sim800l-on_incoming_call).\n\n*See also: [Sim800L Component](https://esphome.io/components/sim800l#configuration-variables)*"
+            },
+            "on_sms_received": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An action to be performed when an SMS is received. See [`on_sms_received` Trigger](https://esphome.io/components/sim800l#sim800l-on_sms_received).\n\n*See also: [Sim800L Component](https://esphome.io/components/sim800l#configuration-variables)*"
+            },
+            "on_ussd_received": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "uart_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "uart::UARTComponent",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the UART hub.\n\n*See also: [Sim800L Component](https://esphome.io/components/sim800l#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "5s",
+              "key": "Optional"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "sim800l.binary_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "registered": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "connectivity"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  }
+                },
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Indicates if the SIM800L has successfully registered in the cellular network.\n\n*See also: [Sim800L Component](https://esphome.io/components/sim800l#configuration-variables)*"
+            },
+            "sim800l_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "sim800l::Sim800LComponent"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "sim800l.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "rssi": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "signal_strength"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "dBm"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The informed Received signal strength indication (RSSI) in dBm.\n\n*See also: [Sim800L Component](https://esphome.io/components/sim800l#configuration-variables)*"
+            },
+            "sim800l_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "sim800l::Sim800LComponent"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

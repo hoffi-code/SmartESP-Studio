@@ -1,0 +1,74 @@
+{
+  "ezo.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "key": "Required",
+              "docs": "**int**: Specify the I\u00b2C address of the sensor.\n\n*See also: [EZO sensor circuits](https://esphome.io/components/sensor/ezo#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "ezo::EZOSensor",
+                "parents": [
+                  "sensor::Sensor",
+                  "EntityBase",
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              }
+            },
+            "on_calibration": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: Triggered when the result of `get_calibration()` is ready. The result is provided as a `std::string` variable named `x`.\n\n*See also: [EZO sensor circuits](https://esphome.io/components/sensor/ezo#configuration-variables)*"
+            },
+            "on_custom": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: Triggered when the result of `get_custom()` is ready. The result is provided as a `std::string` variable named `x`.\n\n*See also: [EZO sensor circuits](https://esphome.io/components/sensor/ezo#configuration-variables)*"
+            },
+            "on_device_information": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: Triggered when the result of `get_device_information()` is ready. The result is provided as a `std::string` variable named `x`.\n\n*See also: [EZO sensor circuits](https://esphome.io/components/sensor/ezo#configuration-variables)*"
+            },
+            "on_led": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: Triggered when the result of `get_led_state()` is ready. The LED state is provided as a boolean variable named `x`.\n\n*See also: [EZO sensor circuits](https://esphome.io/components/sensor/ezo#configuration-variables)*"
+            },
+            "on_slope": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: Triggered when the result of `get_slope()` is ready. The result is provided as a `std::string` variable named `x`.\n\n*See also: [EZO sensor circuits](https://esphome.io/components/sensor/ezo#configuration-variables)*"
+            },
+            "on_t": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: Triggered when the result of `get_t()` is ready. The result is provided as a `std::string` variable named `x`.\n\n*See also: [EZO sensor circuits](https://esphome.io/components/sensor/ezo#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`.\n\n*See also: [EZO sensor circuits](https://esphome.io/components/sensor/ezo#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

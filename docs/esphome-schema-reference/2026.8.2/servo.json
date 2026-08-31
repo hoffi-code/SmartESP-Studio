@@ -1,0 +1,111 @@
+{
+  "servo": {
+    "action": {
+      "detach": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "servo::Servo"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [Action](https://esphome.io/automations/actions#all-actions) allows you to disable the output on a servo motor - this will make the servo motor stop immediately and disable its active control."
+      },
+      "write": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "servo::Servo",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the servo.\n\n*See also: [Servo Component](https://esphome.io/components/servo#servowrite-action)*"
+            },
+            "level": {
+              "key": "Required",
+              "templatable": true,
+              "docs": "**percentage**: The target level. Range is from -100% to 100% (-1.0 to 1.0).\n\n*See also: [Servo Component](https://esphome.io/components/servo#servowrite-action)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "To use your servo motor in [automations](https://esphome.io/automations) or templates, you can use this action to set the target level of the servo from -100% to 100%."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "auto_detach_time": {
+              "default": "0s",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The time after reaching the target value when the servo will be detached, if set to zero, servo will not be detached. Defaults to `0s`.\n\n*See also: [Servo Component](https://esphome.io/components/servo#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "servo::Servo",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "Required",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of this servo so that it can be controlled.\n\n*See also: [Servo Component](https://esphome.io/components/servo#configuration-variables)*"
+            },
+            "idle_level": {
+              "default": "7.5%",
+              "key": "Optional",
+              "docs": "**percentage**: The PWM duty cycle the idle value (0%) will map to. This is also the state of the servo at startup. Defaults to `7.5%`.\n\n*See also: [Servo Component](https://esphome.io/components/servo#configuration-variables)*"
+            },
+            "max_level": {
+              "default": "12%",
+              "key": "Optional",
+              "docs": "**percentage**: The PWM duty cycle the maximum value (100%) will map to. Defaults to `12.0%`.\n\n*See also: [Servo Component](https://esphome.io/components/servo#configuration-variables)*"
+            },
+            "min_level": {
+              "default": "3%",
+              "key": "Optional",
+              "docs": "**percentage**: The PWM duty cycle the minimum value (-100%) will map to. Defaults to `3%`.\n\n*See also: [Servo Component](https://esphome.io/components/servo#configuration-variables)*"
+            },
+            "output": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "output::FloatOutput",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the [output component](https://esphome.io/components/output/) to use for this servo.\n\n*See also: [Servo Component](https://esphome.io/components/servo#configuration-variables)*"
+            },
+            "restore": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Whether to restore the state of the servo motor at startup. This is useful if you have an absolute servo motor and it goes back to its 0 position at startup. Defaults to `false`.\n\n*See also: [Servo Component](https://esphome.io/components/servo#configuration-variables)*"
+            },
+            "transition_length": {
+              "default": "0s",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The time needed for a full movement (-1.0 to 1.0). This will effectively limit the speed of the servo, the larger the value, the slowest the servo will move. Defaults to `0s`. This can slow down the servo to avoid loud noises or just make the movement not jerking.\n\n*See also: [Servo Component](https://esphome.io/components/servo#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

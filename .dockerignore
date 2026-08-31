@@ -1,0 +1,17 @@
+.git
+.github
+
+smartesp-studio-frontend/node_modules
+smartesp-studio-frontend/dist
+smartesp-studio-frontend/.vite
+
+smartesp-studio/web
+smartesp-studio/tests
+smartesp-studio/__pycache__
+smartesp-studio/**/__pycache__
+smartesp-studio/*.pyc
+smartesp-studio/.pytest_cache
+
+docs
+plans
+*.md

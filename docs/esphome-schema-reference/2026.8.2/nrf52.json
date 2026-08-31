@@ -1,0 +1,177 @@
+{
+  "nrf52": {
+    "pin": {
+      "schema": {
+        "config_vars": {
+          "allow_other_uses": {
+            "key": "Optional",
+            "type": "boolean"
+          },
+          "id": {
+            "id_type": {
+              "class": "zephyr::ZephyrGPIOPin",
+              "parents": [
+                "InternalGPIOPin",
+                "GPIOPin"
+              ]
+            },
+            "key": "GeneratedID"
+          },
+          "inverted": {
+            "default": "False",
+            "key": "Optional",
+            "type": "boolean"
+          },
+          "mode": {
+            "default": "{}",
+            "key": "Optional",
+            "modes": [],
+            "schema": {
+              "config_vars": {
+                "analog": {
+                  "default": "False",
+                  "key": "Optional",
+                  "type": "boolean"
+                },
+                "input": {
+                  "default": "False",
+                  "key": "Optional",
+                  "type": "boolean"
+                },
+                "open_drain": {
+                  "default": "False",
+                  "key": "Optional",
+                  "type": "boolean"
+                },
+                "output": {
+                  "default": "False",
+                  "key": "Optional",
+                  "type": "boolean"
+                },
+                "pulldown": {
+                  "default": "False",
+                  "key": "Optional",
+                  "type": "boolean"
+                },
+                "pullup": {
+                  "default": "False",
+                  "key": "Optional",
+                  "type": "boolean"
+                }
+              }
+            },
+            "type": "pin"
+          },
+          "number": {
+            "key": "Required"
+          }
+        }
+      },
+      "type": "schema"
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "board": {
+              "key": "Required",
+              "type": "string",
+              "docs": "**string**: The board type. Valid options are `adafruit_feather_nrf52840`, `adafruit_itsybitsy_nrf52840`, `xiao_ble`. Other boards should work with those configuration as well.\n\n*See also: [NRF52 Platform](https://esphome.io/components/nrf52#configuration-variables)*"
+            },
+            "bootloader": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "adafruit": null,
+                "adafruit_nrf52_sd132": null,
+                "adafruit_nrf52_sd140_v6": null,
+                "adafruit_nrf52_sd140_v7": null,
+                "mcuboot": null
+              },
+              "docs": "**string**: Bootloader type. Valid options are `mcuboot`, `adafruit`, `adafruit_nrf52_sd132`, `adafruit_nrf52_sd140_v6`, `adafruit_nrf52_sd140_v7`. Default value depends on board type.\n\n*See also: [NRF52 Platform](https://esphome.io/components/nrf52#configuration-variables)*"
+            },
+            "cdc_acm": {
+              "id_type": {
+                "class": "zephyr::CdcAcm",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "dcdc": {
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Enable DC/DC converter for REG1 stage. Defaults follow board settings from Zephyr.\n\n*See also: [NRF52 Platform](https://esphome.io/components/nrf52#configuration-variables)*"
+            },
+            "dfu": {
+              "key": "Optional"
+            },
+            "framework": {
+              "default": "{}",
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "advanced": {
+                    "default": "{}",
+                    "key": "Optional",
+                    "schema": {
+                      "config_vars": {
+                        "enable_ota_rollback": {
+                          "default": "True",
+                          "key": "Optional",
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "type": "schema",
+                    "visibility": "yaml_only"
+                  },
+                  "libc_nano": {
+                    "default": "True",
+                    "key": "Optional",
+                    "type": "boolean"
+                  },
+                  "version": {
+                    "key": "Optional",
+                    "type": "string"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "reg0": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "uicr_erase": {
+                    "default": "False",
+                    "key": "Optional",
+                    "type": "boolean"
+                  },
+                  "voltage": {
+                    "key": "Required",
+                    "type": "enum",
+                    "values": {
+                      "1.8": null,
+                      "2.1": null,
+                      "2.4": null,
+                      "2.7": null,
+                      "3.0": null,
+                      "3.3": null
+                    }
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "toolchain": {
+              "key": "Optional"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

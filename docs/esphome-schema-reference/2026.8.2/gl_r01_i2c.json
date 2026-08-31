@@ -1,0 +1,55 @@
+{
+  "gl_r01_i2c.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "0"
+            },
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "116",
+              "key": "Optional"
+            },
+            "device_class": {
+              "default": "distance"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "gl_r01_i2c::GLR01I2CComponent",
+                "parents": [
+                  "sensor::Sensor",
+                  "EntityBase",
+                  "i2c::I2CDevice",
+                  "PollingComponent",
+                  "Component"
+                ]
+              }
+            },
+            "state_class": {
+              "default": "measurement"
+            },
+            "unit_of_measurement": {
+              "default": "mm"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

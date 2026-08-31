@@ -1,0 +1,327 @@
+{
+  "combination.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "type": "typed",
+        "typed_key": "type",
+        "types": {
+          "kalman": {
+            "config_vars": {
+              "id": {
+                "id_type": {
+                  "class": "combination::KalmanCombinationComponent",
+                  "parents": [
+                    "Component",
+                    "sensor::Sensor",
+                    "EntityBase"
+                  ]
+                }
+              },
+              "process_std_dev": {
+                "data_type": "positive_float",
+                "key": "Required",
+                "docs": "**only for `KALMAN` type**: The standard deviation of the measurement's change per second (e.g. `1/3600 = 0.000277` if the temperature usually changes at most by one Kelvin per hour). A low value here will place high importance on the current state and be slow to respond to changes in the measured samples. A high value will update faster, but also be more noisy.\n\n*See also: [Combine the state of several sensors](https://esphome.io/components/sensor/combination#configuration-variables)*"
+              },
+              "sources": {
+                "is_list": true,
+                "key": "Required",
+                "schema": {
+                  "config_vars": {
+                    "error": {
+                      "data_type": "positive_float",
+                      "key": "Required",
+                      "templatable": true,
+                      "docs": "**only for `KALMAN` type**: The standard deviation of the sensor's measurements. This works like the `process_std_dev` parameter, with low values marking accurate data. If implemented as a template, the measurement is in parameter `x`.\n\n*See also: [Combine the state of several sensors](https://esphome.io/components/sensor/combination#configuration-variables)*"
+                    },
+                    "source": {
+                      "key": "Required",
+                      "type": "use_id",
+                      "use_id_type": "sensor::Sensor",
+                      "docs": "**[ID](https://esphome.io/guides/configuration-types#id) of a [Sensor](https://esphome.io/components/sensor/)**: The sensor id that is used as sample source.\n\n*See also: [Combine the state of several sensors](https://esphome.io/components/sensor/combination#configuration-variables)*"
+                    }
+                  }
+                },
+                "type": "schema",
+                "docs": "**list**: A list of sensors to use as source.\n\n*See also: [Combine the state of several sensors](https://esphome.io/components/sensor/combination#configuration-variables)*"
+              },
+              "std_dev": {
+                "key": "Optional",
+                "schema": {
+                  "extends": [
+                    "sensor._SENSOR_SCHEMA"
+                  ]
+                },
+                "type": "schema",
+                "docs": "**only for `KALMAN` type**: A sensor that publishes the current standard deviation of the state with each update.\n\n*See also: [Combine the state of several sensors](https://esphome.io/components/sensor/combination#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "sensor._SENSOR_SCHEMA",
+              "core.COMPONENT_SCHEMA"
+            ]
+          },
+          "linear": {
+            "config_vars": {
+              "id": {
+                "id_type": {
+                  "class": "combination::LinearCombinationComponent",
+                  "parents": [
+                    "Component",
+                    "sensor::Sensor",
+                    "EntityBase"
+                  ]
+                }
+              },
+              "sources": {
+                "is_list": true,
+                "key": "Required",
+                "schema": {
+                  "config_vars": {
+                    "coeffecient": {
+                      "key": "Optional",
+                      "templatable": true
+                    },
+                    "coefficient": {
+                      "key": "Optional",
+                      "templatable": true,
+                      "docs": "**only for `LINEAR` type**: The coefficient to multiply the sensor's state by before summing all source sensor states. If implemented as a template, the measurement is in parameter `x`.\n\n*See also: [Combine the state of several sensors](https://esphome.io/components/sensor/combination#configuration-variables)*"
+                    },
+                    "source": {
+                      "key": "Required",
+                      "type": "use_id",
+                      "use_id_type": "sensor::Sensor",
+                      "docs": "**[ID](https://esphome.io/guides/configuration-types#id) of a [Sensor](https://esphome.io/components/sensor/)**: The sensor id that is used as sample source.\n\n*See also: [Combine the state of several sensors](https://esphome.io/components/sensor/combination#configuration-variables)*"
+                    }
+                  }
+                },
+                "type": "schema",
+                "docs": "**list**: A list of sensors to use as source.\n\n*See also: [Combine the state of several sensors](https://esphome.io/components/sensor/combination#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "sensor._SENSOR_SCHEMA",
+              "core.COMPONENT_SCHEMA"
+            ]
+          },
+          "max": {
+            "config_vars": {
+              "id": {
+                "id_type": {
+                  "class": "combination::MaximumCombinationComponent",
+                  "parents": [
+                    "Component",
+                    "sensor::Sensor",
+                    "EntityBase"
+                  ]
+                }
+              },
+              "sources": {
+                "is_list": true,
+                "key": "Required",
+                "schema": {
+                  "extends": [
+                    "combination.sensor.SENSOR_ONLY_SOURCE_SCHEMA"
+                  ]
+                },
+                "type": "schema",
+                "docs": "**list**: A list of sensors to use as source.\n\n*See also: [Combine the state of several sensors](https://esphome.io/components/sensor/combination#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "sensor._SENSOR_SCHEMA",
+              "core.COMPONENT_SCHEMA"
+            ]
+          },
+          "mean": {
+            "config_vars": {
+              "id": {
+                "id_type": {
+                  "class": "combination::MeanCombinationComponent",
+                  "parents": [
+                    "Component",
+                    "sensor::Sensor",
+                    "EntityBase"
+                  ]
+                }
+              },
+              "sources": {
+                "is_list": true,
+                "key": "Required",
+                "schema": {
+                  "extends": [
+                    "combination.sensor.SENSOR_ONLY_SOURCE_SCHEMA"
+                  ]
+                },
+                "type": "schema",
+                "docs": "**list**: A list of sensors to use as source.\n\n*See also: [Combine the state of several sensors](https://esphome.io/components/sensor/combination#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "sensor._SENSOR_SCHEMA",
+              "core.COMPONENT_SCHEMA"
+            ]
+          },
+          "median": {
+            "config_vars": {
+              "id": {
+                "id_type": {
+                  "class": "combination::MedianCombinationComponent",
+                  "parents": [
+                    "Component",
+                    "sensor::Sensor",
+                    "EntityBase"
+                  ]
+                }
+              },
+              "sources": {
+                "is_list": true,
+                "key": "Required",
+                "schema": {
+                  "extends": [
+                    "combination.sensor.SENSOR_ONLY_SOURCE_SCHEMA"
+                  ]
+                },
+                "type": "schema",
+                "docs": "**list**: A list of sensors to use as source.\n\n*See also: [Combine the state of several sensors](https://esphome.io/components/sensor/combination#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "sensor._SENSOR_SCHEMA",
+              "core.COMPONENT_SCHEMA"
+            ]
+          },
+          "min": {
+            "config_vars": {
+              "id": {
+                "id_type": {
+                  "class": "combination::MinimumCombinationComponent",
+                  "parents": [
+                    "Component",
+                    "sensor::Sensor",
+                    "EntityBase"
+                  ]
+                }
+              },
+              "sources": {
+                "is_list": true,
+                "key": "Required",
+                "schema": {
+                  "extends": [
+                    "combination.sensor.SENSOR_ONLY_SOURCE_SCHEMA"
+                  ]
+                },
+                "type": "schema",
+                "docs": "**list**: A list of sensors to use as source.\n\n*See also: [Combine the state of several sensors](https://esphome.io/components/sensor/combination#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "sensor._SENSOR_SCHEMA",
+              "core.COMPONENT_SCHEMA"
+            ]
+          },
+          "most_recently_updated": {
+            "config_vars": {
+              "id": {
+                "id_type": {
+                  "class": "combination::MostRecentCombinationComponent",
+                  "parents": [
+                    "Component",
+                    "sensor::Sensor",
+                    "EntityBase"
+                  ]
+                }
+              },
+              "sources": {
+                "is_list": true,
+                "key": "Required",
+                "schema": {
+                  "extends": [
+                    "combination.sensor.SENSOR_ONLY_SOURCE_SCHEMA"
+                  ]
+                },
+                "type": "schema",
+                "docs": "**list**: A list of sensors to use as source.\n\n*See also: [Combine the state of several sensors](https://esphome.io/components/sensor/combination#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "sensor._SENSOR_SCHEMA",
+              "core.COMPONENT_SCHEMA"
+            ]
+          },
+          "range": {
+            "config_vars": {
+              "id": {
+                "id_type": {
+                  "class": "combination::RangeCombinationComponent",
+                  "parents": [
+                    "Component",
+                    "sensor::Sensor",
+                    "EntityBase"
+                  ]
+                }
+              },
+              "sources": {
+                "is_list": true,
+                "key": "Required",
+                "schema": {
+                  "extends": [
+                    "combination.sensor.SENSOR_ONLY_SOURCE_SCHEMA"
+                  ]
+                },
+                "type": "schema",
+                "docs": "**list**: A list of sensors to use as source.\n\n*See also: [Combine the state of several sensors](https://esphome.io/components/sensor/combination#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "sensor._SENSOR_SCHEMA",
+              "core.COMPONENT_SCHEMA"
+            ]
+          },
+          "sum": {
+            "config_vars": {
+              "id": {
+                "id_type": {
+                  "class": "combination::SumCombinationComponent",
+                  "parents": [
+                    "Component",
+                    "sensor::Sensor",
+                    "EntityBase"
+                  ]
+                }
+              },
+              "sources": {
+                "is_list": true,
+                "key": "Required",
+                "schema": {
+                  "extends": [
+                    "combination.sensor.SENSOR_ONLY_SOURCE_SCHEMA"
+                  ]
+                },
+                "type": "schema",
+                "docs": "**list**: A list of sensors to use as source.\n\n*See also: [Combine the state of several sensors](https://esphome.io/components/sensor/combination#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "sensor._SENSOR_SCHEMA",
+              "core.COMPONENT_SCHEMA"
+            ]
+          }
+        },
+        "docs": "Combination statistic type, should be one of `KALMAN`, `LINEAR`, `MAX`, `MEAN`, `MEDIAN`, `MIN`, `MOST_RECENTLY_UPDATED`, `RANGE`, or `SUM`."
+      },
+      "SENSOR_ONLY_SOURCE_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "source": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "sensor::Sensor",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id) of a [Sensor](https://esphome.io/components/sensor/)**: The sensor id that is used as sample source.\n\n*See also: [Combine the state of several sensors](https://esphome.io/components/sensor/combination#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

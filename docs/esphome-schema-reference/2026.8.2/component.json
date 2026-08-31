@@ -1,0 +1,74 @@
+{
+  "component": {
+    "action": {
+      "resume": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "PollingComponent"
+            },
+            "update_interval": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "templatable": true,
+              "type": "schema"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Using this action you can manually call the `start_poller()` method of a component."
+      },
+      "suspend": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "PollingComponent"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Using this action you can manually call the `stop_poller()` method of a component."
+      },
+      "update": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "PollingComponent"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Using this action you can manually call the `update()` method of a component."
+      }
+    },
+    "condition": {
+      "is_idle": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "Component"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This condition checks if a given component is idle. A component is considered to be idle if it has completed setup, has not been marked as failed, and is not currently being called by the loop task. This is useful for synchronizing actions with the state of the component, for example, an e-paper display component that requires a significant amount of time to update the display panel."
+      }
+    }
+  }
+}

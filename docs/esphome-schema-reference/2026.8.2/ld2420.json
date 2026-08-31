@@ -1,0 +1,1599 @@
+{
+  "ld2420": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "ld2420::LD2420Component",
+                "parents": [
+                  "Component",
+                  "uart::UARTDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "uart_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "uart::UARTComponent"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "ld2420.binary_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "has_target": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "occupancy"
+                  }
+                },
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "If a target is detected with either still or in movement **has_target** will be set true for the duration of the **presence_time_window** setting. May contain any options from [Binary Sensor](https://esphome.io/components/binary_sensor#config-binary_sensor).\n\n*See also: [LD2420 24GHz mmWave Radar Sensor](https://esphome.io/components/sensor/ld2420#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "ld2420::LD2420BinarySensor",
+                "parents": [
+                  "binary_sensor::BinarySensor",
+                  "EntityBase",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "ld2420_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "ld2420::LD2420Component"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "ld2420.button": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "apply_config": {
+              "key": "Required",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "restart"
+                  },
+                  "entity_category": {
+                    "default": "config"
+                  },
+                  "icon": {
+                    "default": "mdi:restart-alert"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "ld2420::LD2420ApplyConfigButton",
+                      "parents": [
+                        "button::Button",
+                        "EntityBase"
+                      ]
+                    },
+                    "key": "GeneratedID"
+                  }
+                },
+                "extends": [
+                  "button._BUTTON_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Saves both manual config tuning or the auto calibrate still and move threshold config settings. May contain any options from [Button](https://esphome.io/components/button#config-button).\n\n*See also: [LD2420 24GHz mmWave Radar Sensor](https://esphome.io/components/sensor/ld2420#configuration-variables)*"
+            },
+            "factory_reset": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "entity_category": {
+                    "default": "config"
+                  },
+                  "icon": {
+                    "default": "mdi:database"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "ld2420::LD2420FactoryResetButton",
+                      "parents": [
+                        "button::Button",
+                        "EntityBase"
+                      ]
+                    },
+                    "key": "GeneratedID"
+                  }
+                },
+                "extends": [
+                  "button._BUTTON_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Restores a base set of LD2420 configuration values. May contain any options from [Button](https://esphome.io/components/button#config-button).\n\n*See also: [LD2420 24GHz mmWave Radar Sensor](https://esphome.io/components/sensor/ld2420#configuration-variables)*"
+            },
+            "ld2420_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "ld2420::LD2420Component"
+            },
+            "restart_module": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "icon": {
+                    "default": "mdi:database"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "ld2420::LD2420RestartModuleButton",
+                      "parents": [
+                        "button::Button",
+                        "EntityBase"
+                      ]
+                    },
+                    "key": "GeneratedID"
+                  }
+                },
+                "extends": [
+                  "button._BUTTON_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Reboots the LD2420 modules. May contain any options from [Button](https://esphome.io/components/button#config-button).\n\n*See also: [LD2420 24GHz mmWave Radar Sensor](https://esphome.io/components/sensor/ld2420#configuration-variables)*"
+            },
+            "revert_config": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "restart"
+                  },
+                  "entity_category": {
+                    "default": "config"
+                  },
+                  "icon": {
+                    "default": "mdi:restart"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "ld2420::LD2420RevertConfigButton",
+                      "parents": [
+                        "button::Button",
+                        "EntityBase"
+                      ]
+                    },
+                    "key": "GeneratedID"
+                  }
+                },
+                "extends": [
+                  "button._BUTTON_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Undoes in-progress edits prior to their application via the `apply_config` button. May contain any options from [Button](https://esphome.io/components/button#config-button).\n\n*See also: [LD2420 24GHz mmWave Radar Sensor](https://esphome.io/components/sensor/ld2420#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "ld2420.number": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "gate_0": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "move_threshold": {
+                    "key": "Required",
+                    "schema": {
+                      "config_vars": {
+                        "entity_category": {
+                          "default": "config"
+                        },
+                        "icon": {
+                          "default": "mdi:motion-sensor"
+                        },
+                        "id": {
+                          "id_type": {
+                            "class": "ld2420::LD2420MoveThresholdNumbers",
+                            "parents": [
+                              "number::Number",
+                              "EntityBase"
+                            ]
+                          },
+                          "key": "GeneratedID"
+                        }
+                      },
+                      "extends": [
+                        "number._NUMBER_SCHEMA"
+                      ]
+                    },
+                    "type": "schema"
+                  },
+                  "still_threshold": {
+                    "key": "Required",
+                    "schema": {
+                      "config_vars": {
+                        "entity_category": {
+                          "default": "config"
+                        },
+                        "icon": {
+                          "default": "mdi:motion-sensor"
+                        },
+                        "id": {
+                          "id_type": {
+                            "class": "ld2420::LD2420StillThresholdNumbers",
+                            "parents": [
+                              "number::Number",
+                              "EntityBase"
+                            ]
+                          },
+                          "key": "GeneratedID"
+                        }
+                      },
+                      "extends": [
+                        "number._NUMBER_SCHEMA"
+                      ]
+                    },
+                    "type": "schema"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "gate_1": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "move_threshold": {
+                    "key": "Required",
+                    "schema": {
+                      "config_vars": {
+                        "entity_category": {
+                          "default": "config"
+                        },
+                        "icon": {
+                          "default": "mdi:motion-sensor"
+                        },
+                        "id": {
+                          "id_type": {
+                            "class": "ld2420::LD2420MoveThresholdNumbers",
+                            "parents": [
+                              "number::Number",
+                              "EntityBase"
+                            ]
+                          },
+                          "key": "GeneratedID"
+                        }
+                      },
+                      "extends": [
+                        "number._NUMBER_SCHEMA"
+                      ]
+                    },
+                    "type": "schema"
+                  },
+                  "still_threshold": {
+                    "key": "Required",
+                    "schema": {
+                      "config_vars": {
+                        "entity_category": {
+                          "default": "config"
+                        },
+                        "icon": {
+                          "default": "mdi:motion-sensor"
+                        },
+                        "id": {
+                          "id_type": {
+                            "class": "ld2420::LD2420StillThresholdNumbers",
+                            "parents": [
+                              "number::Number",
+                              "EntityBase"
+                            ]
+                          },
+                          "key": "GeneratedID"
+                        }
+                      },
+                      "extends": [
+                        "number._NUMBER_SCHEMA"
+                      ]
+                    },
+                    "type": "schema"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "gate_10": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "move_threshold": {
+                    "key": "Required",
+                    "schema": {
+                      "config_vars": {
+                        "entity_category": {
+                          "default": "config"
+                        },
+                        "icon": {
+                          "default": "mdi:motion-sensor"
+                        },
+                        "id": {
+                          "id_type": {
+                            "class": "ld2420::LD2420MoveThresholdNumbers",
+                            "parents": [
+                              "number::Number",
+                              "EntityBase"
+                            ]
+                          },
+                          "key": "GeneratedID"
+                        }
+                      },
+                      "extends": [
+                        "number._NUMBER_SCHEMA"
+                      ]
+                    },
+                    "type": "schema"
+                  },
+                  "still_threshold": {
+                    "key": "Required",
+                    "schema": {
+                      "config_vars": {
+                        "entity_category": {
+                          "default": "config"
+                        },
+                        "icon": {
+                          "default": "mdi:motion-sensor"
+                        },
+                        "id": {
+                          "id_type": {
+                            "class": "ld2420::LD2420StillThresholdNumbers",
+                            "parents": [
+                              "number::Number",
+                              "EntityBase"
+                            ]
+                          },
+                          "key": "GeneratedID"
+                        }
+                      },
+                      "extends": [
+                        "number._NUMBER_SCHEMA"
+                      ]
+                    },
+                    "type": "schema"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "gate_11": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "move_threshold": {
+                    "key": "Required",
+                    "schema": {
+                      "config_vars": {
+                        "entity_category": {
+                          "default": "config"
+                        },
+                        "icon": {
+                          "default": "mdi:motion-sensor"
+                        },
+                        "id": {
+                          "id_type": {
+                            "class": "ld2420::LD2420MoveThresholdNumbers",
+                            "parents": [
+                              "number::Number",
+                              "EntityBase"
+                            ]
+                          },
+                          "key": "GeneratedID"
+                        }
+                      },
+                      "extends": [
+                        "number._NUMBER_SCHEMA"
+                      ]
+                    },
+                    "type": "schema"
+                  },
+                  "still_threshold": {
+                    "key": "Required",
+                    "schema": {
+                      "config_vars": {
+                        "entity_category": {
+                          "default": "config"
+                        },
+                        "icon": {
+                          "default": "mdi:motion-sensor"
+                        },
+                        "id": {
+                          "id_type": {
+                            "class": "ld2420::LD2420StillThresholdNumbers",
+                            "parents": [
+                              "number::Number",
+                              "EntityBase"
+                            ]
+                          },
+                          "key": "GeneratedID"
+                        }
+                      },
+                      "extends": [
+                        "number._NUMBER_SCHEMA"
+                      ]
+                    },
+                    "type": "schema"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "gate_12": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "move_threshold": {
+                    "key": "Required",
+                    "schema": {
+                      "config_vars": {
+                        "entity_category": {
+                          "default": "config"
+                        },
+                        "icon": {
+                          "default": "mdi:motion-sensor"
+                        },
+                        "id": {
+                          "id_type": {
+                            "class": "ld2420::LD2420MoveThresholdNumbers",
+                            "parents": [
+                              "number::Number",
+                              "EntityBase"
+                            ]
+                          },
+                          "key": "GeneratedID"
+                        }
+                      },
+                      "extends": [
+                        "number._NUMBER_SCHEMA"
+                      ]
+                    },
+                    "type": "schema"
+                  },
+                  "still_threshold": {
+                    "key": "Required",
+                    "schema": {
+                      "config_vars": {
+                        "entity_category": {
+                          "default": "config"
+                        },
+                        "icon": {
+                          "default": "mdi:motion-sensor"
+                        },
+                        "id": {
+                          "id_type": {
+                            "class": "ld2420::LD2420StillThresholdNumbers",
+                            "parents": [
+                              "number::Number",
+                              "EntityBase"
+                            ]
+                          },
+                          "key": "GeneratedID"
+                        }
+                      },
+                      "extends": [
+                        "number._NUMBER_SCHEMA"
+                      ]
+                    },
+                    "type": "schema"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "gate_13": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "move_threshold": {
+                    "key": "Required",
+                    "schema": {
+                      "config_vars": {
+                        "entity_category": {
+                          "default": "config"
+                        },
+                        "icon": {
+                          "default": "mdi:motion-sensor"
+                        },
+                        "id": {
+                          "id_type": {
+                            "class": "ld2420::LD2420MoveThresholdNumbers",
+                            "parents": [
+                              "number::Number",
+                              "EntityBase"
+                            ]
+                          },
+                          "key": "GeneratedID"
+                        }
+                      },
+                      "extends": [
+                        "number._NUMBER_SCHEMA"
+                      ]
+                    },
+                    "type": "schema"
+                  },
+                  "still_threshold": {
+                    "key": "Required",
+                    "schema": {
+                      "config_vars": {
+                        "entity_category": {
+                          "default": "config"
+                        },
+                        "icon": {
+                          "default": "mdi:motion-sensor"
+                        },
+                        "id": {
+                          "id_type": {
+                            "class": "ld2420::LD2420StillThresholdNumbers",
+                            "parents": [
+                              "number::Number",
+                              "EntityBase"
+                            ]
+                          },
+                          "key": "GeneratedID"
+                        }
+                      },
+                      "extends": [
+                        "number._NUMBER_SCHEMA"
+                      ]
+                    },
+                    "type": "schema"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "gate_14": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "move_threshold": {
+                    "key": "Required",
+                    "schema": {
+                      "config_vars": {
+                        "entity_category": {
+                          "default": "config"
+                        },
+                        "icon": {
+                          "default": "mdi:motion-sensor"
+                        },
+                        "id": {
+                          "id_type": {
+                            "class": "ld2420::LD2420MoveThresholdNumbers",
+                            "parents": [
+                              "number::Number",
+                              "EntityBase"
+                            ]
+                          },
+                          "key": "GeneratedID"
+                        }
+                      },
+                      "extends": [
+                        "number._NUMBER_SCHEMA"
+                      ]
+                    },
+                    "type": "schema"
+                  },
+                  "still_threshold": {
+                    "key": "Required",
+                    "schema": {
+                      "config_vars": {
+                        "entity_category": {
+                          "default": "config"
+                        },
+                        "icon": {
+                          "default": "mdi:motion-sensor"
+                        },
+                        "id": {
+                          "id_type": {
+                            "class": "ld2420::LD2420StillThresholdNumbers",
+                            "parents": [
+                              "number::Number",
+                              "EntityBase"
+                            ]
+                          },
+                          "key": "GeneratedID"
+                        }
+                      },
+                      "extends": [
+                        "number._NUMBER_SCHEMA"
+                      ]
+                    },
+                    "type": "schema"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "gate_15": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "move_threshold": {
+                    "key": "Required",
+                    "schema": {
+                      "config_vars": {
+                        "entity_category": {
+                          "default": "config"
+                        },
+                        "icon": {
+                          "default": "mdi:motion-sensor"
+                        },
+                        "id": {
+                          "id_type": {
+                            "class": "ld2420::LD2420MoveThresholdNumbers",
+                            "parents": [
+                              "number::Number",
+                              "EntityBase"
+                            ]
+                          },
+                          "key": "GeneratedID"
+                        }
+                      },
+                      "extends": [
+                        "number._NUMBER_SCHEMA"
+                      ]
+                    },
+                    "type": "schema"
+                  },
+                  "still_threshold": {
+                    "key": "Required",
+                    "schema": {
+                      "config_vars": {
+                        "entity_category": {
+                          "default": "config"
+                        },
+                        "icon": {
+                          "default": "mdi:motion-sensor"
+                        },
+                        "id": {
+                          "id_type": {
+                            "class": "ld2420::LD2420StillThresholdNumbers",
+                            "parents": [
+                              "number::Number",
+                              "EntityBase"
+                            ]
+                          },
+                          "key": "GeneratedID"
+                        }
+                      },
+                      "extends": [
+                        "number._NUMBER_SCHEMA"
+                      ]
+                    },
+                    "type": "schema"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "gate_2": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "move_threshold": {
+                    "key": "Required",
+                    "schema": {
+                      "config_vars": {
+                        "entity_category": {
+                          "default": "config"
+                        },
+                        "icon": {
+                          "default": "mdi:motion-sensor"
+                        },
+                        "id": {
+                          "id_type": {
+                            "class": "ld2420::LD2420MoveThresholdNumbers",
+                            "parents": [
+                              "number::Number",
+                              "EntityBase"
+                            ]
+                          },
+                          "key": "GeneratedID"
+                        }
+                      },
+                      "extends": [
+                        "number._NUMBER_SCHEMA"
+                      ]
+                    },
+                    "type": "schema"
+                  },
+                  "still_threshold": {
+                    "key": "Required",
+                    "schema": {
+                      "config_vars": {
+                        "entity_category": {
+                          "default": "config"
+                        },
+                        "icon": {
+                          "default": "mdi:motion-sensor"
+                        },
+                        "id": {
+                          "id_type": {
+                            "class": "ld2420::LD2420StillThresholdNumbers",
+                            "parents": [
+                              "number::Number",
+                              "EntityBase"
+                            ]
+                          },
+                          "key": "GeneratedID"
+                        }
+                      },
+                      "extends": [
+                        "number._NUMBER_SCHEMA"
+                      ]
+                    },
+                    "type": "schema"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "gate_3": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "move_threshold": {
+                    "key": "Required",
+                    "schema": {
+                      "config_vars": {
+                        "entity_category": {
+                          "default": "config"
+                        },
+                        "icon": {
+                          "default": "mdi:motion-sensor"
+                        },
+                        "id": {
+                          "id_type": {
+                            "class": "ld2420::LD2420MoveThresholdNumbers",
+                            "parents": [
+                              "number::Number",
+                              "EntityBase"
+                            ]
+                          },
+                          "key": "GeneratedID"
+                        }
+                      },
+                      "extends": [
+                        "number._NUMBER_SCHEMA"
+                      ]
+                    },
+                    "type": "schema"
+                  },
+                  "still_threshold": {
+                    "key": "Required",
+                    "schema": {
+                      "config_vars": {
+                        "entity_category": {
+                          "default": "config"
+                        },
+                        "icon": {
+                          "default": "mdi:motion-sensor"
+                        },
+                        "id": {
+                          "id_type": {
+                            "class": "ld2420::LD2420StillThresholdNumbers",
+                            "parents": [
+                              "number::Number",
+                              "EntityBase"
+                            ]
+                          },
+                          "key": "GeneratedID"
+                        }
+                      },
+                      "extends": [
+                        "number._NUMBER_SCHEMA"
+                      ]
+                    },
+                    "type": "schema"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "gate_4": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "move_threshold": {
+                    "key": "Required",
+                    "schema": {
+                      "config_vars": {
+                        "entity_category": {
+                          "default": "config"
+                        },
+                        "icon": {
+                          "default": "mdi:motion-sensor"
+                        },
+                        "id": {
+                          "id_type": {
+                            "class": "ld2420::LD2420MoveThresholdNumbers",
+                            "parents": [
+                              "number::Number",
+                              "EntityBase"
+                            ]
+                          },
+                          "key": "GeneratedID"
+                        }
+                      },
+                      "extends": [
+                        "number._NUMBER_SCHEMA"
+                      ]
+                    },
+                    "type": "schema"
+                  },
+                  "still_threshold": {
+                    "key": "Required",
+                    "schema": {
+                      "config_vars": {
+                        "entity_category": {
+                          "default": "config"
+                        },
+                        "icon": {
+                          "default": "mdi:motion-sensor"
+                        },
+                        "id": {
+                          "id_type": {
+                            "class": "ld2420::LD2420StillThresholdNumbers",
+                            "parents": [
+                              "number::Number",
+                              "EntityBase"
+                            ]
+                          },
+                          "key": "GeneratedID"
+                        }
+                      },
+                      "extends": [
+                        "number._NUMBER_SCHEMA"
+                      ]
+                    },
+                    "type": "schema"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "gate_5": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "move_threshold": {
+                    "key": "Required",
+                    "schema": {
+                      "config_vars": {
+                        "entity_category": {
+                          "default": "config"
+                        },
+                        "icon": {
+                          "default": "mdi:motion-sensor"
+                        },
+                        "id": {
+                          "id_type": {
+                            "class": "ld2420::LD2420MoveThresholdNumbers",
+                            "parents": [
+                              "number::Number",
+                              "EntityBase"
+                            ]
+                          },
+                          "key": "GeneratedID"
+                        }
+                      },
+                      "extends": [
+                        "number._NUMBER_SCHEMA"
+                      ]
+                    },
+                    "type": "schema"
+                  },
+                  "still_threshold": {
+                    "key": "Required",
+                    "schema": {
+                      "config_vars": {
+                        "entity_category": {
+                          "default": "config"
+                        },
+                        "icon": {
+                          "default": "mdi:motion-sensor"
+                        },
+                        "id": {
+                          "id_type": {
+                            "class": "ld2420::LD2420StillThresholdNumbers",
+                            "parents": [
+                              "number::Number",
+                              "EntityBase"
+                            ]
+                          },
+                          "key": "GeneratedID"
+                        }
+                      },
+                      "extends": [
+                        "number._NUMBER_SCHEMA"
+                      ]
+                    },
+                    "type": "schema"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "gate_6": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "move_threshold": {
+                    "key": "Required",
+                    "schema": {
+                      "config_vars": {
+                        "entity_category": {
+                          "default": "config"
+                        },
+                        "icon": {
+                          "default": "mdi:motion-sensor"
+                        },
+                        "id": {
+                          "id_type": {
+                            "class": "ld2420::LD2420MoveThresholdNumbers",
+                            "parents": [
+                              "number::Number",
+                              "EntityBase"
+                            ]
+                          },
+                          "key": "GeneratedID"
+                        }
+                      },
+                      "extends": [
+                        "number._NUMBER_SCHEMA"
+                      ]
+                    },
+                    "type": "schema"
+                  },
+                  "still_threshold": {
+                    "key": "Required",
+                    "schema": {
+                      "config_vars": {
+                        "entity_category": {
+                          "default": "config"
+                        },
+                        "icon": {
+                          "default": "mdi:motion-sensor"
+                        },
+                        "id": {
+                          "id_type": {
+                            "class": "ld2420::LD2420StillThresholdNumbers",
+                            "parents": [
+                              "number::Number",
+                              "EntityBase"
+                            ]
+                          },
+                          "key": "GeneratedID"
+                        }
+                      },
+                      "extends": [
+                        "number._NUMBER_SCHEMA"
+                      ]
+                    },
+                    "type": "schema"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "gate_7": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "move_threshold": {
+                    "key": "Required",
+                    "schema": {
+                      "config_vars": {
+                        "entity_category": {
+                          "default": "config"
+                        },
+                        "icon": {
+                          "default": "mdi:motion-sensor"
+                        },
+                        "id": {
+                          "id_type": {
+                            "class": "ld2420::LD2420MoveThresholdNumbers",
+                            "parents": [
+                              "number::Number",
+                              "EntityBase"
+                            ]
+                          },
+                          "key": "GeneratedID"
+                        }
+                      },
+                      "extends": [
+                        "number._NUMBER_SCHEMA"
+                      ]
+                    },
+                    "type": "schema"
+                  },
+                  "still_threshold": {
+                    "key": "Required",
+                    "schema": {
+                      "config_vars": {
+                        "entity_category": {
+                          "default": "config"
+                        },
+                        "icon": {
+                          "default": "mdi:motion-sensor"
+                        },
+                        "id": {
+                          "id_type": {
+                            "class": "ld2420::LD2420StillThresholdNumbers",
+                            "parents": [
+                              "number::Number",
+                              "EntityBase"
+                            ]
+                          },
+                          "key": "GeneratedID"
+                        }
+                      },
+                      "extends": [
+                        "number._NUMBER_SCHEMA"
+                      ]
+                    },
+                    "type": "schema"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "gate_8": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "move_threshold": {
+                    "key": "Required",
+                    "schema": {
+                      "config_vars": {
+                        "entity_category": {
+                          "default": "config"
+                        },
+                        "icon": {
+                          "default": "mdi:motion-sensor"
+                        },
+                        "id": {
+                          "id_type": {
+                            "class": "ld2420::LD2420MoveThresholdNumbers",
+                            "parents": [
+                              "number::Number",
+                              "EntityBase"
+                            ]
+                          },
+                          "key": "GeneratedID"
+                        }
+                      },
+                      "extends": [
+                        "number._NUMBER_SCHEMA"
+                      ]
+                    },
+                    "type": "schema"
+                  },
+                  "still_threshold": {
+                    "key": "Required",
+                    "schema": {
+                      "config_vars": {
+                        "entity_category": {
+                          "default": "config"
+                        },
+                        "icon": {
+                          "default": "mdi:motion-sensor"
+                        },
+                        "id": {
+                          "id_type": {
+                            "class": "ld2420::LD2420StillThresholdNumbers",
+                            "parents": [
+                              "number::Number",
+                              "EntityBase"
+                            ]
+                          },
+                          "key": "GeneratedID"
+                        }
+                      },
+                      "extends": [
+                        "number._NUMBER_SCHEMA"
+                      ]
+                    },
+                    "type": "schema"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "gate_9": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "move_threshold": {
+                    "key": "Required",
+                    "schema": {
+                      "config_vars": {
+                        "entity_category": {
+                          "default": "config"
+                        },
+                        "icon": {
+                          "default": "mdi:motion-sensor"
+                        },
+                        "id": {
+                          "id_type": {
+                            "class": "ld2420::LD2420MoveThresholdNumbers",
+                            "parents": [
+                              "number::Number",
+                              "EntityBase"
+                            ]
+                          },
+                          "key": "GeneratedID"
+                        }
+                      },
+                      "extends": [
+                        "number._NUMBER_SCHEMA"
+                      ]
+                    },
+                    "type": "schema"
+                  },
+                  "still_threshold": {
+                    "key": "Required",
+                    "schema": {
+                      "config_vars": {
+                        "entity_category": {
+                          "default": "config"
+                        },
+                        "icon": {
+                          "default": "mdi:motion-sensor"
+                        },
+                        "id": {
+                          "id_type": {
+                            "class": "ld2420::LD2420StillThresholdNumbers",
+                            "parents": [
+                              "number::Number",
+                              "EntityBase"
+                            ]
+                          },
+                          "key": "GeneratedID"
+                        }
+                      },
+                      "extends": [
+                        "number._NUMBER_SCHEMA"
+                      ]
+                    },
+                    "type": "schema"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "gate_move_sensitivity": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "distance"
+                  },
+                  "entity_category": {
+                    "default": "config"
+                  },
+                  "icon": {
+                    "default": "mdi:scale"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "ld2420::LD2420MoveSensFactorNumber",
+                      "parents": [
+                        "number::Number",
+                        "EntityBase"
+                      ]
+                    },
+                    "key": "GeneratedID"
+                  }
+                },
+                "extends": [
+                  "number._NUMBER_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Gate move threshold calibration sensitivity factor. Defaults to 0.5 with a range of 0-1, 0 = high and 1 = low. May contain any options from [Number](https://esphome.io/components/number#config-number).\n\n*See also: [LD2420 24GHz mmWave Radar Sensor](https://esphome.io/components/sensor/ld2420#configuration-variables)*"
+            },
+            "gate_select": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "distance"
+                  },
+                  "entity_category": {
+                    "default": "config"
+                  },
+                  "icon": {
+                    "default": "mdi:motion-sensor"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "ld2420::LD2420GateSelectNumber",
+                      "parents": [
+                        "number::Number",
+                        "EntityBase"
+                      ]
+                    },
+                    "key": "GeneratedID"
+                  }
+                },
+                "extends": [
+                  "number._NUMBER_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Selection of gate value to edit (gate # from 0 to 15). Gate thresholds are edited by selecting the gate number and then adjusting the move and still thresholds. **Note that when this variable is defined, the component will run in compact UI mode and the following two configuration variables are then required:** May contain any options from [Number](https://esphome.io/components/number#config-number).\n\n*See also: [LD2420 24GHz mmWave Radar Sensor](https://esphome.io/components/sensor/ld2420#configuration-variables)*"
+            },
+            "gate_still_sensitivity": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "distance"
+                  },
+                  "entity_category": {
+                    "default": "config"
+                  },
+                  "icon": {
+                    "default": "mdi:scale"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "ld2420::LD2420StillSensFactorNumber",
+                      "parents": [
+                        "number::Number",
+                        "EntityBase"
+                      ]
+                    },
+                    "key": "GeneratedID"
+                  }
+                },
+                "extends": [
+                  "number._NUMBER_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Gate still threshold calibration sensitivity factor. Defaults to 0.5 with a range of 0-1, 0 = high and 1 = low. May contain any options from [Number](https://esphome.io/components/number#config-number).\n\n*See also: [LD2420 24GHz mmWave Radar Sensor](https://esphome.io/components/sensor/ld2420#configuration-variables)*"
+            },
+            "ld2420_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "ld2420::LD2420Component"
+            },
+            "max_gate_distance": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "distance"
+                  },
+                  "entity_category": {
+                    "default": "config"
+                  },
+                  "icon": {
+                    "default": "mdi:motion-sensor"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "ld2420::LD2420MaxDistanceNumber",
+                      "parents": [
+                        "number::Number",
+                        "EntityBase"
+                      ]
+                    },
+                    "key": "GeneratedID"
+                  }
+                },
+                "extends": [
+                  "number._NUMBER_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Maximum gate for movement detection. Value from 1 to 15. Each gate detects movement and still energy at 70 cm increments. At the maximum value, the sensor's range equates to approximately 12 meters; however, accuracy at this range may be diminished. The recommended maximum value is 12 which results in approximately 9 meters. **Required** when `presence_timeout` and `min_gate_distance` are specified. May contain any options from [Number](https://esphome.io/components/number#config-number).\n\n*See also: [LD2420 24GHz mmWave Radar Sensor](https://esphome.io/components/sensor/ld2420#configuration-variables)*"
+            },
+            "min_gate_distance": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "distance"
+                  },
+                  "entity_category": {
+                    "default": "config"
+                  },
+                  "icon": {
+                    "default": "mdi:motion-sensor"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "ld2420::LD2420MinDistanceNumber",
+                      "parents": [
+                        "number::Number",
+                        "EntityBase"
+                      ]
+                    },
+                    "key": "GeneratedID"
+                  }
+                },
+                "extends": [
+                  "number._NUMBER_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Minimum distance for move or still energy detection. Value between 0 and `max_gate_distance` - 1. Each increment equals 70 cm. Defaults to 1. **Required** when `presence_timeout` and `max_gate_distance` is specified. May contain any options from [Number](https://esphome.io/components/number#config-number).\n\n*See also: [LD2420 24GHz mmWave Radar Sensor](https://esphome.io/components/sensor/ld2420#configuration-variables)*"
+            },
+            "move_threshold": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "entity_category": {
+                    "default": "config"
+                  },
+                  "icon": {
+                    "default": "mdi:motion-sensor"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "ld2420::LD2420MoveThresholdNumbers",
+                      "parents": [
+                        "number::Number",
+                        "EntityBase"
+                      ]
+                    },
+                    "key": "GeneratedID"
+                  }
+                },
+                "extends": [
+                  "number._NUMBER_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "presence_timeout": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "entity_category": {
+                    "default": "config"
+                  },
+                  "icon": {
+                    "default": "mdi:timelapse"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "ld2420::LD2420TimeoutNumber",
+                      "parents": [
+                        "number::Number",
+                        "EntityBase"
+                      ]
+                    },
+                    "key": "GeneratedID"
+                  },
+                  "unit_of_measurement": {
+                    "default": "s"
+                  }
+                },
+                "extends": [
+                  "number._NUMBER_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The time in seconds during which the occupied state (presence) will persist after presence is no longer detected. Any energy detection within the time window restarts the countdown from this value. Defaults to 120s. **Required** when `min_gate_distance` and `max_gate_distance` is specified. May contain any options from [Number](https://esphome.io/components/number#config-number).\n\n*See also: [LD2420 24GHz mmWave Radar Sensor](https://esphome.io/components/sensor/ld2420#configuration-variables)*"
+            },
+            "still_threshold": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "entity_category": {
+                    "default": "config"
+                  },
+                  "icon": {
+                    "default": "mdi:motion-sensor"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "ld2420::LD2420StillThresholdNumbers",
+                      "parents": [
+                        "number::Number",
+                        "EntityBase"
+                      ]
+                    },
+                    "key": "GeneratedID"
+                  }
+                },
+                "extends": [
+                  "number._NUMBER_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "ld2420.select": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "ld2420_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "ld2420::LD2420Component"
+            },
+            "operating_mode": {
+              "key": "Required",
+              "schema": {
+                "config_vars": {
+                  "entity_category": {
+                    "default": "config"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "ld2420::LD2420Select",
+                      "parents": [
+                        "select::Select",
+                        "EntityBase",
+                        "Component"
+                      ]
+                    }
+                  }
+                },
+                "extends": [
+                  "select._SELECT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Provisions the operating mode select component. May contain any options from [Select](https://esphome.io/components/select#config-select).\n\n*See also: [LD2420 24GHz mmWave Radar Sensor](https://esphome.io/components/sensor/ld2420#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "ld2420.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "ld2420::LD2420Sensor",
+                "parents": [
+                  "sensor::Sensor",
+                  "EntityBase",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "ld2420_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "ld2420::LD2420Component"
+            },
+            "moving_distance": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "distance"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "cm"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Distance between the sensor and the detected moving target. May contain any options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [LD2420 24GHz mmWave Radar Sensor](https://esphome.io/components/sensor/ld2420#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "ld2420.text_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "fw_version": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "icon": {
+                    "default": "mdi:chip"
+                  }
+                },
+                "extends": [
+                  "text_sensor._TEXT_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Allows you to retrieve the [Ld2420](https://esphome.io/components/sensor/ld2420/) firmware version. May contain any options from [Text Sensor](https://esphome.io/components/text_sensor#config-text_sensor).\n\n*See also: [LD2420 24GHz mmWave Radar Sensor](https://esphome.io/components/sensor/ld2420#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "ld2420::LD2420TextSensor",
+                "parents": [
+                  "text_sensor::TextSensor",
+                  "EntityBase",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "ld2420_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "ld2420::LD2420Component"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

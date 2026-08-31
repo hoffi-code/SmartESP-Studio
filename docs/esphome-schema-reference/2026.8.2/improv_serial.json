@@ -1,0 +1,26 @@
+{
+  "improv_serial": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "improv_serial::ImprovSerialComponent",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "next_url": {
+              "key": "Optional",
+              "docs": "**url**: A URL that can be used to forward the user to after setting credentials with improv.\n\n*See also: [Improv via Serial](https://esphome.io/components/improv_serial#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

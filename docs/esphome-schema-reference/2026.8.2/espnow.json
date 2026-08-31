@@ -1,0 +1,245 @@
+{
+  "espnow": {
+    "action": {
+      "broadcast": {
+        "maybe": "data",
+        "schema": {
+          "config_vars": {
+            "address": {
+              "default": "FF:FF:FF:FF:FF:FF",
+              "key": "Optional"
+            }
+          },
+          "extends": [
+            "espnow.SEND_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This is an [Action](https://esphome.io/automations/actions#all-actions) for sending a data packet over the ESP-NOW protocol to every device on the same Wi-Fi channel that is listening for ESP-NOW broadcasts. It is equivalent to using `espnow.send` with the address `FF:FF:FF:FF:FF:FF`. See [Broadcasting](https://esphome.io/components/espnow#broadcasting) below for a discussion of when broadcasts are appropriate."
+      },
+      "peer.add": {
+        "maybe": "address",
+        "schema": {
+          "extends": [
+            "espnow.PEER_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This is an [Action](https://esphome.io/automations/actions#all-actions) to add a new peer to the internal allowed peers list."
+      },
+      "peer.delete": {
+        "maybe": "address",
+        "schema": {
+          "extends": [
+            "espnow.PEER_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This is an [Action](https://esphome.io/automations/actions#all-actions) to remove a known peer from the internal allowed peers list."
+      },
+      "send": {
+        "schema": {
+          "extends": [
+            "espnow.SEND_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This is an [Action](https://esphome.io/automations/actions#all-actions) for sending a data packet over the ESP-NOW protocol to a specific peer."
+      },
+      "set_channel": {
+        "maybe": "channel",
+        "schema": {
+          "config_vars": {
+            "channel": {
+              "key": "Required",
+              "templatable": true
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "espnow::ESPNowComponent"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This is an [Action](https://esphome.io/automations/actions#all-actions) to change the Wi-Fi channel that ESP-NOW is sending and receiving on. It has no effect when the [Wi-Fi](https://esphome.io/components/wifi/) component is enabled, since the channel is then determined by the associated Wi-Fi network."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "auto_add_peer": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: When set to `true`, the ESP-NOW component will automatically add any new incoming device as a peer. See [Peers](https://esphome.io/components/espnow#peers) below. Defaults to `false`.\n\n*See also: [ESPNow communication Component](https://esphome.io/components/espnow#configuration-variables)*"
+            },
+            "channel": {
+              "key": "Optional"
+            },
+            "enable_on_boot": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Enable the ESP-NOW component on boot. Defaults to `true`.\n\n*See also: [ESPNow communication Component](https://esphome.io/components/espnow#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "espnow::ESPNowComponent",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "max_payload_size": {
+              "default": "250",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: The largest payload, in bytes, this device can send and receive in one frame. Values above `250` use ESP-NOW v2 frames (up to `1470` bytes), only work with peers that also support them, and reserve proportionally more RAM for packet buffers. This only sizes this device's buffers; the protocol version itself is negotiated with each peer automatically. Defaults to `250`.\n\n*See also: [ESPNow communication Component](https://esphome.io/components/espnow#configuration-variables)*"
+            },
+            "on_broadcast": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "address": {
+                    "key": "Optional"
+                  },
+                  "then": {
+                    "type": "trigger"
+                  }
+                }
+              },
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform when a broadcast packet is received. May be specified multiple times. See [`on_broadcast`](https://esphome.io/components/espnow#espnow-on_broadcast).\n\n*See also: [ESPNow communication Component](https://esphome.io/components/espnow#configuration-variables)*"
+            },
+            "on_receive": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "address": {
+                    "key": "Optional",
+                    "docs": "**MAC Address**: Only fire this trigger when the packet's source address matches. If not set, the trigger fires for any source address.\n\n*See also: [ESPNow communication Component](https://esphome.io/components/espnow#configuration-variables)*"
+                  },
+                  "then": {
+                    "type": "trigger"
+                  }
+                }
+              },
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform when a directed (non-broadcast) packet is received from a registered peer. May be specified multiple times. See [`on_receive`](https://esphome.io/components/espnow#espnow-on_receive).\n\n*See also: [ESPNow communication Component](https://esphome.io/components/espnow#configuration-variables)*"
+            },
+            "on_unknown_peer": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform when a packet is received from a device that is not registered as a peer. See [`on_unknown_peer`](https://esphome.io/components/espnow#espnow-on_unknown_peer).\n\n*See also: [ESPNow communication Component](https://esphome.io/components/espnow#configuration-variables)*"
+            },
+            "peers": {
+              "is_list": true,
+              "key": "Optional",
+              "docs": "**list of MAC Address**: The list of MAC addresses of the devices that this device is allowed to communicate with. See [Peers](https://esphome.io/components/espnow#peers) below.\n\n*See also: [ESPNow communication Component](https://esphome.io/components/espnow#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "PEER_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "key": "Required",
+              "templatable": true
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "espnow::ESPNowComponent"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "SEND_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "continue_on_error": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: If set to `false`, the surrounding automation will be aborted if the send fails. Cannot be `false` when `wait_for_sent` is `false`. Defaults to `true`.\n\n*See also: [ESPNow communication Component](https://esphome.io/components/espnow#configuration-variables)*"
+            },
+            "data": {
+              "key": "Required",
+              "templatable": true,
+              "docs": "**string or list of bytes**: The data to be sent. The maximum payload size is the configured `max_payload_size` (250 bytes by default).\n\n*See also: [ESPNow communication Component](https://esphome.io/components/espnow#configuration-variables)*"
+            },
+            "on_error": {
+              "is_list": true,
+              "key": "Optional",
+              "registry": "action",
+              "type": "registry",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform when the data could not be sent.\n\n*See also: [ESPNow communication Component](https://esphome.io/components/espnow#configuration-variables)*"
+            },
+            "on_sent": {
+              "is_list": true,
+              "key": "Optional",
+              "registry": "action",
+              "type": "registry",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform when the data is sent successfully (the receiver has acknowledged the packet).\n\n*See also: [ESPNow communication Component](https://esphome.io/components/espnow#configuration-variables)*"
+            },
+            "wait_for_sent": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: If `true`, the automation will wait for the underlying send operation to complete (and for any `on_sent` or `on_error` actions to finish) before continuing with the next action. Defaults to `true`.\n\n*See also: [ESPNow communication Component](https://esphome.io/components/espnow#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "espnow.PEER_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "espnow.packet_transport": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "espnow_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "espnow::ESPNowComponent"
+            },
+            "id": {
+              "id_type": {
+                "class": "espnow::ESPNowTransport",
+                "parents": [
+                  "packet_transport::PacketTransport",
+                  "PollingComponent",
+                  "Component",
+                  "PollingComponent",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "peer_address": {
+              "default": "FF:FF:FF:FF:FF:FF",
+              "key": "Optional"
+            }
+          },
+          "extends": [
+            "packet_transport.TRANSPORT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

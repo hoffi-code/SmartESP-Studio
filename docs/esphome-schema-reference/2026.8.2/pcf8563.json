@@ -1,0 +1,71 @@
+{
+  "pcf8563": {
+    "action": {
+      "read_time": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "pcf8563::PCF8563Component"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [Action](https://esphome.io/automations/actions#all-actions) triggers a synchronization of the current system time from the RTC hardware."
+      },
+      "write_time": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "pcf8563::PCF8563Component"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [Action](https://esphome.io/automations/actions#all-actions) triggers a synchronization of the current system time to the RTC hardware."
+      }
+    }
+  },
+  "pcf8563.time": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "81",
+              "key": "Optional",
+              "docs": "**int**: Manually specify the I\u00b2C address of the RTC. Defaults to `0x51`.\n\n*See also: [PCF8563 Time Source](https://esphome.io/components/time/pcf8563#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "pcf8563::PCF8563Component",
+                "parents": [
+                  "time::RealTimeClock",
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            }
+          },
+          "extends": [
+            "time.TIME_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

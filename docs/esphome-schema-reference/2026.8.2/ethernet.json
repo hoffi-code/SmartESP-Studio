@@ -1,0 +1,827 @@
+{
+  "ethernet": {
+    "action": {
+      "disable": {
+        "docs": "This action turns off the Ethernet interface on demand."
+      },
+      "enable": {
+        "docs": "This action turns on the Ethernet interface on demand."
+      }
+    },
+    "condition": {
+      "connected": {
+        "docs": "This [Condition](https://esphome.io/automations/actions#all-conditions) checks if the device currently has an Ethernet connection."
+      },
+      "enabled": {
+        "docs": "This [Condition](https://esphome.io/automations/actions#all-conditions) checks if the Ethernet interface is currently enabled."
+      }
+    },
+    "schemas": {
+      "BASE_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "domain": {
+              "default": ".local",
+              "key": "Optional",
+              "docs": "**string**: Set the domain of the node hostname used for uploading. For example, if it's set to `.local`, all uploads will be sent to `<HOSTNAME>.local`. Defaults to `.local`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+            },
+            "enable_on_boot": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: If enabled, the Ethernet interface will be enabled on boot. Defaults to `true`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "ethernet::EthernetComponent",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+            },
+            "mac_address": {
+              "key": "Optional",
+              "docs": "**MAC Address**: Set the MAC address of the ethernet interface.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+            },
+            "manual_ip": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "dns1": {
+                    "default": "0.0.0.0",
+                    "key": "Optional",
+                    "docs": "**IPv4 address**: The main DNS server to use.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+                  },
+                  "dns2": {
+                    "default": "0.0.0.0",
+                    "key": "Optional",
+                    "docs": "**IPv4 address**: The backup DNS server to use.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+                  },
+                  "gateway": {
+                    "key": "Required",
+                    "docs": "**IPv4 address**: The gateway of the local network.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+                  },
+                  "static_ip": {
+                    "key": "Required",
+                    "docs": "**IPv4 address**: The static IP of your node.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+                  },
+                  "subnet": {
+                    "key": "Required",
+                    "docs": "**IPv4 address**: The subnet of the local network.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "Manually configure the static IP of the node.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+            },
+            "on_connect": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An action to be performed when a connection is established.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+            },
+            "on_disconnect": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An action to be performed when the connection is dropped.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+            },
+            "use_address": {
+              "key": "Optional",
+              "type": "string",
+              "docs": "**string**: Manually override what address to use to connect to the ESP. Defaults to auto-generated value. For example, if you have changed your static IP and want to flash OTA to the previously configured IP address.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "CONFIG_SCHEMA": {
+        "type": "typed",
+        "typed_key": "type",
+        "types": {
+          "CH390": {
+            "config_vars": {
+              "clk_pin": {
+                "internal": true,
+                "key": "Required",
+                "modes": [
+                  "output"
+                ],
+                "type": "pin",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The SPI clock pin.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "clock_speed": {
+                "key": "Optional",
+                "type": "integer",
+                "docs": "**float**: The SPI clock speed. ESP32 only. Any frequency between `8MHz` and `80MHz` is allowed, but the nearest integer division of `80MHz` is used, i.e. `16MHz` (`80MHz` / 5) is used when `15MHz` is configured. Default: `26.67MHz`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "cs_pin": {
+                "internal": true,
+                "key": "Required",
+                "modes": [
+                  "output"
+                ],
+                "type": "pin",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The SPI chip select pin.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "interface": {
+                "key": "Optional",
+                "type": "enum",
+                "values": {
+                  "spi2": null,
+                  "spi3": null
+                },
+                "docs": "**string**: Controls which ESP-IDF SPI implementation should be used. Value may be either `spi2` or `spi3`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "interrupt_pin": {
+                "internal": true,
+                "key": "Optional",
+                "modes": [
+                  "input"
+                ],
+                "type": "pin",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The interrupt pin. This variable is **required** for older frameworks. See below.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "miso_pin": {
+                "internal": true,
+                "key": "Required",
+                "modes": [
+                  "input"
+                ],
+                "type": "pin",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The SPI MISO pin.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "mosi_pin": {
+                "internal": true,
+                "key": "Required",
+                "modes": [
+                  "output"
+                ],
+                "type": "pin",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The SPI MOSI pin.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "polling_interval": {
+                "key": "Optional",
+                "schema": {
+                  "extends": [
+                    "core.positive_time_period_milliseconds"
+                  ]
+                },
+                "type": "schema",
+                "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: If `interrupt_pin` is not set, set the time interval for periodic polling. Minimum is 1ms; defaults to 10ms. ESP32 only. Older frameworks may not support this variable. See below for details.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "reset_pin": {
+                "internal": true,
+                "key": "Optional",
+                "modes": [
+                  "output"
+                ],
+                "type": "pin",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The reset pin.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "ethernet.BASE_SCHEMA"
+            ]
+          },
+          "DM9051": {
+            "extends": [
+              "ethernet.SPI_SCHEMA"
+            ]
+          },
+          "DP83848": {
+            "extends": [
+              "ethernet.RMII_SCHEMA"
+            ],
+            "config_vars": {
+              "mdc_pin": {
+                "key": "Required",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The MDC pin. On the ESP32-S31 this is `GPIO5`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "mdio_pin": {
+                "key": "Required",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The MDIO pin. On the ESP32-S31 this is `GPIO6`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "phy_addr": {
+                "key": "Optional",
+                "docs": "**int**: The PHY address of the Ethernet controller. Defaults to `0`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "power_pin": {
+                "key": "Optional",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The PHY reset/power pin. On the ESP32-S31 this is `GPIO7`. Recommended so the PHY is reset cleanly at startup.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "phy_registers": {
+                "key": "Optional",
+                "docs": "**mapping**: Arbitrary PHY register values to set after Ethernet initialization, with the same `address`/`value`/`page_id` sub-options as the [RMII configuration variables](https://esphome.io/components/ethernet#rmii-configuration-variables) above.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              }
+            }
+          },
+          "ENC28J60": {
+            "config_vars": {
+              "clk_pin": {
+                "internal": true,
+                "key": "Required",
+                "modes": [
+                  "output"
+                ],
+                "type": "pin",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The SPI clock pin.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "clock_speed": {
+                "key": "Optional",
+                "type": "integer",
+                "docs": "**float**: The SPI clock speed. ESP32 only. Any frequency between `8MHz` and `80MHz` is allowed, but the nearest integer division of `80MHz` is used, i.e. `16MHz` (`80MHz` / 5) is used when `15MHz` is configured. Default: `26.67MHz`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "cs_pin": {
+                "internal": true,
+                "key": "Required",
+                "modes": [
+                  "output"
+                ],
+                "type": "pin",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The SPI chip select pin.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "interface": {
+                "key": "Optional",
+                "type": "enum",
+                "values": {
+                  "spi2": null,
+                  "spi3": null
+                },
+                "docs": "**string**: Controls which ESP-IDF SPI implementation should be used. Value may be either `spi2` or `spi3`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "interrupt_pin": {
+                "internal": true,
+                "key": "Optional",
+                "modes": [
+                  "input"
+                ],
+                "type": "pin",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The interrupt pin. This variable is **required** for older frameworks. See below.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "miso_pin": {
+                "internal": true,
+                "key": "Required",
+                "modes": [
+                  "input"
+                ],
+                "type": "pin",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The SPI MISO pin.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "mosi_pin": {
+                "internal": true,
+                "key": "Required",
+                "modes": [
+                  "output"
+                ],
+                "type": "pin",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The SPI MOSI pin.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "polling_interval": {
+                "key": "Optional",
+                "schema": {
+                  "extends": [
+                    "core.positive_time_period_milliseconds"
+                  ]
+                },
+                "type": "schema",
+                "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: If `interrupt_pin` is not set, set the time interval for periodic polling. Minimum is 1ms; defaults to 10ms. ESP32 only. Older frameworks may not support this variable. See below for details.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "reset_pin": {
+                "internal": true,
+                "key": "Optional",
+                "modes": [
+                  "output"
+                ],
+                "type": "pin",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The reset pin.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "ethernet.BASE_SCHEMA"
+            ]
+          },
+          "GENERIC": {
+            "extends": [
+              "ethernet.GENERIC_SCHEMA"
+            ],
+            "config_vars": {
+              "mdc_pin": {
+                "key": "Required",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The MDC pin. On the ESP32-S31 this is `GPIO5`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "mdio_pin": {
+                "key": "Required",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The MDIO pin. On the ESP32-S31 this is `GPIO6`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "phy_addr": {
+                "key": "Optional",
+                "docs": "**int**: The PHY address of the Ethernet controller. Defaults to `0`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "power_pin": {
+                "key": "Optional",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The PHY reset/power pin. On the ESP32-S31 this is `GPIO7`. Recommended so the PHY is reset cleanly at startup.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "phy_registers": {
+                "key": "Optional",
+                "docs": "**mapping**: Arbitrary PHY register values to set after Ethernet initialization, with the same `address`/`value`/`page_id` sub-options as the [RMII configuration variables](https://esphome.io/components/ethernet#rmii-configuration-variables) above.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              }
+            }
+          },
+          "IP101": {
+            "extends": [
+              "ethernet.RMII_SCHEMA"
+            ],
+            "config_vars": {
+              "mdc_pin": {
+                "key": "Required",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The MDC pin. On the ESP32-S31 this is `GPIO5`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "mdio_pin": {
+                "key": "Required",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The MDIO pin. On the ESP32-S31 this is `GPIO6`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "phy_addr": {
+                "key": "Optional",
+                "docs": "**int**: The PHY address of the Ethernet controller. Defaults to `0`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "power_pin": {
+                "key": "Optional",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The PHY reset/power pin. On the ESP32-S31 this is `GPIO7`. Recommended so the PHY is reset cleanly at startup.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "phy_registers": {
+                "key": "Optional",
+                "docs": "**mapping**: Arbitrary PHY register values to set after Ethernet initialization, with the same `address`/`value`/`page_id` sub-options as the [RMII configuration variables](https://esphome.io/components/ethernet#rmii-configuration-variables) above.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              }
+            }
+          },
+          "JL1101": {
+            "extends": [
+              "ethernet.RMII_SCHEMA"
+            ],
+            "config_vars": {
+              "mdc_pin": {
+                "key": "Required",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The MDC pin. On the ESP32-S31 this is `GPIO5`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "mdio_pin": {
+                "key": "Required",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The MDIO pin. On the ESP32-S31 this is `GPIO6`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "phy_addr": {
+                "key": "Optional",
+                "docs": "**int**: The PHY address of the Ethernet controller. Defaults to `0`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "power_pin": {
+                "key": "Optional",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The PHY reset/power pin. On the ESP32-S31 this is `GPIO7`. Recommended so the PHY is reset cleanly at startup.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "phy_registers": {
+                "key": "Optional",
+                "docs": "**mapping**: Arbitrary PHY register values to set after Ethernet initialization, with the same `address`/`value`/`page_id` sub-options as the [RMII configuration variables](https://esphome.io/components/ethernet#rmii-configuration-variables) above.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              }
+            }
+          },
+          "KSZ8081": {
+            "extends": [
+              "ethernet.RMII_SCHEMA"
+            ],
+            "config_vars": {
+              "mdc_pin": {
+                "key": "Required",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The MDC pin. On the ESP32-S31 this is `GPIO5`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "mdio_pin": {
+                "key": "Required",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The MDIO pin. On the ESP32-S31 this is `GPIO6`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "phy_addr": {
+                "key": "Optional",
+                "docs": "**int**: The PHY address of the Ethernet controller. Defaults to `0`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "power_pin": {
+                "key": "Optional",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The PHY reset/power pin. On the ESP32-S31 this is `GPIO7`. Recommended so the PHY is reset cleanly at startup.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "phy_registers": {
+                "key": "Optional",
+                "docs": "**mapping**: Arbitrary PHY register values to set after Ethernet initialization, with the same `address`/`value`/`page_id` sub-options as the [RMII configuration variables](https://esphome.io/components/ethernet#rmii-configuration-variables) above.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              }
+            }
+          },
+          "KSZ8081RNA": {
+            "extends": [
+              "ethernet.RMII_SCHEMA"
+            ],
+            "config_vars": {
+              "mdc_pin": {
+                "key": "Required",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The MDC pin. On the ESP32-S31 this is `GPIO5`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "mdio_pin": {
+                "key": "Required",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The MDIO pin. On the ESP32-S31 this is `GPIO6`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "phy_addr": {
+                "key": "Optional",
+                "docs": "**int**: The PHY address of the Ethernet controller. Defaults to `0`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "power_pin": {
+                "key": "Optional",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The PHY reset/power pin. On the ESP32-S31 this is `GPIO7`. Recommended so the PHY is reset cleanly at startup.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "phy_registers": {
+                "key": "Optional",
+                "docs": "**mapping**: Arbitrary PHY register values to set after Ethernet initialization, with the same `address`/`value`/`page_id` sub-options as the [RMII configuration variables](https://esphome.io/components/ethernet#rmii-configuration-variables) above.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              }
+            }
+          },
+          "LAN8670": {
+            "extends": [
+              "ethernet.RMII_SCHEMA"
+            ],
+            "config_vars": {
+              "mdc_pin": {
+                "key": "Required",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The MDC pin. On the ESP32-S31 this is `GPIO5`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "mdio_pin": {
+                "key": "Required",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The MDIO pin. On the ESP32-S31 this is `GPIO6`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "phy_addr": {
+                "key": "Optional",
+                "docs": "**int**: The PHY address of the Ethernet controller. Defaults to `0`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "power_pin": {
+                "key": "Optional",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The PHY reset/power pin. On the ESP32-S31 this is `GPIO7`. Recommended so the PHY is reset cleanly at startup.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "phy_registers": {
+                "key": "Optional",
+                "docs": "**mapping**: Arbitrary PHY register values to set after Ethernet initialization, with the same `address`/`value`/`page_id` sub-options as the [RMII configuration variables](https://esphome.io/components/ethernet#rmii-configuration-variables) above.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              }
+            }
+          },
+          "LAN8720": {
+            "extends": [
+              "ethernet.RMII_SCHEMA"
+            ],
+            "config_vars": {
+              "mdc_pin": {
+                "key": "Required",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The MDC pin. On the ESP32-S31 this is `GPIO5`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "mdio_pin": {
+                "key": "Required",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The MDIO pin. On the ESP32-S31 this is `GPIO6`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "phy_addr": {
+                "key": "Optional",
+                "docs": "**int**: The PHY address of the Ethernet controller. Defaults to `0`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "power_pin": {
+                "key": "Optional",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The PHY reset/power pin. On the ESP32-S31 this is `GPIO7`. Recommended so the PHY is reset cleanly at startup.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "phy_registers": {
+                "key": "Optional",
+                "docs": "**mapping**: Arbitrary PHY register values to set after Ethernet initialization, with the same `address`/`value`/`page_id` sub-options as the [RMII configuration variables](https://esphome.io/components/ethernet#rmii-configuration-variables) above.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              }
+            }
+          },
+          "OPENETH": {
+            "extends": [
+              "ethernet.BASE_SCHEMA"
+            ]
+          },
+          "RTL8201": {
+            "extends": [
+              "ethernet.RMII_SCHEMA"
+            ],
+            "config_vars": {
+              "mdc_pin": {
+                "key": "Required",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The MDC pin. On the ESP32-S31 this is `GPIO5`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "mdio_pin": {
+                "key": "Required",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The MDIO pin. On the ESP32-S31 this is `GPIO6`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "phy_addr": {
+                "key": "Optional",
+                "docs": "**int**: The PHY address of the Ethernet controller. Defaults to `0`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "power_pin": {
+                "key": "Optional",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The PHY reset/power pin. On the ESP32-S31 this is `GPIO7`. Recommended so the PHY is reset cleanly at startup.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "phy_registers": {
+                "key": "Optional",
+                "docs": "**mapping**: Arbitrary PHY register values to set after Ethernet initialization, with the same `address`/`value`/`page_id` sub-options as the [RMII configuration variables](https://esphome.io/components/ethernet#rmii-configuration-variables) above.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              }
+            }
+          },
+          "W5100": {
+            "extends": [
+              "ethernet.SPI_SCHEMA"
+            ]
+          },
+          "W5500": {
+            "extends": [
+              "ethernet.SPI_SCHEMA"
+            ]
+          },
+          "W6100": {
+            "extends": [
+              "ethernet.SPI_SCHEMA"
+            ]
+          },
+          "W6300": {
+            "extends": [
+              "ethernet.SPI_SCHEMA"
+            ]
+          },
+          "YT8531": {
+            "extends": [
+              "ethernet.GENERIC_SCHEMA"
+            ],
+            "config_vars": {
+              "mdc_pin": {
+                "key": "Required",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The MDC pin. On the ESP32-S31 this is `GPIO5`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "mdio_pin": {
+                "key": "Required",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The MDIO pin. On the ESP32-S31 this is `GPIO6`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "phy_addr": {
+                "key": "Optional",
+                "docs": "**int**: The PHY address of the Ethernet controller. Defaults to `0`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "power_pin": {
+                "key": "Optional",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The PHY reset/power pin. On the ESP32-S31 this is `GPIO7`. Recommended so the PHY is reset cleanly at startup.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              },
+              "phy_registers": {
+                "key": "Optional",
+                "docs": "**mapping**: Arbitrary PHY register values to set after Ethernet initialization, with the same `address`/`value`/`page_id` sub-options as the [RMII configuration variables](https://esphome.io/components/ethernet#rmii-configuration-variables) above.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+              }
+            }
+          }
+        },
+        "docs": "The type of LAN chipset/phy. Supported chipsets are:"
+      },
+      "GENERIC_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "mdc_pin": {
+              "internal": true,
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The MDC pin of the board. Usually this is `GPIO23`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+            },
+            "mdio_pin": {
+              "internal": true,
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The MDIO pin of the board. Usually this is `GPIO18`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+            },
+            "phy_addr": {
+              "default": "0",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: The PHY addr type of the Ethernet controller. Defaults to 0.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+            },
+            "phy_registers": {
+              "is_list": true,
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "ethernet.PHY_REGISTER_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "**mapping**: Arbitrary PHY register values to set after Ethernet initialization.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+            },
+            "power_pin": {
+              "internal": true,
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin controlling the power/reset status of the Ethernet controller. Leave unspecified for no power pin (default).\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "ethernet.BASE_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "PHY_REGISTER_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "key": "Required",
+              "docs": "**hex**: The register address as a hex number (e.g. `0x10` for address 16)\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+            },
+            "page_id": {
+              "key": "Optional",
+              "docs": "**hex**: (RTL8201 only) Register page number to select before writing (e.g. `0x07` for page 7)\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+            },
+            "value": {
+              "key": "Required",
+              "docs": "**hex**: The value of the register to set as a hex number (e.g. `0x1FFA`  )\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "RMII_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "clk": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "mode": {
+                    "key": "Required",
+                    "type": "enum",
+                    "values": {
+                      "CLK_EXT_IN": null,
+                      "CLK_OUT": null
+                    }
+                  },
+                  "pin": {
+                    "internal": true,
+                    "key": "Required",
+                    "modes": [],
+                    "type": "pin"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "clk_mode": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "GPIO0_IN": null,
+                "GPIO0_OUT": null,
+                "GPIO16_OUT": null,
+                "GPIO17_OUT": null
+              }
+            },
+            "mdc_pin": {
+              "internal": true,
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The MDC pin of the board. Usually this is `GPIO23`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+            },
+            "mdio_pin": {
+              "internal": true,
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The MDIO pin of the board. Usually this is `GPIO18`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+            },
+            "phy_addr": {
+              "default": "0",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: The PHY addr type of the Ethernet controller. Defaults to 0.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+            },
+            "phy_registers": {
+              "is_list": true,
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "ethernet.PHY_REGISTER_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "**mapping**: Arbitrary PHY register values to set after Ethernet initialization.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+            },
+            "power_pin": {
+              "internal": true,
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin controlling the power/reset status of the Ethernet controller. Leave unspecified for no power pin (default).\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "ethernet.BASE_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "SPI_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "clk_pin": {
+              "internal": true,
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The SPI clock pin.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+            },
+            "clock_speed": {
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**float**: The SPI clock speed. ESP32 only. Any frequency between `8MHz` and `80MHz` is allowed, but the nearest integer division of `80MHz` is used, i.e. `16MHz` (`80MHz` / 5) is used when `15MHz` is configured. Default: `26.67MHz`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+            },
+            "cs_pin": {
+              "internal": true,
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The SPI chip select pin.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+            },
+            "interface": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "spi2": null,
+                "spi3": null
+              },
+              "docs": "**string**: Controls which ESP-IDF SPI implementation should be used. Value may be either `spi2` or `spi3`.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+            },
+            "interrupt_pin": {
+              "internal": true,
+              "key": "Optional",
+              "modes": [
+                "input"
+              ],
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The interrupt pin. This variable is **required** for older frameworks. See below.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+            },
+            "miso_pin": {
+              "internal": true,
+              "key": "Required",
+              "modes": [
+                "input"
+              ],
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The SPI MISO pin.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+            },
+            "mosi_pin": {
+              "internal": true,
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The SPI MOSI pin.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+            },
+            "polling_interval": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: If `interrupt_pin` is not set, set the time interval for periodic polling. Minimum is 1ms; defaults to 10ms. ESP32 only. Older frameworks may not support this variable. See below for details.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+            },
+            "reset_pin": {
+              "internal": true,
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The reset pin.\n\n*See also: [Ethernet Component](https://esphome.io/components/ethernet#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "ethernet.BASE_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

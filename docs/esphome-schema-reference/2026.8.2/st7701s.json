@@ -1,0 +1,287 @@
+{
+  "st7701s.display": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "color_order": {
+              "default": "BGR",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "RGB": null,
+                "BGR": null
+              },
+              "docs": "Should be one of `bgr` (default) or `rgb`.\n\n*See also: [ST7701S Display Driver](https://esphome.io/components/display/st7701s#configuration-variables)*"
+            },
+            "cs_pin": {
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin"
+            },
+            "data_pins": {
+              "key": "Required",
+              "schema": {
+                "config_vars": {
+                  "blue": {
+                    "key": "Required",
+                    "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: Exactly 5 pin numbers for the blue databits, listed from least to most significant bit.\n\n*See also: [ST7701S Display Driver](https://esphome.io/components/display/st7701s#configuration-variables)*"
+                  },
+                  "green": {
+                    "key": "Required",
+                    "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: Exactly 6 pin numbers for the green databits, listed from least to most significant bit.\n\n*See also: [ST7701S Display Driver](https://esphome.io/components/display/st7701s#configuration-variables)*"
+                  },
+                  "red": {
+                    "key": "Required",
+                    "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: Exactly 5 pin numbers for the red databits, listed from least to most significant bit.\n\n*See also: [ST7701S Display Driver](https://esphome.io/components/display/st7701s#configuration-variables)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "A list of pins used for the databus. Specified in 3 groups.\n\n*See also: [ST7701S Display Driver](https://esphome.io/components/display/st7701s#configuration-variables)*"
+            },
+            "data_rate": {
+              "default": "1000000.0",
+              "key": "Optional",
+              "docs": "Set the data rate of the SPI interface to the display. One of `80MHz`, `40MHz`, `20MHz`, `10MHz`, `5MHz`, `2MHz`, `1MHz` (default), `200kHz`, `75kHz` or `1kHz`.\n\n*See also: [ST7701S Display Driver](https://esphome.io/components/display/st7701s#configuration-variables)*"
+            },
+            "dc_pin": {
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The DC pin.\n\n*See also: [ST7701S Display Driver](https://esphome.io/components/display/st7701s#configuration-variables)*"
+            },
+            "de_pin": {
+              "internal": true,
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The DE pin.\n\n*See also: [ST7701S Display Driver](https://esphome.io/components/display/st7701s#configuration-variables)*"
+            },
+            "dimensions": {
+              "key": "Required",
+              "schema": {
+                "config_vars": {
+                  "height": {
+                    "key": "Required",
+                    "type": "integer",
+                    "docs": "**int**: Specifies height of display in pixels.\n\n*See also: [ST7701S Display Driver](https://esphome.io/components/display/st7701s#configuration-variables)*"
+                  },
+                  "offset_height": {
+                    "default": "0",
+                    "key": "Optional",
+                    "type": "integer",
+                    "docs": "**int**: Specify an offset for the y-direction of the display. Default is 0.\n\n*See also: [ST7701S Display Driver](https://esphome.io/components/display/st7701s#configuration-variables)*"
+                  },
+                  "offset_width": {
+                    "default": "0",
+                    "key": "Optional",
+                    "type": "integer",
+                    "docs": "**int**: Specify an offset for the x-direction of the display, typically used when an LCD is smaller than the maximum supported by the driver chip. Default is 0\n\n*See also: [ST7701S Display Driver](https://esphome.io/components/display/st7701s#configuration-variables)*"
+                  },
+                  "width": {
+                    "key": "Required",
+                    "type": "integer",
+                    "docs": "**int**: Specifies width of display.\n\n*See also: [ST7701S Display Driver](https://esphome.io/components/display/st7701s#configuration-variables)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "Dimensions of the screen, specified either as *width* **x** *height* (e.g `320x240`  ) or with separate config keys.\n\n*See also: [ST7701S Display Driver](https://esphome.io/components/display/st7701s#configuration-variables)*"
+            },
+            "hsync_back_porch": {
+              "default": "10",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: The horizontal back porch length.\n\n*See also: [ST7701S Display Driver](https://esphome.io/components/display/st7701s#configuration-variables)*"
+            },
+            "hsync_front_porch": {
+              "default": "20",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: The horizontal front porch length.\n\n*See also: [ST7701S Display Driver](https://esphome.io/components/display/st7701s#configuration-variables)*"
+            },
+            "hsync_pin": {
+              "internal": true,
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The Horizontal sync pin.\n\n*See also: [ST7701S Display Driver](https://esphome.io/components/display/st7701s#configuration-variables)*"
+            },
+            "hsync_pulse_width": {
+              "default": "10",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: The horizontal sync pulse width.\n\n*See also: [ST7701S Display Driver](https://esphome.io/components/display/st7701s#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "st7701s::ST7701S",
+                "parents": [
+                  "display::Display",
+                  "PollingComponent",
+                  "Component",
+                  "Component",
+                  "spi::SPIDevice"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [ST7701S Display Driver](https://esphome.io/components/display/st7701s#configuration-variables)*"
+            },
+            "init_sequence": {
+              "default": "1",
+              "is_list": true,
+              "key": "Optional",
+              "docs": "**A list of byte arrays**: Specifies the init sequence for the display\n\n*See also: [ST7701S Display Driver](https://esphome.io/components/display/st7701s#configuration-variables)*"
+            },
+            "invert_colors": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "With this boolean option you can invert the display colors. **Note** some of the displays have this option set automatically to true and can't be changed.\n\n*See also: [ST7701S Display Driver](https://esphome.io/components/display/st7701s#configuration-variables)*"
+            },
+            "pclk_frequency": {
+              "default": "16MHz",
+              "key": "Optional",
+              "docs": "Set the pixel clock speed. Default is 8MHz.\n\n*See also: [ST7701S Display Driver](https://esphome.io/components/display/st7701s#configuration-variables)*"
+            },
+            "pclk_inverted": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**bool**: If the pclk is active negative (default is True)\n\n*See also: [ST7701S Display Driver](https://esphome.io/components/display/st7701s#configuration-variables)*"
+            },
+            "pclk_pin": {
+              "internal": true,
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The PCLK pin.\n\n*See also: [ST7701S Display Driver](https://esphome.io/components/display/st7701s#configuration-variables)*"
+            },
+            "release_device": {
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "reset_pin": {
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The RESET pin.\n\n*See also: [ST7701S Display Driver](https://esphome.io/components/display/st7701s#configuration-variables)*"
+            },
+            "spi_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "spi::SPIComponent"
+            },
+            "spi_mode": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "MODE0": null,
+                "MODE1": null,
+                "MODE2": null,
+                "MODE3": null,
+                "0": null,
+                "1": null,
+                "2": null,
+                "3": null
+              },
+              "docs": "Set the mode for the SPI interface to the display. Default is `MODE0` but some displays require `MODE3`.\n\n*See also: [ST7701S Display Driver](https://esphome.io/components/display/st7701s#configuration-variables)*"
+            },
+            "transform": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "mirror_x": {
+                    "default": "False",
+                    "key": "Optional",
+                    "type": "boolean",
+                    "docs": "**boolean**: If true, mirror the x axis.\n\n*See also: [ST7701S Display Driver](https://esphome.io/components/display/st7701s#configuration-variables)*"
+                  },
+                  "mirror_y": {
+                    "default": "False",
+                    "key": "Optional",
+                    "type": "boolean",
+                    "docs": "**boolean**: If true, mirror the y axis.\n\n*See also: [ST7701S Display Driver](https://esphome.io/components/display/st7701s#configuration-variables)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "Transform the display presentation using hardware. All defaults are `false`. This option cannot be used with `rotation`.\n\n*See also: [ST7701S Display Driver](https://esphome.io/components/display/st7701s#configuration-variables)*"
+            },
+            "vsync_back_porch": {
+              "default": "10",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: The vertical back porch length.\n\n*See also: [ST7701S Display Driver](https://esphome.io/components/display/st7701s#configuration-variables)*"
+            },
+            "vsync_front_porch": {
+              "default": "10",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: The vertical front porch length.\n\n*See also: [ST7701S Display Driver](https://esphome.io/components/display/st7701s#configuration-variables)*"
+            },
+            "vsync_pin": {
+              "internal": true,
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The Vertical sync pin.\n\n*See also: [ST7701S Display Driver](https://esphome.io/components/display/st7701s#configuration-variables)*"
+            },
+            "vsync_pulse_width": {
+              "default": "10",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: The vertical sync pulse width.\n\n*See also: [ST7701S Display Driver](https://esphome.io/components/display/st7701s#configuration-variables)*"
+            },
+            "update_interval": {
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to re-draw the screen. Defaults to `5s`.\n\n*See also: [ST7701S Display Driver](https://esphome.io/components/display/st7701s#configuration-variables)*"
+            },
+            "auto_clear_enabled": {
+              "key": "Optional",
+              "docs": "**boolean**: If the display should be cleared before each update. Defaults to `true` if a lambda or pages are configured, false otherwise.\n\n*See also: [ST7701S Display Driver](https://esphome.io/components/display/st7701s#configuration-variables)*"
+            },
+            "pages": {
+              "key": "Optional",
+              "docs": "**list**: Show pages instead of a single lambda. See [Display Pages](https://esphome.io/components/display#display-pages).\n\n*See also: [ST7701S Display Driver](https://esphome.io/components/display/st7701s#configuration-variables)*"
+            },
+            "rotation": {
+              "key": "Optional",
+              "docs": "Rotate the display presentation in software. Choose one of `0\u00b0`, `90\u00b0`, `180\u00b0`, or `270\u00b0`. This option cannot be used with `transform`.\n\n*See also: [ST7701S Display Driver](https://esphome.io/components/display/st7701s#configuration-variables)*"
+            },
+            "lambda": {
+              "key": "Optional",
+              "docs": "**[lambda](https://esphome.io/automations/templates#config-lambda)**: The lambda to use for rendering the content on the display. See [Display Rendering Engine](https://esphome.io/components/display#display-engine) for more information.\n\n*See also: [ST7701S Display Driver](https://esphome.io/components/display/st7701s#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "display.FULL_DISPLAY_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

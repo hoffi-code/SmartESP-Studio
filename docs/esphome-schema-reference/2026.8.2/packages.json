@@ -1,0 +1,73 @@
+{
+  "packages": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "key": "String",
+        "key_type": "<class 'str'>",
+        "schema": {
+          "config_vars": {
+            "string": {
+              "schema": {
+                "config_vars": {
+                  "file": {
+                    "key": "Optional"
+                  },
+                  "files": {
+                    "is_list": true,
+                    "key": "Optional",
+                    "schema": {
+                      "config_vars": {
+                        "path": {
+                          "key": "Required"
+                        },
+                        "vars": {
+                          "default": "{}",
+                          "key": "String",
+                          "key_type": "string",
+                          "schema": {
+                            "config_vars": {
+                              "string": {}
+                            }
+                          },
+                          "type": "schema"
+                        }
+                      }
+                    },
+                    "type": "schema"
+                  },
+                  "password": {
+                    "key": "Optional",
+                    "sensitive": true,
+                    "sensitive_source": "heuristic",
+                    "type": "string"
+                  },
+                  "path": {
+                    "key": "Optional",
+                    "type": "string"
+                  },
+                  "ref": {
+                    "key": "Optional"
+                  },
+                  "refresh": {
+                    "default": "1d",
+                    "key": "Optional",
+                    "type": "string"
+                  },
+                  "url": {
+                    "key": "Required"
+                  },
+                  "username": {
+                    "key": "Optional",
+                    "type": "string"
+                  }
+                }
+              },
+              "type": "schema"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

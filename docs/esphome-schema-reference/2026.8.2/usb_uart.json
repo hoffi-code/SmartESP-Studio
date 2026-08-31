@@ -1,0 +1,1775 @@
+{
+  "usb_uart": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "type": "typed",
+        "typed_key": "type",
+        "types": {
+          "CDC_ACM": {
+            "config_vars": {
+              "channels": {
+                "is_list": true,
+                "key": "Required",
+                "schema": {
+                  "config_vars": {
+                    "baud_rate": {
+                      "default": "9600",
+                      "key": "Optional",
+                      "type": "integer"
+                    },
+                    "buffer_size": {
+                      "default": "256",
+                      "key": "Optional",
+                      "type": "integer"
+                    },
+                    "data_bits": {
+                      "default": "8",
+                      "key": "Optional",
+                      "type": "integer"
+                    },
+                    "debug": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean"
+                    },
+                    "debug_prefix": {
+                      "default": "",
+                      "key": "Optional",
+                      "type": "string"
+                    },
+                    "dummy_receiver": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean"
+                    },
+                    "flush_timeout": {
+                      "default": "100ms",
+                      "key": "Optional",
+                      "schema": {
+                        "extends": [
+                          "core.positive_time_period_milliseconds"
+                        ]
+                      },
+                      "type": "schema"
+                    },
+                    "id": {
+                      "id_type": {
+                        "class": "usb_uart::USBUartChannel",
+                        "parents": [
+                          "uart::UARTComponent"
+                        ]
+                      },
+                      "key": "GeneratedID"
+                    },
+                    "parity": {
+                      "default": "NONE",
+                      "key": "Optional",
+                      "type": "enum",
+                      "values": {
+                        "NONE": null,
+                        "EVEN": null,
+                        "ODD": null,
+                        "MARK": null,
+                        "SPACE": null
+                      }
+                    },
+                    "stop_bits": {
+                      "default": "1",
+                      "key": "Optional",
+                      "type": "enum",
+                      "values": {
+                        "1": null,
+                        "1.5": null,
+                        "2": null
+                      }
+                    }
+                  }
+                },
+                "type": "schema",
+                "docs": "**list**: A list of channels to configure.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "id": {
+                "id_type": {
+                  "class": "usb_uart::USBUartTypeCdcAcm",
+                  "parents": [
+                    "usb_uart::USBUartComponent",
+                    "Component"
+                  ]
+                },
+                "key": "GeneratedID",
+                "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: An id to assign to the channel. This id may be used anywhere a `uart` component is required.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "pid": {
+                "data_type": "hex_uint16_t",
+                "key": "Optional",
+                "docs": "**int**: The product ID of the device. Use 0 as a wildcard. Each type has a default PID which will be overridden if this is set.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "vid": {
+                "data_type": "hex_uint16_t",
+                "key": "Optional",
+                "docs": "**int**: The vendor ID of the device. Use 0 as a wildcard. Each type has a default VID which will be overridden if this is set.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "core.COMPONENT_SCHEMA"
+            ]
+          },
+          "CH340": {
+            "config_vars": {
+              "channels": {
+                "is_list": true,
+                "key": "Required",
+                "schema": {
+                  "config_vars": {
+                    "baud_rate": {
+                      "key": "Required",
+                      "type": "integer"
+                    },
+                    "buffer_size": {
+                      "default": "256",
+                      "key": "Optional",
+                      "type": "integer"
+                    },
+                    "data_bits": {
+                      "default": "8",
+                      "key": "Optional",
+                      "type": "integer"
+                    },
+                    "debug": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean"
+                    },
+                    "debug_prefix": {
+                      "default": "",
+                      "key": "Optional",
+                      "type": "string"
+                    },
+                    "dummy_receiver": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean"
+                    },
+                    "flush_timeout": {
+                      "default": "100ms",
+                      "key": "Optional",
+                      "schema": {
+                        "extends": [
+                          "core.positive_time_period_milliseconds"
+                        ]
+                      },
+                      "type": "schema"
+                    },
+                    "id": {
+                      "id_type": {
+                        "class": "usb_uart::USBUartChannel",
+                        "parents": [
+                          "uart::UARTComponent"
+                        ]
+                      },
+                      "key": "GeneratedID"
+                    },
+                    "parity": {
+                      "default": "NONE",
+                      "key": "Optional",
+                      "type": "enum",
+                      "values": {
+                        "NONE": null,
+                        "EVEN": null,
+                        "ODD": null,
+                        "MARK": null,
+                        "SPACE": null
+                      }
+                    },
+                    "stop_bits": {
+                      "default": "1",
+                      "key": "Optional",
+                      "type": "enum",
+                      "values": {
+                        "1": null,
+                        "1.5": null,
+                        "2": null
+                      }
+                    }
+                  }
+                },
+                "type": "schema",
+                "docs": "**list**: A list of channels to configure.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "id": {
+                "id_type": {
+                  "class": "usb_uart::USBUartTypeCH34X",
+                  "parents": [
+                    "usb_uart::USBUartComponent",
+                    "Component"
+                  ]
+                },
+                "key": "GeneratedID",
+                "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: An id to assign to the channel. This id may be used anywhere a `uart` component is required.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "pid": {
+                "data_type": "hex_uint16_t",
+                "default": "29987",
+                "key": "Optional",
+                "docs": "**int**: The product ID of the device. Use 0 as a wildcard. Each type has a default PID which will be overridden if this is set.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "vid": {
+                "data_type": "hex_uint16_t",
+                "default": "6790",
+                "key": "Optional",
+                "docs": "**int**: The vendor ID of the device. Use 0 as a wildcard. Each type has a default VID which will be overridden if this is set.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "core.COMPONENT_SCHEMA"
+            ]
+          },
+          "CH34X": {
+            "config_vars": {
+              "channels": {
+                "is_list": true,
+                "key": "Required",
+                "schema": {
+                  "config_vars": {
+                    "baud_rate": {
+                      "key": "Required",
+                      "type": "integer"
+                    },
+                    "buffer_size": {
+                      "default": "256",
+                      "key": "Optional",
+                      "type": "integer"
+                    },
+                    "data_bits": {
+                      "default": "8",
+                      "key": "Optional",
+                      "type": "integer"
+                    },
+                    "debug": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean"
+                    },
+                    "debug_prefix": {
+                      "default": "",
+                      "key": "Optional",
+                      "type": "string"
+                    },
+                    "dummy_receiver": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean"
+                    },
+                    "flush_timeout": {
+                      "default": "100ms",
+                      "key": "Optional",
+                      "schema": {
+                        "extends": [
+                          "core.positive_time_period_milliseconds"
+                        ]
+                      },
+                      "type": "schema"
+                    },
+                    "id": {
+                      "id_type": {
+                        "class": "usb_uart::USBUartChannel",
+                        "parents": [
+                          "uart::UARTComponent"
+                        ]
+                      },
+                      "key": "GeneratedID"
+                    },
+                    "parity": {
+                      "default": "NONE",
+                      "key": "Optional",
+                      "type": "enum",
+                      "values": {
+                        "NONE": null,
+                        "EVEN": null,
+                        "ODD": null,
+                        "MARK": null,
+                        "SPACE": null
+                      }
+                    },
+                    "stop_bits": {
+                      "default": "1",
+                      "key": "Optional",
+                      "type": "enum",
+                      "values": {
+                        "1": null,
+                        "1.5": null,
+                        "2": null
+                      }
+                    }
+                  }
+                },
+                "type": "schema",
+                "docs": "**list**: A list of channels to configure.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "id": {
+                "id_type": {
+                  "class": "usb_uart::USBUartTypeCH34X",
+                  "parents": [
+                    "usb_uart::USBUartComponent",
+                    "Component"
+                  ]
+                },
+                "key": "GeneratedID",
+                "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: An id to assign to the channel. This id may be used anywhere a `uart` component is required.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "pid": {
+                "data_type": "hex_uint16_t",
+                "default": "21973",
+                "key": "Optional",
+                "docs": "**int**: The product ID of the device. Use 0 as a wildcard. Each type has a default PID which will be overridden if this is set.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "vid": {
+                "data_type": "hex_uint16_t",
+                "default": "6790",
+                "key": "Optional",
+                "docs": "**int**: The vendor ID of the device. Use 0 as a wildcard. Each type has a default VID which will be overridden if this is set.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "core.COMPONENT_SCHEMA"
+            ]
+          },
+          "CP210X": {
+            "config_vars": {
+              "channels": {
+                "is_list": true,
+                "key": "Required",
+                "schema": {
+                  "config_vars": {
+                    "baud_rate": {
+                      "key": "Required",
+                      "type": "integer"
+                    },
+                    "buffer_size": {
+                      "default": "256",
+                      "key": "Optional",
+                      "type": "integer"
+                    },
+                    "data_bits": {
+                      "default": "8",
+                      "key": "Optional",
+                      "type": "integer"
+                    },
+                    "debug": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean"
+                    },
+                    "debug_prefix": {
+                      "default": "",
+                      "key": "Optional",
+                      "type": "string"
+                    },
+                    "dummy_receiver": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean"
+                    },
+                    "flush_timeout": {
+                      "default": "100ms",
+                      "key": "Optional",
+                      "schema": {
+                        "extends": [
+                          "core.positive_time_period_milliseconds"
+                        ]
+                      },
+                      "type": "schema"
+                    },
+                    "id": {
+                      "id_type": {
+                        "class": "usb_uart::USBUartChannel",
+                        "parents": [
+                          "uart::UARTComponent"
+                        ]
+                      },
+                      "key": "GeneratedID"
+                    },
+                    "parity": {
+                      "default": "NONE",
+                      "key": "Optional",
+                      "type": "enum",
+                      "values": {
+                        "NONE": null,
+                        "EVEN": null,
+                        "ODD": null,
+                        "MARK": null,
+                        "SPACE": null
+                      }
+                    },
+                    "stop_bits": {
+                      "default": "1",
+                      "key": "Optional",
+                      "type": "enum",
+                      "values": {
+                        "1": null,
+                        "1.5": null,
+                        "2": null
+                      }
+                    }
+                  }
+                },
+                "type": "schema",
+                "docs": "**list**: A list of channels to configure.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "id": {
+                "id_type": {
+                  "class": "usb_uart::USBUartTypeCP210X",
+                  "parents": [
+                    "usb_uart::USBUartComponent",
+                    "Component"
+                  ]
+                },
+                "key": "GeneratedID",
+                "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: An id to assign to the channel. This id may be used anywhere a `uart` component is required.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "pid": {
+                "data_type": "hex_uint16_t",
+                "default": "60000",
+                "key": "Optional",
+                "docs": "**int**: The product ID of the device. Use 0 as a wildcard. Each type has a default PID which will be overridden if this is set.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "vid": {
+                "data_type": "hex_uint16_t",
+                "default": "4292",
+                "key": "Optional",
+                "docs": "**int**: The vendor ID of the device. Use 0 as a wildcard. Each type has a default VID which will be overridden if this is set.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "core.COMPONENT_SCHEMA"
+            ]
+          },
+          "ESP_JTAG": {
+            "config_vars": {
+              "channels": {
+                "is_list": true,
+                "key": "Required",
+                "schema": {
+                  "config_vars": {
+                    "baud_rate": {
+                      "default": "9600",
+                      "key": "Optional",
+                      "type": "integer"
+                    },
+                    "buffer_size": {
+                      "default": "256",
+                      "key": "Optional",
+                      "type": "integer"
+                    },
+                    "data_bits": {
+                      "default": "8",
+                      "key": "Optional",
+                      "type": "integer"
+                    },
+                    "debug": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean"
+                    },
+                    "debug_prefix": {
+                      "default": "",
+                      "key": "Optional",
+                      "type": "string"
+                    },
+                    "dummy_receiver": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean"
+                    },
+                    "flush_timeout": {
+                      "default": "100ms",
+                      "key": "Optional",
+                      "schema": {
+                        "extends": [
+                          "core.positive_time_period_milliseconds"
+                        ]
+                      },
+                      "type": "schema"
+                    },
+                    "id": {
+                      "id_type": {
+                        "class": "usb_uart::USBUartChannel",
+                        "parents": [
+                          "uart::UARTComponent"
+                        ]
+                      },
+                      "key": "GeneratedID"
+                    },
+                    "parity": {
+                      "default": "NONE",
+                      "key": "Optional",
+                      "type": "enum",
+                      "values": {
+                        "NONE": null,
+                        "EVEN": null,
+                        "ODD": null,
+                        "MARK": null,
+                        "SPACE": null
+                      }
+                    },
+                    "stop_bits": {
+                      "default": "1",
+                      "key": "Optional",
+                      "type": "enum",
+                      "values": {
+                        "1": null,
+                        "1.5": null,
+                        "2": null
+                      }
+                    }
+                  }
+                },
+                "type": "schema",
+                "docs": "**list**: A list of channels to configure.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "id": {
+                "id_type": {
+                  "class": "usb_uart::USBUartTypeCdcAcm",
+                  "parents": [
+                    "usb_uart::USBUartComponent",
+                    "Component"
+                  ]
+                },
+                "key": "GeneratedID",
+                "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: An id to assign to the channel. This id may be used anywhere a `uart` component is required.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "pid": {
+                "data_type": "hex_uint16_t",
+                "default": "4097",
+                "key": "Optional",
+                "docs": "**int**: The product ID of the device. Use 0 as a wildcard. Each type has a default PID which will be overridden if this is set.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "vid": {
+                "data_type": "hex_uint16_t",
+                "default": "12346",
+                "key": "Optional",
+                "docs": "**int**: The vendor ID of the device. Use 0 as a wildcard. Each type has a default VID which will be overridden if this is set.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "core.COMPONENT_SCHEMA"
+            ]
+          },
+          "FT2232": {
+            "config_vars": {
+              "channels": {
+                "is_list": true,
+                "key": "Required",
+                "schema": {
+                  "config_vars": {
+                    "baud_rate": {
+                      "key": "Required",
+                      "type": "integer"
+                    },
+                    "buffer_size": {
+                      "default": "256",
+                      "key": "Optional",
+                      "type": "integer"
+                    },
+                    "data_bits": {
+                      "default": "8",
+                      "key": "Optional",
+                      "type": "integer"
+                    },
+                    "debug": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean"
+                    },
+                    "debug_prefix": {
+                      "default": "",
+                      "key": "Optional",
+                      "type": "string"
+                    },
+                    "dummy_receiver": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean"
+                    },
+                    "flush_timeout": {
+                      "default": "100ms",
+                      "key": "Optional",
+                      "schema": {
+                        "extends": [
+                          "core.positive_time_period_milliseconds"
+                        ]
+                      },
+                      "type": "schema"
+                    },
+                    "id": {
+                      "id_type": {
+                        "class": "usb_uart::USBUartChannel",
+                        "parents": [
+                          "uart::UARTComponent"
+                        ]
+                      },
+                      "key": "GeneratedID"
+                    },
+                    "parity": {
+                      "default": "NONE",
+                      "key": "Optional",
+                      "type": "enum",
+                      "values": {
+                        "NONE": null,
+                        "EVEN": null,
+                        "ODD": null,
+                        "MARK": null,
+                        "SPACE": null
+                      }
+                    },
+                    "stop_bits": {
+                      "default": "1",
+                      "key": "Optional",
+                      "type": "enum",
+                      "values": {
+                        "1": null,
+                        "1.5": null,
+                        "2": null
+                      }
+                    }
+                  }
+                },
+                "type": "schema",
+                "docs": "**list**: A list of channels to configure.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "id": {
+                "id_type": {
+                  "class": "usb_uart::USBUartTypeFT23XX",
+                  "parents": [
+                    "usb_uart::USBUartComponent",
+                    "Component"
+                  ]
+                },
+                "key": "GeneratedID",
+                "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: An id to assign to the channel. This id may be used anywhere a `uart` component is required.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "pid": {
+                "data_type": "hex_uint16_t",
+                "default": "24592",
+                "key": "Optional",
+                "docs": "**int**: The product ID of the device. Use 0 as a wildcard. Each type has a default PID which will be overridden if this is set.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "vid": {
+                "data_type": "hex_uint16_t",
+                "default": "1027",
+                "key": "Optional",
+                "docs": "**int**: The vendor ID of the device. Use 0 as a wildcard. Each type has a default VID which will be overridden if this is set.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "core.COMPONENT_SCHEMA"
+            ]
+          },
+          "FT232": {
+            "config_vars": {
+              "channels": {
+                "is_list": true,
+                "key": "Required",
+                "schema": {
+                  "config_vars": {
+                    "baud_rate": {
+                      "key": "Required",
+                      "type": "integer"
+                    },
+                    "buffer_size": {
+                      "default": "256",
+                      "key": "Optional",
+                      "type": "integer"
+                    },
+                    "data_bits": {
+                      "default": "8",
+                      "key": "Optional",
+                      "type": "integer"
+                    },
+                    "debug": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean"
+                    },
+                    "debug_prefix": {
+                      "default": "",
+                      "key": "Optional",
+                      "type": "string"
+                    },
+                    "dummy_receiver": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean"
+                    },
+                    "flush_timeout": {
+                      "default": "100ms",
+                      "key": "Optional",
+                      "schema": {
+                        "extends": [
+                          "core.positive_time_period_milliseconds"
+                        ]
+                      },
+                      "type": "schema"
+                    },
+                    "id": {
+                      "id_type": {
+                        "class": "usb_uart::USBUartChannel",
+                        "parents": [
+                          "uart::UARTComponent"
+                        ]
+                      },
+                      "key": "GeneratedID"
+                    },
+                    "parity": {
+                      "default": "NONE",
+                      "key": "Optional",
+                      "type": "enum",
+                      "values": {
+                        "NONE": null,
+                        "EVEN": null,
+                        "ODD": null,
+                        "MARK": null,
+                        "SPACE": null
+                      }
+                    },
+                    "stop_bits": {
+                      "default": "1",
+                      "key": "Optional",
+                      "type": "enum",
+                      "values": {
+                        "1": null,
+                        "1.5": null,
+                        "2": null
+                      }
+                    }
+                  }
+                },
+                "type": "schema",
+                "docs": "**list**: A list of channels to configure.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "id": {
+                "id_type": {
+                  "class": "usb_uart::USBUartTypeFT23XX",
+                  "parents": [
+                    "usb_uart::USBUartComponent",
+                    "Component"
+                  ]
+                },
+                "key": "GeneratedID",
+                "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: An id to assign to the channel. This id may be used anywhere a `uart` component is required.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "pid": {
+                "data_type": "hex_uint16_t",
+                "default": "24577",
+                "key": "Optional",
+                "docs": "**int**: The product ID of the device. Use 0 as a wildcard. Each type has a default PID which will be overridden if this is set.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "vid": {
+                "data_type": "hex_uint16_t",
+                "default": "1027",
+                "key": "Optional",
+                "docs": "**int**: The vendor ID of the device. Use 0 as a wildcard. Each type has a default VID which will be overridden if this is set.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "core.COMPONENT_SCHEMA"
+            ]
+          },
+          "FT4232": {
+            "config_vars": {
+              "channels": {
+                "is_list": true,
+                "key": "Required",
+                "schema": {
+                  "config_vars": {
+                    "baud_rate": {
+                      "key": "Required",
+                      "type": "integer"
+                    },
+                    "buffer_size": {
+                      "default": "256",
+                      "key": "Optional",
+                      "type": "integer"
+                    },
+                    "data_bits": {
+                      "default": "8",
+                      "key": "Optional",
+                      "type": "integer"
+                    },
+                    "debug": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean"
+                    },
+                    "debug_prefix": {
+                      "default": "",
+                      "key": "Optional",
+                      "type": "string"
+                    },
+                    "dummy_receiver": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean"
+                    },
+                    "flush_timeout": {
+                      "default": "100ms",
+                      "key": "Optional",
+                      "schema": {
+                        "extends": [
+                          "core.positive_time_period_milliseconds"
+                        ]
+                      },
+                      "type": "schema"
+                    },
+                    "id": {
+                      "id_type": {
+                        "class": "usb_uart::USBUartChannel",
+                        "parents": [
+                          "uart::UARTComponent"
+                        ]
+                      },
+                      "key": "GeneratedID"
+                    },
+                    "parity": {
+                      "default": "NONE",
+                      "key": "Optional",
+                      "type": "enum",
+                      "values": {
+                        "NONE": null,
+                        "EVEN": null,
+                        "ODD": null,
+                        "MARK": null,
+                        "SPACE": null
+                      }
+                    },
+                    "stop_bits": {
+                      "default": "1",
+                      "key": "Optional",
+                      "type": "enum",
+                      "values": {
+                        "1": null,
+                        "1.5": null,
+                        "2": null
+                      }
+                    }
+                  }
+                },
+                "type": "schema",
+                "docs": "**list**: A list of channels to configure.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "id": {
+                "id_type": {
+                  "class": "usb_uart::USBUartTypeFT23XX",
+                  "parents": [
+                    "usb_uart::USBUartComponent",
+                    "Component"
+                  ]
+                },
+                "key": "GeneratedID",
+                "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: An id to assign to the channel. This id may be used anywhere a `uart` component is required.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "pid": {
+                "data_type": "hex_uint16_t",
+                "default": "24593",
+                "key": "Optional",
+                "docs": "**int**: The product ID of the device. Use 0 as a wildcard. Each type has a default PID which will be overridden if this is set.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "vid": {
+                "data_type": "hex_uint16_t",
+                "default": "1027",
+                "key": "Optional",
+                "docs": "**int**: The vendor ID of the device. Use 0 as a wildcard. Each type has a default VID which will be overridden if this is set.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "core.COMPONENT_SCHEMA"
+            ]
+          },
+          "PL2303": {
+            "config_vars": {
+              "channels": {
+                "is_list": true,
+                "key": "Required",
+                "schema": {
+                  "config_vars": {
+                    "baud_rate": {
+                      "key": "Required",
+                      "type": "integer"
+                    },
+                    "buffer_size": {
+                      "default": "256",
+                      "key": "Optional",
+                      "type": "integer"
+                    },
+                    "data_bits": {
+                      "default": "8",
+                      "key": "Optional",
+                      "type": "integer"
+                    },
+                    "debug": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean"
+                    },
+                    "debug_prefix": {
+                      "default": "",
+                      "key": "Optional",
+                      "type": "string"
+                    },
+                    "dummy_receiver": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean"
+                    },
+                    "flush_timeout": {
+                      "default": "100ms",
+                      "key": "Optional",
+                      "schema": {
+                        "extends": [
+                          "core.positive_time_period_milliseconds"
+                        ]
+                      },
+                      "type": "schema"
+                    },
+                    "id": {
+                      "id_type": {
+                        "class": "usb_uart::USBUartChannel",
+                        "parents": [
+                          "uart::UARTComponent"
+                        ]
+                      },
+                      "key": "GeneratedID"
+                    },
+                    "parity": {
+                      "default": "NONE",
+                      "key": "Optional",
+                      "type": "enum",
+                      "values": {
+                        "NONE": null,
+                        "EVEN": null,
+                        "ODD": null,
+                        "MARK": null,
+                        "SPACE": null
+                      }
+                    },
+                    "stop_bits": {
+                      "default": "1",
+                      "key": "Optional",
+                      "type": "enum",
+                      "values": {
+                        "1": null,
+                        "1.5": null,
+                        "2": null
+                      }
+                    }
+                  }
+                },
+                "type": "schema",
+                "docs": "**list**: A list of channels to configure.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "id": {
+                "id_type": {
+                  "class": "usb_uart::USBUartTypePL2303",
+                  "parents": [
+                    "usb_uart::USBUartComponent",
+                    "Component"
+                  ]
+                },
+                "key": "GeneratedID",
+                "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: An id to assign to the channel. This id may be used anywhere a `uart` component is required.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "pid": {
+                "data_type": "hex_uint16_t",
+                "default": "8963",
+                "key": "Optional",
+                "docs": "**int**: The product ID of the device. Use 0 as a wildcard. Each type has a default PID which will be overridden if this is set.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "vid": {
+                "data_type": "hex_uint16_t",
+                "default": "1659",
+                "key": "Optional",
+                "docs": "**int**: The vendor ID of the device. Use 0 as a wildcard. Each type has a default VID which will be overridden if this is set.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "core.COMPONENT_SCHEMA"
+            ]
+          },
+          "PL2303GB": {
+            "config_vars": {
+              "channels": {
+                "is_list": true,
+                "key": "Required",
+                "schema": {
+                  "config_vars": {
+                    "baud_rate": {
+                      "key": "Required",
+                      "type": "integer"
+                    },
+                    "buffer_size": {
+                      "default": "256",
+                      "key": "Optional",
+                      "type": "integer"
+                    },
+                    "data_bits": {
+                      "default": "8",
+                      "key": "Optional",
+                      "type": "integer"
+                    },
+                    "debug": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean"
+                    },
+                    "debug_prefix": {
+                      "default": "",
+                      "key": "Optional",
+                      "type": "string"
+                    },
+                    "dummy_receiver": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean"
+                    },
+                    "flush_timeout": {
+                      "default": "100ms",
+                      "key": "Optional",
+                      "schema": {
+                        "extends": [
+                          "core.positive_time_period_milliseconds"
+                        ]
+                      },
+                      "type": "schema"
+                    },
+                    "id": {
+                      "id_type": {
+                        "class": "usb_uart::USBUartChannel",
+                        "parents": [
+                          "uart::UARTComponent"
+                        ]
+                      },
+                      "key": "GeneratedID"
+                    },
+                    "parity": {
+                      "default": "NONE",
+                      "key": "Optional",
+                      "type": "enum",
+                      "values": {
+                        "NONE": null,
+                        "EVEN": null,
+                        "ODD": null,
+                        "MARK": null,
+                        "SPACE": null
+                      }
+                    },
+                    "stop_bits": {
+                      "default": "1",
+                      "key": "Optional",
+                      "type": "enum",
+                      "values": {
+                        "1": null,
+                        "1.5": null,
+                        "2": null
+                      }
+                    }
+                  }
+                },
+                "type": "schema",
+                "docs": "**list**: A list of channels to configure.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "id": {
+                "id_type": {
+                  "class": "usb_uart::USBUartTypePL2303",
+                  "parents": [
+                    "usb_uart::USBUartComponent",
+                    "Component"
+                  ]
+                },
+                "key": "GeneratedID",
+                "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: An id to assign to the channel. This id may be used anywhere a `uart` component is required.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "pid": {
+                "data_type": "hex_uint16_t",
+                "default": "9139",
+                "key": "Optional",
+                "docs": "**int**: The product ID of the device. Use 0 as a wildcard. Each type has a default PID which will be overridden if this is set.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "vid": {
+                "data_type": "hex_uint16_t",
+                "default": "1659",
+                "key": "Optional",
+                "docs": "**int**: The vendor ID of the device. Use 0 as a wildcard. Each type has a default VID which will be overridden if this is set.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "core.COMPONENT_SCHEMA"
+            ]
+          },
+          "PL2303GC": {
+            "config_vars": {
+              "channels": {
+                "is_list": true,
+                "key": "Required",
+                "schema": {
+                  "config_vars": {
+                    "baud_rate": {
+                      "key": "Required",
+                      "type": "integer"
+                    },
+                    "buffer_size": {
+                      "default": "256",
+                      "key": "Optional",
+                      "type": "integer"
+                    },
+                    "data_bits": {
+                      "default": "8",
+                      "key": "Optional",
+                      "type": "integer"
+                    },
+                    "debug": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean"
+                    },
+                    "debug_prefix": {
+                      "default": "",
+                      "key": "Optional",
+                      "type": "string"
+                    },
+                    "dummy_receiver": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean"
+                    },
+                    "flush_timeout": {
+                      "default": "100ms",
+                      "key": "Optional",
+                      "schema": {
+                        "extends": [
+                          "core.positive_time_period_milliseconds"
+                        ]
+                      },
+                      "type": "schema"
+                    },
+                    "id": {
+                      "id_type": {
+                        "class": "usb_uart::USBUartChannel",
+                        "parents": [
+                          "uart::UARTComponent"
+                        ]
+                      },
+                      "key": "GeneratedID"
+                    },
+                    "parity": {
+                      "default": "NONE",
+                      "key": "Optional",
+                      "type": "enum",
+                      "values": {
+                        "NONE": null,
+                        "EVEN": null,
+                        "ODD": null,
+                        "MARK": null,
+                        "SPACE": null
+                      }
+                    },
+                    "stop_bits": {
+                      "default": "1",
+                      "key": "Optional",
+                      "type": "enum",
+                      "values": {
+                        "1": null,
+                        "1.5": null,
+                        "2": null
+                      }
+                    }
+                  }
+                },
+                "type": "schema",
+                "docs": "**list**: A list of channels to configure.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "id": {
+                "id_type": {
+                  "class": "usb_uart::USBUartTypePL2303",
+                  "parents": [
+                    "usb_uart::USBUartComponent",
+                    "Component"
+                  ]
+                },
+                "key": "GeneratedID",
+                "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: An id to assign to the channel. This id may be used anywhere a `uart` component is required.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "pid": {
+                "data_type": "hex_uint16_t",
+                "default": "9123",
+                "key": "Optional",
+                "docs": "**int**: The product ID of the device. Use 0 as a wildcard. Each type has a default PID which will be overridden if this is set.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "vid": {
+                "data_type": "hex_uint16_t",
+                "default": "1659",
+                "key": "Optional",
+                "docs": "**int**: The vendor ID of the device. Use 0 as a wildcard. Each type has a default VID which will be overridden if this is set.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "core.COMPONENT_SCHEMA"
+            ]
+          },
+          "PL2303GE": {
+            "config_vars": {
+              "channels": {
+                "is_list": true,
+                "key": "Required",
+                "schema": {
+                  "config_vars": {
+                    "baud_rate": {
+                      "key": "Required",
+                      "type": "integer"
+                    },
+                    "buffer_size": {
+                      "default": "256",
+                      "key": "Optional",
+                      "type": "integer"
+                    },
+                    "data_bits": {
+                      "default": "8",
+                      "key": "Optional",
+                      "type": "integer"
+                    },
+                    "debug": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean"
+                    },
+                    "debug_prefix": {
+                      "default": "",
+                      "key": "Optional",
+                      "type": "string"
+                    },
+                    "dummy_receiver": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean"
+                    },
+                    "flush_timeout": {
+                      "default": "100ms",
+                      "key": "Optional",
+                      "schema": {
+                        "extends": [
+                          "core.positive_time_period_milliseconds"
+                        ]
+                      },
+                      "type": "schema"
+                    },
+                    "id": {
+                      "id_type": {
+                        "class": "usb_uart::USBUartChannel",
+                        "parents": [
+                          "uart::UARTComponent"
+                        ]
+                      },
+                      "key": "GeneratedID"
+                    },
+                    "parity": {
+                      "default": "NONE",
+                      "key": "Optional",
+                      "type": "enum",
+                      "values": {
+                        "NONE": null,
+                        "EVEN": null,
+                        "ODD": null,
+                        "MARK": null,
+                        "SPACE": null
+                      }
+                    },
+                    "stop_bits": {
+                      "default": "1",
+                      "key": "Optional",
+                      "type": "enum",
+                      "values": {
+                        "1": null,
+                        "1.5": null,
+                        "2": null
+                      }
+                    }
+                  }
+                },
+                "type": "schema",
+                "docs": "**list**: A list of channels to configure.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "id": {
+                "id_type": {
+                  "class": "usb_uart::USBUartTypePL2303",
+                  "parents": [
+                    "usb_uart::USBUartComponent",
+                    "Component"
+                  ]
+                },
+                "key": "GeneratedID",
+                "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: An id to assign to the channel. This id may be used anywhere a `uart` component is required.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "pid": {
+                "data_type": "hex_uint16_t",
+                "default": "9187",
+                "key": "Optional",
+                "docs": "**int**: The product ID of the device. Use 0 as a wildcard. Each type has a default PID which will be overridden if this is set.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "vid": {
+                "data_type": "hex_uint16_t",
+                "default": "1659",
+                "key": "Optional",
+                "docs": "**int**: The vendor ID of the device. Use 0 as a wildcard. Each type has a default VID which will be overridden if this is set.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "core.COMPONENT_SCHEMA"
+            ]
+          },
+          "PL2303GL": {
+            "config_vars": {
+              "channels": {
+                "is_list": true,
+                "key": "Required",
+                "schema": {
+                  "config_vars": {
+                    "baud_rate": {
+                      "key": "Required",
+                      "type": "integer"
+                    },
+                    "buffer_size": {
+                      "default": "256",
+                      "key": "Optional",
+                      "type": "integer"
+                    },
+                    "data_bits": {
+                      "default": "8",
+                      "key": "Optional",
+                      "type": "integer"
+                    },
+                    "debug": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean"
+                    },
+                    "debug_prefix": {
+                      "default": "",
+                      "key": "Optional",
+                      "type": "string"
+                    },
+                    "dummy_receiver": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean"
+                    },
+                    "flush_timeout": {
+                      "default": "100ms",
+                      "key": "Optional",
+                      "schema": {
+                        "extends": [
+                          "core.positive_time_period_milliseconds"
+                        ]
+                      },
+                      "type": "schema"
+                    },
+                    "id": {
+                      "id_type": {
+                        "class": "usb_uart::USBUartChannel",
+                        "parents": [
+                          "uart::UARTComponent"
+                        ]
+                      },
+                      "key": "GeneratedID"
+                    },
+                    "parity": {
+                      "default": "NONE",
+                      "key": "Optional",
+                      "type": "enum",
+                      "values": {
+                        "NONE": null,
+                        "EVEN": null,
+                        "ODD": null,
+                        "MARK": null,
+                        "SPACE": null
+                      }
+                    },
+                    "stop_bits": {
+                      "default": "1",
+                      "key": "Optional",
+                      "type": "enum",
+                      "values": {
+                        "1": null,
+                        "1.5": null,
+                        "2": null
+                      }
+                    }
+                  }
+                },
+                "type": "schema",
+                "docs": "**list**: A list of channels to configure.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "id": {
+                "id_type": {
+                  "class": "usb_uart::USBUartTypePL2303",
+                  "parents": [
+                    "usb_uart::USBUartComponent",
+                    "Component"
+                  ]
+                },
+                "key": "GeneratedID",
+                "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: An id to assign to the channel. This id may be used anywhere a `uart` component is required.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "pid": {
+                "data_type": "hex_uint16_t",
+                "default": "9171",
+                "key": "Optional",
+                "docs": "**int**: The product ID of the device. Use 0 as a wildcard. Each type has a default PID which will be overridden if this is set.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "vid": {
+                "data_type": "hex_uint16_t",
+                "default": "1659",
+                "key": "Optional",
+                "docs": "**int**: The vendor ID of the device. Use 0 as a wildcard. Each type has a default VID which will be overridden if this is set.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "core.COMPONENT_SCHEMA"
+            ]
+          },
+          "PL2303GS": {
+            "config_vars": {
+              "channels": {
+                "is_list": true,
+                "key": "Required",
+                "schema": {
+                  "config_vars": {
+                    "baud_rate": {
+                      "key": "Required",
+                      "type": "integer"
+                    },
+                    "buffer_size": {
+                      "default": "256",
+                      "key": "Optional",
+                      "type": "integer"
+                    },
+                    "data_bits": {
+                      "default": "8",
+                      "key": "Optional",
+                      "type": "integer"
+                    },
+                    "debug": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean"
+                    },
+                    "debug_prefix": {
+                      "default": "",
+                      "key": "Optional",
+                      "type": "string"
+                    },
+                    "dummy_receiver": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean"
+                    },
+                    "flush_timeout": {
+                      "default": "100ms",
+                      "key": "Optional",
+                      "schema": {
+                        "extends": [
+                          "core.positive_time_period_milliseconds"
+                        ]
+                      },
+                      "type": "schema"
+                    },
+                    "id": {
+                      "id_type": {
+                        "class": "usb_uart::USBUartChannel",
+                        "parents": [
+                          "uart::UARTComponent"
+                        ]
+                      },
+                      "key": "GeneratedID"
+                    },
+                    "parity": {
+                      "default": "NONE",
+                      "key": "Optional",
+                      "type": "enum",
+                      "values": {
+                        "NONE": null,
+                        "EVEN": null,
+                        "ODD": null,
+                        "MARK": null,
+                        "SPACE": null
+                      }
+                    },
+                    "stop_bits": {
+                      "default": "1",
+                      "key": "Optional",
+                      "type": "enum",
+                      "values": {
+                        "1": null,
+                        "1.5": null,
+                        "2": null
+                      }
+                    }
+                  }
+                },
+                "type": "schema",
+                "docs": "**list**: A list of channels to configure.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "id": {
+                "id_type": {
+                  "class": "usb_uart::USBUartTypePL2303",
+                  "parents": [
+                    "usb_uart::USBUartComponent",
+                    "Component"
+                  ]
+                },
+                "key": "GeneratedID",
+                "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: An id to assign to the channel. This id may be used anywhere a `uart` component is required.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "pid": {
+                "data_type": "hex_uint16_t",
+                "default": "9203",
+                "key": "Optional",
+                "docs": "**int**: The product ID of the device. Use 0 as a wildcard. Each type has a default PID which will be overridden if this is set.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "vid": {
+                "data_type": "hex_uint16_t",
+                "default": "1659",
+                "key": "Optional",
+                "docs": "**int**: The vendor ID of the device. Use 0 as a wildcard. Each type has a default VID which will be overridden if this is set.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "core.COMPONENT_SCHEMA"
+            ]
+          },
+          "PL2303GT": {
+            "config_vars": {
+              "channels": {
+                "is_list": true,
+                "key": "Required",
+                "schema": {
+                  "config_vars": {
+                    "baud_rate": {
+                      "key": "Required",
+                      "type": "integer"
+                    },
+                    "buffer_size": {
+                      "default": "256",
+                      "key": "Optional",
+                      "type": "integer"
+                    },
+                    "data_bits": {
+                      "default": "8",
+                      "key": "Optional",
+                      "type": "integer"
+                    },
+                    "debug": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean"
+                    },
+                    "debug_prefix": {
+                      "default": "",
+                      "key": "Optional",
+                      "type": "string"
+                    },
+                    "dummy_receiver": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean"
+                    },
+                    "flush_timeout": {
+                      "default": "100ms",
+                      "key": "Optional",
+                      "schema": {
+                        "extends": [
+                          "core.positive_time_period_milliseconds"
+                        ]
+                      },
+                      "type": "schema"
+                    },
+                    "id": {
+                      "id_type": {
+                        "class": "usb_uart::USBUartChannel",
+                        "parents": [
+                          "uart::UARTComponent"
+                        ]
+                      },
+                      "key": "GeneratedID"
+                    },
+                    "parity": {
+                      "default": "NONE",
+                      "key": "Optional",
+                      "type": "enum",
+                      "values": {
+                        "NONE": null,
+                        "EVEN": null,
+                        "ODD": null,
+                        "MARK": null,
+                        "SPACE": null
+                      }
+                    },
+                    "stop_bits": {
+                      "default": "1",
+                      "key": "Optional",
+                      "type": "enum",
+                      "values": {
+                        "1": null,
+                        "1.5": null,
+                        "2": null
+                      }
+                    }
+                  }
+                },
+                "type": "schema",
+                "docs": "**list**: A list of channels to configure.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "id": {
+                "id_type": {
+                  "class": "usb_uart::USBUartTypePL2303",
+                  "parents": [
+                    "usb_uart::USBUartComponent",
+                    "Component"
+                  ]
+                },
+                "key": "GeneratedID",
+                "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: An id to assign to the channel. This id may be used anywhere a `uart` component is required.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "pid": {
+                "data_type": "hex_uint16_t",
+                "default": "9155",
+                "key": "Optional",
+                "docs": "**int**: The product ID of the device. Use 0 as a wildcard. Each type has a default PID which will be overridden if this is set.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "vid": {
+                "data_type": "hex_uint16_t",
+                "default": "1659",
+                "key": "Optional",
+                "docs": "**int**: The vendor ID of the device. Use 0 as a wildcard. Each type has a default VID which will be overridden if this is set.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "core.COMPONENT_SCHEMA"
+            ]
+          },
+          "STM32_VCP": {
+            "config_vars": {
+              "channels": {
+                "is_list": true,
+                "key": "Required",
+                "schema": {
+                  "config_vars": {
+                    "baud_rate": {
+                      "default": "9600",
+                      "key": "Optional",
+                      "type": "integer"
+                    },
+                    "buffer_size": {
+                      "default": "256",
+                      "key": "Optional",
+                      "type": "integer"
+                    },
+                    "data_bits": {
+                      "default": "8",
+                      "key": "Optional",
+                      "type": "integer"
+                    },
+                    "debug": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean"
+                    },
+                    "debug_prefix": {
+                      "default": "",
+                      "key": "Optional",
+                      "type": "string"
+                    },
+                    "dummy_receiver": {
+                      "default": "False",
+                      "key": "Optional",
+                      "type": "boolean"
+                    },
+                    "flush_timeout": {
+                      "default": "100ms",
+                      "key": "Optional",
+                      "schema": {
+                        "extends": [
+                          "core.positive_time_period_milliseconds"
+                        ]
+                      },
+                      "type": "schema"
+                    },
+                    "id": {
+                      "id_type": {
+                        "class": "usb_uart::USBUartChannel",
+                        "parents": [
+                          "uart::UARTComponent"
+                        ]
+                      },
+                      "key": "GeneratedID"
+                    },
+                    "parity": {
+                      "default": "NONE",
+                      "key": "Optional",
+                      "type": "enum",
+                      "values": {
+                        "NONE": null,
+                        "EVEN": null,
+                        "ODD": null,
+                        "MARK": null,
+                        "SPACE": null
+                      }
+                    },
+                    "stop_bits": {
+                      "default": "1",
+                      "key": "Optional",
+                      "type": "enum",
+                      "values": {
+                        "1": null,
+                        "1.5": null,
+                        "2": null
+                      }
+                    }
+                  }
+                },
+                "type": "schema",
+                "docs": "**list**: A list of channels to configure.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "id": {
+                "id_type": {
+                  "class": "usb_uart::USBUartTypeCdcAcm",
+                  "parents": [
+                    "usb_uart::USBUartComponent",
+                    "Component"
+                  ]
+                },
+                "key": "GeneratedID",
+                "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: An id to assign to the channel. This id may be used anywhere a `uart` component is required.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "pid": {
+                "data_type": "hex_uint16_t",
+                "default": "22336",
+                "key": "Optional",
+                "docs": "**int**: The product ID of the device. Use 0 as a wildcard. Each type has a default PID which will be overridden if this is set.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              },
+              "vid": {
+                "data_type": "hex_uint16_t",
+                "default": "1155",
+                "key": "Optional",
+                "docs": "**int**: The vendor ID of the device. Use 0 as a wildcard. Each type has a default VID which will be overridden if this is set.\n\n*See also: [USB Host UART Interface](https://esphome.io/components/usb_uart#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "core.COMPONENT_SCHEMA"
+            ]
+          }
+        },
+        "docs": "The type of USB-serial device to connect to. One of `ft23xx`, `ch34x`, `ch340`, `esp_jtag`, `stm32_vcp`, `cdc_acm`, `cp210x`, `pl2303`, `pl2303gc`, `pl2303gb`, `pl2303gt`, `pl2303gl`, `pl2303ge`, `pl2303gs`."
+      }
+    }
+  }
+}

@@ -1,0 +1,194 @@
+{
+  "hbridge.fan": {
+    "action": {
+      "brake": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "hbridge::HBridgeFan"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Set all h-bridge pins high, shorting the fan/motor's windings and forcing the motor to actively stop."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "decay_mode": {
+              "default": "SLOW",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "SLOW": null,
+                "FAST": null
+              },
+              "docs": "**string**: The decay mode you want to use with the h-bridge. Either `slow` (coasting) or `fast` (braking). Defaults to `slow`.\n\n*See also: [H-bridge Fan](https://esphome.io/components/fan/hbridge#configuration-variables)*"
+            },
+            "enable_pin": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "output::FloatOutput",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id of the [float output](https://esphome.io/components/output/) connected to the Enable pin of the h-bridge (if h-bridge uses enable).\n\n*See also: [H-bridge Fan](https://esphome.io/components/fan/hbridge#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "hbridge::HBridgeFan",
+                "parents": [
+                  "Component",
+                  "fan::Fan",
+                  "EntityBase"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "pin_a": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "output::FloatOutput",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id of the [float output](https://esphome.io/components/output/) connected to Pin A (alternatively IN1, etc.) of the h-bridge.\n\n*See also: [H-bridge Fan](https://esphome.io/components/fan/hbridge#configuration-variables)*"
+            },
+            "pin_b": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "output::FloatOutput",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id of the [float output](https://esphome.io/components/output/) connected to Pin B (alternatively IN2, etc.) of the h-bridge.\n\n*See also: [H-bridge Fan](https://esphome.io/components/fan/hbridge#configuration-variables)*"
+            },
+            "preset_modes": {
+              "key": "Optional",
+              "docs": "A list of preset modes for this fan. Preset modes can be used in automations (i.e. `on_preset_set`  ).\n\n*See also: [H-bridge Fan](https://esphome.io/components/fan/hbridge#configuration-variables)*"
+            },
+            "speed_count": {
+              "default": "100",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Set the number of supported discrete speed levels. The value is used to calculate the percentages for each speed. E.g. `2` means that you have 50% and 100% while `100` will allow 1% increments in the output. Defaults to `100`.\n\n*See also: [H-bridge Fan](https://esphome.io/components/fan/hbridge#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "fan._FAN_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "hbridge.light": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "output_id": {
+              "id_type": {
+                "class": "hbridge::HBridgeLightOutput",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "light::LightOutput"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "pin_a": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "output::FloatOutput",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id of the first float [Output Component](https://esphome.io/components/output/) to use for this light.\n\n*See also: [H-bridge Light](https://esphome.io/components/light/hbridge#configuration-variables)*"
+            },
+            "pin_b": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "output::FloatOutput",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id of the second float [Output Component](https://esphome.io/components/output/) to use for this light.\n\n*See also: [H-bridge Light](https://esphome.io/components/light/hbridge#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "8ms",
+              "key": "Optional"
+            }
+          },
+          "extends": [
+            "light.RGB_LIGHT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "hbridge.switch": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "hbridge::HBridgeSwitch",
+                "parents": [
+                  "switch_::Switch",
+                  "EntityBase",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "off_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The GPIO pin to pulse to turn off the switch.\n\n*See also: [H-bridge Switch](https://esphome.io/components/switch/hbridge#configuration-variables)*"
+            },
+            "on_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The GPIO pin to pulse to turn on the switch.\n\n*See also: [H-bridge Switch](https://esphome.io/components/switch/hbridge#configuration-variables)*"
+            },
+            "optimistic": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Whether to operate in optimistic mode - when in this mode, any command sent to the switch will immediately update the reported state. Defaults to `false`, and the reported state updates only at the end of the pulse.\n\n*See also: [H-bridge Switch](https://esphome.io/components/switch/hbridge#configuration-variables)*"
+            },
+            "pulse_length": {
+              "default": "100ms",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The length in milliseconds of the pulse sent on `on_pin` and `off_pin` to change switch state. Defaults to `100 ms`.\n\n*See also: [H-bridge Switch](https://esphome.io/components/switch/hbridge#configuration-variables)*"
+            },
+            "wait_time": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The time in milliseconds to delay between pulses on `off_pin` and `on_pin`. Defaults to no delay.\n\n*See also: [H-bridge Switch](https://esphome.io/components/switch/hbridge#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "switch._SWITCH_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

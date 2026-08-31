@@ -1,0 +1,49 @@
+{
+  "ntc.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "1"
+            },
+            "calibration": {
+              "key": "Required",
+              "docs": "**float**: The calibration parameters of the sensor - see above for more details.\n\n*See also: [NTC Sensor](https://esphome.io/components/sensor/ntc#configuration-variables)*"
+            },
+            "device_class": {
+              "default": "temperature"
+            },
+            "id": {
+              "id_type": {
+                "class": "ntc::NTC",
+                "parents": [
+                  "Component",
+                  "sensor::Sensor",
+                  "EntityBase"
+                ]
+              }
+            },
+            "sensor": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "sensor::Sensor",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The sensor to read the resistance values from to convert to temperature readings.\n\n*See also: [NTC Sensor](https://esphome.io/components/sensor/ntc#configuration-variables)*"
+            },
+            "state_class": {
+              "default": "measurement"
+            },
+            "unit_of_measurement": {
+              "default": "\u00b0C"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

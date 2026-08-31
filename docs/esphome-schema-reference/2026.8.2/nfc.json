@@ -1,0 +1,49 @@
+{
+  "nfc.binary_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "nfc::NfcTagBinarySensor",
+                "parents": [
+                  "binary_sensor::BinarySensor",
+                  "EntityBase",
+                  "Component",
+                  "nfc::NfcTagListener",
+                  "Parented<nfc::Nfcc>",
+                  "Parented"
+                ]
+              }
+            },
+            "ndef_contains": {
+              "key": "Optional",
+              "type": "string",
+              "docs": "**string**: A (sub)string that must appear in the tag's NDEF message. May not be used with `tag_id` and/or `uid` (below).\n\n*See also: [NFC Binary Sensor](https://esphome.io/components/binary_sensor/nfc#configuration-variables)*"
+            },
+            "nfcc_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "nfc::Nfcc"
+            },
+            "tag_id": {
+              "key": "Optional",
+              "type": "string",
+              "docs": "**string**: A string that identifies the tag; in effect, its name. Specifically, this looks for the Home Assistant URI encoded into one of the tag's NDEF records and then looks for this specific string. May not be used with `ndef_contains` and/or `uid`.\n\n*See also: [NFC Binary Sensor](https://esphome.io/components/binary_sensor/nfc#configuration-variables)*"
+            },
+            "uid": {
+              "key": "Optional",
+              "docs": "**string**: The unique ID of the NFC tag. This is a hyphen-separated list of hexadecimal values. For example: `74-10-37-94`. May not be used with `ndef_contains` and/or `tag_id` (above).\n\n*See also: [NFC Binary Sensor](https://esphome.io/components/binary_sensor/nfc#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "binary_sensor._BINARY_SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

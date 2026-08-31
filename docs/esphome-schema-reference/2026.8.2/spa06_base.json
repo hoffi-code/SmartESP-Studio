@@ -1,0 +1,159 @@
+{
+  "spa06_base": {
+    "schemas": {
+      "CONFIG_SCHEMA_BASE": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "spa06_base::SPA06Component",
+                "parents": [
+                  "PollingComponent",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "pressure": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "atmospheric_pressure"
+                  },
+                  "oversampling": {
+                    "default": "16X",
+                    "key": "Optional",
+                    "type": "enum",
+                    "values": {
+                      "NONE": null,
+                      "2X": null,
+                      "4X": null,
+                      "8X": null,
+                      "16X": null,
+                      "32X": null,
+                      "64X": null,
+                      "128X": null
+                    },
+                    "docs": "The oversampling rate for the pressure sensor. See [Oversampling Options](https://esphome.io/components/sensor/spa06#spa06-oversampling).\n\n*See also: [SPA06-003 Temperature+Pressure Sensor](https://esphome.io/components/sensor/spa06#configuration-variables)*"
+                  },
+                  "sample_rate": {
+                    "default": "1",
+                    "key": "Optional",
+                    "type": "enum",
+                    "values": {
+                      "1": null,
+                      "2": null,
+                      "4": null,
+                      "8": null,
+                      "16": null,
+                      "32": null,
+                      "64": null,
+                      "128": null,
+                      "25p16": null,
+                      "25p8": null,
+                      "25p4": null,
+                      "25p2": null,
+                      "25": null,
+                      "50": null,
+                      "100": null,
+                      "200": null
+                    },
+                    "docs": "The internal sample rate for the pressure sensor. See [Sample Rate](https://esphome.io/components/sensor/spa06#spa06-sample-rate).\n\n*See also: [SPA06-003 Temperature+Pressure Sensor](https://esphome.io/components/sensor/spa06#configuration-variables)*"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "Pa"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the pressure sensor.\n\n*See also: [SPA06-003 Temperature+Pressure Sensor](https://esphome.io/components/sensor/spa06#configuration-variables)*"
+            },
+            "temperature": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "oversampling": {
+                    "default": "NONE",
+                    "key": "Optional",
+                    "type": "enum",
+                    "values": {
+                      "NONE": null,
+                      "2X": null,
+                      "4X": null,
+                      "8X": null,
+                      "16X": null,
+                      "32X": null,
+                      "64X": null,
+                      "128X": null
+                    },
+                    "docs": "The oversampling rate for the temperature sensor. See [Oversampling Options](https://esphome.io/components/sensor/spa06#spa06-oversampling).\n\n*See also: [SPA06-003 Temperature+Pressure Sensor](https://esphome.io/components/sensor/spa06#configuration-variables)*"
+                  },
+                  "sample_rate": {
+                    "default": "1",
+                    "key": "Optional",
+                    "type": "enum",
+                    "values": {
+                      "1": null,
+                      "2": null,
+                      "4": null,
+                      "8": null,
+                      "16": null,
+                      "32": null,
+                      "64": null,
+                      "128": null,
+                      "25p16": null,
+                      "25p8": null,
+                      "25p4": null,
+                      "25p2": null,
+                      "25": null,
+                      "50": null,
+                      "100": null,
+                      "200": null
+                    },
+                    "docs": "The internal sample rate for the temperature sensor. See [Sample Rate](https://esphome.io/components/sensor/spa06#spa06-sample-rate).\n\n*See also: [SPA06-003 Temperature+Pressure Sensor](https://esphome.io/components/sensor/spa06#configuration-variables)*"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the temperature sensor.\n\n*See also: [SPA06-003 Temperature+Pressure Sensor](https://esphome.io/components/sensor/spa06#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`.\n\n*See also: [SPA06-003 Temperature+Pressure Sensor](https://esphome.io/components/sensor/spa06#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

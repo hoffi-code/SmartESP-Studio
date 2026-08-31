@@ -1,0 +1,37 @@
+{
+  "mixer_speaker": {
+    "action": {
+      "apply_ducking": {
+        "schema": {
+          "config_vars": {
+            "decibel_reduction": {
+              "key": "Required",
+              "templatable": true,
+              "type": "integer",
+              "docs": "**int**: The reduction of the media stream in decibels. Must be between 0 and 50.\n\n*See also: [Mixer Speaker](https://esphome.io/components/speaker/mixer#mixer_speakerapply_ducking-action)*"
+            },
+            "duration": {
+              "default": "0.0s",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "templatable": true,
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The length of time to transition between the current reduction level and the new reduction level. Defaults to `0s`.\n\n*See also: [Mixer Speaker](https://esphome.io/components/speaker/mixer#mixer_speakerapply_ducking-action)*"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "mixer_speaker::SourceSpeaker"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This action ducks (reduces the volume of) the media stream."
+      }
+    }
+  }
+}

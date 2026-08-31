@@ -1,0 +1,166 @@
+{
+  "atc_mithermometer.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "battery_level": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "battery"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "%"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the battery level sensor in %. All options from [Sensor](https://esphome.io/components/sensor/).\n\n*See also: [ATC MiThermometer](https://esphome.io/components/sensor/atc_mithermometer#configuration-variables)*"
+            },
+            "battery_voltage": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "3"
+                  },
+                  "device_class": {
+                    "default": "voltage"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "V"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the battery voltage sensor. All options from [Sensor](https://esphome.io/components/sensor/).\n\n*See also: [ATC MiThermometer](https://esphome.io/components/sensor/atc_mithermometer#configuration-variables)*"
+            },
+            "ble_hub_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "ble_device_base::BLEHub",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The BLE tracker hub to receive advertisements from. Auto-generated when only one tracker is configured; set it explicitly to disambiguate multiple trackers. Replaces the former `esp32_ble_id` key, which still works as a deprecated alias until ESPHome 2027.2.0.\n\n*See also: [ATC MiThermometer](https://esphome.io/components/sensor/atc_mithermometer#configuration-variables)*"
+            },
+            "humidity": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "humidity"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "%"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the humidity sensor. All options from [Sensor](https://esphome.io/components/sensor/).\n\n*See also: [ATC MiThermometer](https://esphome.io/components/sensor/atc_mithermometer#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "atc_mithermometer::ATCMiThermometer",
+                "parents": [
+                  "ble_device_base::ESPBTDeviceListener",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [ATC MiThermometer](https://esphome.io/components/sensor/atc_mithermometer#configuration-variables)*"
+            },
+            "mac_address": {
+              "key": "Required",
+              "docs": "**MAC Address**: The MAC address of the device.\n\n*See also: [ATC MiThermometer](https://esphome.io/components/sensor/atc_mithermometer#configuration-variables)*"
+            },
+            "signal_strength": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "signal_strength"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "dBm"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the received signal strength sensor in dBm. All options from [Sensor](https://esphome.io/components/sensor/).\n\n*See also: [ATC MiThermometer](https://esphome.io/components/sensor/atc_mithermometer#configuration-variables)*"
+            },
+            "temperature": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the temperature sensor. All options from [Sensor](https://esphome.io/components/sensor/).\n\n*See also: [ATC MiThermometer](https://esphome.io/components/sensor/atc_mithermometer#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

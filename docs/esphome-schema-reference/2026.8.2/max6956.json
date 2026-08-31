@@ -1,0 +1,141 @@
+{
+  "max6956": {
+    "action": {
+      "set_brightness_global": {
+        "maybe": "brightness_global",
+        "schema": {
+          "config_vars": {
+            "brightness_global": {
+              "key": "Required",
+              "templatable": true,
+              "type": "integer"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "max6956::MAX6956"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "set_brightness_mode": {
+        "maybe": "brightness_mode",
+        "schema": {
+          "config_vars": {
+            "brightness_mode": {
+              "key": "Required",
+              "templatable": true,
+              "type": "enum",
+              "values": {
+                "global": null,
+                "segment": null
+              }
+            },
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "max6956::MAX6956"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    },
+    "pin": {
+      "schema": {
+        "extends": [
+          "max6956.MAX6956_PIN_SCHEMA"
+        ]
+      },
+      "type": "schema"
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "64",
+              "key": "Optional",
+              "docs": "**int**: The I\u00b2C address of the driver. Defaults to `0x40`.\n\n*See also: [MAX6956 I/O Expander](https://esphome.io/components/max6956#configuration-variables)*"
+            },
+            "brightness_global": {
+              "default": "0",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "Set the value of the current to be sink by all pins configured as led driver. Defaults to `0`\n\n*See also: [MAX6956 I/O Expander](https://esphome.io/components/max6956#configuration-variables)*"
+            },
+            "brightness_mode": {
+              "default": "global",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "global": null,
+                "segment": null
+              },
+              "docs": "Define if the current to be sink will be confgured globaly or per pin configured as led driver. Defaults to `global`\n\n*See also: [MAX6956 I/O Expander](https://esphome.io/components/max6956#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus",
+              "docs": "The I\u00b2C Bus ID Defaults to `false`\n\n*See also: [MAX6956 I/O Expander](https://esphome.io/components/max6956#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "max6956::MAX6956",
+                "parents": [
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "Required",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id to use for this `max6956` component.\n\n*See also: [MAX6956 I/O Expander](https://esphome.io/components/max6956#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "max6956.output": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "max6956::MAX6956LedChannel",
+                "parents": [
+                  "output::FloatOutput",
+                  "output::BinaryOutput",
+                  "Component"
+                ]
+              },
+              "key": "Required"
+            },
+            "max6956": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "max6956::MAX6956"
+            },
+            "pin": {
+              "key": "Required",
+              "type": "integer"
+            }
+          },
+          "extends": [
+            "output.FLOAT_OUTPUT_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

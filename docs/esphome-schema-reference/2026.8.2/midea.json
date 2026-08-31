@@ -1,0 +1,227 @@
+{
+  "midea.climate": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "autoconf": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Get capabilities automatically. Allows you not to manually define most of the capabilities of the appliance. Defaults to `True`.\n\n*See also: [Midea Air Conditioner](https://esphome.io/components/climate/midea#configuration-variables)*"
+            },
+            "beeper": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Beeper feedback on command. Defaults to `False`.\n\n*See also: [Midea Air Conditioner](https://esphome.io/components/climate/midea#configuration-variables)*"
+            },
+            "custom_fan_modes": {
+              "is_list": true,
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "SILENT": null,
+                "TURBO": null
+              },
+              "docs": "**list**: List of supported custom fan modes. Possible values are: `SILENT`, `TURBO`.\n\n*See also: [Midea Air Conditioner](https://esphome.io/components/climate/midea#configuration-variables)*"
+            },
+            "custom_presets": {
+              "is_list": true,
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "FREEZE_PROTECTION": null
+              },
+              "docs": "**list**: List of supported custom presets. Possible values are: `FREEZE_PROTECTION`.\n\n*See also: [Midea Air Conditioner](https://esphome.io/components/climate/midea#configuration-variables)*"
+            },
+            "humidity_setpoint": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "humidity"
+                  },
+                  "icon": {
+                    "default": "mdi:water-percent"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "%"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the humidity indoor sensor (experimental).\n\n*See also: [Midea Air Conditioner](https://esphome.io/components/climate/midea#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "midea::ac::AirConditioner",
+                "parents": [
+                  "climate::Climate",
+                  "EntityBase",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "num_attempts": {
+              "default": "3",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Number of request attempts between 1 and 5 inclusive. Defaults to `3`.\n\n*See also: [Midea Air Conditioner](https://esphome.io/components/climate/midea#configuration-variables)*"
+            },
+            "outdoor_temperature": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "icon": {
+                    "default": "mdi:thermometer"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the outdoor temperature sensor.\n\n*See also: [Midea Air Conditioner](https://esphome.io/components/climate/midea#configuration-variables)*"
+            },
+            "period": {
+              "default": "1s",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.time_period"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: Minimal period between requests to the appliance. Defaults to `1s`.\n\n*See also: [Midea Air Conditioner](https://esphome.io/components/climate/midea#configuration-variables)*"
+            },
+            "power_usage": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "power"
+                  },
+                  "icon": {
+                    "default": "mdi:power"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "W"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the current power consumption sensor.\n\n*See also: [Midea Air Conditioner](https://esphome.io/components/climate/midea#configuration-variables)*"
+            },
+            "supported_modes": {
+              "is_list": true,
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "HEAT_COOL": null,
+                "COOL": null,
+                "HEAT": null,
+                "DRY": null,
+                "FAN_ONLY": null
+              },
+              "docs": "**list**: List of supported modes. Possible values are: `HEAT_COOL`, `COOL`, `HEAT`, `DRY`, `FAN_ONLY`.\n\n*See also: [Midea Air Conditioner](https://esphome.io/components/climate/midea#configuration-variables)*"
+            },
+            "supported_presets": {
+              "is_list": true,
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "ECO": null,
+                "BOOST": null,
+                "SLEEP": null
+              },
+              "docs": "**list**: List of supported presets. Possible values are: `ECO`, `BOOST`, `SLEEP`.\n\n*See also: [Midea Air Conditioner](https://esphome.io/components/climate/midea#configuration-variables)*"
+            },
+            "supported_swing_modes": {
+              "is_list": true,
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "BOTH": null,
+                "VERTICAL": null,
+                "HORIZONTAL": null
+              },
+              "docs": "**list**: List of supported swing modes. Possible values are: `VERTICAL`, `HORIZONTAL`, `BOTH`.\n\n*See also: [Midea Air Conditioner](https://esphome.io/components/climate/midea#configuration-variables)*"
+            },
+            "timeout": {
+              "default": "2s",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.time_period"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: Request response timeout until next request attempt. Defaults to `2s`.\n\n*See also: [Midea Air Conditioner](https://esphome.io/components/climate/midea#configuration-variables)*"
+            },
+            "transmitter_id": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "remote_transmitter::RemoteTransmitterComponent",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Defined and used automatically when using [Remote Transmitter](https://esphome.io/components/remote_transmitter/) component for IR commands transmit.\n\n*See also: [Midea Air Conditioner](https://esphome.io/components/climate/midea#configuration-variables)*"
+            },
+            "uart_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "uart::UARTComponent",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the [Uart](https://esphome.io/components/uart/) if you want to use multiple UART buses.\n\n*See also: [Midea Air Conditioner](https://esphome.io/components/climate/midea#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "climate._CLIMATE_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "MIDEA_ACTION_BASE_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "midea::ac::AirConditioner"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

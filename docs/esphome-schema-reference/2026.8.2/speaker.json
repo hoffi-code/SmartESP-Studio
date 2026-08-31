@@ -1,0 +1,386 @@
+{
+  "speaker": {
+    "action": {
+      "finish": {
+        "schema": {
+          "extends": [
+            "speaker.SPEAKER_AUTOMATION_SCHEMA"
+          ],
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The speaker to control. Defaults to the only one in YAML.\n\n*See also: [Speaker Components](https://esphome.io/components/speaker#speakerfinish-action)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This action will stop playing audio data from the speaker after all data **is** played."
+      },
+      "mute_off": {
+        "schema": {
+          "extends": [
+            "speaker.SPEAKER_AUTOMATION_SCHEMA"
+          ],
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The speaker to control. Defaults to the only one in YAML.\n\n*See also: [Speaker Components](https://esphome.io/components/speaker#speakermute_off-action)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This action will unmute the speaker."
+      },
+      "mute_on": {
+        "schema": {
+          "extends": [
+            "speaker.SPEAKER_AUTOMATION_SCHEMA"
+          ],
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The speaker to control. Defaults to the only one in YAML.\n\n*See also: [Speaker Components](https://esphome.io/components/speaker#speakermute_on-action)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This action will mute the speaker."
+      },
+      "play": {
+        "maybe": "data",
+        "schema": {
+          "config_vars": {
+            "data": {
+              "data_type": "hex_uint8_t",
+              "is_list": true,
+              "key": "Required",
+              "templatable": true,
+              "docs": "**list of bytes**: The raw audio data to play.\n\n*See also: [Speaker Components](https://esphome.io/components/speaker#speakerplay-action)*"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "speaker::Speaker",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The speaker to control. Defaults to the only one in YAML.\n\n*See also: [Speaker Components](https://esphome.io/components/speaker#speakerplay-action)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This action will start playing raw audio data from the speaker."
+      },
+      "stop": {
+        "schema": {
+          "extends": [
+            "speaker.SPEAKER_AUTOMATION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action will stop playing audio data from the speaker and discard the unplayed data."
+      },
+      "volume_set": {
+        "maybe": "volume",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "speaker::Speaker"
+            },
+            "volume": {
+              "key": "Required",
+              "templatable": true
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This action will set the volume of the speaker."
+      }
+    },
+    "components": {
+      "i2s_audio": {
+        "dependencies": [
+          "i2s_audio"
+        ]
+      },
+      "mixer": {
+        "docs": "The `mixer` speaker platform allows you to mix audio sent to different source speakers into one output which is sent to another [speaker component](https://esphome.io/components/speaker/). Individual source speakers may be ducked (made quieter) with the [apply ducking action](https://esphome.io/components/speaker/mixer#mixer_speaker-apply_ducking).\n\n*See also: [Mixer Speaker](https://esphome.io/components/speaker/mixer)*"
+      },
+      "resampler": {
+        "docs": "The `resampler` speaker platform allows you to convert the sample rate of an audio stream and output it to another [speaker component](https://esphome.io/components/speaker/).\n\n*See also: [Resampler Speaker](https://esphome.io/components/speaker/resampler)*"
+      },
+      "router": {
+        "docs": "The `router` speaker platform allows you to switch which [speaker component](https://esphome.io/components/speaker/) receives audio at runtime. The router acts as a single speaker that an audio producer (such as a [media player](https://esphome.io/components/media_player/) or a [mixer speaker](https://esphome.io/components/speaker/mixer/)) sends audio to, and it forwards that audio to whichever output speaker is currently active. Use the [switch output action](https://esphome.io/components/speaker/router#router_speaker-switch_output) to change the active output while audio is playing, for example to move playback between an I\u00b2S speaker and an [SPDIF](https://esphome.io/components/speaker/i2s_audio/#spdif-mode) output.\n\n*See also: [Router Speaker](https://esphome.io/components/speaker/router)*"
+      }
+    },
+    "condition": {
+      "is_playing": {
+        "schema": {
+          "extends": [
+            "speaker.SPEAKER_AUTOMATION_SCHEMA"
+          ],
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The speaker to check. Defaults to the only one in YAML.\n\n*See also: [Speaker Components](https://esphome.io/components/speaker#speakeris_playing-condition)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This condition will check if the speaker is currently playing audio data."
+      },
+      "is_stopped": {
+        "schema": {
+          "extends": [
+            "speaker.SPEAKER_AUTOMATION_SCHEMA"
+          ],
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The speaker to check. Defaults to the only one in YAML.\n\n*See also: [Speaker Components](https://esphome.io/components/speaker#speakeris_stopped-condition)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This condition will check if the speaker is fully stopped audio data and is in idle mode."
+      }
+    },
+    "schemas": {
+      "SPEAKER_AUTOMATION_SCHEMA": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "speaker::Speaker",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The speaker to control. Defaults to the only one in YAML.\n\n*See also: [Speaker Components](https://esphome.io/components/speaker#speakerstop-action)*"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "SPEAKER_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "audio_dac": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "audio_dac::AudioDac",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The [audio DAC](https://esphome.io/components/audio_dac/) to use for volume control.\n\n*See also: [Speaker Components](https://esphome.io/components/speaker#base-speaker-configuration)*"
+            },
+            "bits_per_sample": {
+              "key": "Optional",
+              "type": "integer"
+            },
+            "num_channels": {
+              "key": "Optional",
+              "type": "integer"
+            },
+            "sample_rate": {
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**positive integer**: Sample rate to convert to. Must be between `8000` and `48000`. Defaults to the output speaker's sample rate.\n\n*See also: [Resampler Speaker](https://esphome.io/components/speaker/resampler#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "speaker.media_player": {
+    "action": {
+      "play_on_device_media_file": {
+        "maybe": "media_file",
+        "schema": {
+          "config_vars": {
+            "announcement": {
+              "default": "False",
+              "key": "Optional",
+              "templatable": true,
+              "type": "boolean",
+              "docs": "**boolean**: Whether to play back the file as an announcement or media stream. Defaults to `false`.\n\n*See also: [Speaker Audio Media Player](https://esphome.io/components/media_player/speaker#media_playerspeakerplay_on_device_media_file-action)*"
+            },
+            "enqueue": {
+              "default": "False",
+              "key": "Optional",
+              "templatable": true,
+              "type": "boolean",
+              "docs": "**boolean**: Whether to add the media file to the end of the pipeline's internal playlist. Defaults to `false`.\n\n*See also: [Speaker Audio Media Player](https://esphome.io/components/media_player/speaker#media_playerspeakerplay_on_device_media_file-action)*"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "speaker::SpeakerMediaPlayer"
+            },
+            "media_file": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "audio::AudioFile",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the media file.\n\n*See also: [Speaker Audio Media Player](https://esphome.io/components/media_player/speaker#media_playerspeakerplay_on_device_media_file-action)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This action will play a on-device media file."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "announcement_pipeline": {
+              "key": "Required",
+              "schema": {
+                "extends": [
+                  "speaker.media_player.PIPELINE_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "**Pipeline Schema**: Configuration settings for the announcement pipeline.\n\n*See also: [Speaker Audio Media Player](https://esphome.io/components/media_player/speaker#configuration-variables)*"
+            },
+            "buffer_size": {
+              "default": "1000000",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**positive integer**: The buffer size in bytes for each pipeline. Must be between `4000` and `4000000`. Defaults to `1000000`.\n\n*See also: [Speaker Audio Media Player](https://esphome.io/components/media_player/speaker#configuration-variables)*"
+            },
+            "codec_support_enabled": {
+              "key": "Optional",
+              "type": "string"
+            },
+            "files": {
+              "is_list": true,
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "audio_file.MEDIA_FILE_TYPE_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "**list**: A list of media files to build into the firmware for on-device playback.\n\n*See also: [Speaker Audio Media Player](https://esphome.io/components/media_player/speaker#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "speaker::SpeakerMediaPlayer",
+                "parents": [
+                  "media_player::MediaPlayer",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "media_pipeline": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "speaker.media_player.PIPELINE_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "**Pipeline Schema**: Configuration settings for the media pipeline. Same options as the `announcement_pipeline`.\n\n*See also: [Speaker Audio Media Player](https://esphome.io/components/media_player/speaker#configuration-variables)*"
+            },
+            "on_mute": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform when muted.\n\n*See also: [Speaker Audio Media Player](https://esphome.io/components/media_player/speaker#configuration-variables)*"
+            },
+            "on_unmute": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform when unmuted.\n\n*See also: [Speaker Audio Media Player](https://esphome.io/components/media_player/speaker#configuration-variables)*"
+            },
+            "on_volume": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform when the volume is changed.\n\n*See also: [Speaker Audio Media Player](https://esphome.io/components/media_player/speaker#configuration-variables)*"
+            },
+            "task_stack_in_psram": {
+              "key": "Optional",
+              "docs": "**boolean**: Run the audio tasks in external memory. Defaults to `false`.\n\n*See also: [Speaker Audio Media Player](https://esphome.io/components/media_player/speaker#configuration-variables)*"
+            },
+            "volume_increment": {
+              "default": "0.05",
+              "key": "Optional",
+              "docs": "**percentage**: Increment amount that the `media_player.volume_up` and `media_player.volume_down` actions will increase or decrease volume by. Defaults to `5%`.\n\n*See also: [Speaker Audio Media Player](https://esphome.io/components/media_player/speaker#configuration-variables)*"
+            },
+            "volume_initial": {
+              "default": "0.5",
+              "key": "Optional",
+              "docs": "**percentage**: The default volume that mediaplayer uses for first boot where a volume has not been previously saved. Defaults to `50%`.\n\n*See also: [Speaker Audio Media Player](https://esphome.io/components/media_player/speaker#configuration-variables)*"
+            },
+            "volume_max": {
+              "default": "1.0",
+              "key": "Optional",
+              "docs": "**percentage**: The maximum volume allowed. Defaults to `100%`.\n\n*See also: [Speaker Audio Media Player](https://esphome.io/components/media_player/speaker#configuration-variables)*"
+            },
+            "volume_min": {
+              "default": "0.0",
+              "key": "Optional",
+              "docs": "**percentage**: The minimum volume allowed. Defaults to `0%`.\n\n*See also: [Speaker Audio Media Player](https://esphome.io/components/media_player/speaker#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "media_player._MEDIA_PLAYER_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "FINAL_VALIDATE_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "announcement_pipeline": {
+              "key": "Optional"
+            },
+            "media_pipeline": {
+              "key": "Optional"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "PIPELINE_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "format": {
+              "default": "FLAC",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "NONE": null,
+                "WAV": null,
+                "MP3": null,
+                "FLAC": null,
+                "OPUS": null
+              },
+              "docs": "**enum**: The audio format Home Assistant will transcode audio to before sending it to the device. One of `FLAC`, `MP3`, `OPUS`, `WAV`, or `NONE`. `NONE` disables transcoding in Home Assistant; ESPHome will then compile support for all supported codecs (`FLAC`, `MP3`, `OPUS`, and `WAV`), which increases firmware size. To compile in additional codecs without setting this to `NONE`, use the [Audio](https://esphome.io/components/audio/) component. Defaults to `FLAC`.\n\n*See also: [Speaker Audio Media Player](https://esphome.io/components/media_player/speaker#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "speaker::AudioPipeline",
+                "parents": []
+              },
+              "key": "GeneratedID"
+            },
+            "num_channels": {
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**positive integer**: Number of channels for the transcoded audio. Must be either `1` or `2`. Defaults to the speaker's number of channels.\n\n*See also: [Speaker Audio Media Player](https://esphome.io/components/media_player/speaker#configuration-variables)*"
+            },
+            "sample_rate": {
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**positive integer**: Sample rate for the transcoded audio. Should be supported by the configured `speaker` component. Defaults to the speaker's sample rate. The `OPUS` codec only supports a `48000` sample rate.\n\n*See also: [Speaker Audio Media Player](https://esphome.io/components/media_player/speaker#configuration-variables)*"
+            },
+            "speaker": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "speaker::Speaker",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The [speaker](https://esphome.io/components/speaker/) to output the audio.\n\n*See also: [Speaker Audio Media Player](https://esphome.io/components/media_player/speaker#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "udp": {
+    "action": {
+      "write": {
+        "maybe": "data",
+        "schema": {
+          "config_vars": {
+            "data": {
+              "key": "Required",
+              "templatable": true
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "udp::UDPComponent"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "To write data to the UDP port, use the `udp.write` action. This action takes a single argument, the data to write to the UDP port."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "addresses": {
+              "default": "['255.255.255.255']",
+              "is_list": true,
+              "key": "Optional",
+              "docs": "**list of IPv4 addresses**: One or more IP addresses to broadcast data to. Defaults to `255.255.255.255` which is the local network broadcast address.\n\n*See also: [UDP Component](https://esphome.io/components/udp#configuration-variables)*"
+            },
+            "binary_sensors": {
+              "key": "Optional"
+            },
+            "encryption": {
+              "key": "Optional"
+            },
+            "id": {
+              "id_type": {
+                "class": "udp::UDPComponent",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [UDP Component](https://esphome.io/components/udp#configuration-variables)*"
+            },
+            "listen_address": {
+              "default": "255.255.255.255",
+              "key": "Optional",
+              "docs": "**IPv4 address**: Changes to multicast, adding an address to listen to. Defaults to no multicast address, just local network broadcast address `255.255.255.255`. **NOTE**: Adding a multicast address stops it from listening on the broadcast address.\n\n*See also: [UDP Component](https://esphome.io/components/udp#configuration-variables)*"
+            },
+            "on_receive": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "ping_pong_enable": {
+              "key": "Optional"
+            },
+            "port": {
+              "data_type": "port",
+              "default": "18511",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: The destination UDP port number to use. Defaults to `18511`. Different listen and broadcast ports can be specified via a map instead of a single port number.:\n\n*See also: [UDP Component](https://esphome.io/components/udp#configuration-variables)*"
+            },
+            "providers": {
+              "key": "Optional"
+            },
+            "rolling_code_enable": {
+              "key": "Optional"
+            },
+            "sensors": {
+              "key": "Optional"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "UDP_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "udp_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "udp::UDPComponent"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "udp.packet_transport": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "udp::UDPTransport",
+                "parents": [
+                  "packet_transport::PacketTransport",
+                  "PollingComponent",
+                  "Component",
+                  "PollingComponent",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            }
+          },
+          "extends": [
+            "packet_transport.TRANSPORT_SCHEMA",
+            "udp.UDP_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

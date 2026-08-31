@@ -1,0 +1,88 @@
+{
+  "bp5758d": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "clock_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin which CLK is\n\n*See also: [BP5758D LED driver](https://esphome.io/components/output/bp5758d#configuration-variables)*"
+            },
+            "data_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin used for DATA.\n\n*See also: [BP5758D LED driver](https://esphome.io/components/output/bp5758d#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "bp5758d::BP5758D",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id to use for\n\n*See also: [BP5758D LED driver](https://esphome.io/components/output/bp5758d#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "bp5758d.output": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "bp5758d_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "bp5758d::BP5758D",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the [Component/Hub](https://esphome.io/components/output/bp5758d#bp5758d-component). Use this if you have multiple BP5758D chains you want to use at the same time.\n\n*See also: [BP5758D LED driver](https://esphome.io/components/output/bp5758d#configuration-variables)*"
+            },
+            "channel": {
+              "key": "Required",
+              "type": "integer",
+              "docs": "**int**: Chose the channel of the BP5758D chain of this output component. Valid values are 1-5.\n\n*See also: [BP5758D LED driver](https://esphome.io/components/output/bp5758d#configuration-variables)*"
+            },
+            "current": {
+              "default": "10",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Current in mA, valid values are 0-90, default 10.\n\n*See also: [BP5758D LED driver](https://esphome.io/components/output/bp5758d#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "bp5758d::BP5758D::Channel",
+                "parents": [
+                  "output::FloatOutput",
+                  "output::BinaryOutput"
+                ]
+              },
+              "key": "Required",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id to use for this output component.\n\n*See also: [BP5758D LED driver](https://esphome.io/components/output/bp5758d#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "output.FLOAT_OUTPUT_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -7,7 +7,7 @@ on:
     tags:
       - "v*.*.*"
     paths:
-      - "esp-config-designer/**"
+      - "smartesp-studio/**"
       - ".github/workflows/docker-standalone.yml"
   workflow_dispatch:
 
@@ -40,7 +40,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/sokolsok/esp-config-designer
+          images: ghcr.io/hoffi-code/smartesp-studio
           tags: |
             type=raw,value=edge,enable=${{ github.ref == 'refs/heads/main' }}
             type=semver,pattern={{version}}
@@ -50,8 +50,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          context: ./esp-config-designer
-          file: ./esp-config-designer/Dockerfile.standalone
+          context: .
+          file: ./smartesp-studio/Dockerfile.standalone
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.meta.outputs.tags }}

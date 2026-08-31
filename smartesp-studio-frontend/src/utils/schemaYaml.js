@@ -1,0 +1,3022 @@
+import { isFieldVisible } from "./schemaVisibility";
+import { colorToLambda } from "./displayColor";
+import { isSecretReferenceValue, resolveAutoValue } from "./schemaAuto";
+import {
+  normalizeAnimationElementEncoding,
+  normalizeImageElementEncoding
+} from "./displayImageEncoding";
+import {
+  getTemplatableInnerValue,
+  getTemplatableMode,
+  isTemplatableField
+} from "./schemaTemplatable";
+import { serializeGpioValue } from "./schemaGpio";
+import { parseGoogleFontVariant } from "./displayFonts";
+import { createGeneratedYamlLine } from "./yamlDocumentModel";
+import { fieldModeLevel, maxModeLevel, normalizeModeLevel } from "./schemaModeLevel";
+
+// schemaYaml is the central YAML emission pipeline for the Builder.
+// It converts normalized runtime config plus schema metadata into final ESPHome YAML,
+// including special handling for actions/conditions, embedded sections, root_map
+// components, and display-builder generated assets/lambdas.
+
+const componentIdFromEntry = (entry) =>
+  typeof entry === "string" ? entry : entry?.id || "";
+
+const yamlLineOrigins = new WeakMap();
+
+const lineOriginList = (lines) => {
+  if (!lines || typeof lines !== "object") return [];
+  if (!yamlLineOrigins.has(lines)) {
+    yamlLineOrigins.set(lines, []);
+  }
+  return yamlLineOrigins.get(lines);
+};
+
+const setLineOrigin = (lines, index, origin) => {
+  if (!origin || index < 0) return;
+  const origins = lineOriginList(lines);
+  origins[index] = origin;
+};
+
+const getLineOrigin = (lines, index) => lineOriginList(lines)[index] || null;
+
+const markNewLines = (lines, startIndex, origin) => {
+  if (!origin) return;
+  const origins = lineOriginList(lines);
+  for (let index = startIndex; index < lines.length; index += 1) {
+    if (!origins[index]) origins[index] = origin;
+  }
+};
+
+export const pushYamlLine = (lines, text, origin = null) => {
+  const index = lines.length;
+  lines.push(text);
+  setLineOrigin(lines, index, origin);
+};
+
+const appendYamlLines = (target, source) => {
+  const sourceOrigins = lineOriginList(source);
+  source.forEach((line, index) => {
+    const targetIndex = target.length;
+    target.push(line);
+    if (sourceOrigins[index]) setLineOrigin(target, targetIndex, sourceOrigins[index]);
+  });
+};
+
+const makeSourceOrigin = (context, overrides = {}) => {
+  if (!context) return null;
+  const path = Array.isArray(overrides.path)
+    ? overrides.path
+    : Array.isArray(context.path)
+      ? context.path
+      : [];
+  return {
+    owner: context.owner || "schema",
+    type: overrides.type || "field",
+    scopeId: context.scopeId || "",
+    tabKey: context.tabKey || "",
+    componentIndex: context.componentIndex,
+    componentId: context.componentId || "",
+    path,
+    fieldKey: overrides.fieldKey || path[path.length - 1] || "",
+    modeLevel: normalizeModeLevel(overrides.modeLevel || context.modeLevel || "Simple"),
+    confidence: overrides.confidence || "exact",
+    contentKind: overrides.contentKind || "schema"
+  };
+};
+
+const childSourceContext = (context, path, overrides = {}) => {
+  if (!context) return null;
+  return {
+    ...context,
+    ...overrides,
+    path,
+    modeLevel: normalizeModeLevel(overrides.modeLevel || context.modeLevel || "Simple")
+  };
+};
+
+const linesToGeneratedYamlLines = (lines, blockKey = "") => {
+  const origins = lineOriginList(lines);
+  return lines.map((line, index) =>
+    createGeneratedYamlLine({
+      text: line,
+      blockKey,
+      origin: origins[index] || null,
+      id: `generated:${blockKey || "root"}:${index}:${origins[index]?.scopeId || "none"}`
+    })
+  );
+};
+
+const resolveComponentRenderAs = (schema) => {
+  const renderAs = typeof schema?.renderAs === "string" ? schema.renderAs.trim().toLowerCase() : "";
+  if (renderAs === "root_map") return "root_map";
+  if (renderAs === "root_list") return "root_list";
+  return "list";
+};
+
+const resolveSchemaDomain = (schema, config) => {
+  const fallbackDomain = typeof schema?.domain === "string" ? schema.domain.trim() : "";
+  const domainBy = typeof schema?.domainBy === "string" ? schema.domainBy.trim() : "";
+  const domainMap = isPlainObject(schema?.domainMap) ? schema.domainMap : null;
+  const mappedDomainValue = domainBy ? config?.[domainBy] : undefined;
+  const mappedDomain =
+    domainMap && mappedDomainValue !== undefined && domainMap[String(mappedDomainValue)]
+      ? String(domainMap[String(mappedDomainValue)]).trim()
+      : "";
+  return mappedDomain || fallbackDomain || "component";
+};
+
+const filterSchemaFieldsForYaml = (fields = [], schema = null) =>
+  (Array.isArray(fields) ? fields : []).map((field) => {
+    if (schema?.platformByBus && field?.key === "bus") {
+      return { ...field, emitYAML: "never" };
+    }
+    return field;
+  });
+
+const isYamlPrimitive = (value) =>
+  value === null || ["string", "number", "boolean"].includes(typeof value);
+
+const resolveFieldOptions = (fieldType) => {
+  if (!fieldType) return { type: "" };
+  if (typeof fieldType === "string") return { type: fieldType };
+  return fieldType;
+};
+
+const hasFieldDependencies = (field) =>
+  Boolean(field?.dependsOn || field?.globalDependsOn);
+
+const resolveEmitMode = (field) => {
+  const mode = field?.emitYAML;
+  if (mode === "never" || mode === "always" || mode === "visible" || mode === "dependsOn") {
+    return mode;
+  }
+  if (hasFieldDependencies(field)) return "dependsOn";
+  return "visible";
+};
+
+const isDeepEqual = (left, right) => {
+  if (left === right) return true;
+  if (Array.isArray(left) && Array.isArray(right)) {
+    if (left.length !== right.length) return false;
+    return left.every((value, index) => isDeepEqual(value, right[index]));
+  }
+  if (
+    left &&
+    right &&
+    typeof left === "object" &&
+    typeof right === "object" &&
+    !Array.isArray(left) &&
+    !Array.isArray(right)
+  ) {
+    const leftKeys = Object.keys(left);
+    const rightKeys = Object.keys(right);
+    if (leftKeys.length !== rightKeys.length) return false;
+    return leftKeys.every((key) => isDeepEqual(left[key], right[key]));
+  }
+  return false;
+};
+
+const resolveFieldDefault = (field) => {
+  if (field?.default !== undefined) return field.default;
+  if (field?.type === "boolean") return false;
+  return undefined;
+};
+
+const resolveFieldYamlKey = (field) => {
+  if (typeof field?.emitKey === "string" && field.emitKey.trim() && field.emitKey !== "inline") {
+    return field.emitKey.trim();
+  }
+  if (typeof field?.yamlKey === "string" && field.yamlKey.trim()) {
+    return field.yamlKey.trim();
+  }
+  return field?.key || "";
+};
+
+const shouldSuppressDefaultValue = (field, value) => {
+  if (!field || resolveEmitMode(field) === "always" || field.required) return false;
+  if (field.type !== "boolean" && field.type !== "select") return false;
+  const defaultValue = resolveFieldDefault(field);
+  if (defaultValue === undefined) return false;
+  return isDeepEqual(value, defaultValue);
+};
+
+export const formatYamlValue = (value, fieldType) => {
+  const fieldOptions = resolveFieldOptions(fieldType);
+  const resolvedType = fieldOptions.type || fieldType;
+  if (value === null) return "null";
+  if (typeof value === "boolean") return value ? "true" : "false";
+  if (typeof value === "number") return String(value);
+  if (typeof value === "string") {
+    if (isSecretReferenceValue(value)) return value;
+    if (fieldOptions.suppressQuotes) return value;
+    if (
+      resolvedType === "lambda" ||
+      resolvedType === "id" ||
+      resolvedType === "id_ref" ||
+      resolvedType === "slug"
+    ) {
+      return value;
+    }
+    if (
+      resolvedType === "text" ||
+      resolvedType === "icon" ||
+      resolvedType === "ssid" ||
+      resolvedType === "password"
+    ) {
+      return `"${value.replace(/"/g, "\\\"")}"`;
+    }
+    return value;
+  }
+  return String(value);
+};
+
+const formatYamlAutoValue = (value) => {
+  if (typeof value === "number") return String(value);
+  if (typeof value === "boolean") return value ? "true" : "false";
+  if (typeof value !== "string") return formatYamlValue(value);
+  const trimmed = value.trim();
+  if (!trimmed) return "\"\"";
+  if (/^-?\d+(?:\.\d+)?$/.test(trimmed)) return trimmed;
+  return `"${trimmed.replace(/"/g, "\\\"")}"`;
+};
+
+const renderLambdaAssignment = (prefix, value, indent, lines, tag = "") => {
+  const normalized = String(value || "");
+  const suffix = tag ? ` ${tag}` : "";
+  if (/[\r\n]/.test(normalized)) {
+    lines.push(`${prefix}:${suffix} |-`);
+    normalized.split(/\r?\n/).forEach((line) => {
+      lines.push(`${" ".repeat(indent)}${line}`);
+    });
+    return;
+  }
+  lines.push(`${prefix}:${suffix} ${normalized}`);
+};
+
+const canRenderFlowArray = (arrayValue) =>
+  Array.isArray(arrayValue) && arrayValue.length > 0 && arrayValue.every((item) => isYamlPrimitive(item));
+
+const renderFlowArrayLine = (prefix, arrayValue, itemSchema, lines) => {
+  const values = arrayValue.map((item) => formatYamlValue(item, itemSchema || itemSchema?.type));
+  lines.push(`${prefix}: [${values.join(", ")}]`);
+};
+
+const resolveFieldRenderState = (field, rawValue) => {
+  if (!isTemplatableField(field)) {
+    return {
+      value: rawValue,
+      templatableLambda: false
+    };
+  }
+
+  const mode = getTemplatableMode(rawValue, field);
+  return {
+    value: getTemplatableInnerValue(rawValue, field),
+    templatableLambda: mode === "lambda"
+  };
+};
+
+const normalizeYamlFieldValue = (field, value) => {
+  if (field?.type === "gpio") {
+    const normalized = serializeGpioValue(value);
+    return normalized === "" ? undefined : normalized;
+  }
+  return value;
+};
+
+const renderKeyValueMap = (entries, indent, lines, sourceContext = null) => {
+  entries.forEach((entry, index) => {
+    if (!entry || typeof entry !== "object") return;
+    const key = entry.key;
+    if (!key || typeof key !== "string") return;
+    const entryOrigin = makeSourceOrigin(sourceContext, {
+      type: "item",
+      path: [...(sourceContext?.path || []), index],
+      fieldKey: String(index),
+      confidence: "exact"
+    });
+    const lineIndex = lines.length;
+    const rawValue = entry.value;
+    if (rawValue === undefined || rawValue === "") {
+      lines.push(`${" ".repeat(indent)}${key}:`);
+      setLineOrigin(lines, lineIndex, entryOrigin);
+      return;
+    }
+    lines.push(`${" ".repeat(indent)}${key}: ${formatYamlAutoValue(rawValue)}`);
+    setLineOrigin(lines, lineIndex, entryOrigin);
+  });
+};
+
+// Render a simple list of raw values.
+const renderRawList = (values, indent, lines) => {
+  values.forEach((entry) => {
+    if (entry === undefined || entry === null || entry === "") return;
+    lines.push(`${" ".repeat(indent)}- ${entry}`);
+  });
+};
+
+const buildEmbeddedSchemaBlocks = (schema, configValues, globalStore) => {
+  const sourceValues = Array.isArray(configValues) ? configValues : [configValues || {}];
+  const embeddedByKey = new Map();
+  const embeddedItems = [];
+
+  sourceValues.forEach((configValue, sourceIndex) => {
+    const sourceEmbeddedItems = resolveEmbeddedComponentItems(schema, configValue || {}, globalStore);
+    sourceEmbeddedItems.forEach((item, itemIndex) => {
+      const dedupeToken = item.emitAs === "list" ? resolveEmbeddedDedupeToken(item) : "";
+      const dedupeIdentity =
+        item.emitAs === "list" && item.dedupeBy && dedupeToken
+          ? `${item.domain}:${item.dedupeBy}:${dedupeToken}`
+          : item.emitAs === "list"
+            ? `${item.domain}:${sourceIndex}:${item.sourceKey}:${itemIndex}`
+            : `${item.domain}:${item.sourceKey}`;
+      if (embeddedByKey.has(dedupeIdentity)) return;
+      embeddedByKey.set(dedupeIdentity, item);
+      embeddedItems.push(item);
+    });
+  });
+
+  const blocks = [];
+  const listBlocksByDomain = new Map();
+  embeddedItems.forEach((item) => {
+    if (item.emitAs === "map") {
+      const lines = [`${item.domain}:`];
+      const mapLines = [];
+      renderYamlObject(item.payload || {}, item.fields || [], 2, mapLines, item.payload || {}, globalStore);
+      lines.push(...mapLines);
+      blocks.push({ key: item.domain, lines });
+      return;
+    }
+
+    if (!listBlocksByDomain.has(item.domain)) {
+      const block = { key: item.domain, lines: [`${item.domain}:`] };
+      listBlocksByDomain.set(item.domain, block);
+      blocks.push(block);
+    }
+
+    const block = listBlocksByDomain.get(item.domain);
+    renderYamlArray(
+      [item.payload],
+      { type: "object", fields: item.fields || [] },
+      2,
+      block.lines,
+      item.payload,
+      globalStore
+    );
+  });
+
+  return blocks;
+};
+
+// Render filter list entries using filter catalog metadata.
+const isNestedFilterListEntry = (entry) => {
+  if (entry?.style !== "list" || entry?.valueKey !== "filters") return false;
+  const fields = Array.isArray(entry.fields) ? entry.fields : [];
+  const filtersField = fields.find((field) => field?.key === "filters");
+  return (
+    filtersField?.type === "list" &&
+    filtersField.item?.type === "object" &&
+    Array.isArray(filtersField.item.fields) &&
+    filtersField.item.fields.length === 0
+  );
+};
+
+const renderFilterEntries = (filters, indent, lines) => {
+  filters.forEach((entry) => {
+    if (!entry?.type) return;
+    const style = entry.style || "object";
+    const config = entry.config || {};
+    if (style === "scalar") {
+      const value = config.value;
+      if (value === undefined || value === "") {
+        lines.push(`${" ".repeat(indent)}- ${entry.type}:`);
+        return;
+      }
+      if (entry.valueType === "lambda" && typeof value === "string" && value.includes("\n")) {
+        lines.push(`${" ".repeat(indent)}- ${entry.type}: |-`);
+        value.split("\n").forEach((line) => {
+          lines.push(`${" ".repeat(indent + 4)}${line}`);
+        });
+        return;
+      }
+      lines.push(
+        `${" ".repeat(indent)}- ${entry.type}: ${formatYamlValue(value, entry.valueType)}`
+      );
+      return;
+    }
+    if (style === "scalar_or_object") {
+      const { value, ...rest } = config;
+      const hasObjectFields = Object.keys(rest).length > 0;
+      if (!hasObjectFields && value !== undefined) {
+        lines.push(`${" ".repeat(indent)}- ${entry.type}: ${formatYamlValue(value, entry.valueType)}`);
+        return;
+      }
+    }
+    if (style === "list") {
+      const listKey = entry.valueKey || "values";
+      const listValue = config[listKey] || [];
+      lines.push(`${" ".repeat(indent)}- ${entry.type}:`);
+      if (isNestedFilterListEntry(entry)) {
+        renderFilterEntries(listValue, indent + 4, lines);
+        return;
+      }
+      const listField = Array.isArray(entry.fields) ? entry.fields.find((field) => field?.key === listKey) : null;
+      renderYamlArray(listValue, listField?.item || { type: "text" }, indent + 4, lines, config);
+      return;
+    }
+    lines.push(`${" ".repeat(indent)}- ${entry.type}:`);
+    renderYamlObject(config, null, indent + 4, lines, config);
+  });
+};
+
+// Render automation actions list.
+const renderActionEntries = (actions, indent, lines, rootValue, globalStore) => {
+  actions.forEach((entry) => {
+    if (!entry?.type) return;
+    const config = entry.config || {};
+    const fields = Array.isArray(entry.fields) ? entry.fields : [];
+    const declaredFields = fields.filter((field) => field?.key);
+    const declaredFieldKeys = new Set(declaredFields.map((field) => field.key));
+    const dynamicFields = Object.keys(config)
+      .filter((key) => key && !declaredFieldKeys.has(key))
+      .map((key) => ({ key, type: "text", required: false }));
+    const outputFields = declaredFields.concat(dynamicFields);
+    const presentKeys = outputFields.filter((field) => resolveFieldRenderState(field, config[field.key]).value !== undefined);
+
+    if (presentKeys.length === 1 && isYamlPrimitive(resolveFieldRenderState(presentKeys[0], config[presentKeys[0].key]).value)) {
+      const field = presentKeys[0];
+      const state = resolveFieldRenderState(field, config[field.key]);
+        const value = normalizeYamlFieldValue(field, state.value);
+      const isComplexShortFormField =
+        field.type === "raw_yaml" ||
+        field.type === "yaml" ||
+        field.type === "object" ||
+        field.type === "list" || field.type === "generated_list";
+      if (!isComplexShortFormField) {
+        if (state.templatableLambda) {
+          renderLambdaAssignment(`${" ".repeat(indent)}- ${entry.type}`, value, indent + 4, lines, "!lambda");
+          return;
+        }
+        if (field.type === "lambda" && typeof value === "string") {
+          renderLambdaAssignment(`${" ".repeat(indent)}- ${entry.type}`, value, indent + 4, lines);
+          return;
+        }
+        lines.push(
+          `${" ".repeat(indent)}- ${entry.type}: ${formatYamlValue(value, field.type)}`
+        );
+        return;
+      }
+    }
+
+    lines.push(`${" ".repeat(indent)}- ${entry.type}:`);
+    const actionBodyIndent = indent + 4;
+    outputFields.forEach((field) => {
+      const yamlKey = resolveFieldYamlKey(field);
+      const state = resolveFieldRenderState(field, config[field.key]);
+      let value = normalizeYamlFieldValue(field, state.value);
+      if (value === "") value = undefined;
+      if (value === undefined) {
+        if (field.required) {
+          lines.push(`${" ".repeat(actionBodyIndent)}${yamlKey}:`);
+        }
+        return;
+      }
+      if (state.templatableLambda) {
+        renderLambdaAssignment(`${" ".repeat(actionBodyIndent)}${yamlKey}`, value, actionBodyIndent + 2, lines, "!lambda");
+        return;
+      }
+      if (field.type === "lambda" && typeof value === "string") {
+        renderLambdaAssignment(`${" ".repeat(actionBodyIndent)}${yamlKey}`, value, actionBodyIndent + 2, lines);
+        return;
+      }
+      if (field.type === "raw_yaml") {
+        const raw = typeof value === "string" ? value.trimEnd() : "";
+        if (!raw) {
+          if (field.required) {
+            lines.push(`${" ".repeat(actionBodyIndent)}${yamlKey}:`);
+          }
+          return;
+        }
+        raw.split(/\r?\n/).forEach((line) => {
+          lines.push(`${" ".repeat(actionBodyIndent)}${line}`);
+        });
+        return;
+      }
+      if (field.type === "yaml") {
+        const raw = typeof value === "string" ? value.trimEnd() : "";
+        if (!raw) {
+          if (field.required) {
+            lines.push(`${" ".repeat(actionBodyIndent)}${yamlKey}:`);
+          }
+          return;
+        }
+        lines.push(`${" ".repeat(actionBodyIndent)}${yamlKey}:`);
+        raw.split(/\r?\n/).forEach((line) => {
+          lines.push(`${" ".repeat(actionBodyIndent + 2)}${line}`);
+        });
+        return;
+      }
+      if (isYamlPrimitive(value)) {
+        lines.push(
+          `${" ".repeat(actionBodyIndent)}${yamlKey}: ${formatYamlValue(value, field.type)}`
+        );
+        return;
+      }
+      if (Array.isArray(value)) {
+        if (!value.length) return;
+        if (field.item?.extends === "base_actions.json") {
+          lines.push(`${" ".repeat(actionBodyIndent)}${yamlKey}:`);
+          renderActionEntries(value, actionBodyIndent + 2, lines, rootValue, globalStore);
+          return;
+        }
+        if (field.item?.extends === "base_conditions.json") {
+          lines.push(`${" ".repeat(actionBodyIndent)}${yamlKey}:`);
+          renderConditionEntries(value, actionBodyIndent + 2, lines, rootValue, globalStore);
+          return;
+        }
+        if (field.yamlStyle === "flow" && canRenderFlowArray(value)) {
+          renderFlowArrayLine(`${" ".repeat(actionBodyIndent)}${yamlKey}`, value, field.item, lines);
+          return;
+        }
+        lines.push(`${" ".repeat(actionBodyIndent)}${yamlKey}:`);
+        renderYamlArray(value, field.item, actionBodyIndent + 2, lines, value, globalStore);
+        return;
+      }
+      lines.push(`${" ".repeat(actionBodyIndent)}${yamlKey}:`);
+      renderYamlObject(value, field.fields, actionBodyIndent + 2, lines, rootValue, globalStore);
+    });
+  });
+};
+
+const renderConditionEntry = (entry, indent, lines, rootValue, globalStore) => {
+  if (!entry?.type) return;
+  const config = entry.config || {};
+  const fields = Array.isArray(entry.fields) ? entry.fields : [];
+  const declaredFields = fields.filter((field) => field?.key);
+  const declaredFieldKeys = new Set(declaredFields.map((field) => field.key));
+  const dynamicFields = Object.keys(config)
+    .filter((key) => key && !declaredFieldKeys.has(key))
+    .map((key) => ({ key, type: "text", required: false }));
+  const outputFields = declaredFields.concat(dynamicFields);
+  const presentKeys = outputFields.filter((field) => resolveFieldRenderState(field, config[field.key]).value !== undefined);
+
+  if (!presentKeys.length) {
+    lines.push(`${" ".repeat(indent)}${entry.type}:`);
+    return;
+  }
+
+  if (presentKeys.length === 1 && isYamlPrimitive(resolveFieldRenderState(presentKeys[0], config[presentKeys[0].key]).value)) {
+    const field = presentKeys[0];
+    const state = resolveFieldRenderState(field, config[field.key]);
+      const value = normalizeYamlFieldValue(field, state.value);
+    const isComplexShortFormField =
+      field.type === "raw_yaml" ||
+      field.type === "yaml" ||
+      field.type === "object" ||
+      field.type === "list" || field.type === "generated_list";
+    if (!isComplexShortFormField) {
+      if (state.templatableLambda) {
+        renderLambdaAssignment(`${" ".repeat(indent)}${entry.type}`, value, indent + 4, lines, "!lambda");
+        return;
+      }
+      if (field.type === "lambda" && typeof value === "string") {
+        renderLambdaAssignment(`${" ".repeat(indent)}${entry.type}`, value, indent + 4, lines);
+        return;
+      }
+      lines.push(`${" ".repeat(indent)}${entry.type}: ${formatYamlValue(value, field.type)}`);
+      return;
+    }
+  }
+
+  lines.push(`${" ".repeat(indent)}${entry.type}:`);
+  outputFields.forEach((field) => {
+    const state = resolveFieldRenderState(field, config[field.key]);
+    let value = normalizeYamlFieldValue(field, state.value);
+    if (value === "") value = undefined;
+    if (value === undefined) {
+      if (field.required) {
+        lines.push(`${" ".repeat(indent + 2)}${field.key}:`);
+      }
+      return;
+    }
+    if (state.templatableLambda) {
+      renderLambdaAssignment(`${" ".repeat(indent + 2)}${field.key}`, value, indent + 4, lines, "!lambda");
+      return;
+    }
+    if (field.type === "lambda" && typeof value === "string") {
+      renderLambdaAssignment(`${" ".repeat(indent + 2)}${field.key}`, value, indent + 4, lines);
+      return;
+    }
+    if (field.type === "raw_yaml") {
+      const raw = typeof value === "string" ? value.trimEnd() : "";
+      if (!raw) return;
+      raw.split(/\r?\n/).forEach((line) => {
+        lines.push(`${" ".repeat(indent + 2)}${line}`);
+      });
+      return;
+    }
+    if (field.type === "yaml") {
+      const raw = typeof value === "string" ? value.trimEnd() : "";
+      if (!raw) return;
+      lines.push(`${" ".repeat(indent + 2)}${field.key}:`);
+      raw.split(/\r?\n/).forEach((line) => {
+        lines.push(`${" ".repeat(indent + 4)}${line}`);
+      });
+      return;
+    }
+    if (isYamlPrimitive(value)) {
+      const yamlKey = resolveFieldYamlKey(field);
+      lines.push(`${" ".repeat(indent + 2)}${yamlKey}: ${formatYamlValue(value, field.type)}`);
+      return;
+    }
+    if (Array.isArray(value) && field.item?.extends === "base_conditions.json") {
+      if (field.emitKey === "inline") {
+        renderConditionEntries(value, indent + 2, lines, rootValue, globalStore);
+        return;
+      }
+      const yamlKey = resolveFieldYamlKey(field);
+      lines.push(`${" ".repeat(indent + 2)}${yamlKey}:`);
+      renderConditionEntries(value, indent + 4, lines, rootValue, globalStore);
+      return;
+    }
+    if (Array.isArray(value) && field.item?.extends === "base_actions.json") {
+      const yamlKey = resolveFieldYamlKey(field);
+      lines.push(`${" ".repeat(indent + 2)}${yamlKey}:`);
+      renderActionEntries(value, indent + 4, lines, rootValue, globalStore);
+      return;
+    }
+    if (Array.isArray(value)) {
+      if (field.yamlStyle === "flow" && canRenderFlowArray(value)) {
+        const yamlKey = resolveFieldYamlKey(field);
+        renderFlowArrayLine(`${" ".repeat(indent + 2)}${yamlKey}`, value, field.item, lines);
+        return;
+      }
+      const yamlKey = resolveFieldYamlKey(field);
+      lines.push(`${" ".repeat(indent + 2)}${yamlKey}:`);
+      renderYamlArray(value, field.item, indent + 4, lines, rootValue, globalStore);
+      return;
+    }
+    const yamlKey = resolveFieldYamlKey(field);
+    lines.push(`${" ".repeat(indent + 2)}${yamlKey}:`);
+    renderYamlObject(value, field.fields, indent + 4, lines, rootValue, globalStore);
+  });
+};
+
+const renderConditionEntries = (conditions, indent, lines, rootValue, globalStore) => {
+  if (!Array.isArray(conditions) || !conditions.length) return;
+  if (conditions.length === 1) {
+    renderConditionEntry(conditions[0], indent, lines, rootValue, globalStore);
+    return;
+  }
+  conditions.forEach((entry) => {
+    const nestedLines = [];
+    renderConditionEntry(entry, indent + 2, nestedLines, rootValue, globalStore);
+    if (!nestedLines.length) return;
+    const [firstLine, ...rest] = nestedLines;
+    lines.push(`${" ".repeat(indent)}- ${firstLine.slice(indent + 2)}`);
+    rest.forEach((line) => lines.push(line));
+  });
+};
+
+// Render on_boot/on_shutdown/on_loop blocks.
+const renderAutomationList = (entries, indent, lines, rootValue, globalStore) => {
+  (entries || []).forEach((entry) => {
+    if (!entry || typeof entry !== "object") return;
+    const hasPriority = entry.priority !== undefined && entry.priority !== "";
+    const hasThen = Array.isArray(entry.then) && entry.then.length > 0;
+    if (!hasPriority && !hasThen) {
+      return;
+    }
+    if (hasPriority) {
+      lines.push(`${" ".repeat(indent)}- priority: ${formatYamlValue(entry.priority)}`);
+    } else {
+      lines.push(`${" ".repeat(indent)}-`);
+    }
+    if (hasThen) {
+      lines.push(`${" ".repeat(indent + 2)}then:`);
+      renderActionEntries(entry.then, indent + 4, lines, rootValue, globalStore);
+    }
+  });
+};
+
+// Render a schema-defined object into YAML lines.
+// `getFieldComment`, when given, is looked up only for this call's own direct fields (not fields
+// recursed into for nested "object" values) -- comment preservation is intentionally one level deep.
+export const renderYamlObject = (objectValue, schemaFields, indent, lines, rootValue, globalStore, sourceContext = null, getFieldComment = null) => {
+  const valueMap = objectValue || {};
+  const schemaList = Array.isArray(schemaFields) ? schemaFields : [];
+  const handledKeys = new Set();
+
+  schemaList.forEach((field) => {
+    const key = field.key;
+    if (!key) return;
+    const fieldPath = [...(sourceContext?.path || []), key];
+    const effectiveModeLevel = maxModeLevel(sourceContext?.modeLevel || "Simple", fieldModeLevel(field));
+    const originType = field?.originType || "field";
+    const originPath = originType === "section"
+      ? (Array.isArray(sourceContext?.path) ? sourceContext.path : [])
+      : fieldPath;
+    const fieldOrigin = makeSourceOrigin(sourceContext, {
+      type: originType,
+      path: originPath,
+      fieldKey: key,
+      modeLevel: effectiveModeLevel,
+      contentKind: field?.type || "schema"
+    });
+    const fieldSourceContext = childSourceContext(sourceContext, fieldPath, { modeLevel: effectiveModeLevel });
+    const lineStart = lines.length;
+    const emitMode = resolveEmitMode(field);
+    const alwaysEmit = emitMode === "always";
+    if (emitMode === "never") {
+      handledKeys.add(key);
+      return;
+    }
+    const dependencyVisible = isFieldVisible(field, valueMap, schemaList, globalStore);
+    if (emitMode === "dependsOn" && hasFieldDependencies(field) && !dependencyVisible) {
+      handledKeys.add(key);
+      return;
+    }
+    if (!alwaysEmit && emitMode === "visible" && !dependencyVisible) {
+      handledKeys.add(key);
+      return;
+    }
+    if (typeof getFieldComment === "function") {
+      const comment = getFieldComment(key);
+      if (comment) {
+        comment.split("\n").forEach((commentLine) => {
+          pushYamlLine(lines, `${" ".repeat(indent)}${commentLine}`);
+        });
+      }
+    }
+    handledKeys.add(key);
+    const state = resolveFieldRenderState(field, valueMap[key]);
+    let value = normalizeYamlFieldValue(field, state.value);
+    if (value === "") {
+      value = undefined;
+    }
+
+    if (value === undefined) {
+      const autoValue = resolveAutoValue(field, valueMap, rootValue);
+      if (autoValue !== undefined && autoValue !== "") {
+        value = autoValue;
+      }
+    }
+
+    if (value === undefined) {
+      if (!field.required && !alwaysEmit) return;
+      if (field.type === "yaml") {
+        lines.push(`${" ".repeat(indent)}${key}:`);
+        markNewLines(lines, lineStart, fieldOrigin);
+        return;
+      }
+      if (field.default !== undefined) {
+        if (isYamlPrimitive(field.default)) {
+          lines.push(
+            `${" ".repeat(indent)}${key}: ${formatYamlValue(field.default, field)}`
+          );
+          markNewLines(lines, lineStart, fieldOrigin);
+          return;
+        }
+        if (Array.isArray(field.default)) {
+          lines.push(`${" ".repeat(indent)}${key}:`);
+        renderYamlArray(field.default, field.item, indent + 2, lines, rootValue, globalStore, fieldSourceContext);
+        markNewLines(lines, lineStart, fieldOrigin);
+        return;
+      }
+      if (field.type === "object") {
+        lines.push(`${" ".repeat(indent)}${key}:`);
+        renderYamlObject(field.default, field.fields, indent + 2, lines, rootValue, globalStore, fieldSourceContext);
+        markNewLines(lines, lineStart, fieldOrigin);
+        return;
+      }
+      }
+      if (field.type === "object") {
+        lines.push(`${" ".repeat(indent)}${key}:`);
+        renderYamlObject({}, field.fields, indent + 2, lines, rootValue, globalStore, fieldSourceContext);
+        markNewLines(lines, lineStart, fieldOrigin);
+        return;
+      }
+      if (field.type === "list" || field.type === "generated_list") {
+        lines.push(`${" ".repeat(indent)}${key}:`);
+        markNewLines(lines, lineStart, fieldOrigin);
+        return;
+      }
+      lines.push(`${" ".repeat(indent)}${key}:`);
+      markNewLines(lines, lineStart, fieldOrigin);
+      return;
+    }
+
+    if (field.type === "raw_yaml") {
+      const raw = typeof value === "string" ? value.trimEnd() : "";
+      if (!raw) {
+        if (field.required || alwaysEmit) {
+          lines.push(`${" ".repeat(indent)}${key}:`);
+        }
+        markNewLines(lines, lineStart, fieldOrigin);
+        return;
+      }
+      raw.split(/\r?\n/).forEach((line) => {
+        lines.push(`${" ".repeat(indent)}${line}`);
+      });
+      markNewLines(lines, lineStart, fieldOrigin);
+      return;
+    }
+
+    if (field.type === "yaml") {
+      const raw = typeof value === "string" ? value.trimEnd() : "";
+      if (!raw) {
+        if (field.required || alwaysEmit) {
+          lines.push(`${" ".repeat(indent)}${key}:`);
+        }
+        markNewLines(lines, lineStart, fieldOrigin);
+        return;
+      }
+      lines.push(`${" ".repeat(indent)}${key}:`);
+      raw.split(/\r?\n/).forEach((line) => {
+        lines.push(`${" ".repeat(indent + 2)}${line}`);
+      });
+      markNewLines(lines, lineStart, fieldOrigin);
+      return;
+    }
+
+    if (shouldSuppressDefaultValue(field, value)) {
+      return;
+    }
+
+    if (isYamlPrimitive(value)) {
+      if (field.suppressDefault && field.default !== undefined && value === field.default) {
+        return;
+      }
+      if (state.templatableLambda) {
+        renderLambdaAssignment(`${" ".repeat(indent)}${key}`, value, indent + 2, lines, "!lambda");
+        markNewLines(lines, lineStart, fieldOrigin);
+        return;
+      }
+      if (field.type === "lambda" && typeof value === "string") {
+        renderLambdaAssignment(`${" ".repeat(indent)}${key}`, value, indent + 2, lines);
+        markNewLines(lines, lineStart, fieldOrigin);
+        return;
+      }
+      lines.push(`${" ".repeat(indent)}${key}: ${formatYamlValue(value, field)}`);
+      markNewLines(lines, lineStart, fieldOrigin);
+      return;
+    }
+
+    if (key === "filters" && Array.isArray(value) && value.some((item) => item?.type)) {
+      lines.push(`${" ".repeat(indent)}${key}:`);
+      renderFilterEntries(value, indent + 2, lines);
+      markNewLines(lines, lineStart, fieldOrigin);
+      return;
+    }
+
+    if (field.item?.extends === "base_actions.json" && Array.isArray(value)) {
+      if (value.length === 0) {
+        if (field.required || alwaysEmit) {
+          lines.push(`${" ".repeat(indent)}${key}:`);
+        }
+        markNewLines(lines, lineStart, fieldOrigin);
+        return;
+      }
+      lines.push(`${" ".repeat(indent)}${key}:`);
+      if (field.wrapThen === true) {
+        lines.push(`${" ".repeat(indent + 2)}- then:`);
+        renderActionEntries(value, indent + 6, lines, rootValue, globalStore);
+        markNewLines(lines, lineStart, fieldOrigin);
+        return;
+      }
+      renderActionEntries(value, indent + 2, lines, rootValue, globalStore);
+      markNewLines(lines, lineStart, fieldOrigin);
+      return;
+    }
+
+    if (field.item?.extends === "base_conditions.json" && Array.isArray(value)) {
+      if (value.length === 0) {
+        if (field.required || alwaysEmit) {
+          lines.push(`${" ".repeat(indent)}${key}:`);
+        }
+        markNewLines(lines, lineStart, fieldOrigin);
+        return;
+      }
+      lines.push(`${" ".repeat(indent)}${key}:`);
+      renderConditionEntries(value, indent + 2, lines, rootValue, globalStore);
+      markNewLines(lines, lineStart, fieldOrigin);
+      return;
+    }
+
+    if (Array.isArray(value)) {
+      if (value.length === 0) {
+        if (field.required || alwaysEmit) {
+          lines.push(`${" ".repeat(indent)}${key}:`);
+        }
+        markNewLines(lines, lineStart, fieldOrigin);
+        return;
+      }
+      if (field.rawList) {
+        lines.push(`${" ".repeat(indent)}${key}:`);
+        renderRawList(value, indent + 2, lines);
+        markNewLines(lines, lineStart, fieldOrigin);
+        return;
+      }
+      if (["on_boot", "on_shutdown", "on_loop"].includes(key)) {
+        lines.push(`${" ".repeat(indent)}${key}:`);
+        renderAutomationList(value, indent + 2, lines, rootValue, globalStore);
+        markNewLines(lines, lineStart, fieldOrigin);
+        return;
+      }
+      if (key === "includes" || key === "includes_c" || key === "libraries") {
+        lines.push(`${" ".repeat(indent)}${key}:`);
+        renderRawList(value, indent + 2, lines);
+        markNewLines(lines, lineStart, fieldOrigin);
+        return;
+      }
+      if (
+        field.item?.type === "object" &&
+        Array.isArray(field.item.fields) &&
+        field.item.fields.some((itemField) => itemField.key === "key") &&
+        field.item.fields.some((itemField) => itemField.key === "value")
+      ) {
+        lines.push(`${" ".repeat(indent)}${key}:`);
+        setLineOrigin(lines, lineStart, fieldOrigin);
+        renderKeyValueMap(value, indent + 2, lines, fieldSourceContext);
+        return;
+      }
+      if (field.yamlStyle === "flow" && canRenderFlowArray(value)) {
+        renderFlowArrayLine(`${" ".repeat(indent)}${key}`, value, field.item, lines);
+        markNewLines(lines, lineStart, fieldOrigin);
+        return;
+      }
+        lines.push(`${" ".repeat(indent)}${key}:`);
+        renderYamlArray(value, field.item, indent + 2, lines, rootValue, globalStore, fieldSourceContext);
+        markNewLines(lines, lineStart, fieldOrigin);
+        return;
+      }
+
+    const nestedLines = [];
+    renderYamlObject(value, field.fields, indent + 2, nestedLines, rootValue, globalStore, fieldSourceContext);
+    if (!nestedLines.length) {
+      if (field.required || alwaysEmit) {
+        lines.push(`${" ".repeat(indent)}${key}:`);
+        markNewLines(lines, lineStart, fieldOrigin);
+      }
+      return;
+    }
+    lines.push(`${" ".repeat(indent)}${key}:`);
+    appendYamlLines(lines, nestedLines);
+    markNewLines(lines, lineStart, fieldOrigin);
+  });
+
+  Object.entries(valueMap).forEach(([key, value]) => {
+    if (key.startsWith("_")) return;
+    if (handledKeys.has(key)) return;
+    if (value === undefined) return;
+    if (isYamlPrimitive(value)) {
+      lines.push(`${" ".repeat(indent)}${key}: ${formatYamlValue(value)}`);
+      return;
+    }
+    if (Array.isArray(value)) {
+      if (value.length === 0) return;
+      lines.push(`${" ".repeat(indent)}${key}:`);
+      renderYamlArray(value, null, indent + 2, lines, rootValue, globalStore, childSourceContext(sourceContext, [...(sourceContext?.path || []), key]));
+      return;
+    }
+    lines.push(`${" ".repeat(indent)}${key}:`);
+    renderYamlObject(value, null, indent + 2, lines, rootValue, globalStore, childSourceContext(sourceContext, [...(sourceContext?.path || []), key]));
+  });
+};
+
+// Public entry point for YAML generation from a schema.
+export const buildSchemaYaml = (
+  value,
+  schemaFields,
+  indent = 0,
+  rootValue = value,
+  globalStore = null
+) => {
+  const lines = [];
+  renderYamlObject(value, schemaFields, indent, lines, rootValue, globalStore);
+  return lines;
+};
+
+export const buildSchemaYamlDocumentLines = (
+  value,
+  schemaFields,
+  indent = 0,
+  rootValue = value,
+  globalStore = null,
+  sourceContext = null,
+  blockKey = ""
+) => {
+  const lines = [];
+  renderYamlObject(value, schemaFields, indent, lines, rootValue, globalStore, sourceContext);
+  return linesToGeneratedYamlLines(lines, blockKey);
+};
+
+const blockFromDocumentLines = (key, lines) => ({
+  key,
+  lines: (lines || []).map((line) => line.text),
+  documentLines: lines || []
+});
+
+export const buildGeneralSchemaBlocks = (
+  domain,
+  configValue,
+  schema,
+  rootValue = configValue,
+  globalStore = null
+) => {
+  const resolvedDomain = String(domain || resolveSchemaDomain(schema, configValue || {})).trim();
+  if (!resolvedDomain || !schema) return [];
+
+  const fields = Array.isArray(schema.fields) ? schema.fields : [];
+  const blocks = [];
+  const mainLines = buildSchemaYaml(configValue || {}, fields, 2, rootValue, globalStore);
+  blocks.push({ key: resolvedDomain, lines: [`${resolvedDomain}:`, ...mainLines] });
+  blocks.push(...buildEmbeddedSchemaBlocks(schema, configValue || {}, globalStore));
+
+  return blocks;
+};
+
+export const buildGeneralSchemaDocumentBlocks = (
+  domain,
+  configValue,
+  schema,
+  rootValue = configValue,
+  globalStore = null,
+  sourceContext = null,
+  options = {}
+) => {
+  const resolvedDomain = String(domain || resolveSchemaDomain(schema, configValue || {})).trim();
+  if (!resolvedDomain || !schema) return [];
+
+  const sectionOrigin = makeSourceOrigin(sourceContext, {
+    type: "section",
+    path: sourceContext?.path || [],
+    confidence: "section"
+  });
+  if (options.suppressSectionFocus && sectionOrigin) {
+    sectionOrigin.suppressFocus = true;
+  }
+  const fields = Array.isArray(schema.fields) ? schema.fields : [];
+  const mainLines = buildSchemaYamlDocumentLines(
+    configValue || {},
+    fields,
+    2,
+    rootValue,
+    globalStore,
+    sourceContext,
+    resolvedDomain
+  );
+  const documentLines = [
+    createGeneratedYamlLine({ text: `${resolvedDomain}:`, blockKey: resolvedDomain, origin: sectionOrigin }),
+    ...mainLines
+  ];
+  const blocks = [blockFromDocumentLines(resolvedDomain, documentLines)];
+  blocks.push(...buildEmbeddedSchemaBlocks(schema, configValue || {}, globalStore));
+
+  return blocks;
+};
+
+export const buildGeneralSchemaListBlock = (
+  domain,
+  configValues,
+  schema,
+  rootValue = configValues,
+  globalStore = null
+) => {
+  const resolvedDomain = String(domain || resolveSchemaDomain(schema, {})).trim();
+  const values = Array.isArray(configValues) ? configValues : [];
+  if (!resolvedDomain || !schema || !values.length) return [];
+
+  const fields = Array.isArray(schema.fields) ? schema.fields : [];
+  const lines = [`${resolvedDomain}:`];
+
+  values.forEach((value) => {
+    const itemLines = buildSchemaYaml(value || {}, fields, 4, rootValue, globalStore);
+    if (!itemLines.length) {
+      lines.push("  - {}");
+      return;
+    }
+    const [firstLine, ...rest] = itemLines;
+    lines.push(`  - ${firstLine.slice(4)}`);
+    rest.forEach((line) => lines.push(line));
+  });
+
+  return [{ key: resolvedDomain, lines }, ...buildEmbeddedSchemaBlocks(schema, values, globalStore)];
+};
+
+export const buildGeneralSchemaListDocumentBlock = (
+  domain,
+  configValues,
+  schema,
+  rootValue = configValues,
+  globalStore = null,
+  sourceContext = null,
+  options = {}
+) => {
+  const resolvedDomain = String(domain || resolveSchemaDomain(schema, {})).trim();
+  const values = Array.isArray(configValues) ? configValues : [];
+  if (!resolvedDomain || !schema || !values.length) return [];
+
+  const sectionOrigin = makeSourceOrigin(sourceContext, {
+    type: "section",
+    path: sourceContext?.path || [],
+    confidence: "section"
+  });
+  if (options.suppressSectionFocus && sectionOrigin) {
+    sectionOrigin.suppressFocus = true;
+  }
+  const fields = Array.isArray(schema.fields) ? schema.fields : [];
+  const lines = [`${resolvedDomain}:`];
+  setLineOrigin(lines, 0, sectionOrigin);
+
+  values.forEach((value, index) => {
+    const itemScopeId = typeof sourceContext?.itemScopeId === "function"
+      ? sourceContext.itemScopeId(index)
+      : sourceContext?.scopeId || "";
+    const itemPath = typeof sourceContext?.itemScopeId === "function"
+      ? sourceContext?.path || []
+      : [...(sourceContext?.path || []), index];
+    const itemContext = childSourceContext({ ...sourceContext, scopeId: itemScopeId }, itemPath);
+    const itemLines = [];
+    renderYamlObject(value || {}, fields, 4, itemLines, rootValue, globalStore, itemContext);
+    const itemOrigin = makeSourceOrigin(itemContext, {
+      type: "item",
+      path: itemContext?.path || [],
+      confidence: "exact"
+    });
+    if (!itemLines.length) {
+      const targetIndex = lines.length;
+      lines.push("  - {}");
+      setLineOrigin(lines, targetIndex, itemOrigin);
+      return;
+    }
+    const [firstLine, ...rest] = itemLines;
+    const firstIndex = lines.length;
+    lines.push(`  - ${firstLine.slice(4)}`);
+    setLineOrigin(lines, firstIndex, getLineOrigin(itemLines, 0) || itemOrigin);
+    rest.forEach((line, lineIndex) => {
+      const targetIndex = lines.length;
+      lines.push(line);
+      setLineOrigin(lines, targetIndex, getLineOrigin(itemLines, lineIndex + 1) || itemOrigin);
+    });
+  });
+
+  return [
+    blockFromDocumentLines(resolvedDomain, linesToGeneratedYamlLines(lines, resolvedDomain)),
+    ...buildEmbeddedSchemaBlocks(schema, values, globalStore)
+  ];
+};
+
+const renderYamlSingleListObject = (payload, itemSchema, indent, lines, rootValue, globalStore, sourceContext = null, getFieldComment = null) => {
+  const objectLines = [];
+  const itemOrigin = makeSourceOrigin(sourceContext, {
+    type: "item",
+    path: sourceContext?.path || [],
+    confidence: "exact"
+  });
+  renderYamlObject(payload || {}, itemSchema?.fields, indent + 2, objectLines, rootValue, globalStore, sourceContext, getFieldComment);
+  if (!objectLines.length) {
+    pushYamlLine(lines, `${" ".repeat(indent)}- {}`, itemOrigin);
+    return;
+  }
+  const prefix = `${" ".repeat(indent)}- `;
+  const firstLine = objectLines[0];
+  const firstIndex = lines.length;
+  lines.push(`${prefix}${firstLine.slice(indent + 2)}`);
+  setLineOrigin(lines, firstIndex, getLineOrigin(objectLines, 0) || itemOrigin);
+  objectLines.slice(1).forEach((line, objectIndex) => {
+    const targetIndex = lines.length;
+    lines.push(line);
+    setLineOrigin(lines, targetIndex, getLineOrigin(objectLines, objectIndex + 1) || itemOrigin);
+  });
+};
+
+// Render arrays with optional item schema definitions.
+const renderYamlArray = (arrayValue, itemSchema, indent, lines, rootValue, globalStore, sourceContext = null) => {
+  arrayValue.forEach((item, index) => {
+    const itemPath = [...(sourceContext?.path || []), index];
+    const itemOrigin = makeSourceOrigin(sourceContext, {
+      path: itemPath,
+      fieldKey: String(index),
+      confidence: "exact"
+    });
+    const lineStart = lines.length;
+    const normalizedItem = normalizeYamlFieldValue(itemSchema, item);
+    if (normalizedItem === undefined || normalizedItem === null) return;
+    if (isYamlPrimitive(normalizedItem)) {
+      lines.push(`${" ".repeat(indent)}- ${formatYamlValue(normalizedItem, itemSchema || itemSchema?.type)}`);
+      markNewLines(lines, lineStart, itemOrigin);
+      return;
+    }
+    if (Array.isArray(normalizedItem)) {
+      if (normalizedItem.length === 0) return;
+      lines.push(`${" ".repeat(indent)}-`);
+      renderYamlArray(normalizedItem, itemSchema?.item, indent + 2, lines, rootValue, globalStore, childSourceContext(sourceContext, itemPath));
+      markNewLines(lines, lineStart, itemOrigin);
+      return;
+    }
+    const objectLines = [];
+    renderYamlObject(normalizedItem || {}, itemSchema?.fields, indent + 2, objectLines, rootValue, globalStore, childSourceContext(sourceContext, itemPath));
+    if (objectLines.length === 0) {
+      lines.push(`${" ".repeat(indent)}- {}`);
+      markNewLines(lines, lineStart, itemOrigin);
+      return;
+    }
+    const prefix = `${" ".repeat(indent)}- `;
+    const firstLine = objectLines[0];
+    const firstIndex = lines.length;
+    lines.push(`${prefix}${firstLine.slice(indent + 2)}`);
+    setLineOrigin(lines, firstIndex, getLineOrigin(objectLines, 0) || itemOrigin);
+    objectLines.slice(1).forEach((line, objectIndex) => {
+      const targetIndex = lines.length;
+      lines.push(line);
+      setLineOrigin(lines, targetIndex, getLineOrigin(objectLines, objectIndex + 1) || itemOrigin);
+    });
+    markNewLines(lines, lineStart, itemOrigin);
+  });
+};
+
+const hasConfiguredData = (value) => {
+  if (value === undefined || value === null) return false;
+  if (typeof value === "string") return value.trim() !== "";
+  if (Array.isArray(value)) return value.some((item) => hasConfiguredData(item));
+  if (typeof value === "object") {
+    return Object.entries(value).some(([key, nested]) => {
+      if (key.startsWith("_")) return false;
+      return hasConfiguredData(nested);
+    });
+  }
+  return true;
+};
+
+const isPlainObject = (value) =>
+  value !== null && typeof value === "object" && !Array.isArray(value);
+
+const cloneYamlValue = (value) => {
+  if (Array.isArray(value)) {
+    return value.map((item) => cloneYamlValue(item));
+  }
+  if (isPlainObject(value)) {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, nested]) => [key, cloneYamlValue(nested)])
+    );
+  }
+  return value;
+};
+
+const mergeYamlObjects = (baseValue, overrideValue) => {
+  const base = isPlainObject(baseValue) ? cloneYamlValue(baseValue) : {};
+  if (!isPlainObject(overrideValue)) return base;
+
+  Object.entries(overrideValue).forEach(([key, value]) => {
+    if (isPlainObject(base[key]) && isPlainObject(value)) {
+      base[key] = mergeYamlObjects(base[key], value);
+      return;
+    }
+    base[key] = cloneYamlValue(value);
+  });
+
+  return base;
+};
+
+const mergeFieldDefinitions = (primaryFields, secondaryFields) => {
+  const merged = Array.isArray(primaryFields) ? [...primaryFields] : [];
+  const seen = new Set(merged.map((field) => field?.key).filter(Boolean));
+
+  (secondaryFields || []).forEach((field) => {
+    const key = field?.key;
+    if (key && seen.has(key)) return;
+    merged.push(field);
+    if (key) {
+      seen.add(key);
+    }
+  });
+
+  return merged;
+};
+
+const resolveFieldDefaultValue = (fields, key) => {
+  const list = Array.isArray(fields) ? fields : [];
+  const field = list.find((entry) => entry?.key === key);
+  if (!field) return undefined;
+  if (field.default !== undefined) return field.default;
+  if (field.type === "boolean") return false;
+  return undefined;
+};
+
+const resolveEmbeddedDedupeToken = (item) => {
+  const dedupeBy = item?.dedupeBy;
+  if (!dedupeBy) return "";
+  const explicitValue = item?.payload?.[dedupeBy];
+  const fallbackValue = resolveFieldDefaultValue(item?.fields, dedupeBy);
+  const tokenSource = explicitValue !== undefined ? explicitValue : fallbackValue;
+  return normalizeDedupeToken(tokenSource);
+};
+
+const normalizeDedupeToken = (value) => {
+  if (value === undefined || value === null) return "";
+  if (typeof value === "string") return value.trim().toLowerCase();
+  if (typeof value === "number" || typeof value === "boolean") return String(value);
+  return "";
+};
+
+const getValueAtPath = (target, path) => {
+  const parts = Array.isArray(path) ? path : String(path || "").split(".").filter(Boolean);
+  return parts.reduce((acc, key) => (acc && acc[key] !== undefined ? acc[key] : undefined), target);
+};
+
+const setValueAtPath = (target, path, value) => {
+  const parts = Array.isArray(path) ? path : String(path || "").split(".").filter(Boolean);
+  if (!parts.length) return target;
+  let current = target;
+  parts.forEach((part, index) => {
+    if (index === parts.length - 1) {
+      current[part] = value;
+      return;
+    }
+    if (!isPlainObject(current[part])) {
+      current[part] = {};
+    }
+    current = current[part];
+  });
+  return target;
+};
+
+const resolveEmbeddedComponentItems = (schema, config, globalStore) => {
+  const embedded = Array.isArray(schema?.embedded) ? schema.embedded : [];
+  if (!embedded.length) return [];
+  const schemaFields = Array.isArray(schema?.fields) ? schema.fields : [];
+  const fieldByKey = new Map(schemaFields.map((field) => [field.key, field]));
+  const items = [];
+
+  embedded.forEach((definition) => {
+    const key = typeof definition?.key === "string" ? definition.key.trim() : "";
+    const fallbackDomain = typeof definition?.domain === "string" ? definition.domain.trim() : "";
+    const domainBy = typeof definition?.domainBy === "string" ? definition.domainBy.trim() : "";
+    const domainMap = isPlainObject(definition?.domainMap) ? definition.domainMap : null;
+    const mappedDomainValue = domainBy ? config?.[domainBy] : undefined;
+    const mappedDomain =
+      domainMap && mappedDomainValue !== undefined && domainMap[String(mappedDomainValue)]
+        ? String(domainMap[String(mappedDomainValue)]).trim()
+        : "";
+    const domain = mappedDomain || fallbackDomain;
+    if (!key || !domain) return;
+
+    const emitAsValue =
+      typeof definition?.emitAs === "string" ? definition.emitAs.trim().toLowerCase() : "";
+    const emitAs = emitAsValue === "map" ? "map" : "list";
+    const singleton = Boolean(definition?.singleton);
+    const merge =
+      typeof definition?.merge === "string" && definition.merge.trim().toLowerCase() === "deep"
+        ? "deep"
+        : "first";
+
+    const sourceField = fieldByKey.get(key);
+    if (!sourceField || sourceField.type !== "object") return;
+    if (!isFieldVisible(sourceField, config, schemaFields, globalStore)) return;
+
+    const sourceValue = config?.[key];
+    const defaultPayload = isPlainObject(definition?.defaultPayload)
+      ? cloneYamlValue(definition.defaultPayload)
+      : null;
+
+    let payload = null;
+    if (isPlainObject(sourceValue)) {
+      payload = defaultPayload ? mergeYamlObjects(defaultPayload, sourceValue) : cloneYamlValue(sourceValue);
+    } else if (defaultPayload) {
+      payload = defaultPayload;
+    } else if (definition?.alwaysEmit) {
+      payload = {};
+    }
+
+    if (!payload) return;
+
+    const injectFields = Array.isArray(definition?.injectFields) ? definition.injectFields : [];
+    injectFields.forEach((entry) => {
+      const from = typeof entry?.from === "string" ? entry.from.trim() : "";
+      const to = typeof entry?.to === "string" ? entry.to.trim() : from;
+      if (!from || !to) return;
+      const injectedValue = getValueAtPath(config, from);
+      if (injectedValue === undefined || injectedValue === null || injectedValue === "") return;
+      setValueAtPath(payload, to, cloneYamlValue(injectedValue));
+    });
+
+    if (!definition.alwaysEmit && !hasConfiguredData(payload)) return;
+
+    const item = {
+      domain,
+      payload,
+      fields: Array.isArray(sourceField.fields) ? sourceField.fields : [],
+      embedded: Array.isArray(sourceField.embedded) ? sourceField.embedded : [],
+      sourceKey: key,
+      dedupeBy:
+        typeof definition?.dedupeBy === "string" && definition.dedupeBy.trim()
+          ? definition.dedupeBy.trim()
+          : "",
+      emitAs,
+      singleton,
+      merge
+    };
+    items.push(item);
+
+    if (item.fields.length && item.embedded.length && isPlainObject(payload)) {
+      items.push(
+        ...resolveEmbeddedComponentItems(
+          {
+            fields: item.fields,
+            embedded: item.embedded
+          },
+          payload,
+          globalStore
+        )
+      );
+    }
+  });
+
+  return items;
+};
+
+// Build YAML for all component entries (grouped by domain).
+const normalizeMdiKey = (value) => {
+  if (!value || typeof value !== "string") return "";
+  const trimmed = value.trim();
+  const name = trimmed.startsWith("mdi:") ? trimmed.slice(4) : trimmed;
+  if (!name) return "";
+  return `mdi_${name.replace(/[^a-z0-9]/gi, "_")}`;
+};
+
+const escapeCppString = (value) =>
+  String(value ?? "")
+    .replace(/\\/g, "\\\\")
+    .replace(/\"/g, "\\\"");
+
+const escapePrintfText = (value) => escapeCppString(value).replace(/%/g, "%%");
+
+const resolveFontKeyFromParts = ({ source, file, family, variant, size }) => {
+  const fontSize = Math.max(1, Math.round(size || 12));
+  if (source === "google") {
+    if (!family) return "";
+    return `google|${family}|${variant || "regular"}|${fontSize}`;
+  }
+  if (!file) return "";
+  return `local|${file}|${fontSize}`;
+};
+
+const resolveTextFontKey = (element) => {
+  if (!element || element.type !== "text") return "";
+  return resolveFontKeyFromParts({
+    source: element.fontSource || "local",
+    file: element.fontFile || "",
+    family: element.fontFamily || "",
+    variant: element.fontVariant || "regular",
+    size: element.h || 12
+  });
+};
+
+const resolveLegendFontKey = (element, target) => {
+  if (!element || element.type !== "graph") return "";
+  const prefix = target === "value" ? "legendValue" : "legendName";
+  const source = element[`${prefix}FontSource`] || "local";
+  const file = element[`${prefix}FontFile`] || "";
+  const family = element[`${prefix}FontFamily`] || "";
+  const variant = element[`${prefix}FontVariant`] || "regular";
+  const size = element[`${prefix}FontSize`] || (target === "value" ? 8 : 10);
+  return resolveFontKeyFromParts({ source, file, family, variant, size });
+};
+
+const resolveImageKey = (element) => {
+  if (!element || element.type !== "image") return "";
+  const file = element.image || "";
+  if (!file) return "";
+  const encoding = normalizeImageElementEncoding(element);
+  const w = Math.max(1, Math.round(element.w || 1));
+  const h = Math.max(1, Math.round(element.h || 1));
+  return [
+    file,
+    w,
+    h,
+    encoding.imageType,
+    encoding.imageTransparency,
+    encoding.imageInvertAlpha ? "1" : "0",
+    encoding.imageDither,
+    encoding.imageByteOrder
+  ].join("|");
+};
+
+const resolveAnimationKey = (element) => {
+  if (!element || element.type !== "animation") return "";
+  const file = element.animationFile || "";
+  if (!file) return "";
+  const encoding = normalizeAnimationElementEncoding(element);
+  const resizeW = Math.max(1, Math.round(element.w || 1));
+  const resizeH = Math.max(1, Math.round(element.h || 1));
+  const autoAnimate = element.autoAnimate ? "1" : "0";
+  const intervalMs = element.intervalMs ?? "";
+  const loopEnabled = element.loopEnabled ? "1" : "0";
+  const loopStart = element.loopStart ?? "";
+  const loopEnd = element.loopEnd ?? "";
+  const loopRepeat = element.loopRepeat ?? "";
+  return [
+    file,
+    resizeW,
+    resizeH,
+    encoding.animationType,
+    encoding.animationTransparency,
+    encoding.animationInvertAlpha ? "1" : "0",
+    encoding.animationDither,
+    encoding.animationByteOrder,
+    autoAnimate,
+    intervalMs,
+    loopEnabled,
+    loopStart,
+    loopEnd,
+    loopRepeat
+  ].join("|");
+};
+
+const resolveGraphKey = (element) => {
+  if (!element || element.type !== "graph") return "";
+  const graphId = element.graphId || "";
+  const w = Math.max(1, Math.round(element.w || 1));
+  const h = Math.max(1, Math.round(element.h || 1));
+  const duration = element.duration || "1h";
+  const xGrid = element.xGrid || "";
+  const yGrid = element.yGrid ?? "";
+  const minRange = element.minRange ?? "";
+  const maxRange = element.maxRange ?? "";
+  const minValue = element.minValue ?? "";
+  const maxValue = element.maxValue ?? "";
+  const border = element.border === false ? "0" : "1";
+  const useTraces = element.useTraces ? "1" : "0";
+  const sensor = element.sensor || "";
+  const singleLineType = element.lineType || "";
+  const singleLineThickness = element.lineThickness ?? "";
+  const singleContinuous = element.continuous ? "1" : "0";
+  const singleColor = element.color || "";
+  const traces = (element.traces || [])
+    .map((trace) => {
+      if (!trace) return "";
+      return [
+        trace.sensor || "",
+        trace.name || "",
+        trace.lineType || "",
+        trace.lineThickness ?? "",
+        trace.continuous ? "1" : "0",
+        trace.color || ""
+      ].join("|");
+    })
+    .join(";");
+  const legend = element.legendEnabled ? "1" : "0";
+  const legendNameFont = resolveLegendFontKey(element, "name");
+  const legendValueFont = resolveLegendFontKey(element, "value");
+  const legendWidth = element.legendWidth ?? "";
+  const legendHeight = element.legendHeight ?? "";
+  const legendBorder = element.legendBorder === false ? "0" : "1";
+  const legendShowLines = element.legendShowLines === false ? "0" : "1";
+  const legendShowValues = element.legendShowValues || "AUTO";
+  const legendShowUnits = element.legendShowUnits === false ? "0" : "1";
+  const legendDirection = element.legendDirection || "AUTO";
+
+  return [
+    graphId,
+    w,
+    h,
+    duration,
+    border,
+    xGrid,
+    yGrid,
+    minRange,
+    maxRange,
+    minValue,
+    maxValue,
+    useTraces,
+    sensor,
+    singleLineType,
+    singleLineThickness,
+    singleContinuous,
+    singleColor,
+    traces,
+    legend,
+    legendNameFont,
+    legendValueFont,
+    legendWidth,
+    legendHeight,
+    legendBorder,
+    legendShowLines,
+    legendShowValues,
+    legendShowUnits,
+    legendDirection
+  ].join("~");
+};
+
+const collectDisplayAssets = (components, componentSchemas, mdiSubstitutions) => {
+  const glyphsBySize = new Map();
+  const elementsByEntry = new Map();
+  const labelsByUnicode = new Map();
+  const textFontsByKey = new Map();
+  const imagesByKey = new Map();
+  const graphsByKey = new Map();
+  const animationsByKey = new Map();
+
+  (components || []).forEach((entry) => {
+    const componentId = componentIdFromEntry(entry);
+    if (!componentId) return;
+    const schema = componentSchemas[componentId];
+    if (!schema || schema.domain !== "display") return;
+    const layout = entry?.config?._display_builder;
+    const elements = Array.isArray(layout?.elements) ? layout.elements : [];
+    if (!elements.length) return;
+    elementsByEntry.set(entry, elements);
+    elements
+      .filter((element) => element?.type === "icon" && element?.icon)
+      .forEach((element) => {
+        const key = normalizeMdiKey(element.icon);
+        if (!key) return;
+        const unicode = mdiSubstitutions?.[key];
+        if (!unicode) return;
+        const rawLabel = typeof element.icon === "string" ? element.icon.trim() : "";
+        const label = rawLabel
+          ? rawLabel.startsWith("mdi:")
+            ? rawLabel
+            : `mdi:${rawLabel}`
+          : "";
+        if (label && !labelsByUnicode.has(unicode)) {
+          labelsByUnicode.set(unicode, label);
+        }
+        const size = Math.max(1, Math.round(element.h || 16));
+        if (!glyphsBySize.has(size)) {
+          glyphsBySize.set(size, new Set());
+        }
+        glyphsBySize.get(size).add(unicode);
+      });
+    elements
+      .filter((element) => element?.type === "text")
+      .forEach((element) => {
+        const key = resolveTextFontKey(element);
+        if (!key || textFontsByKey.has(key)) return;
+        const size = Math.max(1, Math.round(element.h || 12));
+        if (element.fontSource === "google") {
+          const family = element.fontFamily || "";
+          const variant = element.fontVariant || "regular";
+          if (!family) return;
+          textFontsByKey.set(key, {
+            source: "google",
+            family,
+            variant,
+            size
+          });
+          return;
+        }
+        const file = element.fontFile || "";
+        if (!file) return;
+        textFontsByKey.set(key, {
+          source: "local",
+          file,
+          size
+        });
+      });
+    elements
+      .filter((element) => element?.type === "graph" && element?.legendEnabled)
+      .forEach((element) => {
+        const nameKey = resolveLegendFontKey(element, "name");
+        if (nameKey && !textFontsByKey.has(nameKey)) {
+          const source = element.legendNameFontSource || "local";
+          const size = Math.max(1, Math.round(element.legendNameFontSize || 10));
+          if (source === "google") {
+            const family = element.legendNameFontFamily || "";
+            const variant = element.legendNameFontVariant || "regular";
+            if (family) {
+              textFontsByKey.set(nameKey, { source: "google", family, variant, size });
+            }
+          } else {
+            const file = element.legendNameFontFile || "";
+            if (file) {
+              textFontsByKey.set(nameKey, { source: "local", file, size });
+            }
+          }
+        }
+        const valueKey = resolveLegendFontKey(element, "value");
+        if (valueKey && !textFontsByKey.has(valueKey)) {
+          const source = element.legendValueFontSource || "local";
+          const size = Math.max(1, Math.round(element.legendValueFontSize || 8));
+          if (source === "google") {
+            const family = element.legendValueFontFamily || "";
+            const variant = element.legendValueFontVariant || "regular";
+            if (family) {
+              textFontsByKey.set(valueKey, { source: "google", family, variant, size });
+            }
+          } else {
+            const file = element.legendValueFontFile || "";
+            if (file) {
+              textFontsByKey.set(valueKey, { source: "local", file, size });
+            }
+          }
+        }
+      });
+    elements
+      .filter((element) => element?.type === "image")
+      .forEach((element) => {
+        const key = resolveImageKey(element);
+        if (!key || imagesByKey.has(key)) return;
+        const encoding = normalizeImageElementEncoding(element);
+        const w = Math.max(1, Math.round(element.w || 1));
+        const h = Math.max(1, Math.round(element.h || 1));
+        imagesByKey.set(key, {
+          file: element.image,
+          w,
+          h,
+          type: encoding.imageType,
+          transparency: encoding.imageTransparency,
+          invertAlpha: encoding.imageInvertAlpha,
+          dither: encoding.imageDither,
+          byteOrder: encoding.imageByteOrder
+        });
+      });
+    elements
+      .filter((element) => element?.type === "animation")
+      .forEach((element) => {
+        const key = resolveAnimationKey(element);
+        if (!key || animationsByKey.has(key)) return;
+        const encoding = normalizeAnimationElementEncoding(element);
+        const resizeW = Math.max(1, Math.round(element.w || 1));
+        const resizeH = Math.max(1, Math.round(element.h || 1));
+        animationsByKey.set(key, {
+          file: element.animationFile,
+          id: element.animationId || "",
+          resizeW,
+          resizeH,
+          type: encoding.animationType,
+          transparency: encoding.animationTransparency,
+          invertAlpha: encoding.animationInvertAlpha,
+          dither: encoding.animationDither,
+          byteOrder: encoding.animationByteOrder,
+          autoAnimate: Boolean(element.autoAnimate),
+          intervalMs: element.intervalMs ?? "",
+          loopEnabled: Boolean(element.loopEnabled),
+          loopStart: element.loopStart ?? "",
+          loopEnd: element.loopEnd ?? "",
+          loopRepeat: element.loopRepeat ?? ""
+        });
+      });
+    elements
+      .filter((element) => element?.type === "graph")
+      .forEach((element) => {
+        const key = resolveGraphKey(element);
+        if (!key || graphsByKey.has(key)) return;
+        graphsByKey.set(key, {
+          graphId: element.graphId || "",
+          displayType: schema.displayType || "monochrome",
+          width: Math.max(1, Math.round(element.w || 1)),
+          height: Math.max(1, Math.round(element.h || 1)),
+          duration: element.duration || "1h",
+          border: element.border !== false,
+          xGrid: element.xGrid || "",
+          yGrid: element.yGrid ?? "",
+          minRange: element.minRange ?? "",
+          maxRange: element.maxRange ?? "",
+          minValue: element.minValue ?? "",
+          maxValue: element.maxValue ?? "",
+          useTraces: Boolean(element.useTraces),
+          sensor: element.sensor || "",
+          lineType: element.lineType || "",
+          lineThickness: element.lineThickness ?? "",
+          continuous: Boolean(element.continuous),
+          color: element.color || "",
+          traces: element.traces || [],
+          legendEnabled: Boolean(element.legendEnabled),
+          legendNameFontKey: resolveLegendFontKey(element, "name"),
+          legendValueFontKey: resolveLegendFontKey(element, "value"),
+          legendWidth: element.legendWidth ?? "",
+          legendHeight: element.legendHeight ?? "",
+          legendBorder: element.legendBorder !== false,
+          legendShowLines: element.legendShowLines !== false,
+          legendShowValues: element.legendShowValues || "AUTO",
+          legendShowUnits: element.legendShowUnits !== false,
+          legendDirection: element.legendDirection || "AUTO"
+        });
+      });
+  });
+
+  return {
+    glyphsBySize,
+    elementsByEntry,
+    labelsByUnicode,
+    textFontsByKey,
+    imagesByKey,
+    graphsByKey,
+    animationsByKey
+  };
+};
+
+const buildFontSections = (displayData, textFontIdByKey) => {
+  if (!displayData) return [];
+  const { glyphsBySize, labelsByUnicode, textFontsByKey } = displayData;
+  const hasIcons = glyphsBySize.size > 0;
+  const hasTextFonts = textFontsByKey.size > 0;
+  if (!hasIcons && !hasTextFonts) return [];
+  const lines = [];
+
+  lines.push("font:");
+  [...glyphsBySize.entries()]
+    .sort(([a], [b]) => a - b)
+    .forEach(([size, glyphs]) => {
+      lines.push("  - file: \"esp_assets/fonts/materialdesignicons-webfont.ttf\"");
+      lines.push(`    id: mdi_font_${size}`);
+      lines.push(`    size: ${size}`);
+      lines.push("    bpp: 1");
+      lines.push("    glyphs:");
+      [...glyphs].sort().forEach((unicode) => {
+        const label = labelsByUnicode?.get(unicode);
+        const comment = label ? ` #${label}` : "";
+        lines.push(`      - \"${unicode}\"${comment}`);
+      });
+    });
+
+  [...textFontsByKey.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .forEach(([key, font]) => {
+      const id = textFontIdByKey?.get(key);
+      if (!id) return;
+      if (font.source === "google") {
+        const { weight, italic } = parseGoogleFontVariant(font.variant);
+        lines.push("  - file:");
+        lines.push("      type: gfonts");
+        lines.push(`      family: \"${String(font.family || "").replace(/\"/g, "\\\"")}\"`);
+        lines.push(`      weight: ${weight}`);
+        if (italic) {
+          lines.push("      italic: true");
+        }
+      } else {
+        lines.push(`  - file: \"esp_assets/fonts/${font.file}\"`);
+      }
+      lines.push(`    id: ${id}`);
+      lines.push(`    size: ${font.size}`);
+      lines.push("    bpp: 1");
+    });
+  lines.push("");
+
+  return lines;
+};
+
+const buildImageSections = (displayData, imageIdByKey) => {
+  if (!displayData) return [];
+  const { imagesByKey } = displayData;
+  if (!imagesByKey.size) return [];
+  const lines = [];
+  lines.push("image:");
+  [...imagesByKey.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .forEach(([key, image]) => {
+      const id = imageIdByKey?.get(key);
+      if (!id) return;
+      lines.push(`  - file: \"esp_assets/images/${image.file}\"`);
+      lines.push(`    id: ${id}`);
+      lines.push(`    resize: ${image.w}x${image.h}`);
+      lines.push(`    type: ${image.type || "BINARY"}`);
+      if (image.transparency && image.transparency !== "opaque") {
+        lines.push(`    transparency: ${image.transparency}`);
+      }
+      if (image.invertAlpha) {
+        lines.push("    invert_alpha: true");
+      }
+      if (image.dither && image.dither !== "NONE") {
+        lines.push(`    dither: ${image.dither}`);
+      }
+      if (image.type === "RGB565" && image.byteOrder && image.byteOrder !== "big_endian") {
+        lines.push(`    byte_order: ${image.byteOrder}`);
+      }
+    });
+  lines.push("");
+  return lines;
+};
+
+const buildAnimationSections = (displayData, animationIdByKey) => {
+  if (!displayData) return [];
+  const { animationsByKey } = displayData;
+  if (!animationsByKey.size) return [];
+  const lines = [];
+  lines.push("animation:");
+  [...animationsByKey.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .forEach(([key, animation]) => {
+      const id = animationIdByKey?.get(key);
+      if (!id) return;
+      lines.push(`  - file: \"esp_assets/images/${animation.file}\"`);
+      lines.push(`    id: ${id}`);
+      lines.push(`    resize: ${animation.resizeW}x${animation.resizeH}`);
+      lines.push(`    type: ${animation.type || "BINARY"}`);
+      if (animation.transparency && animation.transparency !== "opaque") {
+        lines.push(`    transparency: ${animation.transparency}`);
+      }
+      if (animation.invertAlpha) {
+        lines.push("    invert_alpha: true");
+      }
+      if (animation.dither && animation.dither !== "NONE") {
+        lines.push(`    dither: ${animation.dither}`);
+      }
+      if (animation.type === "RGB565" && animation.byteOrder && animation.byteOrder !== "big_endian") {
+        lines.push(`    byte_order: ${animation.byteOrder}`);
+      }
+      if (animation.loopEnabled) {
+        lines.push("    loop:");
+        if (animation.loopStart !== "" && animation.loopStart !== null && animation.loopStart !== undefined) {
+          lines.push(`      start_frame: ${animation.loopStart}`);
+        }
+        if (animation.loopEnd !== "" && animation.loopEnd !== null && animation.loopEnd !== undefined) {
+          lines.push(`      end_frame: ${animation.loopEnd}`);
+        }
+        if (animation.loopRepeat !== "" && animation.loopRepeat !== null && animation.loopRepeat !== undefined) {
+          lines.push(`      repeat: ${animation.loopRepeat}`);
+        }
+      }
+    });
+  lines.push("");
+  return lines;
+};
+
+const buildAnimationIntervals = (displayData, animationIdByKey) => {
+  if (!displayData) return [];
+  const { animationsByKey } = displayData;
+  if (!animationsByKey.size) return [];
+  const lines = [];
+  [...animationsByKey.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .forEach(([key, animation]) => {
+      if (!animation.autoAnimate) return;
+      const id = animationIdByKey?.get(key);
+      if (!id) return;
+      const interval = Number(animation.intervalMs || 0) || 200;
+      lines.push("interval:");
+      lines.push(`  - interval: ${interval}ms`);
+      lines.push("    then:");
+      lines.push(`      - animation.next_frame: ${id}`);
+      lines.push("");
+    });
+  return lines;
+};
+
+export const buildDisplayAnimationIntervals = (
+  components,
+  componentSchemas = {},
+  mdiSubstitutions = {}
+) => {
+  const displayData = collectDisplayAssets(components, componentSchemas, mdiSubstitutions);
+  const animationIdByKey = buildAnimationIdMap(displayData?.animationsByKey || new Map());
+  const intervals = [];
+  if (!displayData?.animationsByKey?.size) return intervals;
+  [...displayData.animationsByKey.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .forEach(([key, animation]) => {
+      if (!animation.autoAnimate) return;
+      const id = animationIdByKey?.get(key);
+      if (!id) return;
+      const interval = Number(animation.intervalMs || 0) || 200;
+      intervals.push({
+        interval: `${interval}ms`,
+        then: [
+          {
+            type: "animation.next_frame",
+            fields: [{ key: "id", type: "id_ref", domain: "animation" }],
+            config: { id }
+          }
+        ]
+      });
+    });
+  return intervals;
+};
+
+const resolveElementColor = (value, displayType) => {
+  if (displayType === "monochrome") return "";
+  return colorToLambda(value);
+};
+
+const buildIconLambda = (elements, mdiSubstitutions, displayType) => {
+  const lines = [];
+  (elements || [])
+    .filter((element) => element?.type === "icon" && element?.icon)
+    .forEach((element) => {
+      const key = normalizeMdiKey(element.icon);
+      if (!key || !mdiSubstitutions?.[key]) return;
+      const size = Math.max(1, Math.round(element.h || 16));
+      const x = Math.round(element.x || 0);
+      const y = Math.round(element.y || 0);
+      const unicode = mdiSubstitutions[key];
+      const color = resolveElementColor(element.color, displayType);
+      if (color) {
+        lines.push(`it.printf(${x}, ${y}, id(mdi_font_${size}), ${color}, \"%s\", \"${unicode}\");`);
+        return;
+      }
+      lines.push(`it.printf(${x}, ${y}, id(mdi_font_${size}), \"%s\", \"${unicode}\");`);
+    });
+  return lines;
+};
+
+const buildTextLambda = (elements, textFontIdByKey, displayType) => {
+  const lines = [];
+  (elements || [])
+    .filter((element) => element?.type === "text")
+    .forEach((element) => {
+      const key = resolveTextFontKey(element);
+      if (!key) return;
+      const fontId = textFontIdByKey?.get(key);
+      if (!fontId) return;
+      const x = Math.round(element.x || 0);
+      const y = Math.round(element.y || 0);
+      const mode = element.textMode || "static";
+      const color = resolveElementColor(element.color, displayType);
+      if (mode !== "dynamic") {
+        const value = escapeCppString(element.text ?? "");
+        if (color) {
+          lines.push(`it.print(${x}, ${y}, id(${fontId}), ${color}, \"${value}\");`);
+          return;
+        }
+        lines.push(`it.print(${x}, ${y}, id(${fontId}), \"${value}\");`);
+        return;
+      }
+
+      const dynamicId = element.dynamicId || "";
+      if (!dynamicId) return;
+      const domain = element.dynamicDomain || "";
+      const prefix = escapePrintfText(element.prefix || "");
+      const suffix = escapePrintfText(element.suffix || "");
+
+      if (["sensor", "number"].includes(domain)) {
+        const format = element.format || "%.1f";
+        const fmt = `${prefix}${format}${suffix}`;
+        if (color) {
+          lines.push(
+            `it.printf(${x}, ${y}, id(${fontId}), ${color}, \"${fmt}\", id(${dynamicId}).state);`
+          );
+          return;
+        }
+        lines.push(`it.printf(${x}, ${y}, id(${fontId}), \"${fmt}\", id(${dynamicId}).state);`);
+        return;
+      }
+
+      if (["binary_sensor", "switch"].includes(domain)) {
+        const onLabel = escapePrintfText(element.onLabel || "ON");
+        const offLabel = escapePrintfText(element.offLabel || "OFF");
+        if (color) {
+          lines.push(
+            `it.printf(${x}, ${y}, id(${fontId}), ${color}, \"%s%s%s\", \"${prefix}\", id(${dynamicId}).state ? \"${onLabel}\" : \"${offLabel}\", \"${suffix}\");`
+          );
+          return;
+        }
+        lines.push(
+          `it.printf(${x}, ${y}, id(${fontId}), \"%s%s%s\", \"${prefix}\", id(${dynamicId}).state ? \"${onLabel}\" : \"${offLabel}\", \"${suffix}\");`
+        );
+        return;
+      }
+
+      if (["text_sensor", "select"].includes(domain)) {
+        if (color) {
+          lines.push(
+            `it.printf(${x}, ${y}, id(${fontId}), ${color}, \"%s%s%s\", \"${prefix}\", id(${dynamicId}).state.c_str(), \"${suffix}\");`
+          );
+          return;
+        }
+        lines.push(
+          `it.printf(${x}, ${y}, id(${fontId}), \"%s%s%s\", \"${prefix}\", id(${dynamicId}).state.c_str(), \"${suffix}\");`
+        );
+        return;
+      }
+
+      if (["time", "datetime"].includes(domain)) {
+        const timeFormat = domain === "time" ? "%H:%M" : "%d-%m-%Y %H:%M";
+        if (color) {
+          lines.push(
+            `it.printf(${x}, ${y}, id(${fontId}), ${color}, \"%s%s%s\", \"${prefix}\", id(${dynamicId}).now().strftime(\"${timeFormat}\").c_str(), \"${suffix}\");`
+          );
+          return;
+        }
+        lines.push(
+          `it.printf(${x}, ${y}, id(${fontId}), \"%s%s%s\", \"${prefix}\", id(${dynamicId}).now().strftime(\"${timeFormat}\").c_str(), \"${suffix}\");`
+        );
+        return;
+      }
+
+      if (color) {
+        lines.push(
+          `it.printf(${x}, ${y}, id(${fontId}), ${color}, \"%s%s%s\", \"${prefix}\", id(${dynamicId}).state.c_str(), \"${suffix}\");`
+        );
+        return;
+      }
+      lines.push(
+        `it.printf(${x}, ${y}, id(${fontId}), \"%s%s%s\", \"${prefix}\", id(${dynamicId}).state.c_str(), \"${suffix}\");`
+      );
+    });
+  return lines;
+};
+
+const buildImageLambda = (elements, imageIdByKey) => {
+  const lines = [];
+  (elements || [])
+    .filter((element) => element?.type === "image" && element?.image)
+    .forEach((element) => {
+      const key = resolveImageKey(element);
+      if (!key) return;
+      const imageId = imageIdByKey?.get(key);
+      if (!imageId) return;
+      const x = Math.round(element.x || 0);
+      const y = Math.round(element.y || 0);
+      if (element.invert) {
+        lines.push(`it.image(${x}, ${y}, id(${imageId}), COLOR_OFF, COLOR_ON);`);
+        return;
+      }
+      lines.push(`it.image(${x}, ${y}, id(${imageId}));`);
+    });
+  return lines;
+};
+
+const buildAnimationLambda = (elements, animationIdByKey) => {
+  const lines = [];
+  (elements || [])
+    .filter((element) => element?.type === "animation" && element?.animationFile)
+    .forEach((element) => {
+      const key = resolveAnimationKey(element);
+      if (!key) return;
+      const animationId = animationIdByKey?.get(key);
+      if (!animationId) return;
+      const x = Math.round(element.x || 0);
+      const y = Math.round(element.y || 0);
+      lines.push(`it.image(${x}, ${y}, id(${animationId}));`);
+    });
+  return lines;
+};
+
+const rotatePoint = (point, cx, cy, rotation) => {
+  if (!rotation) return point;
+  const radians = (rotation * Math.PI) / 180;
+  const cos = Math.cos(radians);
+  const sin = Math.sin(radians);
+  const dx = point.x - cx;
+  const dy = point.y - cy;
+  return {
+    x: cx + dx * cos - dy * sin,
+    y: cy + dx * sin + dy * cos
+  };
+};
+
+const roundPoint = (point) => ({
+  x: Math.round(point.x),
+  y: Math.round(point.y)
+});
+
+const buildShapePoints = (element) => {
+  const x = Number(element.x || 0);
+  const y = Number(element.y || 0);
+  const w = Number(element.w || 0);
+  const h = Number(element.h || 0);
+  const shape = element.shapeType || "rect";
+  if (shape === "line") {
+    return [
+      { x, y },
+      { x: x + w, y: y + h }
+    ];
+  }
+  if (shape === "rect") {
+    return [
+      { x, y },
+      { x: x + w, y },
+      { x: x + w, y: y + h },
+      { x, y: y + h }
+    ];
+  }
+  if (shape === "triangle") {
+    return [
+      { x, y: y + h },
+      { x: x + w / 2, y },
+      { x: x + w, y: y + h }
+    ];
+  }
+  if (shape.startsWith("polygon")) {
+    const sides = Number(shape.replace("polygon", ""));
+    if (!sides || sides < 3) return [];
+    const cx = x + w / 2;
+    const cy = y + h / 2;
+    const radius = Math.max(1, Math.min(w, h) / 2);
+    const points = [];
+    const start = -Math.PI / 2;
+    for (let i = 0; i < sides; i += 1) {
+      const angle = start + (i * 2 * Math.PI) / sides;
+      points.push({
+        x: cx + radius * Math.cos(angle),
+        y: cy + radius * Math.sin(angle)
+      });
+    }
+    return points;
+  }
+  return [];
+};
+
+const buildShapeLambda = (elements, displayType) => {
+  const lines = [];
+  (elements || [])
+    .filter((element) => element?.type === "shape")
+    .forEach((element) => {
+      const shape = element.shapeType || "rect";
+      const rotation = Number(element.rotation || 0);
+      const x = Number(element.x || 0);
+      const y = Number(element.y || 0);
+      const w = Number(element.w || 0);
+      const h = Number(element.h || 0);
+      const cx = x + w / 2;
+      const cy = y + h / 2;
+      const color = resolveElementColor(element.color, displayType);
+      if (shape === "circle") {
+        const r = Math.max(1, Math.min(w, h) / 2);
+        const rx = Math.round(cx);
+        const ry = Math.round(cy);
+        const rr = Math.round(r);
+        if (element.filled) {
+          if (color) {
+            lines.push(`it.filled_circle(${rx}, ${ry}, ${rr}, ${color});`);
+            return;
+          }
+          lines.push(`it.filled_circle(${rx}, ${ry}, ${rr});`);
+        } else {
+          if (color) {
+            lines.push(`it.circle(${rx}, ${ry}, ${rr}, ${color});`);
+            return;
+          }
+          lines.push(`it.circle(${rx}, ${ry}, ${rr});`);
+        }
+        return;
+      }
+
+      let points = buildShapePoints(element);
+      if (!points.length) return;
+      if (rotation) {
+        points = points.map((point) => rotatePoint(point, cx, cy, rotation));
+      }
+      points = points.map(roundPoint);
+
+      if (shape === "line") {
+        const [p1, p2] = points;
+        if (!p1 || !p2) return;
+        if (color) {
+          lines.push(`it.line(${p1.x}, ${p1.y}, ${p2.x}, ${p2.y}, ${color});`);
+          return;
+        }
+        lines.push(`it.line(${p1.x}, ${p1.y}, ${p2.x}, ${p2.y});`);
+        return;
+      }
+
+      if (element.filled) {
+        if (points.length === 3) {
+          const [a, b, c] = points;
+          if (color) {
+            lines.push(`it.filled_triangle(${a.x}, ${a.y}, ${b.x}, ${b.y}, ${c.x}, ${c.y}, ${color});`);
+            return;
+          }
+          lines.push(`it.filled_triangle(${a.x}, ${a.y}, ${b.x}, ${b.y}, ${c.x}, ${c.y});`);
+          return;
+        }
+        for (let i = 1; i < points.length - 1; i += 1) {
+          const a = points[0];
+          const b = points[i];
+          const c = points[i + 1];
+          if (color) {
+            lines.push(`it.filled_triangle(${a.x}, ${a.y}, ${b.x}, ${b.y}, ${c.x}, ${c.y}, ${color});`);
+            continue;
+          }
+          lines.push(`it.filled_triangle(${a.x}, ${a.y}, ${b.x}, ${b.y}, ${c.x}, ${c.y});`);
+        }
+        return;
+      }
+
+      for (let i = 0; i < points.length; i += 1) {
+        const current = points[i];
+        const next = points[(i + 1) % points.length];
+        if (color) {
+          lines.push(`it.line(${current.x}, ${current.y}, ${next.x}, ${next.y}, ${color});`);
+          continue;
+        }
+        lines.push(`it.line(${current.x}, ${current.y}, ${next.x}, ${next.y});`);
+      }
+    });
+  return lines;
+};
+
+const buildGraphSections = (displayData, graphIdByKey, textFontIdByKey) => {
+  if (!displayData) return [];
+  const { graphsByKey } = displayData;
+  if (!graphsByKey?.size) return [];
+  const lines = [];
+  lines.push("graph:");
+  [...graphsByKey.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .forEach(([key, graph]) => {
+      const id = graphIdByKey?.get(key);
+      if (!id) return;
+      lines.push(`  - id: ${id}`);
+      if (!graph.useTraces && graph.sensor) {
+        lines.push(`    sensor: ${graph.sensor}`);
+      }
+      lines.push(`    duration: ${graph.duration}`);
+      lines.push(`    width: ${graph.width}`);
+      lines.push(`    height: ${graph.height}`);
+      if (graph.border === false) lines.push("    border: false");
+      if (graph.xGrid) lines.push(`    x_grid: ${graph.xGrid}`);
+      if (graph.yGrid !== "" && graph.yGrid !== null && graph.yGrid !== undefined) {
+        lines.push(`    y_grid: ${graph.yGrid}`);
+      }
+      if (graph.minRange !== "" && graph.minRange !== null && graph.minRange !== undefined) {
+        lines.push(`    min_range: ${graph.minRange}`);
+      }
+      if (graph.maxRange !== "" && graph.maxRange !== null && graph.maxRange !== undefined) {
+        lines.push(`    max_range: ${graph.maxRange}`);
+      }
+      if (graph.minValue !== "" && graph.minValue !== null && graph.minValue !== undefined) {
+        lines.push(`    min_value: ${graph.minValue}`);
+      }
+      if (graph.maxValue !== "" && graph.maxValue !== null && graph.maxValue !== undefined) {
+        lines.push(`    max_value: ${graph.maxValue}`);
+      }
+      if (graph.useTraces && graph.traces?.length) {
+        lines.push("    traces:");
+        graph.traces.forEach((trace) => {
+          const sensor = String(trace?.sensor || "").trim();
+          if (!sensor) return;
+          lines.push(`      - sensor: ${sensor}`);
+          if (trace.name) lines.push(`        name: \"${escapeCppString(trace.name)}\"`);
+          if (trace.lineType) lines.push(`        line_type: ${trace.lineType}`);
+          if (trace.lineThickness !== "" && trace.lineThickness !== null && trace.lineThickness !== undefined) {
+            lines.push(`        line_thickness: ${trace.lineThickness}`);
+          }
+          if (trace.continuous) lines.push("        continuous: true");
+          const color = String(trace.color || "").trim();
+          if (color && graph.displayType !== "monochrome") {
+            lines.push(`        color: ${color}`);
+          }
+        });
+      } else {
+        const color = String(graph.color || "").trim();
+        if (color && graph.displayType !== "monochrome") {
+          lines.push(`    color: ${color}`);
+        }
+      }
+      if (graph.legendEnabled) {
+        lines.push("    legend:");
+        if (graph.legendNameFontKey) {
+          const fontId = textFontIdByKey?.get(graph.legendNameFontKey);
+          if (fontId) lines.push(`      name_font: ${fontId}`);
+        }
+        if (graph.legendValueFontKey) {
+          const fontId = textFontIdByKey?.get(graph.legendValueFontKey);
+          if (fontId) lines.push(`      value_font: ${fontId}`);
+        }
+        if (graph.legendWidth !== "" && graph.legendWidth !== null && graph.legendWidth !== undefined) {
+          lines.push(`      width: ${graph.legendWidth}`);
+        }
+        if (graph.legendHeight !== "" && graph.legendHeight !== null && graph.legendHeight !== undefined) {
+          lines.push(`      height: ${graph.legendHeight}`);
+        }
+        if (graph.legendBorder === false) lines.push("      border: false");
+        if (graph.legendShowLines === false) lines.push("      show_lines: false");
+        if (graph.legendShowValues && graph.legendShowValues !== "AUTO") {
+          lines.push(`      show_values: ${graph.legendShowValues}`);
+        }
+        if (graph.legendShowUnits === false) lines.push("      show_units: false");
+        if (graph.legendDirection && graph.legendDirection !== "AUTO") {
+          lines.push(`      direction: ${graph.legendDirection}`);
+        }
+      }
+    });
+  lines.push("");
+  return lines;
+};
+
+const buildGraphLambda = (elements, graphIdByKey) => {
+  const lines = [];
+  (elements || [])
+    .filter((element) => element?.type === "graph")
+    .forEach((element) => {
+      const key = resolveGraphKey(element);
+      if (!key) return;
+      const graphId = graphIdByKey?.get(key);
+      if (!graphId) return;
+      const x = Math.round(element.x || 0);
+      const y = Math.round(element.y || 0);
+      lines.push(`it.graph(${x}, ${y}, id(${graphId}));`);
+      if (element.legendEnabled) {
+        const legendX = Math.round((element.legendX ?? (element.x + element.w + 8)) || 0);
+        const legendY = Math.round((element.legendY ?? element.y) || 0);
+        lines.push(`it.legend(${legendX}, ${legendY}, id(${graphId}));`);
+      }
+    });
+  return lines;
+};
+
+const buildDisplayLambda = (
+  elements,
+  mdiSubstitutions,
+  textFontIdByKey,
+  imageIdByKey,
+  graphIdByKey,
+  animationIdByKey,
+  displayType
+) => {
+  const lines = [];
+  // The editor stores layers topmost-first, but ESPHome draws later lambda
+  // commands over earlier ones, so YAML must emit layers bottommost-first.
+  [...(elements || [])].reverse().forEach((element) => {
+    if (element?.type === "icon") {
+      const iconLines = buildIconLambda([element], mdiSubstitutions, displayType);
+      lines.push(...iconLines);
+      return;
+    }
+    if (element?.type === "text") {
+      const textLines = buildTextLambda([element], textFontIdByKey, displayType);
+      lines.push(...textLines);
+      return;
+    }
+    if (element?.type === "image") {
+      const imageLines = buildImageLambda([element], imageIdByKey);
+      lines.push(...imageLines);
+      return;
+    }
+    if (element?.type === "animation") {
+      const animationLines = buildAnimationLambda([element], animationIdByKey);
+      lines.push(...animationLines);
+      return;
+    }
+    if (element?.type === "shape") {
+      const shapeLines = buildShapeLambda([element], displayType);
+      lines.push(...shapeLines);
+      return;
+    }
+    if (element?.type === "graph") {
+      const graphLines = buildGraphLambda([element], graphIdByKey);
+      lines.push(...graphLines);
+    }
+  });
+  return lines;
+};
+
+const buildTextFontIdMap = (textFontsByKey) => {
+  const map = new Map();
+  if (!textFontsByKey || !textFontsByKey.size) return map;
+  [...textFontsByKey.keys()]
+    .sort((a, b) => a.localeCompare(b))
+    .forEach((key, index) => {
+      map.set(key, `text_font_${index + 1}`);
+    });
+  return map;
+};
+
+const buildImageIdMap = (imagesByKey) => {
+  const map = new Map();
+  if (!imagesByKey || !imagesByKey.size) return map;
+  [...imagesByKey.keys()]
+    .sort((a, b) => a.localeCompare(b))
+    .forEach((key, index) => {
+      map.set(key, `image_${index + 1}`);
+    });
+  return map;
+};
+
+const buildAnimationIdMap = (animationsByKey) => {
+  const map = new Map();
+  if (!animationsByKey || !animationsByKey.size) return map;
+  const used = new Set();
+  [...animationsByKey.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .forEach(([key, animation], index) => {
+      let id = animation?.id || "";
+      if (!id) {
+        id = `animation_${index + 1}`;
+      }
+      let safeId = id;
+      let counter = 2;
+      while (used.has(safeId)) {
+        safeId = `${id}_${counter}`;
+        counter += 1;
+      }
+      used.add(safeId);
+      map.set(key, safeId);
+    });
+  return map;
+};
+
+const buildGraphIdMap = (graphsByKey) => {
+  const map = new Map();
+  if (!graphsByKey || !graphsByKey.size) return map;
+  const used = new Set();
+  [...graphsByKey.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .forEach(([key, graph], index) => {
+      let id = graph?.graphId || "";
+      if (!id) {
+        id = `graph_${index + 1}`;
+      }
+      let safeId = id;
+      let counter = 2;
+      while (used.has(safeId)) {
+        safeId = `${id}_${counter}`;
+        counter += 1;
+      }
+      used.add(safeId);
+      map.set(key, safeId);
+    });
+  return map;
+};
+
+const buildComponentsYamlInternal = (
+  components,
+  componentSchemas = {},
+  componentSchemaStates = {},
+  globalStore = null,
+  mdiSubstitutions = {},
+  sourceMapped = false,
+  fieldComments = {}
+) => {
+  const displayData = collectDisplayAssets(components, componentSchemas, mdiSubstitutions);
+  const textFontIdByKey = buildTextFontIdMap(displayData?.textFontsByKey || new Map());
+  const imageIdByKey = buildImageIdMap(displayData?.imagesByKey || new Map());
+  const graphIdByKey = buildGraphIdMap(displayData?.graphsByKey || new Map());
+  const animationIdByKey = buildAnimationIdMap(displayData?.animationsByKey || new Map());
+  const grouped = new Map();
+  const embeddedListByIdentity = new Map();
+  const embeddedMapSingleton = new Map();
+  const rootMapByDomain = new Map();
+  const missingSchemas = [];
+  const verbatimRootLines = [];
+
+  (components || []).forEach((entry, componentIndex) => {
+    const componentId = componentIdFromEntry(entry);
+    if (!componentId) return;
+    const schema = componentSchemas[componentId];
+    const componentSourceContext = sourceMapped
+      ? {
+          owner: "component",
+          scopeId: `component:${componentIndex}`,
+          componentIndex,
+          componentId,
+          tabKey: "",
+          path: [],
+          modeLevel: ""
+        }
+      : null;
+    if (!schema) {
+      const schemaState = String(componentSchemaStates?.[componentId] || "").toLowerCase();
+      if (!schemaState || schemaState === "idle" || schemaState === "loading") {
+        return;
+      }
+      const customConfig = entry?.customConfig || "";
+      const separator = componentId.includes(".") ? "." : "/";
+      const [domain, platform] = componentId.split(separator);
+      if (!domain || !platform) {
+        missingSchemas.push(componentId);
+        return;
+      }
+      if (!grouped.has(domain)) {
+        grouped.set(domain, []);
+      }
+      grouped.get(domain).push({
+        type: "custom",
+        platform,
+        config: customConfig,
+        sourceContext: componentSourceContext ? { ...componentSourceContext, tabKey: domain } : null
+      });
+      return;
+    }
+    if (schema.renderStrategy === "verbatim_root") {
+      const rawField =
+        typeof schema.verbatimField === "string" && schema.verbatimField.trim()
+          ? schema.verbatimField.trim()
+          : "custom_config";
+      const rawValue = typeof entry?.config?.[rawField] === "string" ? entry.config[rawField] : "";
+      const normalized = rawValue.replace(/\r\n/g, "\n").replace(/\r/g, "\n").trimEnd();
+      if (!normalized) {
+        return;
+      }
+      if (verbatimRootLines.length) {
+        verbatimRootLines.push("");
+      }
+      normalized.split("\n").forEach((line) => {
+        const index = verbatimRootLines.length;
+        verbatimRootLines.push(line);
+        setLineOrigin(verbatimRootLines, index, makeSourceOrigin(componentSourceContext, {
+          path: [rawField],
+          fieldKey: rawField,
+          contentKind: "raw_yaml"
+        }));
+      });
+      return;
+    }
+    const rawConfig = { ...(entry?.config || {}) };
+    const domain = resolveSchemaDomain(schema, rawConfig);
+    const sourceContext = componentSourceContext ? { ...componentSourceContext, tabKey: domain } : null;
+    const config = { ...rawConfig };
+    const busValue = rawConfig.bus;
+    const renderAs = resolveComponentRenderAs(schema);
+    if (renderAs === "root_map") {
+      if (!grouped.has(domain)) {
+        grouped.set(domain, []);
+      }
+      if (!rootMapByDomain.has(domain)) {
+        grouped.get(domain).push({ type: "root_map", payload: config, schema, sourceContext });
+        rootMapByDomain.set(domain, true);
+      }
+
+      const embeddedItems = resolveEmbeddedComponentItems(schema, rawConfig, globalStore);
+      embeddedItems.forEach((item) => {
+        if (!grouped.has(item.domain)) {
+          grouped.set(item.domain, []);
+        }
+
+        const dedupeToken = item.emitAs === "list" ? resolveEmbeddedDedupeToken(item) : "";
+        const dedupeIdentity =
+          item.emitAs === "list" && item.dedupeBy && dedupeToken
+            ? `${item.domain}:${item.dedupeBy}:${dedupeToken}`
+            : "";
+
+        if (dedupeIdentity) {
+          if (embeddedListByIdentity.has(dedupeIdentity)) {
+            return;
+          }
+        }
+
+        if (item.emitAs === "map" && item.singleton) {
+          const existing = embeddedMapSingleton.get(item.domain);
+          if (existing) {
+            if (item.merge === "deep") {
+              existing.payload = mergeYamlObjects(existing.payload, item.payload);
+              existing.fields = mergeFieldDefinitions(existing.fields, item.fields);
+            }
+            return;
+          }
+        }
+
+        const groupedItem = {
+          type: "embedded",
+          payload: item.payload,
+          fields: item.fields,
+          emitAs: item.emitAs,
+          merge: item.merge,
+          sourceContext: sourceContext
+            ? {
+                ...sourceContext,
+                path: item.sourceKey ? [item.sourceKey] : [],
+                tabKey: item.domain || sourceContext.tabKey
+              }
+            : null
+        };
+
+        grouped.get(item.domain).push(groupedItem);
+
+        if (dedupeIdentity) {
+          embeddedListByIdentity.set(dedupeIdentity, groupedItem);
+        }
+
+        if (item.emitAs === "map" && item.singleton) {
+          embeddedMapSingleton.set(item.domain, groupedItem);
+        }
+      });
+      return;
+    }
+    if (renderAs === "root_list") {
+      if (!grouped.has(domain)) {
+        grouped.set(domain, []);
+      }
+      grouped.get(domain).push({ type: "root_list", payload: config, schema, sourceContext });
+
+      const embeddedItems = resolveEmbeddedComponentItems(schema, config, globalStore);
+      embeddedItems.forEach((item) => {
+        if (!grouped.has(item.domain)) {
+          grouped.set(item.domain, []);
+        }
+
+        const dedupeToken = item.emitAs === "list" ? resolveEmbeddedDedupeToken(item) : "";
+        const dedupeIdentity =
+          item.emitAs === "list" && item.dedupeBy && dedupeToken
+            ? `${item.domain}:${item.dedupeBy}:${dedupeToken}`
+            : "";
+
+        if (dedupeIdentity) {
+          if (embeddedListByIdentity.has(dedupeIdentity)) {
+            return;
+          }
+        }
+
+        if (item.emitAs === "map" && item.singleton) {
+          const existing = embeddedMapSingleton.get(item.domain);
+          if (existing) {
+            if (item.merge === "deep") {
+              existing.payload = mergeYamlObjects(existing.payload, item.payload);
+              existing.fields = mergeFieldDefinitions(existing.fields, item.fields);
+            }
+            return;
+          }
+        }
+
+        const groupedItem = {
+          type: "embedded",
+          payload: item.payload,
+          fields: item.fields,
+          emitAs: item.emitAs,
+          merge: item.merge,
+          sourceContext: sourceContext
+            ? {
+                ...sourceContext,
+                path: item.sourceKey ? [item.sourceKey] : [],
+                tabKey: item.domain || sourceContext.tabKey
+              }
+            : null
+        };
+
+        grouped.get(item.domain).push(groupedItem);
+
+        if (dedupeIdentity) {
+          embeddedListByIdentity.set(dedupeIdentity, groupedItem);
+        }
+
+        if (item.emitAs === "map" && item.singleton) {
+          embeddedMapSingleton.set(item.domain, groupedItem);
+        }
+      });
+      return;
+    }
+    const platform = schema.platformByBus?.[busValue] || schema.platform;
+    let payload = {
+      platform,
+      ...config
+    };
+    if (schema.domain === "display" && payload._display_builder) {
+      delete payload._display_builder;
+    }
+    if (schema.domain === "display") {
+      const elements = displayData.elementsByEntry?.get(entry) || [];
+      const displayLines = buildDisplayLambda(
+        elements,
+        mdiSubstitutions,
+        textFontIdByKey,
+        imageIdByKey,
+        graphIdByKey,
+        animationIdByKey,
+        schema.displayType || "monochrome"
+      );
+      if (displayLines.length) {
+        const existing = typeof payload.lambda === "string" ? payload.lambda.trim() : "";
+        const lambdaBody = [existing, ...displayLines].filter(Boolean).join("\n");
+        payload = { ...payload, lambda: lambdaBody };
+      }
+    }
+    if (!grouped.has(domain)) {
+      grouped.set(domain, []);
+    }
+    grouped.get(domain).push({ type: "schema", payload, schema, sourceContext });
+
+    const embeddedItems = resolveEmbeddedComponentItems(schema, rawConfig, globalStore);
+    embeddedItems.forEach((item) => {
+      if (!grouped.has(item.domain)) {
+        grouped.set(item.domain, []);
+      }
+
+      const dedupeToken = item.emitAs === "list" ? resolveEmbeddedDedupeToken(item) : "";
+      const dedupeIdentity =
+        item.emitAs === "list" && item.dedupeBy && dedupeToken
+          ? `${item.domain}:${item.dedupeBy}:${dedupeToken}`
+          : "";
+
+      if (dedupeIdentity) {
+        if (embeddedListByIdentity.has(dedupeIdentity)) {
+          return;
+        }
+      }
+
+      if (item.emitAs === "map" && item.singleton) {
+        const existing = embeddedMapSingleton.get(item.domain);
+        if (existing) {
+          if (item.merge === "deep") {
+            existing.payload = mergeYamlObjects(existing.payload, item.payload);
+            existing.fields = mergeFieldDefinitions(existing.fields, item.fields);
+          }
+          return;
+        }
+      }
+
+      const groupedItem = {
+        type: "embedded",
+        payload: item.payload,
+        fields: item.fields,
+        emitAs: item.emitAs,
+        merge: item.merge,
+        sourceContext: sourceContext
+          ? {
+              ...sourceContext,
+              path: item.sourceKey ? [item.sourceKey] : [],
+              tabKey: item.domain || sourceContext.tabKey
+            }
+          : null
+      };
+
+      grouped.get(item.domain).push(groupedItem);
+
+      if (dedupeIdentity) {
+        embeddedListByIdentity.set(dedupeIdentity, groupedItem);
+      }
+
+      if (item.emitAs === "map" && item.singleton) {
+        embeddedMapSingleton.set(item.domain, groupedItem);
+      }
+    });
+  });
+
+  const lines = [];
+  const fontLines = buildFontSections(displayData, textFontIdByKey);
+  if (fontLines.length) {
+    lines.push(...fontLines);
+  }
+  const imageLines = buildImageSections(displayData, imageIdByKey);
+  if (imageLines.length) {
+    lines.push(...imageLines);
+  }
+  const animationLines = buildAnimationSections(displayData, animationIdByKey);
+  if (animationLines.length) {
+    lines.push(...animationLines);
+  }
+  const graphLines = buildGraphSections(displayData, graphIdByKey, textFontIdByKey);
+  if (graphLines.length) {
+    lines.push(...graphLines);
+  }
+  grouped.forEach((items, domain) => {
+    const rootMapItems = items.filter((item) => item.type === "root_map");
+    const rootListItems = items.filter((item) => item.type === "root_list");
+    const mapItems = items.filter((item) => item.type === "embedded" && item.emitAs === "map");
+    const listItems = items.filter(
+      (item) => item.type !== "root_map" && item.type !== "root_list" && !(item.type === "embedded" && item.emitAs === "map")
+    );
+
+    const domainComment = fieldComments[domain];
+    if (domainComment) {
+      domainComment.split("\n").forEach((commentLine) => pushYamlLine(lines, commentLine));
+    }
+
+    const firstMappedItem = items.find((item) => item.sourceContext)?.sourceContext || null;
+    pushYamlLine(lines, `${domain}:`, makeSourceOrigin(firstMappedItem, {
+      type: "section",
+      path: firstMappedItem?.path || [],
+      confidence: items.length === 1 ? "section" : "group"
+    }));
+    if (rootMapItems.length) {
+      const rootItem = rootMapItems[0];
+      const mapLines = [];
+      renderYamlObject(
+        rootItem.payload || {},
+        filterSchemaFieldsForYaml(rootItem.schema?.fields || [], rootItem.schema),
+        2,
+        mapLines,
+        rootItem.payload || {},
+        globalStore,
+        rootItem.sourceContext || null
+      );
+      appendYamlLines(lines, mapLines);
+      lines.push("");
+      return;
+    }
+    if (rootListItems.length) {
+      rootListItems.forEach((item) => {
+        renderYamlSingleListObject(
+          item.payload,
+          { type: "object", fields: filterSchemaFieldsForYaml(item.schema?.fields || [], item.schema) },
+          2,
+          lines,
+          item.payload || {},
+          globalStore,
+          item.sourceContext || null
+        );
+      });
+      lines.push("");
+      return;
+    }
+    if (mapItems.length && !listItems.length) {
+      const firstMapItem = mapItems[0];
+      let mergedPayload = cloneYamlValue(firstMapItem.payload || {});
+      let mergedFields = Array.isArray(firstMapItem.fields) ? firstMapItem.fields : [];
+
+      mapItems.slice(1).forEach((item) => {
+        if (item.merge === "deep") {
+          mergedPayload = mergeYamlObjects(mergedPayload, item.payload || {});
+          mergedFields = mergeFieldDefinitions(mergedFields, item.fields || []);
+        }
+      });
+
+      const mapLines = [];
+      renderYamlObject(
+        mergedPayload,
+        mergedFields,
+        2,
+        mapLines,
+        mergedPayload,
+        globalStore,
+        firstMapItem.sourceContext || null
+      );
+      appendYamlLines(lines, mapLines);
+      lines.push("");
+      return;
+    }
+
+    listItems.forEach((item, domainItemIndex) => {
+      const itemPathPrefix = `${domain}[${domainItemIndex}]`;
+      const itemComment = fieldComments[itemPathPrefix];
+      if (itemComment) {
+        itemComment.split("\n").forEach((commentLine) => pushYamlLine(lines, `  ${commentLine}`));
+      }
+
+      if (item.type === "custom") {
+        pushYamlLine(lines, `  - platform: ${item.platform}`, makeSourceOrigin(item.sourceContext, {
+          type: "section",
+          path: [],
+          confidence: "section"
+        }));
+        item.config.split(/\r?\n/).forEach((line) => {
+          pushYamlLine(lines, `    ${line}`, makeSourceOrigin(item.sourceContext, {
+            path: ["custom_config"],
+            fieldKey: "custom_config",
+            contentKind: "raw_yaml"
+          }));
+        });
+        return;
+      }
+      if (item.type === "embedded") {
+        renderYamlArray(
+          [item.payload],
+          { type: "object", fields: item.fields || [] },
+          2,
+          lines,
+          item.payload,
+          globalStore,
+          item.sourceContext || null
+        );
+        return;
+      }
+      const schemaFields = [
+        { key: "platform", type: "select", originType: "section" },
+        ...(item.schema?.fields || [])
+      ];
+      renderYamlSingleListObject(
+        item.payload,
+        { type: "object", fields: filterSchemaFieldsForYaml(schemaFields, item.schema) },
+        2,
+        lines,
+        item.payload,
+        globalStore,
+        item.sourceContext || null,
+        (fieldKey) => fieldComments[`${itemPathPrefix}.${fieldKey}`]
+      );
+    });
+    lines.push("");
+  });
+
+  if (verbatimRootLines.length) {
+    if (lines.length) {
+      lines.push("");
+    }
+    lines.push(...verbatimRootLines);
+  }
+
+  if (lines.length && lines[lines.length - 1] === "") {
+    lines.pop();
+  }
+
+  return lines;
+};
+
+export const buildComponentsYaml = (
+  components,
+  componentSchemas = {},
+  componentSchemaStates = {},
+  globalStore = null,
+  mdiSubstitutions = {}
+) =>
+  buildComponentsYamlInternal(
+    components,
+    componentSchemas,
+    componentSchemaStates,
+    globalStore,
+    mdiSubstitutions
+  );
+
+export const buildComponentsYamlDocumentLines = (
+  components,
+  componentSchemas = {},
+  componentSchemaStates = {},
+  globalStore = null,
+  mdiSubstitutions = {},
+  fieldComments = {}
+) => {
+  const lines = buildComponentsYamlInternal(
+    components,
+    componentSchemas,
+    componentSchemaStates,
+    globalStore,
+    mdiSubstitutions,
+    true,
+    fieldComments
+  );
+  return linesToGeneratedYamlLines(lines, "components");
+};

@@ -1,0 +1,40 @@
+{
+  "lcd_base": {
+    "schemas": {
+      "LCD_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "dimensions": {
+              "key": "Required",
+              "docs": "**string**: The dimensions of the display with `COLUMNSxROWS`. If you're not sure, power the display up and just count them.\n\n*See also: [Character-Based LCD Display](https://esphome.io/components/display/lcd_display#configuration-variables)*"
+            },
+            "update_interval": {},
+            "user_characters": {
+              "is_list": true,
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "data": {
+                    "is_list": true,
+                    "key": "Required",
+                    "type": "integer"
+                  },
+                  "position": {
+                    "key": "Required",
+                    "type": "integer"
+                  }
+                }
+              },
+              "type": "schema"
+            }
+          },
+          "extends": [
+            "display.BASIC_DISPLAY_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

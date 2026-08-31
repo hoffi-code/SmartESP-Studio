@@ -1,0 +1,156 @@
+{
+  "st7789v.display": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "backlight_pin": {
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The display's backlight pin. May be required depending on the hardware configuration. To disable a preset backlight pin (e.g. if controlled by another component) set this to `no`.\n\n*See also: [ST7789V TFT LCD](https://esphome.io/components/display/st7789v#configuration-variables)*"
+            },
+            "cs_pin": {
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The CS pin. Default depends on `model`.\n\n*See also: [ST7789V TFT LCD](https://esphome.io/components/display/st7789v#configuration-variables)*"
+            },
+            "data_rate": {
+              "key": "Optional",
+              "docs": "**frequency**: The SPI data rate (default 20MHz.) Can be reduced if required, e.g. to compensate for long data cables.\n\n*See also: [ST7789V TFT LCD](https://esphome.io/components/display/st7789v#configuration-variables)*"
+            },
+            "dc_pin": {
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The DC pin. Default depends on `model`.\n\n*See also: [ST7789V TFT LCD](https://esphome.io/components/display/st7789v#configuration-variables)*"
+            },
+            "eightbitcolor": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Limits the supported color depth to eight bits. May be useful on memory-constrained devices. Defaults to `false`.\n\n*See also: [ST7789V TFT LCD](https://esphome.io/components/display/st7789v#configuration-variables)*"
+            },
+            "height": {
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Sets height of display in pixels. Default depends on `model`.\n\n*See also: [ST7789V TFT LCD](https://esphome.io/components/display/st7789v#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "st7789v::ST7789V",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "spi::SPIDevice",
+                  "display::DisplayBuffer",
+                  "display::Display",
+                  "PollingComponent",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [ST7789V TFT LCD](https://esphome.io/components/display/st7789v#configuration-variables)*"
+            },
+            "model": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "TTGO_TDISPLAY_135X240": null,
+                "ADAFRUIT_FUNHOUSE_240X240": null,
+                "ADAFRUIT_RR_280X240": null,
+                "ADAFRUIT_S2_TFT_FEATHER_240X135": null,
+                "LILYGO_T-EMBED_170X320": null,
+                "WAVESHARE_1.47IN_172X320": null,
+                "CUSTOM": null
+              },
+              "docs": "**string**: The display model to use. One of the following options:\n\n*See also: [ST7789V TFT LCD](https://esphome.io/components/display/st7789v#configuration-variables)*"
+            },
+            "offset_height": {
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: When `model` is set to \"Custom\", use this to specify the display's vertical offset in pixels. This option may not be specified when the `model` is not set to \"Custom\". Default depends on `model`.\n\n*See also: [ST7789V TFT LCD](https://esphome.io/components/display/st7789v#configuration-variables)*"
+            },
+            "offset_width": {
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: When `model` is set to \"Custom\", use this to specify the display's horizontal offset in pixels. This option may not be specified when the `model` is not set to \"Custom\". Default depends on `model`.\n\n*See also: [ST7789V TFT LCD](https://esphome.io/components/display/st7789v#configuration-variables)*"
+            },
+            "power_supply": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "power_supply::PowerSupply",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The [power supply](https://esphome.io/components/power_supply/) to connect to this display if required by hardware. The power supply will be turned on before attempting to initialize the display.\n\n*See also: [ST7789V TFT LCD](https://esphome.io/components/display/st7789v#configuration-variables)*"
+            },
+            "release_device": {
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "reset_pin": {
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The RESET pin. Default depends on `model`.\n\n*See also: [ST7789V TFT LCD](https://esphome.io/components/display/st7789v#configuration-variables)*"
+            },
+            "spi_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "spi::SPIComponent"
+            },
+            "spi_mode": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "MODE0": null,
+                "MODE1": null,
+                "MODE2": null,
+                "MODE3": null,
+                "0": null,
+                "1": null,
+                "2": null,
+                "3": null
+              },
+              "docs": "**0-3**: The SPI clock mode to use (default: `mode0`  .) The ST7789V datasheet specifies mode 0, but some displays appear to require mode 3. This should be one of `mode0`, `mode1`, `mode2` or `mode3` (or just a digit from 0-3.)\n\n*See also: [ST7789V TFT LCD](https://esphome.io/components/display/st7789v#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "5s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to re-draw the screen. Defaults to `5s`.\n\n*See also: [ST7789V TFT LCD](https://esphome.io/components/display/st7789v#configuration-variables)*"
+            },
+            "width": {
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Sets width of display. Default depends on `model`.\n\n*See also: [ST7789V TFT LCD](https://esphome.io/components/display/st7789v#configuration-variables)*"
+            },
+            "lambda": {
+              "key": "Optional",
+              "docs": "**[lambda](https://esphome.io/automations/templates#config-lambda)**: The lambda to use for rendering the content on the display. See [Display Rendering Engine](https://esphome.io/components/display#display-engine) for more information.\n\n*See also: [ST7789V TFT LCD](https://esphome.io/components/display/st7789v#configuration-variables)*"
+            },
+            "pages": {
+              "key": "Optional",
+              "docs": "**list**: Show pages instead of a single lambda. See [Display Pages](https://esphome.io/components/display#display-pages).\n\n*See also: [ST7789V TFT LCD](https://esphome.io/components/display/st7789v#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "display.FULL_DISPLAY_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

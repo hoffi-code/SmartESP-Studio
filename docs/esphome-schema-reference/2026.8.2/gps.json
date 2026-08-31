@@ -1,0 +1,240 @@
+{
+  "gps": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "altitude": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "icon": {
+                    "default": "mdi:altimeter"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "m"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Include the measured altitude as a sensor\n\n*See also: [GPS Component](https://esphome.io/components/gps#configuration-variables)*"
+            },
+            "course": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "icon": {
+                    "default": "mdi:compass"
+                  },
+                  "state_class": {
+                    "default": "measurement_angle"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Include the measured course as a sensor\n\n*See also: [GPS Component](https://esphome.io/components/gps#configuration-variables)*"
+            },
+            "hdop": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "3"
+                  },
+                  "icon": {
+                    "default": "mdi:circle-double"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Include the measured HDOP (Horizontal Dilution Of Precision) as a sensor\n\n*See also: [GPS Component](https://esphome.io/components/gps#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "gps::GPS",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "uart::UARTDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "latitude": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "6"
+                  },
+                  "icon": {
+                    "default": "mdi:latitude"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Include the Latitude as a sensor\n\n*See also: [GPS Component](https://esphome.io/components/gps#configuration-variables)*"
+            },
+            "longitude": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "6"
+                  },
+                  "icon": {
+                    "default": "mdi:longitude"
+                  },
+                  "state_class": {
+                    "default": "measurement_angle"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Include the Longitude as a sensor\n\n*See also: [GPS Component](https://esphome.io/components/gps#configuration-variables)*"
+            },
+            "satellites": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "icon": {
+                    "default": "mdi:satellite-variant"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Include the number of tracking satellites being used as a sensor\n\n*See also: [GPS Component](https://esphome.io/components/gps#configuration-variables)*"
+            },
+            "speed": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "3"
+                  },
+                  "device_class": {
+                    "default": "speed"
+                  },
+                  "icon": {
+                    "default": "mdi:speedometer"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "km/h"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Include the measured speed as a sensor\n\n*See also: [GPS Component](https://esphome.io/components/gps#configuration-variables)*"
+            },
+            "uart_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "uart::UARTComponent"
+            },
+            "update_interval": {
+              "default": "20s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval of sensor updates. Defaults to `20s`.\n\n*See also: [GPS Component](https://esphome.io/components/gps#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "gps.time": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "gps_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "gps::GPS"
+            },
+            "id": {
+              "id_type": {
+                "class": "gps::GPSTime",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "time::RealTimeClock",
+                  "PollingComponent",
+                  "Component",
+                  "gps::GPSListener"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "update_interval": {
+              "default": "5min"
+            }
+          },
+          "extends": [
+            "time.TIME_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

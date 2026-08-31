@@ -1,0 +1,154 @@
+{
+  "hoermann_hcp": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "address": {
+              "default": "2",
+              "key": "Optional",
+              "docs": "**int**: The Modbus server address the component answers on. Defaults to `2`, which is the address the motor's bus controller expects the UAP1 module on. You should not need to change this.\n\n*See also: [H\u00f6rmann Cover](https://esphome.io/components/cover/hoermann_hcp#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "hoermann_hcp::HoermannHcp",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "modbus::ModbusServerDevice"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [H\u00f6rmann Cover](https://esphome.io/components/cover/hoermann_hcp#configuration-variables)*"
+            },
+            "modbus_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "modbus::ModbusServerHub",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the [Modbus](https://esphome.io/components/modbus/) hub.\n\n*See also: [H\u00f6rmann Cover](https://esphome.io/components/cover/hoermann_hcp#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "500ms",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval at which the connection to the bus controller is checked and state changes are published. Raising it delays every door state update by the same amount. Defaults to `500ms`.\n\n*See also: [H\u00f6rmann Cover](https://esphome.io/components/cover/hoermann_hcp#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "hoermann_hcp.binary_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "hoermann_hcp_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "hoermann_hcp::HoermannHcp",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the `hoermann_hcp` hub. Only required if you have more than one hub.\n\n*See also: [H\u00f6rmann Cover](https://esphome.io/components/cover/hoermann_hcp#configuration-variables)*"
+            },
+            "is_connected": {
+              "key": "Required",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "connectivity"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "hoermann_hcp::HoermannHcpConnectedBinarySensor",
+                      "parents": [
+                        "binary_sensor::BinarySensor",
+                        "EntityBase",
+                        "Component"
+                      ]
+                    }
+                  }
+                },
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA",
+                  "core.COMPONENT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "`true` while the motor's bus controller is polling the emulated UAP1 module. Turns `false` about two seconds after the motor stops responding, for example after the bus power is cut. Defaults to the `connectivity` device class and the `diagnostic` entity category, so the entity appears under the device's diagnostics rather than on its main card.\n\n*See also: [H\u00f6rmann Cover](https://esphome.io/components/cover/hoermann_hcp#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "hoermann_hcp.cover": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "hoermann_hcp_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "hoermann_hcp::HoermannHcp",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the `hoermann_hcp` hub. Only required if you have more than one hub.\n\n*See also: [H\u00f6rmann Cover](https://esphome.io/components/cover/hoermann_hcp#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "hoermann_hcp::HoermannHcpCover",
+                "parents": [
+                  "cover::Cover",
+                  "EntityBase",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            }
+          },
+          "extends": [
+            "cover._COVER_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "hoermann_hcp.light": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "hoermann_hcp_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "hoermann_hcp::HoermannHcp",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the `hoermann_hcp` hub. Only required if you have more than one hub.\n\n*See also: [H\u00f6rmann Cover](https://esphome.io/components/cover/hoermann_hcp#configuration-variables)*"
+            },
+            "output_id": {
+              "id_type": {
+                "class": "hoermann_hcp::HoermannHcpLight",
+                "parents": [
+                  "light::LightOutput",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            }
+          },
+          "extends": [
+            "light.BINARY_LIGHT_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,324 @@
+{
+  "api": {
+    "action": {
+      "respond": {
+        "schema": {
+          "config_vars": {
+            "data": {
+              "key": "Optional",
+              "docs": "**[lambda](https://esphome.io/automations/templates#config-lambda)**: A lambda that populates a JSON object with response data. The lambda receives a `root` variable of type [`JsonObject`](https://arduinojson.org/v7/api/jsonobject/) that you can populate with key-value pairs.\n\n*See also: [Native API Component](https://esphome.io/components/api#configuration-variables)*"
+            },
+            "error_message": {
+              "default": "",
+              "key": "Optional",
+              "templatable": true,
+              "type": "string",
+              "docs": "**string**: An error message to include when `success` is `false`. Defaults to an empty string.\n\n*See also: [Native API Component](https://esphome.io/components/api#configuration-variables)*"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "api::APIServer"
+            },
+            "success": {
+              "default": "True",
+              "key": "Optional",
+              "templatable": true,
+              "type": "boolean",
+              "docs": "**boolean**: Whether the action succeeded. Defaults to `true`.\n\n*See also: [Native API Component](https://esphome.io/components/api#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This action sends a response back to the client that called the user-defined action. It can report success/error status and optionally include JSON data."
+      }
+    },
+    "condition": {
+      "connected": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "api::APIServer"
+            },
+            "state_subscription_only": {
+              "default": "False",
+              "key": "Optional",
+              "templatable": true,
+              "type": "boolean",
+              "docs": "**boolean**: If enabled, only counts clients that have subscribed to entity state updates. This filters out logger-only connections (such as `esphome logs` command), which can cause false positives when waiting for Home Assistant. Defaults to `false`.\n\n*See also: [Native API Component](https://esphome.io/components/api#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [Condition](https://esphome.io/automations/actions#all-conditions) checks if at least one client is connected to the ESPHome native API."
+      }
+    },
+    "schemas": {
+      "ACTIONS_SCHEMA": {
+        "has_required_var": true,
+        "schema": {
+          "config_vars": {
+            "action": {
+              "key": "Optional",
+              "type": "string"
+            },
+            "service": {
+              "key": "Optional",
+              "type": "string"
+            },
+            "supports_response": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "none": null,
+                "optional": null,
+                "only": null,
+                "status": null
+              }
+            },
+            "then": {
+              "type": "trigger"
+            },
+            "variables": {
+              "default": "{}",
+              "key": "String",
+              "key_type": "validate_id_name",
+              "schema": {
+                "config_vars": {
+                  "string": {
+                    "type": "enum",
+                    "values": {
+                      "bool": null,
+                      "int": null,
+                      "float": null,
+                      "string": null,
+                      "bool[]": null,
+                      "int[]": null,
+                      "float[]": null,
+                      "string[]": null
+                    }
+                  }
+                }
+              },
+              "type": "schema"
+            }
+          }
+        },
+        "type": "trigger"
+      },
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "actions": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "api.ACTIONS_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "**list**: A list of user-defined actions. See [User-defined Actions](https://esphome.io/components/api#api-device-actions).\n\n*See also: [Native API Component](https://esphome.io/components/api#configuration-variables)*"
+            },
+            "batch_delay": {
+              "default": "100ms",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The delay time for batching multiple state update messages together to reduce network overhead. Lower values send updates sooner but use more network packets, while higher values batch more efficiently but add latency. Must be between `0ms` and `65535ms` (65.535 seconds). Defaults to `100ms`.\n\n*See also: [Native API Component](https://esphome.io/components/api#configuration-variables)*"
+            },
+            "custom_services": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Enable compilation of custom API services for external components that use the C++ `CustomAPIDevice` class. Only needed when external components register their own services via the native API. Defaults to `false`.\n\n*See also: [Native API Component](https://esphome.io/components/api#configuration-variables)*"
+            },
+            "encryption": {
+              "key": "Optional",
+              "docs": "If present, encryption will be enabled for the API. Using encryption helps to secure the communication between the device running ESPHome and the connected client(s).\n\n*See also: [Native API Component](https://esphome.io/components/api#configuration-variables)*"
+            },
+            "homeassistant_services": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Enable compilation of Home Assistant service call support for external components that use the C++ `CustomAPIDevice::call_homeassistant_service()` or `CustomAPIDevice::fire_homeassistant_event()` methods. This is automatically enabled when using `homeassistant.service` or `homeassistant.event` actions, or the `homeassistant` platform for number or switch components. Only needs to be manually set when external components call Home Assistant services without using the built-in actions. Defaults to `false`.\n\n*See also: [Native API Component](https://esphome.io/components/api#configuration-variables)*"
+            },
+            "homeassistant_states": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Enable compilation of Home Assistant state subscription support for external components that use the C++ `CustomAPIDevice::subscribe_homeassistant_state()` method. This is automatically enabled when using any `homeassistant` platform components (sensor, binary_sensor, text_sensor, switch, or number). Only needs to be manually set when external components subscribe to Home Assistant states without using the built-in components. Defaults to `false`.\n\n*See also: [Native API Component](https://esphome.io/components/api#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "api::APIServer",
+                "parents": [
+                  "Component",
+                  "Controller"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [Native API Component](https://esphome.io/components/api#configuration-variables)*"
+            },
+            "listen_backlog": {
+              "default": "1",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: The maximum number of pending connections in the listen queue. Must be between 1 and 10. Defaults to `1` for ESP8266/RP2040, `4` for ESP32 and other platforms. Lower values use less memory but may reject connections during bursts.\n\n*See also: [Native API Component](https://esphome.io/components/api#configuration-variables)*"
+            },
+            "max_connections": {
+              "default": "4",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: The maximum number of simultaneous API connections allowed. Must be between 1 and 20. Defaults to:\n\n*See also: [Native API Component](https://esphome.io/components/api#configuration-variables)*"
+            },
+            "max_send_queue": {
+              "default": "4",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: The maximum number of messages that can be queued for sending per connection before the connection is dropped. Must be between 1 and 64. Defaults to:\n\n*See also: [Native API Component](https://esphome.io/components/api#configuration-variables)*"
+            },
+            "on_client_connected": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: An automation to perform when a client connects to the API. See [`on_client_connected` Trigger](https://esphome.io/components/api#api-on_client_connected_trigger).\n\n*See also: [Native API Component](https://esphome.io/components/api#configuration-variables)*"
+            },
+            "on_client_disconnected": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: An automation to perform when a client disconnects from the API. See [`on_client_disconnected` Trigger](https://esphome.io/components/api#api-on_client_disconnected_trigger).\n\n*See also: [Native API Component](https://esphome.io/components/api#configuration-variables)*"
+            },
+            "port": {
+              "data_type": "port",
+              "default": "6053",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: The port to run the API server on. Defaults to `6053`.\n\n*See also: [Native API Component](https://esphome.io/components/api#configuration-variables)*"
+            },
+            "reboot_timeout": {
+              "default": "15min",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The amount of time to wait before rebooting when no client connects to the API. This is needed because sometimes the low level ESP functions report that the ESP is connected to the network, when in fact it is not - only a full reboot fixes it. Can be disabled by setting this to `0s`. Defaults to `15min`.\n\n*See also: [Native API Component](https://esphome.io/components/api#configuration-variables)*"
+            },
+            "services": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "api.ACTIONS_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "HOMEASSISTANT_ACTION_ACTION_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "action": {
+              "key": "Required",
+              "templatable": true,
+              "type": "string",
+              "docs": "**string**: The Home Assistant [Action](https://www.home-assistant.io/docs/scripts/service-calls/) to perform.\n\n*See also: [Native API Component](https://esphome.io/components/api#configuration-variables)*"
+            },
+            "capture_response": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Enable capturing the response from the Home Assistant action call. When enabled, `on_success` must be configured. Defaults to `false`.\n\n*See also: [Native API Component](https://esphome.io/components/api#configuration-variables)*"
+            },
+            "data": {
+              "default": "{}",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "api.KEY_VALUE_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "**mapping**: Optional *static* data to perform the action with.\n\n*See also: [Native API Component](https://esphome.io/components/api#configuration-variables)*"
+            },
+            "data_template": {
+              "default": "{}",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "api.KEY_VALUE_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "**mapping**: Optional template data to perform the action with. This is evaluated on the Home Assistant side with Home Assistant's templating engine.\n\n*See also: [Native API Component](https://esphome.io/components/api#configuration-variables)*"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "api::APIServer"
+            },
+            "on_error": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: Optional automation to execute when the Home Assistant action call fails. See [Action Response Handling](https://esphome.io/components/api#action-response-handling).\n\n*See also: [Native API Component](https://esphome.io/components/api#configuration-variables)*"
+            },
+            "on_success": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: Optional automation to execute when the Home Assistant action call succeeds. When `capture_response: true`, the response data is available as a `response` variable of type `JsonObjectConst`. See [Action Response Handling](https://esphome.io/components/api#action-response-handling).\n\n*See also: [Native API Component](https://esphome.io/components/api#configuration-variables)*"
+            },
+            "response_template": {
+              "key": "Optional",
+              "templatable": true,
+              "type": "string",
+              "docs": "**string**: Optional Jinja template to process the action response data. This template is evaluated on the Home Assistant side with Home Assistant's templating engine. Requires `capture_response: true`.\n\n*See also: [Native API Component](https://esphome.io/components/api#configuration-variables)*"
+            },
+            "service": {
+              "key": "Optional",
+              "templatable": true,
+              "type": "string"
+            },
+            "variables": {
+              "default": "{}",
+              "key": "Optional",
+              "key_type": "string",
+              "schema": {
+                "config_vars": {
+                  "string": {}
+                }
+              },
+              "type": "schema",
+              "docs": "**mapping**: Optional variables that can be used in the `data_template`. Values are [lambdas](https://esphome.io/automations/templates#config-lambda) and will be evaluated before sending the request.\n\n*See also: [Native API Component](https://esphome.io/components/api#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "KEY_VALUE_SCHEMA": {
+        "key": "String",
+        "key_type": "string",
+        "schema": {
+          "config_vars": {
+            "string": {
+              "templatable": true,
+              "type": "string"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

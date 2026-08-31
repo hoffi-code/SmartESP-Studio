@@ -1,0 +1,136 @@
+{
+  "rp2": {
+    "pin": {
+      "schema": {
+        "config_vars": {
+          "allow_other_uses": {
+            "key": "Optional",
+            "type": "boolean"
+          },
+          "id": {
+            "id_type": {
+              "class": "rp2::RP2GPIOPin",
+              "parents": [
+                "InternalGPIOPin",
+                "GPIOPin"
+              ]
+            },
+            "key": "GeneratedID"
+          },
+          "inverted": {
+            "default": "False",
+            "key": "Optional",
+            "type": "boolean"
+          },
+          "mode": {
+            "default": "{}",
+            "key": "Optional",
+            "modes": [],
+            "schema": {
+              "config_vars": {
+                "analog": {
+                  "default": "False",
+                  "key": "Optional",
+                  "type": "boolean"
+                },
+                "input": {
+                  "default": "False",
+                  "key": "Optional",
+                  "type": "boolean"
+                },
+                "open_drain": {
+                  "default": "False",
+                  "key": "Optional",
+                  "type": "boolean"
+                },
+                "output": {
+                  "default": "False",
+                  "key": "Optional",
+                  "type": "boolean"
+                },
+                "pulldown": {
+                  "default": "False",
+                  "key": "Optional",
+                  "type": "boolean"
+                },
+                "pullup": {
+                  "default": "False",
+                  "key": "Optional",
+                  "type": "boolean"
+                }
+              }
+            },
+            "type": "pin"
+          },
+          "number": {
+            "key": "Required"
+          }
+        }
+      },
+      "type": "schema"
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "board": {
+              "key": "Optional",
+              "type": "string",
+              "docs": "**string**: The PlatformIO board identifier. Common boards include `rpipicow` (Raspberry Pi Pico W), `rpipico` (Raspberry Pi Pico), `rpipico2w` (Raspberry Pi Pico 2 W), and `rpipico2` (Raspberry Pi Pico 2). Over 140 boards from the [arduino-pico](https://github.com/earlephilhower/arduino-pico) framework are supported. Any board supported by the framework can be used here.\n\n*See also: [RP2 Platform](https://esphome.io/components/rp2#configuration-variables)*"
+            },
+            "enable_full_printf": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Enable full `FILE*`-based printf support. By default, ESPHome wraps `printf()`, `vprintf()`, and `fprintf()` with lightweight stubs that use `vsnprintf()` + `fwrite()`, saving ~9.2 KB of flash. ESPHome logging uses `snprintf`/`vsnprintf`, not libc printf, so these functions are typically unused unless an external component calls them. Set to `true` only if an external component needs full `FILE*`-based printf. Defaults to `false`.\n\n*See also: [RP2 Platform](https://esphome.io/components/rp2#configuration-variables)*"
+            },
+            "framework": {
+              "default": "{}",
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "platform_version": {
+                    "key": "Optional",
+                    "visibility": "yaml_only"
+                  },
+                  "source": {
+                    "key": "Optional",
+                    "type": "string",
+                    "visibility": "yaml_only"
+                  },
+                  "version": {
+                    "default": "recommended",
+                    "key": "Optional",
+                    "type": "string"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "variant": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "RP2040": null,
+                "RP2350": null
+              },
+              "docs": "**string**: The RP2-series chip to target. One of `rp2040` or `rp2350`. This must match the hardware in use, or it will fail to flash.\n\n*See also: [RP2 Platform](https://esphome.io/components/rp2#configuration-variables)*"
+            },
+            "watchdog_timeout": {
+              "default": "8388ms",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The timeout to apply to the RP2040 watchdog. When the device hangs for that period of time, it will reboot. Defaults to `8388ms` (maximum). Set to `0s` to disable the watchdog entirely.\n\n*See also: [RP2 Platform](https://esphome.io/components/rp2#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

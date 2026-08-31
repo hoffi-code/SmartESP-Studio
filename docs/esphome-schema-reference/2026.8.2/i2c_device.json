@@ -1,0 +1,34 @@
+{
+  "i2c_device": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "key": "Required",
+              "docs": "**int**: I\u00b2C address of the device.\n\n*See also: [Generic I\u00b2C device component](https://esphome.io/components/i2c_device#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "i2c_device::I2CDeviceComponent",
+                "parents": [
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

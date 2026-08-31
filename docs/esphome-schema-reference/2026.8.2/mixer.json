@@ -1,0 +1,102 @@
+{
+  "mixer.speaker": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "bits_per_sample": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "8": null,
+                "16": null,
+                "24": null,
+                "32": null
+              },
+              "docs": "**positive integer**: The number of bits per sample to send to the output speaker. Either `8`, `16`, `24`, or `32`. Defaults to the output speaker's bits per sample.\n\n*See also: [Mixer Speaker](https://esphome.io/components/speaker/mixer#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "mixer_speaker::MixerSpeaker",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "num_channels": {
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**positive integer**: The number of audio channels to send to the output speaker. Either `1` or `2`. Defaults to the output speaker's number of channels.\n\n*See also: [Mixer Speaker](https://esphome.io/components/speaker/mixer#configuration-variables)*"
+            },
+            "output_speaker": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "speaker::Speaker",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The [speaker](https://esphome.io/components/speaker/) to output the mixed audio.\n\n*See also: [Mixer Speaker](https://esphome.io/components/speaker/mixer#configuration-variables)*"
+            },
+            "queue_mode": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Enables queue mode. If enabled, audio isn't mixed but instead each source speaker's audio is played successively, starting with the first listed source speaker.\n\n*See also: [Mixer Speaker](https://esphome.io/components/speaker/mixer#configuration-variables)*"
+            },
+            "source_speakers": {
+              "is_list": true,
+              "key": "Required",
+              "schema": {
+                "config_vars": {
+                  "buffer_duration": {
+                    "default": "100ms",
+                    "key": "Optional",
+                    "schema": {
+                      "extends": [
+                        "core.positive_time_period_milliseconds"
+                      ]
+                    },
+                    "type": "schema",
+                    "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The duration of the internal ring buffer. Larger values can reduce stuttering but use more memory. Defaults to `100ms`.\n\n*See also: [Mixer Speaker](https://esphome.io/components/speaker/mixer#configuration-variables)*"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "mixer_speaker::SourceSpeaker",
+                      "parents": [
+                        "Component",
+                        "speaker::Speaker"
+                      ]
+                    },
+                    "key": "GeneratedID"
+                  },
+                  "timeout": {
+                    "default": "500ms",
+                    "key": "Optional",
+                    "schema": {
+                      "extends": [
+                        "core.positive_time_period_milliseconds"
+                      ]
+                    },
+                    "type": "enum",
+                    "values": {
+                      "never": null
+                    },
+                    "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: How long to wait after finishing playback before releasing the bus. Set to `never` to never stop the speaker due to a timeout. Defaults to `500ms`.\n\n*See also: [Mixer Speaker](https://esphome.io/components/speaker/mixer#configuration-variables)*"
+                  }
+                },
+                "extends": [
+                  "speaker.SPEAKER_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "**list**: A list of source speaker inputs. Must have at least 2 and at most 8 speakers.\n\n*See also: [Mixer Speaker](https://esphome.io/components/speaker/mixer#configuration-variables)*"
+            },
+            "task_stack_in_psram": {
+              "key": "Optional",
+              "docs": "**boolean**: Only with `esp-idf`. Run the audio tasks in external memory. Defaults to `false`.\n\n*See also: [Mixer Speaker](https://esphome.io/components/speaker/mixer#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

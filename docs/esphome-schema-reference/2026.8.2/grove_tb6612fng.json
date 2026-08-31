@@ -1,0 +1,151 @@
+{
+  "grove_tb6612fng": {
+    "action": {
+      "break": {
+        "schema": {
+          "config_vars": {
+            "channel": {
+              "key": "Required",
+              "templatable": true,
+              "type": "integer"
+            },
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "grove_tb6612fng::GroveMotorDriveTB6612FNG"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Set the motor channel to be on break mode which it ensure the wheel wont spin even if forced or pushed"
+      },
+      "change_address": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "key": "Required"
+            },
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "grove_tb6612fng::GroveMotorDriveTB6612FNG"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "If you require connecting multiple boards at once, the address can be changed using this action. The address can be changed to a value in the range of `0x01 - 0x7f` inclusive."
+      },
+      "no_standby": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "grove_tb6612fng::GroveMotorDriveTB6612FNG"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Set the board to be awake, every esphome is restarted the default mode is set to standby to ensure the motor wont spin accidentally"
+      },
+      "run": {
+        "schema": {
+          "config_vars": {
+            "channel": {
+              "key": "Required",
+              "templatable": true,
+              "type": "integer"
+            },
+            "direction": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "FORWARD": null,
+                "BACKWARD": null
+              }
+            },
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "grove_tb6612fng::GroveMotorDriveTB6612FNG"
+            },
+            "speed": {
+              "key": "Required",
+              "templatable": true,
+              "type": "integer"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Set the motor to spin by defining the direction and speed of the rotation, speed is a range from 0 to 255"
+      },
+      "standby": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "grove_tb6612fng::GroveMotorDriveTB6612FNG"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Set the board to be on standby when is not used for a long time which reduces power consumptions and any jerking motion when stationary"
+      },
+      "stop": {
+        "schema": {
+          "config_vars": {
+            "channel": {
+              "key": "Required",
+              "templatable": true,
+              "type": "integer"
+            },
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "grove_tb6612fng::GroveMotorDriveTB6612FNG"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Set the motor to stop motion but wont stop to spin in case there is a force pulling down, you would want to use break action if this is your case"
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "20",
+              "key": "Optional",
+              "docs": "**int**: The I\u00b2C address of the driver. Defaults to `0x14`.\n\n*See also: [Grove TB6612FNG Motor Drive](https://esphome.io/components/grove_tb6612fng#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "grove_tb6612fng::GroveMotorDriveTB6612FNG",
+                "parents": [
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "Required",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id to use for this TB6612FNG component.\n\n*See also: [Grove TB6612FNG Motor Drive](https://esphome.io/components/grove_tb6612fng#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

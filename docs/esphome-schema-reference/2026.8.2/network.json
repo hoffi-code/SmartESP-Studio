@@ -1,0 +1,44 @@
+{
+  "network": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "enable_high_performance": {
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Explicitly enables or disables high-performance networking optimizations. Only supported on ESP32 devices. When not specified, this is automatically enabled by components that benefit from optimized network settings. Set to `false` to disable these optimizations if they cause memory issues on your device. Defaults to component-driven behavior.\n\n*See also: [Network component](https://esphome.io/components/network#configuration-variables)*"
+            },
+            "enable_ipv6": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Enables IPv6 support. Defaults to `false`.\n\n*See also: [Network component](https://esphome.io/components/network#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "network::NetworkComponent",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "min_ipv6_addr_count": {
+              "data_type": "positive_int",
+              "default": "0",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**integer**: ESPHome considers the network to be connected when it has one IPv4 address and this number of IPv6 addresses. Defaults to `0` so as to not hang on boot with networks where IPv6 is not enabled. `2` is typically a reasonable value for configurations requiring IPv6.\n\n*See also: [Network component](https://esphome.io/components/network#configuration-variables)*"
+            },
+            "priority": {
+              "key": "Optional",
+              "docs": "**list**: Order of preference for network interfaces when more than one is configured. Only supported on the ESP32 family of devices. Each list entry names one of the supported interface types (`ethernet` or `wifi`); the first entry is the most preferred. Required when both `ethernet:` and `wifi:` are configured, and must then list every configured interface. See [Multi-Interface Support](https://esphome.io/components/network#multi-interface-support).\n\n*See also: [Network component](https://esphome.io/components/network#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

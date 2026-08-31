@@ -1,0 +1,69 @@
+{
+  "gp2y1010au0f.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "0"
+            },
+            "adc_voltage_multiplier": {
+              "default": "1.0",
+              "key": "Optional",
+              "docs": "**float**: The voltage multiplier of the ADC sensor used for calibration. Defaults to `1.0`.\n\n*See also: [Sharp GP2Y1010AU0F PM2.5 Sensor](https://esphome.io/components/sensor/gp2y1010au0f#configuration-variables)*"
+            },
+            "adc_voltage_offset": {
+              "default": "0.0",
+              "key": "Optional",
+              "docs": "**float**: The voltage offset of the ADC sensor used for calibration. Defaults to `0`.\n\n*See also: [Sharp GP2Y1010AU0F PM2.5 Sensor](https://esphome.io/components/sensor/gp2y1010au0f#configuration-variables)*"
+            },
+            "device_class": {
+              "default": "pm25"
+            },
+            "icon": {
+              "default": "mdi:chemical-weapon"
+            },
+            "id": {
+              "id_type": {
+                "class": "gp2y1010au0f::GP2Y1010AU0FSensor",
+                "parents": [
+                  "sensor::Sensor",
+                  "EntityBase",
+                  "PollingComponent",
+                  "Component"
+                ]
+              }
+            },
+            "output": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "output::BinaryOutput",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The binary [Output Component](https://esphome.io/components/output/) to control the sensor's internal IR LED.\n\n*See also: [Sharp GP2Y1010AU0F PM2.5 Sensor](https://esphome.io/components/sensor/gp2y1010au0f#configuration-variables)*"
+            },
+            "sensor": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "voltage_sampler::VoltageSampler",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ADC sensor to measure the sensor's output voltage pulses from.\n\n*See also: [Sharp GP2Y1010AU0F PM2.5 Sensor](https://esphome.io/components/sensor/gp2y1010au0f#configuration-variables)*"
+            },
+            "state_class": {
+              "default": "measurement"
+            },
+            "unit_of_measurement": {
+              "default": "\u00b5g/m\u00b3"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

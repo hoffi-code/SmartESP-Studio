@@ -1,0 +1,252 @@
+{
+  "seeed_mr60fda2": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "seeed_mr60fda2::MR60FDA2Component",
+                "parents": [
+                  "Component",
+                  "uart::UARTDevice"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID for this [Seeed Mr60Fda2](https://esphome.io/components/seeed_mr60fda2/) component if you need multiple components.\n\n*See also: [Seeed Studio MR60FDA2 60GHz mmWave Fall Detection Sensor Kit](https://esphome.io/components/seeed_mr60fda2#configuration-variables)*"
+            },
+            "uart_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "uart::UARTComponent",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the [UART Component](https://esphome.io/components/uart) if you want to use multiple UART buses.\n\n*See also: [Seeed Studio MR60FDA2 60GHz mmWave Fall Detection Sensor Kit](https://esphome.io/components/seeed_mr60fda2#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "seeed_mr60fda2.binary_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "fall_detected": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "safety"
+                  },
+                  "icon": {
+                    "default": "mdi:emergency"
+                  }
+                },
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "An indication of whether the radar has detected a fall. All options from [Text Sensor](https://esphome.io/components/text_sensor#config-text_sensor).\n\n*See also: [Seeed Studio MR60FDA2 60GHz mmWave Fall Detection Sensor Kit](https://esphome.io/components/seeed_mr60fda2#configuration-variables)*"
+            },
+            "mr60fda2_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "seeed_mr60fda2::MR60FDA2Component"
+            },
+            "people_exist": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "occupancy"
+                  },
+                  "icon": {
+                    "default": "mdi:motion-sensor"
+                  }
+                },
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "If true when target (person) is detected. All options from [Binary Sensor](https://esphome.io/components/binary_sensor#config-binary_sensor).\n\n*See also: [Seeed Studio MR60FDA2 60GHz mmWave Fall Detection Sensor Kit](https://esphome.io/components/seeed_mr60fda2#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "seeed_mr60fda2.button": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "factory_reset": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "restart"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "seeed_mr60fda2::ResetRadarButton",
+                      "parents": [
+                        "button::Button",
+                        "EntityBase"
+                      ]
+                    },
+                    "key": "GeneratedID"
+                  }
+                },
+                "extends": [
+                  "button._BUTTON_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Restore all radar settings to factory parameters. All options from [Button](https://esphome.io/components/button#config-button).\n\n*See also: [Seeed Studio MR60FDA2 60GHz mmWave Fall Detection Sensor Kit](https://esphome.io/components/seeed_mr60fda2#configuration-variables)*"
+            },
+            "get_radar_parameters": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "update"
+                  },
+                  "entity_category": {
+                    "default": ""
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "seeed_mr60fda2::GetRadarParametersButton",
+                      "parents": [
+                        "button::Button",
+                        "EntityBase"
+                      ]
+                    },
+                    "key": "GeneratedID"
+                  }
+                },
+                "extends": [
+                  "button._BUTTON_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Get all the current setup parameters of the radar. All options from [Button](https://esphome.io/components/button#config-button).\n\n*See also: [Seeed Studio MR60FDA2 60GHz mmWave Fall Detection Sensor Kit](https://esphome.io/components/seeed_mr60fda2#configuration-variables)*"
+            },
+            "mr60fda2_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "seeed_mr60fda2::MR60FDA2Component"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "seeed_mr60fda2.select": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "height_threshold": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "entity_category": {
+                    "default": "config"
+                  },
+                  "icon": {
+                    "default": "mdi:axis-z-arrow"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "seeed_mr60fda2::HeightThresholdSelect",
+                      "parents": [
+                        "select::Select",
+                        "EntityBase"
+                      ]
+                    }
+                  }
+                },
+                "extends": [
+                  "select._SELECT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "To accurately distinguish between a person falling and sitting still in this area, you need to set the trigger height that triggers fall detection. This height refers to the distance between the person and the ground at the time of the fall. The default is 0.6m. All options from [Select](https://esphome.io/components/select#config-select).\n\n*See also: [Seeed Studio MR60FDA2 60GHz mmWave Fall Detection Sensor Kit](https://esphome.io/components/seeed_mr60fda2#configuration-variables)*"
+            },
+            "install_height": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "entity_category": {
+                    "default": "config"
+                  },
+                  "icon": {
+                    "default": "mdi:axis-z-arrow"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "seeed_mr60fda2::InstallHeightSelect",
+                      "parents": [
+                        "select::Select",
+                        "EntityBase"
+                      ]
+                    }
+                  }
+                },
+                "extends": [
+                  "select._SELECT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Before using the MR60FDA2, please select the installation height of the radar according to the actual situation in order to obtain accurate identification results. The default is 3m. All options from [Select](https://esphome.io/components/select#config-select).\n\n*See also: [Seeed Studio MR60FDA2 60GHz mmWave Fall Detection Sensor Kit](https://esphome.io/components/seeed_mr60fda2#configuration-variables)*"
+            },
+            "mr60fda2_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "seeed_mr60fda2::MR60FDA2Component"
+            },
+            "sensitivity": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "entity_category": {
+                    "default": "config"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "seeed_mr60fda2::SensitivitySelect",
+                      "parents": [
+                        "select::Select",
+                        "EntityBase"
+                      ]
+                    }
+                  }
+                },
+                "extends": [
+                  "select._SELECT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Fall sensitivity factor. Defaults to 1 with a range of 1-3, 3 = high and 1 = low. All options from [Select](https://esphome.io/components/select#config-select).\n\n*See also: [Seeed Studio MR60FDA2 60GHz mmWave Fall Detection Sensor Kit](https://esphome.io/components/seeed_mr60fda2#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

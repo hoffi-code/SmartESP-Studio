@@ -1,0 +1,54 @@
+{
+  "st7567_base": {
+    "schemas": {
+      "ST7567_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "invert_colors": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Display hardware color invesion. Defaults to `false`.\n\n*See also: [ST7567 LCD Graphic Display](https://esphome.io/components/display/st7567#configuration-variables)*"
+            },
+            "reset_pin": {
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The RESET pin. Defaults to not connected.\n\n*See also: [ST7567 LCD Graphic Display](https://esphome.io/components/display/st7567#configuration-variables)*"
+            },
+            "transform": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "mirror_x": {
+                    "default": "False",
+                    "key": "Optional",
+                    "type": "boolean",
+                    "docs": "**boolean**: If true, mirror the physical X axis.\n\n*See also: [ST7567 LCD Graphic Display](https://esphome.io/components/display/st7567#configuration-variables)*"
+                  },
+                  "mirror_y": {
+                    "default": "False",
+                    "key": "Optional",
+                    "type": "boolean",
+                    "docs": "**boolean**: If true, mirror the physical Y axis.\n\n*See also: [ST7567 LCD Graphic Display](https://esphome.io/components/display/st7567#configuration-variables)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "Transform the display presentation using hardware. All defaults are `false`.\n\n*See also: [ST7567 LCD Graphic Display](https://esphome.io/components/display/st7567#configuration-variables)*"
+            },
+            "update_interval": {}
+          },
+          "extends": [
+            "display.FULL_DISPLAY_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

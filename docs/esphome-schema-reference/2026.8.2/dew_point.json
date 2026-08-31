@@ -1,0 +1,54 @@
+{
+  "dew_point.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "1"
+            },
+            "device_class": {
+              "default": "temperature"
+            },
+            "humidity": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "sensor::Sensor",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The sensor that is used to measure the current relative humidity, in %.\n\n*See also: [Dew Point](https://esphome.io/components/sensor/dew_point#configuration-variables)*"
+            },
+            "icon": {
+              "default": "mdi:weather-rainy"
+            },
+            "id": {
+              "id_type": {
+                "class": "dew_point::DewPointComponent",
+                "parents": [
+                  "Component",
+                  "sensor::Sensor",
+                  "EntityBase"
+                ]
+              }
+            },
+            "state_class": {
+              "default": "measurement"
+            },
+            "temperature": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "sensor::Sensor",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The sensor that is used to measure the current temperature, in \u00b0C.\n\n*See also: [Dew Point](https://esphome.io/components/sensor/dew_point#configuration-variables)*"
+            },
+            "unit_of_measurement": {
+              "default": "\u00b0C"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,211 @@
+{
+  "animation": {
+    "action": {
+      "next_frame": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "animation::Animation"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Moves the animation to the next frame. This is equivalent to the `id(my_animation).next_frame();` lambda call."
+      },
+      "prev_frame": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "animation::Animation"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Moves the animation to the previous frame. This is equivalent to the `id(my_animation).prev_frame();` lambda call."
+      },
+      "set_frame": {
+        "schema": {
+          "config_vars": {
+            "frame": {
+              "data_type": "uint16_t",
+              "key": "Required",
+              "type": "integer"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "animation::Animation"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Moves the animation to a specific frame. This is equivalent to the `id(my_animation).set_frame(frame);` lambda call."
+      }
+    },
+    "schemas": {
+      "ANIMATION_CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "byte_order": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "BIG_ENDIAN": null,
+                "LITTLE_ENDIAN": null
+              }
+            },
+            "dither": {
+              "default": "NONE",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "NONE": null,
+                "FLOYDSTEINBERG": null
+              }
+            },
+            "file": {
+              "key": "Required",
+              "type": "typed",
+              "typed_key": "source",
+              "types": {
+                "local": {
+                  "config_vars": {
+                    "path": {
+                      "key": "Required"
+                    }
+                  }
+                },
+                "mdi": {
+                  "config_vars": {
+                    "icon": {
+                      "key": "Required",
+                      "type": "string"
+                    }
+                  }
+                },
+                "mdil": {
+                  "config_vars": {
+                    "icon": {
+                      "key": "Required",
+                      "type": "string"
+                    }
+                  }
+                },
+                "memory": {
+                  "config_vars": {
+                    "icon": {
+                      "key": "Required",
+                      "type": "string"
+                    }
+                  }
+                },
+                "web": {
+                  "config_vars": {
+                    "url": {
+                      "key": "Required",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "id": {
+              "id_type": {
+                "class": "animation::Animation",
+                "parents": [
+                  "image::Image"
+                ]
+              },
+              "key": "Required",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the animation, used to reference it from the [`lvgl.animation.start`](https://esphome.io/components/lvgl/animation#lvgl-animation-start-action) action.\n\n*See also: [LVGL Animations](https://esphome.io/components/lvgl/animation#configuration-variables)*"
+            },
+            "invert_alpha": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "loop": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "end_frame": {
+                    "data_type": "positive_int",
+                    "key": "Optional",
+                    "type": "integer",
+                    "docs": "**int**: The last frame to show in the loop; when this frame is reached it will loop back to `start_frame`. Defaults to the last frame in the animation.\n\n*See also: [Animation](https://esphome.io/components/image/animation#configuration-variables)*"
+                  },
+                  "repeat": {
+                    "data_type": "positive_int",
+                    "key": "Optional",
+                    "type": "integer",
+                    "docs": "**int**: Specifies how many times the loop will run. When the count is reached, the animation will continue with the next frame after `end_frame`, or restart from the beginning if `end_frame` was the last frame. Defaults to \"loop forever\".\n\n*See also: [Animation](https://esphome.io/components/image/animation#configuration-variables)*"
+                  },
+                  "start_frame": {
+                    "data_type": "positive_int",
+                    "default": "0",
+                    "key": "Optional",
+                    "type": "integer",
+                    "docs": "**int**: The frame to loop back to when `end_frame` is reached. Defaults to the first frame in the animation.\n\n*See also: [Animation](https://esphome.io/components/image/animation#configuration-variables)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "If you want to loop over a subset of your animation (e.g. a fire animation where the fire \"starts\", then \"burns\" and \"dies\") you can specify some frames to loop over.\n\n*See also: [Animation](https://esphome.io/components/image/animation#configuration-variables)*"
+            },
+            "raw_data_id": {
+              "id_type": {
+                "class": "uint8_t",
+                "parents": null
+              },
+              "key": "GeneratedID"
+            },
+            "resize": {
+              "key": "Optional"
+            },
+            "transparency": {
+              "default": "opaque",
+              "key": "Optional"
+            },
+            "type": {
+              "key": "Required"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "extends": [
+            "animation.ANIMATION_CONFIG_SCHEMA"
+          ],
+          "config_vars": {
+            "loop": {
+              "key": "Optional",
+              "docs": "**boolean**: Restart the animation automatically each time it completes. Defaults to `false`.\n\n*See also: [LVGL Animations](https://esphome.io/components/lvgl/animation#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "animation.image": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "extends": [
+            "animation.ANIMATION_CONFIG_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

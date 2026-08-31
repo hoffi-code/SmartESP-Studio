@@ -1,0 +1,266 @@
+{
+  "packet_transport": {
+    "components": {
+      "espnow": {
+        "dependencies": [
+          "espnow"
+        ]
+      },
+      "sx126x": {},
+      "sx127x": {},
+      "uart": {
+        "dependencies": [
+          "uart"
+        ]
+      },
+      "udp": {}
+    },
+    "schemas": {
+      "ENCRYPTION_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "encryption": {
+              "key": "Optional",
+              "maybe": "key",
+              "schema": {
+                "config_vars": {
+                  "key": {
+                    "key": "Required",
+                    "sensitive": true,
+                    "sensitive_source": "explicit",
+                    "type": "string"
+                  }
+                }
+              },
+              "type": "schema"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "PROVIDER_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "name": {
+              "key": "Required"
+            }
+          },
+          "extends": [
+            "packet_transport.ENCRYPTION_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "TRANSPORT_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "binary_sensors": {
+              "is_list": true,
+              "key": "Optional",
+              "maybe": "id",
+              "schema": {
+                "config_vars": {
+                  "broadcast_id": {
+                    "key": "Optional"
+                  },
+                  "id": {
+                    "key": "Required",
+                    "type": "use_id",
+                    "use_id_type": "binary_sensor::BinarySensor"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "ping_pong_enable": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "ping_pong_recycle_time": {
+              "default": "600s",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_seconds"
+                ]
+              },
+              "type": "schema"
+            },
+            "providers": {
+              "default": "[]",
+              "is_list": true,
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "packet_transport.PROVIDER_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "rolling_code_enable": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "sensors": {
+              "is_list": true,
+              "key": "Optional",
+              "maybe": "id",
+              "schema": {
+                "config_vars": {
+                  "broadcast_id": {
+                    "key": "Optional"
+                  },
+                  "id": {
+                    "key": "Required",
+                    "type": "use_id",
+                    "use_id_type": "sensor::Sensor"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "update_interval": {
+              "default": "15s",
+              "key": "Optional"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA",
+            "packet_transport.ENCRYPTION_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "packet_transport.binary_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "type": "typed",
+        "typed_key": "type",
+        "types": {
+          "data": {
+            "config_vars": {
+              "provider": {
+                "key": "Required",
+                "docs": "**string**: The name of the provider node.\n\n*See also: [Packet Transport Binary Sensor](https://esphome.io/components/binary_sensor/packet_transport#configuration-variables)*"
+              },
+              "remote_id": {
+                "key": "Optional",
+                "type": "string",
+                "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the original binary sensor in the provider device. If not specified defaults to the ID configured with `id:`.\n\n*See also: [Packet Transport Binary Sensor](https://esphome.io/components/binary_sensor/packet_transport#configuration-variables)*"
+              },
+              "transport_id": {
+                "key": "GeneratedID",
+                "type": "use_id",
+                "use_id_type": "packet_transport::PacketTransport"
+              },
+              "id": {
+                "key": "GeneratedID",
+                "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [Packet Transport Binary Sensor](https://esphome.io/components/binary_sensor/packet_transport#configuration-variables)*"
+              },
+              "name": {
+                "key": "Optional",
+                "docs": "**string**: The name of the binary sensor.\n\n*See also: [Packet Transport Binary Sensor](https://esphome.io/components/binary_sensor/packet_transport#configuration-variables)*"
+              },
+              "internal": {
+                "key": "Optional",
+                "docs": "**boolean**: Whether the sensor should be exposed via API (e.g. to Home Assistant.) Defaults to `true` if name is not set, required if name is provided.\n\n*See also: [Packet Transport Binary Sensor](https://esphome.io/components/binary_sensor/packet_transport#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "binary_sensor._BINARY_SENSOR_SCHEMA"
+            ]
+          },
+          "status": {
+            "extends": [
+              "packet_transport.binary_sensor.STATUS_SENSOR_SCHEMA"
+            ],
+            "config_vars": {
+              "id": {
+                "key": "GeneratedID",
+                "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [Packet Transport Binary Sensor](https://esphome.io/components/binary_sensor/packet_transport#configuration-variables)*"
+              },
+              "name": {
+                "key": "Optional",
+                "docs": "**string**: The name of the binary sensor.\n\n*See also: [Packet Transport Binary Sensor](https://esphome.io/components/binary_sensor/packet_transport#configuration-variables)*"
+              },
+              "internal": {
+                "key": "Optional",
+                "docs": "**boolean**: Whether the sensor should be exposed via API (e.g. to Home Assistant.) Defaults to `true` if name is not set, required if name is provided.\n\n*See also: [Packet Transport Binary Sensor](https://esphome.io/components/binary_sensor/packet_transport#configuration-variables)*"
+              }
+            }
+          }
+        },
+        "docs": "With `type: status`, the sensor will report the connection status to the referenced provider node (online/offline). Defaults to `data` where a remote entity value is used."
+      },
+      "STATUS_SENSOR_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "device_class": {
+              "default": "connectivity"
+            },
+            "entity_category": {
+              "default": "diagnostic"
+            },
+            "provider": {
+              "key": "Required",
+              "docs": "**string**: The name of the provider node.\n\n*See also: [Packet Transport Binary Sensor](https://esphome.io/components/binary_sensor/packet_transport#configuration-variables)*"
+            },
+            "transport_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "packet_transport::PacketTransport"
+            }
+          },
+          "extends": [
+            "binary_sensor._BINARY_SENSOR_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "packet_transport.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "provider": {
+              "key": "Required",
+              "docs": "**string**: The name of the provider node.\n\n*See also: [Packet Transport Sensor](https://esphome.io/components/sensor/packet_transport#configuration-variables)*"
+            },
+            "remote_id": {
+              "key": "Optional",
+              "type": "string",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the original sensor in the provider node. If not specified defaults to the ID configured with `id:`.\n\n*See also: [Packet Transport Sensor](https://esphome.io/components/sensor/packet_transport#configuration-variables)*"
+            },
+            "transport_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "packet_transport::PacketTransport"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [Packet Transport Sensor](https://esphome.io/components/sensor/packet_transport#configuration-variables)*"
+            },
+            "name": {
+              "key": "Optional",
+              "docs": "**string**: The name of the sensor.\n\n*See also: [Packet Transport Sensor](https://esphome.io/components/sensor/packet_transport#configuration-variables)*"
+            },
+            "internal": {
+              "key": "Optional",
+              "docs": "**boolean**: Whether the sensor should be exposed via API (e.g. to Home Assistant.) Defaults to `true` if name is not set, required if name is provided.\n\n*See also: [Packet Transport Sensor](https://esphome.io/components/sensor/packet_transport#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

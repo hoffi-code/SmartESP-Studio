@@ -1,0 +1,183 @@
+{
+  "gpio.binary_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "gpio::GPIOBinarySensor",
+                "parents": [
+                  "binary_sensor::BinarySensor",
+                  "EntityBase",
+                  "Component"
+                ]
+              }
+            },
+            "interrupt_type": {
+              "default": "ANY",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "RISING": {
+                  "docs": "Trigger only on rising edge (low to high)"
+                },
+                "FALLING": {
+                  "docs": "Trigger only on falling edge (high to low)"
+                },
+                "ANY": {
+                  "docs": "Trigger on any edge change (high to low or low to high)",
+                  "default": true
+                }
+              },
+              "docs": "**string**: The type of interrupt to use. One of:\n\n*See also: [GPIO Binary Sensor](https://esphome.io/components/binary_sensor/gpio#configuration-variables)*"
+            },
+            "pin": {
+              "key": "Required",
+              "modes": [
+                "input"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin to monitor.\n\n*See also: [GPIO Binary Sensor](https://esphome.io/components/binary_sensor/gpio#configuration-variables)*"
+            },
+            "use_interrupt": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Use hardware interrupts instead of polling for better performance and lower CPU usage. Defaults to `true` for most platforms, but defaults to `false` for LibreTiny-based platforms (BK72xx, RTL87xx, LN882x) due to hardware limitations. Only supported on internal GPIO pins.\n\n*See also: [GPIO Binary Sensor](https://esphome.io/components/binary_sensor/gpio#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "binary_sensor._BINARY_SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "gpio.one_wire": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "gpio::GPIOOneWireBus",
+                "parents": [
+                  "one_wire::OneWireBus",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation. Required if you have multiple busses.\n\n*See also: [1-Wire Bus via GPIO](https://esphome.io/components/one_wire/gpio#configuration-variables)*"
+            },
+            "pin": {
+              "internal": true,
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**number**: The pin which will be use for bus communication. Note that 1-wire is a bi-directional bus so the selected GPIO pin must support both input and output. This must be a GPIO pin internal to the microcontroller and cannot be a pin located on an I/O expander or similar device.\n\n*See also: [1-Wire Bus via GPIO](https://esphome.io/components/one_wire/gpio#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "gpio.output": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "gpio::GPIOBinaryOutput",
+                "parents": [
+                  "output::BinaryOutput",
+                  "Component"
+                ]
+              },
+              "key": "Required",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id to use for this output component.\n\n*See also: [GPIO Output](https://esphome.io/components/output/gpio#configuration-variables)*"
+            },
+            "pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin to turn on and off.\n\n*See also: [GPIO Output](https://esphome.io/components/output/gpio#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "output.BINARY_OUTPUT_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "gpio.switch": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "gpio::GPIOSwitch",
+                "parents": [
+                  "switch_::Switch",
+                  "EntityBase",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "interlock": {
+              "is_list": true,
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "switch_::Switch",
+              "docs": "**list**: A list of other GPIO switches in an interlock group. See [Interlocking](https://esphome.io/components/switch/gpio#interlocking).\n\n*See also: [GPIO Switch](https://esphome.io/components/switch/gpio#configuration-variables)*"
+            },
+            "interlock_wait_time": {
+              "default": "0ms",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: For interlocking mode, set how long to wait after other items in an interlock group have been disabled before re-activating. Useful for motors where immediately turning on in the other direction could cause problems.\n\n*See also: [GPIO Switch](https://esphome.io/components/switch/gpio#configuration-variables)*"
+            },
+            "pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The GPIO pin to use for the switch.\n\n*See also: [GPIO Switch](https://esphome.io/components/switch/gpio#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "switch._SWITCH_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,319 @@
+{
+  "inkplate.display": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "72",
+              "key": "Optional"
+            },
+            "ckv_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The CKV pin for the Inkplate display.\n\n*See also: [Inkplate 5, 6, 10 and 6 Plus](https://esphome.io/components/display/inkplate#configuration-variables)*"
+            },
+            "cl_pin": {
+              "default": "{'number': 0, 'ignore_strapping_warning': True}",
+              "internal": true,
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The CL pin for the Inkplate display. Defaults to GPIO0.\n\n*See also: [Inkplate 5, 6, 10 and 6 Plus](https://esphome.io/components/display/inkplate#configuration-variables)*"
+            },
+            "custom_waveform": {
+              "data_type": "uint8_t",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Sets a custom predefined waveform for the display. Accepts values from 1 to 4. Useful if the greyscale of the image seems washed. **Inkplate10 ONLY**. Defaults to `0`\n\n*See also: [Inkplate 5, 6, 10 and 6 Plus](https://esphome.io/components/display/inkplate#configuration-variables)*"
+            },
+            "display_data_0_pin": {
+              "default": "4",
+              "internal": true,
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The Data 0 pin for the Inkplate display. Defaults to GPIO4.\n\n*See also: [Inkplate 5, 6, 10 and 6 Plus](https://esphome.io/components/display/inkplate#configuration-variables)*"
+            },
+            "display_data_1_pin": {
+              "default": "{'number': 5, 'ignore_strapping_warning': True}",
+              "internal": true,
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The Data 1 pin for the Inkplate display. Defaults to GPIO5.\n\n*See also: [Inkplate 5, 6, 10 and 6 Plus](https://esphome.io/components/display/inkplate#configuration-variables)*"
+            },
+            "display_data_2_pin": {
+              "default": "18",
+              "internal": true,
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The Data 2 pin for the Inkplate display. Defaults to GPIO18.\n\n*See also: [Inkplate 5, 6, 10 and 6 Plus](https://esphome.io/components/display/inkplate#configuration-variables)*"
+            },
+            "display_data_3_pin": {
+              "default": "19",
+              "internal": true,
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The Data 3 pin for the Inkplate display. Defaults to GPIO19.\n\n*See also: [Inkplate 5, 6, 10 and 6 Plus](https://esphome.io/components/display/inkplate#configuration-variables)*"
+            },
+            "display_data_4_pin": {
+              "default": "23",
+              "internal": true,
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The Data 4 pin for the Inkplate display. Defaults to GPIO23.\n\n*See also: [Inkplate 5, 6, 10 and 6 Plus](https://esphome.io/components/display/inkplate#configuration-variables)*"
+            },
+            "display_data_5_pin": {
+              "default": "25",
+              "internal": true,
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The Data 5 pin for the Inkplate display. Defaults to GPIO25.\n\n*See also: [Inkplate 5, 6, 10 and 6 Plus](https://esphome.io/components/display/inkplate#configuration-variables)*"
+            },
+            "display_data_6_pin": {
+              "default": "26",
+              "internal": true,
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The Data 6 pin for the Inkplate display. Defaults to GPIO26.\n\n*See also: [Inkplate 5, 6, 10 and 6 Plus](https://esphome.io/components/display/inkplate#configuration-variables)*"
+            },
+            "display_data_7_pin": {
+              "default": "27",
+              "internal": true,
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The Data 7 pin for the Inkplate display. Defaults to GPIO27.\n\n*See also: [Inkplate 5, 6, 10 and 6 Plus](https://esphome.io/components/display/inkplate#configuration-variables)*"
+            },
+            "full_update_every": {
+              "data_type": "uint32_t",
+              "default": "10",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: When partial updating is enabled, forces a full screen update after chosen number of updates. Defaults to `10`\n\n*See also: [Inkplate 5, 6, 10 and 6 Plus](https://esphome.io/components/display/inkplate#configuration-variables)*"
+            },
+            "gmod_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The GMOD pin for the Inkplate display.\n\n*See also: [Inkplate 5, 6, 10 and 6 Plus](https://esphome.io/components/display/inkplate#configuration-variables)*"
+            },
+            "gpio0_enable_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The GPIO0 Enable pin for the Inkplate display.\n\n*See also: [Inkplate 5, 6, 10 and 6 Plus](https://esphome.io/components/display/inkplate#configuration-variables)*"
+            },
+            "greyscale": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Makes the screen display 3 bit colors. Defaults to `false`\n\n*See also: [Inkplate 5, 6, 10 and 6 Plus](https://esphome.io/components/display/inkplate#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "inkplate::Inkplate",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice",
+                  "display::Display",
+                  "PollingComponent",
+                  "Component",
+                  "display::DisplayBuffer",
+                  "display::Display",
+                  "PollingComponent",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [Inkplate 5, 6, 10 and 6 Plus](https://esphome.io/components/display/inkplate#configuration-variables)*"
+            },
+            "le_pin": {
+              "default": "{'number': 2, 'ignore_strapping_warning': True}",
+              "internal": true,
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The LE pin for the Inkplate display. Defaults to GPIO2.\n\n*See also: [Inkplate 5, 6, 10 and 6 Plus](https://esphome.io/components/display/inkplate#configuration-variables)*"
+            },
+            "model": {
+              "default": "inkplate_6",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "inkplate_6": {
+                  "docs": null
+                },
+                "inkplate_10": {
+                  "docs": null
+                },
+                "inkplate_6_plus": {
+                  "docs": null
+                },
+                "inkplate_6_v2": {
+                  "docs": null
+                },
+                "inkplate_5": {
+                  "docs": null
+                },
+                "inkplate_5_v2": {
+                  "docs": null
+                }
+              },
+              "docs": "**enum**: Specify the model. Defaults to `inkplate_6`.\n\n*See also: [Inkplate 5, 6, 10 and 6 Plus](https://esphome.io/components/display/inkplate#configuration-variables)*"
+            },
+            "oe_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The OE pin for the Inkplate display.\n\n*See also: [Inkplate 5, 6, 10 and 6 Plus](https://esphome.io/components/display/inkplate#configuration-variables)*"
+            },
+            "partial_updating": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Makes the screen update partially, which is faster, but leaves burnin. Defaults to `false`\n\n*See also: [Inkplate 5, 6, 10 and 6 Plus](https://esphome.io/components/display/inkplate#configuration-variables)*"
+            },
+            "powerup_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The Powerup pin for the Inkplate display.\n\n*See also: [Inkplate 5, 6, 10 and 6 Plus](https://esphome.io/components/display/inkplate#configuration-variables)*"
+            },
+            "sph_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The SPH pin for the Inkplate display.\n\n*See also: [Inkplate 5, 6, 10 and 6 Plus](https://esphome.io/components/display/inkplate#configuration-variables)*"
+            },
+            "spv_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The SPV pin for the Inkplate display.\n\n*See also: [Inkplate 5, 6, 10 and 6 Plus](https://esphome.io/components/display/inkplate#configuration-variables)*"
+            },
+            "transform": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "mirror_x": {
+                    "default": "False",
+                    "key": "Optional",
+                    "type": "boolean"
+                  },
+                  "mirror_y": {
+                    "default": "False",
+                    "key": "Optional",
+                    "type": "boolean"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "Transform the display presentation.\n\n*See also: [Inkplate 5, 6, 10 and 6 Plus](https://esphome.io/components/display/inkplate#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "5s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to re-draw the screen. Defaults to `5s`.\n\n*See also: [Inkplate 5, 6, 10 and 6 Plus](https://esphome.io/components/display/inkplate#configuration-variables)*"
+            },
+            "vcom_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The VCOM pin for the Inkplate display.\n\n*See also: [Inkplate 5, 6, 10 and 6 Plus](https://esphome.io/components/display/inkplate#configuration-variables)*"
+            },
+            "wakeup_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin"
+            },
+            "lambda": {
+              "key": "Optional",
+              "docs": "**[lambda](https://esphome.io/automations/templates#config-lambda)**: The lambda to use for rendering the content on the display. See [Display Rendering Engine](https://esphome.io/components/display#display-engine) for more information.\n\n*See also: [Inkplate 5, 6, 10 and 6 Plus](https://esphome.io/components/display/inkplate#configuration-variables)*"
+            },
+            "pages": {
+              "key": "Optional",
+              "docs": "**list**: Show pages instead of a single lambda. See [Display Pages](https://esphome.io/components/display#display-pages).\n\n*See also: [Inkplate 5, 6, 10 and 6 Plus](https://esphome.io/components/display/inkplate#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "display.FULL_DISPLAY_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

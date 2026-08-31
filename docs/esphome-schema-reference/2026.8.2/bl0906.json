@@ -1,0 +1,748 @@
+{
+  "bl0906": {
+    "action": {
+      "reset_energy": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "bl0906::BL0906"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "bl0906.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "channel_1": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "current": {
+                    "key": "Optional",
+                    "maybe": "name",
+                    "schema": {
+                      "config_vars": {
+                        "accuracy_decimals": {
+                          "default": "3"
+                        },
+                        "device_class": {
+                          "default": "current"
+                        },
+                        "icon": {
+                          "default": "mdi:current-ac"
+                        },
+                        "state_class": {
+                          "default": "measurement"
+                        },
+                        "unit_of_measurement": {
+                          "default": "A"
+                        }
+                      },
+                      "extends": [
+                        "sensor._SENSOR_SCHEMA"
+                      ]
+                    },
+                    "type": "schema",
+                    "docs": "The current value of the channel 1 in amperes. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Belling BL0906 Energy Monitor](https://esphome.io/components/sensor/bl0906#configuration-variables)*"
+                  },
+                  "energy": {
+                    "key": "Optional",
+                    "maybe": "name",
+                    "schema": {
+                      "config_vars": {
+                        "accuracy_decimals": {
+                          "default": "3"
+                        },
+                        "device_class": {
+                          "default": "energy"
+                        },
+                        "icon": {
+                          "default": "mdi:lightning-bolt"
+                        },
+                        "state_class": {
+                          "default": "total_increasing"
+                        },
+                        "unit_of_measurement": {
+                          "default": "kWh"
+                        }
+                      },
+                      "extends": [
+                        "sensor._SENSOR_SCHEMA"
+                      ]
+                    },
+                    "type": "schema",
+                    "docs": "The energy value of the channel 1 in kWh. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Belling BL0906 Energy Monitor](https://esphome.io/components/sensor/bl0906#configuration-variables)*"
+                  },
+                  "power": {
+                    "key": "Optional",
+                    "maybe": "name",
+                    "schema": {
+                      "config_vars": {
+                        "accuracy_decimals": {
+                          "default": "0"
+                        },
+                        "device_class": {
+                          "default": "power"
+                        },
+                        "icon": {
+                          "default": "mdi:power"
+                        },
+                        "state_class": {
+                          "default": "measurement"
+                        },
+                        "unit_of_measurement": {
+                          "default": "W"
+                        }
+                      },
+                      "extends": [
+                        "sensor._SENSOR_SCHEMA"
+                      ]
+                    },
+                    "type": "schema",
+                    "docs": "The Power value of the channel 1 in watts. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Belling BL0906 Energy Monitor](https://esphome.io/components/sensor/bl0906#configuration-variables)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "Use channel 1.\n\n*See also: [Belling BL0906 Energy Monitor](https://esphome.io/components/sensor/bl0906#configuration-variables)*"
+            },
+            "channel_2": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "current": {
+                    "key": "Optional",
+                    "maybe": "name",
+                    "schema": {
+                      "config_vars": {
+                        "accuracy_decimals": {
+                          "default": "3"
+                        },
+                        "device_class": {
+                          "default": "current"
+                        },
+                        "icon": {
+                          "default": "mdi:current-ac"
+                        },
+                        "state_class": {
+                          "default": "measurement"
+                        },
+                        "unit_of_measurement": {
+                          "default": "A"
+                        }
+                      },
+                      "extends": [
+                        "sensor._SENSOR_SCHEMA"
+                      ]
+                    },
+                    "type": "schema",
+                    "docs": "The current value of the channel 2 in amperes. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Belling BL0906 Energy Monitor](https://esphome.io/components/sensor/bl0906#configuration-variables)*"
+                  },
+                  "energy": {
+                    "key": "Optional",
+                    "maybe": "name",
+                    "schema": {
+                      "config_vars": {
+                        "accuracy_decimals": {
+                          "default": "3"
+                        },
+                        "device_class": {
+                          "default": "energy"
+                        },
+                        "icon": {
+                          "default": "mdi:lightning-bolt"
+                        },
+                        "state_class": {
+                          "default": "total_increasing"
+                        },
+                        "unit_of_measurement": {
+                          "default": "kWh"
+                        }
+                      },
+                      "extends": [
+                        "sensor._SENSOR_SCHEMA"
+                      ]
+                    },
+                    "type": "schema",
+                    "docs": "The energy value of the channel 2 in kWh. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Belling BL0906 Energy Monitor](https://esphome.io/components/sensor/bl0906#configuration-variables)*"
+                  },
+                  "power": {
+                    "key": "Optional",
+                    "maybe": "name",
+                    "schema": {
+                      "config_vars": {
+                        "accuracy_decimals": {
+                          "default": "0"
+                        },
+                        "device_class": {
+                          "default": "power"
+                        },
+                        "icon": {
+                          "default": "mdi:power"
+                        },
+                        "state_class": {
+                          "default": "measurement"
+                        },
+                        "unit_of_measurement": {
+                          "default": "W"
+                        }
+                      },
+                      "extends": [
+                        "sensor._SENSOR_SCHEMA"
+                      ]
+                    },
+                    "type": "schema",
+                    "docs": "The Power value of the channel 2 in watts. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Belling BL0906 Energy Monitor](https://esphome.io/components/sensor/bl0906#configuration-variables)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "Use channel 2.\n\n*See also: [Belling BL0906 Energy Monitor](https://esphome.io/components/sensor/bl0906#configuration-variables)*"
+            },
+            "channel_3": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "current": {
+                    "key": "Optional",
+                    "maybe": "name",
+                    "schema": {
+                      "config_vars": {
+                        "accuracy_decimals": {
+                          "default": "3"
+                        },
+                        "device_class": {
+                          "default": "current"
+                        },
+                        "icon": {
+                          "default": "mdi:current-ac"
+                        },
+                        "state_class": {
+                          "default": "measurement"
+                        },
+                        "unit_of_measurement": {
+                          "default": "A"
+                        }
+                      },
+                      "extends": [
+                        "sensor._SENSOR_SCHEMA"
+                      ]
+                    },
+                    "type": "schema",
+                    "docs": "The current value of the channel 3 in amperes. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Belling BL0906 Energy Monitor](https://esphome.io/components/sensor/bl0906#configuration-variables)*"
+                  },
+                  "energy": {
+                    "key": "Optional",
+                    "maybe": "name",
+                    "schema": {
+                      "config_vars": {
+                        "accuracy_decimals": {
+                          "default": "3"
+                        },
+                        "device_class": {
+                          "default": "energy"
+                        },
+                        "icon": {
+                          "default": "mdi:lightning-bolt"
+                        },
+                        "state_class": {
+                          "default": "total_increasing"
+                        },
+                        "unit_of_measurement": {
+                          "default": "kWh"
+                        }
+                      },
+                      "extends": [
+                        "sensor._SENSOR_SCHEMA"
+                      ]
+                    },
+                    "type": "schema",
+                    "docs": "The energy value of the channel 3 in kWh. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Belling BL0906 Energy Monitor](https://esphome.io/components/sensor/bl0906#configuration-variables)*"
+                  },
+                  "power": {
+                    "key": "Optional",
+                    "maybe": "name",
+                    "schema": {
+                      "config_vars": {
+                        "accuracy_decimals": {
+                          "default": "0"
+                        },
+                        "device_class": {
+                          "default": "power"
+                        },
+                        "icon": {
+                          "default": "mdi:power"
+                        },
+                        "state_class": {
+                          "default": "measurement"
+                        },
+                        "unit_of_measurement": {
+                          "default": "W"
+                        }
+                      },
+                      "extends": [
+                        "sensor._SENSOR_SCHEMA"
+                      ]
+                    },
+                    "type": "schema",
+                    "docs": "The Power value of the channel 3 in watts. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Belling BL0906 Energy Monitor](https://esphome.io/components/sensor/bl0906#configuration-variables)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "Use channel 3.\n\n*See also: [Belling BL0906 Energy Monitor](https://esphome.io/components/sensor/bl0906#configuration-variables)*"
+            },
+            "channel_4": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "current": {
+                    "key": "Optional",
+                    "maybe": "name",
+                    "schema": {
+                      "config_vars": {
+                        "accuracy_decimals": {
+                          "default": "3"
+                        },
+                        "device_class": {
+                          "default": "current"
+                        },
+                        "icon": {
+                          "default": "mdi:current-ac"
+                        },
+                        "state_class": {
+                          "default": "measurement"
+                        },
+                        "unit_of_measurement": {
+                          "default": "A"
+                        }
+                      },
+                      "extends": [
+                        "sensor._SENSOR_SCHEMA"
+                      ]
+                    },
+                    "type": "schema",
+                    "docs": "The current value of the channel 4 in amperes. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Belling BL0906 Energy Monitor](https://esphome.io/components/sensor/bl0906#configuration-variables)*"
+                  },
+                  "energy": {
+                    "key": "Optional",
+                    "maybe": "name",
+                    "schema": {
+                      "config_vars": {
+                        "accuracy_decimals": {
+                          "default": "3"
+                        },
+                        "device_class": {
+                          "default": "energy"
+                        },
+                        "icon": {
+                          "default": "mdi:lightning-bolt"
+                        },
+                        "state_class": {
+                          "default": "total_increasing"
+                        },
+                        "unit_of_measurement": {
+                          "default": "kWh"
+                        }
+                      },
+                      "extends": [
+                        "sensor._SENSOR_SCHEMA"
+                      ]
+                    },
+                    "type": "schema",
+                    "docs": "The energy value of the channel 4 in kWh. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Belling BL0906 Energy Monitor](https://esphome.io/components/sensor/bl0906#configuration-variables)*"
+                  },
+                  "power": {
+                    "key": "Optional",
+                    "maybe": "name",
+                    "schema": {
+                      "config_vars": {
+                        "accuracy_decimals": {
+                          "default": "0"
+                        },
+                        "device_class": {
+                          "default": "power"
+                        },
+                        "icon": {
+                          "default": "mdi:power"
+                        },
+                        "state_class": {
+                          "default": "measurement"
+                        },
+                        "unit_of_measurement": {
+                          "default": "W"
+                        }
+                      },
+                      "extends": [
+                        "sensor._SENSOR_SCHEMA"
+                      ]
+                    },
+                    "type": "schema",
+                    "docs": "The Power value of the channel 4 in watts. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Belling BL0906 Energy Monitor](https://esphome.io/components/sensor/bl0906#configuration-variables)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "Use channel 4.\n\n*See also: [Belling BL0906 Energy Monitor](https://esphome.io/components/sensor/bl0906#configuration-variables)*"
+            },
+            "channel_5": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "current": {
+                    "key": "Optional",
+                    "maybe": "name",
+                    "schema": {
+                      "config_vars": {
+                        "accuracy_decimals": {
+                          "default": "3"
+                        },
+                        "device_class": {
+                          "default": "current"
+                        },
+                        "icon": {
+                          "default": "mdi:current-ac"
+                        },
+                        "state_class": {
+                          "default": "measurement"
+                        },
+                        "unit_of_measurement": {
+                          "default": "A"
+                        }
+                      },
+                      "extends": [
+                        "sensor._SENSOR_SCHEMA"
+                      ]
+                    },
+                    "type": "schema",
+                    "docs": "The current value of the channel 5 in amperes. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Belling BL0906 Energy Monitor](https://esphome.io/components/sensor/bl0906#configuration-variables)*"
+                  },
+                  "energy": {
+                    "key": "Optional",
+                    "maybe": "name",
+                    "schema": {
+                      "config_vars": {
+                        "accuracy_decimals": {
+                          "default": "3"
+                        },
+                        "device_class": {
+                          "default": "energy"
+                        },
+                        "icon": {
+                          "default": "mdi:lightning-bolt"
+                        },
+                        "state_class": {
+                          "default": "total_increasing"
+                        },
+                        "unit_of_measurement": {
+                          "default": "kWh"
+                        }
+                      },
+                      "extends": [
+                        "sensor._SENSOR_SCHEMA"
+                      ]
+                    },
+                    "type": "schema",
+                    "docs": "The energy value of the channel 5 in kWh. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Belling BL0906 Energy Monitor](https://esphome.io/components/sensor/bl0906#configuration-variables)*"
+                  },
+                  "power": {
+                    "key": "Optional",
+                    "maybe": "name",
+                    "schema": {
+                      "config_vars": {
+                        "accuracy_decimals": {
+                          "default": "0"
+                        },
+                        "device_class": {
+                          "default": "power"
+                        },
+                        "icon": {
+                          "default": "mdi:power"
+                        },
+                        "state_class": {
+                          "default": "measurement"
+                        },
+                        "unit_of_measurement": {
+                          "default": "W"
+                        }
+                      },
+                      "extends": [
+                        "sensor._SENSOR_SCHEMA"
+                      ]
+                    },
+                    "type": "schema",
+                    "docs": "The Power value of the channel 5 in watts. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Belling BL0906 Energy Monitor](https://esphome.io/components/sensor/bl0906#configuration-variables)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "Use channel 5.\n\n*See also: [Belling BL0906 Energy Monitor](https://esphome.io/components/sensor/bl0906#configuration-variables)*"
+            },
+            "channel_6": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "current": {
+                    "key": "Optional",
+                    "maybe": "name",
+                    "schema": {
+                      "config_vars": {
+                        "accuracy_decimals": {
+                          "default": "3"
+                        },
+                        "device_class": {
+                          "default": "current"
+                        },
+                        "icon": {
+                          "default": "mdi:current-ac"
+                        },
+                        "state_class": {
+                          "default": "measurement"
+                        },
+                        "unit_of_measurement": {
+                          "default": "A"
+                        }
+                      },
+                      "extends": [
+                        "sensor._SENSOR_SCHEMA"
+                      ]
+                    },
+                    "type": "schema",
+                    "docs": "The current value of the channel 6 in amperes. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Belling BL0906 Energy Monitor](https://esphome.io/components/sensor/bl0906#configuration-variables)*"
+                  },
+                  "energy": {
+                    "key": "Optional",
+                    "maybe": "name",
+                    "schema": {
+                      "config_vars": {
+                        "accuracy_decimals": {
+                          "default": "3"
+                        },
+                        "device_class": {
+                          "default": "energy"
+                        },
+                        "icon": {
+                          "default": "mdi:lightning-bolt"
+                        },
+                        "state_class": {
+                          "default": "total_increasing"
+                        },
+                        "unit_of_measurement": {
+                          "default": "kWh"
+                        }
+                      },
+                      "extends": [
+                        "sensor._SENSOR_SCHEMA"
+                      ]
+                    },
+                    "type": "schema",
+                    "docs": "The energy value of the channel 6 in kWh. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Belling BL0906 Energy Monitor](https://esphome.io/components/sensor/bl0906#configuration-variables)*"
+                  },
+                  "power": {
+                    "key": "Optional",
+                    "maybe": "name",
+                    "schema": {
+                      "config_vars": {
+                        "accuracy_decimals": {
+                          "default": "0"
+                        },
+                        "device_class": {
+                          "default": "power"
+                        },
+                        "icon": {
+                          "default": "mdi:power"
+                        },
+                        "state_class": {
+                          "default": "measurement"
+                        },
+                        "unit_of_measurement": {
+                          "default": "W"
+                        }
+                      },
+                      "extends": [
+                        "sensor._SENSOR_SCHEMA"
+                      ]
+                    },
+                    "type": "schema",
+                    "docs": "The Power value of the channel 6 in watts. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Belling BL0906 Energy Monitor](https://esphome.io/components/sensor/bl0906#configuration-variables)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "Use channel 6.\n\n*See also: [Belling BL0906 Energy Monitor](https://esphome.io/components/sensor/bl0906#configuration-variables)*"
+            },
+            "frequency": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "frequency"
+                  },
+                  "icon": {
+                    "default": "mdi:cosine-wave"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "Hz"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The AC line frequency of the supply voltage. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Belling BL0906 Energy Monitor](https://esphome.io/components/sensor/bl0906#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "bl0906::BL0906",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "uart::UARTDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "temperature": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "icon": {
+                    "default": "mdi:thermometer"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Chip internal temperature. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Belling BL0906 Energy Monitor](https://esphome.io/components/sensor/bl0906#configuration-variables)*"
+            },
+            "total_energy": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "3"
+                  },
+                  "device_class": {
+                    "default": "energy"
+                  },
+                  "icon": {
+                    "default": "mdi:lightning-bolt"
+                  },
+                  "state_class": {
+                    "default": "total_increasing"
+                  },
+                  "unit_of_measurement": {
+                    "default": "kWh"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The total energy value of all channels in kWh. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Belling BL0906 Energy Monitor](https://esphome.io/components/sensor/bl0906#configuration-variables)*"
+            },
+            "total_power": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "3"
+                  },
+                  "device_class": {
+                    "default": "power"
+                  },
+                  "icon": {
+                    "default": "mdi:power"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "W"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The total power value of all channels in watts. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Belling BL0906 Energy Monitor](https://esphome.io/components/sensor/bl0906#configuration-variables)*"
+            },
+            "uart_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "uart::UARTComponent",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the [UART Component](https://esphome.io/components/uart) if you want to use multiple UART buses.\n\n*See also: [Belling BL0906 Energy Monitor](https://esphome.io/components/sensor/bl0906#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`.\n\n*See also: [Belling BL0906 Energy Monitor](https://esphome.io/components/sensor/bl0906#configuration-variables)*"
+            },
+            "voltage": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "voltage"
+                  },
+                  "icon": {
+                    "default": "mdi:sine-wave"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "V"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the voltage value of the sensor in V. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Belling BL0906 Energy Monitor](https://esphome.io/components/sensor/bl0906#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

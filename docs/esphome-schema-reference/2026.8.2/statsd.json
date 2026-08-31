@@ -1,0 +1,86 @@
+{
+  "statsd": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "binary_sensors": {
+              "is_list": true,
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "id": {
+                    "key": "Required",
+                    "type": "use_id",
+                    "use_id_type": "binary_sensor::BinarySensor"
+                  },
+                  "name": {
+                    "key": "Required",
+                    "type": "string"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "host": {
+              "key": "Required",
+              "type": "string",
+              "docs": "**ip**: The Host IP of your StatsD Server.\n\n*See also: [StatsD](https://esphome.io/components/statsd#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "statsd::StatsdComponent",
+                "parents": [
+                  "PollingComponent",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the sensor.\n\n*See also: [StatsD](https://esphome.io/components/statsd#configuration-variables)*"
+            },
+            "port": {
+              "data_type": "port",
+              "default": "8125",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**uint16**: The Port of your StatsD Server. Defaults to `8125`.\n\n*See also: [StatsD](https://esphome.io/components/statsd#configuration-variables)*"
+            },
+            "prefix": {
+              "default": "",
+              "key": "Optional",
+              "type": "string",
+              "docs": "**string**: The prefix to automatically prepend every metric with. Defaults to `\"\"`.\n\n*See also: [StatsD](https://esphome.io/components/statsd#configuration-variables)*"
+            },
+            "sensors": {
+              "is_list": true,
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "id": {
+                    "key": "Required",
+                    "type": "use_id",
+                    "use_id_type": "sensor::Sensor"
+                  },
+                  "name": {
+                    "key": "Required",
+                    "type": "string"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "update_interval": {
+              "default": "10s",
+              "key": "Optional",
+              "docs": "**uint16**: How often to send the metrics. Defaults to `10s`.\n\n*See also: [StatsD](https://esphome.io/components/statsd#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

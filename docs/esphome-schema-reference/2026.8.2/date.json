@@ -1,0 +1,24 @@
+{
+  "date.datetime": {
+    "action": {
+      "set": {
+        "schema": {
+          "config_vars": {
+            "date": {
+              "key": "Required",
+              "docs": "**string**: The value to set the datetime to.\n\n*See also: [Datetime Component](https://esphome.io/components/datetime#using-a-lambda)*"
+            },
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "datetime::DateEntity",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the datetime to set.\n\n*See also: [Datetime Component](https://esphome.io/components/datetime#using-a-lambda)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This is an [Action](https://esphome.io/automations/actions#all-actions) for setting a datetime date state. The `date` provided can be in one of 3 formats:"
+      }
+    }
+  }
+}

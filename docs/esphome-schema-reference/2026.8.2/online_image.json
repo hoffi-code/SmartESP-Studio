@@ -1,0 +1,181 @@
+{
+  "online_image": {
+    "action": {
+      "release": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "online_image::OnlineImage",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The image to update the URL for.\n\n*See also: [Online Image Component](https://esphome.io/components/image/online_image#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Release the memory currently used by an image. Can be used if different display pages need different images, to avoid wasting memory on an image that is currently not being displayed."
+      },
+      "set_url": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "online_image::OnlineImage",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The image to update the URL for.\n\n*See also: [Online Image Component](https://esphome.io/components/image/online_image#configuration-variables)*"
+            },
+            "update": {
+              "default": "True",
+              "key": "Optional",
+              "templatable": true,
+              "docs": "**bool**: If `true`, the image will be updated (fetched) immediately after setting the new URL. If `false`, the URL will be set but the image will **not** be updated until you call the `update` action. Defaults to `true`\n\n*See also: [Online Image Component](https://esphome.io/components/image/online_image#configuration-variables)*"
+            },
+            "url": {
+              "key": "Required",
+              "templatable": true,
+              "docs": "**url**: The new URL to download the image from.\n\n*See also: [Online Image Component](https://esphome.io/components/image/online_image#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Change the URL where the image is downloaded from. A re-download will be automatically triggered unless `update` is set to `false`."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "extends": [
+            "online_image.ONLINE_IMAGE_CONFIG_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "ONLINE_IMAGE_CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "buffer_size": {
+              "default": "65536",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Explicitly specify the size of the buffer where the image chunks are being downloaded while decoding. The default value (65536) should be OK for most use cases, but you can try to reduce the size for slow connections, to avoid watchdog timeouts.\n\n*See also: [Online Image Component](https://esphome.io/components/image/online_image#configuration-variables)*"
+            },
+            "byte_order": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "BIG_ENDIAN": null,
+                "LITTLE_ENDIAN": null
+              },
+              "docs": "**string**: For RGB565 images, the pixels are converted to 16 bit values. By default these will be stored in little endian byte order (LSB first), but you can override this by setting `byte_order` to `big_endian`. Options are `little_endian` (default) and `big_endian`. Not applicable to other image formats.\n\n*See also: [Online Image Component](https://esphome.io/components/image/online_image#configuration-variables)*"
+            },
+            "format": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "BMP": {
+                  "docs": null
+                },
+                "JPEG": {
+                  "docs": "or `JPG`"
+                },
+                "PNG": {
+                  "docs": null
+                },
+                "JPG": null
+              },
+              "docs": "The format that the image is encoded with.\n\n*See also: [Online Image Component](https://esphome.io/components/image/online_image#configuration-variables)*"
+            },
+            "http_request_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "http_request::HttpRequestComponent"
+            },
+            "id": {
+              "id_type": {
+                "class": "online_image::OnlineImage",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "runtime_image::RuntimeImage",
+                  "image::Image"
+                ]
+              },
+              "key": "Required",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID with which you will be able to reference the image later in your display code.\n\n*See also: [Online Image Component](https://esphome.io/components/image/online_image#configuration-variables)*"
+            },
+            "on_download_finished": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform when the image has been successfully downloaded.\n\n*See also: [Online Image Component](https://esphome.io/components/image/online_image#configuration-variables)*"
+            },
+            "on_error": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform when an error happened during download or decode.\n\n*See also: [Online Image Component](https://esphome.io/components/image/online_image#configuration-variables)*"
+            },
+            "placeholder": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "image::Image",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: ID of another [image](https://esphome.io/components/image/) to display while the downloaded image is not yet ready. This placeholder image will **not** be resized; regardless of the `resize` option value for the `online_image`.\n\n*See also: [Online Image Component](https://esphome.io/components/image/online_image#configuration-variables)*"
+            },
+            "request_headers": {
+              "key": "Optional",
+              "key_type": "string",
+              "schema": {
+                "config_vars": {
+                  "string": {
+                    "templatable": true,
+                    "type": "string"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "**mapping**: Map of HTTP headers. Values are [templatable](https://esphome.io/automations/templates).\n\n*See also: [Online Image Component](https://esphome.io/components/image/online_image#configuration-variables)*"
+            },
+            "resize": {
+              "key": "Optional",
+              "docs": "**string**: If set, this will resize the image to fit inside the given dimensions `WIDTHxHEIGHT` and preserve the aspect ratio.\n\n*See also: [Online Image Component](https://esphome.io/components/image/online_image#configuration-variables)*"
+            },
+            "transparency": {
+              "default": "OPAQUE",
+              "key": "Optional",
+              "docs": "If set the alpha channel of the input image will be taken into account. The possible values are `opaque` (default), `chroma_key` and `alpha_channel`. See the discussion on transparency in the [image component](https://esphome.io/components/image#transparency-options).\n\n*See also: [Online Image Component](https://esphome.io/components/image/online_image#configuration-variables)*"
+            },
+            "type": {
+              "key": "Required",
+              "docs": "Specifies how to encode image internally.\n\n*See also: [Online Image Component](https://esphome.io/components/image/online_image#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "never",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: Redownload the image when the specified time has elapsed. Defaults to `never` (i.e. the update component action needs to be called manually).\n\n*See also: [Online Image Component](https://esphome.io/components/image/online_image#configuration-variables)*"
+            },
+            "url": {
+              "key": "Required",
+              "docs": "**url**: The URL where the image will be downloaded from.\n\n*See also: [Online Image Component](https://esphome.io/components/image/online_image#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "online_image.image": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "extends": [
+            "online_image.ONLINE_IMAGE_CONFIG_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

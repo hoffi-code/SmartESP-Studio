@@ -1,0 +1,181 @@
+{
+  "ina3221.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "64",
+              "key": "Optional",
+              "docs": "**int**: Manually specify the I\u00b2C address of the sensor. Defaults to `0x40`.\n\n*See also: [INA3221 3-Channel DC Current Sensor](https://esphome.io/components/sensor/ina3221#configuration-variables)*"
+            },
+            "channel_1": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "ina3221.sensor.INA3221_CHANNEL_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The configuration options for the 1st channel.\n\n*See also: [INA3221 3-Channel DC Current Sensor](https://esphome.io/components/sensor/ina3221#configuration-variables)*"
+            },
+            "channel_2": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "ina3221.sensor.INA3221_CHANNEL_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The configuration options for the 2nd channel. Same options as 1st channel.\n\n*See also: [INA3221 3-Channel DC Current Sensor](https://esphome.io/components/sensor/ina3221#configuration-variables)*"
+            },
+            "channel_3": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "ina3221.sensor.INA3221_CHANNEL_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The configuration options for the 3rd channel. Same options as 1st channel.\n\n*See also: [INA3221 3-Channel DC Current Sensor](https://esphome.io/components/sensor/ina3221#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "ina3221::INA3221Component",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`.\n\n*See also: [INA3221 3-Channel DC Current Sensor](https://esphome.io/components/sensor/ina3221#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "INA3221_CHANNEL_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "bus_voltage": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "voltage"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "V"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the bus voltage (voltage of the high side contact) value on this channel in V. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [INA3221 3-Channel DC Current Sensor](https://esphome.io/components/sensor/ina3221#configuration-variables)*"
+            },
+            "current": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "current"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "A"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the current value on this channel in amperes. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [INA3221 3-Channel DC Current Sensor](https://esphome.io/components/sensor/ina3221#configuration-variables)*"
+            },
+            "power": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "power"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "W"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the power value on this channel in watts. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [INA3221 3-Channel DC Current Sensor](https://esphome.io/components/sensor/ina3221#configuration-variables)*"
+            },
+            "shunt_resistance": {
+              "default": "0.1",
+              "key": "Optional",
+              "docs": "**float**: The value of the shunt resistor on this channel for current calculation. Defaults to `0.1 ohm`.\n\n*See also: [INA3221 3-Channel DC Current Sensor](https://esphome.io/components/sensor/ina3221#configuration-variables)*"
+            },
+            "shunt_voltage": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "voltage"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "V"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the shunt voltage (voltage across the shunt resistor) value on this channel in V. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [INA3221 3-Channel DC Current Sensor](https://esphome.io/components/sensor/ina3221#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

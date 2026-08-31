@@ -1,0 +1,61 @@
+{
+  "rp2040_pwm.output": {
+    "action": {
+      "set_frequency": {
+        "schema": {
+          "config_vars": {
+            "frequency": {
+              "data_type": "output",
+              "key": "Required",
+              "templatable": true
+            },
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "rp2040_pwm::RP2040PWM"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "frequency": {
+              "data_type": "output",
+              "default": "1kHz",
+              "key": "Optional"
+            },
+            "id": {
+              "id_type": {
+                "class": "rp2040_pwm::RP2040PWM",
+                "parents": [
+                  "output::FloatOutput",
+                  "output::BinaryOutput",
+                  "Component"
+                ]
+              },
+              "key": "Required"
+            },
+            "pin": {
+              "internal": true,
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin"
+            }
+          },
+          "extends": [
+            "output.FLOAT_OUTPUT_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

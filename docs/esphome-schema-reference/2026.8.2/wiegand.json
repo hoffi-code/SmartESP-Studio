@@ -1,0 +1,63 @@
+{
+  "wiegand": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "d0": {
+              "internal": true,
+              "key": "Required",
+              "modes": [
+                "input"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin where the `D0` output of the Wiegand's interface connects.\n\n*See also: [Wiegand keypad and tag reader](https://esphome.io/components/wiegand#configuration-variables)*"
+            },
+            "d1": {
+              "internal": true,
+              "key": "Required",
+              "modes": [
+                "input"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin where the `D1` output of the Wiegand's interface connects.\n\n*See also: [Wiegand keypad and tag reader](https://esphome.io/components/wiegand#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "wiegand::Wiegand",
+                "parents": [
+                  "key_provider::KeyProvider",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Set the ID of this device for use in lambdas.\n\n*See also: [Wiegand keypad and tag reader](https://esphome.io/components/wiegand#configuration-variables)*"
+            },
+            "on_key": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform when a key has been pressed on the pad. The key is in a variable called `x`.\n\n*See also: [Wiegand keypad and tag reader](https://esphome.io/components/wiegand#configuration-variables)*"
+            },
+            "on_raw": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform for any data sent by the device. The value is in a variable called `value`, the number of bits is in a variable called `bits`. Note that this will include parity bits as well and no parity checking is done.\n\n*See also: [Wiegand keypad and tag reader](https://esphome.io/components/wiegand#configuration-variables)*"
+            },
+            "on_tag": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform when a Wiegand-compatible card or a tag has been read by the device. The tag code is in a variable called `x`.\n\n*See also: [Wiegand keypad and tag reader](https://esphome.io/components/wiegand#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

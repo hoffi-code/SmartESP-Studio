@@ -1,0 +1,110 @@
+{
+  "es8388.audio_dac": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "16",
+              "key": "Optional",
+              "docs": "**int**: The I\u00b2C address of the driver. Defaults to `0x10`.\n\n*See also: [ES8388](https://esphome.io/components/audio_dac/es8388#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus",
+              "docs": "The ID of the [I\u00b2C bus](https://esphome.io/components/i2c) the ES8388 is connected to.\n\n*See also: [ES8388](https://esphome.io/components/audio_dac/es8388#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "es8388::ES8388",
+                "parents": [
+                  "audio_dac::AudioDac",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "es8388.select": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "adc_input_mic": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "entity_category": {
+                    "default": "config"
+                  },
+                  "icon": {
+                    "default": "mdi:chip"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "es8388::ADCInputMicSelect",
+                      "parents": [
+                        "select::Select",
+                        "EntityBase"
+                      ]
+                    }
+                  }
+                },
+                "extends": [
+                  "select._SELECT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Control the ADC Mic Input.\n\n*See also: [ES8388](https://esphome.io/components/audio_dac/es8388#configuration-variables)*"
+            },
+            "dac_output": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "entity_category": {
+                    "default": "config"
+                  },
+                  "icon": {
+                    "default": "mdi:chip"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "es8388::DacOutputSelect",
+                      "parents": [
+                        "select::Select",
+                        "EntityBase"
+                      ]
+                    }
+                  }
+                },
+                "extends": [
+                  "select._SELECT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Control the DAC Audio output.\n\n*See also: [ES8388](https://esphome.io/components/audio_dac/es8388#configuration-variables)*"
+            },
+            "es8388_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "es8388::ES8388",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID for the [Es8388](https://esphome.io/components/audio_dac/es8388/) component.\n\n*See also: [ES8388](https://esphome.io/components/audio_dac/es8388#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

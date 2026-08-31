@@ -1,0 +1,70 @@
+{
+  "ttp229_lsf": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "87",
+              "key": "Optional"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "ttp229_lsf::TTP229LSFComponent",
+                "parents": [
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "ttp229_lsf.binary_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "channel": {
+              "key": "Required",
+              "type": "integer"
+            },
+            "id": {
+              "id_type": {
+                "class": "ttp229_lsf::TTP229Channel",
+                "parents": [
+                  "binary_sensor::BinarySensor",
+                  "EntityBase"
+                ]
+              },
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually set the ID of this sensor.\n\n*See also: [TTP229 Capacitive Touch Sensor](https://esphome.io/components/binary_sensor/ttp229#configuration-variables)*"
+            },
+            "ttp229_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "ttp229_lsf::TTP229LSFComponent"
+            }
+          },
+          "extends": [
+            "binary_sensor._BINARY_SENSOR_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

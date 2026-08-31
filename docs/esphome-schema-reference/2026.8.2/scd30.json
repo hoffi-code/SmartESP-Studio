@@ -1,0 +1,167 @@
+{
+  "scd30": {
+    "action": {
+      "force_recalibration_with_reference": {
+        "maybe": "value",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "scd30::SCD30Component"
+            },
+            "value": {
+              "key": "Required",
+              "templatable": true,
+              "type": "integer"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": null
+      }
+    }
+  },
+  "scd30.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "97",
+              "key": "Optional",
+              "docs": "**int**: Manually specify the I\u00b2C address of the sensor. Defaults to `0x61`.\n\n*See also: [SCD30 CO\u2082, Temperature and Relative Humidity Sensor](https://esphome.io/components/sensor/scd30#configuration-variables)*"
+            },
+            "altitude_compensation": {
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Enable compensating deviations due to current altitude (in metres). Notice: setting *altitude_compensation* is ignored if *ambient_pressure_compensation* is set.\n\n*See also: [SCD30 CO\u2082, Temperature and Relative Humidity Sensor](https://esphome.io/components/sensor/scd30#configuration-variables)*"
+            },
+            "ambient_pressure_compensation": {
+              "default": "0",
+              "key": "Optional",
+              "docs": "**int**: Enable compensation of measured CO\u2082 values based on given ambient pressure in mBar.\n\n*See also: [SCD30 CO\u2082, Temperature and Relative Humidity Sensor](https://esphome.io/components/sensor/scd30#configuration-variables)*"
+            },
+            "automatic_self_calibration": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Whether to enable automatic self calibration (ASC). Defaults to `true`.\n\n*See also: [SCD30 CO\u2082, Temperature and Relative Humidity Sensor](https://esphome.io/components/sensor/scd30#configuration-variables)*"
+            },
+            "co2": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "carbon_dioxide"
+                  },
+                  "icon": {
+                    "default": "mdi:molecule-co2"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "ppm"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the CO\u2082 sensor.\n\n*See also: [SCD30 CO\u2082, Temperature and Relative Humidity Sensor](https://esphome.io/components/sensor/scd30#configuration-variables)*"
+            },
+            "humidity": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "humidity"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "%"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the Humidity sensor.\n\n*See also: [SCD30 CO\u2082, Temperature and Relative Humidity Sensor](https://esphome.io/components/sensor/scd30#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "scd30::SCD30Component",
+                "parents": [
+                  "Component",
+                  "sensirion_common::SensirionI2CDevice",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "temperature": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the Temperature sensor.\n\n*See also: [SCD30 CO\u2082, Temperature and Relative Humidity Sensor](https://esphome.io/components/sensor/scd30#configuration-variables)*"
+            },
+            "temperature_offset": {
+              "key": "Optional",
+              "docs": "**float**: Temperature and humidity offsets may occur when operating the sensor in end-customer devices. This variable allows the compensation of those effects by setting a temperature offset.\n\n*See also: [SCD30 CO\u2082, Temperature and Relative Humidity Sensor](https://esphome.io/components/sensor/scd30#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_seconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Available range: [2 \u2026 1800]. Defaults to `60s`.\n\n*See also: [SCD30 CO\u2082, Temperature and Relative Humidity Sensor](https://esphome.io/components/sensor/scd30#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

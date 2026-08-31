@@ -1,0 +1,105 @@
+{
+  "audio_dac": {
+    "action": {
+      "mute_off": {
+        "schema": {
+          "extends": [
+            "audio_dac.MUTE_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action unmutes the output of the DAC."
+      },
+      "mute_on": {
+        "schema": {
+          "extends": [
+            "audio_dac.MUTE_ACTION_SCHEMA"
+          ],
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the `audio_dac` platform.\n\n*See also: [Audio DAC Core](https://esphome.io/components/audio_dac#audio_dacmute_on-action)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This action mutes the output of the DAC."
+      },
+      "set_volume": {
+        "schema": {
+          "extends": [
+            "audio_dac.SET_VOLUME_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action sets the output volume of the DAC."
+      }
+    },
+    "components": {
+      "aic3204": {
+        "dependencies": [
+          "i2c"
+        ],
+        "docs": "The `aic3204` platform allows your ESPHome devices to use the AIC3204 ultra low power stereo audio codec (DAC). This allows the playback of audio via the microcontroller from a range of sources via [Media Player](https://esphome.io/components/media_player/).\n\n*See also: [AIC3204](https://esphome.io/components/audio_dac/aic3204)*"
+      },
+      "es8156": {
+        "dependencies": [
+          "i2c"
+        ],
+        "docs": "The `es8156` platform allows your ESPHome devices to use the ES8156 low power mono audio codec. This allows the playback of audio via the microcontroller from a range of sources via [Speaker](https://esphome.io/components/speaker/) or [Media Player](https://esphome.io/components/media_player/).\n\n*See also: [ES8156](https://esphome.io/components/audio_dac/es8156)*"
+      },
+      "es8311": {
+        "dependencies": [
+          "i2c"
+        ],
+        "docs": "The `es8311` platform allows your ESPHome devices to use the ES8311 low power mono audio codec. This allows the playback of audio via the microcontroller from a range of sources via [Speaker](https://esphome.io/components/speaker/) or [Media Player](https://esphome.io/components/media_player/).\n\n*See also: [ES8311](https://esphome.io/components/audio_dac/es8311)*"
+      },
+      "es8388": {
+        "dependencies": [
+          "i2c"
+        ],
+        "docs": "None\n\n*See also: [ES8388](https://esphome.io/components/audio_dac/es8388#audio-dac)*"
+      },
+      "pcm5122": {
+        "dependencies": [
+          "i2c"
+        ],
+        "docs": "The `pcm5122` platform allows your ESPHome devices to use the PCM5122 high-performance stereo audio DAC. This allows the playback of audio via the microcontroller from a range of sources via [Speaker](https://esphome.io/components/speaker/) or [Media Player](https://esphome.io/components/media_player/).\n\n*See also: [PCM5122](https://esphome.io/components/audio_dac/pcm5122)*"
+      }
+    },
+    "schemas": {
+      "MUTE_ACTION_SCHEMA": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "audio_dac::AudioDac",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the `audio_dac` platform.\n\n*See also: [Audio DAC Core](https://esphome.io/components/audio_dac#audio_dacmute_off-action)*"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "SET_VOLUME_ACTION_SCHEMA": {
+        "maybe": "volume",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "audio_dac::AudioDac",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the `audio_dac` platform.\n\n*See also: [Audio DAC Core](https://esphome.io/components/audio_dac#audio_dacset_volume-action)*"
+            },
+            "volume": {
+              "key": "Required",
+              "templatable": true
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

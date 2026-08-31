@@ -1,0 +1,762 @@
+{
+  "cc1101": {
+    "action": {
+      "begin_rx": {
+        "schema": {
+          "extends": [
+            "cc1101.CC1101_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) puts the radio into RX mode and switches `gdo0_pin` to input mode."
+      },
+      "begin_tx": {
+        "schema": {
+          "extends": [
+            "cc1101.CC1101_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) puts the radio into TX mode and switches `gdo0_pin` to output mode."
+      },
+      "reset": {
+        "schema": {
+          "extends": [
+            "cc1101.CC1101_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) resets the CC1101 chip and re-applies configuration."
+      },
+      "send_packet": {
+        "maybe": "data",
+        "schema": {
+          "config_vars": {
+            "data": {
+              "key": "Required",
+              "templatable": true,
+              "docs": "**list**: The packet to send, length should match the configured `packet_length`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "cc1101::CC1101Component"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) transmits a packet. Only available when `packet_mode` is enabled."
+      },
+      "set_channel": {
+        "maybe": "value",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "cc1101::CC1101Component"
+            },
+            "value": {
+              "data_type": "uint8_t",
+              "key": "Required",
+              "templatable": true,
+              "type": "integer",
+              "docs": "**int**: The channel number. Range: `0` to `255`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) changes the channel number at runtime."
+      },
+      "set_channel_spacing": {
+        "maybe": "value",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "cc1101::CC1101Component"
+            },
+            "value": {
+              "key": "Required",
+              "templatable": true,
+              "docs": "**frequency**: The spacing between channels. Range: `25kHz` to `405kHz`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) changes the channel spacing at runtime."
+      },
+      "set_dc_blocking_filter": {
+        "maybe": "value",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "cc1101::CC1101Component"
+            },
+            "value": {
+              "key": "Required",
+              "templatable": true,
+              "type": "boolean",
+              "docs": "**boolean**: `true` to enable, `false` to disable.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) enables or disables the DC blocking filter at runtime."
+      },
+      "set_filter_bandwidth": {
+        "maybe": "value",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "cc1101::CC1101Component"
+            },
+            "value": {
+              "key": "Required",
+              "templatable": true,
+              "docs": "**frequency**: The filter bandwidth. Range: `58kHz` to `812kHz`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) changes the receive filter bandwidth at runtime."
+      },
+      "set_frequency": {
+        "maybe": "value",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "cc1101::CC1101Component"
+            },
+            "value": {
+              "key": "Required",
+              "templatable": true,
+              "docs": "**frequency**: The frequency to set. Range: `300MHz` to `928MHz`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) changes the operating frequency at runtime."
+      },
+      "set_fsk_deviation": {
+        "maybe": "value",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "cc1101::CC1101Component"
+            },
+            "value": {
+              "key": "Required",
+              "templatable": true,
+              "docs": "**frequency**: The frequency deviation. Range: `1.5kHz` to `381kHz`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) changes the FSK/GFSK frequency deviation at runtime."
+      },
+      "set_idle": {
+        "schema": {
+          "extends": [
+            "cc1101.CC1101_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) puts the radio into an idle state."
+      },
+      "set_if_frequency": {
+        "maybe": "value",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "cc1101::CC1101Component"
+            },
+            "value": {
+              "key": "Required",
+              "templatable": true,
+              "docs": "**frequency**: The intermediate frequency. Range: `25kHz` to `788kHz`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) changes the intermediate frequency at runtime."
+      },
+      "set_manchester": {
+        "maybe": "value",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "cc1101::CC1101Component"
+            },
+            "value": {
+              "key": "Required",
+              "templatable": true,
+              "type": "boolean",
+              "docs": "**boolean**: `true` to enable, `false` to disable.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) enables or disables Manchester encoding at runtime."
+      },
+      "set_modulation_type": {
+        "maybe": "value",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "cc1101::CC1101Component"
+            },
+            "value": {
+              "key": "Required",
+              "templatable": true,
+              "type": "enum",
+              "values": {
+                "2-FSK": null,
+                "GFSK": null,
+                "ASK/OOK": null,
+                "4-FSK": null,
+                "MSK": null
+              },
+              "docs": "**enum**: The modulation type. Options: `ASK/OOK`, `2-FSK`, `4-FSK`, `GFSK`, `MSK`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) changes the modulation type at runtime."
+      },
+      "set_msk_deviation": {
+        "maybe": "value",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "cc1101::CC1101Component"
+            },
+            "value": {
+              "key": "Required",
+              "templatable": true,
+              "type": "integer",
+              "docs": "**int**: The deviation index. Range: `1` to `8`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) changes the MSK deviation index at runtime."
+      },
+      "set_output_power": {
+        "maybe": "value",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "cc1101::CC1101Component"
+            },
+            "value": {
+              "key": "Required",
+              "templatable": true,
+              "docs": "**float**: The output power in dBm. Range: `-30` to `11`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) changes the transmission power at runtime."
+      },
+      "set_rx_attenuation": {
+        "maybe": "value",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "cc1101::CC1101Component"
+            },
+            "value": {
+              "key": "Required",
+              "templatable": true,
+              "type": "enum",
+              "values": {
+                "0dB": null,
+                "6dB": null,
+                "12dB": null,
+                "18dB": null
+              },
+              "docs": "**enum**: The attenuation level. Options: `0dB`, `6dB`, `12dB`, `18dB`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) changes the internal RX attenuation at runtime."
+      },
+      "set_symbol_rate": {
+        "maybe": "value",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "cc1101::CC1101Component"
+            },
+            "value": {
+              "key": "Required",
+              "templatable": true,
+              "docs": "**float**: The symbol rate in baud. Range: `600` to `500000`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) changes the symbol rate at runtime."
+      }
+    },
+    "schemas": {
+      "CC1101_ACTION_SCHEMA": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "cc1101::CC1101Component"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "bs_limit": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "Disabled": null,
+                "3.125%": null,
+                "6.25%": null,
+                "12.5%": null
+              },
+              "docs": "**enum**: Saturation point for data rate offset compensation. Options: `Disabled`, `3.125%`, `6.25%`, `12.5%`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "bs_post_ki": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "Same": null,
+                "KI/2": null
+              },
+              "docs": "**enum**: Clock recovery integral gain after sync word detection. Options: `Same`, `KI/2`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "bs_post_kp": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "Same": null,
+                "KP": null
+              },
+              "docs": "**enum**: Clock recovery proportional gain after sync word detection. Options: `Same`, `KP`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "bs_pre_ki": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "KI": null,
+                "2KI": null,
+                "3KI": null,
+                "4KI": null
+              },
+              "docs": "**enum**: Clock recovery integral gain before sync word detection. Options: `KI`, `2KI`, `3KI`, `4KI`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "bs_pre_kp": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "KP": null,
+                "2KP": null,
+                "3KP": null,
+                "4KP": null
+              },
+              "docs": "**enum**: Clock recovery proportional gain before sync word detection. Options: `KP`, `2KP`, `3KP`, `4KP`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "carrier_sense_above_threshold": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Only accept packets when carrier sense indicates a signal is present. Defaults to `false`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "carrier_sense_abs_thr": {
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Absolute RSSI threshold for carrier sense. The radio considers a carrier present when RSSI exceeds this level. Range: `-8` to `7`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "carrier_sense_rel_thr": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "Default": null,
+                "+6dB": null,
+                "+10dB": null,
+                "+14dB": null
+              },
+              "docs": "**enum**: Relative RSSI threshold for carrier sense, compared to the current noise floor. Options: `Default`, `+6dB`, `+10dB`, `+14dB`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "channel": {
+              "data_type": "uint8_t",
+              "default": "0",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Channel number (added to base frequency). Defaults to `0`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "channel_spacing": {
+              "default": "200kHz",
+              "key": "Optional",
+              "docs": "**frequency**: Spacing between channels. Range: `25kHz` to `405kHz`. Defaults to `200kHz`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "crc_enable": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Enable CRC-16 calculation and checking. The CC1101 uses CRC-16-IBM (polynomial 0x8005). Defaults to `false`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "cs_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types/#pin)**: The SPI Chip Select (CSN) pin connected to the module.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "data_rate": {
+              "key": "Optional"
+            },
+            "dc_blocking_filter": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Enable the digital DC blocking filter. Defaults to `true`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "filter_bandwidth": {
+              "default": "203kHz",
+              "key": "Optional",
+              "docs": "**frequency**: The receive filter bandwidth. Range: `58kHz` to `812kHz`. Defaults to `203kHz`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "filter_length_ask_ook": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "4dB": null,
+                "8dB": null,
+                "12dB": null,
+                "16dB": null
+              },
+              "docs": "**enum**: Averaging length for AGC in ASK/OOK modes. Longer values provide more stable gain but slower response. Options: `4dB`, `8dB`, `12dB`, `16dB`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "filter_length_fsk_msk": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "8": null,
+                "16": null,
+                "32": null,
+                "64": null
+              },
+              "docs": "**enum**: Averaging length for AGC in FSK/MSK modes. Longer values provide more stable gain but slower response. Options: `8`, `16`, `32`, `64`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "foc_bs_cs_gate": {
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Freeze frequency offset compensation and clock recovery until carrier sense is asserted.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "foc_limit": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "Disabled": null,
+                "BW/8": null,
+                "BW/4": null,
+                "BW/2": null
+              },
+              "docs": "**enum**: Saturation point for frequency offset compensation. Options: `Disabled`, `BW/8`, `BW/4`, `BW/2`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "foc_post_k": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "Same": null,
+                "K/2": null
+              },
+              "docs": "**enum**: Frequency compensation loop gain after sync word detection. Options: `Same`, `K/2`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "foc_pre_k": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "K": null,
+                "2K": null,
+                "3K": null,
+                "4K": null
+              },
+              "docs": "**enum**: Frequency compensation loop gain before sync word detection. Options: `K`, `2K`, `3K`, `4K`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "freeze": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "Default": null,
+                "On Sync": null,
+                "Analog Only": null,
+                "Analog And Digital": null
+              },
+              "docs": "**enum**: Controls when AGC gain is frozen (held constant). Options: `Default`, `On Sync`, `Analog Only`, `Analog And Digital`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "frequency": {
+              "default": "433.92MHz",
+              "key": "Optional",
+              "docs": "**frequency**: The operating frequency. Range: `300MHz` to `928MHz`. Defaults to `433.92MHz`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "fsk_deviation": {
+              "key": "Optional",
+              "docs": "**frequency**: Frequency deviation for FSK/GFSK modulation. Range: `1.5kHz` to `381kHz`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "gdo0_pin": {
+              "internal": true,
+              "key": "Optional",
+              "modes": [
+                "input"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types/#pin)**: The GDO0 pin. Required when `packet_mode` is enabled, also used for single pin mode switching.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "hyst_level": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "None": null,
+                "Low": null,
+                "Medium": null,
+                "High": null
+              },
+              "docs": "**enum**: Hysteresis level to prevent gain oscillation on borderline signals. Options: `None`, `Low`, `Medium`, `High`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "cc1101::CC1101Component",
+                "parents": [
+                  "Component",
+                  "spi::SPIDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "if_frequency": {
+              "default": "153kHz",
+              "key": "Optional",
+              "docs": "**frequency**: Intermediate Frequency. Range: `25kHz` to `788kHz`. Defaults to `153kHz`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "lna_priority": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: If true, reduce LNA gain before DVGA gain when decreasing overall gain. Useful for optimizing noise figure. Defaults to `false`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "magn_target": {
+              "default": "42dB",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "24dB": null,
+                "27dB": null,
+                "30dB": null,
+                "33dB": null,
+                "36dB": null,
+                "38dB": null,
+                "40dB": null,
+                "42dB": null
+              },
+              "docs": "**dB**: Target signal amplitude for the AGC loop. Higher values increase sensitivity but may cause clipping on strong signals. Range: `24dB` to `42dB` in increments of 3 (e.g., `33dB`). Defaults to `42dB`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "manchester": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Enable Manchester encoding. Defaults to `false`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "max_dvga_gain": {
+              "default": "-3",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "Default": null,
+                "-1": null,
+                "-2": null,
+                "-3": null
+              },
+              "docs": "**enum**: Limits the maximum DVGA (Digital Variable Gain Amplifier) gain. Options: `Default`, `-1`, `-2`, `-3`. Defaults to `-3`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "max_lna_gain": {
+              "default": "Default",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "Default": null,
+                "2.6dB": null,
+                "6.1dB": null,
+                "7.4dB": null,
+                "9.2dB": null,
+                "11.5dB": null,
+                "14.6dB": null,
+                "17.1dB": null
+              },
+              "docs": "**dB**: Limits the maximum LNA (Low Noise Amplifier) gain. Use to prevent saturation in high-signal environments. Defaults to `Default`. Options: `Default`, `2.6dB`, `6.1dB`, `7.4dB`, `9.2dB`, `11.5dB`, `14.6dB`, `17.1dB`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "modulation_type": {
+              "default": "ASK/OOK",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "2-FSK": null,
+                "GFSK": null,
+                "ASK/OOK": null,
+                "4-FSK": null,
+                "MSK": null
+              },
+              "docs": "**enum**: The modulation format. Options: `ASK/OOK` (default), `2-FSK`, `4-FSK`, `GFSK`, `MSK`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "msk_deviation": {
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Deviation index for MSK modulation. Range: `1` to `8`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "num_preamble": {
+              "default": "2",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Number of preamble bytes to transmit. Range: `0` to `7` (maps to 2, 3, 4, 6, 8, 12, 16, 24 bytes). Defaults to `2` (4 bytes).\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "on_packet": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "output_power": {
+              "default": "10",
+              "key": "Optional",
+              "docs": "**float**: The transmission power in dBm. Range: `-30` to `11`. Defaults to `10`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "packet_length": {
+              "data_type": "uint8_t",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Packet length in bytes. Set to `0` for variable length packets (length byte prepended to data). Range: `0` to `64`. Defaults to `0`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "packet_mode": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Enable FIFO packet mode. When enabled, `gdo0_pin` is required. Defaults to `false`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "release_device": {
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "rx_attenuation": {
+              "default": "0dB",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "0dB": null,
+                "6dB": null,
+                "12dB": null,
+                "18dB": null
+              },
+              "docs": "**enum**: Internal RX attenuation. Options: `0dB`, `6dB`, `12dB`, `18dB`. Defaults to `0dB`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "spi_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "spi::SPIComponent"
+            },
+            "spi_mode": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "MODE0": null,
+                "MODE1": null,
+                "MODE2": null,
+                "MODE3": null,
+                "0": null,
+                "1": null,
+                "2": null,
+                "3": null
+              }
+            },
+            "symbol_rate": {
+              "default": "5000",
+              "key": "Optional",
+              "docs": "**int**: The symbol rate in Baud. Range: `600` to `500000`. Defaults to `5000`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "sync0": {
+              "data_type": "hex_uint8_t",
+              "default": "145",
+              "key": "Optional",
+              "docs": "**hex**: Lower sync word byte. Defaults to `0x91`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "sync1": {
+              "data_type": "hex_uint8_t",
+              "default": "211",
+              "key": "Optional",
+              "docs": "**hex**: Upper sync word byte. Defaults to `0xD3`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "sync_mode": {
+              "default": "16/16",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "None": null,
+                "15/16": null,
+                "16/16": null,
+                "30/32": null
+              },
+              "docs": "**enum**: Sync word detection mode. Options: `None`, `15/16`, `16/16`, `30/32`. Defaults to `16/16`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "wait_time": {
+              "default": "32",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "8": null,
+                "16": null,
+                "24": null,
+                "32": null
+              },
+              "docs": "**enum**: Time to wait after a gain change before allowing another adjustment. Options: `8`, `16`, `24`, `32`. Defaults to `32`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            },
+            "whitening": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Enable data whitening to improve DC balance. Defaults to `false`.\n\n*See also: [CC1101 Low-Power Sub-1 GHz RF Transceiver](https://esphome.io/components/cc1101#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "datetime": {
+    "components": {
+      "template": {
+        "docs": "The `template` datetime platform allows you to create a datetime with templated values using [lambdas](https://esphome.io/automations/templates#config-lambda).\n\n*See also: [Template Datetime](https://esphome.io/components/datetime/template)*"
+      }
+    },
+    "schemas": {
+      "_DATETIME_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "on_value": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "time_id": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "time::RealTimeClock",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the time entity. Automatically set to the ID of a time component if only a single one is defined. Required if `on_time` is used.\n\n*See also: [Datetime Component](https://esphome.io/components/datetime#optional-variables)*"
+            },
+            "web_server": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "sorting_group_id": {
+                    "key": "Optional",
+                    "type": "use_id",
+                    "use_id_type": "int"
+                  },
+                  "sorting_weight": {
+                    "key": "Optional"
+                  },
+                  "web_server_id": {
+                    "key": "Optional",
+                    "type": "use_id",
+                    "use_id_type": "web_server::WebServer"
+                  }
+                }
+              },
+              "type": "schema",
+              "visibility": "advanced"
+            },
+            "name": {
+              "key": "Optional",
+              "docs": "**string**: The name for the datetime. At least one of **id** and **name** must be specified.\n\n*See also: [Datetime Component](https://esphome.io/components/datetime#optional-variables)*"
+            },
+            "icon": {
+              "key": "Optional",
+              "docs": "**icon**: Manually set the icon to use for the datetime in the frontend.\n\n*See also: [Datetime Component](https://esphome.io/components/datetime#optional-variables)*"
+            },
+            "internal": {
+              "key": "Optional",
+              "docs": "**boolean**: Mark this component as internal. Internal components will not be exposed to the frontend (like Home Assistant). Only specifying an `id` without a `name` will implicitly set this to true.\n\n*See also: [Datetime Component](https://esphome.io/components/datetime#optional-variables)*"
+            },
+            "disabled_by_default": {
+              "key": "Optional",
+              "docs": "**boolean**: If true, then this entity should not be added to any client's frontend, (usually Home Assistant) without the user manually enabling it (via the Home Assistant UI). Defaults to `false`.\n\n*See also: [Datetime Component](https://esphome.io/components/datetime#optional-variables)*"
+            },
+            "entity_category": {
+              "key": "Optional",
+              "docs": "**string**: The category of the entity. See [https://developers.home-assistant.io/docs/core/entity/#generic-properties](https://developers.home-assistant.io/docs/core/entity/#generic-properties) for a list of available options. Set to `\"\"` to remove the default entity category.\n\n*See also: [Datetime Component](https://esphome.io/components/datetime#optional-variables)*"
+            }
+          },
+          "extends": [
+            "core.ENTITY_BASE_SCHEMA",
+            "core.MQTT_COMMAND_COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "datetime.datetime": {
+    "action": {
+      "set": {
+        "schema": {
+          "config_vars": {
+            "datetime": {
+              "key": "Required",
+              "docs": "**string**: The value to set the datetime to.\n\n*See also: [Datetime Component](https://esphome.io/components/datetime#using-a-lambda)*"
+            },
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "datetime::DateTimeEntity",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the datetime to set.\n\n*See also: [Datetime Component](https://esphome.io/components/datetime#using-a-lambda)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This is an [Action](https://esphome.io/automations/actions#all-actions) for setting a datetime datetime state. The `datetime` provided can be in one of 3 formats:"
+      }
+    }
+  }
+}

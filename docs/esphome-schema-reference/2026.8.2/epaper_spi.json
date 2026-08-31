@@ -1,0 +1,212 @@
+{
+  "epaper_spi.display": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "busy_pin": {
+              "key": "Optional",
+              "modes": [
+                "input"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The BUSY pin, if used. > [!NOTE] > Some displays use inverted busy pin polarity (LOW = busy, HIGH = idle). For these models, set `inverted: true` > on the busy pin. This applies to: `Waveshare-1.54in-G`, `Waveshare-7.5in-H`, `inkplate6color`.\n\n*See also: [ePaper SPI Display](https://esphome.io/components/display/epaper_spi#configuration-variables)*"
+            },
+            "cs_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The CS pin. Predefined for integrated boards.\n\n*See also: [ePaper SPI Display](https://esphome.io/components/display/epaper_spi#configuration-variables)*"
+            },
+            "data_rate": {
+              "default": "20MHz",
+              "key": "Optional"
+            },
+            "dc_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The DC pin. Predefined for integrated boards.\n\n*See also: [ePaper SPI Display](https://esphome.io/components/display/epaper_spi#configuration-variables)*"
+            },
+            "dimensions": {
+              "key": "Required",
+              "schema": {
+                "config_vars": {
+                  "height": {
+                    "key": "Required",
+                    "type": "integer",
+                    "docs": "**int**: Specifies height of display.\n\n*See also: [ePaper SPI Display](https://esphome.io/components/display/epaper_spi#configuration-variables)*"
+                  },
+                  "width": {
+                    "key": "Required",
+                    "type": "integer",
+                    "docs": "**int**: Specifies width of display.\n\n*See also: [ePaper SPI Display](https://esphome.io/components/display/epaper_spi#configuration-variables)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "**dict**: Dimensions of the screen, specified either as *width* **x** *height* (e.g `320x240`  ) or with separate config keys. For integrated boards with full pre-defined configuration this is optional and will be preset by the model selected. The dimensions are specified in pixels, and the width and height must be greater than 0.\n\n*See also: [ePaper SPI Display](https://esphome.io/components/display/epaper_spi#configuration-variables)*"
+            },
+            "enable_pin": {
+              "is_list": true,
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: An optional pin to enable the display, if required. A list of pins can be provided for displays that require multiple enable pins. A full pin configuration may be provided to set the pin mode and inverted property if required. The pin or pins will be driven high (low if inverted) prior to display initialisation.\n\n*See also: [ePaper SPI Display](https://esphome.io/components/display/epaper_spi#configuration-variables)*"
+            },
+            "full_update_every": {
+              "default": "1",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: On screens that support partial updates, this sets the number of updates before a full update is forced. Defaults to `1` which will make every update a full update.\n\n*See also: [ePaper SPI Display](https://esphome.io/components/display/epaper_spi#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "epaper_spi::EPaperSpectraE6",
+                "parents": [
+                  "epaper_spi::EPaperBase",
+                  "PollingComponent",
+                  "Component",
+                  "spi::SPIDevice",
+                  "display::Display",
+                  "PollingComponent",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [ePaper SPI Display](https://esphome.io/components/display/epaper_spi#configuration-variables)*"
+            },
+            "init_sequence": {
+              "is_list": true,
+              "key": "Optional"
+            },
+            "init_sequence_id": {
+              "id_type": {
+                "class": "uint8_t",
+                "parents": null
+              },
+              "key": "GeneratedID"
+            },
+            "model": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "7.3IN-SPECTRA-E6": null,
+                "GOODISPLAY-GDEY042T81-4.2": null,
+                "INKPLATE2": null,
+                "INKPLATE6COLOR": null,
+                "JD79660": null,
+                "SEEED-EE04-MONO-4.26": null,
+                "SEEED-RETERMINAL-E1002": null,
+                "SEEED-RETERMINAL-E1004": null,
+                "SEEED-RETERMINAL-STICKY": null,
+                "SPECTRA-E6": null,
+                "SSD1677": null,
+                "SSD1683": null,
+                "T133A01": null,
+                "WAVESHARE-1.54IN-G": null,
+                "WAVESHARE-2.13IN-BV4": null,
+                "WAVESHARE-2.13IN-V3": null,
+                "WAVESHARE-3.97IN": null,
+                "WAVESHARE-4.26IN": null,
+                "WAVESHARE-7.5IN-BV2-BWR": null,
+                "WAVESHARE-7.5IN-H": null,
+                "WEACT-2.13IN-3C": null,
+                "WEACT-2.9IN-3C": null,
+                "WEACT-4.2IN-3C": null
+              },
+              "docs": "The model of the ePaper display. See the table above for options (case is not significant).\n\n*See also: [ePaper SPI Display](https://esphome.io/components/display/epaper_spi#configuration-variables)*"
+            },
+            "release_device": {
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "reset_duration": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: Duration for the display reset operation. Defaults to `200ms`.\n\n*See also: [ePaper SPI Display](https://esphome.io/components/display/epaper_spi#configuration-variables)*"
+            },
+            "reset_pin": {
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The RESET pin, if used. Make sure you pull this pin high (by connecting it to 3.3V with a resistor) if not connected to a GPIO pin.\n\n*See also: [ePaper SPI Display](https://esphome.io/components/display/epaper_spi#configuration-variables)*"
+            },
+            "rotation": {
+              "default": "0",
+              "key": "Optional",
+              "docs": "**int**: Set the rotation of the display. Everything you draw in `lambda:` will be rotated by this option. One of `0\u00b0` (default), `90\u00b0`, `180\u00b0`, `270\u00b0`.\n\n*See also: [ePaper SPI Display](https://esphome.io/components/display/epaper_spi#configuration-variables)*"
+            },
+            "spi_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "spi::SPIComponent",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Required to specify the ID of the [SPI Component](https://esphome.io/components/spi) if your configuration defines multiple SPI buses. If only a single SPI bus is configured, this is optional.\n\n*See also: [ePaper SPI Display](https://esphome.io/components/display/epaper_spi#configuration-variables)*"
+            },
+            "spi_mode": {
+              "default": "MODE0",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "MODE0": null,
+                "MODE1": null,
+                "MODE2": null,
+                "MODE3": null,
+                "0": null,
+                "1": null,
+                "2": null,
+                "3": null
+              }
+            },
+            "transform": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "mirror_x": {
+                    "key": "Required",
+                    "type": "boolean",
+                    "docs": "**boolean**: If true, mirror the x axis.\n\n*See also: [ePaper SPI Display](https://esphome.io/components/display/epaper_spi#configuration-variables)*"
+                  },
+                  "mirror_y": {
+                    "key": "Required",
+                    "type": "boolean",
+                    "docs": "**boolean**: If true, mirror the y axis.\n\n*See also: [ePaper SPI Display](https://esphome.io/components/display/epaper_spi#configuration-variables)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "**dict**: If `rotation` is not sufficient, use this to transform the display. Options are:\n\n*See also: [ePaper SPI Display](https://esphome.io/components/display/epaper_spi#configuration-variables)*"
+            },
+            "update_interval": {},
+            "lambda": {
+              "key": "Optional",
+              "docs": "**[lambda](https://esphome.io/automations/templates#config-lambda)**: The lambda to use for rendering the content on the display. See [Display Rendering Engine](https://esphome.io/components/display#display-engine) for more information.\n\n*See also: [ePaper SPI Display](https://esphome.io/components/display/epaper_spi#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "display.FULL_DISPLAY_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

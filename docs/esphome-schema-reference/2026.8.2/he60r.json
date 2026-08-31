@@ -1,0 +1,55 @@
+{
+  "he60r.cover": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "close_duration": {
+              "default": "15s",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The time required for the door to fully close from the open position. Default 15s.\n\n*See also: [HE60R Garage Door Opener](https://esphome.io/components/cover/he60r#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "he60r::HE60rCover",
+                "parents": [
+                  "cover::Cover",
+                  "EntityBase",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "open_duration": {
+              "default": "15s",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The time required for the door to fully open from the closed position. Default 15s.\n\n*See also: [HE60R Garage Door Opener](https://esphome.io/components/cover/he60r#configuration-variables)*"
+            },
+            "uart_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "uart::UARTComponent"
+            }
+          },
+          "extends": [
+            "cover._COVER_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,404 @@
+{
+  "sx127x": {
+    "action": {
+      "run_image_cal": {
+        "schema": {
+          "extends": [
+            "sx127x.NO_ARGS_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) runs the `sx127x` image calibration, must be in standby mode."
+      },
+      "send_packet": {
+        "maybe": "data",
+        "schema": {
+          "config_vars": {
+            "data": {
+              "key": "Required",
+              "templatable": true,
+              "docs": "**list**: The packet to send, length should match the configured payload_length.\n\n*See also: [SX127x Component](https://esphome.io/components/sx127x#configuration-variables)*"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "sx127x::SX127x"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) sends a packet, the `sx127x` needs to be in packet mode."
+      },
+      "set_mode_rx": {
+        "schema": {
+          "extends": [
+            "sx127x.NO_ARGS_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) sets the `sx127x` mode to rx."
+      },
+      "set_mode_sleep": {
+        "schema": {
+          "extends": [
+            "sx127x.NO_ARGS_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) sets the `sx127x` mode to sleep."
+      },
+      "set_mode_standby": {
+        "schema": {
+          "extends": [
+            "sx127x.NO_ARGS_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) sets the `sx127x` mode to standby."
+      },
+      "set_mode_tx": {
+        "schema": {
+          "extends": [
+            "sx127x.NO_ARGS_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) sets the `sx127x` mode to tx."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "auto_cal": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**bool**: Enable automatic image calibration on temperature changes. Defaults to `true`.\n\n*See also: [SX127x Component](https://esphome.io/components/sx127x#configuration-variables)*"
+            },
+            "bandwidth": {
+              "default": "125_0kHz",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "2_6kHz": null,
+                "3_1kHz": null,
+                "3_9kHz": null,
+                "5_2kHz": null,
+                "6_3kHz": null,
+                "7_8kHz": null,
+                "10_4kHz": null,
+                "12_5kHz": null,
+                "15_6kHz": null,
+                "20_8kHz": null,
+                "25_0kHz": null,
+                "31_3kHz": null,
+                "41_7kHz": null,
+                "50_0kHz": null,
+                "62_5kHz": null,
+                "83_3kHz": null,
+                "100_0kHz": null,
+                "125_0kHz": null,
+                "166_7kHz": null,
+                "200_0kHz": null,
+                "250_0kHz": null,
+                "500_0kHz": null
+              },
+              "docs": "**enum**: Bandwidth can be `2_6kHz`, `3_1kHz`, `3_9kHz`, `5_2kHz`, `6_3kHz`, `7_8kHz`, `10_4kHz`, `12_5kHz`, `15_6kHz`, `20_8kHz`, `25_0kHz`, `31_3kHz`, `41_7kHz`, `50_0kHz`, `62_5kHz`, `83_3kHz`, `100_0kHz`, `125_0kHz`, `166_7kHz`, `200_0kHz` or `250_0kHz`.\n\n*See also: [SX127x Component](https://esphome.io/components/sx127x#configuration-variables)*"
+            },
+            "bitrate": {
+              "default": "4800",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Bit rate of the signal. Required in packet mode and recommended in continuous mode. Normally the inverse of the bit duration, eg 1 / 208 us is 4800 bps.\n\n*See also: [SX127x Component](https://esphome.io/components/sx127x#configuration-variables)*"
+            },
+            "bitsync": {
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**bool**: Enables the receive bit synchronizer. Required in packet mode. Recommended in continuous mode, however if there is no preamble plus high noise it may be better to turn it off.\n\n*See also: [SX127x Component](https://esphome.io/components/sx127x#configuration-variables)*"
+            },
+            "coding_rate": {
+              "default": "CR_4_5",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "CR_4_5": null,
+                "CR_4_6": null,
+                "CR_4_7": null,
+                "CR_4_8": null
+              },
+              "docs": "**enum**: Coding rate, values can be `CR_4_5`, `CR_4_6`, `CR_4_7` or `CR_4_8`. Defaults to `CR_4_5`.\n\n*See also: [SX127x Component](https://esphome.io/components/sx127x#configuration-variables)*"
+            },
+            "crc_enable": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**bool**: Enables a 16 bit CRC calculation/check in packet mode.\n\n*See also: [SX127x Component](https://esphome.io/components/sx127x#configuration-variables)*"
+            },
+            "cs_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: SPI chip select pin.\n\n*See also: [SX127x Component](https://esphome.io/components/sx127x#configuration-variables)*"
+            },
+            "data_rate": {
+              "default": "8000000.0",
+              "key": "Optional"
+            },
+            "deviation": {
+              "default": "5kHz",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**frequency**: Transmitter FSK frequency deviation, values range from 0 to 100 kHz. Defaults to `5kHz`.\n\n*See also: [SX127x Component](https://esphome.io/components/sx127x#configuration-variables)*"
+            },
+            "dio0_pin": {
+              "internal": true,
+              "key": "Optional",
+              "modes": [
+                "input"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: Digital IO pin 0.\n\n*See also: [SX127x Component](https://esphome.io/components/sx127x#configuration-variables)*"
+            },
+            "frequency": {
+              "key": "Required",
+              "type": "integer",
+              "docs": "**frequency**: Frequency in Hz of the transceiver.\n\n*See also: [SX127x Component](https://esphome.io/components/sx127x#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "sx127x::SX127x",
+                "parents": [
+                  "Component",
+                  "spi::SPIDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "modulation": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "LORA": null,
+                "FSK": null,
+                "OOK": null
+              },
+              "docs": "**enum**: Modulation can be `OOK`, `FSK` or `LORA`  `.\n\n*See also: [SX127x Component](https://esphome.io/components/sx127x#configuration-variables)*"
+            },
+            "on_packet": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform in packet mode when a packet has been decoded. A variable x of type `std::vector<uint8_t>` is passed to the automation for use in lambdas. In LoRa mode the variables snr and rssi are also available.\n\n*See also: [SX127x Component](https://esphome.io/components/sx127x#configuration-variables)*"
+            },
+            "pa_pin": {
+              "default": "BOOST",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "RFO": null,
+                "BOOST": null
+              },
+              "docs": "**enum**: Transmitter output pin, can be `BOOST` or `RFO`.\n\n*See also: [SX127x Component](https://esphome.io/components/sx127x#configuration-variables)*"
+            },
+            "pa_power": {
+              "default": "17",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Transmitter power, range is from 2 to 17 dBm when `pa_pin` is `BOOST` and 0 to 15 dBm when using `RFO`.\n\n*See also: [SX127x Component](https://esphome.io/components/sx127x#configuration-variables)*"
+            },
+            "pa_ramp": {
+              "default": "40us",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "10us": null,
+                "12us": null,
+                "15us": null,
+                "20us": null,
+                "25us": null,
+                "31us": null,
+                "40us": null,
+                "50us": null,
+                "62us": null,
+                "100us": null,
+                "125us": null,
+                "250us": null,
+                "500us": null,
+                "1000us": null,
+                "2000us": null,
+                "3400us": null
+              },
+              "docs": "**enum**: Transmitter PA ramp, can be `10us`, `12us`, `15us`, `20us`, `25us`, `31us`, `40us`, `50us`, `62us`, `100us`, `125us`, `250us`, `500us`, `1000us`, `2000us` or `3400us`.\n\n*See also: [SX127x Component](https://esphome.io/components/sx127x#configuration-variables)*"
+            },
+            "packet_mode": {
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**bool**: In packet mode bytes are sent via the `send_packet` automation and received with the `on_packet` trigger. If not enabled continuous mode is used and raw data is sent and received on DIO2.\n\n*See also: [SX127x Component](https://esphome.io/components/sx127x#configuration-variables)*"
+            },
+            "payload_length": {
+              "default": "0",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Length of the payload in packet mode. If not configured then the variable length packet format is used. Maximum length is 64.\n\n*See also: [SX127x Component](https://esphome.io/components/sx127x#configuration-variables)*"
+            },
+            "preamble_detect": {
+              "default": "0",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Minimum length of the preamble in bytes required by the receiver. Preamble detector is disabled if the size is 0 and its value capped at 3.\n\n*See also: [SX127x Component](https://esphome.io/components/sx127x#configuration-variables)*"
+            },
+            "preamble_errors": {
+              "default": "0",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Number of chip errors tolerated in the receiver.\n\n*See also: [SX127x Component](https://esphome.io/components/sx127x#configuration-variables)*"
+            },
+            "preamble_polarity": {
+              "default": "170",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "170": null,
+                "85": null
+              },
+              "docs": "**int**: Polarity of the preamble, either 0xAA or 0x55.\n\n*See also: [SX127x Component](https://esphome.io/components/sx127x#configuration-variables)*"
+            },
+            "preamble_size": {
+              "default": "0",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Length of the preamble, in bytes, to be sent by the transmitter. This value should be larger than `preamble_detect` on the receive side to allow time for the receiver\u2019s AFC and AGC to adjust.\n\n*See also: [SX127x Component](https://esphome.io/components/sx127x#configuration-variables)*"
+            },
+            "release_device": {
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "rst_pin": {
+              "internal": true,
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: Reset pin.\n\n*See also: [SX127x Component](https://esphome.io/components/sx127x#configuration-variables)*"
+            },
+            "rx_floor": {
+              "default": "-94",
+              "key": "Optional",
+              "docs": "**float**: When receiving OOK `rx_floor` should be set appropriately for your environment. If set too high (ie closer to 0) the radio will ignore everything. If set too low (ie closer to -128) too much noise will get through. When receiving FSK without a preamble configured `rx_floor` is used to trigger the receiver.\n\n*See also: [SX127x Component](https://esphome.io/components/sx127x#configuration-variables)*"
+            },
+            "rx_start": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**bool**: Start the receiver automatically on boot or after transmitting.\n\n*See also: [SX127x Component](https://esphome.io/components/sx127x#configuration-variables)*"
+            },
+            "shaping": {
+              "default": "NONE",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "CUTOFF_BR_X_2": null,
+                "CUTOFF_BR_X_1": null,
+                "GAUSSIAN_BT_0_3": null,
+                "GAUSSIAN_BT_0_5": null,
+                "GAUSSIAN_BT_1_0": null,
+                "NONE": null
+              },
+              "docs": "**enum**: Transmitter data shaping. In OOK can be `CUTOFF_BR_X_2`, `CUTOFF_BR_X_1` or `NONE`. In FSK can be `GAUSSIAN_BT_0_3`, `GAUSSIAN_BT_0_5`, `GAUSSIAN_BT_1_0` or `NONE`. Not recommended in continuous mode as the data on DIO2 must to be synchronized with the bit clock on DIO1.\n\n*See also: [SX127x Component](https://esphome.io/components/sx127x#configuration-variables)*"
+            },
+            "spi_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "spi::SPIComponent"
+            },
+            "spi_mode": {
+              "default": "mode0",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "MODE0": null,
+                "MODE1": null,
+                "MODE2": null,
+                "MODE3": null,
+                "0": null,
+                "1": null,
+                "2": null,
+                "3": null
+              }
+            },
+            "spreading_factor": {
+              "default": "7",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Spreading factor, values range from 6 to 12. Defaults to 7.\n\n*See also: [SX127x Component](https://esphome.io/components/sx127x#configuration-variables)*"
+            },
+            "sync_value": {
+              "data_type": "hex_uint8_t",
+              "default": "[]",
+              "is_list": true,
+              "key": "Optional",
+              "docs": "**list**: Synchronization bytes, list of 1 to 8 bytes, found after the preamble and before the payload.\n\n*See also: [SX127x Component](https://esphome.io/components/sx127x#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "NO_ARGS_ACTION_SCHEMA": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "sx127x::SX127x"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "sx127x.packet_transport": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "sx127x::SX127xTransport",
+                "parents": [
+                  "packet_transport::PacketTransport",
+                  "PollingComponent",
+                  "Component",
+                  "PollingComponent",
+                  "Component",
+                  "sx127x::SX127xListener"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "sx127x_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "sx127x::SX127x"
+            }
+          },
+          "extends": [
+            "packet_transport.TRANSPORT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

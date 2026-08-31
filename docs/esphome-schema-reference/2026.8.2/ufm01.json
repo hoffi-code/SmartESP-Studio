@@ -1,0 +1,213 @@
+{
+  "ufm01": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "ufm01::UFM01Component",
+                "parents": [
+                  "uart::UARTDevice",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID to use for the UFM-01 component.\n\n*See also: [UFM-01 Flow Meter](https://esphome.io/components/ufm01#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "uart.UART_DEVICE_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "ufm01.binary_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "empty_tube": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "problem"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  }
+                },
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Reports if the tube is empty.\n\n*See also: [UFM-01 Flow Meter](https://esphome.io/components/ufm01#configuration-variables)*"
+            },
+            "flow_direction_wrong": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "problem"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  }
+                },
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Reports if the flow direction is incorrect.\n\n*See also: [UFM-01 Flow Meter](https://esphome.io/components/ufm01#configuration-variables)*"
+            },
+            "flow_rate_out_of_range": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "problem"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  }
+                },
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Reports if the flow rate is out of the measurable range.\n\n*See also: [UFM-01 Flow Meter](https://esphome.io/components/ufm01#configuration-variables)*"
+            },
+            "ufc_chip_error": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "problem"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  }
+                },
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Reports if there is an error with the UFC chip (ultrasonic flow converter; datasheet ST2 bit 5).\n\n*See also: [UFM-01 Flow Meter](https://esphome.io/components/ufm01#configuration-variables)*"
+            },
+            "ufm01_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "ufm01::UFM01Component",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the `ufm01` component this binary sensor belongs to.\n\n*See also: [UFM-01 Flow Meter](https://esphome.io/components/ufm01#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "ufm01.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accumulated_flow": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "3"
+                  },
+                  "device_class": {
+                    "default": "water"
+                  },
+                  "state_class": {
+                    "default": "total_increasing"
+                  },
+                  "unit_of_measurement": {
+                    "default": "L"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The accumulated flow (volume) sensor.\n\n*See also: [UFM-01 Flow Meter](https://esphome.io/components/ufm01#configuration-variables)*"
+            },
+            "flow": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "5"
+                  },
+                  "device_class": {
+                    "default": "volume_flow_rate"
+                  },
+                  "icon": {
+                    "default": "mdi:waves-arrow-right"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "m\u00b3/h"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The current flow rate sensor.\n\n*See also: [UFM-01 Flow Meter](https://esphome.io/components/ufm01#configuration-variables)*"
+            },
+            "temperature": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "icon": {
+                    "default": "mdi:thermometer-water"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The water temperature sensor.\n\n*See also: [UFM-01 Flow Meter](https://esphome.io/components/ufm01#configuration-variables)*"
+            },
+            "ufm01_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "ufm01::UFM01Component",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the `ufm01` component this sensor belongs to.\n\n*See also: [UFM-01 Flow Meter](https://esphome.io/components/ufm01#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

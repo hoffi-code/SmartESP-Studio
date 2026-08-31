@@ -1,0 +1,808 @@
+{
+  "tuya": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "tuya::Tuya",
+                "parents": [
+                  "Component",
+                  "uart::UARTDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "ignore_mcu_update_on_datapoints": {
+              "data_type": "uint8_t",
+              "is_list": true,
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**list**: A list of datapoints to ignore MCU updates for. Useful for certain broken/erratic hardware and debugging.\n\n*See also: [Tuya MCU](https://esphome.io/components/tuya#configuration-variables)*"
+            },
+            "on_datapoint_update": {
+              "has_required_var": true,
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "datapoint_type": {
+                    "default": "any",
+                    "key": "Optional",
+                    "type": "enum",
+                    "values": {
+                      "any": null,
+                      "raw": null,
+                      "bool": null,
+                      "int": null,
+                      "uint": null,
+                      "string": null,
+                      "enum": null,
+                      "bitmask": null
+                    },
+                    "docs": "**string**: The datapoint type one of *raw*, *string*, *bool*, *int*, *uint*, *enum*, *bitmask* or *any*.\n\n*See also: [Tuya MCU](https://esphome.io/components/tuya#configuration-variables)*"
+                  },
+                  "sensor_datapoint": {
+                    "data_type": "uint8_t",
+                    "key": "Required",
+                    "type": "integer",
+                    "docs": "**int**: The datapoint id number of the sensor.\n\n*See also: [Tuya MCU](https://esphome.io/components/tuya#configuration-variables)*"
+                  },
+                  "then": {
+                    "type": "trigger"
+                  }
+                }
+              },
+              "type": "trigger",
+              "docs": "An automation to perform when a Tuya datapoint update is received. See [`on_datapoint_update`](https://esphome.io/components/tuya#tuya-on_datapoint_update).\n\n*See also: [Tuya MCU](https://esphome.io/components/tuya#configuration-variables)*"
+            },
+            "status_pin": {
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: Some Tuya devices support WiFi status reporting ONLY through gpio pin. Specify the pin reported in the config dump or leave empty otherwise. More about this on the [Tuya Developer Documentation](https://developer.tuya.com/docs/iot/tuya-cloud-universal-serial-port-access-protocol?id=K9hhi0xxtn9cb#title-7-Query%20working%20mode).\n\n*See also: [Tuya MCU](https://esphome.io/components/tuya#configuration-variables)*"
+            },
+            "time_id": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "time::RealTimeClock",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Some Tuya devices support obtaining local time from ESPHome. Specify the ID of the [Time](https://esphome.io/components/time/) which will be used.\n\n*See also: [Tuya MCU](https://esphome.io/components/tuya#configuration-variables)*"
+            },
+            "uart_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "uart::UARTComponent"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "tuya.binary_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "tuya::TuyaBinarySensor",
+                "parents": [
+                  "binary_sensor::BinarySensor",
+                  "EntityBase",
+                  "Component"
+                ]
+              }
+            },
+            "sensor_datapoint": {
+              "data_type": "uint8_t",
+              "key": "Required",
+              "type": "integer"
+            },
+            "tuya_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "tuya::Tuya"
+            }
+          },
+          "extends": [
+            "binary_sensor._BINARY_SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "tuya.climate": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "active_state": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "cooling_value": {
+                    "data_type": "uint8_t",
+                    "key": "Optional",
+                    "type": "integer"
+                  },
+                  "datapoint": {
+                    "data_type": "uint8_t",
+                    "key": "Required",
+                    "type": "integer"
+                  },
+                  "drying_value": {
+                    "data_type": "uint8_t",
+                    "key": "Optional",
+                    "type": "integer"
+                  },
+                  "fanonly_value": {
+                    "data_type": "uint8_t",
+                    "key": "Optional",
+                    "type": "integer"
+                  },
+                  "heating_value": {
+                    "data_type": "uint8_t",
+                    "default": "1",
+                    "key": "Optional",
+                    "type": "integer"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "cooling_state_pin": {
+              "key": "Optional",
+              "modes": [
+                "input"
+              ],
+              "schema": true,
+              "type": "pin"
+            },
+            "current_temperature_datapoint": {
+              "data_type": "uint8_t",
+              "key": "Optional",
+              "type": "integer"
+            },
+            "current_temperature_multiplier": {
+              "data_type": "positive_float",
+              "key": "Optional"
+            },
+            "fan_mode": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "auto_value": {
+                    "data_type": "uint8_t",
+                    "key": "Optional",
+                    "type": "integer"
+                  },
+                  "datapoint": {
+                    "data_type": "uint8_t",
+                    "key": "Required",
+                    "type": "integer"
+                  },
+                  "high_value": {
+                    "data_type": "uint8_t",
+                    "key": "Optional",
+                    "type": "integer"
+                  },
+                  "low_value": {
+                    "data_type": "uint8_t",
+                    "key": "Optional",
+                    "type": "integer"
+                  },
+                  "medium_value": {
+                    "data_type": "uint8_t",
+                    "key": "Optional",
+                    "type": "integer"
+                  },
+                  "middle_value": {
+                    "data_type": "uint8_t",
+                    "key": "Optional",
+                    "type": "integer"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "heating_state_pin": {
+              "key": "Optional",
+              "modes": [
+                "input"
+              ],
+              "schema": true,
+              "type": "pin"
+            },
+            "id": {
+              "id_type": {
+                "class": "tuya::TuyaClimate",
+                "parents": [
+                  "climate::Climate",
+                  "EntityBase",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "preset": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "eco": {
+                    "key": "Optional",
+                    "schema": {
+                      "config_vars": {
+                        "datapoint": {
+                          "data_type": "uint8_t",
+                          "key": "Required",
+                          "type": "integer"
+                        },
+                        "temperature": {
+                          "key": "Optional"
+                        }
+                      }
+                    },
+                    "type": "schema"
+                  },
+                  "sleep": {
+                    "key": "Optional",
+                    "schema": {
+                      "config_vars": {
+                        "datapoint": {
+                          "data_type": "uint8_t",
+                          "key": "Required",
+                          "type": "integer"
+                        }
+                      }
+                    },
+                    "type": "schema"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "reports_fahrenheit": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "supports_cool": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "supports_heat": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "swing_mode": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "horizontal_datapoint": {
+                    "data_type": "uint8_t",
+                    "key": "Optional",
+                    "type": "integer"
+                  },
+                  "vertical_datapoint": {
+                    "data_type": "uint8_t",
+                    "key": "Optional",
+                    "type": "integer"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "switch_datapoint": {
+              "data_type": "uint8_t",
+              "key": "Optional",
+              "type": "integer"
+            },
+            "target_temperature_datapoint": {
+              "data_type": "uint8_t",
+              "key": "Optional",
+              "type": "integer"
+            },
+            "target_temperature_multiplier": {
+              "data_type": "positive_float",
+              "key": "Optional"
+            },
+            "temperature_multiplier": {
+              "data_type": "positive_float",
+              "key": "Optional"
+            },
+            "tuya_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "tuya::Tuya"
+            }
+          },
+          "extends": [
+            "climate._CLIMATE_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "tuya.cover": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "control_datapoint": {
+              "data_type": "uint8_t",
+              "key": "Optional",
+              "type": "integer"
+            },
+            "direction_datapoint": {
+              "data_type": "uint8_t",
+              "key": "Optional",
+              "type": "integer"
+            },
+            "id": {
+              "id_type": {
+                "class": "tuya::TuyaCover",
+                "parents": [
+                  "cover::Cover",
+                  "EntityBase",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "invert_position": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "invert_position_report": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "max_value": {
+              "default": "100",
+              "key": "Optional",
+              "type": "integer"
+            },
+            "min_value": {
+              "default": "0",
+              "key": "Optional",
+              "type": "integer"
+            },
+            "position_datapoint": {
+              "data_type": "uint8_t",
+              "key": "Required",
+              "type": "integer"
+            },
+            "position_report_datapoint": {
+              "data_type": "uint8_t",
+              "key": "Optional",
+              "type": "integer"
+            },
+            "restore_mode": {
+              "default": "RESTORE",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "NO_RESTORE": null,
+                "RESTORE": null,
+                "RESTORE_AND_CALL": null
+              }
+            },
+            "tuya_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "tuya::Tuya"
+            }
+          },
+          "extends": [
+            "cover._COVER_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "tuya.fan": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "direction_datapoint": {
+              "data_type": "uint8_t",
+              "key": "Optional",
+              "type": "integer"
+            },
+            "id": {
+              "id_type": {
+                "class": "tuya::TuyaFan",
+                "parents": [
+                  "Component",
+                  "fan::Fan",
+                  "EntityBase"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "oscillation_datapoint": {
+              "data_type": "uint8_t",
+              "key": "Optional",
+              "type": "integer"
+            },
+            "speed_count": {
+              "default": "3",
+              "key": "Optional",
+              "type": "integer"
+            },
+            "speed_datapoint": {
+              "data_type": "uint8_t",
+              "key": "Optional",
+              "type": "integer"
+            },
+            "switch_datapoint": {
+              "data_type": "uint8_t",
+              "key": "Optional",
+              "type": "integer"
+            },
+            "tuya_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "tuya::Tuya"
+            }
+          },
+          "extends": [
+            "fan._FAN_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "tuya.light": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "cold_white_color_temperature": {
+              "key": "Optional"
+            },
+            "color_datapoint": {
+              "data_type": "uint8_t",
+              "key": "Optional",
+              "type": "integer"
+            },
+            "color_interlock": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "color_temperature_datapoint": {
+              "data_type": "uint8_t",
+              "key": "Optional",
+              "type": "integer"
+            },
+            "color_temperature_invert": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "color_temperature_max_value": {
+              "key": "Optional",
+              "type": "integer"
+            },
+            "color_type": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "RGB": null,
+                "HSV": null,
+                "RGBHSV": null
+              }
+            },
+            "color_type_lowercase": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "default_transition_length": {
+              "default": "0s"
+            },
+            "dimmer_datapoint": {
+              "data_type": "uint8_t",
+              "key": "Optional",
+              "type": "integer"
+            },
+            "gamma_correct": {
+              "default": "1.0"
+            },
+            "max_value": {
+              "key": "Optional",
+              "type": "integer"
+            },
+            "min_value": {
+              "key": "Optional",
+              "type": "integer"
+            },
+            "min_value_datapoint": {
+              "data_type": "uint8_t",
+              "key": "Optional",
+              "type": "integer"
+            },
+            "output_id": {
+              "id_type": {
+                "class": "tuya::TuyaLight",
+                "parents": [
+                  "light::LightOutput",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "switch_datapoint": {
+              "data_type": "uint8_t",
+              "key": "Optional",
+              "type": "integer"
+            },
+            "tuya_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "tuya::Tuya"
+            },
+            "warm_white_color_temperature": {
+              "key": "Optional"
+            }
+          },
+          "extends": [
+            "light.BRIGHTNESS_ONLY_LIGHT_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "tuya.number": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "datapoint_hidden": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "datapoint_type": {
+                    "key": "Required",
+                    "type": "enum",
+                    "values": {
+                      "int": null,
+                      "uint": null,
+                      "enum": null
+                    }
+                  },
+                  "initial_value": {
+                    "key": "Optional"
+                  },
+                  "restore_value": {
+                    "default": "False",
+                    "key": "Optional",
+                    "type": "boolean"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "id": {
+              "id_type": {
+                "class": "tuya::TuyaNumber",
+                "parents": [
+                  "number::Number",
+                  "EntityBase",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "max_value": {
+              "key": "Required"
+            },
+            "min_value": {
+              "key": "Required"
+            },
+            "multiply": {
+              "default": "1.0",
+              "key": "Optional"
+            },
+            "number_datapoint": {
+              "data_type": "uint8_t",
+              "key": "Required",
+              "type": "integer"
+            },
+            "step": {
+              "data_type": "positive_float",
+              "key": "Required"
+            },
+            "tuya_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "tuya::Tuya"
+            }
+          },
+          "extends": [
+            "number._NUMBER_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "tuya.select": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "enum_datapoint": {
+              "data_type": "uint8_t",
+              "key": "Optional",
+              "type": "integer"
+            },
+            "id": {
+              "id_type": {
+                "class": "tuya::TuyaSelect",
+                "parents": [
+                  "select::Select",
+                  "EntityBase",
+                  "Component"
+                ]
+              }
+            },
+            "int_datapoint": {
+              "data_type": "uint8_t",
+              "key": "Optional",
+              "type": "integer"
+            },
+            "optimistic": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "options": {
+              "key": "Required"
+            },
+            "tuya_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "tuya::Tuya"
+            }
+          },
+          "extends": [
+            "select._SELECT_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "tuya.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "tuya::TuyaSensor",
+                "parents": [
+                  "sensor::Sensor",
+                  "EntityBase",
+                  "Component"
+                ]
+              }
+            },
+            "sensor_datapoint": {
+              "data_type": "uint8_t",
+              "key": "Required",
+              "type": "integer"
+            },
+            "tuya_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "tuya::Tuya"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "tuya.switch": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "tuya::TuyaSwitch",
+                "parents": [
+                  "switch_::Switch",
+                  "EntityBase",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "switch_datapoint": {
+              "data_type": "uint8_t",
+              "key": "Required",
+              "type": "integer"
+            },
+            "tuya_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "tuya::Tuya"
+            }
+          },
+          "extends": [
+            "switch._SWITCH_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "tuya.text_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "tuya::TuyaTextSensor",
+                "parents": [
+                  "text_sensor::TextSensor",
+                  "EntityBase",
+                  "Component"
+                ]
+              }
+            },
+            "sensor_datapoint": {
+              "data_type": "uint8_t",
+              "key": "Required",
+              "type": "integer"
+            },
+            "tuya_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "tuya::Tuya"
+            }
+          },
+          "extends": [
+            "text_sensor._TEXT_SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

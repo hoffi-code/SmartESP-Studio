@@ -1,0 +1,64 @@
+{
+  "power_supply": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "enable_on_boot": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**bool**: If the power supply should be enabled when the power supply component is setup. Defaults to false. The startup delay will be applied (other component setup will be blocked until the delay has elapsed.) This is useful for power supplies that will never be turned off and avoids the need to specifically configure the power supply in a different component.\n\n*See also: [Power Supply Component](https://esphome.io/components/power_supply#configuration-variables)*"
+            },
+            "enable_time": {
+              "default": "20ms",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The time that the power supply needs for startup. The output component will wait for this period of time after turning on the PSU and before switching the output on. Defaults to `20ms`. Maximum of less than `5s`.\n\n*See also: [Power Supply Component](https://esphome.io/components/power_supply#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "power_supply::PowerSupply",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "Required",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id of the power supply so that it can be used by the outputs.\n\n*See also: [Power Supply Component](https://esphome.io/components/power_supply#configuration-variables)*"
+            },
+            "keep_on_time": {
+              "default": "10s",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The time the power supply should be kept enabled after the last output that used it has been switch off. Defaults to `10s`.\n\n*See also: [Power Supply Component](https://esphome.io/components/power_supply#configuration-variables)*"
+            },
+            "pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The GPIO pin to control the power supply on.\n\n*See also: [Power Supply Component](https://esphome.io/components/power_supply#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

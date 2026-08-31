@@ -1,6 +1,6 @@
 # How To Create A Schema
 
-This document gives a high-level overview of how custom component schemas work in ESPConfig Designer.
+This document gives a high-level overview of how custom component schemas work in SmartESP Studio.
 
 It is intended as an introduction for users who want to create their own component schema without needing to understand every internal detail of the full schema system.
 

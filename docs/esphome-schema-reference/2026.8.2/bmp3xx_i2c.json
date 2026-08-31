@@ -1,0 +1,38 @@
+{
+  "bmp3xx_i2c.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "119",
+              "key": "Optional",
+              "docs": "**int**: *I2C* only. Manually specify the I\u00b2C address of the sensor. Defaults to `0x77`. Another address can be `0x76`.\n\n*See also: [BMP388 / BMP390 Temperature+Pressure Sensor](https://esphome.io/components/sensor/bmp3xx#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "bmp3xx_i2c::BMP3XXI2CComponent",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            }
+          },
+          "extends": [
+            "bmp3xx_base.CONFIG_SCHEMA_BASE"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

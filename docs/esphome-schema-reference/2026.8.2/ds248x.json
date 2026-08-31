@@ -1,0 +1,179 @@
+{
+  "ds248x": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "type": "typed",
+        "typed_key": "type",
+        "types": {
+          "ds2482-100": {
+            "config_vars": {
+              "active_pullup": {
+                "default": "False",
+                "key": "Optional",
+                "type": "boolean",
+                "docs": "**boolean**: Enable the active pullup feature. Useful for long lines or heavier bus loads. Defaults to `false`.\n\n*See also: [DS248x 1-Wire Bus Master](https://esphome.io/components/one_wire/ds248x#configuration-variables)*"
+              },
+              "address": {
+                "data_type": "hex_uint8_t",
+                "default": "24",
+                "key": "Optional",
+                "docs": "**int**: The I\u00b2C address of the device. Defaults to `0x18`.\n\n*See also: [DS248x 1-Wire Bus Master](https://esphome.io/components/one_wire/ds248x#configuration-variables)*"
+              },
+              "i2c_id": {
+                "key": "GeneratedID",
+                "type": "use_id",
+                "use_id_type": "i2c::I2CBus",
+                "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the [I\u00b2C bus](https://esphome.io/components/i2c/) to use. Required if you have configured multiple I\u00b2C buses.\n\n*See also: [DS248x 1-Wire Bus Master](https://esphome.io/components/one_wire/ds248x#configuration-variables)*"
+              },
+              "id": {
+                "id_type": {
+                  "class": "ds248x::DS248xComponent",
+                  "parents": [
+                    "Component",
+                    "i2c::I2CDevice"
+                  ]
+                },
+                "key": "GeneratedID",
+                "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the 1-Wire bus. Required if you have configured multiple 1-Wire buses.\n\n*See also: [DS248x 1-Wire Bus Master](https://esphome.io/components/one_wire/ds248x#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "core.COMPONENT_SCHEMA"
+            ]
+          },
+          "ds2482-101": {
+            "config_vars": {
+              "bus_sleep": {
+                "default": "False",
+                "key": "Optional",
+                "type": "boolean",
+                "docs": "**boolean**: Put the 1-Wire bus to sleep when not in use. Only available for `ds2482-101` and `ds2484`. Defaults to `false`.\n\n*See also: [DS248x 1-Wire Bus Master](https://esphome.io/components/one_wire/ds248x#configuration-variables)*"
+              },
+              "hub_sleep": {
+                "default": "False",
+                "key": "Optional",
+                "type": "boolean",
+                "docs": "**boolean**: Put the bridge chip to sleep when not in use. Requires `sleep_pin` and is only available for `ds2482-101` and `ds2484`. Defaults to `false`.\n\n*See also: [DS248x 1-Wire Bus Master](https://esphome.io/components/one_wire/ds248x#configuration-variables)*"
+              },
+              "sleep_pin": {
+                "internal": true,
+                "key": "Optional",
+                "modes": [
+                  "output"
+                ],
+                "schema": true,
+                "type": "pin",
+                "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: A GPIO pin connected to the `SLPZ` pin. Only available for `ds2482-101` and `ds2484`.\n\n*See also: [DS248x 1-Wire Bus Master](https://esphome.io/components/one_wire/ds248x#configuration-variables)*"
+              }
+            }
+          },
+          "ds2482-800": {
+            "config_vars": {
+              "active_pullup": {
+                "default": "False",
+                "key": "Optional",
+                "type": "boolean",
+                "docs": "**boolean**: Enable the active pullup feature. Useful for long lines or heavier bus loads. Defaults to `false`.\n\n*See also: [DS248x 1-Wire Bus Master](https://esphome.io/components/one_wire/ds248x#configuration-variables)*"
+              },
+              "address": {
+                "data_type": "hex_uint8_t",
+                "default": "24",
+                "key": "Optional",
+                "docs": "**int**: The I\u00b2C address of the device. Defaults to `0x18`.\n\n*See also: [DS248x 1-Wire Bus Master](https://esphome.io/components/one_wire/ds248x#configuration-variables)*"
+              },
+              "i2c_id": {
+                "key": "GeneratedID",
+                "type": "use_id",
+                "use_id_type": "i2c::I2CBus",
+                "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the [I\u00b2C bus](https://esphome.io/components/i2c/) to use. Required if you have configured multiple I\u00b2C buses.\n\n*See also: [DS248x 1-Wire Bus Master](https://esphome.io/components/one_wire/ds248x#configuration-variables)*"
+              },
+              "id": {
+                "id_type": {
+                  "class": "ds248x::DS248xComponent",
+                  "parents": [
+                    "Component",
+                    "i2c::I2CDevice"
+                  ]
+                },
+                "key": "GeneratedID",
+                "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the 1-Wire bus. Required if you have configured multiple 1-Wire buses.\n\n*See also: [DS248x 1-Wire Bus Master](https://esphome.io/components/one_wire/ds248x#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "core.COMPONENT_SCHEMA"
+            ]
+          },
+          "ds2484": {
+            "config_vars": {
+              "active_pullup_resistance": {
+                "key": "Optional",
+                "type": "enum",
+                "values": {
+                  "500ohm": null,
+                  "1000ohm": null
+                },
+                "docs": "**string**: The active pullup resistance. One of `500ohm` or `1000ohm`.\n\n*See also: [DS248x 1-Wire Bus Master](https://esphome.io/components/one_wire/ds248x#configuration-variables)*"
+              },
+              "master_sample_time": {
+                "key": "Optional",
+                "type": "integer",
+                "docs": "**int**: Adjust the master sample time (`tMSP`). Value from `0` to `15`.\n\n*See also: [DS248x 1-Wire Bus Master](https://esphome.io/components/one_wire/ds248x#configuration-variables)*"
+              },
+              "recovery_time": {
+                "key": "Optional",
+                "type": "integer",
+                "docs": "**int**: Adjust the recovery time (`tREC0`). Value from `0` to `15`.\n\n*See also: [DS248x 1-Wire Bus Master](https://esphome.io/components/one_wire/ds248x#configuration-variables)*"
+              },
+              "reset_low_time": {
+                "key": "Optional",
+                "type": "integer",
+                "docs": "**int**: Adjust the reset low time (`tRSTL`). Value from `0` to `15`.\n\n*See also: [DS248x 1-Wire Bus Master](https://esphome.io/components/one_wire/ds248x#configuration-variables)*"
+              },
+              "write_0_low_time": {
+                "key": "Optional",
+                "type": "integer",
+                "docs": "**int**: Adjust the write-0 low time (`tW0L`). Value from `0` to `15`.\n\n*See also: [DS248x 1-Wire Bus Master](https://esphome.io/components/one_wire/ds248x#configuration-variables)*"
+              }
+            }
+          }
+        },
+        "docs": "The DS248x chip variant. One of `ds2482-100`, `ds2482-101`, `ds2482-800`, or `ds2484`."
+      }
+    }
+  },
+  "ds248x.one_wire": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "channel": {
+              "default": "0",
+              "key": "Optional",
+              "type": "integer"
+            },
+            "ds248x_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "ds248x::DS248xComponent"
+            },
+            "id": {
+              "id_type": {
+                "class": "ds248x::DS248xOneWireBus",
+                "parents": [
+                  "one_wire::OneWireBus",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

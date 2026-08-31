@@ -1,0 +1,113 @@
+{
+  "factory_reset": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "factory_reset::FactoryResetComponent",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "max_delay": {
+              "default": "10s",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_seconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The maximum delay between power cycles. Default: 10s\n\n*See also: [Factory Reset](https://esphome.io/components/factory_reset#configuration-variables)*"
+            },
+            "on_increment": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "resets_required": {
+              "data_type": "positive_not_null_int",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**integer**: The number of power cycles after which the device will be reset. No default, if not configured the power cycle reset feature will be disabled\n\n*See also: [Factory Reset](https://esphome.io/components/factory_reset#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "factory_reset.button": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "device_class": {
+              "default": "restart"
+            },
+            "entity_category": {
+              "default": "config"
+            },
+            "icon": {
+              "default": "mdi:restart-alert"
+            },
+            "id": {
+              "id_type": {
+                "class": "factory_reset::FactoryResetButton",
+                "parents": [
+                  "button::Button",
+                  "EntityBase",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            }
+          },
+          "extends": [
+            "button._BUTTON_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "factory_reset.switch": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "entity_category": {
+              "default": "config"
+            },
+            "icon": {
+              "default": "mdi:restart-alert"
+            },
+            "id": {
+              "id_type": {
+                "class": "factory_reset::FactoryResetSwitch",
+                "parents": [
+                  "switch_::Switch",
+                  "EntityBase",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            }
+          },
+          "extends": [
+            "switch._SWITCH_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

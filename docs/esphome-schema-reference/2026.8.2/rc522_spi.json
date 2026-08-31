@@ -1,0 +1,97 @@
+{
+  "rc522_spi": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "cs_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin on the ESP that the chip select line is connected to.\n\n*See also: [RC522 NFC/RFID](https://esphome.io/components/binary_sensor/rc522#configuration-variables)*"
+            },
+            "data_rate": {
+              "key": "Optional"
+            },
+            "id": {
+              "id_type": {
+                "class": "rc522_spi::RC522Spi",
+                "parents": [
+                  "rc522::RC522",
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice",
+                  "spi::SPIDevice"
+                ]
+              },
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID for this component.\n\n*See also: [RC522 NFC/RFID](https://esphome.io/components/binary_sensor/rc522#configuration-variables)*"
+            },
+            "release_device": {
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "spi_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "spi::SPIComponent",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the [SPI Component](https://esphome.io/components/spi) if you want to use multiple SPI buses.\n\n*See also: [RC522 NFC/RFID](https://esphome.io/components/binary_sensor/rc522#configuration-variables)*"
+            },
+            "spi_mode": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "MODE0": null,
+                "MODE1": null,
+                "MODE2": null,
+                "MODE3": null,
+                "0": null,
+                "1": null,
+                "2": null,
+                "3": null
+              }
+            }
+          },
+          "extends": [
+            "rc522.RC522_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "rc522_spi.binary_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "rc522::RC522BinarySensor",
+                "parents": [
+                  "binary_sensor::BinarySensor",
+                  "EntityBase"
+                ]
+              }
+            },
+            "rc522_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "rc522::RC522"
+            },
+            "uid": {
+              "key": "Required"
+            }
+          },
+          "extends": [
+            "binary_sensor._BINARY_SENSOR_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

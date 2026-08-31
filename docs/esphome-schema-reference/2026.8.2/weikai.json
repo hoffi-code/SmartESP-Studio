@@ -1,0 +1,124 @@
+{
+  "weikai": {
+    "schemas": {
+      "WEIKAI_PIN_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "inverted": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "mode": {
+              "default": "{}",
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "input": {
+                    "default": "False",
+                    "key": "Optional",
+                    "type": "boolean"
+                  },
+                  "output": {
+                    "default": "False",
+                    "key": "Optional",
+                    "type": "boolean"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "number": {
+              "key": "Required",
+              "type": "integer"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "WKBASE_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "crystal": {
+              "default": "14745600",
+              "key": "Optional",
+              "type": "integer"
+            },
+            "id": {
+              "id_type": {
+                "class": "weikai::WeikaiComponent",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "test_mode": {
+              "default": "0",
+              "key": "Optional",
+              "type": "integer"
+            },
+            "uart": {
+              "is_list": true,
+              "key": "Required",
+              "schema": {
+                "config_vars": {
+                  "baud_rate": {
+                    "key": "Required",
+                    "type": "integer"
+                  },
+                  "channel": {
+                    "default": "0",
+                    "key": "Optional",
+                    "type": "integer"
+                  },
+                  "data_bits": {
+                    "default": "8",
+                    "key": "Optional",
+                    "type": "enum",
+                    "values": {
+                      "8": null
+                    }
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "weikai::WeikaiChannel",
+                      "parents": [
+                        "uart::UARTComponent"
+                      ]
+                    },
+                    "key": "Required"
+                  },
+                  "parity": {
+                    "default": "NONE",
+                    "key": "Optional",
+                    "type": "enum",
+                    "values": {
+                      "NONE": null,
+                      "EVEN": null,
+                      "ODD": null
+                    }
+                  },
+                  "stop_bits": {
+                    "default": "1",
+                    "key": "Optional",
+                    "type": "enum",
+                    "values": {
+                      "1": null,
+                      "2": null
+                    }
+                  }
+                }
+              },
+              "type": "schema"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

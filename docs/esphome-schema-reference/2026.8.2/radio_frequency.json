@@ -1,0 +1,12 @@
+{
+  "radio_frequency": {
+    "components": {
+      "ir_rf_proxy": {
+        "dependencies": [
+          "radio_frequency"
+        ]
+      }
+    },
+    "schemas": {}
+  }
+}

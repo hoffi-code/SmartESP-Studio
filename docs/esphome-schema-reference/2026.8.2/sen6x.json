@@ -1,0 +1,309 @@
+{
+  "sen6x.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "107",
+              "key": "Optional",
+              "docs": "**int**: Manually specify the I\u00b2C address of the sensor. Defaults to `0x6B`.\n\n*See also: [SEN6x Series Environmental Sensor](https://esphome.io/components/sensor/sen6x#configuration-variables)*"
+            },
+            "co2": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "carbon_dioxide"
+                  },
+                  "icon": {
+                    "default": "mdi:molecule-co2"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "ppm"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The **carbon dioxide** concentration in ppm. Note: only available with SEN63C, SEN66 or SEN69C. The sensor will be ignored on unsupported models.\n\n*See also: [SEN6x Series Environmental Sensor](https://esphome.io/components/sensor/sen6x#configuration-variables)*"
+            },
+            "formaldehyde": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "icon": {
+                    "default": "mdi:radiator"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "ppb"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The Formaldehyde (HCHO) concentration in ppb. Note: only available with SEN68 or SEN69C. The sensor will be ignored on unsupported models.\n\n*See also: [SEN6x Series Environmental Sensor](https://esphome.io/components/sensor/sen6x#configuration-variables)*"
+            },
+            "humidity": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "humidity"
+                  },
+                  "icon": {
+                    "default": "mdi:water-percent"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "%"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Relative Humidity.\n\n*See also: [SEN6x Series Environmental Sensor](https://esphome.io/components/sensor/sen6x#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "sen6x::SEN6XComponent",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "sensirion_common::SensirionI2CDevice",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "nox_index": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "icon": {
+                    "default": "mdi:radiator"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "NOx Index. Note: only available with SEN65, SEN66, SEN68 or SEN69C. The sensor will be ignored on unsupported models.\n\n*See also: [SEN6x Series Environmental Sensor](https://esphome.io/components/sensor/sen6x#configuration-variables)*"
+            },
+            "pm_10_0": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "pm10"
+                  },
+                  "icon": {
+                    "default": "mdi:chemical-weapon"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b5g/m\u00b3"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the **Weight Concentration** sensor for coarse particles up to 10\u03bcm. Readings in \u00b5g/m\u00b3.\n\n*See also: [SEN6x Series Environmental Sensor](https://esphome.io/components/sensor/sen6x#configuration-variables)*"
+            },
+            "pm_1_0": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "pm1"
+                  },
+                  "icon": {
+                    "default": "mdi:chemical-weapon"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b5g/m\u00b3"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the **Weight Concentration** sensor for fine particles up to 1\u03bcm. Readings in \u00b5g/m\u00b3.\n\n*See also: [SEN6x Series Environmental Sensor](https://esphome.io/components/sensor/sen6x#configuration-variables)*"
+            },
+            "pm_2_5": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "pm25"
+                  },
+                  "icon": {
+                    "default": "mdi:chemical-weapon"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b5g/m\u00b3"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the **Weight Concentration** sensor for fine particles up to 2.5\u03bcm. Readings in \u00b5g/m\u00b3.\n\n*See also: [SEN6x Series Environmental Sensor](https://esphome.io/components/sensor/sen6x#configuration-variables)*"
+            },
+            "pm_4_0": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "icon": {
+                    "default": "mdi:chemical-weapon"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b5g/m\u00b3"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the **Weight Concentration** sensor for coarse particles up to 4\u03bcm. Readings in \u00b5g/m\u00b3.\n\n*See also: [SEN6x Series Environmental Sensor](https://esphome.io/components/sensor/sen6x#configuration-variables)*"
+            },
+            "temperature": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "icon": {
+                    "default": "mdi:thermometer"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Temperature.\n\n*See also: [SEN6x Series Environmental Sensor](https://esphome.io/components/sensor/sen6x#configuration-variables)*"
+            },
+            "type": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "SEN62": null,
+                "SEN63C": null,
+                "SEN65": null,
+                "SEN66": null,
+                "SEN68": null,
+                "SEN69C": null
+              },
+              "docs": "The type of sensor. If not specified, sensor type will be auto-detected. If specified, the value will override auto-detection. In case of mismatch, a warning will be provided in the log.\n\n*See also: [SEN6x Series Environmental Sensor](https://esphome.io/components/sensor/sen6x#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`.\n\n*See also: [SEN6x Series Environmental Sensor](https://esphome.io/components/sensor/sen6x#configuration-variables)*"
+            },
+            "voc_index": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "icon": {
+                    "default": "mdi:radiator"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "VOC Index. Note: only available with SEN65, SEN66, SEN68 or SEN69C. The sensor will be ignored on unsupported models.\n\n*See also: [SEN6x Series Environmental Sensor](https://esphome.io/components/sensor/sen6x#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

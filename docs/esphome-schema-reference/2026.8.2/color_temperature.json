@@ -1,0 +1,45 @@
+{
+  "color_temperature.light": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "brightness": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "output::FloatOutput",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id of the float [Output Component](https://esphome.io/components/output/) to use for the brightness. It returns a float from 0 to 1.\n\n*See also: [Color Temperature Light](https://esphome.io/components/light/color_temperature#configuration-variables)*"
+            },
+            "cold_white_color_temperature": {
+              "key": "Required",
+              "docs": "**float**: The coldest color temperature supported by this light. This is the lowest value when expressed in [mireds](https://en.wikipedia.org/wiki/Mired), or the highest value when expressed in Kelvin.\n\n*See also: [Color Temperature Light](https://esphome.io/components/light/color_temperature#configuration-variables)*"
+            },
+            "color_temperature": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "output::FloatOutput",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id of the float [Output Component](https://esphome.io/components/output/) to use for the color temperature. It returns a float from 0 to 1 in the mired scale. Hereby 0 corresponds to the cold white temperature and 1 to the warm white temperature.\n\n*See also: [Color Temperature Light](https://esphome.io/components/light/color_temperature#configuration-variables)*"
+            },
+            "output_id": {
+              "id_type": {
+                "class": "color_temperature::CTLightOutput",
+                "parents": [
+                  "light::LightOutput"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "warm_white_color_temperature": {
+              "key": "Required",
+              "docs": "**float**: The warmest color temperature supported by this light. This is the highest value when expressed in [mireds](https://en.wikipedia.org/wiki/Mired), or the lowest value when expressed in Kelvin.\n\n*See also: [Color Temperature Light](https://esphome.io/components/light/color_temperature#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "light.RGB_LIGHT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

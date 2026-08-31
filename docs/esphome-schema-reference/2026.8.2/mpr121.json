@@ -1,0 +1,119 @@
+{
+  "mpr121": {
+    "pin": {
+      "schema": {
+        "extends": [
+          "mpr121.MPR121_GPIO_PIN_SCHEMA"
+        ]
+      },
+      "type": "schema"
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "90",
+              "key": "Optional",
+              "docs": "**int**: The I\u00b2C address of the sensor. Defaults to `0x5A`.\n\n*See also: [MPR121 Capacitive Touch Sensor](https://esphome.io/components/binary_sensor/mpr121#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "mpr121::MPR121Component",
+                "parents": [
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Set the ID of this sensor.\n\n*See also: [MPR121 Capacitive Touch Sensor](https://esphome.io/components/binary_sensor/mpr121#configuration-variables)*"
+            },
+            "max_touch_channel": {
+              "key": "Optional",
+              "type": "integer"
+            },
+            "release_debounce": {
+              "default": "0",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: The minimum length that no touch is recognized before a release event is created. Range is from 0 to 7. Defaults to 0.\n\n*See also: [MPR121 Capacitive Touch Sensor](https://esphome.io/components/binary_sensor/mpr121#configuration-variables)*"
+            },
+            "release_threshold": {
+              "default": "6",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: The release defines the sensitivity for touch detection and should be between 5 and 30. Defaults to 6.\n\n*See also: [MPR121 Capacitive Touch Sensor](https://esphome.io/components/binary_sensor/mpr121#configuration-variables)*"
+            },
+            "touch_debounce": {
+              "default": "0",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: The minimum length before a touch is recognized. Range is from 0 to 7. Defaults to 0.\n\n*See also: [MPR121 Capacitive Touch Sensor](https://esphome.io/components/binary_sensor/mpr121#configuration-variables)*"
+            },
+            "touch_threshold": {
+              "default": "11",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: The touch threshold for all channels. This defines the sensitivity for touch detection and should be between 5 and 30 (lower = more sensitive). Defaults to 12. Typically the touch threshold is a little bigger than the release threshold.\n\n*See also: [MPR121 Capacitive Touch Sensor](https://esphome.io/components/binary_sensor/mpr121#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "mpr121.binary_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "channel": {
+              "key": "Required",
+              "type": "integer",
+              "docs": "**int**: The channel number at the MPR121 the touchkey is connected to.\n\n*See also: [MPR121 Capacitive Touch Sensor](https://esphome.io/components/binary_sensor/mpr121#binary-sensor)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "mpr121::MPR121BinarySensor",
+                "parents": [
+                  "binary_sensor::BinarySensor",
+                  "EntityBase"
+                ]
+              }
+            },
+            "mpr121_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "mpr121::MPR121Component",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the MPR121 defined above. Useful for multiple MPR121's on the I\u00b2C bus\n\n*See also: [MPR121 Capacitive Touch Sensor](https://esphome.io/components/binary_sensor/mpr121#binary-sensor)*"
+            },
+            "release_threshold": {
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: A per-channel override of the global release_threshold value. If not specified, uses the global value.\n\n*See also: [MPR121 Capacitive Touch Sensor](https://esphome.io/components/binary_sensor/mpr121#binary-sensor)*"
+            },
+            "touch_threshold": {
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: A per-channel override of the global touch_threshold value. If not specified, uses the global value.\n\n*See also: [MPR121 Capacitive Touch Sensor](https://esphome.io/components/binary_sensor/mpr121#binary-sensor)*"
+            }
+          },
+          "extends": [
+            "binary_sensor._BINARY_SENSOR_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

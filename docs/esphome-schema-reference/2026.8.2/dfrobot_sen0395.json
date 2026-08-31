@@ -1,0 +1,263 @@
+{
+  "dfrobot_sen0395": {
+    "action": {
+      "reset": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "dfrobot_sen0395::DfrobotSen0395Component",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the mmWave component. Useful when multiple instances of this component are defined.\n\n*See also: [DFRobot mmWave Radar](https://esphome.io/components/dfrobot_sen0395#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Restart the sensor."
+      },
+      "settings": {
+        "schema": {
+          "config_vars": {
+            "detection_segments": {
+              "key": "Optional",
+              "docs": "**list**: A list of detection segments. A segment specifies from where to where detection should trigger. One to four segments and ranges from 0cm to 9m may be specified. Distances should be defined in steps of 15cm. Note that the specified ranges are rounded internally. Segments can be defined in a one or two dimensional list. Pairs of values must be defined (from distance to distance). The default is one range from 0cm to 3m. **Examples** In the above example, if a person was present in the range between 0cm and 3m (distance from the sensor) or between 5.1m and 6.6m the sensor would trigger (meaning a person was detected). If a person is present between 3.1m and 5m or 6.7m and 9m it would not trigger. Section values can be defined using lambdas, so you can set the distances depending on other entities. Distances are defined as a float in meters (10cm = 0.1). If you return a negative value (-1) the segment will not be set.\n\n*See also: [DFRobot mmWave Radar](https://esphome.io/components/dfrobot_sen0395#configuration-variables)*"
+            },
+            "factory_reset": {
+              "key": "Optional",
+              "templatable": true,
+              "type": "boolean",
+              "docs": "**boolean**: If set to `true`, a factory reset of the sensor will be performed (before changing other options if present). Ignored if not set or set to `false`.\n\n*See also: [DFRobot mmWave Radar](https://esphome.io/components/dfrobot_sen0395#configuration-variables)*"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "dfrobot_sen0395::DfrobotSen0395Component",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the mmWave sensor on which settings should be changed. If only one radar is defined, this is optional.\n\n*See also: [DFRobot mmWave Radar](https://esphome.io/components/dfrobot_sen0395#configuration-variables)*"
+            },
+            "output_latency": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "delay_after_detect": {
+                    "key": "Required",
+                    "schema": {
+                      "extends": [
+                        "core.positive_time_period_milliseconds"
+                      ]
+                    },
+                    "templatable": true,
+                    "type": "schema"
+                  },
+                  "delay_after_disappear": {
+                    "key": "Required",
+                    "schema": {
+                      "extends": [
+                        "core.positive_time_period_milliseconds"
+                      ]
+                    },
+                    "templatable": true,
+                    "type": "schema"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "sensitivity": {
+              "key": "Optional",
+              "templatable": true,
+              "type": "integer",
+              "docs": "**int**: Set the sensitivity of the sensor. Ranges from 0 to 9. Return 0-9. Returning -1 keeps the value unchanged.\n\n*See also: [DFRobot mmWave Radar](https://esphome.io/components/dfrobot_sen0395#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "> [!WARNING] > Each change to the configuration of the mmWave radar triggers a write to its internal flash/EEPROM. > Write cycles to this memory are limited, so avoid the practice of changing settings frequently. > Determine the appropriate settings for your device and avoid changing them unless absolutely necessary."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "dfrobot_sen0395::DfrobotSen0395Component",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation. Necessary if you want to define multiple instances of this component.\n\n*See also: [DFRobot mmWave Radar](https://esphome.io/components/dfrobot_sen0395#configuration-variables)*"
+            },
+            "uart_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "uart::UARTComponent",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the [Uart](https://esphome.io/components/uart/) if you want to use multiple UART buses.\n\n*See also: [DFRobot mmWave Radar](https://esphome.io/components/dfrobot_sen0395#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "dfrobot_sen0395.binary_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "device_class": {
+              "default": "motion"
+            },
+            "dfrobot_sen0395_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "dfrobot_sen0395::DfrobotSen0395Component",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the DFRobot mmWave component defined above. Required when multiple instances of the `dfrobot_sen0395` component are defined.\n\n*See also: [DFRobot mmWave Radar](https://esphome.io/components/dfrobot_sen0395#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "binary_sensor._BINARY_SENSOR_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "dfrobot_sen0395.switch": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "type": "typed",
+        "typed_key": "type",
+        "types": {
+          "presence_via_uart": {
+            "config_vars": {
+              "dfrobot_sen0395_id": {
+                "key": "GeneratedID",
+                "type": "use_id",
+                "use_id_type": "dfrobot_sen0395::DfrobotSen0395Component",
+                "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the DFRobot mmWave component defined above. Required when multiple instances of the `dfrobot_sen0395` component are defined.\n\n*See also: [DFRobot mmWave Radar](https://esphome.io/components/dfrobot_sen0395#configuration-variables)*"
+              },
+              "entity_category": {
+                "default": "config"
+              },
+              "id": {
+                "id_type": {
+                  "class": "dfrobot_sen0395::Sen0395UartPresenceSwitch",
+                  "parents": [
+                    "dfrobot_sen0395::DfrobotSen0395Switch",
+                    "switch_::Switch",
+                    "EntityBase",
+                    "Component",
+                    "Parented<dfrobot_sen0395::DfrobotSen0395Component>",
+                    "Parented"
+                  ]
+                },
+                "key": "GeneratedID"
+              }
+            },
+            "extends": [
+              "switch._SWITCH_SCHEMA",
+              "core.COMPONENT_SCHEMA"
+            ]
+          },
+          "sensor_active": {
+            "config_vars": {
+              "dfrobot_sen0395_id": {
+                "key": "GeneratedID",
+                "type": "use_id",
+                "use_id_type": "dfrobot_sen0395::DfrobotSen0395Component",
+                "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the DFRobot mmWave component defined above. Required when multiple instances of the `dfrobot_sen0395` component are defined.\n\n*See also: [DFRobot mmWave Radar](https://esphome.io/components/dfrobot_sen0395#configuration-variables)*"
+              },
+              "entity_category": {
+                "default": "config"
+              },
+              "id": {
+                "id_type": {
+                  "class": "dfrobot_sen0395::Sen0395PowerSwitch",
+                  "parents": [
+                    "dfrobot_sen0395::DfrobotSen0395Switch",
+                    "switch_::Switch",
+                    "EntityBase",
+                    "Component",
+                    "Parented<dfrobot_sen0395::DfrobotSen0395Component>",
+                    "Parented"
+                  ]
+                },
+                "key": "GeneratedID"
+              }
+            },
+            "extends": [
+              "switch._SWITCH_SCHEMA",
+              "core.COMPONENT_SCHEMA"
+            ]
+          },
+          "start_after_boot": {
+            "config_vars": {
+              "dfrobot_sen0395_id": {
+                "key": "GeneratedID",
+                "type": "use_id",
+                "use_id_type": "dfrobot_sen0395::DfrobotSen0395Component",
+                "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the DFRobot mmWave component defined above. Required when multiple instances of the `dfrobot_sen0395` component are defined.\n\n*See also: [DFRobot mmWave Radar](https://esphome.io/components/dfrobot_sen0395#configuration-variables)*"
+              },
+              "entity_category": {
+                "default": "config"
+              },
+              "id": {
+                "id_type": {
+                  "class": "dfrobot_sen0395::Sen0395StartAfterBootSwitch",
+                  "parents": [
+                    "dfrobot_sen0395::DfrobotSen0395Switch",
+                    "switch_::Switch",
+                    "EntityBase",
+                    "Component",
+                    "Parented<dfrobot_sen0395::DfrobotSen0395Component>",
+                    "Parented"
+                  ]
+                },
+                "key": "GeneratedID"
+              }
+            },
+            "extends": [
+              "switch._SWITCH_SCHEMA",
+              "core.COMPONENT_SCHEMA"
+            ]
+          },
+          "turn_on_led": {
+            "config_vars": {
+              "dfrobot_sen0395_id": {
+                "key": "GeneratedID",
+                "type": "use_id",
+                "use_id_type": "dfrobot_sen0395::DfrobotSen0395Component",
+                "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the DFRobot mmWave component defined above. Required when multiple instances of the `dfrobot_sen0395` component are defined.\n\n*See also: [DFRobot mmWave Radar](https://esphome.io/components/dfrobot_sen0395#configuration-variables)*"
+              },
+              "entity_category": {
+                "default": "config"
+              },
+              "id": {
+                "id_type": {
+                  "class": "dfrobot_sen0395::Sen0395LedSwitch",
+                  "parents": [
+                    "dfrobot_sen0395::DfrobotSen0395Switch",
+                    "switch_::Switch",
+                    "EntityBase",
+                    "Component",
+                    "Parented<dfrobot_sen0395::DfrobotSen0395Component>",
+                    "Parented"
+                  ]
+                },
+                "key": "GeneratedID"
+              }
+            },
+            "extends": [
+              "switch._SWITCH_SCHEMA",
+              "core.COMPONENT_SCHEMA"
+            ]
+          }
+        },
+        "docs": "One of:"
+      }
+    }
+  }
+}

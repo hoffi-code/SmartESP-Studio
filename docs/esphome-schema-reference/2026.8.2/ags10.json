@@ -1,0 +1,170 @@
+{
+  "ags10": {
+    "action": {
+      "new_i2c_address": {
+        "maybe": "address",
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "key": "Required",
+              "templatable": true,
+              "docs": "**int**: New I2C address.\n\n*See also: [AGS10 Volatile Organic Compound (VOC) Sensor](https://esphome.io/components/sensor/ags10#in-some-trigger)*"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "ags10::AGS10Component",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the AGS10 sensor.\n\n*See also: [AGS10 Volatile Organic Compound (VOC) Sensor](https://esphome.io/components/sensor/ags10#in-some-trigger)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "I2C address of AGS10 can be modified, and it is possible to use multiple AGS10 sensors on one bus. After sending the command for address changing, the new address is saved and takes effect immediately even after power-off."
+      },
+      "set_zero_point": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "ags10::AGS10Component"
+            },
+            "mode": {
+              "key": "Required",
+              "templatable": true,
+              "type": "enum",
+              "values": {
+                "FACTORY_DEFAULT": null,
+                "CURRENT_VALUE": null,
+                "CUSTOM_VALUE": null
+              }
+            },
+            "value": {
+              "data_type": "uint16_t",
+              "default": "65535",
+              "key": "Optional",
+              "templatable": true,
+              "type": "integer"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Zero-point of AGS10 has been calibrated before leaving factory. User can re-calibrate the zero-point as needed."
+      }
+    }
+  },
+  "ags10.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "26",
+              "key": "Optional",
+              "docs": "**int**: Manually specify the I\u00b2C address of the sensor. Defaults to `0x1A`.\n\n*See also: [AGS10 Volatile Organic Compound (VOC) Sensor](https://esphome.io/components/sensor/ags10#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "ags10::AGS10Component",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "resistance": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "icon": {
+                    "default": "mdi:restart"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u03a9"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The initial value of the sensor resistance. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [AGS10 Volatile Organic Compound (VOC) Sensor](https://esphome.io/components/sensor/ags10#configuration-variables)*"
+            },
+            "tvoc": {
+              "key": "Required",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "volatile_organic_compounds_parts"
+                  },
+                  "icon": {
+                    "default": "mdi:radiator"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "ppb"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the total Volatile Organic Compounds sensor. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [AGS10 Volatile Organic Compound (VOC) Sensor](https://esphome.io/components/sensor/ags10#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`.\n\n*See also: [AGS10 Volatile Organic Compound (VOC) Sensor](https://esphome.io/components/sensor/ags10#configuration-variables)*"
+            },
+            "version": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "icon": {
+                    "default": "mdi:restart"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The firmware version of the sensor. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [AGS10 Volatile Organic Compound (VOC) Sensor](https://esphome.io/components/sensor/ags10#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

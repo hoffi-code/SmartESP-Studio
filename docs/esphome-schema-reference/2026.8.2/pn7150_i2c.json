@@ -1,0 +1,81 @@
+{
+  "pn7150_i2c": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "40",
+              "key": "Optional"
+            },
+            "emulation_message": {
+              "key": "Optional",
+              "type": "string"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "pn7150::PN7150",
+                "parents": [
+                  "nfc::Nfcc",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "irq_pin": {
+              "key": "Required",
+              "modes": [
+                "input"
+              ],
+              "schema": true,
+              "type": "pin"
+            },
+            "on_emulated_tag_scan": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "on_finished_write": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "on_tag": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "on_tag_removed": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "tag_ttl": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema"
+            },
+            "ven_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}
