@@ -11,11 +11,34 @@ const labelSchema = {
   ]
 };
 
+const buttonSchema = {
+  fields: [
+    { key: "id", type: "id", required: false },
+    { key: "width", type: "number", required: false },
+    { key: "height", type: "number", required: false },
+    { key: "text", type: "text", required: false },
+    { key: "checkable", type: "boolean", required: false },
+    {
+      key: "on_click",
+      type: "list",
+      required: false,
+      item: { type: "object", fields: [], extends: "base_actions.json" }
+    }
+  ]
+};
+
+const homeassistantActionDefinition = {
+  fields: [{ key: "action", type: "text", required: true }]
+};
+
 const schemaContext = {
   loadWidgetSchema: async (type) => {
     if (type === "label") return labelSchema;
+    if (type === "button") return buttonSchema;
     return null;
-  }
+  },
+  loadActionCatalog: async () => [{ id: "homeassistant.action", schemaUrl: "actions/homeassistant/action.json" }],
+  loadActionDefinition: async () => homeassistantActionDefinition
 };
 
 describe("parseWidgetNode", () => {
@@ -29,6 +52,26 @@ describe("parseWidgetNode", () => {
     expect(node.common).toMatchObject({ id: "label_1", align: "TOP_MID", y: 8 });
     expect(node.props).toEqual({ text: "Couch", text_color: "0x3FFFFF" });
     expect(node.children).toEqual([]);
+  });
+
+  it("parses a button widget's on_click action list through the shared action-catalog mapper", async () => {
+    const node = await parseWidgetNode(
+      {
+        button: {
+          id: "btn_1",
+          width: 110,
+          text: "Couch",
+          on_click: [{ "homeassistant.action": { action: "switch.toggle" } }]
+        }
+      },
+      schemaContext
+    );
+
+    expect(node.type).toBe("button");
+    expect(node.common).toMatchObject({ id: "btn_1", width: 110 });
+    expect(node.props.text).toBe("Couch");
+    expect(node.props.on_click).toHaveLength(1);
+    expect(node.props.on_click[0]).toMatchObject({ type: "homeassistant.action", config: { action: "switch.toggle" } });
   });
 
   it("keeps a widget type without a loadWidgetSchema/loaded schema as an opaque raw-YAML node", async () => {

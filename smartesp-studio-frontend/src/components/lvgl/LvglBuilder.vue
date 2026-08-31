@@ -47,6 +47,9 @@
                 <button type="button" class="secondary compact" :disabled="activePageIndex < 0" @click="addWidget('label')">
                   Add label
                 </button>
+                <button type="button" class="secondary compact" :disabled="activePageIndex < 0" @click="addWidget('button')">
+                  Add button
+                </button>
               </div>
             </div>
             <div class="lvgl-widget-tree">
@@ -152,7 +155,8 @@ const removeActivePage = () => {
 };
 
 const NEW_WIDGET_DEFAULTS = {
-  label: { text: "Label" }
+  label: { text: "Label" },
+  button: { text: "Button" }
 };
 
 const addWidget = (type) => {

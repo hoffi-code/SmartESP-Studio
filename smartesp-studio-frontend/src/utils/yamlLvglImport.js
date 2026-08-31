@@ -5,7 +5,7 @@ import { loadAutomationContextForSchema } from "./yamlProjectImport";
 // Widget types with a real inspector panel. Everything else round-trips as an opaque raw-YAML
 // node (see parseWidgetNode) instead of being dropped -- covered incrementally, seam by seam,
 // following the same pattern (see plans/... LVGL notes).
-const SUPPORTED_WIDGET_TYPES = new Set(["label"]);
+const SUPPORTED_WIDGET_TYPES = new Set(["label", "button"]);
 
 // Position/size fields every widget type shares -- matches LvglWidgetInspectorCommon.vue's field
 // list exactly, since that's the only other place this split matters (it's a UI grouping, not a
