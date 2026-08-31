@@ -499,3 +499,24 @@ Linux-Runner `PermissionError: '/config'` schon bei der Collection, vor dem erst
 `C:\config\…`, anlegbar; Container: root) unsichtbar. Fix: `smartesp-studio/conftest.py` lenkt
 `TARGET_DIR` & Co. auf ein `tempfile.mkdtemp()`, sofern nicht gesetzt — pytest lädt die conftest vor den
 Testmodulen. CI danach grün (frontend + backend), PR `mergeable_state: clean`.
+
+### Folge-Änderungen auf dem Branch (vor dem Merge)
+
+Aus dem „Was kommt als nächstes"-Plan, jeweils ein Commit, Checks grün:
+
+- **F1 (`1d1e536`)** — Builder markierte ein frisch geöffnetes, gespeichertes Projekt als geändert
+  (`name.yaml*`). `loadConfig()` snappt den Fingerprint bevor Schemas geladen sind; die danach
+  laufende Passwort-Materialisierung + der `framework`-Default mutieren `config` und ließen den
+  Dirty-Watcher anschlagen. Deterministische Post-Load-Fills setzen jetzt kurz
+  `autoNormalizationInFlight`; der Watcher verschiebt dann die Baseline statt zu flaggen. Neuer
+  `resolveDirtyState()`-Util + Spec, dritter redundanter Deep-Watch auf `config` entfernt.
+- **F2 (`6be91fb`)** — README/CONTRIBUTING: Distribution ist jetzt Standalone-Image-only. HA-Add-on-Weg
+  als „on hold" markiert, `smartesp-studio/web/`- und „Deploy frontend into add-on"-Reste raus,
+  CONTRIBUTING-Notiz zu Docker-in-CI korrigiert (eigener Workflow, nur `main`/Tags).
+- **F3 (`8544398`)** — Die MDI-Font (`materialdesignicons-webfont.ttf`) war nur im Vue-Menü
+  geschützt; `/api/assets/rename` und `DELETE /api/assets/fonts/<file>` hatten keinen Check. Backend
+  weist beide mit `409` (`ASSET_PROTECTED`) ab und setzt `protected: true` im Manifest; Frontend über
+  ein gemeinsames `isProtectedAsset()`.
+- **F4 (`f4312d7`)** — Totes `"available"`-Feld entfernt (553× im Katalog, nichts las es mehr nach dem
+  Paywall-Ausbau): aus `components_list.json`, `normalize_component_entry`, den Custom-Component-Routen
+  (`COMPONENTS_AVAILABLE_INVALID`) und den Katalog-Merge-Tests.
