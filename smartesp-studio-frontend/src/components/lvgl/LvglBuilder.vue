@@ -306,6 +306,8 @@ const handleInspectorUpdate = (nextNode) => {
   text-align: left;
   border: none;
   background: transparent;
+  color: var(--navy);
+  font-weight: 500;
   padding: 6px 8px;
   border-radius: 6px;
   cursor: pointer;
