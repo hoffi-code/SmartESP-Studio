@@ -44,14 +44,16 @@
             <div class="lvgl-config-panel__header">
               <h4>Widgets</h4>
               <div class="lvgl-config-panel__actions">
-                <button type="button" class="secondary compact" :disabled="activePageIndex < 0" @click="addWidget('label')">
-                  Add label
-                </button>
-                <button type="button" class="secondary compact" :disabled="activePageIndex < 0" @click="addWidget('button')">
-                  Add button
-                </button>
-                <button type="button" class="secondary compact" :disabled="activePageIndex < 0" @click="addWidget('image')">
-                  Add image
+                <select v-model="widgetTypeToAdd" class="lvgl-widget-type-select" :disabled="activePageIndex < 0">
+                  <option v-for="widget in LVGL_WIDGETS" :key="widget.type" :value="widget.type">{{ widget.label }}</option>
+                </select>
+                <button
+                  type="button"
+                  class="secondary compact"
+                  :disabled="activePageIndex < 0"
+                  @click="addWidget(widgetTypeToAdd)"
+                >
+                  Add
                 </button>
               </div>
             </div>
@@ -74,7 +76,12 @@
             <div class="lvgl-config-panel__header">
               <h4>Inspector</h4>
             </div>
-            <LvglWidgetInspector :node="selectedWidget" @update="handleInspectorUpdate" />
+            <LvglWidgetInspector
+              :node="selectedWidget"
+              :widget-schemas="widgetSchemas"
+              :id-index="idIndex"
+              @update="handleInspectorUpdate"
+            />
           </section>
         </div>
 
@@ -90,11 +97,21 @@
 import { computed, ref } from "vue";
 import LvglWidgetTreeItem from "./LvglWidgetTreeItem.vue";
 import LvglWidgetInspector from "./LvglWidgetInspector.vue";
+import { LVGL_WIDGETS, lvglWidgetDefaults } from "../../utils/lvglWidgets";
 
 const props = defineProps({
   lvglConfig: {
     type: Object,
     default: null
+  },
+  // type -> loaded widget schema (BuilderView.lvglWidgetSchemas).
+  widgetSchemas: {
+    type: Object,
+    default: () => ({})
+  },
+  idIndex: {
+    type: Array,
+    default: () => []
   }
 });
 
@@ -103,6 +120,7 @@ const emit = defineEmits(["update"]);
 const isOpen = ref(false);
 const activePageIndex = ref(0);
 const selectedWidgetId = ref("");
+const widgetTypeToAdd = ref(LVGL_WIDGETS[0]?.type || "label");
 
 let uiIdCounter = 0;
 const nextUiId = () => {
@@ -157,16 +175,10 @@ const removeActivePage = () => {
   selectedWidgetId.value = "";
 };
 
-const NEW_WIDGET_DEFAULTS = {
-  label: { text: "Label" },
-  button: { text: "Button" },
-  image: {}
-};
-
 const addWidget = (type) => {
   const current = props.lvglConfig;
-  if (!current || activePageIndex.value < 0) return;
-  const newWidget = { uiId: nextUiId(), type, common: {}, props: { ...(NEW_WIDGET_DEFAULTS[type] || {}) }, children: [] };
+  if (!current || activePageIndex.value < 0 || !type) return;
+  const newWidget = { uiId: nextUiId(), type, common: {}, props: lvglWidgetDefaults(type), children: [] };
   const nextPages = current.pages.map((page, index) =>
     index === activePageIndex.value ? { ...page, widgets: [...(page.widgets || []), newWidget] } : page
   );
@@ -274,6 +286,11 @@ const handleInspectorUpdate = (nextNode) => {
   gap: 6px;
 }
 
+.lvgl-widget-type-select {
+  min-width: 0;
+  flex: 1;
+}
+
 .lvgl-page-list,
 .lvgl-widget-tree {
   display: flex;
@@ -289,6 +306,8 @@ const handleInspectorUpdate = (nextNode) => {
   text-align: left;
   border: none;
   background: transparent;
+  color: var(--navy);
+  font-weight: 500;
   padding: 6px 8px;
   border-radius: 6px;
   cursor: pointer;

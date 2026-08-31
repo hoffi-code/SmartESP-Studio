@@ -130,6 +130,50 @@ describe("buildLvglYamlLines", () => {
     expect(text).toContain('- homeassistant.action: "switch.toggle"');
   });
 
+  it("emits a slider widget's value fields and an on_value trigger", () => {
+    const sliderSchema = {
+      fields: [
+        { key: "id", type: "id", required: false },
+        { key: "value", type: "text", required: false },
+        { key: "max_value", type: "text", required: false },
+        {
+          key: "on_value",
+          type: "list",
+          required: false,
+          item: { type: "object", fields: [], extends: "base_actions.json" }
+        }
+      ]
+    };
+    const lvgl = {
+      pages: [
+        {
+          id: "main_page",
+          widgets: [
+            {
+              uiId: "w1",
+              type: "slider",
+              common: { id: "vol", width: 200 },
+              props: {
+                value: 40,
+                max_value: 100,
+                on_value: [{ type: "homeassistant.action", config: { action: "light.toggle" }, fields: [{ key: "action", type: "text" }] }]
+              },
+              children: []
+            }
+          ]
+        }
+      ]
+    };
+
+    const text = buildLvglYamlLines(lvgl, { slider: sliderSchema }).join("\n");
+    expect(text).toContain("- slider:");
+    expect(text).toContain("id: vol");
+    expect(text).toContain("value: 40");
+    expect(text).toContain("max_value: 100");
+    expect(text).toContain("on_value:");
+    expect(text).toContain('- homeassistant.action: "light.toggle"');
+  });
+
   it("skips a widget whose schema has not been loaded rather than emitting it wrong", () => {
     const lvgl = {
       pages: [{ id: "main_page", widgets: [{ uiId: "w1", type: "label", common: {}, props: {}, children: [] }] }]

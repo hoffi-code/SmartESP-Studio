@@ -40,11 +40,42 @@ const imageSchema = {
   ]
 };
 
+const sliderSchema = {
+  fields: [
+    { key: "id", type: "id", required: false },
+    { key: "width", type: "number", required: false },
+    { key: "value", type: "text", required: false },
+    { key: "min_value", type: "text", required: false },
+    { key: "max_value", type: "text", required: false },
+    { key: "mode", type: "select", required: false, options: ["NORMAL", "RANGE"] },
+    { key: "on_value", type: "list", required: false, item: { type: "object", fields: [], extends: "base_actions.json" } }
+  ]
+};
+
+const switchSchema = {
+  fields: [
+    { key: "id", type: "id", required: false },
+    { key: "align", type: "select", required: false, options: ["CENTER"] },
+    { key: "on_value", type: "list", required: false, item: { type: "object", fields: [], extends: "base_actions.json" } }
+  ]
+};
+
+const dropdownSchema = {
+  fields: [
+    { key: "id", type: "id", required: false },
+    { key: "options", type: "list", required: false, item: { type: "text" } },
+    { key: "selected_index", type: "text", required: false }
+  ]
+};
+
 const schemaContext = {
   loadWidgetSchema: async (type) => {
     if (type === "label") return labelSchema;
     if (type === "button") return buttonSchema;
     if (type === "image") return imageSchema;
+    if (type === "slider") return sliderSchema;
+    if (type === "switch") return switchSchema;
+    if (type === "dropdown") return dropdownSchema;
     return null;
   },
   loadActionCatalog: async () => [{ id: "homeassistant.action", schemaUrl: "actions/homeassistant/action.json" }],
@@ -95,13 +126,46 @@ describe("parseWidgetNode", () => {
     expect(node.props).toEqual({ src: "icon_couch", image_recolor: "0x3FFFFF" });
   });
 
-  it("keeps a widget type without a loadWidgetSchema/loaded schema as an opaque raw-YAML node", async () => {
-    const node = await parseWidgetNode({ slider: { id: "slider_1", width: 110 } }, schemaContext);
+  it("parses a slider widget with its common/props split and value fields", async () => {
+    const node = await parseWidgetNode(
+      { slider: { id: "vol", width: 200, value: 40, min_value: 0, max_value: 100, mode: "NORMAL" } },
+      schemaContext
+    );
+
+    expect(node.type).toBe("slider");
+    expect(node.common).toMatchObject({ id: "vol", width: 200 });
+    expect(node.props).toEqual({ value: 40, min_value: 0, max_value: 100, mode: "NORMAL" });
+  });
+
+  it("parses a switch on_value trigger through the shared action-catalog mapper", async () => {
+    const node = await parseWidgetNode(
+      { switch: { id: "sw", on_value: [{ "homeassistant.action": { action: "light.toggle" } }] } },
+      schemaContext
+    );
+
+    expect(node.type).toBe("switch");
+    expect(node.props.on_value).toHaveLength(1);
+    expect(node.props.on_value[0]).toMatchObject({ type: "homeassistant.action", config: { action: "light.toggle" } });
+  });
+
+  it("parses a dropdown options list", async () => {
+    const node = await parseWidgetNode(
+      { dropdown: { id: "dd", options: ["One", "Two", "Three"], selected_index: 1 } },
+      schemaContext
+    );
+
+    expect(node.type).toBe("dropdown");
+    expect(node.props.options).toEqual(["One", "Two", "Three"]);
+    expect(node.props.selected_index).toBe(1);
+  });
+
+  it("keeps a widget type outside the registry as an opaque raw-YAML node", async () => {
+    const node = await parseWidgetNode({ chart: { id: "chart_1", width: 110 } }, schemaContext);
 
     expect(node.type).toBe("unsupported");
-    expect(node.originalType).toBe("slider");
-    expect(node.rawYaml).toContain("slider:");
-    expect(node.rawYaml).toContain("id: slider_1");
+    expect(node.originalType).toBe("chart");
+    expect(node.rawYaml).toContain("chart:");
+    expect(node.rawYaml).toContain("id: chart_1");
     expect(node.children).toEqual([]);
   });
 

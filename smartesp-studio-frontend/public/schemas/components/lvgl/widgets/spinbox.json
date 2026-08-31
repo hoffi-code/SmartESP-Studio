@@ -1,15 +1,15 @@
 {
-  "id": "lvgl.widget.button",
+  "id": "lvgl.widget.spinbox",
   "domain": "lvgl",
-  "widgetType": "button",
-  "helpUrl": "https://esphome.io/components/lvgl/widgets/",
+  "widgetType": "spinbox",
+  "helpUrl": "https://esphome.io/components/lvgl/widgets/spinbox/",
   "fields": [
     {
       "key": "id",
       "type": "id",
       "required": false,
       "lvl": "simple",
-      "placeholder": "button_id"
+      "placeholder": "spinbox_id"
     },
     {
       "key": "x",
@@ -57,31 +57,52 @@
       ]
     },
     {
-      "key": "text",
+      "key": "value",
       "type": "text",
       "required": false,
       "lvl": "simple",
-      "placeholder": "Button text"
+      "placeholder": "0"
     },
     {
-      "key": "checkable",
-      "type": "boolean",
-      "required": false,
-      "lvl": "normal",
-      "default": false
-    },
-    {
-      "key": "bg_color",
+      "key": "range_from",
       "type": "text",
       "required": false,
       "lvl": "normal",
-      "placeholder": "0x000000"
+      "placeholder": "0"
+    },
+    {
+      "key": "range_to",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "100"
+    },
+    {
+      "key": "step",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "1"
+    },
+    {
+      "key": "digits",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "4"
+    },
+    {
+      "key": "decimal_places",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "0"
     },
     {
       "key": "on_click",
       "type": "list",
       "required": false,
-      "lvl": "normal",
+      "lvl": "advanced",
       "item": {
         "type": "object",
         "fields": [],
@@ -134,6 +155,17 @@
     },
     {
       "key": "on_defocus",
+      "type": "list",
+      "required": false,
+      "lvl": "advanced",
+      "item": {
+        "type": "object",
+        "fields": [],
+        "extends": "base_actions.json"
+      }
+    },
+    {
+      "key": "on_value",
       "type": "list",
       "required": false,
       "lvl": "advanced",

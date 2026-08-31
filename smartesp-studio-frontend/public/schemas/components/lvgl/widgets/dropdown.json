@@ -1,15 +1,15 @@
 {
-  "id": "lvgl.widget.button",
+  "id": "lvgl.widget.dropdown",
   "domain": "lvgl",
-  "widgetType": "button",
-  "helpUrl": "https://esphome.io/components/lvgl/widgets/",
+  "widgetType": "dropdown",
+  "helpUrl": "https://esphome.io/components/lvgl/widgets/dropdown/",
   "fields": [
     {
       "key": "id",
       "type": "id",
       "required": false,
       "lvl": "simple",
-      "placeholder": "button_id"
+      "placeholder": "dropdown_id"
     },
     {
       "key": "x",
@@ -57,31 +57,45 @@
       ]
     },
     {
-      "key": "text",
-      "type": "text",
+      "key": "options",
+      "type": "list",
       "required": false,
       "lvl": "simple",
-      "placeholder": "Button text"
+      "item": {
+        "type": "text"
+      }
     },
     {
-      "key": "checkable",
-      "type": "boolean",
-      "required": false,
-      "lvl": "normal",
-      "default": false
-    },
-    {
-      "key": "bg_color",
+      "key": "selected_index",
       "type": "text",
       "required": false,
       "lvl": "normal",
-      "placeholder": "0x000000"
+      "placeholder": "0"
+    },
+    {
+      "key": "dir",
+      "type": "select",
+      "required": false,
+      "lvl": "normal",
+      "options": [
+        "DOWN",
+        "UP",
+        "LEFT",
+        "RIGHT"
+      ]
+    },
+    {
+      "key": "symbol",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": ""
     },
     {
       "key": "on_click",
       "type": "list",
       "required": false,
-      "lvl": "normal",
+      "lvl": "advanced",
       "item": {
         "type": "object",
         "fields": [],
@@ -134,6 +148,17 @@
     },
     {
       "key": "on_defocus",
+      "type": "list",
+      "required": false,
+      "lvl": "advanced",
+      "item": {
+        "type": "object",
+        "fields": [],
+        "extends": "base_actions.json"
+      }
+    },
+    {
+      "key": "on_value",
       "type": "list",
       "required": false,
       "lvl": "advanced",

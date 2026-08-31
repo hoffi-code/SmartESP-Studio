@@ -1,15 +1,15 @@
 {
-  "id": "lvgl.widget.button",
+  "id": "lvgl.widget.textarea",
   "domain": "lvgl",
-  "widgetType": "button",
-  "helpUrl": "https://esphome.io/components/lvgl/widgets/",
+  "widgetType": "textarea",
+  "helpUrl": "https://esphome.io/components/lvgl/widgets/textarea/",
   "fields": [
     {
       "key": "id",
       "type": "id",
       "required": false,
       "lvl": "simple",
-      "placeholder": "button_id"
+      "placeholder": "textarea_id"
     },
     {
       "key": "x",
@@ -61,27 +61,48 @@
       "type": "text",
       "required": false,
       "lvl": "simple",
-      "placeholder": "Button text"
+      "placeholder": ""
     },
     {
-      "key": "checkable",
+      "key": "placeholder_text",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": ""
+    },
+    {
+      "key": "max_length",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "0"
+    },
+    {
+      "key": "one_line",
       "type": "boolean",
       "required": false,
       "lvl": "normal",
       "default": false
     },
     {
-      "key": "bg_color",
+      "key": "password_mode",
+      "type": "boolean",
+      "required": false,
+      "lvl": "normal",
+      "default": false
+    },
+    {
+      "key": "accepted_chars",
       "type": "text",
       "required": false,
       "lvl": "normal",
-      "placeholder": "0x000000"
+      "placeholder": ""
     },
     {
       "key": "on_click",
       "type": "list",
       "required": false,
-      "lvl": "normal",
+      "lvl": "advanced",
       "item": {
         "type": "object",
         "fields": [],
@@ -134,6 +155,17 @@
     },
     {
       "key": "on_defocus",
+      "type": "list",
+      "required": false,
+      "lvl": "advanced",
+      "item": {
+        "type": "object",
+        "fields": [],
+        "extends": "base_actions.json"
+      }
+    },
+    {
+      "key": "on_value",
       "type": "list",
       "required": false,
       "lvl": "advanced",

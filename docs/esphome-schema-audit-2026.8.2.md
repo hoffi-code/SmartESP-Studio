@@ -73,7 +73,7 @@ Vollständige Liste inkl. `extraInOurs` (Felder, die wir haben und ESPHome laut 
 | `mcp4461.output` | output/mcp4461.json | id, nonvolatile, nonvolatile_write_delay |
 | `mics_4514.sensor` | sensor/mics_4514.json | address, i2c_id, id |
 
-`lvgl` ist aus dieser Tabelle ausgeklammert: der Upstream-Dump listet dort alle ~250 LVGL-Style-/Root-Properties in einem einzigen Schema-Block (rekursiv, nicht pro Widget-Typ) — bereits im vorherigen Planungsschritt separat gegen die Docs geprüft (button/label/image-Felder stimmen). Fehlende Style-Properties und weitere Widget-Typen sind bekannter, bereits dokumentierter Backlog aus `plans/`.
+`lvgl` ist aus dieser Tabelle ausgeklammert: der Upstream-Dump listet dort alle ~250 LVGL-Style-/Root-Properties in einem einzigen Schema-Block (rekursiv, nicht pro Widget-Typ). Der LVGL-Builder ist schema-getrieben über `smartesp-studio-frontend/src/utils/lvglWidgets.js` — ein neues Widget = ein Schema-JSON unter `public/schemas/components/lvgl/widgets/` + eine Registry-Zeile. Abgedeckt: Runde 1 = 15 Widgets (label/button/image + 12 Tier-1) mit kuratierten Feldsätzen + Triggern. Offen (Styling-Properties, States/Parts, Flex/Grid, Top-Level-Optionen, Tier-2-Widgets, Action-Katalog): siehe `plans/was-kommt-als-n-chstes-mossy-bonbon.md`.
 
 ## Backlog: nicht implementierte Komponenten/Plattformen (473)
 

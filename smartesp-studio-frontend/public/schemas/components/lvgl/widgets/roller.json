@@ -1,15 +1,15 @@
 {
-  "id": "lvgl.widget.button",
+  "id": "lvgl.widget.roller",
   "domain": "lvgl",
-  "widgetType": "button",
-  "helpUrl": "https://esphome.io/components/lvgl/widgets/",
+  "widgetType": "roller",
+  "helpUrl": "https://esphome.io/components/lvgl/widgets/roller/",
   "fields": [
     {
       "key": "id",
       "type": "id",
       "required": false,
       "lvl": "simple",
-      "placeholder": "button_id"
+      "placeholder": "roller_id"
     },
     {
       "key": "x",
@@ -57,31 +57,43 @@
       ]
     },
     {
-      "key": "text",
-      "type": "text",
+      "key": "options",
+      "type": "list",
       "required": false,
       "lvl": "simple",
-      "placeholder": "Button text"
+      "item": {
+        "type": "text"
+      }
     },
     {
-      "key": "checkable",
-      "type": "boolean",
-      "required": false,
-      "lvl": "normal",
-      "default": false
-    },
-    {
-      "key": "bg_color",
+      "key": "selected_index",
       "type": "text",
       "required": false,
       "lvl": "normal",
-      "placeholder": "0x000000"
+      "placeholder": "0"
+    },
+    {
+      "key": "mode",
+      "type": "select",
+      "required": false,
+      "lvl": "normal",
+      "options": [
+        "NORMAL",
+        "INFINITE"
+      ]
+    },
+    {
+      "key": "visible_row_count",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "3"
     },
     {
       "key": "on_click",
       "type": "list",
       "required": false,
-      "lvl": "normal",
+      "lvl": "advanced",
       "item": {
         "type": "object",
         "fields": [],
@@ -134,6 +146,17 @@
     },
     {
       "key": "on_defocus",
+      "type": "list",
+      "required": false,
+      "lvl": "advanced",
+      "item": {
+        "type": "object",
+        "fields": [],
+        "extends": "base_actions.json"
+      }
+    },
+    {
+      "key": "on_value",
       "type": "list",
       "required": false,
       "lvl": "advanced",

@@ -1,15 +1,15 @@
 {
-  "id": "lvgl.widget.button",
+  "id": "lvgl.widget.slider",
   "domain": "lvgl",
-  "widgetType": "button",
-  "helpUrl": "https://esphome.io/components/lvgl/widgets/",
+  "widgetType": "slider",
+  "helpUrl": "https://esphome.io/components/lvgl/widgets/slider/",
   "fields": [
     {
       "key": "id",
       "type": "id",
       "required": false,
       "lvl": "simple",
-      "placeholder": "button_id"
+      "placeholder": "slider_id"
     },
     {
       "key": "x",
@@ -57,31 +57,49 @@
       ]
     },
     {
-      "key": "text",
+      "key": "value",
       "type": "text",
       "required": false,
       "lvl": "simple",
-      "placeholder": "Button text"
+      "placeholder": "0"
     },
     {
-      "key": "checkable",
-      "type": "boolean",
-      "required": false,
-      "lvl": "normal",
-      "default": false
-    },
-    {
-      "key": "bg_color",
+      "key": "min_value",
       "type": "text",
       "required": false,
       "lvl": "normal",
-      "placeholder": "0x000000"
+      "placeholder": "0"
+    },
+    {
+      "key": "max_value",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "100"
+    },
+    {
+      "key": "animated",
+      "type": "boolean",
+      "required": false,
+      "lvl": "normal",
+      "default": true
+    },
+    {
+      "key": "mode",
+      "type": "select",
+      "required": false,
+      "lvl": "normal",
+      "options": [
+        "NORMAL",
+        "SYMMETRICAL",
+        "RANGE"
+      ]
     },
     {
       "key": "on_click",
       "type": "list",
       "required": false,
-      "lvl": "normal",
+      "lvl": "advanced",
       "item": {
         "type": "object",
         "fields": [],
@@ -134,6 +152,17 @@
     },
     {
       "key": "on_defocus",
+      "type": "list",
+      "required": false,
+      "lvl": "advanced",
+      "item": {
+        "type": "object",
+        "fields": [],
+        "extends": "base_actions.json"
+      }
+    },
+    {
+      "key": "on_value",
       "type": "list",
       "required": false,
       "lvl": "advanced",

@@ -1,15 +1,15 @@
 {
-  "id": "lvgl.widget.button",
+  "id": "lvgl.widget.led",
   "domain": "lvgl",
-  "widgetType": "button",
-  "helpUrl": "https://esphome.io/components/lvgl/widgets/",
+  "widgetType": "led",
+  "helpUrl": "https://esphome.io/components/lvgl/widgets/led/",
   "fields": [
     {
       "key": "id",
       "type": "id",
       "required": false,
       "lvl": "simple",
-      "placeholder": "button_id"
+      "placeholder": "led_id"
     },
     {
       "key": "x",
@@ -57,31 +57,24 @@
       ]
     },
     {
-      "key": "text",
-      "type": "text",
-      "required": false,
-      "lvl": "simple",
-      "placeholder": "Button text"
-    },
-    {
-      "key": "checkable",
-      "type": "boolean",
-      "required": false,
-      "lvl": "normal",
-      "default": false
-    },
-    {
-      "key": "bg_color",
+      "key": "color",
       "type": "text",
       "required": false,
       "lvl": "normal",
-      "placeholder": "0x000000"
+      "placeholder": "0xFF0000"
+    },
+    {
+      "key": "brightness",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "255"
     },
     {
       "key": "on_click",
       "type": "list",
       "required": false,
-      "lvl": "normal",
+      "lvl": "advanced",
       "item": {
         "type": "object",
         "fields": [],

@@ -393,7 +393,12 @@
         />
 
         <div class="module-card" v-if="activeTab === 'LVGL'">
-          <LvglBuilder :lvgl-config="config.lvgl" @update="handleLvglUpdate" />
+          <LvglBuilder
+            :lvgl-config="config.lvgl"
+            :widget-schemas="lvglWidgetSchemas"
+            :id-index="idIndex"
+            @update="handleLvglUpdate"
+          />
         </div>
 
         <div class="module-card" v-if="activeTab === 'Components'">
@@ -542,6 +547,7 @@ import { useBuilderYamlPreview } from "../composables/builder/useBuilderYamlPrev
 import { useInstallConsoleFlow } from "../composables/useInstallConsoleFlow";
 import { loadGpioData, resolveGpioKey } from "../utils/gpioData";
 import { loadSchemaByPath } from "../utils/schemaLoader";
+import { LVGL_WIDGETS } from "../utils/lvglWidgets";
 import { resolveDirtyState } from "../utils/builderDirtyState";
 import {
   buildGpioUsageIndex,
@@ -3613,11 +3619,10 @@ onMounted(async () => {
     console.error("Network core schema load failed", error);
   }
   try {
-    lvglWidgetSchemas.value = {
-      label: await loadSchemaByPath("components/lvgl/widgets/label.json"),
-      button: await loadSchemaByPath("components/lvgl/widgets/button.json"),
-      image: await loadSchemaByPath("components/lvgl/widgets/image.json")
-    };
+    const loaded = await Promise.all(
+      LVGL_WIDGETS.map(async (widget) => [widget.type, await loadSchemaByPath(widget.schemaPath)])
+    );
+    lvglWidgetSchemas.value = Object.fromEntries(loaded);
   } catch (error) {
     console.error("LVGL widget schemas load failed", error);
   }

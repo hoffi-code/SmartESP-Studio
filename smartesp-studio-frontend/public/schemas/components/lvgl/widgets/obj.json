@@ -1,15 +1,15 @@
 {
-  "id": "lvgl.widget.button",
+  "id": "lvgl.widget.obj",
   "domain": "lvgl",
-  "widgetType": "button",
-  "helpUrl": "https://esphome.io/components/lvgl/widgets/",
+  "widgetType": "obj",
+  "helpUrl": "https://esphome.io/components/lvgl/widgets/obj/",
   "fields": [
     {
       "key": "id",
       "type": "id",
       "required": false,
       "lvl": "simple",
-      "placeholder": "button_id"
+      "placeholder": "obj_id"
     },
     {
       "key": "x",
@@ -57,31 +57,10 @@
       ]
     },
     {
-      "key": "text",
-      "type": "text",
-      "required": false,
-      "lvl": "simple",
-      "placeholder": "Button text"
-    },
-    {
-      "key": "checkable",
-      "type": "boolean",
-      "required": false,
-      "lvl": "normal",
-      "default": false
-    },
-    {
-      "key": "bg_color",
-      "type": "text",
-      "required": false,
-      "lvl": "normal",
-      "placeholder": "0x000000"
-    },
-    {
       "key": "on_click",
       "type": "list",
       "required": false,
-      "lvl": "normal",
+      "lvl": "advanced",
       "item": {
         "type": "object",
         "fields": [],
