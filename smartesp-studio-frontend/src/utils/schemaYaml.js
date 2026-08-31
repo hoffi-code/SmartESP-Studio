@@ -49,7 +49,7 @@ const markNewLines = (lines, startIndex, origin) => {
   }
 };
 
-const pushYamlLine = (lines, text, origin = null) => {
+export const pushYamlLine = (lines, text, origin = null) => {
   const index = lines.length;
   lines.push(text);
   setLineOrigin(lines, index, origin);
@@ -702,7 +702,9 @@ const renderAutomationList = (entries, indent, lines, rootValue, globalStore) =>
 };
 
 // Render a schema-defined object into YAML lines.
-const renderYamlObject = (objectValue, schemaFields, indent, lines, rootValue, globalStore, sourceContext = null) => {
+// `getFieldComment`, when given, is looked up only for this call's own direct fields (not fields
+// recursed into for nested "object" values) -- comment preservation is intentionally one level deep.
+export const renderYamlObject = (objectValue, schemaFields, indent, lines, rootValue, globalStore, sourceContext = null, getFieldComment = null) => {
   const valueMap = objectValue || {};
   const schemaList = Array.isArray(schemaFields) ? schemaFields : [];
   const handledKeys = new Set();
@@ -739,6 +741,14 @@ const renderYamlObject = (objectValue, schemaFields, indent, lines, rootValue, g
     if (!alwaysEmit && emitMode === "visible" && !dependencyVisible) {
       handledKeys.add(key);
       return;
+    }
+    if (typeof getFieldComment === "function") {
+      const comment = getFieldComment(key);
+      if (comment) {
+        comment.split("\n").forEach((commentLine) => {
+          pushYamlLine(lines, `${" ".repeat(indent)}${commentLine}`);
+        });
+      }
     }
     handledKeys.add(key);
     const state = resolveFieldRenderState(field, valueMap[key]);
@@ -1159,14 +1169,14 @@ export const buildGeneralSchemaListDocumentBlock = (
   ];
 };
 
-const renderYamlSingleListObject = (payload, itemSchema, indent, lines, rootValue, globalStore, sourceContext = null) => {
+const renderYamlSingleListObject = (payload, itemSchema, indent, lines, rootValue, globalStore, sourceContext = null, getFieldComment = null) => {
   const objectLines = [];
   const itemOrigin = makeSourceOrigin(sourceContext, {
     type: "item",
     path: sourceContext?.path || [],
     confidence: "exact"
   });
-  renderYamlObject(payload || {}, itemSchema?.fields, indent + 2, objectLines, rootValue, globalStore, sourceContext);
+  renderYamlObject(payload || {}, itemSchema?.fields, indent + 2, objectLines, rootValue, globalStore, sourceContext, getFieldComment);
   if (!objectLines.length) {
     pushYamlLine(lines, `${" ".repeat(indent)}- {}`, itemOrigin);
     return;
@@ -2520,7 +2530,8 @@ const buildComponentsYamlInternal = (
   componentSchemaStates = {},
   globalStore = null,
   mdiSubstitutions = {},
-  sourceMapped = false
+  sourceMapped = false,
+  fieldComments = {}
 ) => {
   const displayData = collectDisplayAssets(components, componentSchemas, mdiSubstitutions);
   const textFontIdByKey = buildTextFontIdMap(displayData?.textFontsByKey || new Map());
@@ -2840,6 +2851,11 @@ const buildComponentsYamlInternal = (
       (item) => item.type !== "root_map" && item.type !== "root_list" && !(item.type === "embedded" && item.emitAs === "map")
     );
 
+    const domainComment = fieldComments[domain];
+    if (domainComment) {
+      domainComment.split("\n").forEach((commentLine) => pushYamlLine(lines, commentLine));
+    }
+
     const firstMappedItem = items.find((item) => item.sourceContext)?.sourceContext || null;
     pushYamlLine(lines, `${domain}:`, makeSourceOrigin(firstMappedItem, {
       type: "section",
@@ -2904,7 +2920,13 @@ const buildComponentsYamlInternal = (
       return;
     }
 
-    listItems.forEach((item) => {
+    listItems.forEach((item, domainItemIndex) => {
+      const itemPathPrefix = `${domain}[${domainItemIndex}]`;
+      const itemComment = fieldComments[itemPathPrefix];
+      if (itemComment) {
+        itemComment.split("\n").forEach((commentLine) => pushYamlLine(lines, `  ${commentLine}`));
+      }
+
       if (item.type === "custom") {
         pushYamlLine(lines, `  - platform: ${item.platform}`, makeSourceOrigin(item.sourceContext, {
           type: "section",
@@ -2943,7 +2965,8 @@ const buildComponentsYamlInternal = (
         lines,
         item.payload,
         globalStore,
-        item.sourceContext || null
+        item.sourceContext || null,
+        (fieldKey) => fieldComments[`${itemPathPrefix}.${fieldKey}`]
       );
     });
     lines.push("");
@@ -2983,7 +3006,8 @@ export const buildComponentsYamlDocumentLines = (
   componentSchemas = {},
   componentSchemaStates = {},
   globalStore = null,
-  mdiSubstitutions = {}
+  mdiSubstitutions = {},
+  fieldComments = {}
 ) => {
   const lines = buildComponentsYamlInternal(
     components,
@@ -2991,7 +3015,8 @@ export const buildComponentsYamlDocumentLines = (
     componentSchemaStates,
     globalStore,
     mdiSubstitutions,
-    true
+    true,
+    fieldComments
   );
   return linesToGeneratedYamlLines(lines, "components");
 };

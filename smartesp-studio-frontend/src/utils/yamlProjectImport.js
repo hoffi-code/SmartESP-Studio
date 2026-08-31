@@ -11,6 +11,7 @@ import { getTopLevelComponentDomains, identifyYamlComponents } from "./yamlCompo
 import { resolveYamlImportTargetNames } from "./yamlImportNaming";
 import { classifyYamlSections } from "./yamlSectionClassifier";
 import { isMultiInstanceBusKey } from "./busInstances";
+import { extractSectionComments } from "./yamlStructureScan";
 import { parseLvglSection } from "./yamlLvglImport";
 
 const isPlainObject = (value) => value !== null && typeof value === "object" && !Array.isArray(value);
@@ -75,6 +76,25 @@ const normalizeYamlError = (error) => {
     line: Number.isFinite(mark?.line) ? mark.line + 1 : 0,
     column: Number.isFinite(mark?.column) ? mark.column + 1 : 0
   };
+};
+
+// Capture the leading run of comment/blank lines before the first real content line, so it can be
+// preserved across import -> save -> re-export. Comments anywhere else in the file are still dropped.
+export const extractLeadingHeaderComment = (yamlText) => {
+  const lines = String(yamlText || "").split(/\r?\n/);
+  const collected = [];
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (trimmed === "" || trimmed.startsWith("#")) {
+      collected.push(line);
+      continue;
+    }
+    break;
+  }
+  while (collected.length && collected[collected.length - 1].trim() === "") {
+    collected.pop();
+  }
+  return collected.join("\n");
 };
 
 export const parseYamlText = (yamlText) => {
@@ -880,6 +900,15 @@ export const importYamlToProjectConfig = async ({
   const { projectName: generatedProjectName, yamlName: generatedYamlName } = resolveYamlImportTargetNames(document);
   const projectData = defaultConfigFactory();
   const handledTopLevelKeys = new Set();
+  const headerComment = extractLeadingHeaderComment(yamlText);
+  const headerCommentLineCount = headerComment ? headerComment.split("\n").length : 0;
+  if (headerComment) {
+    projectData.headerComment = headerComment;
+  }
+  const fieldComments = extractSectionComments(yamlText);
+  if (Object.keys(fieldComments).length) {
+    projectData.fieldComments = fieldComments;
+  }
   const report = makeImportReport({
     sourceName,
     projectName: generatedProjectName,
@@ -1246,6 +1275,7 @@ export const importYamlToProjectConfig = async ({
     projectData,
     generatedProjectName,
     generatedYamlName,
+    headerCommentLineCount,
     importReport: report
   };
 };

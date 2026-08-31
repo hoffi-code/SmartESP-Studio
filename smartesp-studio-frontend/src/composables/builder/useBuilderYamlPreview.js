@@ -275,8 +275,21 @@ export const useBuilderYamlPreview = ({
   networkWebServerScopeId,
   lvglWidgetSchemas = ref({})
 }) => {
+  const pushBlockHeaderComment = (lines, domainKey) => {
+    const comment = (config.value.fieldComments || {})[domainKey];
+    if (!comment) return;
+    comment.split("\n").forEach((line) => pushPreviewLine(lines, line, domainKey, null));
+  };
+
   const yamlPreviewDocument = computed(() => {
     const lines = [];
+    const headerComment = config.value.headerComment || "";
+    if (headerComment) {
+      headerComment.split("\n").forEach((line) => {
+        pushPreviewLine(lines, line, "headerComment", null);
+      });
+      pushPreviewLine(lines, "", "headerComment", null);
+    }
     const substitutionsValue = config.value.substitutions || {};
     const substitutionsFields = substitutionsCoreSchema.value?.fields || [];
     if (substitutionsFields.length) {
@@ -312,6 +325,7 @@ export const useBuilderYamlPreview = ({
       );
       if (coreLines.length) {
         pushPreviewLine(lines, "", "core", null);
+        pushBlockHeaderComment(lines, "esphome");
         pushPreviewLine(lines, "esphome:", "esphome", sectionOrigin(esphomeCoreScopeId, "core", [], { suppressFocus: true }));
         appendPreviewLines(lines, coreLines, "esphome");
       }
@@ -322,6 +336,7 @@ export const useBuilderYamlPreview = ({
     if (platformName && detailFields.length) {
       const platformContext = makeSourceContext({ owner: "platform", scopeId: platformDetailScopeId, tabKey: "core" });
       pushPreviewLine(lines, "", platformName, null);
+      pushBlockHeaderComment(lines, platformName);
       pushPreviewLine(lines, `${platformName}:`, platformName, sectionOrigin(platformDetailScopeId, "core", [], { suppressFocus: true }));
 
       if (platformName === "esp32") {
@@ -483,6 +498,7 @@ export const useBuilderYamlPreview = ({
           }
         }
         pushPreviewLine(lines, "", networkTransport, null);
+        pushBlockHeaderComment(lines, networkTransport);
         pushPreviewLine(lines, `${networkTransport}:`, networkTransport, sectionOrigin(networkDetailScopeId, "core", [], { suppressFocus: true }));
         appendPreviewLines(lines, networkLines, networkTransport);
         if (networkTransport === "wifi" && captivePortalEnabled) {
@@ -702,6 +718,7 @@ export const useBuilderYamlPreview = ({
         if (!busBlocks.length) return;
         busBlocks.forEach((block) => {
           pushPreviewLine(lines, "", block.key, null);
+          pushBlockHeaderComment(lines, block.key);
           appendPreviewLines(lines, block.documentLines || block.lines, block.key);
         });
         return;
@@ -721,6 +738,7 @@ export const useBuilderYamlPreview = ({
       if (!hasPrimaryContent && !shouldEmitEmptyBlock(fields)) return;
       busBlocks.forEach((block) => {
         pushPreviewLine(lines, "", block.key, null);
+        pushBlockHeaderComment(lines, block.key);
         appendPreviewLines(lines, block.documentLines || block.lines, block.key);
       });
     });
@@ -730,7 +748,8 @@ export const useBuilderYamlPreview = ({
       componentSchemas.value,
       componentSchemaStatus.value,
       globalStore.value,
-      mdiSubstitutions.value
+      mdiSubstitutions.value,
+      config.value.fieldComments || {}
     );
     if (componentLines.length) {
       pushPreviewLine(lines, "", "components", null);

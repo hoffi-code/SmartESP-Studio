@@ -69,6 +69,31 @@ describe("useBuilderYamlPreview", () => {
     expect(yamlPreview.value).toBe('esphome:\n  name: "kitchen_sensor"');
   });
 
+  it("prepends an imported header comment before the rest of the document", () => {
+    const harness = buildHarness({
+      config: ref({
+        headerComment: "# Board: CYD\n# Definition: manifest.yaml",
+        esphomeCore: { name: "kitchen_sensor" },
+        substitutions: {},
+        platformCore: {},
+        networkCore: {},
+        protocolsCore: {},
+        systemCore: {},
+        automationCore: {},
+        bussesCore: {},
+        components: []
+      })
+    });
+    expect(harness.yamlPreview.value).toBe(
+      '# Board: CYD\n# Definition: manifest.yaml\n\n\nesphome:\n  name: "kitchen_sensor"'
+    );
+  });
+
+  it("omits the header block entirely when there is no header comment", () => {
+    const { yamlPreview } = buildHarness();
+    expect(yamlPreview.value.startsWith("#")).toBe(false);
+  });
+
   it("groups the core section under the Core preview tab", () => {
     const { previewTabs } = buildHarness();
     const tabs = previewTabs.value;
@@ -114,6 +139,30 @@ describe("useBuilderYamlPreview", () => {
     expect(harness.previewTabs.value).toEqual([]);
   });
 
+  it("prepends a domain-level section comment before a bus block", () => {
+    const harness = buildHarness({
+      config: ref({
+        esphomeCore: { name: "kitchen_sensor" },
+        substitutions: {},
+        platformCore: {},
+        networkCore: {},
+        protocolsCore: {},
+        systemCore: {},
+        automationCore: {},
+        bussesCore: {},
+        components: [],
+        fieldComments: { i2c: "# --- I2C bus for the display ---" }
+      }),
+      bussesSchemas: ref({ i2c: { fields: [textField("sda"), textField("scl")] } }),
+      bussesDefinitions: [{ key: "i2c" }],
+      resolveBusEnabled: (key) => key === "i2c",
+      getBusInstances: (key) => (key === "i2c" ? [{ sda: "GPIO21", scl: "GPIO22" }] : [])
+    });
+    expect(harness.yamlPreview.value).toBe(
+      'esphome:\n  name: "kitchen_sensor"\n\n# --- I2C bus for the display ---\ni2c:\n  - sda: "GPIO21"\n    scl: "GPIO22"'
+    );
+  });
+
   it("emits an lvgl block with a label widget once its schema is loaded", () => {
     const harness = buildHarness({
       config: ref({
@@ -146,5 +195,29 @@ describe("useBuilderYamlPreview", () => {
     expect(text).toContain("pages:");
     expect(text).toContain("- label:");
     expect(text).toContain('text: "Couch"');
+  });
+
+  it("prepends a field-level section comment before the matching component field", () => {
+    const harness = buildHarness({
+      config: ref({
+        esphomeCore: { name: "kitchen_sensor" },
+        substitutions: {},
+        platformCore: {},
+        networkCore: {},
+        protocolsCore: {},
+        systemCore: {},
+        automationCore: {},
+        bussesCore: {},
+        components: [{ id: "touchscreen/xpt2046", catalogKey: "touchscreen/xpt2046", config: { id: "main_touchscreen" } }],
+        fieldComments: { "touchscreen[0].id": "# unique per board" }
+      }),
+      componentSchemas: ref({
+        "touchscreen/xpt2046": { domain: "touchscreen", platform: "xpt2046", fields: [textField("id")] }
+      }),
+      componentSchemaStatus: ref({ "touchscreen/xpt2046": "ready" })
+    });
+    expect(harness.yamlPreview.value).toContain(
+      'touchscreen:\n  - platform: xpt2046\n    # unique per board\n    id: "main_touchscreen"'
+    );
   });
 });

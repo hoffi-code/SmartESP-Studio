@@ -1,6 +1,8 @@
 export const createDefaultBuilderConfig = () => ({
   schemaVersion: 1,
   isSaved: false,
+  headerComment: "",
+  fieldComments: {},
   lvgl: null,
   esphomeCore: {},
   substitutions: {},

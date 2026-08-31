@@ -1,4 +1,12 @@
-const TOP_LEVEL_KEY_RE = /^([A-Za-z0-9_-]+):(?:\s|$)/;
+import {
+  buildTopLevelBlocks,
+  findFirstLevelListItems,
+  findSectionComments,
+  indentationOf,
+  isCommentLine,
+  isListItemAtIndent,
+  isNonEmptyLine
+} from "./yamlStructureScan";
 
 const STATUS_PRIORITY = {
   neutral: 0,
@@ -8,29 +16,11 @@ const STATUS_PRIORITY = {
   error: 3
 };
 
-const isNonEmptyLine = (line) => String(line || "").trim() !== "";
-
-const isCommentLine = (line) => String(line || "").trim().startsWith("#");
-
 const setStatus = (line, status, message = "") => {
   if (!line || !status) return;
   if ((STATUS_PRIORITY[status] || 0) < (STATUS_PRIORITY[line.status] || 0)) return;
   line.status = status;
   if (message) line.message = message;
-};
-
-const buildTopLevelBlocks = (lines) => {
-  const starts = [];
-  lines.forEach((line, index) => {
-    const match = line.text.match(TOP_LEVEL_KEY_RE);
-    if (!match) return;
-    starts.push({ key: match[1], start: index });
-  });
-
-  return starts.map((entry, index) => ({
-    ...entry,
-    end: index + 1 < starts.length ? starts[index + 1].start - 1 : lines.length - 1
-  }));
 };
 
 const applyBlockStatus = (lines, block, status, message) => {
@@ -39,34 +29,6 @@ const applyBlockStatus = (lines, block, status, message) => {
     if (!isNonEmptyLine(lines[index]?.text)) continue;
     setStatus(lines[index], status, message);
   }
-};
-
-const indentationOf = (text) => {
-  const match = String(text || "").match(/^(\s*)/);
-  return match ? match[1].length : 0;
-};
-
-const isListItemAtIndent = (text, indent) => {
-  const line = String(text || "");
-  return indentationOf(line) === indent && /^\s*-\s+/.test(line);
-};
-
-const findFirstLevelListItems = (lines, block) => {
-  if (!block) return [];
-  const candidates = [];
-  for (let index = block.start + 1; index <= block.end; index += 1) {
-    const text = lines[index]?.text || "";
-    const match = text.match(/^(\s*)-\s*/);
-    if (!match) continue;
-    candidates.push({ index, indent: match[1].length });
-  }
-  if (!candidates.length) return [];
-  const firstLevelIndent = Math.min(...candidates.map((item) => item.indent));
-  const starts = candidates.filter((item) => item.indent === firstLevelIndent);
-  return starts.map((entry, index) => ({
-    start: entry.index,
-    end: index + 1 < starts.length ? starts[index + 1].index - 1 : block.end
-  }));
 };
 
 const keyFromReportPath = (path) => {
@@ -158,7 +120,23 @@ const hasReportKeys = (entry) =>
 const markCommentsDropped = (lines) => {
   lines.forEach((line) => {
     if (!isCommentLine(line.text)) return;
+    if (line.status !== "neutral") return;
     setStatus(line, "dropped", "YAML comments are not imported");
+  });
+};
+
+const markHeaderCommentImported = (lines, headerCommentLineCount) => {
+  const count = Number(headerCommentLineCount) || 0;
+  for (let index = 0; index < count && index < lines.length; index += 1) {
+    setStatus(lines[index], "mapped", "Imported as project header comment");
+  }
+};
+
+const markSectionCommentsImported = (lines, yamlText) => {
+  findSectionComments(yamlText).forEach(({ startIndex, endIndex }) => {
+    for (let index = startIndex; index <= endIndex && index < lines.length; index += 1) {
+      setStatus(lines[index], "mapped", "Imported as section comment");
+    }
   });
 };
 
@@ -179,6 +157,9 @@ export const annotateYamlImportLines = ({ yamlText, analysis = null, analysisErr
   }
 
   if (!analysis?.ok) return lines;
+
+  markHeaderCommentImported(lines, analysis.headerCommentLineCount);
+  markSectionCommentsImported(lines, source);
 
   const blocks = buildTopLevelBlocks(lines);
   const blocksByKey = new Map(blocks.map((block) => [block.key, block]));
