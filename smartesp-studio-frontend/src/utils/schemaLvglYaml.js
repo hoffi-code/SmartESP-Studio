@@ -56,10 +56,17 @@ const serializeWidgetNode = (node, pageIndex, dashIndent, lines, widgetSchemas) 
   if (node.type === "unsupported") {
     const rawLines = (node.rawYaml || "").split("\n");
     if (!rawLines[0]) return;
-    pushYamlLine(lines, `${" ".repeat(dashIndent)}- ${rawLines[0]}`, sectionOrigin);
+    const kids = node.children || [];
+    // `chart: {}` can't take a nested `widgets:` -- open it back up to `chart:`.
+    const head = kids.length ? rawLines[0].replace(/:\s*\{\s*\}\s*$/, ":") : rawLines[0];
+    pushYamlLine(lines, `${" ".repeat(dashIndent)}- ${head}`, sectionOrigin);
     rawLines.slice(1).forEach((line) => {
       pushYamlLine(lines, line ? `${" ".repeat(dashIndent + 2)}${line}` : "", sectionOrigin);
     });
+    if (kids.length) {
+      pushYamlLine(lines, `${" ".repeat(dashIndent + 2)}widgets:`, sectionOrigin);
+      kids.forEach((child) => serializeWidgetNode(child, pageIndex, dashIndent + 4, lines, widgetSchemas));
+    }
     return;
   }
 

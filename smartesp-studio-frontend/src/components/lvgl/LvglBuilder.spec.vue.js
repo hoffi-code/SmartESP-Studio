@@ -196,9 +196,90 @@ describe("LvglBuilder", () => {
     const wrapper = mount(LvglBuilder, { props: { lvglConfig, widgetSchemas } });
 
     await wrapper.get(".lvgl-tree-node__button").trigger("click");
-    await clickByText(wrapper, "Remove widget");
+    await clickByText(wrapper, "Remove");
 
     const patch = wrapper.emitted("update").at(-1)[0];
     expect(patch.pages[0].widgets).toEqual([]);
+  });
+
+  const twoWidgetConfig = () => ({
+    displays: [],
+    touchscreens: [],
+    bufferSize: "",
+    bgColor: "",
+    options: {},
+    pages: [
+      {
+        id: "main_page",
+        widgets: [
+          { uiId: "w1", type: "label", common: {}, props: { text: "A" }, children: [] },
+          { uiId: "w2", type: "label", common: {}, props: { text: "B" }, children: [] }
+        ]
+      }
+    ]
+  });
+
+  it("adds the picked type as a child of the selected widget", async () => {
+    const wrapper = mount(LvglBuilder, { props: { lvglConfig: twoWidgetConfig(), widgetSchemas } });
+    await wrapper.findAll(".lvgl-tree-node__button")[0].trigger("click");
+    await clickByText(wrapper, "+ child");
+
+    const patch = wrapper.emitted("update").at(-1)[0];
+    expect(patch.pages[0].widgets[0].children).toHaveLength(1);
+    expect(patch.pages[0].widgets[0].children[0]).toMatchObject({ type: "label" });
+  });
+
+  it("reorders a widget among its siblings", async () => {
+    const wrapper = mount(LvglBuilder, { props: { lvglConfig: twoWidgetConfig(), widgetSchemas } });
+    await wrapper.findAll(".lvgl-tree-node__button")[1].trigger("click"); // select w2
+    await clickByText(wrapper, "↑");
+
+    const patch = wrapper.emitted("update").at(-1)[0];
+    expect(patch.pages[0].widgets.map((w) => w.uiId)).toEqual(["w2", "w1"]);
+  });
+
+  it("nests a widget under its previous sibling and pulls it back out", async () => {
+    const wrapper = mount(LvglBuilder, { props: { lvglConfig: twoWidgetConfig(), widgetSchemas } });
+    await wrapper.findAll(".lvgl-tree-node__button")[1].trigger("click"); // select w2
+    await clickByText(wrapper, "⇥");
+
+    let patch = wrapper.emitted("update").at(-1)[0];
+    expect(patch.pages[0].widgets.map((w) => w.uiId)).toEqual(["w1"]);
+    expect(patch.pages[0].widgets[0].children.map((w) => w.uiId)).toEqual(["w2"]);
+
+    await wrapper.setProps({ lvglConfig: patch });
+    await wrapper.findAll(".lvgl-tree-node__button")[1].trigger("click"); // select nested w2
+    await clickByText(wrapper, "⇤");
+
+    patch = wrapper.emitted("update").at(-1)[0];
+    expect(patch.pages[0].widgets.map((w) => w.uiId)).toEqual(["w1", "w2"]);
+    expect(patch.pages[0].widgets[0].children).toEqual([]);
+  });
+
+  it("edits an unsupported widget's raw YAML", async () => {
+    const lvglConfig = {
+      displays: [],
+      touchscreens: [],
+      bufferSize: "",
+      bgColor: "",
+      options: {},
+      pages: [
+        {
+          id: "main_page",
+          widgets: [{ uiId: "u1", type: "unsupported", originalType: "chart", rawYaml: "chart:\n  id: chart_1", children: [] }]
+        }
+      ]
+    };
+    const wrapper = mount(LvglBuilder, { props: { lvglConfig, widgetSchemas } });
+    await wrapper.get(".lvgl-tree-node__button").trigger("click");
+
+    const area = wrapper.get("textarea.lvgl-raw-yaml-editor__area");
+    expect(area.element.value).toBe("chart:\n  id: chart_1");
+    await area.setValue("chart:\n  id: chart_1\n  width: 120");
+    await clickByText(wrapper, "Apply");
+
+    const patch = wrapper.emitted("update").at(-1)[0];
+    expect(patch.pages[0].widgets[0].rawYaml).toContain("width: 120");
+    expect(patch.pages[0].widgets[0].originalType).toBe("chart");
   });
 });

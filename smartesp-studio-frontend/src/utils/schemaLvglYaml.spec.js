@@ -128,6 +128,31 @@ describe("buildLvglYamlLines", () => {
     expect(text).toContain("id: btn_1");
   });
 
+  it("emits child widgets nested under an unsupported node", () => {
+    const lvgl = {
+      pages: [
+        {
+          id: "main_page",
+          widgets: [
+            {
+              uiId: "u1",
+              type: "unsupported",
+              originalType: "chart",
+              rawYaml: "chart: {}",
+              children: [{ uiId: "w2", type: "label", common: { id: "lbl" }, props: { text: "Hi" }, children: [] }]
+            }
+          ]
+        }
+      ]
+    };
+
+    const text = asText(buildLvglYamlLines(lvgl, { label: labelSchema }));
+    expect(text).toContain("- chart:");
+    expect(text).not.toContain("chart: {}");
+    expect(text).toMatch(/chart:\n\s+widgets:\n\s+- label:/);
+    expect(text).toContain('text: "Hi"');
+  });
+
   it("emits a button widget's on_click action list through the existing generic action renderer", () => {
     const buttonSchema = {
       fields: [
