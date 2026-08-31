@@ -1,3 +1,11 @@
+FROM node:22-alpine AS web
+
+WORKDIR /app
+COPY smartesp-studio-frontend/package.json smartesp-studio-frontend/package-lock.json smartesp-studio-frontend/.npmrc ./
+RUN npm ci
+COPY smartesp-studio-frontend/ .
+RUN npm run build
+
 FROM ghcr.io/esphome/esphome:2026.6.4
 
 ARG BUILD_VERSION=dev
@@ -18,17 +26,17 @@ ENV SES_VERSION=$BUILD_VERSION
 ENV SES_PORT=8099
 ENV PORT=8099
 
-COPY requirements.txt /requirements.txt
+COPY smartesp-studio/requirements.txt /requirements.txt
 RUN python3 -m venv /opt/designer-venv \
     && /opt/designer-venv/bin/python -m pip install --no-cache-dir -U pip \
     && /opt/designer-venv/bin/python -m pip install --no-cache-dir -r /requirements.txt
 
-COPY server.py /server.py
-COPY ses /ses
-COPY run.sh /run.sh
-COPY seed_esphome /seed_esphome
-COPY logo.png /logo.png
-COPY web /web
+COPY smartesp-studio/server.py /server.py
+COPY smartesp-studio/ses /ses
+COPY smartesp-studio/run.sh /run.sh
+COPY smartesp-studio/seed_esphome /seed_esphome
+COPY smartesp-studio/logo.png /logo.png
+COPY --from=web /app/dist /web
 RUN chmod a+x /run.sh
 
 EXPOSE 8099
