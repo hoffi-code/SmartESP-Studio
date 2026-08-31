@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { mount } from "@vue/test-utils";
-import { describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import LvglBuilder from "./LvglBuilder.vue";
 
 // Minimal label schema so the generic inspector renders its fields without a backend.
@@ -16,6 +16,22 @@ const LABEL_SCHEMA = {
   ]
 };
 const widgetSchemas = { label: LABEL_SCHEMA };
+
+// The YAML editor's Apply path runs parseLvglSection, which pulls widget schemas +
+// action catalog through schemaLoader's fetch. Stub it to the label schema.
+const realFetch = globalThis.fetch;
+beforeAll(() => {
+  globalThis.fetch = async (url = "") => {
+    const path = String(url);
+    let body = {};
+    if (path.includes("/lvgl/widgets/label.json")) body = LABEL_SCHEMA;
+    else if (path.includes("catalog") || path.includes("actions") || path.includes("conditions")) body = { actions: [], conditions: [] };
+    return { ok: true, status: 200, headers: { get: () => "application/json" }, json: async () => body, text: async () => JSON.stringify(body) };
+  };
+});
+afterAll(() => {
+  globalThis.fetch = realFetch;
+});
 
 const clickByText = async (wrapper, text) => {
   const button = wrapper.findAll("button").find((btn) => btn.text() === text);
@@ -119,6 +135,53 @@ describe("LvglBuilder", () => {
     await wrapper.setProps({ externalSelect: { pageIndex: 1, uiId: "w2", token: 1 } });
 
     expect(wrapper.get("#schema-text").element.value).toBe("B");
+  });
+
+  it("seeds the YAML editor from the current lvgl config when switched to YAML view", async () => {
+    const widget = { uiId: "w1", type: "label", common: { id: "hi" }, props: { text: "Couch" }, children: [] };
+    const lvglConfig = { displays: [], touchscreens: [], bufferSize: "", bgColor: "", pages: [{ id: "main_page", widgets: [widget] }] };
+    const wrapper = mount(LvglBuilder, { props: { lvglConfig, widgetSchemas } });
+
+    await clickByText(wrapper, "YAML");
+
+    const text = wrapper.get("textarea.lvgl-yaml-editor").element.value;
+    expect(text).toContain("lvgl:");
+    expect(text).toContain("- id: main_page");
+    expect(text).toContain("- label:");
+    expect(text).toContain('text: "Couch"');
+  });
+
+  it("applies edited YAML back into config.lvgl", async () => {
+    const lvglConfig = { displays: [], touchscreens: [], bufferSize: "", bgColor: "", pages: [{ id: "main_page", widgets: [] }] };
+    const wrapper = mount(LvglBuilder, { props: { lvglConfig, widgetSchemas } });
+
+    await clickByText(wrapper, "YAML");
+    await wrapper.get("textarea.lvgl-yaml-editor").setValue(
+      ["lvgl:", "  buffer_size: 25%", "  pages:", "    - id: renamed", "      widgets:", "        - label:", '            text: "Hi"'].join("\n")
+    );
+    await clickByText(wrapper, "Apply");
+    await new Promise((r) => setTimeout(r, 0));
+
+    const patch = wrapper.emitted("update").at(-1)[0];
+    expect(patch.bufferSize).toBe("25%");
+    expect(patch.pages[0].id).toBe("renamed");
+    expect(patch.pages[0].widgets[0]).toMatchObject({ type: "label", props: { text: "Hi" } });
+    // back to the form view after a successful apply
+    expect(wrapper.find("textarea.lvgl-yaml-editor").exists()).toBe(false);
+  });
+
+  it("shows an error and keeps editing when the YAML is invalid", async () => {
+    const lvglConfig = { displays: [], touchscreens: [], bufferSize: "", bgColor: "", pages: [] };
+    const wrapper = mount(LvglBuilder, { props: { lvglConfig, widgetSchemas } });
+
+    await clickByText(wrapper, "YAML");
+    await wrapper.get("textarea.lvgl-yaml-editor").setValue("lvgl:\n  pages:\n   - id: x\n  bad: [unclosed");
+    await clickByText(wrapper, "Apply");
+    await new Promise((r) => setTimeout(r, 0));
+
+    expect(wrapper.get(".lvgl-yaml-editor__error").text().length).toBeGreaterThan(0);
+    expect(wrapper.find("textarea.lvgl-yaml-editor").exists()).toBe(true);
+    expect(wrapper.emitted("update")).toBeUndefined();
   });
 
   it("removes the selected widget", async () => {

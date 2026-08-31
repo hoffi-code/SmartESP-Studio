@@ -25,7 +25,11 @@ schema-driven: `LvglWidgetInspectorGeneric.vue` renders the widget's JSON schema
 shared style fields) + one `LVGL_WIDGETS` entry; import (`utils/yamlLvglImport.js`) and export
 (`utils/schemaLvglYaml.js`) are generic. Widget schemas are curated subsets -- YAML keys they don't
 model are round-tripped verbatim via `node.extra`. The inspector groups `group: "style"` fields and
-`on_*` triggers into collapsible sections. `buildLvglYamlLines` stamps each widget's preview lines
+`on_*` triggers into collapsible sections. A `Form` / `YAML` toggle in the tab header swaps the
+form for an editable textarea of just the `lvgl:` block; `Apply` re-parses it via `parseLvglSection`
+(same loaders as the project importer, pulled from `schemaLoader.js`) and replaces `config.lvgl` --
+lossy for props outside a curated schema (kept in `node.extra`) and does not preserve comments.
+`buildLvglYamlLines` stamps each widget's preview lines
 with an `lvgl:page:<i>:widget:<uiId>` origin, so clicking an LVGL line in the YAML preview selects
 that widget (`BuilderView.activateYamlOriginScope` -> `LvglBuilder.externalSelect`) and an inspector
 edit pulses the matching preview line back (`field-edit` -> `lvglPreviewPulse` -> `useBuilderPreview`).

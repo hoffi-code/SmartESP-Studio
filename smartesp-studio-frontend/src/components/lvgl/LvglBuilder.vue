@@ -12,9 +12,36 @@
         ?
       </a>
     </div>
+    <div class="lvgl-view-toggle">
+      <button type="button" class="secondary compact" :class="{ active: viewMode === 'form' }" @click="setViewMode('form')">
+        Form
+      </button>
+      <button type="button" class="secondary compact" :class="{ active: viewMode === 'yaml' }" @click="setViewMode('yaml')">
+        YAML
+      </button>
+    </div>
   </div>
 
-  <div class="module-card__body lvgl-builder">
+  <div v-if="viewMode === 'yaml'" class="module-card__body lvgl-builder">
+    <p class="note">
+      Edits the <code>lvgl:</code> block only. Applying re-parses it against the widget schemas --
+      keys outside a curated schema are kept verbatim, comments and formatting are not preserved.
+    </p>
+    <textarea
+      v-model="yamlDraft"
+      class="lvgl-yaml-editor"
+      spellcheck="false"
+      autocomplete="off"
+      autocapitalize="off"
+    ></textarea>
+    <div class="lvgl-yaml-editor__bar">
+      <button type="button" class="secondary compact" :disabled="applying" @click="applyYaml">Apply</button>
+      <button type="button" class="secondary compact" @click="setViewMode('form')">Discard</button>
+      <span v-if="yamlError" class="lvgl-yaml-editor__error">{{ yamlError }}</span>
+    </div>
+  </div>
+
+  <div v-else class="module-card__body lvgl-builder">
     <div class="lvgl-pages-bar">
       <span class="lvgl-pages-bar__label">Pages</span>
       <div class="lvgl-page-list">
@@ -96,6 +123,16 @@ import { computed, onMounted, ref, watch } from "vue";
 import LvglWidgetTreeItem from "./LvglWidgetTreeItem.vue";
 import LvglWidgetInspector from "./LvglWidgetInspector.vue";
 import { LVGL_WIDGETS, lvglWidgetDefaults } from "../../utils/lvglWidgets";
+import { buildLvglYamlLines } from "../../utils/schemaLvglYaml";
+import { parseLvglSection } from "../../utils/yamlLvglImport";
+import { parseYamlText } from "../../utils/yamlProjectImport";
+import {
+  loadActionCatalog,
+  loadActionDefinition,
+  loadConditionCatalog,
+  loadConditionDefinition,
+  loadSchemaByPath
+} from "../../utils/schemaLoader";
 
 const props = defineProps({
   lvglConfig: {
@@ -124,6 +161,60 @@ const emit = defineEmits(["update", "field-edit"]);
 const activePageIndex = ref(0);
 const selectedWidgetId = ref("");
 const widgetTypeToAdd = ref(LVGL_WIDGETS[0]?.type || "label");
+
+const viewMode = ref("form"); // "form" | "yaml"
+const yamlDraft = ref("");
+const yamlError = ref("");
+const applying = ref(false);
+
+// Same loader bundle importYamlToProjectConfig feeds parseLvglSection, but built
+// straight from the (cached) schema loaders so the LVGL tab stays self-contained.
+const lvglSchemaContext = {
+  loadWidgetSchema: (type) => loadSchemaByPath(`components/lvgl/widgets/${type}.json`),
+  loadActionCatalog,
+  loadActionDefinition,
+  loadConditionCatalog,
+  loadConditionDefinition
+};
+
+const setViewMode = (mode) => {
+  if (mode === viewMode.value) return;
+  if (mode === "yaml") {
+    yamlError.value = "";
+    yamlDraft.value = buildLvglYamlLines(props.lvglConfig, props.widgetSchemas)
+      .map((line) => line.text)
+      .join("\n");
+  }
+  viewMode.value = mode;
+};
+
+const applyYaml = async () => {
+  yamlError.value = "";
+  const parsed = parseYamlText(yamlDraft.value);
+  if (!parsed.ok) {
+    yamlError.value = parsed.error?.message || "Invalid YAML.";
+    return;
+  }
+  const rawLvgl = parsed.document?.lvgl;
+  if (rawLvgl === undefined) {
+    yamlError.value = "No lvgl: block found.";
+    return;
+  }
+  applying.value = true;
+  try {
+    const next = await parseLvglSection(rawLvgl, lvglSchemaContext);
+    if (!next) {
+      yamlError.value = "lvgl: must be a YAML object.";
+      return;
+    }
+    emit("update", next);
+    selectedWidgetId.value = "";
+    activePageIndex.value = Math.min(activePageIndex.value, Math.max(0, next.pages.length - 1));
+    viewMode.value = "form";
+  } finally {
+    applying.value = false;
+  }
+};
 
 let uiIdCounter = 0;
 const nextUiId = () => {
@@ -235,6 +326,44 @@ const handleInspectorUpdate = (nextNode) => {
 <style scoped>
 .lvgl-builder {
   min-width: 0;
+}
+
+.lvgl-view-toggle {
+  display: flex;
+  gap: 4px;
+}
+
+.lvgl-view-toggle .active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.lvgl-yaml-editor {
+  flex: 1;
+  min-height: 320px;
+  width: 100%;
+  resize: vertical;
+  font-family: var(--mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  font-size: 12px;
+  line-height: 1.5;
+  tab-size: 2;
+  white-space: pre;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+.lvgl-yaml-editor__bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.lvgl-yaml-editor__error {
+  color: var(--danger, #c0392b);
+  font-size: 12px;
 }
 
 .lvgl-pages-bar {
