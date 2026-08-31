@@ -409,8 +409,7 @@ Route-Split und Gate B1 siehe §8 oben — B1 ist komplett abgeschlossen.
    Klick-Durchlauf bleibt offen. Auf Nutzerentscheidung mit Phase 4 fortgesetzt statt zu blockieren.
 3. ~~**Phase 4** — Docker-Multistage (Frontend im Image, `smartesp-studio/web/` raus), `dependabot.yml`,
    `CONTRIBUTING.md` + Modul-Doku. Gate.~~ **erledigt**, siehe §9.
-4. **Abschluss-Feature-Prüfung** (11-Punkte-Checkliste, `plans/…` „Feature-Prüfung") — noch offen,
-   hängt am selben Chrome-Extension-Blocker wie der F1+F5-Gate-Durchlauf.
+4. ~~**Abschluss-Feature-Prüfung** (11-Punkte-Checkliste)~~ **durchgeführt**, siehe §10.
 5. `icon.png` (quadratisch, HA-Add-on-Store) — braucht Asset vom Nutzer. Betrifft ohnehin nur den
    jetzt zurückgestellten HA-Add-on-Weg (siehe §9), nicht den Standalone-Pfad.
 6. Push + PR, sobald der Nutzer grünes Licht gibt.
@@ -439,3 +438,50 @@ Route-Split und Gate B1 siehe §8 oben — B1 ist komplett abgeschlossen.
   zurückgestellten HA-Add-on-Pfad), `smartesp-studio/ses/README.md` (Modul-Landkarte),
   `smartesp-studio-frontend/README.md` (Views/Composables-Überblick, generischer vs. bespoke
   Import/Export-Pfad, `VITE_DEV_OFFLINE`).
+
+---
+
+## 10. Abschluss-Feature-Prüfung (durchgeführt)
+
+Browser-Durchlauf per Chrome-MCP gegen den lokalen Standalone-Container
+(`smartesp-studio:local`, `http://localhost:8099`, `Up (healthy)`), plus curl-Sweep. Fixture:
+mitgeliefertes `esptaster`-Projekt (hat bewusst echte Validierungsfehler — kurzes OTA-Passwort,
+HA-Action-`id`-Referenzen ohne Ziel). Automatisierte Checks vorab grün: FE `lint` (0 Fehler /
+109 Warnungen), `test` (226 in 30 Dateien), `build`; BE `ruff` (sauber), `pytest` (32 + 16 subtests).
+
+| # | Flow | Ergebnis |
+|---|---|---|
+| 1 | Dashboard: Laden, Branding/Retheme, Ordnerbaum + Breadcrumb, Ordner anlegen/löschen (In-App-Confirm), Suche, View-Mode-Toggle, Projekt-Kontextmenü (7 Aktionen), Tile-Customization (Live-Preview → Apply → persistiert `ui.dashboardTile` → re-render nach Reload → Reset to default), Projekt öffnen/löschen | **PASS** |
+| 2 | Builder-Tabs: Core/Platform/Network/Protocols/Busses/System/Automation je geöffnet, Feld ändern → YAML-Preview aktualisiert live; Mode-Level Simple→Normal→Advanced | **PASS** |
+| 3 | YAML-Preview: Single↔Tabbed-Umschaltung (section-scoped Tabs), YAML-Zeile klicken → Sprung ins Formular (Tab-Wechsel Core→Network), Form→YAML-Puls | **PASS** |
+| 4 | Components: Picker öffnen, Suche, Komponente hinzufügen (Status Led), entfernen (Confirm); **kein Store-Upsell / kein „Available only"-Toggle** (Paywall-Entfernung bestätigt) | **PASS** |
+| 5 | Save: Ctrl-S → `/save` (`/config/smartesp/esptaster.yaml`, mtime + Inhalt korrekt, Header-Kommentare erhalten) + `/projects/save`; Asterisk-Indikator + Save-Button-Disable; „Back to Dashboard" mit ungespeicherter Änderung → UnsavedChangesModal (Cancel/Discard/Save) | **PASS** (Rename-Nebeneffekt bewusst nicht ausgelöst — Name vorher zurückgesetzt, um die Fixture nicht umzubenennen) |
+| 6 | Display-Configurator: Modal öffnet (Model/Resolution-Header), alle 6 Elementtypen angelegt — je eigener Inspector-Panel (`DisplayInspector{Text,Image,Icon,Graph,Animation,Shape}.vue`), X/Y-Move, Zoom +/−/Fit, Delete; generiertes `display:`-Lambda im YAML (`it.print(...)`, `it.graph(...)`) inkl. auto-erzeugtem `font:`/`graph:`-Block | **PASS** — Kern der F5-DisplayInspector-Zerlegung verifiziert |
+| 7 | Asset-Manager: Modal öffnet, Manifest lädt, Tabs Images/Fonts/Audio schalten, Upload-Button da; MDI-Font wird im Fonts-Tab **gelistet** (Checkliste erwartete „ausgeblendet" — vermutlich Wortlaut-Mismatch: sichtbar-aber-geschützt statt versteckt, → gegen Intent prüfen) | **PASS (mit offener Frage)** |
+| 8 | Secrets: Modal öffnet, `secrets.yaml` lädt mit Syntax-Highlight, ungültiges YAML → Fehleranzeige (Zeile/Spalte) + Save deaktiviert | **PASS** |
+| 9 | YAML-Import: „ESPHome Builder" → Kandidatenliste, leerer Zustand („No .yaml files found.") sauber; „YAML file" → OS-Dateidialog (per Automatisierung nicht steuerbar) | **PASS (teilweise)** — Analyse→Confirm→neues-Projekt-Kette nicht end-to-end geklickt; deckt `useDashboardYamlImport.spec.dom.js` (9 Tests) ab |
+| 10 | Install-Flows: Validate gegen fehlerhafte Fixture → Client-Gate blockt mit Fehlerliste (korrekt); Validate gegen frisches „New device" → **Validation Console** öffnet, Log streamt, endet grün „INFO Configuration is valid!" + SUCCESS-Badge | **PASS** — Job-Konsole + Log-Stream + Statusabschluss verifiziert; Clean/Logs/OTA/Serial/Download/Job-Cancel nicht einzeln (gleiche JobManager-Infrastruktur) |
+| 11 | Backend-API curl-Sweep: `/api/health`, `/api/runtime(?debug=1)`, `/projects/list`, `/api/component-catalog` (100 KB), `/api/assets/manifest`, `/api/assets/mdi-substitutions`, `/api/devices/list`, `/api/devices/status` (400 ohne Selektor), `/api/import/targets`, `/api/import/yaml-candidates`, `/api/serial/ports`, `/api/secrets/raw`, `/api/firmware` (400 ohne yaml), `/api/jobs/<unbekannt>` (404), `/` — alle Statuscodes + Antwortformen plausibel | **PASS** |
+
+**Konsolen-Log über den gesamten Durchlauf fehlerfrei** (nur unabhängiges Extension-Rauschen).
+
+### Beobachtungen (nicht blockierend)
+
+- **Dirty-Flag beim Öffnen:** Der Builder zeigt teils direkt nach dem Öffnen `esptaster.yaml*`
+  (ungespeichert), ohne dass etwas geändert wurde — mal nach Komponenten-Auswahl, mal nicht,
+  inkonsistent. Vermutlich `normalizeConfig`/`loadConfig`-Bootstrap in `BuilderView.vue` (Mode-Level /
+  Split-Preview aus `localStorage`). Harmlos, aber verwirrend; Kandidat für einen kleinen Folge-Fix.
+- **`icon.png`** (`smartesp-studio/icon.png`) ist weiterhin das alte quadratische ESPConfig-Icon
+  (beim Rename mitgeschleppt) — Header-Logo im UI ist korrekt SmartESP.
+- Fixture-Drift: der Test-Durchlauf hat `esptaster.json` im Container leicht verändert
+  (`ui.modeLevel` → `Normal`, `deviceHost` gesetzt) und ein Job-Artefakt in `/data/jobs` hinterlassen.
+  Reine Container-Laufzeitdaten, kein Repo-Bezug — bei Bedarf Container neu bauen.
+
+### Nicht abgedeckt (Automatisierungs-Grenzen / bewusst ausgelassen)
+
+- Drag-&-Drop: Projekt→Ordner (Dashboard), Element-Reorder + Canvas-Move-per-Drag (Display-Configurator).
+- ZIP-Import einer Custom-Component, Custom-Component-als-Template speichern/löschen.
+- Asset Upload/Rename/Delete (Rename nutzt `window.prompt` → würde die Extension blockieren).
+- YAML-file-Import end-to-end (OS-Dateidialog).
+- Job-Typen außer Validate; Job-Cancel.
+- `root_map`-Konflikt (Komponente ausgegraut), Online/Offline-Badge-Polling (keine registrierten Geräte).
