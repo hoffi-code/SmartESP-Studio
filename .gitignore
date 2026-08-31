@@ -4,6 +4,7 @@ __pycache__/
 smartesp-studio-frontend/node_modules/
 smartesp-studio-frontend/dist/
 smartesp-studio-frontend/runtime/
+smartesp-studio/web/
 tests/
 !smartesp-studio/tests/
 !smartesp-studio/tests/**

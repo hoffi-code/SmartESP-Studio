@@ -1,3 +1,8 @@
+# NOT CURRENTLY BUILDABLE: HA Supervisor builds this with smartesp-studio/ as context, which
+# can't see smartesp-studio-frontend/ -- COPY web /web below has nothing to copy since the
+# frontend build output is no longer checked in (see Phase 4 / R2 in REFACTORING.md). The HA
+# add-on distribution path is shelved for now; only the standalone image (Dockerfile.standalone,
+# built from the repo root) is maintained. Revisit before relisting on the HA add-on store.
 FROM ghcr.io/esphome/esphome-hassio:2026.6.4
 
 ENV LANG=C.UTF-8
