@@ -37,6 +37,36 @@
         @update="handlePropsUpdate"
       />
     </details>
+    <details v-if="stateFields.length" class="lvgl-widget-inspector-panel__section">
+      <summary>States</summary>
+      <p class="note">Per-state style overrides (pressed, checked, ...).</p>
+      <SchemaField
+        v-for="field in stateFields"
+        :key="field.key"
+        :field="field"
+        :path="[]"
+        :value="node.props || {}"
+        :root-value="node.props || {}"
+        :id-index="idIndex"
+        :context-scope-id="widgetScopeId"
+        @update="handlePropsUpdate"
+      />
+    </details>
+    <details v-if="partFields.length" class="lvgl-widget-inspector-panel__section">
+      <summary>Parts</summary>
+      <p class="note">Style overrides for widget sub-parts (indicator, knob, ...).</p>
+      <SchemaField
+        v-for="field in partFields"
+        :key="field.key"
+        :field="field"
+        :path="[]"
+        :value="node.props || {}"
+        :root-value="node.props || {}"
+        :id-index="idIndex"
+        :context-scope-id="widgetScopeId"
+        @update="handlePropsUpdate"
+      />
+    </details>
     <details v-if="triggerFields.length" class="lvgl-widget-inspector-panel__section">
       <summary>Events</summary>
       <SchemaField
@@ -97,11 +127,17 @@ const typeSpecificFields = computed(() =>
 const isTriggerField = (field) =>
   field?.type === "list" && field?.item?.extends === "base_actions.json";
 const isStyleField = (field) => field?.group === "style";
+const isStateField = (field) => field?.group === "states";
+const isPartField = (field) => field?.group === "parts";
+const isGroupedField = (field) =>
+  isTriggerField(field) || isStyleField(field) || isStateField(field) || isPartField(field);
 
 const settingFields = computed(() =>
-  typeSpecificFields.value.filter((field) => !isTriggerField(field) && !isStyleField(field))
+  typeSpecificFields.value.filter((field) => !isGroupedField(field))
 );
 const styleFields = computed(() => typeSpecificFields.value.filter(isStyleField));
+const stateFields = computed(() => typeSpecificFields.value.filter(isStateField));
+const partFields = computed(() => typeSpecificFields.value.filter(isPartField));
 const triggerFields = computed(() => typeSpecificFields.value.filter(isTriggerField));
 const extraKeys = computed(() => Object.keys(props.node?.extra || {}));
 
@@ -110,11 +146,27 @@ const handleCommonUpdate = (patch) => {
   Object.keys(patch || {}).forEach((key) => emit("field-edit", { scopeId: widgetScopeId.value, path: [key] }));
 };
 
+// Nested style blocks (a state/part -> a style prop) arrive with a deep path,
+// e.g. ["pressed", "bg_color"]. Rebuild the props object immutably along that
+// path; an emptied leaf/branch is pruned so the block doesn't serialize as `{}`.
+const setDeep = (source, path, value) => {
+  const [head, ...rest] = path;
+  const next = { ...(source || {}) };
+  if (!rest.length) {
+    if (value === undefined || value === "" || value === null) delete next[head];
+    else next[head] = value;
+    return next;
+  }
+  const child = setDeep(next[head], rest, value);
+  if (child && Object.keys(child).length) next[head] = child;
+  else delete next[head];
+  return next;
+};
+
 const handlePropsUpdate = ({ path, value }) => {
-  const key = path?.[0];
-  if (!key) return;
-  emit("update", { ...props.node, props: { ...(props.node.props || {}), [key]: value } });
-  emit("field-edit", { scopeId: widgetScopeId.value, path: [key] });
+  if (!path?.length) return;
+  emit("update", { ...props.node, props: setDeep(props.node.props, path, value) });
+  emit("field-edit", { scopeId: widgetScopeId.value, path: [path[0]] });
 };
 </script>
 

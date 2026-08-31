@@ -240,6 +240,43 @@ describe("buildLvglYamlLines", () => {
     expect(text).toContain("flex_grow: 1");
   });
 
+  it("emits nested state and part style blocks from props", () => {
+    const styleBlockFields = [
+      { key: "bg_color", type: "color" },
+      { key: "text_color", type: "color" }
+    ];
+    const sliderSchema = {
+      fields: [
+        { key: "id", type: "id" },
+        { key: "value", type: "text" },
+        { key: "pressed", type: "object", group: "states", fields: styleBlockFields },
+        { key: "knob", type: "object", group: "parts", fields: styleBlockFields }
+      ]
+    };
+    const lvgl = {
+      pages: [
+        {
+          id: "main_page",
+          widgets: [
+            {
+              uiId: "w1",
+              type: "slider",
+              common: { id: "vol" },
+              props: { value: 40, pressed: { bg_color: "0xFF0000" }, knob: { bg_color: "0x0000FF" } },
+              children: []
+            }
+          ]
+        }
+      ]
+    };
+
+    const text = asText(buildLvglYamlLines(lvgl, { slider: sliderSchema }));
+    expect(text).toContain("pressed:");
+    expect(text).toContain('bg_color: "0xFF0000"');
+    expect(text).toContain("knob:");
+    expect(text).toContain('bg_color: "0x0000FF"');
+  });
+
   it("skips a widget whose schema has not been loaded rather than emitting it wrong", () => {
     const lvgl = {
       pages: [{ id: "main_page", widgets: [{ uiId: "w1", type: "label", common: {}, props: {}, children: [] }] }]
