@@ -123,6 +123,10 @@ export const buildLvglYamlLines = (lvglConfig, widgetSchemas = {}) => {
   if (lvglConfig.bgColor !== undefined && lvglConfig.bgColor !== "") {
     pushYamlLine(lines, `  bg_color: ${lvglConfig.bgColor}`);
   }
+  // Top-level options the builder doesn't map to a dedicated field (default_font,
+  // style_definitions, theme, on_idle, ...) -- kept verbatim, edited via the
+  // Settings panel. Rendered raw like a widget's `extra` block.
+  renderExtraLines(lvglConfig.options, 2).forEach((line) => pushYamlLine(lines, line));
   if ((lvglConfig.pages || []).length) {
     pushYamlLine(lines, "  pages:");
     lvglConfig.pages.forEach((page, pageIndex) => serializePage(page, pageIndex, 4, lines, widgetSchemas));

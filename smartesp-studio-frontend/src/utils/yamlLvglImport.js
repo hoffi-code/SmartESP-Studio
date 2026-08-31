@@ -95,6 +95,11 @@ const parsePage = async (rawPage, schemaContext) => {
   };
 };
 
+// Top-level `lvgl:` keys the builder maps to a dedicated field; everything else
+// is kept verbatim in `options` so an import -> export round-trip stays lossless
+// and the Settings panel has something to edit.
+const LVGL_MAPPED_KEYS = new Set(["displays", "touchscreens", "buffer_size", "bg_color", "pages"]);
+
 // Parses the raw `lvgl:` document value into the Builder's config.lvgl shape. Returns null when
 // there is no lvgl section (distinct from an lvgl section with no pages, which is still an object).
 // `schemaContext` is optional -- without it (e.g. in tests that only care about the raw tree
@@ -102,11 +107,16 @@ const parsePage = async (rawPage, schemaContext) => {
 export const parseLvglSection = async (lvglValue, schemaContext = {}) => {
   if (!isPlainObject(lvglValue)) return null;
   const pages = Array.isArray(lvglValue.pages) ? lvglValue.pages : [];
+  const options = {};
+  Object.entries(lvglValue).forEach(([key, value]) => {
+    if (!LVGL_MAPPED_KEYS.has(key)) options[key] = value;
+  });
   return {
     displays: Array.isArray(lvglValue.displays) ? lvglValue.displays : [],
     touchscreens: Array.isArray(lvglValue.touchscreens) ? lvglValue.touchscreens : [],
     bufferSize: lvglValue.buffer_size !== undefined ? lvglValue.buffer_size : "",
     bgColor: lvglValue.bg_color !== undefined ? lvglValue.bg_color : "",
+    options,
     pages: (await Promise.all(pages.map((page) => parsePage(page, schemaContext)))).filter(Boolean)
   };
 };

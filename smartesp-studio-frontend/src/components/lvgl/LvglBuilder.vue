@@ -15,6 +15,26 @@
   </div>
 
   <div class="module-card__body lvgl-builder">
+    <section v-if="topLevelSchema" class="lvgl-config-panel lvgl-settings-section">
+      <details>
+        <summary>Settings</summary>
+        <p class="note">Top-level <code>lvgl:</code> options (fonts, theme, display background, style definitions).</p>
+        <SchemaField
+          v-for="field in topLevelSchema.fields"
+          :key="field.key"
+          :field="field"
+          :path="[]"
+          :value="lvglOptions"
+          :root-value="lvglOptions"
+          :id-index="idIndex"
+          @update="handleOptionUpdate"
+        />
+        <p v-if="unmodeledOptionKeys.length" class="note">
+          Kept as-is (not editable here): {{ unmodeledOptionKeys.join(", ") }}
+        </p>
+      </details>
+    </section>
+
     <div class="lvgl-grid">
       <section class="lvgl-config-panel">
         <div class="lvgl-config-panel__header">
@@ -138,6 +158,7 @@ import { computed, onMounted, ref, watch } from "vue";
 import LvglWidgetTreeItem from "./LvglWidgetTreeItem.vue";
 import LvglWidgetInspector from "./LvglWidgetInspector.vue";
 import LvglCanvas from "./LvglCanvas.vue";
+import SchemaField from "../SchemaField.vue";
 import { LVGL_WIDGETS, lvglWidgetDefaults } from "../../utils/lvglWidgets";
 import { buildLvglYamlLines } from "../../utils/schemaLvglYaml";
 import { parseLvglSection } from "../../utils/yamlLvglImport";
@@ -190,6 +211,37 @@ const yamlError = ref("");
 const applying = ref(false);
 const canvasW = ref(240);
 const canvasH = ref(320);
+
+// Curated top-level lvgl: options for the Settings panel. Everything the schema
+// doesn't model still round-trips via lvglConfig.options (see parseLvglSection).
+const topLevelSchema = ref(null);
+const lvglOptions = computed(() => props.lvglConfig?.options || {});
+const modeledOptionKeys = computed(
+  () => new Set((topLevelSchema.value?.fields || []).map((field) => field.key))
+);
+const unmodeledOptionKeys = computed(() =>
+  Object.keys(lvglOptions.value).filter((key) => !modeledOptionKeys.value.has(key))
+);
+
+const setDeep = (source, path, value) => {
+  const [head, ...rest] = path;
+  const next = { ...(source || {}) };
+  if (!rest.length) {
+    if (value === undefined || value === "" || value === null) delete next[head];
+    else next[head] = value;
+    return next;
+  }
+  const child = setDeep(next[head], rest, value);
+  if (child && Object.keys(child).length) next[head] = child;
+  else delete next[head];
+  return next;
+};
+
+const handleOptionUpdate = ({ path, value }) => {
+  if (!path?.length) return;
+  const current = props.lvglConfig || emptyLvglConfig();
+  emit("update", { ...current, options: setDeep(current.options, path, value) });
+};
 
 const showYaml = computed(() => modeLevelRank(props.activeModeLevel) >= modeLevelRank("Advanced"));
 
@@ -259,7 +311,14 @@ const nextUiId = () => {
   return `lvgl-widget-new-${uiIdCounter}`;
 };
 
-const emptyLvglConfig = () => ({ displays: [], touchscreens: [], bufferSize: "", bgColor: "", pages: [] });
+const emptyLvglConfig = () => ({
+  displays: [],
+  touchscreens: [],
+  bufferSize: "",
+  bgColor: "",
+  options: {},
+  pages: []
+});
 
 const pages = computed(() => props.lvglConfig?.pages || []);
 const activePageWidgets = computed(() => pages.value[activePageIndex.value]?.widgets || []);
@@ -277,9 +336,14 @@ const selectedWidget = computed(() => findWidgetById(activePageWidgets.value, se
 
 // The config-frame panel is always mounted, so lazily seed an empty lvgl config
 // on first render instead of on a modal open.
-onMounted(() => {
+onMounted(async () => {
   if (!props.lvglConfig) {
     emit("update", emptyLvglConfig());
+  }
+  try {
+    topLevelSchema.value = await loadSchemaByPath("components/lvgl/lvgl_top_level.json");
+  } catch {
+    topLevelSchema.value = null;
   }
 });
 
@@ -400,6 +464,18 @@ const handleCanvasResize = ({ dim, value }) => {
 .lvgl-yaml-section {
   border-top: 1px solid var(--border);
   padding-top: 12px;
+}
+
+.lvgl-settings-section {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+}
+
+.lvgl-settings-section > details > summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
 }
 
 .lvgl-yaml-editor {

@@ -53,6 +53,7 @@ describe("LvglBuilder", () => {
       touchscreens: [],
       bufferSize: "",
       bgColor: "",
+      options: {},
       pages: []
     });
     // Rendered inline in the config frame -- no modal backdrop.

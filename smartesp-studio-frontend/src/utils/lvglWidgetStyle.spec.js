@@ -11,6 +11,7 @@ const readJson = (rel) => JSON.parse(readFileSync(resolve(publicDir, rel), "utf-
 const styleProps = readJson("schemas/components/base_component/lvgl_style_props.json");
 const widgetStyle = readJson("schemas/components/base_component/lvgl_widget_style.json");
 const widgetLayout = readJson("schemas/components/base_component/lvgl_widget_layout.json");
+const topLevel = readJson("schemas/components/lvgl/lvgl_top_level.json");
 
 describe("lvgl widget style schema", () => {
   it("keeps the flat style props in a reusable object schema", () => {
@@ -50,5 +51,18 @@ describe("lvgl widget style schema", () => {
       expect(block.type).toBe("object");
       expect(block.extends).toBe("lvgl_style_props.json");
     }
+  });
+});
+
+describe("lvgl top-level options schema", () => {
+  it("curates the common lvgl: options and reuses the style props for style_definitions", () => {
+    const keys = topLevel.fields.map((f) => f.key);
+    expect(keys).toEqual(
+      expect.arrayContaining(["default_font", "disp_bg_color", "color_depth", "style_definitions"])
+    );
+    const styleDefs = topLevel.fields.find((f) => f.key === "style_definitions");
+    expect(styleDefs.type).toBe("list");
+    expect(styleDefs.item.extends).toBe("lvgl_style_props.json");
+    expect(styleDefs.item.fields.map((f) => f.key)).toContain("id");
   });
 });
