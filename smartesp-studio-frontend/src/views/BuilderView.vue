@@ -399,6 +399,7 @@
             :widget-schemas="lvglWidgetSchemas"
             :id-index="idIndex"
             :external-select="lvglExternalSelect"
+            :active-mode-level="activeModeLevel"
             @update="handleLvglUpdate"
             @field-edit="handleLvglFieldEdit"
           />
