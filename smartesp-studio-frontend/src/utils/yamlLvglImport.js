@@ -1,17 +1,7 @@
 import { dump } from "js-yaml";
 import { mapYamlObjectToSchemaConfig } from "./schemaProjectImport";
 import { loadAutomationContextForSchema } from "./yamlProjectImport";
-
-// Widget types with a real inspector panel. Everything else round-trips as an opaque raw-YAML
-// node (see parseWidgetNode) instead of being dropped -- covered incrementally, seam by seam,
-// following the same pattern (see plans/... LVGL notes).
-const SUPPORTED_WIDGET_TYPES = new Set(["label", "button", "image"]);
-
-// Position/size fields every widget type shares -- matches LvglWidgetInspectorCommon.vue's field
-// list exactly, since that's the only other place this split matters (it's a UI grouping, not a
-// data distinction: buildWidgetFieldValue in schemaLvglYaml.js just spreads common+props back
-// together for export).
-const COMMON_FIELD_KEYS = new Set(["id", "x", "y", "width", "height", "align"]);
+import { COMMON_FIELD_KEYS, LVGL_WIDGET_TYPES } from "./lvglWidgets";
 
 const isPlainObject = (value) => value !== null && typeof value === "object" && !Array.isArray(value);
 
@@ -26,7 +16,7 @@ const splitCommonAndProps = (flatConfig) => {
   const propsValue = {};
   Object.entries(flatConfig || {}).forEach(([key, value]) => {
     if (COMMON_FIELD_KEYS.has(key)) {
-      common[key === "bg_color" ? "bgColor" : key === "text_color" ? "textColor" : key] = value;
+      common[key] = value;
     } else {
       propsValue[key] = value;
     }
@@ -51,7 +41,7 @@ export const parseWidgetNode = async (rawWidget, schemaContext = {}) => {
     await Promise.all(childrenRaw.map((child) => parseWidgetNode(child, schemaContext)))
   ).filter(Boolean);
 
-  if (!SUPPORTED_WIDGET_TYPES.has(type) || typeof schemaContext.loadWidgetSchema !== "function") {
+  if (!LVGL_WIDGET_TYPES.has(type) || typeof schemaContext.loadWidgetSchema !== "function") {
     return {
       uiId: nextUiId(),
       type: "unsupported",

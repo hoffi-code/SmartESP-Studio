@@ -3,6 +3,26 @@ import { mount } from "@vue/test-utils";
 import { describe, expect, it } from "vitest";
 import LvglBuilder from "./LvglBuilder.vue";
 
+// Minimal label schema so the generic inspector renders its fields without a backend.
+const LABEL_SCHEMA = {
+  fields: [
+    { key: "id", type: "id", required: false },
+    { key: "x", type: "text", required: false },
+    { key: "y", type: "text", required: false },
+    { key: "width", type: "text", required: false },
+    { key: "height", type: "text", required: false },
+    { key: "align", type: "select", required: false, options: ["TOP_LEFT", "CENTER"] },
+    { key: "text", type: "text", required: false }
+  ]
+};
+const widgetSchemas = { label: LABEL_SCHEMA };
+
+const addWidget = async (wrapper, type) => {
+  await wrapper.get("select.lvgl-widget-type-select").setValue(type);
+  const addButton = wrapper.findAll("button").find((btn) => btn.text() === "Add");
+  await addButton.trigger("click");
+};
+
 describe("LvglBuilder", () => {
   it("initializes an empty lvgl config the first time the modal is opened", async () => {
     const wrapper = mount(LvglBuilder, { props: { lvglConfig: null } });
@@ -41,13 +61,12 @@ describe("LvglBuilder", () => {
     expect(patch.pages[0]).toEqual({ id: "page_0", widgets: [] });
   });
 
-  it("adds a label widget to the active page and shows it in the inspector when clicked", async () => {
+  it("adds a widget of the picked type to the active page", async () => {
     const lvglConfig = { displays: [], touchscreens: [], bufferSize: "", bgColor: "", pages: [{ id: "main_page", widgets: [] }] };
-    const wrapper = mount(LvglBuilder, { props: { lvglConfig } });
+    const wrapper = mount(LvglBuilder, { props: { lvglConfig, widgetSchemas } });
     await wrapper.get("button").trigger("click");
 
-    const addLabelButton = wrapper.findAll("button").find((btn) => btn.text() === "Add label");
-    await addLabelButton.trigger("click");
+    await addWidget(wrapper, "label");
 
     const patch = wrapper.emitted("update").at(-1)[0];
     expect(patch.pages[0].widgets).toHaveLength(1);
@@ -58,10 +77,10 @@ describe("LvglBuilder", () => {
     expect(wrapper.get("#schema-text").element.value).toBe("Label");
   });
 
-  it("edits the selected label widget's text through the inspector", async () => {
+  it("edits the selected widget's text through the generic inspector", async () => {
     const widget = { uiId: "w1", type: "label", common: {}, props: { text: "Old" }, children: [] };
     const lvglConfig = { displays: [], touchscreens: [], bufferSize: "", bgColor: "", pages: [{ id: "main_page", widgets: [widget] }] };
-    const wrapper = mount(LvglBuilder, { props: { lvglConfig } });
+    const wrapper = mount(LvglBuilder, { props: { lvglConfig, widgetSchemas } });
     await wrapper.get("button").trigger("click");
     await wrapper.get(".lvgl-tree-node__button").trigger("click");
 
@@ -74,7 +93,7 @@ describe("LvglBuilder", () => {
   it("removes the selected widget", async () => {
     const widget = { uiId: "w1", type: "label", common: {}, props: { text: "Label" }, children: [] };
     const lvglConfig = { displays: [], touchscreens: [], bufferSize: "", bgColor: "", pages: [{ id: "main_page", widgets: [widget] }] };
-    const wrapper = mount(LvglBuilder, { props: { lvglConfig } });
+    const wrapper = mount(LvglBuilder, { props: { lvglConfig, widgetSchemas } });
     await wrapper.get("button").trigger("click");
 
     await wrapper.get(".lvgl-tree-node__button").trigger("click");
