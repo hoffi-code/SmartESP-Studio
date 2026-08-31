@@ -41,7 +41,7 @@ describe("LvglBuilder", () => {
     expect(patch.pages[0]).toEqual({ id: "page_0", widgets: [] });
   });
 
-  it("adds a label widget to the active page and shows it selected when clicked", async () => {
+  it("adds a label widget to the active page and shows it in the inspector when clicked", async () => {
     const lvglConfig = { displays: [], touchscreens: [], bufferSize: "", bgColor: "", pages: [{ id: "main_page", widgets: [] }] };
     const wrapper = mount(LvglBuilder, { props: { lvglConfig } });
     await wrapper.get("button").trigger("click");
@@ -55,7 +55,20 @@ describe("LvglBuilder", () => {
 
     await wrapper.setProps({ lvglConfig: patch });
     await wrapper.get(".lvgl-tree-node__button").trigger("click");
-    expect(wrapper.get(".lvgl-widget-dump").text()).toContain('"text": "Label"');
+    expect(wrapper.get("#schema-text").element.value).toBe("Label");
+  });
+
+  it("edits the selected label widget's text through the inspector", async () => {
+    const widget = { uiId: "w1", type: "label", common: {}, props: { text: "Old" }, children: [] };
+    const lvglConfig = { displays: [], touchscreens: [], bufferSize: "", bgColor: "", pages: [{ id: "main_page", widgets: [widget] }] };
+    const wrapper = mount(LvglBuilder, { props: { lvglConfig } });
+    await wrapper.get("button").trigger("click");
+    await wrapper.get(".lvgl-tree-node__button").trigger("click");
+
+    await wrapper.get("#schema-text").setValue("New text");
+
+    const patch = wrapper.emitted("update").at(-1)[0];
+    expect(patch.pages[0].widgets[0].props.text).toBe("New text");
   });
 
   it("removes the selected widget", async () => {

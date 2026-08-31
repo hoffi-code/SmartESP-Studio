@@ -392,6 +392,10 @@
           @promote-mode-level="promoteModeLevel"
         />
 
+        <div class="module-card" v-if="activeTab === 'LVGL'">
+          <LvglBuilder :lvgl-config="config.lvgl" @update="handleLvglUpdate" />
+        </div>
+
         <div class="module-card" v-if="activeTab === 'Components'">
           <div class="components-header">
             <div class="components-title">
@@ -521,6 +525,7 @@ import BuilderAutomationTab from "../components/builder/BuilderAutomationTab.vue
 import BuilderComponentForm from "../components/builder/BuilderComponentForm.vue";
 import BuilderComponentPicker from "../components/builder/BuilderComponentPicker.vue";
 import BuilderCoreTab from "../components/builder/BuilderCoreTab.vue";
+import LvglBuilder from "../components/lvgl/LvglBuilder.vue";
 import BuilderBussesTab from "../components/builder/BuilderBussesTab.vue";
 import BuilderModalHost from "../components/builder/BuilderModalHost.vue";
 import BuilderNetworkTab from "../components/builder/BuilderNetworkTab.vue";
@@ -583,7 +588,7 @@ import { apiFetch, apiUrl } from "../utils/api";
 // UI-heavy sections, preview logic, catalog flow, schema loading, and validation are
 // delegated to focused components/composables so the view can coordinate them.
 
-const tabs = ["Core", "Platform", "Network", "Protocols", "Busses", "System", "Automation"];
+const tabs = ["Core", "Platform", "Network", "Protocols", "Busses", "System", "Automation", "LVGL"];
 const activeTab = ref(tabs[0]);
 const splitPreviewEnabled = ref(false);
 const pulsingTabs = ref(new Set());
@@ -658,6 +663,7 @@ const networkDetailSchema = ref(null);
 const networkCoreSchema = ref(null);
 const protocolsSchemas = ref({});
 const bussesSchemas = ref({});
+const lvglWidgetSchemas = ref({});
 const otherSchemas = ref({});
 const automationSchemas = ref({});
 
@@ -869,6 +875,10 @@ const activeTabHelpUrl = computed(() => {
 
   if (activeTab.value === "System") {
     return schemaHelpUrl(otherSchemas.value?.[activeOtherKey.value]);
+  }
+
+  if (activeTab.value === "LVGL") {
+    return "https://esphome.io/components/lvgl/";
   }
 
   if (activeTab.value === "Automation") {
@@ -2188,12 +2198,14 @@ const { yamlPreviewDocument, yamlPreview, previewTabs } = useBuilderYamlPreview(
   platformDetailScopeId,
   networkDetailScopeId,
   networkOtaScopeId,
-  networkWebServerScopeId
+  networkWebServerScopeId,
+  lvglWidgetSchemas
 });
 
 const resolvePreviewTabKeyFromMain = () => {
   if (activeTab.value === "Busses") return "busses";
   if (activeTab.value === "Automation") return "automation";
+  if (activeTab.value === "LVGL") return "lvgl";
   if (activeTab.value === "Components") {
     const componentId = activeComponentId.value || "";
     const schema = componentSchemas.value?.[componentId];
@@ -3372,6 +3384,11 @@ const handleAutomationDetailUpdate = ({ path, value }) => {
   saveConfig();
 };
 
+const handleLvglUpdate = (nextLvgl) => {
+  config.value.lvgl = nextLvgl;
+  saveConfig();
+};
+
 const handleCustomConfigUpdate = (value) => {
   if (activeComponentSlot.value === null) return;
   const entry = config.value.components[activeComponentSlot.value];
@@ -3579,6 +3596,13 @@ onMounted(async () => {
     networkCoreSchema.value = await loadSchemaByPath("general/network/network.json");
   } catch (error) {
     console.error("Network core schema load failed", error);
+  }
+  try {
+    lvglWidgetSchemas.value = {
+      label: await loadSchemaByPath("components/lvgl/widgets/label.json")
+    };
+  } catch (error) {
+    console.error("LVGL widget schemas load failed", error);
   }
   const platform = platformCoreConfig.value?.platform;
   if (platform) {

@@ -66,10 +66,9 @@
 
           <section class="lvgl-config-panel lvgl-config-panel--inspector">
             <div class="lvgl-config-panel__header">
-              <h4>Selected widget</h4>
+              <h4>Inspector</h4>
             </div>
-            <pre v-if="selectedWidget" class="lvgl-widget-dump">{{ JSON.stringify(selectedWidget, null, 2) }}</pre>
-            <div v-else class="note">Select a widget to inspect it.</div>
+            <LvglWidgetInspector :node="selectedWidget" @update="handleInspectorUpdate" />
           </section>
         </div>
 
@@ -84,6 +83,7 @@
 <script setup>
 import { computed, ref } from "vue";
 import LvglWidgetTreeItem from "./LvglWidgetTreeItem.vue";
+import LvglWidgetInspector from "./LvglWidgetInspector.vue";
 
 const props = defineProps({
   lvglConfig: {
@@ -178,6 +178,22 @@ const removeSelectedWidget = () => {
   );
   emit("update", { ...current, pages: nextPages });
   selectedWidgetId.value = "";
+};
+
+const replaceWidgetById = (nodes, uiId, nextNode) =>
+  (nodes || []).map((node) =>
+    node.uiId === uiId ? nextNode : { ...node, children: replaceWidgetById(node.children, uiId, nextNode) }
+  );
+
+const handleInspectorUpdate = (nextNode) => {
+  const current = props.lvglConfig;
+  if (!current || !selectedWidgetId.value) return;
+  const nextPages = current.pages.map((page, index) =>
+    index === activePageIndex.value
+      ? { ...page, widgets: replaceWidgetById(page.widgets, selectedWidgetId.value, nextNode) }
+      : page
+  );
+  emit("update", { ...current, pages: nextPages });
 };
 </script>
 
@@ -277,13 +293,6 @@ const removeSelectedWidget = () => {
 .lvgl-page-item.active {
   background: var(--accent);
   color: #fff;
-}
-
-.lvgl-widget-dump {
-  margin: 0;
-  font-size: 11px;
-  white-space: pre-wrap;
-  word-break: break-word;
 }
 
 .lvgl-config-footer {
