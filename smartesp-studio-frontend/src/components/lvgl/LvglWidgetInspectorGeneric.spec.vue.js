@@ -115,6 +115,28 @@ describe("LvglWidgetInspectorGeneric", () => {
     expect(patch.common.id).toBe("img_1");
   });
 
+  it("renders group:style fields in a separate Style section, not the main form", async () => {
+    const schema = {
+      fields: [
+        { key: "id", type: "id" },
+        { key: "value", type: "text" },
+        { key: "bg_color", type: "text", group: "style" },
+        { key: "radius", type: "text", group: "style" }
+      ]
+    };
+    const node = { uiId: "w1", type: "slider", common: {}, props: {}, children: [] };
+    const wrapper = mount(LvglWidgetInspectorGeneric, { props: { node, schema } });
+
+    // value is a normal setting; bg_color/radius live inside the <details>Style block
+    expect(wrapper.get("#schema-value")).toBeTruthy();
+    const summaries = wrapper.findAll("summary").map((s) => s.text());
+    expect(summaries).toContain("Style");
+
+    await wrapper.get("#schema-bg_color").setValue("0x101010");
+    const patch = wrapper.emitted("update").at(-1)[0];
+    expect(patch.props.bg_color).toBe("0x101010");
+  });
+
   it("shows a note when the schema has no type-specific fields", () => {
     const commonOnly = {
       fields: [

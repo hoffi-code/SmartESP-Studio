@@ -2,6 +2,7 @@
   "id": "lvgl.widget.buttonmatrix",
   "domain": "lvgl",
   "widgetType": "buttonmatrix",
+  "extends": "lvgl_widget_style.json",
   "helpUrl": "https://esphome.io/components/lvgl/widgets/buttonmatrix/",
   "fields": [
     {

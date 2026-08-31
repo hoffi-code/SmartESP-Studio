@@ -2,6 +2,7 @@
   "id": "lvgl.widget.roller",
   "domain": "lvgl",
   "widgetType": "roller",
+  "extends": "lvgl_widget_style.json",
   "helpUrl": "https://esphome.io/components/lvgl/widgets/roller/",
   "fields": [
     {

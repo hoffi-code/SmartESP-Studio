@@ -2,6 +2,7 @@
   "id": "lvgl.widget.spinner",
   "domain": "lvgl",
   "widgetType": "spinner",
+  "extends": "lvgl_widget_style.json",
   "helpUrl": "https://esphome.io/components/lvgl/widgets/spinner/",
   "fields": [
     {

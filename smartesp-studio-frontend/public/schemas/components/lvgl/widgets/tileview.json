@@ -2,6 +2,7 @@
   "id": "lvgl.widget.tileview",
   "domain": "lvgl",
   "widgetType": "tileview",
+  "extends": "lvgl_widget_style.json",
   "helpUrl": "https://esphome.io/components/lvgl/widgets/tileview/",
   "fields": [
     {

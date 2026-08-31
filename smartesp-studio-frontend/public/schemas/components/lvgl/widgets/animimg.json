@@ -2,6 +2,7 @@
   "id": "lvgl.widget.animimg",
   "domain": "lvgl",
   "widgetType": "animimg",
+  "extends": "lvgl_widget_style.json",
   "helpUrl": "https://esphome.io/components/lvgl/widgets/animimg/",
   "fields": [
     {
