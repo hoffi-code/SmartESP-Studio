@@ -107,10 +107,48 @@ lvgl:
                     entity_id: switch.smartplug_no3_smartplug_no3_switch
 `;
 
+// Minimal stand-in for schemaLoader.resolveSchema so the gate exercises the real
+// shipped schemas after the shared base_component/ extends chain
+// (widget -> common -> style -> layout -> style_props) landed.
+const CATALOG_EXTENDS = new Set(["base_actions.json", "base_conditions.json", "base_filters.json"]);
+const mergeFields = (own = [], base = []) => {
+  const seen = new Set();
+  const out = [];
+  for (const field of [...own, ...base]) {
+    const key = typeof field?.key === "string" ? field.key : null;
+    if (key && seen.has(key)) continue;
+    if (key) seen.add(key);
+    out.push(field);
+  }
+  return out;
+};
+const resolveField = (field) => {
+  let out = field;
+  if (out.extends && !CATALOG_EXTENDS.has(out.extends)) {
+    const base = resolveSchema(readJson(`schemas/components/base_component/${out.extends}`));
+    out = { ...out, fields: mergeFields(Array.isArray(out.fields) ? out.fields : [], base.fields) };
+  }
+  if (out.type === "object" && Array.isArray(out.fields)) {
+    out = { ...out, fields: out.fields.map(resolveField) };
+  }
+  if (out.type === "list" && out.item) {
+    out = { ...out, item: resolveField(out.item) };
+  }
+  return out;
+};
+function resolveSchema(schema) {
+  let baseFields = [];
+  if (schema.extends) {
+    baseFields = resolveSchema(readJson(`schemas/components/base_component/${schema.extends}`)).fields;
+  }
+  const own = (Array.isArray(schema.fields) ? schema.fields : []).map(resolveField);
+  return { ...schema, fields: mergeFields(own, baseFields) };
+}
+
 const widgetSchemas = {
-  label: readJson("schemas/components/lvgl/widgets/label.json"),
-  button: readJson("schemas/components/lvgl/widgets/button.json"),
-  image: readJson("schemas/components/lvgl/widgets/image.json")
+  label: resolveSchema(readJson("schemas/components/lvgl/widgets/label.json")),
+  button: resolveSchema(readJson("schemas/components/lvgl/widgets/button.json")),
+  image: resolveSchema(readJson("schemas/components/lvgl/widgets/image.json"))
 };
 
 const actionCatalog = readJson("action_list/base_actions.json").actions;

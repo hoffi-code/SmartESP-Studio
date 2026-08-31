@@ -1,10 +1,11 @@
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
-// The widget style schema every LVGL widget extends: flat main-part style props
-// (via extends) plus one nested block per interactive state and per sub-part.
+// Structure guards for the shared LVGL schema chain every widget extends:
+// widget -> lvgl_widget_common -> lvgl_widget_style -> lvgl_widget_layout ->
+// lvgl_style_props, plus the top-level lvgl: options schema.
 const publicDir = resolve(dirname(fileURLToPath(import.meta.url)), "../../public");
 const readJson = (rel) => JSON.parse(readFileSync(resolve(publicDir, rel), "utf-8"));
 
@@ -12,6 +13,9 @@ const styleProps = readJson("schemas/components/base_component/lvgl_style_props.
 const widgetStyle = readJson("schemas/components/base_component/lvgl_widget_style.json");
 const widgetLayout = readJson("schemas/components/base_component/lvgl_widget_layout.json");
 const topLevel = readJson("schemas/components/lvgl/lvgl_top_level.json");
+const widgetCommon = readJson("schemas/components/base_component/lvgl_widget_common.json");
+const widgetDir = "schemas/components/lvgl/widgets";
+const widgetFiles = readdirSync(resolve(publicDir, widgetDir)).filter((f) => f.endsWith(".json"));
 
 describe("lvgl widget style schema", () => {
   it("keeps the flat style props in a reusable object schema", () => {
@@ -50,6 +54,28 @@ describe("lvgl widget style schema", () => {
     for (const block of [...states, ...parts]) {
       expect(block.type).toBe("object");
       expect(block.extends).toBe("lvgl_style_props.json");
+    }
+  });
+});
+
+describe("lvgl widget common base", () => {
+  const COMMON_KEYS = ["id", "x", "y", "width", "height", "align"];
+  const STD_TRIGGERS = ["on_click", "on_press", "on_release", "on_long_press", "on_focus", "on_defocus"];
+
+  it("carries the position/size fields and the shared trigger blocks", () => {
+    expect(widgetCommon.extends).toBe("lvgl_widget_style.json");
+    const keys = widgetCommon.fields.map((f) => f.key);
+    expect(keys).toEqual([...COMMON_KEYS, ...STD_TRIGGERS]);
+  });
+
+  it("no widget schema re-declares a common field or a standard trigger", () => {
+    for (const file of widgetFiles) {
+      const schema = readJson(`${widgetDir}/${file}`);
+      expect(schema.extends, file).toBe("lvgl_widget_common.json");
+      const keys = schema.fields.map((f) => f.key);
+      for (const dup of [...COMMON_KEYS, ...STD_TRIGGERS]) {
+        expect(keys, `${file} still declares ${dup}`).not.toContain(dup);
+      }
     }
   });
 });

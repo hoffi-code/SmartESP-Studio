@@ -13,3 +13,4 @@ smartesp-studio/tests/**/*.pyc
 scripts/
 .github/workflows/validate.yml
 R&D/
+LVGL_Docs/
