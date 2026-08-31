@@ -1,0 +1,52 @@
+# SmartESP Studio -- frontend
+
+Vue 3 (Composition API, `<script setup>`), Vite, no TypeScript, no state-management package --
+state lives in composables + `localStorage`.
+
+## Views
+
+- `BuilderView.vue` -- the config editor. Orchestration shell: tab components
+  (`components/builder/*`) + composables (`composables/builder/*`) do the actual work. Owns the
+  live YAML preview (`useBuilderYamlPreview`), the component catalog (`useBuilderComponentCatalog`),
+  validation (`useBuilderValidation`), deployment/device-status polling (`useBuilderDeployment`),
+  and save/persistence (`useBuilderProjectPersistence`).
+- `DashboardView.vue` -- the project browser/tree. `useDashboardTree` (folder tree),
+  `useDashboardDeviceStatus` (online/offline polling), `useDashboardYamlImport` (the two import
+  flows), `useDashboardTileCustomization` (per-project icon/color overrides).
+
+Display-configurator UI lives under `components/display/` (`DisplayBuilder.vue` +
+`DisplayCanvas.vue` + `DisplayInspector*.vue`, backed by `composables/display/*`) -- a bespoke
+editor for the `display:` lambda, not part of the generic schema-field system. `components/lvgl/`
+is the same pattern for `lvgl:` (`LvglBuilder.vue`, `LvglWidgetInspector*.vue`).
+
+## Import/export pipeline
+
+`utils/yamlProjectImport.js` (import) and `utils/schemaYaml.js` (export) are the generic
+schema-driven mapper both directions go through for ordinary component fields. `on_*` actions and
+conditions route through `utils/schemaActionImport.js`/`schemaConditionImport.js` and the
+shared action/condition catalogs, recursively (works the same whether it's a component's
+`on_state`, an LVGL button's `on_click`, or a nested `if/then/else`). `lvgl:` gets its own bespoke
+import/export pair (`utils/yamlLvglImport.js`/`utils/schemaLvglYaml.js`) since it's a recursive
+widget tree the generic field mapper doesn't model -- `display:` follows the same "own
+serializer, own non-emitted config key" pattern inline within `schemaYaml.js`/
+`yamlProjectImport.js` rather than a separate module pair.
+
+## API access
+
+`utils/api.js` (`apiUrl`/`apiFetch`/`unwrapJson`/`apiJson`) centralizes the ingress/base-URL/
+`credentials` handling every backend call needs. Route new fetches through it rather than raw
+`fetch()`.
+
+## Dev vs. add-on runtime
+
+- `npm run dev` talks to a real backend by default -- point it at a running
+  `smartesp-studio` instance (standalone container or `python server.py` locally).
+- `VITE_DEV_OFFLINE=1 npm run dev` (dev builds only) makes schema/catalog loading read straight
+  from `public/schemas/` and `public/components_list/` instead of the backend's
+  `/api/component-schemas/...` route -- useful for schema/catalog-only work without a backend up.
+- In production (standalone image or the HA add-on), the built frontend is served by the Flask app
+  itself; there's no separate dev server.
+
+## Checks
+
+`npm run lint`, `npm test`, `npm run build` -- see `CONTRIBUTING.md` at the repo root.
