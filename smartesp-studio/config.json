@@ -2,7 +2,7 @@
   "name": "SmartESP Studio",
   "slug": "smartesp-studio",
   "description": "Ingress-only ESPHome editor. Build YAML, compile, and flash devices with live logs.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "build": "Dockerfile",
   "arch": ["amd64", "aarch64"],
   "startup": "services",
