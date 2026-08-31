@@ -2,6 +2,7 @@
   "id": "lvgl.widget.image",
   "domain": "lvgl",
   "widgetType": "image",
+  "extends": "lvgl_widget_style.json",
   "helpUrl": "https://esphome.io/components/lvgl/widgets/",
   "fields": [
     {

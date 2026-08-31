@@ -2,6 +2,7 @@
   "id": "lvgl.widget.canvas",
   "domain": "lvgl",
   "widgetType": "canvas",
+  "extends": "lvgl_widget_style.json",
   "helpUrl": "https://esphome.io/components/lvgl/widgets/canvas/",
   "fields": [
     {

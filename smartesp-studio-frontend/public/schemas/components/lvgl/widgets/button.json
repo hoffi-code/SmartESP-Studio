@@ -2,6 +2,7 @@
   "id": "lvgl.widget.button",
   "domain": "lvgl",
   "widgetType": "button",
+  "extends": "lvgl_widget_style.json",
   "helpUrl": "https://esphome.io/components/lvgl/widgets/",
   "fields": [
     {

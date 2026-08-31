@@ -20,9 +20,11 @@ editor for the `display:` lambda, not part of the generic schema-field system. `
 is the same shell for `lvgl:` (`LvglBuilder.vue` = pages/widget-tree modal), but the per-widget
 inspector is schema-driven: `LvglWidgetInspectorGeneric.vue` renders the widget's JSON schema.
 `utils/lvglWidgets.js` is the registry -- adding a widget type = one schema JSON under
-`public/schemas/components/lvgl/widgets/` + one `LVGL_WIDGETS` entry; import
-(`utils/yamlLvglImport.js`) and export (`utils/schemaLvglYaml.js`) are already generic and need
-no per-widget change.
+`public/schemas/components/lvgl/widgets/` (`extends` `base_component/lvgl_widget_style.json` for the
+shared style fields) + one `LVGL_WIDGETS` entry; import (`utils/yamlLvglImport.js`) and export
+(`utils/schemaLvglYaml.js`) are generic. Widget schemas are curated subsets -- YAML keys they don't
+model are round-tripped verbatim via `node.extra`. The inspector groups `group: "style"` fields and
+`on_*` triggers into collapsible sections.
 
 ## Import/export pipeline
 

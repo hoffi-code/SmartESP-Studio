@@ -2,6 +2,7 @@
   "id": "lvgl.widget.line",
   "domain": "lvgl",
   "widgetType": "line",
+  "extends": "lvgl_widget_style.json",
   "helpUrl": "https://esphome.io/components/lvgl/widgets/line/",
   "fields": [
     {

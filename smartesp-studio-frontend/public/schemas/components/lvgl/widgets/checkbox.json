@@ -2,6 +2,7 @@
   "id": "lvgl.widget.checkbox",
   "domain": "lvgl",
   "widgetType": "checkbox",
+  "extends": "lvgl_widget_style.json",
   "helpUrl": "https://esphome.io/components/lvgl/widgets/checkbox/",
   "fields": [
     {

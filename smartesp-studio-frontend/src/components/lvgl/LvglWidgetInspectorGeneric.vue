@@ -17,7 +17,20 @@
     <p v-if="extraKeys.length" class="note">
       Kept as-is (not editable here): {{ extraKeys.join(", ") }}
     </p>
-    <details v-if="triggerFields.length" class="lvgl-widget-inspector-panel__events">
+    <details v-if="styleFields.length" class="lvgl-widget-inspector-panel__section">
+      <summary>Style</summary>
+      <SchemaField
+        v-for="field in styleFields"
+        :key="field.key"
+        :field="field"
+        :path="[]"
+        :value="node.props || {}"
+        :root-value="node.props || {}"
+        :id-index="idIndex"
+        @update="handlePropsUpdate"
+      />
+    </details>
+    <details v-if="triggerFields.length" class="lvgl-widget-inspector-panel__section">
       <summary>Events</summary>
       <SchemaField
         v-for="field in triggerFields"
@@ -67,8 +80,12 @@ const typeSpecificFields = computed(() =>
 
 const isTriggerField = (field) =>
   field?.type === "list" && field?.item?.extends === "base_actions.json";
+const isStyleField = (field) => field?.group === "style";
 
-const settingFields = computed(() => typeSpecificFields.value.filter((field) => !isTriggerField(field)));
+const settingFields = computed(() =>
+  typeSpecificFields.value.filter((field) => !isTriggerField(field) && !isStyleField(field))
+);
+const styleFields = computed(() => typeSpecificFields.value.filter(isStyleField));
 const triggerFields = computed(() => typeSpecificFields.value.filter(isTriggerField));
 const extraKeys = computed(() => Object.keys(props.node?.extra || {}));
 
@@ -82,3 +99,18 @@ const handlePropsUpdate = ({ path, value }) => {
   emit("update", { ...props.node, props: { ...(props.node.props || {}), [key]: value } });
 };
 </script>
+
+<style scoped>
+.lvgl-widget-inspector-panel__section {
+  margin-top: 10px;
+  border-top: 1px solid var(--border);
+  padding-top: 8px;
+}
+
+.lvgl-widget-inspector-panel__section > summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+</style>

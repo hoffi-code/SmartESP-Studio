@@ -1,0 +1,27 @@
+{
+  "id": "base.lvgl_widget_style",
+  "domain": "lvgl",
+  "type": "object",
+  "fields": [
+    { "key": "bg_color", "type": "text", "required": false, "lvl": "advanced", "group": "style", "placeholder": "0x000000" },
+    { "key": "bg_opa", "type": "text", "required": false, "lvl": "advanced", "group": "style", "placeholder": "100%" },
+    { "key": "border_color", "type": "text", "required": false, "lvl": "advanced", "group": "style", "placeholder": "0xFFFFFF" },
+    { "key": "border_width", "type": "text", "required": false, "lvl": "advanced", "group": "style", "placeholder": "0" },
+    { "key": "outline_color", "type": "text", "required": false, "lvl": "advanced", "group": "style", "placeholder": "0xFFFFFF" },
+    { "key": "outline_width", "type": "text", "required": false, "lvl": "advanced", "group": "style", "placeholder": "0" },
+    { "key": "radius", "type": "text", "required": false, "lvl": "advanced", "group": "style", "placeholder": "0" },
+    { "key": "clip_corner", "type": "boolean", "required": false, "lvl": "advanced", "group": "style", "default": false },
+    { "key": "pad_all", "type": "text", "required": false, "lvl": "advanced", "group": "style", "placeholder": "0" },
+    { "key": "pad_top", "type": "text", "required": false, "lvl": "advanced", "group": "style", "placeholder": "0" },
+    { "key": "pad_bottom", "type": "text", "required": false, "lvl": "advanced", "group": "style", "placeholder": "0" },
+    { "key": "pad_left", "type": "text", "required": false, "lvl": "advanced", "group": "style", "placeholder": "0" },
+    { "key": "pad_right", "type": "text", "required": false, "lvl": "advanced", "group": "style", "placeholder": "0" },
+    { "key": "text_color", "type": "text", "required": false, "lvl": "advanced", "group": "style", "placeholder": "0xFFFFFF" },
+    { "key": "text_font", "type": "text", "required": false, "lvl": "advanced", "group": "style", "placeholder": "font_id" },
+    { "key": "text_align", "type": "select", "required": false, "lvl": "advanced", "group": "style", "options": ["LEFT", "CENTER", "RIGHT", "AUTO"] },
+    { "key": "text_opa", "type": "text", "required": false, "lvl": "advanced", "group": "style", "placeholder": "100%" },
+    { "key": "shadow_color", "type": "text", "required": false, "lvl": "advanced", "group": "style", "placeholder": "0x000000" },
+    { "key": "shadow_width", "type": "text", "required": false, "lvl": "advanced", "group": "style", "placeholder": "0" },
+    { "key": "opa", "type": "text", "required": false, "lvl": "advanced", "group": "style", "placeholder": "100%" }
+  ]
+}
