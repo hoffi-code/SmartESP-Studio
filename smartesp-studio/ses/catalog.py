@@ -156,10 +156,6 @@ def normalize_component_entry(raw: dict) -> Tuple[Optional[dict], str]:
     if not comp_id or not path_value or not schema_path:
         return None, f"Invalid component entry for {name}"
 
-    available = raw.get("available", True)
-    if not isinstance(available, bool):
-        return None, f"Invalid available flag for {comp_id}"
-
     catalog_key = None
     if "catalogKey" in raw and raw.get("catalogKey") is not None:
         catalog_key = normalize_component_catalog_key(raw.get("catalogKey", ""))
@@ -185,7 +181,6 @@ def normalize_component_entry(raw: dict) -> Tuple[Optional[dict], str]:
         "name": name,
         "path": path_value,
         "id": comp_id,
-        "available": available,
         "schemaPath": schema_path,
     }
     if catalog_key:

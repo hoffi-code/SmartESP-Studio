@@ -19,12 +19,11 @@ import ses.config as config  # noqa: E402
 from ses import catalog as catalog_mod  # noqa: E402
 
 
-def component_entry(name, component_id, *, available=True, catalog_key=None):
+def component_entry(name, component_id, *, catalog_key=None):
     entry = {
         "name": name,
         "path": f"components/{component_id}",
         "id": component_id,
-        "available": available,
         "schemaPath": f"components/{component_id}.json",
     }
     if catalog_key:
@@ -69,15 +68,13 @@ class ComponentCatalogTests(unittest.TestCase):
         base = catalog_with_items(
             [
                 component_entry(
-                    "Home Assistant",
+                    "Home Assistant Base",
                     "sensor/homeassistant",
-                    available=False,
                     catalog_key="sensor/homeassistant/home_assistant",
                 ),
                 component_entry(
-                    "Sensor",
+                    "Sensor Base",
                     "sensor/homeassistant",
-                    available=False,
                     catalog_key="sensor/homeassistant/sensor",
                 ),
             ]
@@ -85,9 +82,8 @@ class ComponentCatalogTests(unittest.TestCase):
         runtime = catalog_with_items(
             [
                 component_entry(
-                    "Home Assistant",
+                    "Home Assistant Runtime",
                     "sensor/homeassistant",
-                    available=True,
                     catalog_key="sensor/homeassistant/home_assistant",
                 )
             ]
@@ -99,8 +95,8 @@ class ComponentCatalogTests(unittest.TestCase):
             for item in catalog_mod.extract_catalog_items(merged)
         }
 
-        self.assertTrue(items["sensor/homeassistant/home_assistant"]["available"])
-        self.assertFalse(items["sensor/homeassistant/sensor"]["available"])
+        self.assertEqual("Home Assistant Runtime", items["sensor/homeassistant/home_assistant"]["name"])
+        self.assertEqual("Sensor Base", items["sensor/homeassistant/sensor"]["name"])
         self.assertEqual(2, len(items))
 
     def test_remove_catalog_item_by_key_keeps_sibling_variants(self):
@@ -131,7 +127,6 @@ class ComponentCatalogTests(unittest.TestCase):
                 "name": "ESP32 Camera",
                 "path": "components/esp32_camera",
                 "id": "esp32_camera",
-                "available": True,
                 "schemaPath": "components/miscellaneous/esp32_camera.json",
             }
         )
@@ -155,11 +150,11 @@ class ComponentCatalogTests(unittest.TestCase):
         self.assertEqual(2, len(entries))
 
     def test_merge_runtime_catalog_preserves_duplicate_category_placements(self):
-        base = catalog_with_items([component_entry("Template Sensor", "sensor/template", available=False)])
+        base = catalog_with_items([component_entry("Template Sensor Base", "sensor/template")])
         runtime = catalog_with_items(
             [
-                component_entry("Template Sensor", "sensor/template", available=True),
-                component_entry("Template Sensor Duplicate", "sensor/template", available=True),
+                component_entry("Template Sensor Runtime", "sensor/template"),
+                component_entry("Template Sensor Duplicate Runtime", "sensor/template"),
             ]
         )
 
@@ -167,7 +162,7 @@ class ComponentCatalogTests(unittest.TestCase):
         items = catalog_mod.extract_catalog_items(merged)
 
         self.assertEqual(2, len(items))
-        self.assertTrue(all(item["available"] is True for item in items))
+        self.assertTrue(all(item["name"].endswith("Runtime") for item in items))
 
     def test_import_zip_is_idempotent_for_variants_with_same_id(self):
         base_catalog = catalog_with_items(
@@ -175,13 +170,11 @@ class ComponentCatalogTests(unittest.TestCase):
                 component_entry(
                     "Home Assistant",
                     "sensor/homeassistant",
-                    available=False,
                     catalog_key="sensor/homeassistant/home_assistant",
                 ),
                 component_entry(
                     "Sensor",
                     "sensor/homeassistant",
-                    available=False,
                     catalog_key="sensor/homeassistant/sensor",
                 ),
             ]
@@ -191,13 +184,11 @@ class ComponentCatalogTests(unittest.TestCase):
                 component_entry(
                     "Home Assistant",
                     "sensor/homeassistant",
-                    available=True,
                     catalog_key="sensor/homeassistant/home_assistant",
                 ),
                 component_entry(
                     "Sensor",
                     "sensor/homeassistant",
-                    available=True,
                     catalog_key="sensor/homeassistant/sensor",
                 ),
             ]
@@ -248,8 +239,8 @@ class ComponentCatalogTests(unittest.TestCase):
             config.COMPONENTS_BASE_LIST_PATH = original_base_list_path
 
     def test_import_zip_ignores_root_license_markdown(self):
-        base_catalog = catalog_with_items([component_entry("Template Sensor", "sensor/template", available=False)])
-        zip_catalog = catalog_with_items([component_entry("Template Sensor", "sensor/template", available=True)])
+        base_catalog = catalog_with_items([component_entry("Template Sensor", "sensor/template")])
+        zip_catalog = catalog_with_items([component_entry("Template Sensor", "sensor/template")])
         schema = {"id": "sensor.template", "domain": "sensor", "platform": "template", "fields": []}
         buffer = io.BytesIO()
         with zipfile.ZipFile(buffer, "w") as archive:

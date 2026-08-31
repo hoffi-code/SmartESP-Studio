@@ -255,14 +255,10 @@ def api_custom_components_create():
         return json_error("Invalid custom component key", "COMPONENTS_CUSTOM_KEY_INVALID", 400)
 
     component_id = requested_id or f"custom/{key}"
-    available = payload.get("available", True)
-    if not isinstance(available, bool):
-        return json_error("Invalid available flag", "COMPONENTS_AVAILABLE_INVALID", 400)
     entry = {
         "name": name,
         "path": f"components/{component_id}",
         "id": component_id,
-        "available": available,
         "schemaPath": f"components/{component_id}.json",
         "prefillConfig": {
             "name": name,
@@ -329,10 +325,6 @@ def api_custom_components_update(id_or_key):
     if not isinstance(custom_config, str):
         return json_error("custom_config must be a string", "COMPONENTS_CUSTOM_CONFIG_INVALID", 400)
 
-    available = payload.get("available", True)
-    if not isinstance(available, bool):
-        return json_error("Invalid available flag", "COMPONENTS_AVAILABLE_INVALID", 400)
-
     new_key = catalog.slugify_component_key(name)
     if not new_key:
         return json_error("Invalid custom component key", "COMPONENTS_CUSTOM_KEY_INVALID", 400)
@@ -368,7 +360,6 @@ def api_custom_components_update(id_or_key):
             "name": name,
             "path": f"components/{new_id}",
             "id": new_id,
-            "available": available,
             "schemaPath": f"components/{new_id}.json",
             "prefillConfig": {
                 "name": name,

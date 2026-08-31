@@ -45,7 +45,6 @@ describe("importYamlToProjectConfig - image: component + header comment", () => 
             name: "File",
             path: "components/image/file",
             id: "image/file",
-            available: true,
             schemaPath: "components/image/file.json"
           }
         ],
