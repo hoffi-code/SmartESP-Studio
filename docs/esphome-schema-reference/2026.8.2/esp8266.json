@@ -1,0 +1,293 @@
+{
+  "esp8266": {
+    "pin": {
+      "schema": {
+        "config_vars": {
+          "allow_other_uses": {
+            "key": "Optional",
+            "type": "boolean"
+          },
+          "id": {
+            "id_type": {
+              "class": "esphome::esp8266::ESP8266GPIOPin",
+              "parents": [
+                "InternalGPIOPin",
+                "GPIOPin"
+              ]
+            },
+            "key": "GeneratedID"
+          },
+          "inverted": {
+            "default": "False",
+            "key": "Optional",
+            "type": "boolean"
+          },
+          "mode": {
+            "default": "{}",
+            "key": "Optional",
+            "modes": [],
+            "schema": {
+              "config_vars": {
+                "analog": {
+                  "default": "False",
+                  "key": "Optional",
+                  "type": "boolean"
+                },
+                "input": {
+                  "default": "False",
+                  "key": "Optional",
+                  "type": "boolean"
+                },
+                "open_drain": {
+                  "default": "False",
+                  "key": "Optional",
+                  "type": "boolean"
+                },
+                "output": {
+                  "default": "False",
+                  "key": "Optional",
+                  "type": "boolean"
+                },
+                "pulldown": {
+                  "default": "False",
+                  "key": "Optional",
+                  "type": "boolean"
+                },
+                "pullup": {
+                  "default": "False",
+                  "key": "Optional",
+                  "type": "boolean"
+                }
+              }
+            },
+            "type": "pin"
+          },
+          "number": {
+            "key": "Required"
+          }
+        }
+      },
+      "type": "schema"
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "board": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "agruminolemon": {
+                  "docs": "Lifely Agrumino Lemon v4"
+                },
+                "d1_mini_lite": {
+                  "docs": "WeMos D1 mini Lite"
+                },
+                "d1_mini": {
+                  "docs": "WeMos D1 R2 and mini"
+                },
+                "d1_mini_pro": {
+                  "docs": "WeMos D1 mini Pro"
+                },
+                "d1": {
+                  "docs": "WEMOS D1 R1"
+                },
+                "eduinowifi": {
+                  "docs": "Schirmilabs Eduino WiFi"
+                },
+                "esp01_1m": {
+                  "docs": "Espressif Generic ESP8266 ESP-01 1M"
+                },
+                "esp01": {
+                  "docs": "Espressif Generic ESP8266 ESP-01 512k"
+                },
+                "esp07": {
+                  "docs": "Espressif Generic ESP8266 ESP-07 1MB"
+                },
+                "esp07s": {
+                  "docs": "Espressif Generic ESP8266 ESP-07S"
+                },
+                "esp12e": {
+                  "docs": "Espressif ESP8266 ESP-12E"
+                },
+                "esp210": {
+                  "docs": "SweetPea ESP-210"
+                },
+                "esp8285": {
+                  "docs": "Generic ESP8285 Module"
+                },
+                "espduino": {
+                  "docs": "ESPDuino (ESP-13 Module)"
+                },
+                "espectro": {
+                  "docs": "ESPectro Core"
+                },
+                "espino": {
+                  "docs": "ESPino"
+                },
+                "espinotee": {
+                  "docs": "ThaiEasyElec ESPino"
+                },
+                "espmxdevkit": {
+                  "docs": "ESP-Mx DevKit (ESP8285)"
+                },
+                "espresso_lite_v1": {
+                  "docs": "ESPresso Lite 1.0"
+                },
+                "espresso_lite_v2": {
+                  "docs": "ESPresso Lite 2.0"
+                },
+                "esp_wroom_02": {
+                  "docs": "ESP-WROOM-02"
+                },
+                "gen4iod": {
+                  "docs": "4D Systems gen4 IoD Range"
+                },
+                "heltec_wifi_kit_8": {
+                  "docs": "Heltec Wifi kit 8"
+                },
+                "huzzah": {
+                  "docs": "Adafruit HUZZAH ESP8266"
+                },
+                "inventone": {
+                  "docs": "Invent One"
+                },
+                "modwifi": {
+                  "docs": "Olimex MOD-WIFI-ESP8266(-DEV)"
+                },
+                "nodemcu": {
+                  "docs": "NodeMCU 0.9 (ESP-12 Module)"
+                },
+                "nodemcuv2": {
+                  "docs": "NodeMCU 1.0 (ESP-12E Module)"
+                },
+                "oak": {
+                  "docs": "DigiStump Oak"
+                },
+                "phoenix_v1": {
+                  "docs": "Phoenix 1.0"
+                },
+                "phoenix_v2": {
+                  "docs": "Phoenix 2.0"
+                },
+                "sonoff_basic": {
+                  "docs": "Sonoff Basic"
+                },
+                "sonoff_s20": {
+                  "docs": "Sonoff S20"
+                },
+                "sonoff_sv": {
+                  "docs": "Sonoff SV"
+                },
+                "sonoff_th": {
+                  "docs": "Sonoff TH"
+                },
+                "sparkfunBlynk": {
+                  "docs": "SparkFun Blynk Board"
+                },
+                "thingdev": {
+                  "docs": "SparkFun ESP8266 Thing Dev"
+                },
+                "thing": {
+                  "docs": "SparkFun ESP8266 Thing"
+                },
+                "wifiduino": {
+                  "docs": "WiFiduino"
+                },
+                "wifinfo": {
+                  "docs": "WifInfo"
+                },
+                "wifi_slot": {
+                  "docs": "WiFi Slot"
+                },
+                "wio_link": {
+                  "docs": "Wio Link"
+                },
+                "wio_node": {
+                  "docs": "Wio Node"
+                },
+                "xinabox_cw01": {
+                  "docs": "XinaBox CW01"
+                }
+              },
+              "docs": "**string**: The PlatformIO board ID that should be used. Choose the appropriate board from [this list](https://registry.platformio.org/platforms/platformio/espressif8266/boards) (the icon next to the name can be used to copy the board ID). *This only affects pin aliases, flash size and some internal settings*, if unsure choose a generic board from Espressif such as `esp01_1m`.\n\n*See also: [ESP8266 Platform](https://esphome.io/components/esp8266#configuration-variables)*"
+            },
+            "board_flash_mode": {
+              "default": "dout",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "qio": null,
+                "qout": null,
+                "dio": null,
+                "dout": null
+              },
+              "docs": "**string**: The SPI mode of the flash chip. One of `qio`, `qout`, `dio` and `dout`. Defaults to `dout` for compatibility with all chips. Note: on the next OTA update the actual flash mode is automatically detected and changed to the appropriate one.\n\n*See also: [ESP8266 Platform](https://esphome.io/components/esp8266#configuration-variables)*"
+            },
+            "early_pin_init": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Specifies whether pins should be initialised as early as possible to known values. Recommended value is `false` where switches are involved, as these will toggle when updating the firmware or when restarting the device. Defaults to `true`.\n\n*See also: [ESP8266 Platform](https://esphome.io/components/esp8266#configuration-variables)*"
+            },
+            "enable_full_printf": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Enable full `FILE*`-based printf support. By default, ESPHome wraps `printf()`, `vprintf()`, and `fprintf()` with lightweight stubs that use `vsnprintf()` + `fwrite()`, saving ~1.6 KB of flash. ESPHome logging writes directly to the UART via Arduino's `Serial`, not libc printf, so these functions are typically unused unless an external component calls them. Set to `true` only if an external component needs full `FILE*`-based printf. Defaults to `false`.\n\n*See also: [ESP8266 Platform](https://esphome.io/components/esp8266#configuration-variables)*"
+            },
+            "enable_scanf_float": {
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Enable float support for `scanf()`/`sscanf()`. By default, ESPHome removes the `-u _scanf_float` linker flag to save ~8 KB of flash. This means `sscanf()` with `%f` will silently fail to parse floating-point numbers. Nothing in ESPHome itself uses scanf; set to `true` only if you use `sscanf()` with `%f` in lambdas. Defaults to `false`.\n\n*See also: [ESP8266 Platform](https://esphome.io/components/esp8266#configuration-variables)*"
+            },
+            "enable_serial": {
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Force-enable the Arduino `Serial` object (UART0) for use in lambdas or external libraries. Most users will never need this option, as the `logger` and `uart` components automatically enable the required Serial objects. Only use this if you directly access `Serial` in a lambda and get a compilation error. Use the [UART component](https://esphome.io/components/uart) instead when possible, as it works across all platforms. Defaults to automatic detection.\n\n*See also: [ESP8266 Platform](https://esphome.io/components/esp8266#configuration-variables)*"
+            },
+            "enable_serial1": {
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Force-enable the Arduino `Serial1` object (UART1) for use in lambdas or external libraries. Most users will never need this option, as the `logger` and `uart` components automatically enable the required Serial objects. Only use this if you directly access `Serial1` in a lambda and get a compilation error. Use the [UART component](https://esphome.io/components/uart) instead when possible, as it works across all platforms. Defaults to automatic detection.\n\n*See also: [ESP8266 Platform](https://esphome.io/components/esp8266#configuration-variables)*"
+            },
+            "framework": {
+              "default": "{}",
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "platform_version": {
+                    "key": "Optional",
+                    "visibility": "yaml_only",
+                    "docs": "**string**: The version of the [platformio/espressif8266](https://github.com/platformio/platform-espressif8266/releases/) package to use.\n\n*See also: [ESP8266 Platform](https://esphome.io/components/esp8266#configuration-variables)*"
+                  },
+                  "source": {
+                    "key": "Optional",
+                    "type": "string",
+                    "visibility": "yaml_only",
+                    "docs": "**string**: The PlatformIO package or repository to use for the framework. This can be used to use a custom or patched version of the framework.\n\n*See also: [ESP8266 Platform](https://esphome.io/components/esp8266#configuration-variables)*"
+                  },
+                  "version": {
+                    "default": "recommended",
+                    "key": "Optional",
+                    "type": "string",
+                    "docs": "**string**: The base framework version number to use, from [esp8266 arduino releases](https://github.com/esp8266/Arduino/releases). Defaults to `recommended`. Additional values\n\n*See also: [ESP8266 Platform](https://esphome.io/components/esp8266#configuration-variables)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "Options for the underlying framework used by ESPHome.\n\n*See also: [ESP8266 Platform](https://esphome.io/components/esp8266#configuration-variables)*"
+            },
+            "restore_from_flash": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Whether to store some persistent preferences in flash memory. Defaults to `false`.\n\n*See also: [ESP8266 Platform](https://esphome.io/components/esp8266#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

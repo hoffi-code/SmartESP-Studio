@@ -1,0 +1,55 @@
+{
+  "bh1900nux.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "1"
+            },
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "72",
+              "key": "Optional"
+            },
+            "device_class": {
+              "default": "temperature"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "bh1900nux::BH1900NUXSensor",
+                "parents": [
+                  "sensor::Sensor",
+                  "EntityBase",
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              }
+            },
+            "state_class": {
+              "default": "measurement"
+            },
+            "unit_of_measurement": {
+              "default": "\u00b0C"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

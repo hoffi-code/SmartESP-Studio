@@ -1,0 +1,225 @@
+{
+  "pvvx_mithermometer.display": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "auto_clear_enabled": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Whether to automatically clear the display data before each lambda call, or to keep the existing display content (must overwrite explicitly, e.g., only on data change). Defaults to `true` if a lambda or pages are configured, false otherwise.\n\n*See also: [PVVX MiThermometer Display](https://esphome.io/components/display/pvvx_mithermometer#configuration-variables)*"
+            },
+            "disconnect_delay": {
+              "default": "5s",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The amount of time the BLE connection is maintained before being disconnected again. Defaults to `5s`.\n\n*See also: [PVVX MiThermometer Display](https://esphome.io/components/display/pvvx_mithermometer#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "pvvx_mithermometer::PVVXDisplay",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "ble_client::BLEClientNode"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [PVVX MiThermometer Display](https://esphome.io/components/display/pvvx_mithermometer#configuration-variables)*"
+            },
+            "time_id": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "time::RealTimeClock",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: ID of a [Time](https://esphome.io/components/time/). If set, the time will be synchronized with every connection.\n\n*See also: [PVVX MiThermometer Display](https://esphome.io/components/display/pvvx_mithermometer#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to transmit the display data. Defaults to `60s`.\n\n*See also: [PVVX MiThermometer Display](https://esphome.io/components/display/pvvx_mithermometer#configuration-variables)*"
+            },
+            "validity_period": {
+              "default": "5min",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_seconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The time periode for which the pvvx device should display the information. Defaults to `5min`.\n\n*See also: [PVVX MiThermometer Display](https://esphome.io/components/display/pvvx_mithermometer#configuration-variables)*"
+            },
+            "lambda": {
+              "key": "Optional",
+              "docs": "**[lambda](https://esphome.io/automations/templates#config-lambda)**: The lambda to use to define the information to be displayed. See [Rendering Lambda](https://esphome.io/components/display/pvvx_mithermometer#display-pvvx_mithermometer_lambda) for more information.\n\n*See also: [PVVX MiThermometer Display](https://esphome.io/components/display/pvvx_mithermometer#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "display.BASIC_DISPLAY_SCHEMA",
+            "ble_client.BLE_CLIENT_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "pvvx_mithermometer.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "battery_level": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "battery"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "%"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "battery_voltage": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "3"
+                  },
+                  "device_class": {
+                    "default": "voltage"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "V"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "humidity": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "humidity"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "%"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "id": {
+              "id_type": {
+                "class": "pvvx_mithermometer::PVVXMiThermometer",
+                "parents": [
+                  "ble_device_base::ESPBTDeviceListener",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "mac_address": {
+              "key": "Required"
+            },
+            "signal_strength": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "signal_strength"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "dBm"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "temperature": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA",
+            "ble_device_base.BLE_DEVICE_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

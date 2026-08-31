@@ -1,0 +1,63 @@
+{
+  "ft63x6.touchscreen": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "56",
+              "key": "Optional"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "ft63x6::FT63X6Touchscreen",
+                "parents": [
+                  "touchscreen::Touchscreen",
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually set the ID of this touchscreen.\n\n*See also: [FT63X6 Touchscreen Controller](https://esphome.io/components/touchscreen/ft63x6#configuration-variables)*"
+            },
+            "interrupt_pin": {
+              "internal": true,
+              "key": "Optional",
+              "modes": [
+                "input"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The touch detection pin.\n\n*See also: [FT63X6 Touchscreen Controller](https://esphome.io/components/touchscreen/ft63x6#configuration-variables)*"
+            },
+            "reset_pin": {
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The reset pin of the controller.\n\n*See also: [FT63X6 Touchscreen Controller](https://esphome.io/components/touchscreen/ft63x6#configuration-variables)*"
+            },
+            "threshold": {
+              "data_type": "uint8_t",
+              "key": "Optional",
+              "type": "integer"
+            }
+          },
+          "extends": [
+            "touchscreen.TOUCHSCREEN_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "ina2xx_spi.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "cs_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin"
+            },
+            "data_rate": {
+              "key": "Optional"
+            },
+            "id": {
+              "id_type": {
+                "class": "ina2xx_spi::INA2XXSPI",
+                "parents": [
+                  "ina2xx_base::INA2XX",
+                  "PollingComponent",
+                  "Component",
+                  "spi::SPIDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "model": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "INA229": null,
+                "INA239": null
+              }
+            },
+            "release_device": {
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "spi_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "spi::SPIComponent"
+            },
+            "spi_mode": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "MODE0": null,
+                "MODE1": null,
+                "MODE2": null,
+                "MODE3": null,
+                "0": null,
+                "1": null,
+                "2": null,
+                "3": null
+              }
+            }
+          },
+          "extends": [
+            "ina2xx_base.INA2XX_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

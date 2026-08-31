@@ -1,0 +1,66 @@
+{
+  "tca9548a": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "112",
+              "key": "Optional",
+              "docs": "**int**: The I\u00b2C address of the Multiplexer. Defaults to `0x70`.\n\n*See also: [TCA9548A I\u00b2C Multiplexer](https://esphome.io/components/tca9548a#configuration-variables)*"
+            },
+            "channels": {
+              "default": "[]",
+              "is_list": true,
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "bus_id": {
+                    "id_type": {
+                      "class": "tca9548a::TCA9548AChannel",
+                      "parents": [
+                        "i2c::I2CBus"
+                      ]
+                    },
+                    "key": "Required",
+                    "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id to use for this virtual I2C Bus.\n\n*See also: [TCA9548A I\u00b2C Multiplexer](https://esphome.io/components/tca9548a#configuration-variables)*"
+                  },
+                  "channel": {
+                    "key": "Required",
+                    "type": "integer",
+                    "docs": "The channel (0-7) to use for this virtual I2C Bus.\n\n*See also: [TCA9548A I\u00b2C Multiplexer](https://esphome.io/components/tca9548a#configuration-variables)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "The I\u00b2C Bus Channels\n\n*See also: [TCA9548A I\u00b2C Multiplexer](https://esphome.io/components/tca9548a#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus",
+              "docs": "The I\u00b2C Bus ID Defaults to `false`\n\n*See also: [TCA9548A I\u00b2C Multiplexer](https://esphome.io/components/tca9548a#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "tca9548a::TCA9548AComponent",
+                "parents": [
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id to use for this TCA9548A component.\n\n*See also: [TCA9548A I\u00b2C Multiplexer](https://esphome.io/components/tca9548a#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

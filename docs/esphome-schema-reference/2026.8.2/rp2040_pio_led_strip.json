@@ -1,0 +1,106 @@
+{
+  "rp2040_pio_led_strip.light": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "bit0_high": {
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The time to hold the data line high for a `0` bit.\n\n*See also: [RP2040 PIO LED Strip](https://esphome.io/components/light/rp2040_pio_led_strip#configuration-variables)*"
+            },
+            "bit0_low": {
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The time to hold the data line low for a `0` bit.\n\n*See also: [RP2040 PIO LED Strip](https://esphome.io/components/light/rp2040_pio_led_strip#configuration-variables)*"
+            },
+            "bit1_high": {
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The time to hold the data line high for a `1` bit.\n\n*See also: [RP2040 PIO LED Strip](https://esphome.io/components/light/rp2040_pio_led_strip#configuration-variables)*"
+            },
+            "bit1_low": {
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The time to hold the data line low for a `1` bit.\n\n*See also: [RP2040 PIO LED Strip](https://esphome.io/components/light/rp2040_pio_led_strip#configuration-variables)*"
+            },
+            "channel_colors": {
+              "key": "Required",
+              "docs": "**string**: The order in which the strip expects its color channels. List each of `R`, `G` and `B` exactly once, optionally with a single `W` in any position; for example `GRB`, `BGR`, `GRBW`, `WRGB` or `RWGB`. The value is case-insensitive. Including a `W` makes this a four channel RGBW strip.\n\n*See also: [RP2040 PIO LED Strip](https://esphome.io/components/light/rp2040_pio_led_strip#configuration-variables)*"
+            },
+            "chipset": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "WS2812": {
+                  "docs": null
+                },
+                "WS2812B": {
+                  "docs": null
+                },
+                "SK6812": {
+                  "docs": null
+                },
+                "SM16703": {
+                  "docs": null
+                }
+              },
+              "docs": "**enum**: The chipset to apply known timings from.\n\n*See also: [RP2040 PIO LED Strip](https://esphome.io/components/light/rp2040_pio_led_strip#configuration-variables)*"
+            },
+            "is_rgbw": {
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "num_leds": {
+              "data_type": "positive_not_null_int",
+              "key": "Required",
+              "type": "integer",
+              "docs": "**int**: The number of LEDs in the strip.\n\n*See also: [RP2040 PIO LED Strip](https://esphome.io/components/light/rp2040_pio_led_strip#configuration-variables)*"
+            },
+            "output_id": {
+              "id_type": {
+                "class": "rp2040_pio_led_strip::RP2040PIOLEDStripLightOutput",
+                "parents": [
+                  "light::AddressableLight",
+                  "light::LightOutput",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "pin": {
+              "internal": true,
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The pin for the data line of the light.\n\n*See also: [RP2040 PIO LED Strip](https://esphome.io/components/light/rp2040_pio_led_strip#configuration-variables)*"
+            },
+            "pio": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "0": null,
+                "1": null
+              },
+              "docs": "**int**: The PIO peripheral to use. If using multiple strips, you can use up to 4 strips per PIO. Must be one of `0` or `1`.\n\n*See also: [RP2040 PIO LED Strip](https://esphome.io/components/light/rp2040_pio_led_strip#configuration-variables)*"
+            },
+            "rgb_order": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "RGB": null,
+                "RBG": null,
+                "GRB": null,
+                "GBR": null,
+                "BGR": null,
+                "BRG": null
+              }
+            }
+          },
+          "extends": [
+            "light.ADDRESSABLE_LIGHT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,205 @@
+{
+  "valve": {
+    "action": {
+      "close": {
+        "schema": {
+          "extends": [
+            "valve.VALVE_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) closes the valve with the given ID when executed."
+      },
+      "control": {
+        "schema": {
+          "extends": [
+            "valve.VALVE_CONTROL_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) is a more generic version of the other valve actions and allows all valve attributes to be set."
+      },
+      "open": {
+        "schema": {
+          "extends": [
+            "valve.VALVE_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) opens the valve with the given ID when executed."
+      },
+      "stop": {
+        "schema": {
+          "extends": [
+            "valve.VALVE_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) stops the valve with the given ID when executed."
+      },
+      "toggle": {
+        "schema": {
+          "extends": [
+            "valve.VALVE_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) toggles the valve with the given ID when executed, cycling through the states close/stop/open/stop... This allows the valve to be controlled by a single push button."
+      }
+    },
+    "components": {
+      "template": {
+        "docs": "The `template` valve platform allows you to create simple valves out of just a few actions and a value lambda. Once defined, it will automatically appear in Home Assistant as a valve and can be controlled through the frontend.\n\n*See also: [Template Valve](https://esphome.io/components/valve/template)*"
+      }
+    },
+    "schemas": {
+      "VALVE_ACTION_SCHEMA": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "valve::Valve"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "VALVE_CONTROL_ACTION_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "valve::Valve",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The valve to control.\n\n*See also: [Valve Component](https://esphome.io/components/valve#valvecontrol-action)*"
+            },
+            "position": {
+              "key": "Optional",
+              "templatable": true,
+              "docs": "**float**: The valve position to set.\n\n*See also: [Valve Component](https://esphome.io/components/valve#valvecontrol-action)*"
+            },
+            "state": {
+              "key": "Optional",
+              "templatable": true,
+              "type": "enum",
+              "values": {
+                "OPEN": null,
+                "CLOSED": null
+              },
+              "docs": "**string**: The state to set the valve to - one of `OPEN` or `CLOSE`.\n\n*See also: [Valve Component](https://esphome.io/components/valve#valvecontrol-action)*"
+            },
+            "stop": {
+              "key": "Optional",
+              "templatable": true,
+              "type": "boolean",
+              "docs": "**boolean**: Whether to stop the valve.\n\n*See also: [Valve Component](https://esphome.io/components/valve#valvecontrol-action)*"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "_VALVE_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "device_class": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "": null,
+                "gas": null,
+                "water": null
+              },
+              "visibility": "advanced",
+              "docs": "**string**: The device class for the sensor. See [https://www.home-assistant.io/components/valve/](https://www.home-assistant.io/components/valve/) for a list of available options.\n\n*See also: [Valve Component](https://esphome.io/components/valve#base-valve-configuration)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "valve::Valve",
+                "parents": [
+                  "EntityBase"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**string**: Manually specify the ID for code generation. At least one of **id** and **name** must be specified.\n\n*See also: [Valve Component](https://esphome.io/components/valve#base-valve-configuration)*"
+            },
+            "mqtt_id": {
+              "id_type": {
+                "class": "mqtt::MQTTValveComponent",
+                "parents": [
+                  "mqtt::MQTTComponent",
+                  "Component"
+                ]
+              },
+              "key": "Optional"
+            },
+            "on_closed": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "on_open": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "position_command_topic": {
+              "key": "Optional",
+              "docs": "**string**: The topic to receive valve position commands on.\n\n*See also: [Valve Component](https://esphome.io/components/valve#base-valve-configuration)*"
+            },
+            "position_state_topic": {
+              "key": "Optional",
+              "docs": "**string**: The topic to publish valve position changes to.\n\n*See also: [Valve Component](https://esphome.io/components/valve#base-valve-configuration)*"
+            },
+            "web_server": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "sorting_group_id": {
+                    "key": "Optional",
+                    "type": "use_id",
+                    "use_id_type": "int"
+                  },
+                  "sorting_weight": {
+                    "key": "Optional"
+                  },
+                  "web_server_id": {
+                    "key": "Optional",
+                    "type": "use_id",
+                    "use_id_type": "web_server::WebServer"
+                  }
+                }
+              },
+              "type": "schema",
+              "visibility": "advanced"
+            },
+            "name": {
+              "key": "Optional",
+              "docs": "**string**: The name for the valve. At least one of **id** and **name** must be specified.\n\n*See also: [Valve Component](https://esphome.io/components/valve#base-valve-configuration)*"
+            },
+            "icon": {
+              "key": "Optional",
+              "docs": "**icon**: Manually set the icon to use for the valve in the frontend.\n\n*See also: [Valve Component](https://esphome.io/components/valve#base-valve-configuration)*"
+            },
+            "internal": {
+              "key": "Optional",
+              "docs": "**boolean**: Mark this component as internal. Internal components will not be exposed to the frontend (like Home Assistant). Only specifying an `id` without a `name` will implicitly set this to true.\n\n*See also: [Valve Component](https://esphome.io/components/valve#base-valve-configuration)*"
+            },
+            "disabled_by_default": {
+              "key": "Optional",
+              "docs": "**boolean**: If true, this entity should not be added to any client's frontend, (usually Home Assistant) without the user manually enabling it (via the Home Assistant UI). Defaults to `false`.\n\n*See also: [Valve Component](https://esphome.io/components/valve#base-valve-configuration)*"
+            },
+            "entity_category": {
+              "key": "Optional",
+              "docs": "**string**: The category of the entity. See [https://developers.home-assistant.io/docs/core/entity/#generic-properties](https://developers.home-assistant.io/docs/core/entity/#generic-properties) for a list of available options. Set to `\"\"` to remove the default entity category.\n\n*See also: [Valve Component](https://esphome.io/components/valve#base-valve-configuration)*"
+            }
+          },
+          "extends": [
+            "core.ENTITY_BASE_SCHEMA",
+            "core.MQTT_COMMAND_COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

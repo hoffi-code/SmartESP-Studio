@@ -1,0 +1,165 @@
+{
+  "text": {
+    "action": {
+      "set": {
+        "schema": {
+          "config_vars": {
+            "value": {
+              "key": "Required",
+              "templatable": true,
+              "type": "string",
+              "docs": "**string**: The value to set the text to.\n\n*See also: [Text Component](https://esphome.io/components/text#textset-action)*"
+            }
+          },
+          "extends": [
+            "text.OPERATION_BASE_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This is an [Action](https://esphome.io/automations/actions#all-actions) for setting a text state."
+      }
+    },
+    "components": {
+      "copy": {
+        "docs": "None\n\n*See also: [Copy Component](https://esphome.io/components/copy#copy-text)*"
+      },
+      "lvgl": {},
+      "template": {
+        "docs": "The `template` text platform allows you to create a text with templated values using [lambdas](https://esphome.io/automations/templates#config-lambda).\n\n*See also: [Template Text](https://esphome.io/components/text/template)*"
+      }
+    },
+    "schemas": {
+      "OPERATION_BASE_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "text::Text",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the text to set.\n\n*See also: [Text Component](https://esphome.io/components/text#textset-action)*"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "_TEXT_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "text::Text",
+                "parents": [
+                  "EntityBase"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**string**: Manually specify the ID for code generation. At least one of **id** and **name** must be specified.\n\n*See also: [Text Component](https://esphome.io/components/text#optional-variables)*"
+            },
+            "mode": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "TEXT": null,
+                "PASSWORD": null
+              },
+              "docs": "**string**: Defines how the text should be displayed in the frontend. One of `text` or `password`.\n\n*See also: [Text Component](https://esphome.io/components/text#optional-variables)*"
+            },
+            "mqtt_id": {
+              "id_type": {
+                "class": "mqtt::MQTTTextComponent",
+                "parents": [
+                  "mqtt::MQTTComponent",
+                  "Component"
+                ]
+              },
+              "key": "Optional"
+            },
+            "on_value": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform when a new value is published. See [`on_value`](https://esphome.io/components/text#text-on_value).\n\n*See also: [Text Component](https://esphome.io/components/text#optional-variables)*"
+            },
+            "web_server": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "sorting_group_id": {
+                    "key": "Optional",
+                    "type": "use_id",
+                    "use_id_type": "int"
+                  },
+                  "sorting_weight": {
+                    "key": "Optional"
+                  },
+                  "web_server_id": {
+                    "key": "Optional",
+                    "type": "use_id",
+                    "use_id_type": "web_server::WebServer"
+                  }
+                }
+              },
+              "type": "schema",
+              "visibility": "advanced"
+            },
+            "name": {
+              "key": "Required",
+              "docs": "**string**: The name for the text.\n\n*See also: [Text Component](https://esphome.io/components/text#optional-variables)*"
+            },
+            "icon": {
+              "key": "Optional",
+              "docs": "**icon**: Manually set the icon to use for the text in the frontend.\n\n*See also: [Text Component](https://esphome.io/components/text#optional-variables)*"
+            },
+            "internal": {
+              "key": "Optional",
+              "docs": "**boolean**: Mark this component as internal. Internal components will not be exposed to the frontend (like Home Assistant). Only specifying an `id` without a `name` will implicitly set this to true.\n\n*See also: [Text Component](https://esphome.io/components/text#optional-variables)*"
+            },
+            "disabled_by_default": {
+              "key": "Optional",
+              "docs": "**boolean**: If true, then this entity should not be added to any client's frontend, (usually Home Assistant) without the user manually enabling it (via the Home Assistant UI). Defaults to `false`.\n\n*See also: [Text Component](https://esphome.io/components/text#optional-variables)*"
+            },
+            "entity_category": {
+              "key": "Optional",
+              "docs": "**string**: The category of the entity. See [https://developers.home-assistant.io/docs/core/entity/#generic-properties](https://developers.home-assistant.io/docs/core/entity/#generic-properties) for a list of available options. Set to `\"\"` to remove the default entity category.\n\n*See also: [Text Component](https://esphome.io/components/text#optional-variables)*"
+            }
+          },
+          "extends": [
+            "core.ENTITY_BASE_SCHEMA",
+            "core.MQTT_COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "text.text_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "text::TextTextSensor",
+                "parents": [
+                  "text_sensor::TextSensor",
+                  "EntityBase",
+                  "Component"
+                ]
+              }
+            },
+            "source_id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "text::Text",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The source text to observe.\n\n*See also: [Text Text Sensor](https://esphome.io/components/text_sensor/text#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "text_sensor._TEXT_SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

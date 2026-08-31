@@ -1,0 +1,104 @@
+{
+  "modbus": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "type": "typed",
+        "typed_key": "role",
+        "types": {
+          "client": {
+            "config_vars": {
+              "flow_control_pin": {
+                "key": "Optional",
+                "modes": [
+                  "output"
+                ],
+                "schema": true,
+                "type": "pin",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The pin used to switch flow control. This is useful for RS485 transceivers that do not have automatic flow control switching, like the common MAX485. If your UART supports `flow_control_pin`, you should configure this in the `uart` component, not in the `modbus` component.\n\n*See also: [Modbus Component](https://esphome.io/components/modbus#configuration-variables)*"
+              },
+              "id": {
+                "id_type": {
+                  "class": "modbus::ModbusClientHub",
+                  "parents": [
+                    "modbus::Modbus",
+                    "Component",
+                    "uart::UARTDevice"
+                  ]
+                },
+                "key": "GeneratedID",
+                "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [Modbus Component](https://esphome.io/components/modbus#configuration-variables)*"
+              },
+              "send_wait_time": {
+                "default": "2000ms",
+                "key": "Optional",
+                "schema": {
+                  "extends": [
+                    "core.positive_time_period_milliseconds"
+                  ]
+                },
+                "type": "schema",
+                "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: Time in milliseconds before the next ModBUS command is sent when an answer from a previous command has not yet started (i.e. when to timeout and assume no response is coming). Defaults to 2000 ms. Set this value to the maximum time required for the slowest device on the bus to begin responding (time to first byte). If a device starts responding within this time, the next command will be queued and sent after the response is finished, no matter how long the response. This option is only valid when the `role` is `client`.\n\n*See also: [Modbus Component](https://esphome.io/components/modbus#configuration-variables)*"
+              },
+              "turnaround_time": {
+                "default": "600ms",
+                "key": "Optional",
+                "schema": {
+                  "extends": [
+                    "core.positive_time_period_milliseconds"
+                  ]
+                },
+                "type": "schema",
+                "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: Time in milliseconds before the next ModBUS command is sent after last response is received. This interval allows other devices on the bus time to process messages. Defaults to 600 ms. This value is ideally set to the maximum time required for the slowest device on the bus to process a message and be ready to process another. Note that all devices will receive all messages and will require time to process them even if they don't need to reply. If devices don't respond sometimes, it can help to increase this value. This option is only valid when the `role` is `client`.\n\n*See also: [Modbus Component](https://esphome.io/components/modbus#configuration-variables)*"
+              },
+              "uart_id": {
+                "key": "GeneratedID",
+                "type": "use_id",
+                "use_id_type": "uart::UARTComponent",
+                "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the [UART Component](https://esphome.io/components/uart) if you want to use multiple UART buses.\n\n*See also: [Modbus Component](https://esphome.io/components/modbus#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "core.COMPONENT_SCHEMA"
+            ]
+          },
+          "server": {
+            "config_vars": {
+              "flow_control_pin": {
+                "key": "Optional",
+                "modes": [
+                  "output"
+                ],
+                "schema": true,
+                "type": "pin",
+                "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The pin used to switch flow control. This is useful for RS485 transceivers that do not have automatic flow control switching, like the common MAX485. If your UART supports `flow_control_pin`, you should configure this in the `uart` component, not in the `modbus` component.\n\n*See also: [Modbus Component](https://esphome.io/components/modbus#configuration-variables)*"
+              },
+              "id": {
+                "id_type": {
+                  "class": "modbus::ModbusServerHub",
+                  "parents": [
+                    "modbus::Modbus",
+                    "Component",
+                    "uart::UARTDevice"
+                  ]
+                },
+                "key": "GeneratedID",
+                "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [Modbus Component](https://esphome.io/components/modbus#configuration-variables)*"
+              },
+              "uart_id": {
+                "key": "GeneratedID",
+                "type": "use_id",
+                "use_id_type": "uart::UARTComponent",
+                "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the [UART Component](https://esphome.io/components/uart) if you want to use multiple UART buses.\n\n*See also: [Modbus Component](https://esphome.io/components/modbus#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "core.COMPONENT_SCHEMA"
+            ]
+          }
+        },
+        "docs": "The role of this component, `client` or `server`. Defaults to `client`."
+      }
+    }
+  }
+}

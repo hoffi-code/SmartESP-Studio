@@ -1,0 +1,159 @@
+{
+  "hdc302x": {
+    "action": {
+      "heater_off": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "hdc302x::HDC302XComponent"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) disables the integrated heater on the sensor with the given ID. After turning off the heater, allow several minutes for the sensor to cool down before expecting accurate readings."
+      },
+      "heater_on": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "duration": {
+              "default": "5s",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "templatable": true,
+              "type": "schema"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "hdc302x::HDC302XComponent"
+            },
+            "power": {
+              "default": "QUARTER",
+              "key": "Optional",
+              "templatable": true
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) enables the integrated heater on the sensor with the given ID. The heater can be used to remove condensation from the humidity sensor or to verify sensor functionality."
+      }
+    }
+  },
+  "hdc302x.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "68",
+              "key": "Optional",
+              "docs": "**int**: Manually specify the I\u00b2C address of the sensor. Defaults to `0x44`. Supported addresses are `0x44` through `0x47`.\n\n*See also: [HDC302x Temperature and Humidity Sensor](https://esphome.io/components/sensor/hdc302x#configuration-variables)*"
+            },
+            "humidity": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "humidity"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "%"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the humidity sensor.\n\n*See also: [HDC302x Temperature and Humidity Sensor](https://esphome.io/components/sensor/hdc302x#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "hdc302x::HDC302XComponent",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "power_mode": {
+              "default": "HIGH_ACCURACY",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "HIGH_ACCURACY": {
+                  "docs": "Default"
+                },
+                "BALANCED": {
+                  "docs": "Balance between accuracy and power usage."
+                },
+                "LOW_POWER": {
+                  "docs": "Lower power usage, faster, less accurate."
+                },
+                "ULTRA_LOW_POWER": {
+                  "docs": "Lowest power usage, fastest, least accurate."
+                }
+              },
+              "docs": "**enum**: The power mode used when triggering temperature and humidity measurements. This affects measurement accuracy and sensor power usage.\n\n*See also: [HDC302x Temperature and Humidity Sensor](https://esphome.io/components/sensor/hdc302x#configuration-variables)*"
+            },
+            "temperature": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the temperature sensor.\n\n*See also: [HDC302x Temperature and Humidity Sensor](https://esphome.io/components/sensor/hdc302x#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`.\n\n*See also: [HDC302x Temperature and Humidity Sensor](https://esphome.io/components/sensor/hdc302x#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

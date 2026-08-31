@@ -1,0 +1,49 @@
+{
+  "audio_adc": {
+    "action": {
+      "set_mic_gain": {
+        "schema": {
+          "extends": [
+            "audio_adc.SET_MIC_GAIN_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action sets the (microphone) gain of the ADC."
+      }
+    },
+    "components": {
+      "es7210": {
+        "dependencies": [
+          "i2c"
+        ],
+        "docs": "The `es7210` platform allows your ESPHome devices to use the ES7210 high performance four channel audio ADC ([datasheet](http://www.everest-semi.com/pdf/ES7210%20PB.pdf)). This allows attached microphones to be used as a microphone input via [I2S Audio](https://esphome.io/components/microphone/i2s_audio/).\n\n*See also: [ES7210](https://esphome.io/components/audio_adc/es7210)*"
+      },
+      "es7243e": {
+        "dependencies": [
+          "i2c"
+        ],
+        "docs": "The `es7243e` platform allows your ESPHome devices to use the ES7243E high performance four channel audio ADC ([datasheet](https://www.lcsc.com/datasheet/lcsc_datasheet_2410121611_Everest-semi-Everest-Semiconductor-ES7243E_C2929446.pdf)). This allows attached microphones to be used as a microphone input via [I2S Audio](https://esphome.io/components/microphone/i2s_audio/).\n\n*See also: [ES7243E](https://esphome.io/components/audio_adc/es7243e)*"
+      }
+    },
+    "schemas": {
+      "SET_MIC_GAIN_ACTION_SCHEMA": {
+        "maybe": "mic_gain",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "audio_adc::AudioAdc",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the `audio_adc` platform.\n\n*See also: [Audio ADC Core](https://esphome.io/components/audio_adc#audio_adcset_mic_gain-action)*"
+            },
+            "mic_gain": {
+              "key": "Required",
+              "templatable": true
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

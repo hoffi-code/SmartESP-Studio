@@ -1,0 +1,237 @@
+{
+  "ltr390.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "83",
+              "key": "Optional",
+              "docs": "**int**: Manually specify the I\u00b2C address of the sensor. Default is `0x53`.\n\n*See also: [LTR390 UV and Ambient Light Sensor](https://esphome.io/components/sensor/ltr390#configuration-variables)*"
+            },
+            "ambient_light": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": ""
+                  },
+                  "icon": {
+                    "default": "mdi:brightness-5"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "#"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Sensor counts for the Ambient light sensor (#). All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [LTR390 UV and Ambient Light Sensor](https://esphome.io/components/sensor/ltr390#configuration-variables)*"
+            },
+            "gain": {
+              "default": "X18",
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "ambient_light": {
+                    "key": "Required",
+                    "type": "enum",
+                    "values": {
+                      "X1": null,
+                      "X3": null,
+                      "X6": null,
+                      "X9": null,
+                      "X18": null
+                    }
+                  },
+                  "uv": {
+                    "key": "Required",
+                    "type": "enum",
+                    "values": {
+                      "X1": null,
+                      "X3": null,
+                      "X6": null,
+                      "X9": null,
+                      "X18": null
+                    }
+                  }
+                }
+              },
+              "type": "schema",
+              "values": {
+                "X1": null,
+                "X18": null,
+                "X3": null,
+                "X6": null,
+                "X9": null
+              },
+              "docs": "**string**: Adjusts the sensitivity of the sensor. A larger value means higher sensitivity. Default is `\"X18\"`, see table below for options.\n\n*See also: [LTR390 UV and Ambient Light Sensor](https://esphome.io/components/sensor/ltr390#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "ltr390::LTR390Component",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "light": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "illuminance"
+                  },
+                  "icon": {
+                    "default": "mdi:brightness-5"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "lx"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Lux of ambient light (lx). All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [LTR390 UV and Ambient Light Sensor](https://esphome.io/components/sensor/ltr390#configuration-variables)*"
+            },
+            "resolution": {
+              "default": "20",
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "ambient_light": {
+                    "key": "Required",
+                    "type": "enum",
+                    "values": {
+                      "20": null,
+                      "19": null,
+                      "18": null,
+                      "17": null,
+                      "16": null,
+                      "13": null
+                    }
+                  },
+                  "uv": {
+                    "key": "Required",
+                    "type": "enum",
+                    "values": {
+                      "20": null,
+                      "19": null,
+                      "18": null,
+                      "17": null,
+                      "16": null,
+                      "13": null
+                    }
+                  }
+                }
+              },
+              "type": "schema",
+              "values": {
+                "13": null,
+                "16": null,
+                "17": null,
+                "18": null,
+                "19": null,
+                "20": null
+              },
+              "docs": "**int**: ADC resolution. Higher resolutions require longer sensor integration times. Default is `20`, see table below for options.\n\n*See also: [LTR390 UV and Ambient Light Sensor](https://esphome.io/components/sensor/ltr390#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`. It is recommended that the update interval is at least 1 second since updates can take up to 800ms when using a high resolution value.\n\n*See also: [LTR390 UV and Ambient Light Sensor](https://esphome.io/components/sensor/ltr390#configuration-variables)*"
+            },
+            "uv": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": ""
+                  },
+                  "icon": {
+                    "default": "mdi:brightness-5"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "#"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Sensor counts for the UV sensor (#). All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [LTR390 UV and Ambient Light Sensor](https://esphome.io/components/sensor/ltr390#configuration-variables)*"
+            },
+            "uv_index": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "5"
+                  },
+                  "device_class": {
+                    "default": ""
+                  },
+                  "icon": {
+                    "default": "mdi:brightness-5"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "UVI"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "UV index (UVI). All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [LTR390 UV and Ambient Light Sensor](https://esphome.io/components/sensor/ltr390#configuration-variables)*"
+            },
+            "window_correction_factor": {
+              "default": "1.0",
+              "key": "Optional",
+              "docs": "**float**: Window correction factor. Use larger values when using under tinted windows. Default is `1.0`, must be `>= 1.0`.\n\n*See also: [LTR390 UV and Ambient Light Sensor](https://esphome.io/components/sensor/ltr390#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

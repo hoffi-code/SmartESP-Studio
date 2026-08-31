@@ -1,0 +1,96 @@
+{
+  "gt911.binary_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "gt911_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "gt911::GT911Touchscreen",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the touchscreen.\n\n*See also: [gt911 Touch Screen Controller](https://esphome.io/components/touchscreen/gt911#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "gt911::GT911Button",
+                "parents": [
+                  "binary_sensor::BinarySensor",
+                  "EntityBase",
+                  "Component",
+                  "gt911::GT911ButtonListener",
+                  "Parented<gt911::GT911Touchscreen>",
+                  "Parented"
+                ]
+              }
+            },
+            "index": {
+              "default": "0",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Internal index of the touch button, between 0 and 3. The default is 0.\n\n*See also: [gt911 Touch Screen Controller](https://esphome.io/components/touchscreen/gt911#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "binary_sensor._BINARY_SENSOR_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "gt911.touchscreen": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "93",
+              "key": "Optional"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "gt911::GT911Touchscreen",
+                "parents": [
+                  "touchscreen::Touchscreen",
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually set the ID of this touchscreen.\n\n*See also: [gt911 Touch Screen Controller](https://esphome.io/components/touchscreen/gt911#configuration-variables)*"
+            },
+            "interrupt_pin": {
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The touch detection pin if run to an on-MCU pin.\n\n*See also: [gt911 Touch Screen Controller](https://esphome.io/components/touchscreen/gt911#configuration-variables)*"
+            },
+            "reset_pin": {
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The reset pin.\n\n*See also: [gt911 Touch Screen Controller](https://esphome.io/components/touchscreen/gt911#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "touchscreen.TOUCHSCREEN_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

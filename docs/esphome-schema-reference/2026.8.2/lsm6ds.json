@@ -1,0 +1,140 @@
+{
+  "lsm6ds.motion": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accelerometer_odr": {
+              "default": "104HZ",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "OFF": null,
+                "12_5HZ": null,
+                "26HZ": null,
+                "52HZ": null,
+                "104HZ": null,
+                "208HZ": null,
+                "416HZ": null,
+                "833HZ": null,
+                "1666HZ": null,
+                "3332HZ": null,
+                "6664HZ": null
+              },
+              "docs": "**string**: The output data rate of the accelerometer. One of `OFF`, `12_5HZ`, `26HZ`, `52HZ`, `104HZ`, `208HZ`, `416HZ`, `833HZ`, `1666HZ`, `3332HZ`, `6664HZ`. Defaults to `104HZ`.\n\n*See also: [LSM6DS Accelerometer/Gyroscope Sensor](https://esphome.io/components/motion/lsm6ds#configuration-variables)*"
+            },
+            "accelerometer_range": {
+              "default": "4G",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "2G": null,
+                "4G": null,
+                "8G": null,
+                "16G": null
+              },
+              "docs": "**string**: The full-scale range of the accelerometer. One of `2G`, `4G`, `8G`, `16G`. Defaults to `4G`.\n\n*See also: [LSM6DS Accelerometer/Gyroscope Sensor](https://esphome.io/components/motion/lsm6ds#configuration-variables)*"
+            },
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "106",
+              "key": "Optional",
+              "docs": "**int**: Manually specify the I\u00b2C address of the sensor. Defaults to `0x6A`, on some boards it may need to be set to `0x6B`.\n\n*See also: [LSM6DS Accelerometer/Gyroscope Sensor](https://esphome.io/components/motion/lsm6ds#configuration-variables)*"
+            },
+            "gyroscope_odr": {
+              "default": "208HZ",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "OFF": null,
+                "12_5HZ": null,
+                "26HZ": null,
+                "52HZ": null,
+                "104HZ": null,
+                "208HZ": null,
+                "416HZ": null,
+                "833HZ": null,
+                "1666HZ": null,
+                "3332HZ": null,
+                "6664HZ": null
+              },
+              "docs": "**string**: The output data rate of the gyroscope. One of `OFF`, `12_5HZ`, `26HZ`, `52HZ`, `104HZ`, `208HZ`, `416HZ`, `833HZ`, `1666HZ`, `3332HZ`, `6664HZ`. Defaults to `208HZ`.\n\n*See also: [LSM6DS Accelerometer/Gyroscope Sensor](https://esphome.io/components/motion/lsm6ds#configuration-variables)*"
+            },
+            "gyroscope_range": {
+              "default": "2000DPS",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "125DPS": null,
+                "250DPS": null,
+                "500DPS": null,
+                "1000DPS": null,
+                "2000DPS": null
+              },
+              "docs": "**string**: The full-scale range of the gyroscope. One of `125DPS`, `250DPS`, `500DPS`, `1000DPS`, `2000DPS`. Defaults to `2000DPS`.\n\n*See also: [LSM6DS Accelerometer/Gyroscope Sensor](https://esphome.io/components/motion/lsm6ds#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "lsm6ds::LSM6DSComponent",
+                "parents": [
+                  "motion::MotionComponent",
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            }
+          },
+          "extends": [
+            "motion._CONFIG_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "lsm6ds.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "2"
+            },
+            "device_class": {
+              "default": "temperature"
+            },
+            "icon": {
+              "default": "mdi:thermometer"
+            },
+            "lsm6ds_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "lsm6ds::LSM6DSComponent"
+            },
+            "state_class": {
+              "default": "measurement"
+            },
+            "type": {
+              "key": "Optional",
+              "docs": "**string**: Must be set to `temperature`, or simply omitted.\n\n*See also: [LSM6DS Temperature Sensor](https://esphome.io/components/sensor/lsm6ds#configuration-variables)*"
+            },
+            "unit_of_measurement": {
+              "default": "\u00b0C"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

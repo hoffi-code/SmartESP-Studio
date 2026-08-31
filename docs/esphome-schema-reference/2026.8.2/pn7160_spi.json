@@ -1,0 +1,65 @@
+{
+  "pn7160_spi": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "cs_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin connected to the PN7160's `NSS` (chip select) line.\n\n*See also: [PN7160 NFC](https://esphome.io/components/pn7160#configuration-variables)*"
+            },
+            "data_rate": {
+              "key": "Optional"
+            },
+            "id": {
+              "id_type": {
+                "class": "pn7160_spi::PN7160Spi",
+                "parents": [
+                  "pn7160::PN7160",
+                  "nfc::Nfcc",
+                  "Component",
+                  "spi::SPIDevice"
+                ]
+              },
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID for this component.\n\n*See also: [PN7160 NFC](https://esphome.io/components/pn7160#configuration-variables)*"
+            },
+            "release_device": {
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "spi_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "spi::SPIComponent",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the [SPI Component](https://esphome.io/components/spi) if you want to use multiple SPI buses.\n\n*See also: [PN7160 NFC](https://esphome.io/components/pn7160#configuration-variables)*"
+            },
+            "spi_mode": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "MODE0": null,
+                "MODE1": null,
+                "MODE2": null,
+                "MODE3": null,
+                "0": null,
+                "1": null,
+                "2": null,
+                "3": null
+              }
+            }
+          },
+          "extends": [
+            "pn7160.PN7160_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

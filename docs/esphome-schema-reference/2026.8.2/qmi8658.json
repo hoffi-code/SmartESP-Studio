@@ -1,0 +1,142 @@
+{
+  "qmi8658": {
+    "schemas": {
+      "CONFIG_SCHEMA": {}
+    }
+  },
+  "qmi8658.motion": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accelerometer_odr": {
+              "default": "1000HZ",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "31_25HZ": null,
+                "62_5HZ": null,
+                "125HZ": null,
+                "250HZ": null,
+                "500HZ": null,
+                "1000HZ": null,
+                "2000HZ": null,
+                "4000HZ": null,
+                "8000HZ": null
+              }
+            },
+            "accelerometer_range": {
+              "default": "4G",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "2G": null,
+                "4G": null,
+                "8G": null,
+                "16G": null
+              }
+            },
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "107",
+              "key": "Optional"
+            },
+            "gyroscope_odr": {
+              "default": "1000HZ",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "31_25HZ": null,
+                "62_5HZ": null,
+                "125HZ": null,
+                "250HZ": null,
+                "500HZ": null,
+                "1000HZ": null,
+                "2000HZ": null,
+                "4000HZ": null,
+                "8000HZ": null
+              }
+            },
+            "gyroscope_range": {
+              "default": "2048DPS",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "16DPS": null,
+                "32DPS": null,
+                "64DPS": null,
+                "128DPS": null,
+                "256DPS": null,
+                "512DPS": null,
+                "1024DPS": null,
+                "2048DPS": null
+              }
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "qmi8658::QMI8658Component",
+                "parents": [
+                  "motion::MotionComponent",
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            }
+          },
+          "extends": [
+            "motion._CONFIG_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "qmi8658.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "2"
+            },
+            "device_class": {
+              "default": "temperature"
+            },
+            "icon": {
+              "default": "mdi:thermometer"
+            },
+            "qmi8658_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "qmi8658::QMI8658Component"
+            },
+            "state_class": {
+              "default": "measurement"
+            },
+            "type": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "temperature": null
+              }
+            },
+            "unit_of_measurement": {
+              "default": "\u00b0C"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,187 @@
+{
+  "rf_bridge": {
+    "action": {
+      "beep": {
+        "schema": {
+          "config_vars": {
+            "duration": {
+              "data_type": "uint16_t",
+              "key": "Required",
+              "templatable": true,
+              "type": "integer"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "rf_bridge::RFBridgeComponent"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Activate the internal buzzer to make a beep."
+      },
+      "learn": {
+        "schema": {
+          "extends": [
+            "rf_bridge.RFBRIDGE_ID_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Tell the RF Bridge to learn new protocol timings using this action in automations. A new code with timings will be returned to [`on_code_received` Trigger](https://esphome.io/components/rf_bridge#rf_bridge-on_code_received)"
+      },
+      "send_advanced_code": {
+        "schema": {
+          "config_vars": {
+            "code": {
+              "key": "Required",
+              "templatable": true,
+              "type": "string"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "rf_bridge::RFBridgeComponent"
+            },
+            "length": {
+              "data_type": "hex_uint8_t",
+              "key": "Required",
+              "templatable": true
+            },
+            "protocol": {
+              "data_type": "hex_uint8_t",
+              "key": "Required",
+              "templatable": true
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Send an RF code using this action in automations."
+      },
+      "send_code": {
+        "schema": {
+          "config_vars": {
+            "code": {
+              "data_type": "hex_uint32_t",
+              "key": "Required",
+              "templatable": true
+            },
+            "high": {
+              "data_type": "hex_uint16_t",
+              "key": "Required",
+              "templatable": true
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "rf_bridge::RFBridgeComponent"
+            },
+            "low": {
+              "data_type": "hex_uint16_t",
+              "key": "Required",
+              "templatable": true
+            },
+            "sync": {
+              "data_type": "hex_uint16_t",
+              "key": "Required",
+              "templatable": true
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Send a standard (0xA5) RF code using this action in automations."
+      },
+      "send_raw": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "rf_bridge::RFBridgeComponent"
+            },
+            "raw": {
+              "key": "Required",
+              "templatable": true,
+              "type": "string"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Send a raw command to the onboard radio chip. The OEM RF firmware is able to raw send only standard signals (usually short), for other signals (B0 transmit), flashing the RF chip with Portisch or Mightymos firmware is needed."
+      },
+      "start_advanced_sniffing": {
+        "schema": {
+          "extends": [
+            "rf_bridge.RFBRIDGE_ID_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Tell the RF Bridge to listen for the advanced/extra protocols defined in the portisch firmware. The decoded codes with length and protocol will be returned to [`on_advanced_code_received` Trigger](https://esphome.io/components/rf_bridge#rf_bridge-on_advanced_code_received)"
+      },
+      "start_bucket_sniffing": {
+        "schema": {
+          "extends": [
+            "rf_bridge.RFBRIDGE_ID_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Tell the RF Bridge to dump raw sniffing data. Useful for getting codes for unsupported protocols. The raw data will be available in the log and can later be used with [`rf_bridge.send_raw` Action](https://esphome.io/components/rf_bridge#rf_bridge-send_raw-action) action."
+      },
+      "stop_advanced_sniffing": {
+        "schema": {
+          "extends": [
+            "rf_bridge.RFBRIDGE_ID_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Tell the RF Bridge to stop listening for the advanced/extra protocols defined in the portisch firmware."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "rf_bridge::RFBridgeComponent",
+                "parents": [
+                  "Component",
+                  "uart::UARTDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "on_advanced_code_received": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "on_code_received": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "uart_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "uart::UARTComponent"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "RFBRIDGE_ID_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "rf_bridge::RFBridgeComponent"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,486 @@
+{
+  "thermostat.climate": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "auto_mode": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action to call when the climate device is placed into \"auto\" mode (it may both cool and heat as required). This mode is different from `heat_cool_mode` (above) in that it takes control of the set points away from the user; it's generally intended for exclusive use by automations.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "away_config": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "default_target_temperature_high": {
+                    "key": "Optional"
+                  },
+                  "default_target_temperature_low": {
+                    "key": "Optional"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "cool_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action to call when the climate device should enter cooling mode to decrease the current temperature.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "cool_deadband": {
+              "default": "0.5",
+              "key": "Optional",
+              "docs": "**float**: The minimum temperature differential (temperature above the set point) before calling the cooling [action](https://esphome.io/automations/actions#all-actions). Defaults to 0.5 \u00b0C.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "cool_mode": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action to call when the climate device is placed into cool mode (it may cool as required, but not heat).\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "cool_overrun": {
+              "default": "0.5",
+              "key": "Optional",
+              "docs": "**float**: The minimum temperature differential (cooling beyond the set point) before calling the idle [action](https://esphome.io/automations/actions#all-actions). Defaults to 0.5 \u00b0C.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "default_mode": {
+              "key": "Optional"
+            },
+            "default_preset": {
+              "key": "Optional",
+              "type": "string",
+              "docs": "**string**: The name of the preset to use by default. Must match a preset as per [preset](https://esphome.io/components/climate/thermostat#thermostat-preset).\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "default_target_temperature_high": {
+              "key": "Optional"
+            },
+            "default_target_temperature_low": {
+              "key": "Optional"
+            },
+            "dry_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action to call when the climate device should perform its drying (dehumidification) action. The thermostat controller does not trigger this action; it is invoked by `dry_mode` (see below).\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "dry_mode": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action to call when the climate device is placed into dry mode (for dehumidification).\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "fan_mode_auto_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action to call when the fan should be set to \"auto\" mode (the fan is controlled by the climate control system as required).\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "fan_mode_diffuse_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action to call when the fan should direct its airflow over a broad area.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "fan_mode_focus_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action to call when the fan should direct its airflow at a specific area.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "fan_mode_high_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action to call when the fan should run at its maximum speed.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "fan_mode_low_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action to call when the fan should run at its minimum speed.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "fan_mode_medium_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action to call when the fan should run at an intermediate speed.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "fan_mode_middle_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action to call when the fan should direct its airflow at an intermediate area.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "fan_mode_off_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action to call when the fan should never run.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "fan_mode_on_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action to call when the fan should run continuously.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "fan_mode_quiet_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action to call when the fan should run at quiet speed.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "fan_only_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action to call when the climate device should activate its fan only (but does not heat or cool). When `fan_only_cooling` is set to `false`, the thermostat controller immediately triggers this action when set to `fan_only_mode`  ; however, when `fan_only_cooling` is set to `true`, this action is called based on the upper target temperature (similar to `cool_action` above).\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "fan_only_action_uses_fan_mode_timer": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: If set to `true`, the `fan_only_action` will share the same delay timer used for all `fan_mode` actions. The minimum fan switching delay is then determined by `min_fan_mode_switching_time` (see below). This is useful when `fan_only_action` controls the same physical fan as the `fan_mode` actions, common in forced-air HVAC systems.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "fan_only_cooling": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: If set to `true`, when in the `fan_only_mode` climate mode, the `fan_only_action` will only be called when the observed temperature exceeds the upper set point plus `cool_deadband`. When set to `false` (the default), `fan_only_action` is called immediately when `fan_only_mode` is activated, regardless of the current temperature or set points. Defaults to `false`.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "fan_only_mode": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action to call when the climate device is placed into fan-only mode (it may not heat or cool, but will activate its fan either immediately or, when `fan_only_cooling` is `true`, as needed based on the upper target temperature value).\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "fan_with_cooling": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: If set to `true`, `fan_only_action` will be called whenever `cool_action` is called. This is useful for forced-air systems where the fan typically runs with cooling. Defaults to `false`.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "fan_with_heating": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: If set to `true`, `fan_only_action` will be called whenever `heat_action` is called. This is useful for forced-air systems where the fan typically runs with heating. Defaults to `false`.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "heat_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action to call when the climate device should enter heating mode to increase the current temperature.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "heat_cool_mode": {
+              "key": "Optional",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions) or boolean**: The action to call when the climate device is placed into \"heat/cool\" mode (it may both cool and heat as required). If no action is desired, may be set to `true` to enable the mode without a related automation. Note that **both** `heat_action` **and** `cool_action` ([see above](https://esphome.io/components/climate/thermostat#heating-and-cooling-actions)) must be defined to enable this mode.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "heat_deadband": {
+              "default": "0.5",
+              "key": "Optional",
+              "docs": "**float**: The minimum temperature differential (temperature below the set point) before calling the heating [action](https://esphome.io/automations/actions#all-actions). Defaults to 0.5 \u00b0C.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "heat_mode": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action to call when the climate device is placed into heat mode (it may heat as required, but not cool).\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "heat_overrun": {
+              "default": "0.5",
+              "key": "Optional",
+              "docs": "**float**: The minimum temperature differential (heating beyond the set point) before calling the idle [action](https://esphome.io/automations/actions#all-actions). Defaults to 0.5 \u00b0C.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "humidity_control_dehumidify_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#config-action)**: The action to call when dehumidification is required.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "humidity_control_humidify_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#config-action)**: The action to call when humidification is required.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "humidity_control_off_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#config-action)**: The action to call when (de)humidification should stop. This action is **required** when either of the above actions are configured.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "humidity_hysteresis": {
+              "default": "1.0",
+              "key": "Optional",
+              "docs": "**float**: The maximum humidity differential (above/below the set point) before calling the respective humidity control [action](https://esphome.io/automations/actions#config-action). Defaults to 1%.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "humidity_sensor": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "sensor::Sensor",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: If specified, this sensor is used to measure the current humidity. This may be used for humidity control; see [Humidity Control Actions](https://esphome.io/components/climate/thermostat#humidity-control-actions).\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "thermostat::ThermostatClimate",
+                "parents": [
+                  "climate::Climate",
+                  "EntityBase",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "idle_action": {
+              "key": "Required",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action to call when the climate device should enter its idle state (not cooling, not heating).\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "max_cooling_run_time": {
+              "key": "Required with `supplemental_cooling_action`",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_seconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: Duration after which `supplemental_cooling_action` will be called when cooling is active. Note that `supplemental_cooling_action` will be called repeatedly at an interval defined by this parameter, as well, enabling multiple stages of supplemental (auxiliary/emergency) cooling.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "max_heating_run_time": {
+              "key": "Required with `supplemental_heating_action`",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_seconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: Duration after which `supplemental_heating_action` will be called when heating is active. Note that `supplemental_heating_action` will be called repeatedly at an interval defined by this parameter, as well, enabling multiple stages of supplemental (auxiliary/emergency) heating.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "min_cooling_off_time": {
+              "key": "Required with `cool_action`",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_seconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: Minimum duration the cooling action must be disengaged before it may be engaged.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "min_cooling_run_time": {
+              "key": "Required with `cool_action`",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_seconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: Minimum duration the cooling action must be engaged before it may be disengaged.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "min_fan_mode_switching_time": {
+              "key": "Required with any `fan_mode` action",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_seconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: Minimum duration any given fan mode must be active before it may be changed.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "min_fanning_off_time": {
+              "key": "Required with `fan_only_action`",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_seconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: Minimum duration the fanning action must be disengaged before it may be engaged.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "min_fanning_run_time": {
+              "key": "Required with `fan_only_action`",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_seconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: Minimum duration the fanning action must be engaged before it may be disengaged.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "min_heating_off_time": {
+              "key": "Required with `heat_action`",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_seconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: Minimum duration the heating action must be disengaged before it may be engaged.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "min_heating_run_time": {
+              "key": "Required with `heat_action`",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_seconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: Minimum duration the heating action must be engaged before it may be disengaged.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "min_idle_time": {
+              "key": "Required",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_seconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: Minimum duration the idle action must be active before calling another climate action.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "off_mode": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action to call when the climate device is placed into \"off\" mode (it is completely disabled).\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "on_boot_restore_from": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "MEMORY": null,
+                "DEFAULT_PRESET": null
+              },
+              "docs": "(*Optional*, on_boot_restore_from): Controls what the thermostat will do when it first boots. One of:\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "preset": {
+              "is_list": true,
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "default_target_temperature_high": {
+                    "key": "Optional",
+                    "docs": "**float**: The default high target temperature when switching to this preset.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+                  },
+                  "default_target_temperature_low": {
+                    "key": "Optional",
+                    "docs": "**float**: The default low target temperature when switching to this preset\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+                  },
+                  "fan_mode": {
+                    "key": "Optional",
+                    "type": "enum",
+                    "values": {
+                      "ON": null,
+                      "OFF": null,
+                      "AUTO": null,
+                      "LOW": null,
+                      "MEDIUM": null,
+                      "HIGH": null,
+                      "MIDDLE": null,
+                      "FOCUS": null,
+                      "DIFFUSE": null,
+                      "QUIET": null
+                    },
+                    "docs": "**climate fan mode**: The fan mode the thermostat should switch to when this preset is activated. If not specified, the thermostat's fan mode will remain unchanged when the preset is activated. One of:\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "thermostat::ThermostatClimateTargetTempConfig",
+                      "parents": []
+                    },
+                    "key": "GeneratedID"
+                  },
+                  "mode": {
+                    "key": "Optional",
+                    "type": "enum",
+                    "values": {
+                      "OFF": null,
+                      "HEAT_COOL": null,
+                      "COOL": null,
+                      "HEAT": null,
+                      "DRY": null,
+                      "FAN_ONLY": null,
+                      "AUTO": null
+                    },
+                    "docs": "**climate mode**: The mode the thermostat should switch to when this preset is activated. If not specified, the thermostat's mode will remain unchanged when the preset is activated. One of:\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+                  },
+                  "name": {
+                    "key": "Required",
+                    "type": "string",
+                    "docs": "**string**: Name of the preset. If this is one of the *standard* presets (`eco`, `away`, `boost`, `comfort`, `home`, `sleep`, or `activity`  ) it is considered a *standard* preset. Any other string will make the preset a *custom* preset. *Standard* and *custom* presets are functionally equivalent, the only difference is that when switching the mode via [climate.control Action](https://esphome.io/components/climate#climate-control-action) you will need to use the `preset` or `custom_preset` property as appropriate. The Home Assistant `climate.set_preset_mode` service treats them identically\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+                  },
+                  "swing_mode": {
+                    "key": "Optional",
+                    "type": "enum",
+                    "values": {
+                      "OFF": null,
+                      "BOTH": null,
+                      "VERTICAL": null,
+                      "HORIZONTAL": null
+                    },
+                    "docs": "**climate swing mode**: The fan swing mode the thermostat should switch to when this preset is activated. If not specified, the thermostat's fan swing mode will remain unchanged when the preset is activated. One of:\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "(*Optional*, list)\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "preset_change": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "(*Optional*, [Action](https://esphome.io/automations/actions#all-actions)): The action to call when the preset is changed. This will be called either when a user changes the mode through the Home Assistant UI or through a call to `climate.control`\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "sensor": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "sensor::Sensor",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The sensor that is used to measure the current temperature.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "set_point_minimum_differential": {
+              "default": "0.5",
+              "key": "Optional",
+              "docs": "**float**: For dual-point/dual-function systems, the minimum required temperature difference between the heat and cool set points. Defaults to 0.5 \u00b0C.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "startup_delay": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: If set to `true`, when ESPHome starts, `min_cooling_off_time`, `min_fanning_off_time`, and `min_heating_off_time` must elapse before each respective action may be invoked. This option provides a way to prevent damage to equipment (for example) disrupted by a power interruption. Defaults to `false`.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "supplemental_cooling_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action to call when the climate device should activate supplemental cooling to (more aggressively) decrease the current temperature. *This action is called repeatedly at an interval defined by* `max_cooling_run_time` *(see below).*\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "supplemental_cooling_delta": {
+              "key": "Required with `supplemental_cooling_action`",
+              "docs": "**float**: When the temperature difference between the upper set point and the current temperature exceeds this value, `supplemental_cooling_action` will be called immediately.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "supplemental_heating_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action to call when the climate device should activate supplemental heating to (more aggressively) increase the current temperature. *This action is called repeatedly at an interval defined by* `max_heating_run_time` *(see below).*\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "supplemental_heating_delta": {
+              "key": "Required with `supplemental_heating_action`",
+              "docs": "**float**: When the temperature difference between the lower set point and the current temperature exceeds this value, `supplemental_heating_action` will be called immediately.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "swing_both_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action to call when the fan should oscillate in horizontal and vertical directions.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "swing_horizontal_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action to call when the fan should oscillate in a horizontal direction.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "swing_off_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action to call when the fan should remain in a stationary position.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "swing_vertical_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action to call when the fan should oscillate in a vertical direction.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "target_humidity_change_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action to call when the thermostat's target humidity is changed.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            },
+            "target_temperature_change_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action to call when the thermostat's target temperature(s) is/are changed.\n\n*See also: [Thermostat Climate Controller](https://esphome.io/components/climate/thermostat#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "climate._CLIMATE_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

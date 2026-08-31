@@ -1,0 +1,41 @@
+{
+  "provisioning": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "provisioning::ProvisioningManager",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "on_timeout": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform when the provisioning window closes.\n\n*See also: [Provisioning](https://esphome.io/components/provisioning#configuration-variables)*"
+            },
+            "timeout": {
+              "key": "Required",
+              "schema": {
+                "extends": [
+                  "core.positive_not_null_time_period",
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: How long after boot the provisioning window stays open before closing if the device is still unprovisioned.\n\n*See also: [Provisioning](https://esphome.io/components/provisioning#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

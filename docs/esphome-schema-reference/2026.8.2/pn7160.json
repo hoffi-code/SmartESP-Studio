@@ -1,0 +1,145 @@
+{
+  "pn7160": {
+    "condition": {
+      "is_writing": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "pn7160::PN7160"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    },
+    "schemas": {
+      "PN7160_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "dwl_req_pin": {
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin connected to the PN7160's `DWL_REQ` line. Used to invoke the PN7160's firmware update mode; may be used in a future release.\n\n*See also: [PN7160 NFC](https://esphome.io/components/pn7160#configuration-variables)*"
+            },
+            "emulation_message": {
+              "key": "Optional",
+              "type": "string",
+              "docs": "**string**: When scanned by another NFC card/tag reader (such as a smartphone), this string is used as the content for an NDEF-formatted response. This allows the PN7160 to act as a tag in addition to a tag reader/writer.\n\n*See also: [PN7160 NFC](https://esphome.io/components/pn7160#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "pn7160::PN7160",
+                "parents": [
+                  "nfc::Nfcc",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "irq_pin": {
+              "key": "Required",
+              "modes": [
+                "input"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin connected to the PN7160's `IRQ` line.\n\n*See also: [PN7160 NFC](https://esphome.io/components/pn7160#configuration-variables)*"
+            },
+            "on_emulated_tag_scan": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform when the PN7160 is scanned by another tag reader (such as a smartphone). See [`on_emulated_tag_scan` Trigger](https://esphome.io/components/pn7160#pn7160-on_emulated_tag_scan).\n\n*See also: [PN7160 NFC](https://esphome.io/components/pn7160#configuration-variables)*"
+            },
+            "on_finished_write": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "on_tag": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform when a tag is first read. See [`on_tag` Trigger](https://esphome.io/components/pn7160#pn7160-on_tag).\n\n*See also: [PN7160 NFC](https://esphome.io/components/pn7160#configuration-variables)*"
+            },
+            "on_tag_removed": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform after a tag is removed. See [`on_tag_removed` Trigger](https://esphome.io/components/pn7160#pn7160-on_tag_removed).\n\n*See also: [PN7160 NFC](https://esphome.io/components/pn7160#configuration-variables)*"
+            },
+            "tag_ttl": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The duration that must elapse after the PN7160 is no longer able to \"see\" a tag before it is considered to have been removed from the reader.\n\n*See also: [PN7160 NFC](https://esphome.io/components/pn7160#configuration-variables)*"
+            },
+            "ven_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin connected to the PN7160's `VEN` line.\n\n*See also: [PN7160 NFC](https://esphome.io/components/pn7160#configuration-variables)*"
+            },
+            "wkup_req_pin": {
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin connected to the PN7160's `WKUP_REQ` line. May be used to improve power management in a future release.\n\n*See also: [PN7160 NFC](https://esphome.io/components/pn7160#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "SET_MESSAGE_ACTION_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "pn7160::PN7160"
+            },
+            "include_android_app_record": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "message": {
+              "key": "Required",
+              "templatable": true,
+              "type": "string"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "SIMPLE_ACTION_SCHEMA": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "pn7160::PN7160"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

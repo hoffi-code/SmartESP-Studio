@@ -1,0 +1,129 @@
+{
+  "airthings_wave_plus.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "co2": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "carbon_dioxide"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "ppm"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "device_type": {
+              "default": "WAVE_PLUS",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "WAVE_PLUS": null,
+                "WAVE_GEN2": null
+              }
+            },
+            "id": {
+              "id_type": {
+                "class": "airthings_wave_plus::AirthingsWavePlus",
+                "parents": [
+                  "airthings_wave_base::AirthingsWaveBase",
+                  "PollingComponent",
+                  "Component",
+                  "ble_client::BLEClientNode"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "illuminance": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "illuminance"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "lx"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "radon": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "icon": {
+                    "default": "mdi:radioactive"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "Bq/m\u00b3"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "radon_long_term": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "icon": {
+                    "default": "mdi:radioactive"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "Bq/m\u00b3"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            }
+          },
+          "extends": [
+            "airthings_wave_base.BASE_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

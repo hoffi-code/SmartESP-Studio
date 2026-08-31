@@ -1,0 +1,62 @@
+{
+  "lcd_menu": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "display_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "lcd_base::LCDDisplay",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the LCD display.\n\n*See also: [LCD Menu](https://esphome.io/components/display_menu/lcd_menu#a-debounced-gpio-push-button-is-used-to-click)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "lcd_menu::LCDCharacterMenuComponent",
+                "parents": [
+                  "display_menu_base::DisplayMenuComponent",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [LCD Menu](https://esphome.io/components/display_menu/lcd_menu#a-debounced-gpio-push-button-is-used-to-click)*"
+            },
+            "mark_back": {
+              "data_type": "uint8_t",
+              "default": "94",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**0-255**: Code of the character used to mark menu items going back one level. As the character set lacks a good looking back arrow, using a user defined character is advisable (use `8` to reference one at position `0` to avoid problems with zeros in a string). Defaults to `0x5e` (`^`  ).\n\n*See also: [LCD Menu](https://esphome.io/components/display_menu/lcd_menu#a-debounced-gpio-push-button-is-used-to-click)*"
+            },
+            "mark_editing": {
+              "data_type": "uint8_t",
+              "default": "42",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**0-255**: Code of the character used to mark menu item editing mode. Defaults to `0x2a` (`*`  ).\n\n*See also: [LCD Menu](https://esphome.io/components/display_menu/lcd_menu#a-debounced-gpio-push-button-is-used-to-click)*"
+            },
+            "mark_selected": {
+              "data_type": "uint8_t",
+              "default": "62",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**0-255**: Code of the character used to mark menu item selected. Defaults to `0x3e` (`>`  ).\n\n*See also: [LCD Menu](https://esphome.io/components/display_menu/lcd_menu#a-debounced-gpio-push-button-is-used-to-click)*"
+            },
+            "mark_submenu": {
+              "data_type": "uint8_t",
+              "default": "126",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**0-255**: Code of the character used to mark menu item leading to a submenu. Defaults to `0x7e` (a right arrow).\n\n*See also: [LCD Menu](https://esphome.io/components/display_menu/lcd_menu#a-debounced-gpio-push-button-is-used-to-click)*"
+            }
+          },
+          "extends": [
+            "display_menu_base.DISPLAY_MENU_BASE_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

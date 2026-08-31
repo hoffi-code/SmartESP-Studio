@@ -1,0 +1,157 @@
+{
+  "thermopro_ble.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "battery_level": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "battery"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "%"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the battery level sensor.\n\n*See also: [ThermoPro BLE Sensors](https://esphome.io/components/sensor/thermopro_ble#configuration-variables)*"
+            },
+            "external_temperature": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the external/probe temperature sensor. Some models (TP972, TP970, TP96x) support dual temperature readings - one internal and one from an external probe.\n\n*See also: [ThermoPro BLE Sensors](https://esphome.io/components/sensor/thermopro_ble#configuration-variables)*"
+            },
+            "humidity": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "humidity"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "%"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the humidity sensor. Only available on TP3xx devices.\n\n*See also: [ThermoPro BLE Sensors](https://esphome.io/components/sensor/thermopro_ble#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "thermopro_ble::ThermoProBLE",
+                "parents": [
+                  "ble_device_base::ESPBTDeviceListener",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "mac_address": {
+              "key": "Required",
+              "docs": "**MAC Address**: The MAC address of the ThermoPro device.\n\n*See also: [ThermoPro BLE Sensors](https://esphome.io/components/sensor/thermopro_ble#configuration-variables)*"
+            },
+            "signal_strength": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "signal_strength"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "dBm"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the signal strength (RSSI) sensor.\n\n*See also: [ThermoPro BLE Sensors](https://esphome.io/components/sensor/thermopro_ble#configuration-variables)*"
+            },
+            "temperature": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the temperature sensor.\n\n*See also: [ThermoPro BLE Sensors](https://esphome.io/components/sensor/thermopro_ble#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA",
+            "ble_device_base.BLE_DEVICE_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

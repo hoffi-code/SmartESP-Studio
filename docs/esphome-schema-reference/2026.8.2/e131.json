@@ -1,0 +1,34 @@
+{
+  "e131": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "e131::E131Component",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "method": {
+              "default": "MULTICAST",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "UNICAST": null,
+                "MULTICAST": null
+              }
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

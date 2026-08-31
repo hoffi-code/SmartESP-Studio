@@ -1,0 +1,151 @@
+{
+  "waveshare_io_ch32v003": {
+    "pin": {
+      "schema": {
+        "extends": [
+          "waveshare_io_ch32v003.WAVESHARE_IO_PIN_SCHEMA"
+        ]
+      },
+      "type": "schema"
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "36",
+              "key": "Optional",
+              "docs": "**int**: The I\u00b2C address of the expander. Defaults to `0x24`.\n\n*See also: [Waveshare CH32V003 I/O Expander](https://esphome.io/components/waveshare_io_ch32v003#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus",
+              "docs": "The I\u00b2C Bus ID if you have multiple I\u00b2C buses.\n\n*See also: [Waveshare CH32V003 I/O Expander](https://esphome.io/components/waveshare_io_ch32v003#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "waveshare_io_ch32v003::WaveshareIOCH32V003Component",
+                "parents": [
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id to use for this component.\n\n*See also: [Waveshare CH32V003 I/O Expander](https://esphome.io/components/waveshare_io_ch32v003#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "waveshare_io_ch32v003.output": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "waveshare_io_ch32v003::WaveshareIOCH32V003Output",
+                "parents": [
+                  "output::FloatOutput",
+                  "output::BinaryOutput",
+                  "Parented<waveshare_io_ch32v003::WaveshareIOCH32V003Component>",
+                  "Parented"
+                ]
+              },
+              "key": "Required"
+            },
+            "safe_pwm_levels": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "max_value": {
+                    "default": "247",
+                    "key": "Optional",
+                    "type": "integer"
+                  },
+                  "min_value": {
+                    "default": "1",
+                    "key": "Optional",
+                    "type": "integer"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "waveshare_io_ch32v003_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "waveshare_io_ch32v003::WaveshareIOCH32V003Component"
+            }
+          },
+          "extends": [
+            "output.FLOAT_OUTPUT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "waveshare_io_ch32v003.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "3"
+            },
+            "device_class": {
+              "default": "voltage"
+            },
+            "id": {
+              "id_type": {
+                "class": "waveshare_io_ch32v003::WaveshareIOCH32V003Sensor",
+                "parents": [
+                  "sensor::Sensor",
+                  "EntityBase",
+                  "PollingComponent",
+                  "Component",
+                  "voltage_sampler::VoltageSampler",
+                  "Parented<waveshare_io_ch32v003::WaveshareIOCH32V003Component>",
+                  "Parented"
+                ]
+              }
+            },
+            "reference_voltage": {
+              "default": "9.9V",
+              "key": "Optional"
+            },
+            "state_class": {
+              "default": "measurement"
+            },
+            "unit_of_measurement": {
+              "default": "V"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional"
+            },
+            "waveshare_io_ch32v003_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "waveshare_io_ch32v003::WaveshareIOCH32V003Component"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

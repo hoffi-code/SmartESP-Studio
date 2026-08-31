@@ -1,0 +1,129 @@
+{
+  "ccs811.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "90",
+              "key": "Optional",
+              "docs": "**int**: The [I\u00b2C](https://esphome.io/components/i2c) address of the sensor. Defaults to `0x5A`.\n\n*See also: [CCS811 eCO_2 and Volatile Organic Compound Sensor](https://esphome.io/components/sensor/ccs811#configuration-variables)*"
+            },
+            "baseline": {
+              "data_type": "hex_uint16_t",
+              "key": "Optional",
+              "docs": "**int**: The baseline value for the unit, for calibration purposes. See [Calibrating Baseline](https://esphome.io/components/sensor/ccs811#ccs811-calibrating) for more info.\n\n*See also: [CCS811 eCO_2 and Volatile Organic Compound Sensor](https://esphome.io/components/sensor/ccs811#configuration-variables)*"
+            },
+            "eco2": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "carbon_dioxide"
+                  },
+                  "icon": {
+                    "default": "mdi:molecule-co2"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "ppm"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The eCO_2 data from the sensor in parts per million (ppm).\n\n*See also: [CCS811 eCO_2 and Volatile Organic Compound Sensor](https://esphome.io/components/sensor/ccs811#configuration-variables)*"
+            },
+            "humidity": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "sensor::Sensor",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Give an external humidity sensor ID here. This can improve the sensor's internal calculations.\n\n*See also: [CCS811 eCO_2 and Volatile Organic Compound Sensor](https://esphome.io/components/sensor/ccs811#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "ccs811::CCS811Component",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "temperature": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "sensor::Sensor",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Give an external temperature sensor ID here. This can improve the sensor's internal calculations.\n\n*See also: [CCS811 eCO_2 and Volatile Organic Compound Sensor](https://esphome.io/components/sensor/ccs811#configuration-variables)*"
+            },
+            "tvoc": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "volatile_organic_compounds_parts"
+                  },
+                  "icon": {
+                    "default": "mdi:radiator"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "ppb"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the total volatile organic compound sensor in parts per billion (ppb).\n\n*See also: [CCS811 eCO_2 and Volatile Organic Compound Sensor](https://esphome.io/components/sensor/ccs811#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`.\n\n*See also: [CCS811 eCO_2 and Volatile Organic Compound Sensor](https://esphome.io/components/sensor/ccs811#configuration-variables)*"
+            },
+            "version": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "icon": {
+                    "default": "mdi:restart"
+                  }
+                },
+                "extends": [
+                  "text_sensor._TEXT_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "This sensor reports the firmware ('application') version in text, with the internal hex representation of the version number behind it, so version 1.0.0 will be reported as '1.0.0 (0x1000)'.\n\n*See also: [CCS811 eCO_2 and Volatile Organic Compound Sensor](https://esphome.io/components/sensor/ccs811#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

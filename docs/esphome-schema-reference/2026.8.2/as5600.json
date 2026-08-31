@@ -1,0 +1,274 @@
+{
+  "as5600": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "54",
+              "key": "Optional",
+              "docs": "**int**: The i\u00b2c address of the sensor. See [I\u00b2C Addresses](https://esphome.io/components/sensor/as5600#as5600_i2c_addresses) for more information.\n\n*See also: [AS5600 12-Bit Magnetic Position Sensor](https://esphome.io/components/sensor/as5600#configuration-variables)*"
+            },
+            "dir_pin": {
+              "key": "Optional",
+              "modes": [
+                "input"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**int**: The pin connected to the AS5600's direction pin. See [Direction](https://esphome.io/components/sensor/as5600#direction) for more information.\n\n*See also: [AS5600 12-Bit Magnetic Position Sensor](https://esphome.io/components/sensor/as5600#configuration-variables)*"
+            },
+            "direction": {
+              "default": "CLOCKWISE",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "CLOCKWISE": null,
+                "COUNTERCLOCKWISE": null
+              },
+              "docs": "**string**: The direction that the magnet should rotate to increase values. Used in combination with the **dir_pin**.\n\n*See also: [AS5600 12-Bit Magnetic Position Sensor](https://esphome.io/components/sensor/as5600#configuration-variables)*"
+            },
+            "end_position": {
+              "key": "Optional",
+              "docs": "**int**: The raw position that should be considered the end (e.g. 180deg) of the allowable rotation range. Mutually exclusive with **range**. See [Position / Range](https://esphome.io/components/sensor/as5600#as5600_position_range).\n\n*See also: [AS5600 12-Bit Magnetic Position Sensor](https://esphome.io/components/sensor/as5600#configuration-variables)*"
+            },
+            "fast_filter": {
+              "default": "NONE",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "NONE": null,
+                "LSB6": null,
+                "LSB7": null,
+                "LSB9": null,
+                "LSB18": null,
+                "LSB21": null,
+                "LSB24": null,
+                "LSB10": null
+              },
+              "docs": "**string**: See datasheet.\n\n*See also: [AS5600 12-Bit Magnetic Position Sensor](https://esphome.io/components/sensor/as5600#configuration-variables)*"
+            },
+            "hysteresis": {
+              "default": "NONE",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "NONE": null,
+                "LSB1": null,
+                "LSB2": null,
+                "LSB3": null
+              },
+              "docs": "**string**: See datasheet.\n\n*See also: [AS5600 12-Bit Magnetic Position Sensor](https://esphome.io/components/sensor/as5600#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "as5600::AS5600Component",
+                "parents": [
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID for this AS5600 Hub.\n\n*See also: [AS5600 12-Bit Magnetic Position Sensor](https://esphome.io/components/sensor/as5600#configuration-variables)*"
+            },
+            "power_mode": {
+              "default": "NOMINAL",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "NOMINAL": null,
+                "LOW1": null,
+                "LOW2": null,
+                "LOW3": null
+              },
+              "docs": "**string**: The power mode to run the sensor. Note: When **watchdog** is enabled, it will switch the device to `low3` when there is not much change in position.\n\n*See also: [AS5600 12-Bit Magnetic Position Sensor](https://esphome.io/components/sensor/as5600#configuration-variables)*"
+            },
+            "range": {
+              "key": "Optional",
+              "docs": "**int**: The allowable rotation range from the **start_position**. Mutually exclusive with **end_position**. See [Position / Range](https://esphome.io/components/sensor/as5600#as5600_position_range).\n\n*See also: [AS5600 12-Bit Magnetic Position Sensor](https://esphome.io/components/sensor/as5600#configuration-variables)*"
+            },
+            "slow_filter": {
+              "default": "16X",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "16X": null,
+                "8X": null,
+                "4X": null,
+                "2X": null
+              },
+              "docs": "**string**: See datasheet.\n\n*See also: [AS5600 12-Bit Magnetic Position Sensor](https://esphome.io/components/sensor/as5600#configuration-variables)*"
+            },
+            "start_position": {
+              "default": "0",
+              "key": "Optional",
+              "docs": "**int**: The raw position that should be considered the start (i.e. `0`  ). See [Position / Range](https://esphome.io/components/sensor/as5600#as5600_position_range).\n\n*See also: [AS5600 12-Bit Magnetic Position Sensor](https://esphome.io/components/sensor/as5600#configuration-variables)*"
+            },
+            "watchdog": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Whether to enable the watchdog that puts the chip into low power mode 3. Check the datasheet for more information. Defaults to `off`.\n\n*See also: [AS5600 12-Bit Magnetic Position Sensor](https://esphome.io/components/sensor/as5600#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "as5600.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "0"
+            },
+            "as5600_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "as5600::AS5600Component",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the [AS5600 Hub](https://esphome.io/components/sensor/as5600#as5600-component) you want to use this sensor.\n\n*See also: [AS5600 12-Bit Magnetic Position Sensor](https://esphome.io/components/sensor/as5600#configuration-variables)*"
+            },
+            "gain": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Information about the automatic gain control. Typically for diagnostic purposes. The datasheet says this will be between 0-255 when powered by 5v and between 0-128 when powered by 3.3v. Ideally the value should be close to the middle of the respective range.\n\n*See also: [AS5600 12-Bit Magnetic Position Sensor](https://esphome.io/components/sensor/as5600#configuration-variables)*"
+            },
+            "icon": {
+              "default": "mdi:rotate-right"
+            },
+            "id": {
+              "id_type": {
+                "class": "as5600::AS5600Sensor",
+                "parents": [
+                  "sensor::Sensor",
+                  "EntityBase",
+                  "PollingComponent",
+                  "Component"
+                ]
+              }
+            },
+            "magnitude": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "icon": {
+                    "default": "mdi:magnet"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Information about the detected magnitude. Typically for diagnostic purposes. The expected scale does not appear to be defined in the datasheet, however, AMS provides a [user guide](https://ams.com/documents/20143/36005/Position%20Sensors_UG000359_1-00.pdf/65a99825-c115-f2f0-9167-6efad8e27c20) which contains pictures that show it as a scale between `0` and `3000`. Typically this value is seen somewhere in the neighborhood of `2100` for a well positioned magnet.\n\n*See also: [AS5600 12-Bit Magnetic Position Sensor](https://esphome.io/components/sensor/as5600#configuration-variables)*"
+            },
+            "out_of_range_mode": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "MIN_MAX": null,
+                "NAN": null
+              },
+              "docs": "**string**: How to treat out of range values. Only applicable if configured for a range less than 360 degrees. Defaults to `min_max`. See [Out of Range Mode](https://esphome.io/components/sensor/as5600#out-of-range-mode).\n\n*See also: [AS5600 12-Bit Magnetic Position Sensor](https://esphome.io/components/sensor/as5600#configuration-variables)*"
+            },
+            "raw_position": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "icon": {
+                    "default": "mdi:rotate-right"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Reports the raw (un-scaled, un-filtered) position of the magnet.\n\n*See also: [AS5600 12-Bit Magnetic Position Sensor](https://esphome.io/components/sensor/as5600#configuration-variables)*"
+            },
+            "state_class": {
+              "default": "measurement"
+            },
+            "status": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "icon": {
+                    "default": "mdi:magnet"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Information about the magnet status. Typically for diagnostic purposes. See [Magnet Status](https://esphome.io/components/sensor/as5600#magnet-status)\n\n*See also: [AS5600 12-Bit Magnetic Position Sensor](https://esphome.io/components/sensor/as5600#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`.\n\n*See also: [AS5600 12-Bit Magnetic Position Sensor](https://esphome.io/components/sensor/as5600#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "usb_cdc_acm": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "usb_cdc_acm::USBCDCACMComponent",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID to use for this interface instance. This is used to refer to the interface in other components, platforms or lambdas.\n\n*See also: [USB CDC-ACM Interface](https://esphome.io/components/usb_cdc_acm#configuration-variables)*"
+            },
+            "interfaces": {
+              "default": "[{}]",
+              "is_list": true,
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "id": {
+                    "id_type": {
+                      "class": "usb_cdc_acm::USBCDCACMInstance",
+                      "parents": [
+                        "uart::UARTComponent",
+                        "Parented<usb_cdc_acm::USBCDCACMComponent>",
+                        "Parented"
+                      ]
+                    },
+                    "key": "GeneratedID"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "**list**: List of CDC-ACM interface instances. Up to two are supported; at least one is required. Defaults to a single-item list which defines a single interface only.\n\n*See also: [USB CDC-ACM Interface](https://esphome.io/components/usb_cdc_acm#configuration-variables)*"
+            },
+            "rx_buffer_size": {
+              "data_type": "uint16_t",
+              "default": "256",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Size of the USB receive buffer in bytes. Range: 1-65535. Defaults to `256`.\n\n*See also: [USB CDC-ACM Interface](https://esphome.io/components/usb_cdc_acm#configuration-variables)*"
+            },
+            "tx_buffer_size": {
+              "data_type": "uint16_t",
+              "default": "256",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Size of the USB transmit buffer in bytes. Range: 1-65535. Defaults to `256`.\n\n*See also: [USB CDC-ACM Interface](https://esphome.io/components/usb_cdc_acm#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

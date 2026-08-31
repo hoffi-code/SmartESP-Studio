@@ -1,0 +1,420 @@
+{
+  "sendspin": {
+    "action": {
+      "image.transition_finished": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "sendspin_::SendspinImageSlot",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The artwork slot the transition belongs to.\n\n*See also: [Sendspin Image](https://esphome.io/components/image/sendspin#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Report that the transition for the artwork just displayed has finished, telling the server the device is ready for more. Only needed when a `transition_image` is configured."
+      },
+      "media_source.disable_static_delay_adjustment": {
+        "schema": {
+          "extends": [
+            "sendspin.media_source.SENDSPIN_MEDIA_SOURCE_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) disables runtime adjustment of the static delay. The configured static delay is no longer applied to playback, and the Sendspin server cannot tune it."
+      },
+      "media_source.enable_static_delay_adjustment": {
+        "schema": {
+          "extends": [
+            "sendspin.media_source.SENDSPIN_MEDIA_SOURCE_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) enables runtime adjustment of the static delay from the Sendspin server and applies the currently configured static delay value to playback."
+      },
+      "switch": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "sendspin_::SendspinHub"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) switches the Sendspin client to the next active group."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "sendspin_::SendspinHub",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the artwork slot. Use this to target the action below.\n\n*See also: [Sendspin Image](https://esphome.io/components/image/sendspin#configuration-variables)*"
+            },
+            "task_stack_in_psram": {
+              "key": "Optional",
+              "docs": "**boolean**: If `true`, the FreeRTOS playback task stack is allocated in PSRAM instead of internal RAM. Requires the [psram](https://esphome.io/components/psram/) component. Defaults to `false`.\n\n*See also: [Sendspin Media Source](https://esphome.io/components/media_source/sendspin#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "sendspin.image": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "byte_order": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "BIG_ENDIAN": null,
+                "LITTLE_ENDIAN": null
+              }
+            },
+            "current_image": {
+              "key": "Required",
+              "schema": {
+                "extends": [
+                  "sendspin.image._IMAGE_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "display_offset": {
+              "default": "0ms",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.time_period"
+                ]
+              },
+              "type": "schema"
+            },
+            "format": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "JPEG": null,
+                "JPG": null,
+                "PNG": null,
+                "BMP": null
+              }
+            },
+            "id": {
+              "id_type": {
+                "class": "sendspin_::SendspinImageSlot",
+                "parents": [
+                  "Component",
+                  "Parented<sendspin_::SendspinHub>",
+                  "Parented"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "on_image_clear": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "on_image_display": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "on_image_error": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "placeholder": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "image::Image"
+            },
+            "resize": {
+              "key": "Required"
+            },
+            "sendspin_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "sendspin_::SendspinHub"
+            },
+            "source": {
+              "default": "ALBUM",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "ALBUM": null,
+                "ARTIST": null
+              }
+            },
+            "transition_image": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "sendspin.image._IMAGE_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "transparency": {
+              "default": "OPAQUE",
+              "key": "Optional"
+            },
+            "type": {
+              "key": "Required"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "_IMAGE_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "sendspin_::ArtworkImageView",
+                "parents": [
+                  "image::Image"
+                ]
+              },
+              "key": "Required"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "sendspin.media_player": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "sendspin_::SendspinMediaPlayer",
+                "parents": [
+                  "media_player::MediaPlayer",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "sendspin_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "sendspin_::SendspinHub"
+            },
+            "volume_increment": {
+              "default": "0.05",
+              "key": "Optional"
+            }
+          },
+          "extends": [
+            "media_player._MEDIA_PLAYER_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "sendspin.media_source": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "data_type": "_MEDIA_SOURCE_SCHEMA"
+      },
+      "SENDSPIN_MEDIA_SOURCE_ACTION_SCHEMA": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "sendspin_::SendspinMediaSource"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "sendspin.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "type": "typed",
+        "typed_key": "type",
+        "types": {
+          "track": {
+            "config_vars": {
+              "accuracy_decimals": {
+                "default": "0"
+              },
+              "id": {
+                "id_type": {
+                  "class": "sendspin_::SendspinMetadataSensor",
+                  "parents": [
+                    "sensor::Sensor",
+                    "EntityBase",
+                    "Component"
+                  ]
+                }
+              }
+            },
+            "extends": [
+              "sensor._SENSOR_SCHEMA",
+              "sendspin.sensor._HUB_ID_SCHEMA",
+              "core.COMPONENT_SCHEMA"
+            ]
+          },
+          "track_duration": {
+            "config_vars": {
+              "accuracy_decimals": {
+                "default": "0"
+              },
+              "id": {
+                "id_type": {
+                  "class": "sendspin_::SendspinMetadataSensor",
+                  "parents": [
+                    "sensor::Sensor",
+                    "EntityBase",
+                    "Component"
+                  ]
+                }
+              },
+              "state_class": {
+                "default": "measurement"
+              },
+              "unit_of_measurement": {
+                "default": "ms"
+              }
+            },
+            "extends": [
+              "sensor._SENSOR_SCHEMA",
+              "sendspin.sensor._HUB_ID_SCHEMA",
+              "core.COMPONENT_SCHEMA"
+            ]
+          },
+          "track_progress": {
+            "config_vars": {
+              "accuracy_decimals": {
+                "default": "0"
+              },
+              "id": {
+                "id_type": {
+                  "class": "sendspin_::SendspinTrackProgressSensor",
+                  "parents": [
+                    "sensor::Sensor",
+                    "EntityBase",
+                    "PollingComponent",
+                    "Component"
+                  ]
+                }
+              },
+              "state_class": {
+                "default": "measurement"
+              },
+              "unit_of_measurement": {
+                "default": "ms"
+              },
+              "update_interval": {
+                "default": "1s",
+                "key": "Optional"
+              }
+            },
+            "extends": [
+              "sensor._SENSOR_SCHEMA",
+              "sendspin.sensor._HUB_ID_SCHEMA",
+              "core.COMPONENT_SCHEMA"
+            ]
+          },
+          "year": {
+            "config_vars": {
+              "accuracy_decimals": {
+                "default": "0"
+              },
+              "id": {
+                "id_type": {
+                  "class": "sendspin_::SendspinMetadataSensor",
+                  "parents": [
+                    "sensor::Sensor",
+                    "EntityBase",
+                    "Component"
+                  ]
+                }
+              }
+            },
+            "extends": [
+              "sensor._SENSOR_SCHEMA",
+              "sendspin.sensor._HUB_ID_SCHEMA",
+              "core.COMPONENT_SCHEMA"
+            ]
+          }
+        }
+      },
+      "_HUB_ID_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "sendspin_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "sendspin_::SendspinHub"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "sendspin.text_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "sendspin_::SendspinTextSensor",
+                "parents": [
+                  "text_sensor::TextSensor",
+                  "EntityBase",
+                  "Component"
+                ]
+              }
+            },
+            "sendspin_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "sendspin_::SendspinHub"
+            },
+            "type": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "title": null,
+                "artist": null,
+                "album": null,
+                "album_artist": null
+              }
+            }
+          },
+          "extends": [
+            "text_sensor._TEXT_SENSOR_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

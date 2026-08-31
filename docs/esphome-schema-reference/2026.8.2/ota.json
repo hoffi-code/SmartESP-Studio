@@ -1,0 +1,62 @@
+{
+  "ota": {
+    "components": {
+      "esphome": {
+        "dependencies": [
+          "network"
+        ]
+      },
+      "http_request": {
+        "dependencies": [
+          "network",
+          "http_request"
+        ]
+      },
+      "web_server": {
+        "dependencies": [
+          "network",
+          "web_server_base"
+        ]
+      },
+      "zephyr_mcumgr": {
+        "dependencies": [
+          "zephyr"
+        ],
+        "docs": "The nRF52 platform supports firmware updates via Over-the-Air (OTA) mechanisms. The **only supported bootloader** for OTA updates is **MCUboot**.\n\n*See also: [nRF52 Firmware Updates](https://esphome.io/components/ota/zephyr_mcumgr)*"
+      }
+    },
+    "schemas": {
+      "BASE_OTA_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "on_abort": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "on_begin": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "on_end": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "on_error": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "on_progress": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "on_state_change": {
+              "key": "Optional",
+              "type": "trigger"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,196 @@
+{
+  "bl0942.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "default": "0",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: The address of the BL0942 from its strapping pins. Defaults to `0`.\n\n*See also: [Belling BL0942 Energy Monitor](https://esphome.io/components/sensor/bl0942#configuration-variables)*"
+            },
+            "current": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "current"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "A"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The current value of the sensor in Amperes. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Belling BL0942 Energy Monitor](https://esphome.io/components/sensor/bl0942#configuration-variables)*"
+            },
+            "current_reference": {
+              "key": "Optional",
+              "docs": "**float**: The calibration parameter for current readings. Defaults to `251065.6814`.\n\n*See also: [Belling BL0942 Energy Monitor](https://esphome.io/components/sensor/bl0942#configuration-variables)*"
+            },
+            "energy": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "3"
+                  },
+                  "device_class": {
+                    "default": "energy"
+                  },
+                  "state_class": {
+                    "default": "total_increasing"
+                  },
+                  "unit_of_measurement": {
+                    "default": "kWh"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the energy value of the sensor in kWh. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Belling BL0942 Energy Monitor](https://esphome.io/components/sensor/bl0942#configuration-variables)*"
+            },
+            "energy_reference": {
+              "key": "Optional",
+              "docs": "**float**: The calibration parameter for cumulative energy readings. Defaults to `5347.484240` unless any of `current_reference`, `voltage_reference` or `power_reference` are explicitly set, in which case it is calculated. See [Calibration](https://esphome.io/components/sensor/bl0942#calibration) for more details.\n\n*See also: [Belling BL0942 Energy Monitor](https://esphome.io/components/sensor/bl0942#configuration-variables)*"
+            },
+            "frequency": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "frequency"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "Hz"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The frequency value of the sensor in Hertz. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Belling BL0942 Energy Monitor](https://esphome.io/components/sensor/bl0942#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "bl0942::BL0942",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "uart::UARTDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "line_frequency": {
+              "default": "50HZ",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "50": null,
+                "60": null
+              },
+              "docs": "**string**: The nominal AC line frequency of the supply voltage. One of `50Hz`, `60Hz`. Defaults to `50Hz`.\n\n*See also: [Belling BL0942 Energy Monitor](https://esphome.io/components/sensor/bl0942#configuration-variables)*"
+            },
+            "power": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "power"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "W"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The (active) power value of the sensor in Watts. Note that some power meters will report this in negative values (probably wired backwards), so you may want to use a filter to multiply it by -1. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Belling BL0942 Energy Monitor](https://esphome.io/components/sensor/bl0942#configuration-variables)*"
+            },
+            "power_reference": {
+              "key": "Optional",
+              "docs": "**float**: The calibration parameter for power readings. Defaults to `623.0270705` unless either `current_reference` or `voltage_reference` are explicitly set, in which case it is calculated. See [Calibration](https://esphome.io/components/sensor/bl0942#calibration) for more details.\n\n*See also: [Belling BL0942 Energy Monitor](https://esphome.io/components/sensor/bl0942#configuration-variables)*"
+            },
+            "reset": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Whether to reset the BL0942 chip on startup, resetting all internal counters. Defaults to `true`.\n\n*See also: [Belling BL0942 Energy Monitor](https://esphome.io/components/sensor/bl0942#configuration-variables)*"
+            },
+            "uart_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "uart::UARTComponent",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the [UART Component](https://esphome.io/components/uart) if you want to use multiple UART buses.\n\n*See also: [Belling BL0942 Energy Monitor](https://esphome.io/components/sensor/bl0942#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`.\n\n*See also: [Belling BL0942 Energy Monitor](https://esphome.io/components/sensor/bl0942#configuration-variables)*"
+            },
+            "voltage": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "voltage"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "V"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The voltage value of the sensor in Volts. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Belling BL0942 Energy Monitor](https://esphome.io/components/sensor/bl0942#configuration-variables)*"
+            },
+            "voltage_reference": {
+              "key": "Optional",
+              "docs": "**float**: The calibration parameter for voltage readings. Defaults to `15883.34116`.\n\n*See also: [Belling BL0942 Energy Monitor](https://esphome.io/components/sensor/bl0942#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

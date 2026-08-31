@@ -1,0 +1,63 @@
+{
+  "graphical_display_menu": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "background_color": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "Color",
+              "docs": "**[Color](https://esphome.io/components/display#color)**: Specifies the background color to use. Defaults to COLOR_OFF\n\n*See also: [Graphical Display Menu](https://esphome.io/components/display_menu/graphical_display_menu#example-configuration-entry)*"
+            },
+            "display": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "display::Display",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: ID of the display to render to. See [Drawing Modes](https://esphome.io/components/display_menu/graphical_display_menu#drawing-modes) for more details\n\n*See also: [Graphical Display Menu](https://esphome.io/components/display_menu/graphical_display_menu#example-configuration-entry)*"
+            },
+            "font": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "font::Font",
+              "docs": "**[Font](https://esphome.io/components/font#display-fonts)**: Specifies the font to use\n\n*See also: [Graphical Display Menu](https://esphome.io/components/display_menu/graphical_display_menu#example-configuration-entry)*"
+            },
+            "foreground_color": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "Color",
+              "docs": "**[Color](https://esphome.io/components/display#color)**: Specifies the foreground color to use. Defaults to COLOR_ON\n\n*See also: [Graphical Display Menu](https://esphome.io/components/display_menu/graphical_display_menu#example-configuration-entry)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "graphical_display_menu::GraphicalDisplayMenu",
+                "parents": [
+                  "display_menu_base::DisplayMenuComponent",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [Graphical Display Menu](https://esphome.io/components/display_menu/graphical_display_menu#example-configuration-entry)*"
+            },
+            "menu_item_value": {
+              "key": "Optional",
+              "templatable": true,
+              "type": "string",
+              "docs": "**string**: Specifies how to render values for menu items that have values (eg. Selects, numbers). Defaults to rendering the value as \"(value here)\". Receives a MenuItemValueArguments as the argument`it`.\n\n*See also: [Graphical Display Menu](https://esphome.io/components/display_menu/graphical_display_menu#example-configuration-entry)*"
+            },
+            "on_redraw": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform when the menu needs to be redrawn. This can be useful if your display has slow refresh rates. For example E-Ink displays that are used with `display_interval: never`.\n\n*See also: [Graphical Display Menu](https://esphome.io/components/display_menu/graphical_display_menu#example-configuration-entry)*"
+            }
+          },
+          "extends": [
+            "display_menu_base.DISPLAY_MENU_BASE_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

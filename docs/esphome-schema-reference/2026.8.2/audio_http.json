@@ -1,0 +1,9 @@
+{
+  "audio_http.media_source": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "data_type": "_MEDIA_SOURCE_SCHEMA"
+      }
+    }
+  }
+}

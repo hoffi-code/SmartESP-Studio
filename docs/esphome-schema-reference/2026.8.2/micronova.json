@@ -1,0 +1,694 @@
+{
+  "micronova": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "enable_rx_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: Output pin to be used to switch the line between RX and TX.\n\n*See also: [MicroNova based pellet stove](https://esphome.io/components/micronova#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "micronova::MicroNova",
+                "parents": [
+                  "Component",
+                  "uart::UARTDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "uart_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "uart::UARTComponent"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "micronova.button": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "custom_button": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "id": {
+                    "id_type": {
+                      "class": "micronova::MicroNovaButton",
+                      "parents": [
+                        "button::Button",
+                        "EntityBase",
+                        "Component"
+                      ]
+                    },
+                    "key": "GeneratedID"
+                  },
+                  "memory_address": {
+                    "key": "Required"
+                  },
+                  "memory_data": {
+                    "key": "Required"
+                  },
+                  "memory_location": {
+                    "key": "Required"
+                  },
+                  "micronova_id": {
+                    "key": "GeneratedID",
+                    "type": "use_id",
+                    "use_id_type": "micronova::MicroNova"
+                  }
+                },
+                "extends": [
+                  "button._BUTTON_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "micronova_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "micronova::MicroNova"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "micronova.number": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "micronova_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "micronova::MicroNova"
+            },
+            "power_level": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "icon": {
+                    "default": "mdi:flash"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "micronova::MicroNovaNumber",
+                      "parents": [
+                        "number::Number",
+                        "EntityBase",
+                        "micronova::MicroNovaListener",
+                        "PollingComponent",
+                        "Component"
+                      ]
+                    },
+                    "key": "GeneratedID"
+                  },
+                  "memory_address": {
+                    "default": "127",
+                    "key": "Optional"
+                  },
+                  "memory_location": {
+                    "default": "32",
+                    "key": "Optional"
+                  },
+                  "micronova_id": {
+                    "key": "GeneratedID",
+                    "type": "use_id",
+                    "use_id_type": "micronova::MicroNova"
+                  },
+                  "update_interval": {
+                    "default": "60s",
+                    "key": "Optional"
+                  }
+                },
+                "extends": [
+                  "number._NUMBER_SCHEMA",
+                  "core.COMPONENT_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "thermostat_temperature": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "micronova::MicroNovaNumber",
+                      "parents": [
+                        "number::Number",
+                        "EntityBase",
+                        "micronova::MicroNovaListener",
+                        "PollingComponent",
+                        "Component"
+                      ]
+                    },
+                    "key": "GeneratedID"
+                  },
+                  "memory_address": {
+                    "default": "125",
+                    "key": "Optional"
+                  },
+                  "memory_location": {
+                    "default": "32",
+                    "key": "Optional"
+                  },
+                  "micronova_id": {
+                    "key": "GeneratedID",
+                    "type": "use_id",
+                    "use_id_type": "micronova::MicroNova"
+                  },
+                  "step": {
+                    "default": "1.0",
+                    "key": "Optional"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  },
+                  "update_interval": {
+                    "default": "60s",
+                    "key": "Optional"
+                  }
+                },
+                "extends": [
+                  "number._NUMBER_SCHEMA",
+                  "core.COMPONENT_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "micronova.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "fan_speed": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "fan_rpm_offset": {
+                    "default": "0",
+                    "key": "Optional",
+                    "type": "integer"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "micronova::MicroNovaSensor",
+                      "parents": [
+                        "sensor::Sensor",
+                        "EntityBase",
+                        "micronova::MicroNovaListener",
+                        "PollingComponent",
+                        "Component"
+                      ]
+                    }
+                  },
+                  "memory_address": {
+                    "default": "55",
+                    "key": "Optional"
+                  },
+                  "memory_location": {
+                    "default": "0",
+                    "key": "Optional"
+                  },
+                  "micronova_id": {
+                    "key": "GeneratedID",
+                    "type": "use_id",
+                    "use_id_type": "micronova::MicroNova"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "RPM"
+                  },
+                  "update_interval": {
+                    "default": "60s",
+                    "key": "Optional"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA",
+                  "core.COMPONENT_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "fumes_temperature": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "micronova::MicroNovaSensor",
+                      "parents": [
+                        "sensor::Sensor",
+                        "EntityBase",
+                        "micronova::MicroNovaListener",
+                        "PollingComponent",
+                        "Component"
+                      ]
+                    }
+                  },
+                  "memory_address": {
+                    "default": "90",
+                    "key": "Optional"
+                  },
+                  "memory_location": {
+                    "default": "0",
+                    "key": "Optional"
+                  },
+                  "micronova_id": {
+                    "key": "GeneratedID",
+                    "type": "use_id",
+                    "use_id_type": "micronova::MicroNova"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  },
+                  "update_interval": {
+                    "default": "60s",
+                    "key": "Optional"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA",
+                  "core.COMPONENT_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "memory_address_sensor": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "id": {
+                    "id_type": {
+                      "class": "micronova::MicroNovaSensor",
+                      "parents": [
+                        "sensor::Sensor",
+                        "EntityBase",
+                        "micronova::MicroNovaListener",
+                        "PollingComponent",
+                        "Component"
+                      ]
+                    }
+                  },
+                  "memory_address": {
+                    "key": "Required"
+                  },
+                  "memory_location": {
+                    "key": "Required"
+                  },
+                  "micronova_id": {
+                    "key": "GeneratedID",
+                    "type": "use_id",
+                    "use_id_type": "micronova::MicroNova"
+                  },
+                  "update_interval": {
+                    "default": "60s",
+                    "key": "Optional"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA",
+                  "core.COMPONENT_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "micronova_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "micronova::MicroNova"
+            },
+            "room_temperature": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "micronova::MicroNovaSensor",
+                      "parents": [
+                        "sensor::Sensor",
+                        "EntityBase",
+                        "micronova::MicroNovaListener",
+                        "PollingComponent",
+                        "Component"
+                      ]
+                    }
+                  },
+                  "memory_address": {
+                    "default": "1",
+                    "key": "Optional"
+                  },
+                  "memory_location": {
+                    "default": "0",
+                    "key": "Optional"
+                  },
+                  "micronova_id": {
+                    "key": "GeneratedID",
+                    "type": "use_id",
+                    "use_id_type": "micronova::MicroNova"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  },
+                  "update_interval": {
+                    "default": "60s",
+                    "key": "Optional"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA",
+                  "core.COMPONENT_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "stove_power": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "micronova::MicroNovaSensor",
+                      "parents": [
+                        "sensor::Sensor",
+                        "EntityBase",
+                        "micronova::MicroNovaListener",
+                        "PollingComponent",
+                        "Component"
+                      ]
+                    }
+                  },
+                  "memory_address": {
+                    "default": "52",
+                    "key": "Optional"
+                  },
+                  "memory_location": {
+                    "default": "0",
+                    "key": "Optional"
+                  },
+                  "micronova_id": {
+                    "key": "GeneratedID",
+                    "type": "use_id",
+                    "use_id_type": "micronova::MicroNova"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "update_interval": {
+                    "default": "60s",
+                    "key": "Optional"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA",
+                  "core.COMPONENT_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "water_pressure": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "pressure"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "micronova::MicroNovaSensor",
+                      "parents": [
+                        "sensor::Sensor",
+                        "EntityBase",
+                        "micronova::MicroNovaListener",
+                        "PollingComponent",
+                        "Component"
+                      ]
+                    }
+                  },
+                  "memory_address": {
+                    "default": "60",
+                    "key": "Optional"
+                  },
+                  "memory_location": {
+                    "default": "0",
+                    "key": "Optional"
+                  },
+                  "micronova_id": {
+                    "key": "GeneratedID",
+                    "type": "use_id",
+                    "use_id_type": "micronova::MicroNova"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "bar"
+                  },
+                  "update_interval": {
+                    "default": "60s",
+                    "key": "Optional"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA",
+                  "core.COMPONENT_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "water_temperature": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "micronova::MicroNovaSensor",
+                      "parents": [
+                        "sensor::Sensor",
+                        "EntityBase",
+                        "micronova::MicroNovaListener",
+                        "PollingComponent",
+                        "Component"
+                      ]
+                    }
+                  },
+                  "memory_address": {
+                    "default": "59",
+                    "key": "Optional"
+                  },
+                  "memory_location": {
+                    "default": "0",
+                    "key": "Optional"
+                  },
+                  "micronova_id": {
+                    "key": "GeneratedID",
+                    "type": "use_id",
+                    "use_id_type": "micronova::MicroNova"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  },
+                  "update_interval": {
+                    "default": "60s",
+                    "key": "Optional"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA",
+                  "core.COMPONENT_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "micronova.switch": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "micronova_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "micronova::MicroNova"
+            },
+            "stove": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "icon": {
+                    "default": "mdi:power"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "micronova::MicroNovaSwitch",
+                      "parents": [
+                        "switch_::Switch",
+                        "EntityBase",
+                        "micronova::MicroNovaListener",
+                        "PollingComponent",
+                        "Component"
+                      ]
+                    },
+                    "key": "GeneratedID"
+                  },
+                  "memory_address": {
+                    "default": "33",
+                    "key": "Optional"
+                  },
+                  "memory_data_off": {
+                    "default": "6",
+                    "key": "Optional"
+                  },
+                  "memory_data_on": {
+                    "default": "1",
+                    "key": "Optional"
+                  },
+                  "memory_location": {
+                    "default": "0",
+                    "key": "Optional"
+                  },
+                  "micronova_id": {
+                    "key": "GeneratedID",
+                    "type": "use_id",
+                    "use_id_type": "micronova::MicroNova"
+                  },
+                  "update_interval": {
+                    "default": "60s",
+                    "key": "Optional"
+                  }
+                },
+                "extends": [
+                  "switch._SWITCH_SCHEMA",
+                  "core.COMPONENT_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "micronova.text_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "micronova_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "micronova::MicroNova"
+            },
+            "stove_state": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "id": {
+                    "id_type": {
+                      "class": "micronova::MicroNovaTextSensor",
+                      "parents": [
+                        "text_sensor::TextSensor",
+                        "EntityBase",
+                        "micronova::MicroNovaListener",
+                        "PollingComponent",
+                        "Component"
+                      ]
+                    }
+                  },
+                  "memory_address": {
+                    "default": "33",
+                    "key": "Optional"
+                  },
+                  "memory_location": {
+                    "default": "0",
+                    "key": "Optional"
+                  },
+                  "micronova_id": {
+                    "key": "GeneratedID",
+                    "type": "use_id",
+                    "use_id_type": "micronova::MicroNova"
+                  },
+                  "update_interval": {
+                    "default": "60s",
+                    "key": "Optional"
+                  }
+                },
+                "extends": [
+                  "text_sensor._TEXT_SENSOR_SCHEMA",
+                  "core.COMPONENT_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

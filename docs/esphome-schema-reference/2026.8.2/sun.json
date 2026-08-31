@@ -1,0 +1,215 @@
+{
+  "sun": {
+    "condition": {
+      "is_above_horizon": {
+        "schema": {
+          "config_vars": {
+            "elevation": {
+              "default": "-0.83333",
+              "key": "Optional",
+              "templatable": true
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "sun::Sun"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "is_below_horizon": {
+        "schema": {
+          "config_vars": {
+            "elevation": {
+              "default": "-0.83333",
+              "key": "Optional",
+              "templatable": true
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "sun::Sun"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "sun::Sun",
+                "parents": []
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [Sun](https://esphome.io/components/sun#configuration-variables)*"
+            },
+            "latitude": {
+              "key": "Required",
+              "docs": "**float**: The latitude for performing the calculation.\n\n*See also: [Sun](https://esphome.io/components/sun#configuration-variables)*"
+            },
+            "longitude": {
+              "key": "Required",
+              "docs": "**float**: The longitude for performing the calculation.\n\n*See also: [Sun](https://esphome.io/components/sun#configuration-variables)*"
+            },
+            "on_sunrise": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "elevation": {
+                    "default": "-0.83333",
+                    "key": "Optional",
+                    "docs": "**float**: The elevation to cross. Defaults to -0.833\u00b0 (the horizon, slightly less than 0\u00b0 to compensate for atmospheric refraction).\n\n*See also: [Sun](https://esphome.io/components/sun#configuration-variables)*"
+                  },
+                  "then": {
+                    "type": "trigger"
+                  }
+                }
+              },
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform at sunrise when the sun crosses a specified angle.\n\n*See also: [Sun](https://esphome.io/components/sun#configuration-variables)*"
+            },
+            "on_sunset": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "elevation": {
+                    "default": "-0.83333",
+                    "key": "Optional",
+                    "docs": "**float**: The elevation to cross. Defaults to -0.833\u00b0 (the horizon, slightly less than 0\u00b0 to compensate for atmospheric refraction).\n\n*See also: [Sun](https://esphome.io/components/sun#configuration-variables)*"
+                  },
+                  "then": {
+                    "type": "trigger"
+                  }
+                }
+              },
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform at sunset when the sun crosses a specified angle.\n\n*See also: [Sun](https://esphome.io/components/sun#configuration-variables)*"
+            },
+            "time_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "time::RealTimeClock"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "sun.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "1"
+            },
+            "icon": {
+              "default": "mdi:weather-sunset"
+            },
+            "id": {
+              "id_type": {
+                "class": "sun::SunSensor",
+                "parents": [
+                  "sensor::Sensor",
+                  "EntityBase",
+                  "PollingComponent",
+                  "Component"
+                ]
+              }
+            },
+            "state_class": {
+              "default": "measurement"
+            },
+            "sun_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "sun::Sun"
+            },
+            "type": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "elevation": null,
+                "azimuth": null
+              },
+              "docs": "**string**: The type of value to track. One of `elevation` and `azimuth`.\n\n*See also: [Sun](https://esphome.io/components/sun#configuration-variables)*"
+            },
+            "unit_of_measurement": {
+              "default": "\u00b0"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "sun.text_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "elevation": {
+              "default": "-0.83333",
+              "key": "Optional",
+              "docs": "**float**: The elevation to calculate the next sunrise/sunset event for. Defaults to -0.833\u00b0 (the horizon, slightly less than 0\u00b0 to compensate for atmospheric refraction).\n\n*See also: [Sun](https://esphome.io/components/sun#configuration-variables)*"
+            },
+            "format": {
+              "default": "%X",
+              "key": "Optional",
+              "type": "string",
+              "docs": "**string**: The format to format the time value with, see [strftime](https://esphome.io/components/time#strftime) for more information. Defaults to `%X`.\n\n*See also: [Sun](https://esphome.io/components/sun#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "sun::SunTextSensor",
+                "parents": [
+                  "text_sensor::TextSensor",
+                  "EntityBase",
+                  "PollingComponent",
+                  "Component"
+                ]
+              }
+            },
+            "sun_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "sun::Sun"
+            },
+            "type": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "sunset": null,
+                "sunrise": null
+              },
+              "docs": "**string**: The type of value to track. One of `sunrise` and `sunset`.\n\n*See also: [Sun](https://esphome.io/components/sun#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional"
+            }
+          },
+          "extends": [
+            "text_sensor._TEXT_SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

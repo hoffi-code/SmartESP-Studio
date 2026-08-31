@@ -1,0 +1,46 @@
+{
+  "sm10bit_base": {
+    "schemas": {
+      "SM10BIT_BASE_CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "clock_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin which CLK is\n\n*See also: [SM2235 LED driver](https://esphome.io/components/output/sm2235#configuration-variables)*"
+            },
+            "data_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin used for DATA.\n\n*See also: [SM2235 LED driver](https://esphome.io/components/output/sm2235#configuration-variables)*"
+            },
+            "max_power_color_channels": {
+              "default": "2",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int 0-15**: Adjusts the current supplied to the\n\n*See also: [SM2235 LED driver](https://esphome.io/components/output/sm2235#configuration-variables)*"
+            },
+            "max_power_white_channels": {
+              "default": "4",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int 0-15**: Adjusts the current supplied to the\n\n*See also: [SM2235 LED driver](https://esphome.io/components/output/sm2235#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

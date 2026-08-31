@@ -1,0 +1,152 @@
+{
+  "st7735.display": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "col_start": {
+              "key": "Required",
+              "type": "integer",
+              "docs": "**int**: The starting column offset. Default value depends on **model**.\n\n*See also: [ST7735 Display](https://esphome.io/components/display/st7735#configuration-variables)*"
+            },
+            "cs_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The CS pin.\n\n*See also: [ST7735 Display](https://esphome.io/components/display/st7735#configuration-variables)*"
+            },
+            "data_rate": {
+              "key": "Optional"
+            },
+            "dc_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The DC pin.\n\n*See also: [ST7735 Display](https://esphome.io/components/display/st7735#configuration-variables)*"
+            },
+            "device_height": {
+              "key": "Required",
+              "type": "integer",
+              "docs": "**int**: The device height. 160 is default\n\n*See also: [ST7735 Display](https://esphome.io/components/display/st7735#configuration-variables)*"
+            },
+            "device_width": {
+              "key": "Required",
+              "type": "integer",
+              "docs": "**int**: The device width. 128 is default\n\n*See also: [ST7735 Display](https://esphome.io/components/display/st7735#configuration-variables)*"
+            },
+            "eight_bit_color": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: 8bit mode. Default is false. This saves 50% of the buffer required for the display.\n\n*See also: [ST7735 Display](https://esphome.io/components/display/st7735#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "st7735::ST7735",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "display::DisplayBuffer",
+                  "display::Display",
+                  "PollingComponent",
+                  "Component",
+                  "spi::SPIDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "invert_colors": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Invert LCD colors. Default is false.\n\n*See also: [ST7735 Display](https://esphome.io/components/display/st7735#configuration-variables)*"
+            },
+            "model": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "INITR_GREENTAB": {
+                  "docs": null
+                },
+                "INITR_REDTAB": {
+                  "docs": null
+                },
+                "INITR_BLACKTAB": {
+                  "docs": null
+                },
+                "INITR_MINI160X80": {
+                  "docs": null
+                },
+                "INITR_18BLACKTAB": {
+                  "docs": null
+                },
+                "INITR_18REDTAB": {
+                  "docs": null
+                }
+              },
+              "docs": "**string**: The model to use, one of the following options:\n\n*See also: [ST7735 Display](https://esphome.io/components/display/st7735#configuration-variables)*"
+            },
+            "release_device": {
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "reset_pin": {
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The RESET pin.\n\n*See also: [ST7735 Display](https://esphome.io/components/display/st7735#configuration-variables)*"
+            },
+            "row_start": {
+              "key": "Required",
+              "type": "integer",
+              "docs": "**int**: The starting row offset. Default value depends on **model**.\n\n*See also: [ST7735 Display](https://esphome.io/components/display/st7735#configuration-variables)*"
+            },
+            "spi_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "spi::SPIComponent"
+            },
+            "spi_mode": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "MODE0": null,
+                "MODE1": null,
+                "MODE2": null,
+                "MODE3": null,
+                "0": null,
+                "1": null,
+                "2": null,
+                "3": null
+              }
+            },
+            "update_interval": {
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: Time between display updates. Default is 1s.\n\n*See also: [ST7735 Display](https://esphome.io/components/display/st7735#configuration-variables)*"
+            },
+            "use_bgr": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Use BGR mode. Default is false.\n\n*See also: [ST7735 Display](https://esphome.io/components/display/st7735#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "display.FULL_DISPLAY_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

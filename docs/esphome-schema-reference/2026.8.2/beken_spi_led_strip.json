@@ -1,0 +1,95 @@
+{
+  "beken_spi_led_strip.light": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "channel_colors": {
+              "key": "Required",
+              "docs": "**string**: The order in which the strip expects its color channels. List each of `R`, `G` and `B` exactly once, optionally with a single `W` in any position; for example `GRB`, `BGR`, `GRBW`, `WRGB` or `RWGB`. The value is case-insensitive. Including a `W` makes this a four channel RGBW strip.\n\n*See also: [Beken SPI LED Strip](https://esphome.io/components/light/beken_spi_led_strip#configuration-variables)*"
+            },
+            "chipset": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "WS2812": {
+                  "docs": null
+                },
+                "SK6812": {
+                  "docs": null
+                },
+                "APA106": {
+                  "docs": null
+                },
+                "SM16703": {
+                  "docs": null
+                }
+              },
+              "docs": "**enum**: The chipset to apply known timings from.\n\n*See also: [Beken SPI LED Strip](https://esphome.io/components/light/beken_spi_led_strip#configuration-variables)*"
+            },
+            "is_rgbw": {
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "is_wrgb": {
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "max_refresh_rate": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_microseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: A time interval used to limit the number of commands a light can handle per second. For example 16ms will limit the light to a refresh rate of about 60Hz. Defaults to sending commands as quickly as changes are made to the lights.\n\n*See also: [Beken SPI LED Strip](https://esphome.io/components/light/beken_spi_led_strip#configuration-variables)*"
+            },
+            "num_leds": {
+              "data_type": "positive_not_null_int",
+              "key": "Required",
+              "type": "integer",
+              "docs": "**int**: The number of LEDs in the strip. The DMA buffer limits this to 165 LEDs, or 123 LEDs when `channel_colors` contains a `W`.\n\n*See also: [Beken SPI LED Strip](https://esphome.io/components/light/beken_spi_led_strip#configuration-variables)*"
+            },
+            "output_id": {
+              "id_type": {
+                "class": "beken_spi_led_strip::BekenSPILEDStripLightOutput",
+                "parents": [
+                  "light::AddressableLight",
+                  "light::LightOutput",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "pin": {
+              "internal": true,
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The pin for the data line of the light.\n\n*See also: [Beken SPI LED Strip](https://esphome.io/components/light/beken_spi_led_strip#configuration-variables)*"
+            },
+            "rgb_order": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "RGB": null,
+                "RBG": null,
+                "GRB": null,
+                "GBR": null,
+                "BGR": null,
+                "BRG": null
+              }
+            }
+          },
+          "extends": [
+            "light.ADDRESSABLE_LIGHT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

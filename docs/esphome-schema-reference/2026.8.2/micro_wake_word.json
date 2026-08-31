@@ -1,0 +1,243 @@
+{
+  "micro_wake_word": {
+    "action": {
+      "disable_model": {
+        "schema": {
+          "extends": [
+            "micro_wake_word.MICRO_WAKE_WORLD_MODEL_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "enable_model": {
+        "schema": {
+          "extends": [
+            "micro_wake_word.MICRO_WAKE_WORLD_MODEL_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "start": {
+        "schema": {
+          "extends": [
+            "micro_wake_word.MICRO_WAKE_WORD_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "stop": {
+        "schema": {
+          "extends": [
+            "micro_wake_word.MICRO_WAKE_WORD_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    },
+    "condition": {
+      "is_running": {
+        "schema": {
+          "extends": [
+            "micro_wake_word.MICRO_WAKE_WORD_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "model_is_enabled": {
+        "schema": {
+          "extends": [
+            "micro_wake_word.MICRO_WAKE_WORLD_MODEL_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "micro_wake_word::MicroWakeWord",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "microphone": {
+              "default": "{}",
+              "key": "Optional",
+              "maybe": "microphone",
+              "schema": {
+                "config_vars": {
+                  "bits_per_sample": {
+                    "default": "16",
+                    "key": "Optional",
+                    "type": "integer"
+                  },
+                  "channels": {
+                    "default": "0",
+                    "is_list": true,
+                    "key": "Optional",
+                    "type": "integer"
+                  },
+                  "gain_factor": {
+                    "default": "1",
+                    "key": "Optional",
+                    "type": "integer"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "microphone::MicrophoneSource",
+                      "parents": []
+                    },
+                    "key": "GeneratedID"
+                  },
+                  "microphone": {
+                    "key": "GeneratedID",
+                    "type": "use_id",
+                    "use_id_type": "microphone::Microphone"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "**[Microphone Source Configuration](https://esphome.io/components/microphone#config-microphone-source)**: The [microphone](https://esphome.io/components/microphone/) settings to use for audio input.\n\n*See also: [Micro Wake Word](https://esphome.io/components/micro_wake_word#configuration-variables)*"
+            },
+            "models": {
+              "default": "[]",
+              "is_list": true,
+              "key": "Optional",
+              "maybe": "model",
+              "schema": {
+                "extends": [
+                  "micro_wake_word.MODEL_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "**list**: The models to use. Only the first model is enabled by default on the first boot. Each model's enabled state is then saved/restored to/from the flash. Defaults to an empty list, which builds the firmware without any wake word models.\n\n*See also: [Micro Wake Word](https://esphome.io/components/micro_wake_word#configuration-variables)*"
+            },
+            "on_wake_word_detected": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "stop_after_detection": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Whether to stop the component after detecting a wake word. Defaults to `true`.\n\n*See also: [Micro Wake Word](https://esphome.io/components/micro_wake_word#configuration-variables)*"
+            },
+            "task_stack_in_psram": {
+              "key": "Optional",
+              "docs": "**boolean**: If `true`, allocate the inference task stack in PSRAM instead of internal RAM. Requires the [PSRAM](https://esphome.io/components/psram/) component. Defaults to `false`.\n\n*See also: [Micro Wake Word](https://esphome.io/components/micro_wake_word#configuration-variables)*"
+            },
+            "vad": {
+              "key": "Optional"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "MICRO_WAKE_WORD_ACTION_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "micro_wake_word::MicroWakeWord"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "MICRO_WAKE_WORLD_MODEL_ACTION_SCHEMA": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "micro_wake_word::WakeWordModel"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "MODEL_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "micro_wake_word::WakeWordModel",
+                "parents": []
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The optional ID used for the model actions below.\n\n*See also: [Micro Wake Word](https://esphome.io/components/micro_wake_word#configuration-variables)*"
+            },
+            "internal": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "model": {
+              "key": "Optional",
+              "type": "typed",
+              "typed_key": "type",
+              "types": {
+                "git": {
+                  "config_vars": {
+                    "file": {
+                      "key": "Required"
+                    },
+                    "refresh": {
+                      "default": "1d",
+                      "key": "Optional",
+                      "type": "string"
+                    }
+                  },
+                  "extends": [
+                    "core.GIT_SCHEMA"
+                  ]
+                },
+                "http": {
+                  "config_vars": {
+                    "url": {
+                      "key": "Required"
+                    }
+                  }
+                },
+                "local": {
+                  "config_vars": {
+                    "path": {
+                      "key": "Required"
+                    }
+                  }
+                }
+              },
+              "docs": "**string**: This can be one of:\n\n*See also: [Micro Wake Word](https://esphome.io/components/micro_wake_word#configuration-variables)*"
+            },
+            "probability_cutoff": {
+              "key": "Optional"
+            },
+            "raw_data_id": {
+              "id_type": {
+                "class": "uint8_t",
+                "parents": null
+              },
+              "key": "GeneratedID"
+            },
+            "sliding_window_size": {
+              "data_type": "positive_int",
+              "key": "Optional",
+              "type": "integer"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

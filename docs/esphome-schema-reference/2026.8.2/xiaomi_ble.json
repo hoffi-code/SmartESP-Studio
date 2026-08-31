@@ -1,0 +1,25 @@
+{
+  "xiaomi_ble": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "xiaomi_ble::XiaomiListener",
+                "parents": [
+                  "ble_device_base::ESPBTDeviceListener"
+                ]
+              },
+              "key": "GeneratedID"
+            }
+          },
+          "extends": [
+            "ble_device_base.BLE_DEVICE_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

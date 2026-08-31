@@ -1,0 +1,417 @@
+{
+  "ble_client": {
+    "action": {
+      "ble_write": {
+        "schema": {
+          "config_vars": {
+            "characteristic_uuid": {
+              "key": "Required",
+              "docs": "**UUID**: UUID of the service's characteristic to write to.\n\n*See also: [BLE Client](https://esphome.io/components/ble_client#configuration-variables)*"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "ble_client::BLEClient",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: ID of the associated BLE client.\n\n*See also: [BLE Client](https://esphome.io/components/ble_client#configuration-variables)*"
+            },
+            "service_uuid": {
+              "key": "Required",
+              "docs": "**UUID**: UUID of the service to write to.\n\n*See also: [BLE Client](https://esphome.io/components/ble_client#configuration-variables)*"
+            },
+            "value": {
+              "data_type": "hex_uint8_t",
+              "is_list": true,
+              "key": "Required",
+              "templatable": true,
+              "docs": "**list of bytes**: The value to be written.\n\n*See also: [BLE Client](https://esphome.io/components/ble_client#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This action triggers a write to a specified BLE characteristic. The write is attempted in a best-effort fashion and will only succeed if the `ble_client`  's connection has been established and the peripheral exposes the expected BLE service and characteristic. Execution of the automation block sequence resumes after the write has completed. A write failure will *not* stop execution of succeeding actions (this allows a disconnect to be executed, for example.)"
+      },
+      "connect": {
+        "schema": {
+          "extends": [
+            "ble_client.BLE_CONNECT_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action is useful only for devices with `auto_connect: false` and allows a connection to be made from within an automation. Once connected other actions like `ble_write` can be used. This is useful where a BLE server needs only to be interacted with occasionally, and thus does not need a constant connection held."
+      },
+      "disconnect": {
+        "schema": {
+          "extends": [
+            "ble_client.BLE_CONNECT_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action disconnects a device that was connected with the `ble_client.connect` action. Execution of the automation block sequence resumes after the disconnect has completed."
+      },
+      "numeric_comparison_reply": {
+        "schema": {
+          "config_vars": {
+            "accept": {
+              "key": "Required",
+              "templatable": true,
+              "type": "boolean",
+              "docs": "**boolean**: Should be `true` if the passkeys displayed on both BLE devices are matching.\n\n*See also: [BLE Client](https://esphome.io/components/ble_client#configuration-variables)*"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "ble_client::BLEClient",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: ID of the associated BLE client.\n\n*See also: [BLE Client](https://esphome.io/components/ble_client#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This action triggers an authentication attempt after a numeric comparison."
+      },
+      "passkey_reply": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "ble_client::BLEClient",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: ID of the associated BLE client.\n\n*See also: [BLE Client](https://esphome.io/components/ble_client#configuration-variables)*"
+            },
+            "passkey": {
+              "key": "Required",
+              "templatable": true,
+              "type": "integer",
+              "docs": "**int**: The 6-digit passkey.\n\n*See also: [BLE Client](https://esphome.io/components/ble_client#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This action triggers an authentication attempt using the specified `passkey`."
+      },
+      "remove_bond": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "ble_client::BLEClient",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: ID of the associated BLE client.\n\n*See also: [BLE Client](https://esphome.io/components/ble_client#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This action removes a device from the security database and manages unpairing."
+      }
+    },
+    "schemas": {
+      "BLE_CLIENT_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "ble_client_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "ble_client::BLEClient",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: ID of the associated BLE client.\n\n*See also: [PVVX MiThermometer Display](https://esphome.io/components/display/pvvx_mithermometer#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "BLE_CONNECT_ACTION_SCHEMA": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "ble_client::BLEClient"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "auto_connect": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: If true the device will be automatically connected when found by the [Esp32 Ble Tracker](https://esphome.io/components/esp32_ble_tracker/). Defaults to true.\n\n*See also: [BLE Client](https://esphome.io/components/ble_client#configuration-variables)*"
+            },
+            "esp32_ble_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "esp32_ble_tracker::ESP32BLETracker"
+            },
+            "id": {
+              "id_type": {
+                "class": "ble_client::BLEClient",
+                "parents": [
+                  "esp32_ble_client::BLEClientBase",
+                  "esp32_ble_tracker::ESPBTClient",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID to use for code generation, and for reference by dependent components.\n\n*See also: [BLE Client Sensor](https://esphome.io/components/sensor/ble_client#configuration-variables)*"
+            },
+            "mac_address": {
+              "key": "Required",
+              "docs": "**MAC Address**: The MAC address of the BLE device to connect to.\n\n*See also: [BLE Client](https://esphome.io/components/ble_client#configuration-variables)*"
+            },
+            "name": {
+              "key": "Optional",
+              "type": "string"
+            },
+            "on_connect": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform when the client connects to a device. See [`on_connect`](https://esphome.io/components/ble_client#ble_client-on_connect).\n\n*See also: [BLE Client](https://esphome.io/components/ble_client#configuration-variables)*"
+            },
+            "on_disconnect": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform when the client disconnects from a device. See [`on_disconnect`](https://esphome.io/components/ble_client#ble_client-on_disconnect).\n\n*See also: [BLE Client](https://esphome.io/components/ble_client#configuration-variables)*"
+            },
+            "on_numeric_comparison_request": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to compare the passkeys shown on the two BLE devices. See [`on_numeric_comparison_request`](https://esphome.io/components/ble_client#ble_client-on_numeric_comparison_request).\n\n*See also: [BLE Client](https://esphome.io/components/ble_client#configuration-variables)*"
+            },
+            "on_passkey_notification": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to display the passkey to the user. See [`on_passkey_notification`](https://esphome.io/components/ble_client#ble_client-on_passkey_notification).\n\n*See also: [BLE Client](https://esphome.io/components/ble_client#configuration-variables)*"
+            },
+            "on_passkey_request": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to enter the passkey required by the other BLE device. See [`on_passkey_request`](https://esphome.io/components/ble_client#ble_client-on_passkey_request).\n\n*See also: [BLE Client](https://esphome.io/components/ble_client#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "ble_client.output": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "characteristic_uuid": {
+              "key": "Required"
+            },
+            "id": {
+              "id_type": {
+                "class": "ble_client::BLEBinaryOutput",
+                "parents": [
+                  "output::BinaryOutput",
+                  "ble_client::BLEClientNode",
+                  "Component"
+                ]
+              },
+              "key": "Required"
+            },
+            "require_response": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "service_uuid": {
+              "key": "Required"
+            }
+          },
+          "extends": [
+            "output.BINARY_OUTPUT_SCHEMA",
+            "core.COMPONENT_SCHEMA",
+            "ble_client.BLE_CLIENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "ble_client.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "type": "typed",
+        "typed_key": "type",
+        "types": {
+          "characteristic": {
+            "config_vars": {
+              "accuracy_decimals": {
+                "default": "0"
+              },
+              "characteristic_uuid": {
+                "key": "Required"
+              },
+              "descriptor_uuid": {
+                "key": "Optional"
+              },
+              "id": {
+                "id_type": {
+                  "class": "ble_client::BLESensor",
+                  "parents": [
+                    "sensor::Sensor",
+                    "EntityBase",
+                    "PollingComponent",
+                    "Component",
+                    "ble_client::BLEClientNode"
+                  ]
+                }
+              },
+              "lambda": {
+                "key": "Optional"
+              },
+              "notify": {
+                "default": "False",
+                "key": "Optional",
+                "type": "boolean"
+              },
+              "on_notify": {
+                "key": "Optional",
+                "type": "trigger"
+              },
+              "service_uuid": {
+                "key": "Required"
+              },
+              "update_interval": {
+                "default": "60s",
+                "key": "Optional"
+              }
+            },
+            "extends": [
+              "sensor._SENSOR_SCHEMA",
+              "core.COMPONENT_SCHEMA",
+              "ble_client.BLE_CLIENT_SCHEMA"
+            ]
+          },
+          "rssi": {
+            "config_vars": {
+              "accuracy_decimals": {
+                "default": "0"
+              },
+              "device_class": {
+                "default": "signal_strength"
+              },
+              "id": {
+                "id_type": {
+                  "class": "ble_client::BLEClientRSSISensor",
+                  "parents": [
+                    "sensor::Sensor",
+                    "EntityBase",
+                    "PollingComponent",
+                    "Component",
+                    "ble_client::BLEClientNode"
+                  ]
+                }
+              },
+              "state_class": {
+                "default": "measurement"
+              },
+              "unit_of_measurement": {
+                "default": "dBm"
+              },
+              "update_interval": {
+                "default": "60s",
+                "key": "Optional"
+              }
+            },
+            "extends": [
+              "sensor._SENSOR_SCHEMA",
+              "core.COMPONENT_SCHEMA",
+              "ble_client.BLE_CLIENT_SCHEMA"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "ble_client.switch": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "icon": {
+              "default": "mdi:bluetooth"
+            },
+            "id": {
+              "id_type": {
+                "class": "ble_client::BLEClientSwitch",
+                "parents": [
+                  "switch_::Switch",
+                  "EntityBase",
+                  "Component",
+                  "ble_client::BLEClientNode"
+                ]
+              },
+              "key": "GeneratedID"
+            }
+          },
+          "extends": [
+            "switch._SWITCH_SCHEMA",
+            "ble_client.BLE_CLIENT_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "ble_client.text_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "characteristic_uuid": {
+              "key": "Required"
+            },
+            "descriptor_uuid": {
+              "key": "Optional"
+            },
+            "id": {
+              "id_type": {
+                "class": "ble_client::BLETextSensor",
+                "parents": [
+                  "text_sensor::TextSensor",
+                  "EntityBase",
+                  "PollingComponent",
+                  "Component",
+                  "ble_client::BLEClientNode"
+                ]
+              }
+            },
+            "notify": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "on_notify": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "service_uuid": {
+              "key": "Required"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional"
+            }
+          },
+          "extends": [
+            "text_sensor._TEXT_SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA",
+            "ble_client.BLE_CLIENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

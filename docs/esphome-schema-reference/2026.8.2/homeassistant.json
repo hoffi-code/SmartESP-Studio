@@ -1,0 +1,310 @@
+{
+  "homeassistant": {
+    "action": {
+      "action": {
+        "schema": {
+          "extends": [
+            "api.HOMEASSISTANT_ACTION_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "> [!NOTE] > Be sure to [follow the instructions above](https://esphome.io/components/api#actions) to tell Home Assistant to allow > your device to perform actions."
+      },
+      "event": {
+        "schema": {
+          "config_vars": {
+            "data": {
+              "default": "{}",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "api.KEY_VALUE_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "**mapping**: Optional *static* data to pass along with the event.\n\n*See also: [Native API Component](https://esphome.io/components/api#configuration-variables)*"
+            },
+            "data_template": {
+              "default": "{}",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "api.KEY_VALUE_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "**mapping**: Optional template data to pass along with the event. This is evaluated on the Home Assistant side with Home Assistant's templating engine.\n\n*See also: [Native API Component](https://esphome.io/components/api#configuration-variables)*"
+            },
+            "event": {
+              "key": "Required",
+              "docs": "**string**: The event to create - must begin with `esphome.`\n\n*See also: [Native API Component](https://esphome.io/components/api#configuration-variables)*"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "api::APIServer"
+            },
+            "variables": {
+              "default": "{}",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "api.KEY_VALUE_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "**mapping**: Optional variables that can be used in the `data_template`. Values are [lambdas](https://esphome.io/automations/templates#config-lambda) and will be evaluated before sending the request.\n\n*See also: [Native API Component](https://esphome.io/components/api#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "> [!NOTE] > Be sure to [follow the instructions above](https://esphome.io/components/api#actions) to tell Home Assistant to allow > your device to perform actions."
+      },
+      "service": {
+        "schema": {
+          "extends": [
+            "api.HOMEASSISTANT_ACTION_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "tag_scanned": {
+        "maybe": "tag",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "api::APIServer"
+            },
+            "tag": {
+              "key": "Required",
+              "templatable": true,
+              "type": "string",
+              "docs": "**string**: The id of the scanned tag\n\n*See also: [Native API Component](https://esphome.io/components/api#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "> [!NOTE] > Be sure to [follow the instructions above](https://esphome.io/components/api#actions) to tell Home Assistant to allow > your device to make action calls."
+      }
+    },
+    "schemas": {
+      "HOME_ASSISTANT_IMPORT_CONTROL_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "entity_id": {
+              "key": "Required",
+              "docs": "**string**: The Home Assistant entity ID of the number to synchronize with.\n\n*See also: [Home Assistant Number](https://esphome.io/components/number/homeassistant#configuration-variables)*"
+            },
+            "internal": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "HOME_ASSISTANT_IMPORT_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "attribute": {
+              "key": "Optional",
+              "type": "string",
+              "docs": "**string**: The name of the state attribute to import from the specified entity. The entity state is used when this option is omitted.\n\n*See also: [Home Assistant Binary Sensor](https://esphome.io/components/binary_sensor/homeassistant#configuration-variables)*"
+            },
+            "entity_id": {
+              "key": "Required",
+              "docs": "**string**: The entity ID to import from Home Assistant.\n\n*See also: [Home Assistant Binary Sensor](https://esphome.io/components/binary_sensor/homeassistant#configuration-variables)*"
+            },
+            "internal": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "homeassistant.binary_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "homeassistant::HomeassistantBinarySensor",
+                "parents": [
+                  "binary_sensor::BinarySensor",
+                  "EntityBase",
+                  "Component"
+                ]
+              }
+            }
+          },
+          "extends": [
+            "binary_sensor._BINARY_SENSOR_SCHEMA",
+            "homeassistant.HOME_ASSISTANT_IMPORT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "homeassistant.number": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "homeassistant::HomeassistantNumber",
+                "parents": [
+                  "number::Number",
+                  "EntityBase",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            }
+          },
+          "extends": [
+            "number._NUMBER_SCHEMA",
+            "homeassistant.HOME_ASSISTANT_IMPORT_CONTROL_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "homeassistant.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "1"
+            },
+            "id": {
+              "id_type": {
+                "class": "homeassistant::HomeassistantSensor",
+                "parents": [
+                  "sensor::Sensor",
+                  "EntityBase",
+                  "Component"
+                ]
+              }
+            },
+            "entity_id": {
+              "key": "Required",
+              "docs": "**string**: The entity ID to import from Home Assistant.\n\n*See also: [Home Assistant Sensor](https://esphome.io/components/sensor/homeassistant#configuration-variables)*"
+            },
+            "attribute": {
+              "key": "Optional",
+              "docs": "**string**: The name of the state attribute to import from the specified entity. The entity state is used when this option is omitted.\n\n*See also: [Home Assistant Sensor](https://esphome.io/components/sensor/homeassistant#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA",
+            "homeassistant.HOME_ASSISTANT_IMPORT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "homeassistant.switch": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "homeassistant::HomeassistantSwitch",
+                "parents": [
+                  "switch_::Switch",
+                  "EntityBase",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "entity_id": {
+              "key": "Required",
+              "docs": "**string**: The entity ID to import / control from Home Assistant.\n\n*See also: [Home Assistant Switch](https://esphome.io/components/switch/homeassistant#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "switch._SWITCH_SCHEMA",
+            "homeassistant.HOME_ASSISTANT_IMPORT_CONTROL_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "homeassistant.text_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "homeassistant::HomeassistantTextSensor",
+                "parents": [
+                  "text_sensor::TextSensor",
+                  "EntityBase",
+                  "Component"
+                ]
+              }
+            },
+            "entity_id": {
+              "key": "Required",
+              "docs": "**string**: The entity ID to import from Home Assistant.\n\n*See also: [Home Assistant Text Sensor](https://esphome.io/components/text_sensor/homeassistant#configuration-variables)*"
+            },
+            "attribute": {
+              "key": "Optional",
+              "docs": "**string**: The name of the state attribute to import from the specified entity. The entity state is used when this option is omitted.\n\n*See also: [Home Assistant Text Sensor](https://esphome.io/components/text_sensor/homeassistant#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "text_sensor._TEXT_SENSOR_SCHEMA",
+            "homeassistant.HOME_ASSISTANT_IMPORT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "homeassistant.time": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "homeassistant::HomeassistantTime",
+                "parents": [
+                  "time::RealTimeClock",
+                  "PollingComponent",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            }
+          },
+          "extends": [
+            "time.TIME_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

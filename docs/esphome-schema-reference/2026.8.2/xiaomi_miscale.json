@@ -1,0 +1,88 @@
+{
+  "xiaomi_miscale.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "clear_impedance": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "Clear the impedance information if a weight reading without impedance is received. Defaults to `false`. **Only available on MiScale2** Useful in the example below if a person steps onto the scale without waiting for the complete measurement. Without setting the flag the impedance reading of the measurement before will be used for the currently measured person.\n\n*See also: [Xiaomi Miscale Sensors](https://esphome.io/components/sensor/xiaomi_miscale#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "xiaomi_miscale::XiaomiMiscale",
+                "parents": [
+                  "ble_device_base::ESPBTDeviceListener",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "impedance": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "icon": {
+                    "default": "mdi:omega"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u03a9"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the impedance sensor. **Only available on MiScale2**\n\n*See also: [Xiaomi Miscale Sensors](https://esphome.io/components/sensor/xiaomi_miscale#configuration-variables)*"
+            },
+            "mac_address": {
+              "key": "Required",
+              "docs": "**MAC Address**: The MAC address of the scale.\n\n*See also: [Xiaomi Miscale Sensors](https://esphome.io/components/sensor/xiaomi_miscale#configuration-variables)*"
+            },
+            "weight": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "weight"
+                  },
+                  "icon": {
+                    "default": "mdi:scale-bathroom"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "kg"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the weight sensor.\n\n*See also: [Xiaomi Miscale Sensors](https://esphome.io/components/sensor/xiaomi_miscale#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA",
+            "ble_device_base.BLE_DEVICE_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,171 @@
+{
+  "seeed_mr60bha2": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "seeed_mr60bha2::MR60BHA2Component",
+                "parents": [
+                  "Component",
+                  "uart::UARTDevice"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID for this [Seeed Mr60Bha2](https://esphome.io/components/seeed_mr60bha2/) component if you need multiple components.\n\n*See also: [Seeed Studio MR60BHA2 60GHz mmWave Breathing and Heartbeat Detection Sensor Kit](https://esphome.io/components/seeed_mr60bha2#configuration-variables)*"
+            },
+            "uart_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "uart::UARTComponent",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the [UART Component](https://esphome.io/components/uart) if you want to use multiple UART buses.\n\n*See also: [Seeed Studio MR60BHA2 60GHz mmWave Breathing and Heartbeat Detection Sensor Kit](https://esphome.io/components/seeed_mr60bha2#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "seeed_mr60bha2.binary_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "has_target": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "occupancy"
+                  },
+                  "icon": {
+                    "default": "mdi:motion-sensor"
+                  }
+                },
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "If true when target (person) is detected. All options from [Binary Sensor](https://esphome.io/components/binary_sensor#config-binary_sensor).\n\n*See also: [Seeed Studio MR60BHA2 60GHz mmWave Breathing and Heartbeat Detection Sensor Kit](https://esphome.io/components/seeed_mr60bha2#configuration-variables)*"
+            },
+            "mr60bha2_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "seeed_mr60bha2::MR60BHA2Component"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "seeed_mr60bha2.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "breath_rate": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "icon": {
+                    "default": "mdi:pulse"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "**float**: Radar-detected respiratory rate during the first 60 seconds. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Seeed Studio MR60BHA2 60GHz mmWave Breathing and Heartbeat Detection Sensor Kit](https://esphome.io/components/seeed_mr60bha2#configuration-variables)*"
+            },
+            "distance": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "distance"
+                  },
+                  "icon": {
+                    "default": "mdi:signal-distance-variant"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "cm"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "**float**: Straight-line distance between the radar and the monitoring object. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Seeed Studio MR60BHA2 60GHz mmWave Breathing and Heartbeat Detection Sensor Kit](https://esphome.io/components/seeed_mr60bha2#configuration-variables)*"
+            },
+            "heart_rate": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "icon": {
+                    "default": "mdi:heart-pulse"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "bpm"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "**float**: Heart rate during the first 60 seconds as detected by the radar. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Seeed Studio MR60BHA2 60GHz mmWave Breathing and Heartbeat Detection Sensor Kit](https://esphome.io/components/seeed_mr60bha2#configuration-variables)*"
+            },
+            "mr60bha2_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "seeed_mr60bha2::MR60BHA2Component"
+            },
+            "num_targets": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "icon": {
+                    "default": "mdi:counter"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "**int**: The number of target detected by the radar. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Seeed Studio MR60BHA2 60GHz mmWave Breathing and Heartbeat Detection Sensor Kit](https://esphome.io/components/seeed_mr60bha2#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "st7567_i2c.display": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "63",
+              "key": "Optional",
+              "docs": "**int**: Manually specify the [I\u00b2C](https://esphome.io/components/i2c) address of the display. Defaults to 0x3F.\n\n*See also: [ST7567 LCD Graphic Display](https://esphome.io/components/display/st7567#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the [I\u00b2C Component](https://esphome.io/components/i2c) if you want to use multiple I\u00b2C buses.\n\n*See also: [ST7567 LCD Graphic Display](https://esphome.io/components/display/st7567#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "st7567_i2c::I2CST7567",
+                "parents": [
+                  "st7567_base::ST7567",
+                  "PollingComponent",
+                  "Component",
+                  "display::DisplayBuffer",
+                  "display::Display",
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [ST7567 LCD Graphic Display](https://esphome.io/components/display/st7567#configuration-variables)*"
+            },
+            "update_interval": {
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to re-draw the screen. Defaults to `1s`.\n\n*See also: [ST7567 LCD Graphic Display](https://esphome.io/components/display/st7567#configuration-variables)*"
+            },
+            "pages": {
+              "key": "Optional",
+              "docs": "**list**: Show pages instead of a single lambda. See [Display Pages](https://esphome.io/components/display#display-pages).\n\n*See also: [ST7567 LCD Graphic Display](https://esphome.io/components/display/st7567#configuration-variables)*"
+            },
+            "lambda": {
+              "key": "Optional",
+              "docs": "**[lambda](https://esphome.io/automations/templates#config-lambda)**: The lambda to use for rendering the content on the display.\n\n*See also: [ST7567 LCD Graphic Display](https://esphome.io/components/display/st7567#configuration-variables)*"
+            },
+            "rotation": {
+              "key": "Optional",
+              "docs": "Set the rotation of the display. Everything you draw in `lambda:` will be rotated by this option. One of `0\u00b0` (default), `90\u00b0`, `180\u00b0`, `270\u00b0`.\n\n*See also: [ST7567 LCD Graphic Display](https://esphome.io/components/display/st7567#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "st7567_base.ST7567_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

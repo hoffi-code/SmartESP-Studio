@@ -1,0 +1,58 @@
+{
+  "tormatic.cover": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "close_duration": {
+              "default": "22s",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema"
+            },
+            "id": {
+              "id_type": {
+                "class": "tormatic::Tormatic",
+                "parents": [
+                  "cover::Cover",
+                  "EntityBase",
+                  "PollingComponent",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "open_duration": {
+              "default": "15s",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema"
+            },
+            "uart_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "uart::UARTComponent"
+            },
+            "update_interval": {
+              "default": "300ms",
+              "key": "Optional"
+            }
+          },
+          "extends": [
+            "cover._COVER_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "absolute_humidity.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "2"
+            },
+            "device_class": {
+              "default": "absolute_humidity"
+            },
+            "equation": {
+              "default": "WOBUS",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "BUCK": null,
+                "TETENS": null,
+                "WOBUS": null
+              },
+              "docs": "The saturated vapor pressure equation to use (see below).\n\n*See also: [Absolute Humidity](https://esphome.io/components/sensor/absolute_humidity#configuration-variables)*"
+            },
+            "humidity": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "sensor::Sensor",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The sensor that is used to measure the current relative humidity, in %.\n\n*See also: [Absolute Humidity](https://esphome.io/components/sensor/absolute_humidity#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "absolute_humidity::AbsoluteHumidityComponent",
+                "parents": [
+                  "sensor::Sensor",
+                  "EntityBase",
+                  "Component"
+                ]
+              }
+            },
+            "state_class": {
+              "default": "measurement"
+            },
+            "temperature": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "sensor::Sensor",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The sensor that is used to measure the current temperature, in \u00b0C.\n\n*See also: [Absolute Humidity](https://esphome.io/components/sensor/absolute_humidity#configuration-variables)*"
+            },
+            "unit_of_measurement": {
+              "default": "g/m\u00b3"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,1445 @@
+{
+  "template.alarm_control_panel": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "arming_away_time": {
+              "default": "0s",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The exit delay before the alarm is armed to away mode. Defaults to `0s`.\n\n*See also: [Template Alarm Control Panel](https://esphome.io/components/alarm_control_panel/template#configuration-variables)*"
+            },
+            "arming_home_time": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The exit delay before the alarm is armed to home mode.\n\n*See also: [Template Alarm Control Panel](https://esphome.io/components/alarm_control_panel/template#configuration-variables)*"
+            },
+            "arming_night_time": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The exit delay before the alarm is armed to night mode.\n\n*See also: [Template Alarm Control Panel](https://esphome.io/components/alarm_control_panel/template#configuration-variables)*"
+            },
+            "binary_sensors": {
+              "is_list": true,
+              "key": "Optional",
+              "maybe": "input",
+              "schema": {
+                "config_vars": {
+                  "bypass_armed_home": {
+                    "default": "False",
+                    "key": "Optional",
+                    "type": "boolean",
+                    "docs": "**boolean**: This binary sensor will not trigger the alarm when in `armed_home` state.\n\n*See also: [Template Alarm Control Panel](https://esphome.io/components/alarm_control_panel/template#configuration-variables)*"
+                  },
+                  "bypass_armed_night": {
+                    "default": "False",
+                    "key": "Optional",
+                    "type": "boolean",
+                    "docs": "**boolean**: This binary sensor will not trigger the alarm when in `armed_night` state.\n\n*See also: [Template Alarm Control Panel](https://esphome.io/components/alarm_control_panel/template#configuration-variables)*"
+                  },
+                  "bypass_auto": {
+                    "default": "False",
+                    "key": "Optional",
+                    "type": "boolean",
+                    "docs": "**boolean**: This binary sensor will be automatically bypassed if left on/open at the time of arming.\n\n*See also: [Template Alarm Control Panel](https://esphome.io/components/alarm_control_panel/template#configuration-variables)*"
+                  },
+                  "chime": {
+                    "default": "False",
+                    "key": "Optional",
+                    "type": "boolean",
+                    "docs": "**boolean**: When set `true`, the chime callback will be called whenever the sensor goes from closed to open. (`false` is the default if not specified)\n\n*See also: [Template Alarm Control Panel](https://esphome.io/components/alarm_control_panel/template#configuration-variables)*"
+                  },
+                  "input": {
+                    "key": "Required",
+                    "type": "use_id",
+                    "use_id_type": "binary_sensor::BinarySensor",
+                    "docs": "**string**: The id of the binary sensor component\n\n*See also: [Template Alarm Control Panel](https://esphome.io/components/alarm_control_panel/template#configuration-variables)*"
+                  },
+                  "trigger_mode": {
+                    "default": "DELAYED",
+                    "key": "Optional",
+                    "type": "enum",
+                    "values": {
+                      "DELAYED": null,
+                      "INSTANT": null,
+                      "DELAYED_FOLLOWER": null,
+                      "INSTANT_ALWAYS": null
+                    },
+                    "docs": "**string**: Sets the trigger mode for this sensor. One of `delayed`, `instant`, `instant_always`, or `delayed_follower`. (`delayed` is the default if not specified)\n\n*See also: [Template Alarm Control Panel](https://esphome.io/components/alarm_control_panel/template#configuration-variables)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "***list***: A list of binary sensors the panel should use. Each consists of:\n\n*See also: [Template Alarm Control Panel](https://esphome.io/components/alarm_control_panel/template#configuration-variables)*"
+            },
+            "codes": {
+              "is_list": true,
+              "key": "Optional",
+              "type": "string",
+              "docs": "**list of string**: A list of codes for disarming the alarm, if *requires_code_to_arm* set to true then for arming the alarm too.\n\n*See also: [Template Alarm Control Panel](https://esphome.io/components/alarm_control_panel/template#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "template_::TemplateAlarmControlPanel",
+                "parents": [
+                  "alarm_control_panel::AlarmControlPanel",
+                  "EntityBase",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "pending_time": {
+              "default": "0s",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The entry delay before the alarm is triggered. Defaults to `0s`.\n\n*See also: [Template Alarm Control Panel](https://esphome.io/components/alarm_control_panel/template#configuration-variables)*"
+            },
+            "requires_code_to_arm": {
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Code required for arming the alarm, *codes* must be provided.\n\n*See also: [Template Alarm Control Panel](https://esphome.io/components/alarm_control_panel/template#configuration-variables)*"
+            },
+            "restore_mode": {
+              "default": "ALWAYS_DISARMED",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "ALWAYS_DISARMED": null,
+                "RESTORE_DEFAULT_DISARMED": null
+              }
+            },
+            "trigger_time": {
+              "default": "0s",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The time after a triggered alarm before resetting to previous state if the sensors are cleared/off. Defaults to `0s`.\n\n*See also: [Template Alarm Control Panel](https://esphome.io/components/alarm_control_panel/template#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "alarm_control_panel._ALARM_CONTROL_PANEL_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "template.binary_sensor": {
+    "action": {
+      "publish": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "binary_sensor::BinarySensor",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the template binary sensor.\n\n*See also: [Template Binary Sensor](https://esphome.io/components/binary_sensor/template#in-some-trigger)*"
+            },
+            "state": {
+              "key": "Required",
+              "templatable": true,
+              "type": "boolean",
+              "docs": "**boolean**: The state to publish.\n\n*See also: [Template Binary Sensor](https://esphome.io/components/binary_sensor/template#in-some-trigger)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "You can also publish a state to a template binary sensor from elsewhere in your YAML file with the `binary_sensor.template.publish` action."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "condition": {
+              "key": "Optional",
+              "registry": "condition",
+              "type": "registry",
+              "docs": "**[Condition](https://esphome.io/automations/actions#all-conditions)**: The condition to check to determine the value of the binary sensor. `lambda` and `condition` may not both be present in the configuration.\n\n*See also: [Template Binary Sensor](https://esphome.io/components/binary_sensor/template#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "template_::TemplateBinarySensor",
+                "parents": [
+                  "binary_sensor::BinarySensor",
+                  "EntityBase",
+                  "Component"
+                ]
+              }
+            },
+            "lambda": {
+              "key": "Optional"
+            }
+          },
+          "extends": [
+            "binary_sensor._BINARY_SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "template.button": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "template_::TemplateButton",
+                "parents": [
+                  "button::Button",
+                  "EntityBase"
+                ]
+              },
+              "key": "GeneratedID"
+            }
+          },
+          "extends": [
+            "button._BUTTON_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "template.cover": {
+    "action": {
+      "publish": {
+        "schema": {
+          "config_vars": {
+            "current_operation": {
+              "key": "Optional",
+              "templatable": true,
+              "type": "enum",
+              "values": {
+                "IDLE": null,
+                "OPENING": null,
+                "CLOSING": null
+              },
+              "docs": "**string**: The current operation mode to publish. One of `IDLE`, `OPENING` and `CLOSING`. If using a lambda, use `COVER_OPERATION_IDLE`, `COVER_OPERATION_OPENING`, and `COVER_OPERATION_CLOSING`.\n\n*See also: [Template Cover](https://esphome.io/components/cover/template#in-some-trigger)*"
+            },
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "cover::Cover",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the template cover.\n\n*See also: [Template Cover](https://esphome.io/components/cover/template#in-some-trigger)*"
+            },
+            "position": {
+              "data_type": "zero_to_one_float",
+              "key": "Optional",
+              "templatable": true,
+              "docs": "**float**: The position to publish, from 0 (CLOSED) to 1.0 (OPEN)\n\n*See also: [Template Cover](https://esphome.io/components/cover/template#in-some-trigger)*"
+            },
+            "state": {
+              "key": "Optional",
+              "templatable": true,
+              "type": "enum",
+              "values": {
+                "OPEN": null,
+                "CLOSED": null
+              },
+              "docs": "The state to publish. One of `OPEN`, `CLOSED`. If using a lambda, use `COVER_OPEN` or `COVER_CLOSED`.\n\n*See also: [Template Cover](https://esphome.io/components/cover/template#in-some-trigger)*"
+            },
+            "tilt": {
+              "data_type": "zero_to_one_float",
+              "key": "Optional",
+              "templatable": true,
+              "docs": "**float**: The tilt position to publish, from 0 (CLOSED) to 1.0 (OPEN)\n\n*See also: [Template Cover](https://esphome.io/components/cover/template#in-some-trigger)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "You can also publish a state to a template cover from elsewhere in your YAML file with the `cover.template.publish` action."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "assumed_state": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Whether the true state/position of the cover is not known. This will make the Home Assistant frontend show buttons for both OPEN and CLOSE actions, instead of hiding one of them. Defaults to `false`.\n\n*See also: [Template Cover](https://esphome.io/components/cover/template#configuration-variables)*"
+            },
+            "close_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action that should be performed when the remote requests the cover to be closed.\n\n*See also: [Template Cover](https://esphome.io/components/cover/template#configuration-variables)*"
+            },
+            "has_position": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Whether this cover will publish its position as a floating point number. By default (`false`  ), the cover only publishes OPEN/CLOSED position.\n\n*See also: [Template Cover](https://esphome.io/components/cover/template#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "template_::TemplateCover",
+                "parents": [
+                  "cover::Cover",
+                  "EntityBase",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "lambda": {
+              "key": "Optional",
+              "docs": "**[lambda](https://esphome.io/automations/templates#config-lambda)**: Lambda to be evaluated repeatedly to get the current state/position of the cover.\n\n*See also: [Template Cover](https://esphome.io/components/cover/template#configuration-variables)*"
+            },
+            "open_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action that should be performed when the remote (like Home Assistant's frontend) requests the cover to be opened.\n\n*See also: [Template Cover](https://esphome.io/components/cover/template#configuration-variables)*"
+            },
+            "optimistic": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Whether to operate in optimistic mode - when in this mode, any command sent to the template cover will immediately update the reported state/position and no lambda needs to be used. Defaults to `false`.\n\n*See also: [Template Cover](https://esphome.io/components/cover/template#configuration-variables)*"
+            },
+            "position_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action that should be performed when the remote (like Home Assistant's frontend) requests the cover be set to a specific position. The desired position is available in the lambda in the `pos` variable. Used only when `has_position` is set to `true`.\n\n*See also: [Template Cover](https://esphome.io/components/cover/template#configuration-variables)*"
+            },
+            "restore_mode": {
+              "default": "RESTORE",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "NO_RESTORE": null,
+                "RESTORE": null,
+                "RESTORE_AND_CALL": null
+              }
+            },
+            "stop_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action that should be performed when the remote requests the cover to be stopped.\n\n*See also: [Template Cover](https://esphome.io/components/cover/template#configuration-variables)*"
+            },
+            "tilt_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action that should be performed when the remote (like Home Assistant's frontend) requests the cover be set to a specific tilt position. The desired tilt is available in the lambda in the `tilt` variable.\n\n*See also: [Template Cover](https://esphome.io/components/cover/template#configuration-variables)*"
+            },
+            "tilt_lambda": {
+              "key": "Optional",
+              "docs": "**[lambda](https://esphome.io/automations/templates#config-lambda)**: Lambda to be evaluated repeatedly to get the current tilt position of the cover.\n\n*See also: [Template Cover](https://esphome.io/components/cover/template#configuration-variables)*"
+            },
+            "toggle_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action that should be performed when the remote requests to toggle the cover.\n\n*See also: [Template Cover](https://esphome.io/components/cover/template#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "cover._COVER_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "template.datetime": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "type": "typed",
+        "typed_key": "type",
+        "types": {
+          "DATE": {
+            "config_vars": {
+              "id": {
+                "id_type": {
+                  "class": "template_::TemplateDate",
+                  "parents": [
+                    "datetime::DateEntity",
+                    "datetime::DateTimeBase",
+                    "EntityBase",
+                    "PollingComponent",
+                    "Component"
+                  ]
+                },
+                "key": "GeneratedID"
+              },
+              "initial_value": {
+                "key": "Optional",
+                "docs": "**string**: The value to set the state to on setup if not restored with `restore_value`. Can be one of:\n\n*See also: [Template Datetime](https://esphome.io/components/datetime/template#configuration-variables)*"
+              },
+              "mqtt_id": {
+                "id_type": {
+                  "class": "mqtt::MQTTDateComponent",
+                  "parents": [
+                    "mqtt::MQTTComponent",
+                    "Component"
+                  ]
+                },
+                "key": "Optional"
+              },
+              "type": {
+                "default": "DATE",
+                "key": "Optional",
+                "type": "enum",
+                "values": {
+                  "DATE": null
+                }
+              }
+            },
+            "extends": [
+              "datetime._DATETIME_SCHEMA",
+              "template.datetime._BASE_SCHEMA"
+            ]
+          },
+          "DATETIME": {
+            "config_vars": {
+              "id": {
+                "id_type": {
+                  "class": "template_::TemplateDateTime",
+                  "parents": [
+                    "datetime::DateTimeEntity",
+                    "datetime::DateTimeBase",
+                    "EntityBase",
+                    "PollingComponent",
+                    "Component"
+                  ]
+                },
+                "key": "GeneratedID"
+              },
+              "initial_value": {
+                "key": "Optional",
+                "docs": "**string**: The value to set the state to on setup if not restored with `restore_value`. Can be one of:\n\n*See also: [Template Datetime](https://esphome.io/components/datetime/template#configuration-variables)*"
+              },
+              "mqtt_id": {
+                "id_type": {
+                  "class": "mqtt::MQTTDateTimeComponent",
+                  "parents": [
+                    "mqtt::MQTTComponent",
+                    "Component"
+                  ]
+                },
+                "key": "Optional"
+              },
+              "on_time": {
+                "key": "Optional",
+                "type": "trigger"
+              },
+              "type": {
+                "default": "DATETIME",
+                "key": "Optional",
+                "type": "enum",
+                "values": {
+                  "DATETIME": null
+                }
+              }
+            },
+            "extends": [
+              "datetime._DATETIME_SCHEMA",
+              "template.datetime._BASE_SCHEMA"
+            ]
+          },
+          "TIME": {
+            "config_vars": {
+              "id": {
+                "id_type": {
+                  "class": "template_::TemplateTime",
+                  "parents": [
+                    "datetime::TimeEntity",
+                    "datetime::DateTimeBase",
+                    "EntityBase",
+                    "PollingComponent",
+                    "Component"
+                  ]
+                },
+                "key": "GeneratedID"
+              },
+              "initial_value": {
+                "key": "Optional",
+                "docs": "**string**: The value to set the state to on setup if not restored with `restore_value`. Can be one of:\n\n*See also: [Template Datetime](https://esphome.io/components/datetime/template#configuration-variables)*"
+              },
+              "mqtt_id": {
+                "id_type": {
+                  "class": "mqtt::MQTTTimeComponent",
+                  "parents": [
+                    "mqtt::MQTTComponent",
+                    "Component"
+                  ]
+                },
+                "key": "Optional"
+              },
+              "on_time": {
+                "key": "Optional",
+                "type": "trigger"
+              },
+              "type": {
+                "default": "TIME",
+                "key": "Optional",
+                "type": "enum",
+                "values": {
+                  "TIME": null
+                }
+              }
+            },
+            "extends": [
+              "datetime._DATETIME_SCHEMA",
+              "template.datetime._BASE_SCHEMA"
+            ]
+          }
+        },
+        "docs": "The type of the datetime. Can be one of `date` or `time`."
+      },
+      "_BASE_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "lambda": {
+              "key": "Optional",
+              "docs": "**[lambda](https://esphome.io/automations/templates#config-lambda)**: Lambda to be evaluated every update interval to get the current value of the datetime.\n\n*See also: [Template Datetime](https://esphome.io/components/datetime/template#configuration-variables)*"
+            },
+            "optimistic": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Whether to operate in optimistic mode - when in this mode, any command sent to the template datetime will immediately update the reported state. Cannot be used with `lambda`. Defaults to `false`.\n\n*See also: [Template Datetime](https://esphome.io/components/datetime/template#configuration-variables)*"
+            },
+            "restore_value": {
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Saves and loads the state to RTC/Flash. Cannot be used with `lambda`. Defaults to `false`.\n\n*See also: [Template Datetime](https://esphome.io/components/datetime/template#configuration-variables)*"
+            },
+            "set_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action that should be performed when the remote (like Home Assistant's frontend) requests to set the dateime value. The new value is available to lambdas in the `x` variable.\n\n*See also: [Template Datetime](https://esphome.io/components/datetime/template#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval on which to update the datetime by executing the `lambda`. Defaults to `60s`.\n\n*See also: [Template Datetime](https://esphome.io/components/datetime/template#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "template.event": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "event_types": {
+              "is_list": true,
+              "key": "Required",
+              "type": "string",
+              "docs": "**list**: A list of custom event identifiers that this template event is capable of triggering. These identifiers can be used in Home Assistant automations or ESPHome scripts to perform actions when the event occurs.\n\n*See also: [Template Event](https://esphome.io/components/event/template#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "template_::TemplateEvent",
+                "parents": [
+                  "event::Event",
+                  "EntityBase",
+                  "Component"
+                ]
+              }
+            }
+          },
+          "extends": [
+            "event._EVENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "template.fan": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "has_direction": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Indicates if there should be a control for direction. Default is `false`.\n\n*See also: [Template Fan](https://esphome.io/components/fan/template#configuration-variables)*"
+            },
+            "has_oscillating": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Indicates if there should be a control for oscillating. Default is `false`.\n\n*See also: [Template Fan](https://esphome.io/components/fan/template#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "template_::TemplateFan",
+                "parents": [
+                  "Component",
+                  "fan::Fan",
+                  "EntityBase"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "preset_modes": {
+              "key": "Optional",
+              "docs": "A list of preset modes for this fan. Preset modes can be used in automations (i.e. `on_preset_set`  ).\n\n*See also: [Template Fan](https://esphome.io/components/fan/template#configuration-variables)*"
+            },
+            "speed_count": {
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Set the number of supported discrete speed levels. Default is only on/off.\n\n*See also: [Template Fan](https://esphome.io/components/fan/template#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "fan._FAN_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "template.lock": {
+    "action": {
+      "publish": {
+        "maybe": "state",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "template_::TemplateLock",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the template lock.\n\n*See also: [Template Lock](https://esphome.io/components/lock/template#in-some-trigger)*"
+            },
+            "state": {
+              "key": "Required",
+              "templatable": true,
+              "type": "enum",
+              "values": {
+                "OPEN": null,
+                "LOCKED": null,
+                "UNLOCKED": null,
+                "JAMMED": null,
+                "OPENING": null,
+                "LOCKING": null,
+                "UNLOCKING": null
+              },
+              "docs": "**boolean**: The state to publish.\n\n*See also: [Template Lock](https://esphome.io/components/lock/template#in-some-trigger)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "You can also publish a state to a template lock from elsewhere in your YAML file with the `lock.template.publish` action."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "assumed_state": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Whether the true state of the lock is not known. This will make the Home Assistant frontend show buttons for both LOCK and UNLOCK actions, instead of hiding one of them when the lock is LOCKED/UNLOCKED. Defaults to `false`.\n\n*See also: [Template Lock](https://esphome.io/components/lock/template#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "template_::TemplateLock",
+                "parents": [
+                  "lock::Lock",
+                  "EntityBase",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "lambda": {
+              "key": "Optional",
+              "docs": "**[lambda](https://esphome.io/automations/templates#config-lambda)**: Lambda to be evaluated repeatedly to get the current state of the lock.\n\n*See also: [Template Lock](https://esphome.io/components/lock/template#configuration-variables)*"
+            },
+            "lock_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action that should be performed when the remote (like Home Assistant's frontend) requests the lock to be locked.\n\n*See also: [Template Lock](https://esphome.io/components/lock/template#configuration-variables)*"
+            },
+            "open_action": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "optimistic": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Whether to operate in optimistic mode - when in this mode, any command sent to the template lock will immediately update the reported state. Defaults to `false`.\n\n*See also: [Template Lock](https://esphome.io/components/lock/template#configuration-variables)*"
+            },
+            "unlock_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action that should be performed when the remote (like Home Assistant's frontend) requests the lock to be unlocked.\n\n*See also: [Template Lock](https://esphome.io/components/lock/template#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "lock._LOCK_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "template.number": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "template_::TemplateNumber",
+                "parents": [
+                  "number::Number",
+                  "EntityBase",
+                  "PollingComponent",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "initial_value": {
+              "key": "Optional",
+              "docs": "**float**: The value to set the state to on setup if not restored with `restore_value`. Cannot be used with `lambda`. Defaults to `min_value`.\n\n*See also: [Template Number](https://esphome.io/components/number/template#configuration-variables)*"
+            },
+            "lambda": {
+              "key": "Optional",
+              "docs": "**[lambda](https://esphome.io/automations/templates#config-lambda)**: Lambda to be evaluated every update interval to get the current value of the number.\n\n*See also: [Template Number](https://esphome.io/components/number/template#configuration-variables)*"
+            },
+            "max_value": {
+              "key": "Required",
+              "docs": "**float**: The maximum value this number can be.\n\n*See also: [Template Number](https://esphome.io/components/number/template#configuration-variables)*"
+            },
+            "min_value": {
+              "key": "Required",
+              "docs": "**float**: The minimum value this number can be.\n\n*See also: [Template Number](https://esphome.io/components/number/template#configuration-variables)*"
+            },
+            "optimistic": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Whether to operate in optimistic mode - when in this mode, any command sent to the template number will immediately update the reported state. Cannot be used with `lambda`. Defaults to `false`.\n\n*See also: [Template Number](https://esphome.io/components/number/template#configuration-variables)*"
+            },
+            "restore_value": {
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Saves and loads the state to RTC/Flash. Cannot be used with `lambda`. Defaults to `false`.\n\n*See also: [Template Number](https://esphome.io/components/number/template#configuration-variables)*"
+            },
+            "set_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action that should be performed when the remote (like Home Assistant's frontend) requests to set the number value. The new value is available to lambdas in the `x` variable.\n\n*See also: [Template Number](https://esphome.io/components/number/template#configuration-variables)*"
+            },
+            "step": {
+              "data_type": "positive_float",
+              "key": "Required",
+              "docs": "**float**: The granularity with which the number can be set.\n\n*See also: [Template Number](https://esphome.io/components/number/template#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval on which to update the number by executing the `lambda`. Defaults to `60s`.\n\n*See also: [Template Number](https://esphome.io/components/number/template#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "number._NUMBER_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "template.output": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "type": "typed",
+        "typed_key": "type",
+        "types": {
+          "binary": {
+            "config_vars": {
+              "id": {
+                "id_type": {
+                  "class": "template_::TemplateBinaryOutput",
+                  "parents": [
+                    "output::BinaryOutput"
+                  ]
+                },
+                "key": "GeneratedID",
+                "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id to use for this output component.\n\n*See also: [Template Output](https://esphome.io/components/output/template#configuration-variables)*"
+              },
+              "write_action": {
+                "key": "Required",
+                "type": "trigger",
+                "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform when the state of the output is updated.\n\n*See also: [Template Output](https://esphome.io/components/output/template#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "output.BINARY_OUTPUT_SCHEMA"
+            ]
+          },
+          "float": {
+            "config_vars": {
+              "id": {
+                "id_type": {
+                  "class": "template_::TemplateFloatOutput",
+                  "parents": [
+                    "output::FloatOutput",
+                    "output::BinaryOutput"
+                  ]
+                },
+                "key": "GeneratedID",
+                "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id to use for this output component.\n\n*See also: [Template Output](https://esphome.io/components/output/template#configuration-variables)*"
+              },
+              "write_action": {
+                "key": "Required",
+                "type": "trigger",
+                "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform when the state of the output is updated.\n\n*See also: [Template Output](https://esphome.io/components/output/template#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "output.FLOAT_OUTPUT_SCHEMA"
+            ]
+          }
+        },
+        "docs": "The type of output. One of `binary` and `float`."
+      }
+    }
+  },
+  "template.select": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "template_::TemplateSelect",
+                "parents": [
+                  "select::Select",
+                  "EntityBase",
+                  "PollingComponent",
+                  "Component"
+                ]
+              }
+            },
+            "initial_option": {
+              "key": "Optional",
+              "type": "string",
+              "docs": "**string**: The option to set the option to on setup if not restored with `restore_value`. Cannot be used with `lambda`. Defaults to the first option in the `options` list.\n\n*See also: [Template Select](https://esphome.io/components/select/template#configuration-variables)*"
+            },
+            "lambda": {
+              "key": "Optional",
+              "docs": "**[lambda](https://esphome.io/automations/templates#config-lambda)**: Lambda to be evaluated every update interval to get the current option of the select.\n\n*See also: [Template Select](https://esphome.io/components/select/template#configuration-variables)*"
+            },
+            "optimistic": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Whether to operate in optimistic mode - when in this mode, any command sent to the Template Select will immediately update the reported state. Cannot be used with `lambda`. Defaults to `false`.\n\n*See also: [Template Select](https://esphome.io/components/select/template#configuration-variables)*"
+            },
+            "options": {
+              "is_list": true,
+              "key": "Required",
+              "type": "string",
+              "docs": "**list**: The list of options this Select has.\n\n*See also: [Template Select](https://esphome.io/components/select/template#configuration-variables)*"
+            },
+            "restore_value": {
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Saves and loads the state to RTC/Flash. Cannot be used with `lambda`. Defaults to `false`.\n\n*See also: [Template Select](https://esphome.io/components/select/template#configuration-variables)*"
+            },
+            "set_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action that should be performed when the remote (like Home Assistant's frontend) requests to set the Select option. The new option is available to lambdas in the `x` variable.\n\n*See also: [Template Select](https://esphome.io/components/select/template#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval on which to update the select by executing the `lambda`. Defaults to `60s`.\n\n*See also: [Template Select](https://esphome.io/components/select/template#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "select._SELECT_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "template.sensor": {
+    "action": {
+      "publish": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "sensor::Sensor",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the template sensor.\n\n*See also: [Template Sensor](https://esphome.io/components/sensor/template#in-some-trigger)*"
+            },
+            "state": {
+              "key": "Required",
+              "templatable": true,
+              "docs": "**float**: The state to publish.\n\n*See also: [Template Sensor](https://esphome.io/components/sensor/template#in-some-trigger)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "You can also publish a state to a template sensor from elsewhere in your YAML file with the `sensor.template.publish` action."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "1"
+            },
+            "id": {
+              "id_type": {
+                "class": "template_::TemplateSensor",
+                "parents": [
+                  "sensor::Sensor",
+                  "EntityBase",
+                  "PollingComponent",
+                  "Component"
+                ]
+              }
+            },
+            "lambda": {
+              "key": "Optional",
+              "docs": "**[lambda](https://esphome.io/automations/templates#config-lambda)**: Lambda to be evaluated every update interval to get the new value of the sensor\n\n*See also: [Template Sensor](https://esphome.io/components/sensor/template#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Set to `never` to disable updates. Defaults to `60s`.\n\n*See also: [Template Sensor](https://esphome.io/components/sensor/template#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "template.switch": {
+    "action": {
+      "publish": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "switch_::Switch",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the template switch.\n\n*See also: [Template Switch](https://esphome.io/components/switch/template#in-some-trigger)*"
+            },
+            "state": {
+              "key": "Required",
+              "templatable": true,
+              "type": "boolean",
+              "docs": "**boolean**: The state to publish.\n\n*See also: [Template Switch](https://esphome.io/components/switch/template#in-some-trigger)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "You can also publish a state to a template switch from elsewhere in your YAML file with the `switch.template.publish` action."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "assumed_state": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Whether the true state of the switch is not known. This will make the Home Assistant frontend show buttons for both ON and OFF actions, instead of hiding one of them when the switch is ON/OFF. Defaults to `false`.\n\n*See also: [Template Switch](https://esphome.io/components/switch/template#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "template_::TemplateSwitch",
+                "parents": [
+                  "switch_::Switch",
+                  "EntityBase",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "lambda": {
+              "key": "Optional",
+              "docs": "**[lambda](https://esphome.io/automations/templates#config-lambda)**: Lambda to be evaluated repeatedly to get the current state of the switch.\n\n*See also: [Template Switch](https://esphome.io/components/switch/template#configuration-variables)*"
+            },
+            "optimistic": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Whether to operate in optimistic mode - when in this mode, any command sent to the template switch will immediately update the reported state. Defaults to `false`.\n\n*See also: [Template Switch](https://esphome.io/components/switch/template#configuration-variables)*"
+            },
+            "turn_off_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action that should be performed when the remote (like Home Assistant's frontend) requests the switch to be turned off.\n\n*See also: [Template Switch](https://esphome.io/components/switch/template#configuration-variables)*"
+            },
+            "turn_on_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action that should be performed when the remote (like Home Assistant's frontend) requests the switch to be turned on.\n\n*See also: [Template Switch](https://esphome.io/components/switch/template#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "switch._SWITCH_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "template.text": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "template_::TemplateText",
+                "parents": [
+                  "text::Text",
+                  "EntityBase",
+                  "PollingComponent",
+                  "Component"
+                ]
+              }
+            },
+            "initial_value": {
+              "key": "Optional",
+              "type": "string",
+              "docs": "**String**: The value to set the state to on setup if not restored with `restore_value`. Cannot be used with `lambda`. Defaults to the empty string.\n\n*See also: [Template Text](https://esphome.io/components/text/template#configuration-variables)*"
+            },
+            "lambda": {
+              "key": "Optional",
+              "docs": "**[lambda](https://esphome.io/automations/templates#config-lambda)**: Lambda to be evaluated every update interval to get the current value of the text.\n\n*See also: [Template Text](https://esphome.io/components/text/template#configuration-variables)*"
+            },
+            "max_length": {
+              "default": "255",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: The maximum length this text can be. Defaults to `255`.\n\n*See also: [Template Text](https://esphome.io/components/text/template#configuration-variables)*"
+            },
+            "min_length": {
+              "default": "0",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: The minimum length this text can be. Defaults to `0`.\n\n*See also: [Template Text](https://esphome.io/components/text/template#configuration-variables)*"
+            },
+            "optimistic": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Whether to operate in optimistic mode - when in this mode, any command sent to the template text will immediately update the reported state. Cannot be used with `lambda`. Defaults to `false`.\n\n*See also: [Template Text](https://esphome.io/components/text/template#configuration-variables)*"
+            },
+            "pattern": {
+              "key": "Optional",
+              "type": "string"
+            },
+            "restore_value": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Saves and loads the state to RTC/Flash. Cannot be used with `lambda`. Defaults to `false`.\n\n*See also: [Template Text](https://esphome.io/components/text/template#configuration-variables)*"
+            },
+            "set_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action that should be performed when the remote (like Home Assistant's frontend) requests to set the text value. The new value is available to lambdas in the `x` variable.\n\n*See also: [Template Text](https://esphome.io/components/text/template#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval on which to update the text by executing the `lambda`. Defaults to `60s`.\n\n*See also: [Template Text](https://esphome.io/components/text/template#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "text._TEXT_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "template.text_sensor": {
+    "action": {
+      "publish": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "text_sensor::TextSensor",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the template text sensor.\n\n*See also: [Template Text Sensor](https://esphome.io/components/text_sensor/template#in-some-trigger)*"
+            },
+            "state": {
+              "key": "Required",
+              "templatable": true,
+              "type": "string",
+              "docs": "**string**: The state to publish.\n\n*See also: [Template Text Sensor](https://esphome.io/components/text_sensor/template#in-some-trigger)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "You can also publish a state to a template text sensor from elsewhere in your YAML file with the `text_sensor.template.publish` action."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "template_::TemplateTextSensor",
+                "parents": [
+                  "text_sensor::TextSensor",
+                  "EntityBase",
+                  "PollingComponent",
+                  "Component"
+                ]
+              }
+            },
+            "lambda": {
+              "key": "Optional",
+              "docs": "**[lambda](https://esphome.io/automations/templates#config-lambda)**: Lambda to be evaluated every update interval to get the new value of the text sensor\n\n*See also: [Template Text Sensor](https://esphome.io/components/text_sensor/template#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the text sensor. Set to `never` to disable updates. Defaults to `60s`.\n\n*See also: [Template Text Sensor](https://esphome.io/components/text_sensor/template#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "text_sensor._TEXT_SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "template.valve": {
+    "action": {
+      "publish": {
+        "schema": {
+          "config_vars": {
+            "current_operation": {
+              "key": "Optional",
+              "templatable": true,
+              "type": "enum",
+              "values": {
+                "IDLE": null,
+                "OPENING": null,
+                "CLOSING": null
+              },
+              "docs": "**string**: The current operation mode to publish. One of `IDLE`, `OPENING` and `CLOSING`. If using a lambda, use `VALVE_OPERATION_IDLE`, `VALVE_OPERATION_OPENING`, and `VALVE_OPERATION_CLOSING`.\n\n*See also: [Template Valve](https://esphome.io/components/valve/template#in-some-trigger)*"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "template_::TemplateValve",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the template valve.\n\n*See also: [Template Valve](https://esphome.io/components/valve/template#in-some-trigger)*"
+            },
+            "position": {
+              "key": "Optional",
+              "templatable": true,
+              "docs": "**float**: The position to publish, from 0 (CLOSED) to 1.0 (OPEN)\n\n*See also: [Template Valve](https://esphome.io/components/valve/template#in-some-trigger)*"
+            },
+            "state": {
+              "key": "Optional",
+              "templatable": true,
+              "type": "enum",
+              "values": {
+                "OPEN": null,
+                "CLOSED": null
+              },
+              "docs": "The state to publish. One of `OPEN`, `CLOSED`. If using a lambda, use `VALVE_OPEN` or `VALVE_CLOSED`.\n\n*See also: [Template Valve](https://esphome.io/components/valve/template#in-some-trigger)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "You can also publish a state to a template valve from elsewhere in your YAML filewith the `valve.template.publish` action."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "assumed_state": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Whether the true state of the valve is not known. This will make the Home Assistant frontend show buttons for both OPEN and CLOSE actions, instead of hiding one of them. Defaults to `false`.\n\n*See also: [Template Valve](https://esphome.io/components/valve/template#configuration-variables)*"
+            },
+            "close_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action that should be performed when the remote requests the valve to be closed.\n\n*See also: [Template Valve](https://esphome.io/components/valve/template#configuration-variables)*"
+            },
+            "has_position": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Whether this valve will publish its position as a floating point number. By default (`false`  ), the valve only publishes OPEN/CLOSED position.\n\n*See also: [Template Valve](https://esphome.io/components/valve/template#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "template_::TemplateValve",
+                "parents": [
+                  "valve::Valve",
+                  "EntityBase",
+                  "Component"
+                ]
+              }
+            },
+            "lambda": {
+              "key": "Optional",
+              "docs": "**[lambda](https://esphome.io/automations/templates#config-lambda)**: Lambda to be evaluated repeatedly to get the current state of the valve.\n\n*See also: [Template Valve](https://esphome.io/components/valve/template#configuration-variables)*"
+            },
+            "open_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action that should be performed when the remote (like Home Assistant's frontend) requests the valve to be opened.\n\n*See also: [Template Valve](https://esphome.io/components/valve/template#configuration-variables)*"
+            },
+            "optimistic": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Whether to operate in optimistic mode - when in this mode, any command sent to the template valve will immediately update the reported state and no lambda needs to be used. Defaults to `false`.\n\n*See also: [Template Valve](https://esphome.io/components/valve/template#configuration-variables)*"
+            },
+            "position_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action that should be performed when the remote (like Home Assistant's frontend) requests the valve be set to a specific position. The desired position is available in the lambda in the `pos` variable. Requires `has_position` (above) to be set to `true`.\n\n*See also: [Template Valve](https://esphome.io/components/valve/template#configuration-variables)*"
+            },
+            "restore_mode": {
+              "default": "NO_RESTORE",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "NO_RESTORE": {
+                  "docs": "Default"
+                },
+                "RESTORE": {
+                  "docs": null
+                },
+                "RESTORE_AND_CALL": {
+                  "docs": null
+                }
+              },
+              "docs": "**enum**: Control how the valve attempts to restore state on bootup.\n\n*See also: [Template Valve](https://esphome.io/components/valve/template#configuration-variables)*"
+            },
+            "stop_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action that should be performed when the remote requests the valve to be stopped.\n\n*See also: [Template Valve](https://esphome.io/components/valve/template#configuration-variables)*"
+            },
+            "toggle_action": {
+              "key": "Optional",
+              "type": "trigger"
+            }
+          },
+          "extends": [
+            "valve._VALVE_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "template.water_heater": {
+    "action": {
+      "publish": {
+        "schema": {
+          "config_vars": {
+            "away": {
+              "key": "Optional",
+              "templatable": true,
+              "type": "boolean",
+              "docs": "**boolean**: The away mode state to publish.\n\n*See also: [Template Water Heater](https://esphome.io/components/water_heater/template#example-action)*"
+            },
+            "current_temperature": {
+              "key": "Optional",
+              "templatable": true,
+              "docs": "**float**: The current measured temperature to publish.\n\n*See also: [Template Water Heater](https://esphome.io/components/water_heater/template#example-action)*"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "template_::TemplateWaterHeater",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the template water heater.\n\n*See also: [Template Water Heater](https://esphome.io/components/water_heater/template#example-action)*"
+            },
+            "is_on": {
+              "key": "Optional",
+              "templatable": true,
+              "type": "boolean",
+              "docs": "**boolean**: The boolean On/Off state to publish.\n\n*See also: [Template Water Heater](https://esphome.io/components/water_heater/template#example-action)*"
+            },
+            "mode": {
+              "key": "Optional",
+              "templatable": true,
+              "type": "enum",
+              "values": {
+                "OFF": null,
+                "ECO": null,
+                "ELECTRIC": null,
+                "PERFORMANCE": null,
+                "HIGH_DEMAND": null,
+                "HEAT_PUMP": null,
+                "GAS": null
+              },
+              "docs": "**string**: The operation mode to publish. See [Water Heater Modes](https://esphome.io/components/water_heater#water-heater-modes) for options.\n\n*See also: [Template Water Heater](https://esphome.io/components/water_heater/template#example-action)*"
+            },
+            "target_temperature": {
+              "key": "Optional",
+              "templatable": true,
+              "docs": "**float**: The target setpoint temperature to publish.\n\n*See also: [Template Water Heater](https://esphome.io/components/water_heater/template#example-action)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "You can also publish state to a template water heater from elsewhere in your YAML file with the `water_heater.template.publish` action."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "away": {
+              "key": "Optional",
+              "docs": "**[lambda](https://esphome.io/automations/templates#config-lambda)**: Lambda to be evaluated repeatedly to get the current away mode state. Expects a boolean return value.\n\n*See also: [Template Water Heater](https://esphome.io/components/water_heater/template#configuration-variables)*"
+            },
+            "current_temperature": {
+              "key": "Optional",
+              "docs": "**[lambda](https://esphome.io/automations/templates#config-lambda)**: Lambda to be evaluated repeatedly to get the current temperature of the water. Expects a float return value.\n\n*See also: [Template Water Heater](https://esphome.io/components/water_heater/template#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "template_::TemplateWaterHeater",
+                "parents": [
+                  "Component",
+                  "water_heater::WaterHeater",
+                  "EntityBase"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "is_on": {
+              "key": "Optional",
+              "docs": "**[lambda](https://esphome.io/automations/templates#config-lambda)**: Lambda to be evaluated repeatedly to get the current On/Off state. Expects a boolean return value.\n\n*See also: [Template Water Heater](https://esphome.io/components/water_heater/template#configuration-variables)*"
+            },
+            "mode": {
+              "key": "Optional",
+              "docs": "**[lambda](https://esphome.io/automations/templates#config-lambda)**: Lambda to be evaluated repeatedly to get the current operation mode. Expects a `WaterHeaterMode` enum return value.\n\n*See also: [Template Water Heater](https://esphome.io/components/water_heater/template#configuration-variables)*"
+            },
+            "optimistic": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Whether to operate in optimistic mode - when in this mode, any command sent to the template water heater will immediately update the reported state. Defaults to `true`.\n\n*See also: [Template Water Heater](https://esphome.io/components/water_heater/template#configuration-variables)*"
+            },
+            "restore_mode": {
+              "default": "NO_RESTORE",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "NO_RESTORE": {
+                  "docs": "Default"
+                },
+                "RESTORE": {
+                  "docs": null
+                },
+                "RESTORE_AND_CALL": {
+                  "docs": null
+                }
+              },
+              "docs": "**enum**: Control how the water heater attempts to restore state on bootup.\n\n*See also: [Template Water Heater](https://esphome.io/components/water_heater/template#configuration-variables)*"
+            },
+            "set_action": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action to perform when the water heater receives a command (mode change, target temperature change, away, on/off, etc.). This is where you implement the actual control logic for your water heater.\n\n*See also: [Template Water Heater](https://esphome.io/components/water_heater/template#configuration-variables)*"
+            },
+            "supported_modes": {
+              "is_list": true,
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "OFF": null,
+                "ECO": null,
+                "ELECTRIC": null,
+                "PERFORMANCE": null,
+                "HIGH_DEMAND": null,
+                "HEAT_PUMP": null,
+                "GAS": null
+              },
+              "docs": "**list**: Static list of operation modes that will be exposed to the frontend (for example Home Assistant). This controls the `operation_list` reported to Home Assistant and affects only the UI and available service calls. It does not change runtime behavior or control logic. When not specified, all supported water heater modes are shown by default. > [!NOTE] > The list of `supported_modes` is static and evaluated at startup. It cannot be changed dynamically and does not support templates or lambdas.\n\n*See also: [Template Water Heater](https://esphome.io/components/water_heater/template#configuration-variables)*"
+            },
+            "target_temperature": {
+              "key": "Optional",
+              "docs": "**[lambda](https://esphome.io/automations/templates#config-lambda)**: Lambda to be evaluated repeatedly to get the target temperature of the water. Expects a float return value.\n\n*See also: [Template Water Heater](https://esphome.io/components/water_heater/template#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "water_heater._WATER_HEATER_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

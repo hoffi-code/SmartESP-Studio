@@ -1,0 +1,57 @@
+{
+  "mcp23016": {
+    "pin": {
+      "schema": {
+        "extends": [
+          "mcp23016.MCP23016_PIN_SCHEMA"
+        ]
+      },
+      "type": "schema"
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "32",
+              "key": "Optional",
+              "docs": "**int**: The I\u00b2C address of the driver. Defaults to `0x20`.\n\n*See also: [MCP230xx I/O Expander](https://esphome.io/components/mcp230xx#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "mcp23016::MCP23016",
+                "parents": [
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "Required",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id to use for this MCP23016 component.\n\n*See also: [MCP230xx I/O Expander](https://esphome.io/components/mcp230xx#configuration-variables)*"
+            },
+            "interrupt_pin": {
+              "internal": true,
+              "key": "Optional",
+              "modes": [
+                "input"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin connected to the INT output of the MCP23016. When configured, the component becomes interrupt-driven instead of polling \u2014 it only reads the chip when a pin actually changes state, significantly reducing I\u00b2C bus traffic and CPU usage. The INT pin is active-low and open-drain, so an external or internal pull-up resistor is required. Must be an internal GPIO pin (not another expander pin).\n\n*See also: [MCP230xx I/O Expander](https://esphome.io/components/mcp230xx#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,272 @@
+{
+  "wireguard": {
+    "action": {
+      "disable": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "wireguard::Wireguard"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This action drops down the active VPN link (if any) and disables the component."
+      },
+      "enable": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "wireguard::Wireguard"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This action enables the component and starts the connection to the remote peer."
+      }
+    },
+    "condition": {
+      "enabled": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "wireguard::Wireguard"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This condition checks if WireGuard\u00ae is currently enabled or not."
+      },
+      "peer_online": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "wireguard::Wireguard"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This condition checks if the remote peer is *online*."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "key": "Required",
+              "docs": "**IPv4 address**: The local VPN address of the device. If you intend to upload firmwares through the VPN link you probably need to copy this value to the `use_address` parameter of the [Wifi](https://esphome.io/components/wifi/).\n\n*See also: [WireGuard Component](https://esphome.io/components/wireguard#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "wireguard::Wireguard",
+                "parents": [
+                  "Component",
+                  "PollingComponent",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [WireGuard Component](https://esphome.io/components/wireguard#configuration-variables)*"
+            },
+            "netmask": {
+              "default": "255.255.255.255",
+              "key": "Optional",
+              "docs": "**IPv4 address**: The netmask for the configured address. Default to `255.255.255.255`. See section [Static routes and outgoing connections](https://esphome.io/components/wireguard#wireguard-static-routes) if outgoing connections are expected to transit through the VPN link (e.g. with [Mqtt](https://esphome.io/components/mqtt/) to a remote MQTT broker).\n\n*See also: [WireGuard Component](https://esphome.io/components/wireguard#configuration-variables)*"
+            },
+            "peer_allowed_ips": {
+              "default": "['0.0.0.0/0']",
+              "is_list": true,
+              "key": "Optional",
+              "docs": "**list of IPv4 networks**: A list of networks in CIDR notation (*IP/mask*) to be allowed through the tunnel. Any host (`0.0.0.0/0`  ) will be allowed if this parameter is omitted. The device own `address/32` is always added by default to this list. See section [Static routes and outgoing connections](https://esphome.io/components/wireguard#wireguard-static-routes) if outgoing connections are expected to transit through the VPN link (e.g. with [Mqtt](https://esphome.io/components/mqtt/) to a remote MQTT broker).\n\n*See also: [WireGuard Component](https://esphome.io/components/wireguard#configuration-variables)*"
+            },
+            "peer_endpoint": {
+              "key": "Required",
+              "type": "string",
+              "docs": "**string**: The hostname of the remote peer.\n\n*See also: [WireGuard Component](https://esphome.io/components/wireguard#configuration-variables)*"
+            },
+            "peer_persistent_keepalive": {
+              "default": "0s",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_seconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The amount of time after which a *keepalive* packet is sent through the tunnel. By default this feature is disabled (`0s`  ). If there are NATs or firewalls between the device and the remote peer set this value to something like `25s`.\n\n*See also: [WireGuard Component](https://esphome.io/components/wireguard#configuration-variables)*"
+            },
+            "peer_port": {
+              "data_type": "port",
+              "default": "51820",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**UDP port**: The port where remote peer is listening on. The WireGuard\u00ae default is `51820`.\n\n*See also: [WireGuard Component](https://esphome.io/components/wireguard#configuration-variables)*"
+            },
+            "peer_preshared_key": {
+              "key": "Optional",
+              "sensitive": true,
+              "sensitive_source": "explicit",
+              "docs": "**string**: The chosen pre-shared key between local device and remote peer.\n\n*See also: [WireGuard Component](https://esphome.io/components/wireguard#configuration-variables)*"
+            },
+            "peer_public_key": {
+              "key": "Required",
+              "docs": "**string**: The public key of the remote peer.\n\n*See also: [WireGuard Component](https://esphome.io/components/wireguard#configuration-variables)*"
+            },
+            "private_key": {
+              "key": "Required",
+              "sensitive": true,
+              "sensitive_source": "explicit",
+              "docs": "**string**: The private key of the device.\n\n*See also: [WireGuard Component](https://esphome.io/components/wireguard#configuration-variables)*"
+            },
+            "reboot_timeout": {
+              "default": "15min",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The amount of time to wait before rebooting the device when the remote peer is unreachable. Can be disabled by setting this to `0s`. Default to `15min`.\n\n*See also: [WireGuard Component](https://esphome.io/components/wireguard#configuration-variables)*"
+            },
+            "require_connection_to_proceed": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Set to `true` to wait for the remote peer to be up before continuing to boot the device. Default to `false`. This can be used to delay the initialization of components that use the VPN tunnel as long as the VPN isn't ready. For example if you are using [Mqtt](https://esphome.io/components/mqtt/) to reach a remote broker you may experience boot freeze just after the setup of MQTT because it waits for the broker to be reachable, but the connection cannot be established until the VPN link is active too. To bypass such deadlock set this parameter to `true` in order to not initialize MQTT until the remote peer is up.\n\n*See also: [WireGuard Component](https://esphome.io/components/wireguard#configuration-variables)*"
+            },
+            "time_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "time::RealTimeClock"
+            },
+            "update_interval": {
+              "default": "10s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: How often to check the connection status and the latest handshake value. Default to `10s`.\n\n*See also: [WireGuard Component](https://esphome.io/components/wireguard#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "wireguard.binary_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "enabled": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "entity_category": {
+                    "default": "diagnostic"
+                  }
+                },
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "status": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "connectivity"
+                  }
+                },
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "wireguard_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "wireguard::Wireguard"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "wireguard.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "latest_handshake": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "timestamp"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "wireguard_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "wireguard::Wireguard"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "wireguard.text_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "entity_category": {
+                    "default": "diagnostic"
+                  }
+                },
+                "extends": [
+                  "text_sensor._TEXT_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "wireguard_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "wireguard::Wireguard"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

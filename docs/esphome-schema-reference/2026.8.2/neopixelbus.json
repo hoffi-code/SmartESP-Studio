@@ -1,0 +1,100 @@
+{
+  "neopixelbus.light": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "clock_pin": {
+              "internal": true,
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The pin for the clock line of the light, for two-wire lights.\n\n*See also: [NeoPixelBus Light](https://esphome.io/components/light/neopixelbus#configuration-variables)*"
+            },
+            "data_pin": {
+              "internal": true,
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The pin for the data line of the light, for two-wire lights.\n\n*See also: [NeoPixelBus Light](https://esphome.io/components/light/neopixelbus#configuration-variables)*"
+            },
+            "invert": {
+              "default": "no",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Invert data output, for use with n-type transistors. Defaults to `no`.\n\n*See also: [NeoPixelBus Light](https://esphome.io/components/light/neopixelbus#configuration-variables)*"
+            },
+            "method": {
+              "key": "Optional",
+              "docs": "**string**: The method used to transmit the data. By default, ESPHome will try to use the best method available for this chipset, ESP platform, and the given pin. See [methods](https://esphome.io/components/light/neopixelbus#methods) for more information.\n\n*See also: [NeoPixelBus Light](https://esphome.io/components/light/neopixelbus#configuration-variables)*"
+            },
+            "num_leds": {
+              "data_type": "positive_not_null_int",
+              "key": "Required",
+              "type": "integer",
+              "docs": "**int**: The number of LEDs attached.\n\n*See also: [NeoPixelBus Light](https://esphome.io/components/light/neopixelbus#configuration-variables)*"
+            },
+            "output_id": {
+              "id_type": {
+                "class": "neopixelbus::NeoPixelBusLightOutputBase",
+                "parents": [
+                  "light::AddressableLight",
+                  "light::LightOutput",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "pin": {
+              "internal": true,
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The pin for the data line of the light.\n\n*See also: [NeoPixelBus Light](https://esphome.io/components/light/neopixelbus#configuration-variables)*"
+            },
+            "type": {
+              "default": "GRB",
+              "key": "Optional",
+              "docs": "**string**: The type of light. This is used to specify if it is an RGBW or RGB light and in which order the colors are. Defaults to `GRB`. Change this if you have lights with white channel and/or the colors are in the wrong order.\n\n*See also: [NeoPixelBus Light](https://esphome.io/components/light/neopixelbus#configuration-variables)*"
+            },
+            "variant": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "ws2811": null,
+                "ws2812": null,
+                "ws2812x": null,
+                "ws2813": null,
+                "sk6812": null,
+                "tm1814": null,
+                "tm1829": null,
+                "tm1914": null,
+                "800kbps": null,
+                "400kbps": null,
+                "apa106": null,
+                "lc8812": null,
+                "dotstar": null,
+                "ws2801": null,
+                "lpd6803": null,
+                "lpd8806": null,
+                "p9813": null
+              },
+              "docs": "**string**: The chipset of the light. The following options are supported:\n\n*See also: [NeoPixelBus Light](https://esphome.io/components/light/neopixelbus#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "light.ADDRESSABLE_LIGHT_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "rtttl": {
+    "action": {
+      "play": {
+        "maybe": "rtttl",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "rtttl::Rtttl"
+            },
+            "rtttl": {
+              "key": "Required",
+              "templatable": true,
+              "type": "string",
+              "docs": "**string**: The RTTTL string.\n\n*See also: [RTTTL Buzzer](https://esphome.io/components/rtttl#rtttlplay-action)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Plays an RTTTL tone."
+      },
+      "stop": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "rtttl::Rtttl"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Stops playback."
+      }
+    },
+    "condition": {
+      "is_playing": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "rtttl::Rtttl"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This Condition returns true while playback is active."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "gain": {
+              "default": "0.6",
+              "key": "Optional",
+              "docs": "**Percentage**: With this value you can set the volume of the sound.\n\n*See also: [RTTTL Buzzer](https://esphome.io/components/rtttl#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "rtttl::Rtttl",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the RTTTL if you have multiple components.\n\n*See also: [RTTTL Buzzer](https://esphome.io/components/rtttl#configuration-variables)*"
+            },
+            "on_finished_playback": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An action to be performed when playback is finished.\n\n*See also: [RTTTL Buzzer](https://esphome.io/components/rtttl#configuration-variables)*"
+            },
+            "output": {
+              "key": "Exclusive",
+              "type": "use_id",
+              "use_id_type": "output::FloatOutput",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id of the [float output](https://esphome.io/components/output) to use for this buzzer.\n\n*See also: [RTTTL Buzzer](https://esphome.io/components/rtttl#configuration-variables)*"
+            },
+            "speaker": {
+              "key": "Exclusive",
+              "type": "use_id",
+              "use_id_type": "speaker::Speaker",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id of the [Speaker](https://esphome.io/components/speaker) to play the song on.\n\n*See also: [RTTTL Buzzer](https://esphome.io/components/rtttl#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

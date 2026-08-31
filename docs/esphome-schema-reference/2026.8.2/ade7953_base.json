@@ -1,0 +1,426 @@
+{
+  "ade7953_base": {
+    "schemas": {
+      "ADE7953_CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "active_power_a": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "power"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "W"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the power value of the A channel in watts. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [ADE7953 Power Sensor](https://esphome.io/components/sensor/ade7953#configuration-variables)*"
+            },
+            "active_power_b": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "power"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "W"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the power value of the B channel in watts. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [ADE7953 Power Sensor](https://esphome.io/components/sensor/ade7953#configuration-variables)*"
+            },
+            "active_power_gain_a": {
+              "default": "4194304",
+              "key": "Optional",
+              "docs": "**int**: Set the active power amplification of the A channel. Defaults to `0x400000`.\n\n*See also: [ADE7953 Power Sensor](https://esphome.io/components/sensor/ade7953#configuration-variables)*"
+            },
+            "active_power_gain_b": {
+              "default": "4194304",
+              "key": "Optional",
+              "docs": "**int**: Set the active power amplification of the B channel. Defaults to `0x400000`.\n\n*See also: [ADE7953 Power Sensor](https://esphome.io/components/sensor/ade7953#configuration-variables)*"
+            },
+            "apparent_power_a": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "apparent_power"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "VA"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the apparent power value of the A channel in volt amperes. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [ADE7953 Power Sensor](https://esphome.io/components/sensor/ade7953#configuration-variables)*"
+            },
+            "apparent_power_b": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "apparent_power"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "VA"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the apparent power value of the B channel in volt amperes. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [ADE7953 Power Sensor](https://esphome.io/components/sensor/ade7953#configuration-variables)*"
+            },
+            "current_a": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "current"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "A"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the current value of the A channel in amperes. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [ADE7953 Power Sensor](https://esphome.io/components/sensor/ade7953#configuration-variables)*"
+            },
+            "current_b": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "current"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "A"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the current value of the B channel in amperes. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [ADE7953 Power Sensor](https://esphome.io/components/sensor/ade7953#configuration-variables)*"
+            },
+            "current_gain_a": {
+              "default": "4194304",
+              "key": "Optional",
+              "docs": "**int**: Set the current amplification of the A channel. Defaults to `0x400000`.\n\n*See also: [ADE7953 Power Sensor](https://esphome.io/components/sensor/ade7953#configuration-variables)*"
+            },
+            "current_gain_b": {
+              "default": "4194304",
+              "key": "Optional",
+              "docs": "**int**: Set the current amplification of the B channel. Defaults to `0x400000`.\n\n*See also: [ADE7953 Power Sensor](https://esphome.io/components/sensor/ade7953#configuration-variables)*"
+            },
+            "current_pga_gain_a": {
+              "default": "1x",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "1x": {
+                  "docs": null
+                },
+                "2x": {
+                  "docs": null
+                },
+                "4x": {
+                  "docs": null
+                },
+                "8x": {
+                  "docs": null
+                },
+                "16x": {
+                  "docs": null
+                },
+                "22x": {
+                  "docs": null
+                }
+              },
+              "docs": "**mapping**: Set the input PGA current amplification of the A channel. Defaults to `1x`. Possible values are:\n\n*See also: [ADE7953 Power Sensor](https://esphome.io/components/sensor/ade7953#configuration-variables)*"
+            },
+            "current_pga_gain_b": {
+              "default": "1x",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "1x": {
+                  "docs": null
+                },
+                "2x": {
+                  "docs": null
+                },
+                "4x": {
+                  "docs": null
+                },
+                "8x": {
+                  "docs": null
+                },
+                "16x": {
+                  "docs": null
+                },
+                "22x": null
+              },
+              "docs": "**mapping**: Set input PGA current amplification of the B channel. Defaults to `1x`. Possible values are:\n\n*See also: [ADE7953 Power Sensor](https://esphome.io/components/sensor/ade7953#configuration-variables)*"
+            },
+            "frequency": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "frequency"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "Hz"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the frequency value of the sensor in hertzs. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [ADE7953 Power Sensor](https://esphome.io/components/sensor/ade7953#configuration-variables)*"
+            },
+            "irq_pin": {
+              "internal": true,
+              "key": "Optional",
+              "modes": [
+                "input"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The pin connected to the ADE7935 IRQ line (if connected)\n\n*See also: [ADE7953 Power Sensor](https://esphome.io/components/sensor/ade7953#configuration-variables)*"
+            },
+            "power_factor_a": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "power_factor"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "%"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the power factor of the A channel in percentage. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [ADE7953 Power Sensor](https://esphome.io/components/sensor/ade7953#configuration-variables)*"
+            },
+            "power_factor_b": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "power_factor"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "%"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the power factor of the B channel in percentage. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [ADE7953 Power Sensor](https://esphome.io/components/sensor/ade7953#configuration-variables)*"
+            },
+            "reactive_power_a": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "reactive_power"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "var"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the reactive power value of the A channel in volt amperes. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [ADE7953 Power Sensor](https://esphome.io/components/sensor/ade7953#configuration-variables)*"
+            },
+            "reactive_power_b": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "reactive_power"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "var"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the reactive power value of the B channel in volt amperes. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [ADE7953 Power Sensor](https://esphome.io/components/sensor/ade7953#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`.\n\n*See also: [ADE7953 Power Sensor](https://esphome.io/components/sensor/ade7953#configuration-variables)*"
+            },
+            "use_accumulated_energy_registers": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Use ADE7935 accumulated energy registers instead of instant power registers. These registers store the accumulated energy since the last read and should provide better accuracy for power calculation. Defaults to `false`.\n\n*See also: [ADE7953 Power Sensor](https://esphome.io/components/sensor/ade7953#configuration-variables)*"
+            },
+            "voltage": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "voltage"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "V"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the voltage value of the sensor in volts. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [ADE7953 Power Sensor](https://esphome.io/components/sensor/ade7953#configuration-variables)*"
+            },
+            "voltage_gain": {
+              "default": "4194304",
+              "key": "Optional",
+              "docs": "**int**: Set the voltage amplification. Defaults to `0x400000`.\n\n*See also: [ADE7953 Power Sensor](https://esphome.io/components/sensor/ade7953#configuration-variables)*"
+            },
+            "voltage_pga_gain": {
+              "default": "1x",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "1x": {
+                  "docs": null
+                },
+                "2x": {
+                  "docs": null
+                },
+                "4x": {
+                  "docs": null
+                },
+                "8x": {
+                  "docs": null
+                },
+                "16x": {
+                  "docs": null
+                },
+                "22x": {
+                  "docs": null
+                }
+              },
+              "docs": "**mapping**: Set the input PGA voltage amplification. Defaults to `1x`. Possible values are:\n\n*See also: [ADE7953 Power Sensor](https://esphome.io/components/sensor/ade7953#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "zephyr_mcumgr.ota": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "zephyr_mcumgr::OTAComponent",
+                "parents": [
+                  "ota::OTAComponent",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "transport": {
+              "default": "{'ble': True}",
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "ble": {
+                    "default": "False",
+                    "key": "Optional",
+                    "type": "boolean"
+                  },
+                  "hardware_uart": {
+                    "key": "Optional",
+                    "type": "enum",
+                    "values": {
+                      "CDC": null,
+                      "CDC1": null,
+                      "UART0": null,
+                      "UART1": null
+                    }
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "**mapping**: Specifies the transport method used by Zephyr MCUmgr for OTA updates. By default, Bluetooth Low Energy (`ble: true`) is enabled.\n\n*See also: [nRF52 Firmware Updates](https://esphome.io/components/ota/zephyr_mcumgr#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "ota.BASE_OTA_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

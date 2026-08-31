@@ -1,0 +1,162 @@
+{
+  "htu21d": {
+    "action": {
+      "set_heater": {
+        "maybe": "status",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "htu21d::HTU21DComponent"
+            },
+            "status": {
+              "key": "Required",
+              "templatable": true,
+              "type": "boolean"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "set_heater_level": {
+        "maybe": "level",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "htu21d::HTU21DComponent"
+            },
+            "level": {
+              "key": "Required",
+              "templatable": true,
+              "type": "integer"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "htu21d.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "64",
+              "key": "Optional"
+            },
+            "heater": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": ""
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the heater sensor. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [HTU21D | Si7021 | SHT21 Temperature & Humidity Sensor](https://esphome.io/components/sensor/htu21d#configuration-variables)*"
+            },
+            "humidity": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "humidity"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "%"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the humidity sensor. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [HTU21D | Si7021 | SHT21 Temperature & Humidity Sensor](https://esphome.io/components/sensor/htu21d#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "htu21d::HTU21DComponent",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "model": {
+              "default": "HTU21D",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "HTU21D": null,
+                "SI7021": null,
+                "SHT21": null
+              },
+              "docs": "Possible values are HTU21D, SI7021, SHT21. Some boards may be mislabeled. If you encounter I2C errors, try using HTU21D. Defaults to HTU21D.\n\n*See also: [HTU21D | Si7021 | SHT21 Temperature & Humidity Sensor](https://esphome.io/components/sensor/htu21d#configuration-variables)*"
+            },
+            "temperature": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the temperature sensor. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [HTU21D | Si7021 | SHT21 Temperature & Humidity Sensor](https://esphome.io/components/sensor/htu21d#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`.\n\n*See also: [HTU21D | Si7021 | SHT21 Temperature & Humidity Sensor](https://esphome.io/components/sensor/htu21d#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

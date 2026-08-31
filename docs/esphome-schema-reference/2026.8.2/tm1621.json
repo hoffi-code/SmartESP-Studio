@@ -1,0 +1,72 @@
+{
+  "tm1621.display": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "cs_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin you have the CS line.\n\n*See also: [TM1621 LCD Display](https://esphome.io/components/display/tm1621#configuration-variables)*"
+            },
+            "data_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin you have the DATA line.\n\n*See also: [TM1621 LCD Display](https://esphome.io/components/display/tm1621#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "tm1621::TM1621Display",
+                "parents": [
+                  "PollingComponent",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [TM1621 LCD Display](https://esphome.io/components/display/tm1621#configuration-variables)*"
+            },
+            "read_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin you have the READ line.\n\n*See also: [TM1621 LCD Display](https://esphome.io/components/display/tm1621#configuration-variables)*"
+            },
+            "update_interval": {
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to re-draw the screen. Defaults to `1s`.\n\n*See also: [TM1621 LCD Display](https://esphome.io/components/display/tm1621#configuration-variables)*"
+            },
+            "write_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin you have the WRITE line.\n\n*See also: [TM1621 LCD Display](https://esphome.io/components/display/tm1621#configuration-variables)*"
+            },
+            "lambda": {
+              "key": "Optional",
+              "docs": "**[lambda](https://esphome.io/automations/templates#config-lambda)**: The lambda to use for rendering the content on the TM1621. See [Rendering Lambda](https://esphome.io/components/display/tm1621#display-tm1621_lambda) for more information.\n\n*See also: [TM1621 LCD Display](https://esphome.io/components/display/tm1621#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "display.BASIC_DISPLAY_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

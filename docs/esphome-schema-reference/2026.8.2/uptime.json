@@ -1,0 +1,174 @@
+{
+  "uptime.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "type": "typed",
+        "typed_key": "type",
+        "types": {
+          "seconds": {
+            "config_vars": {
+              "accuracy_decimals": {
+                "default": "0"
+              },
+              "device_class": {
+                "default": "duration"
+              },
+              "entity_category": {
+                "default": "diagnostic"
+              },
+              "icon": {
+                "default": "mdi:timer-outline"
+              },
+              "id": {
+                "id_type": {
+                  "class": "uptime::UptimeSecondsSensor",
+                  "parents": [
+                    "sensor::Sensor",
+                    "EntityBase",
+                    "PollingComponent",
+                    "Component"
+                  ]
+                }
+              },
+              "state_class": {
+                "default": "total_increasing"
+              },
+              "unit_of_measurement": {
+                "default": "s"
+              },
+              "update_interval": {
+                "default": "60s",
+                "key": "Optional",
+                "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The sensor reporting interval. Defaults to `60s`. Valid only with `type: seconds`.\n\n*See also: [Uptime Sensor](https://esphome.io/components/sensor/uptime#configuration-variables)*"
+              }
+            },
+            "extends": [
+              "sensor._SENSOR_SCHEMA",
+              "core.COMPONENT_SCHEMA"
+            ]
+          },
+          "timestamp": {
+            "config_vars": {
+              "accuracy_decimals": {
+                "default": "0"
+              },
+              "device_class": {
+                "default": "timestamp"
+              },
+              "entity_category": {
+                "default": "diagnostic"
+              },
+              "icon": {
+                "default": "mdi:timer-outline"
+              },
+              "id": {
+                "id_type": {
+                  "class": "uptime::UptimeTimestampSensor",
+                  "parents": [
+                    "sensor::Sensor",
+                    "EntityBase",
+                    "Component"
+                  ]
+                }
+              },
+              "time_id": {
+                "id_type": {},
+                "key": "GeneratedID",
+                "type": "use_id",
+                "use_id_type": "time::RealTimeClock"
+              }
+            },
+            "extends": [
+              "sensor._SENSOR_SCHEMA",
+              "core.COMPONENT_SCHEMA"
+            ]
+          }
+        },
+        "docs": "Either:"
+      }
+    }
+  },
+  "uptime.text_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "entity_category": {
+              "default": "diagnostic"
+            },
+            "format": {
+              "default": "{}",
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "days": {
+                    "default": "d",
+                    "key": "Optional",
+                    "type": "string",
+                    "docs": "**string**: The string to use for the days element. Defaults to `d`.\n\n*See also: [Uptime Text Sensor](https://esphome.io/components/text_sensor/uptime#configuration-variables)*"
+                  },
+                  "expand": {
+                    "default": "False",
+                    "key": "Optional",
+                    "type": "boolean",
+                    "docs": "**boolean**: If set, the text will always include all elements, even if they are zero. Defaults to `false`.\n\n*See also: [Uptime Text Sensor](https://esphome.io/components/text_sensor/uptime#configuration-variables)*"
+                  },
+                  "hours": {
+                    "default": "h",
+                    "key": "Optional",
+                    "type": "string",
+                    "docs": "**string**: The string to use for the hours element. Defaults to `h`.\n\n*See also: [Uptime Text Sensor](https://esphome.io/components/text_sensor/uptime#configuration-variables)*"
+                  },
+                  "minutes": {
+                    "default": "m",
+                    "key": "Optional",
+                    "type": "string",
+                    "docs": "**string**: The string to use for the minutes element. Defaults to `m`.\n\n*See also: [Uptime Text Sensor](https://esphome.io/components/text_sensor/uptime#configuration-variables)*"
+                  },
+                  "seconds": {
+                    "default": "s",
+                    "key": "Optional",
+                    "type": "string",
+                    "docs": "**string**: The string to use for the seconds element. Defaults to `s`.\n\n*See also: [Uptime Text Sensor](https://esphome.io/components/text_sensor/uptime#configuration-variables)*"
+                  },
+                  "separator": {
+                    "default": "",
+                    "key": "Optional",
+                    "type": "string",
+                    "docs": "**string**: The separator to use between the uptime values. Defaults to the empty string.\n\n*See also: [Uptime Text Sensor](https://esphome.io/components/text_sensor/uptime#configuration-variables)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "**list**: Allows the customization of the output format. The following options are available:\n\n*See also: [Uptime Text Sensor](https://esphome.io/components/text_sensor/uptime#configuration-variables)*"
+            },
+            "icon": {
+              "default": "mdi:timer-outline"
+            },
+            "id": {
+              "id_type": {
+                "class": "uptime::UptimeTextSensor",
+                "parents": [
+                  "text_sensor::TextSensor",
+                  "EntityBase",
+                  "PollingComponent",
+                  "Component"
+                ]
+              }
+            },
+            "update_interval": {
+              "default": "30s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The sensor reporting interval. Defaults to `30s`.\n\n*See also: [Uptime Text Sensor](https://esphome.io/components/text_sensor/uptime#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "text_sensor._TEXT_SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,156 @@
+{
+  "hm3301.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "64",
+              "key": "Optional"
+            },
+            "aqi": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "calculation_type": {
+                    "key": "Required",
+                    "type": "enum",
+                    "values": {
+                      "CAQI": null,
+                      "AQI": null
+                    }
+                  },
+                  "device_class": {
+                    "default": "aqi"
+                  },
+                  "icon": {
+                    "default": "mdi:chemical-weapon"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "index"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "hm3301::HM3301Component",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "pm_10_0": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "pm10"
+                  },
+                  "icon": {
+                    "default": "mdi:chemical-weapon"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b5g/m\u00b3"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the concentration of particulates of size less than 10.0\u00b5m in \u00b5g per cubic meter.\n\n*See also: [The Grove - Laser PM2.5 Sensor (HM3301)](https://esphome.io/components/sensor/hm3301#configuration-variables)*"
+            },
+            "pm_1_0": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "pm1"
+                  },
+                  "icon": {
+                    "default": "mdi:chemical-weapon"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b5g/m\u00b3"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the concentration of particulates of size less than 1.0\u00b5m in \u00b5g per cubic meter.\n\n*See also: [The Grove - Laser PM2.5 Sensor (HM3301)](https://esphome.io/components/sensor/hm3301#configuration-variables)*"
+            },
+            "pm_2_5": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "pm25"
+                  },
+                  "icon": {
+                    "default": "mdi:chemical-weapon"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b5g/m\u00b3"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the concentration of particulates of size less than 2.5\u00b5m in \u00b5g per cubic meter.\n\n*See also: [The Grove - Laser PM2.5 Sensor (HM3301)](https://esphome.io/components/sensor/hm3301#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

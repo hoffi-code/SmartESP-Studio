@@ -1,0 +1,183 @@
+{
+  "mhz19": {
+    "action": {
+      "abc_disable": {
+        "schema": {
+          "extends": [
+            "mhz19.sensor.NO_ARGS_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) disables automatic baseline calibration on the sensor with the given ID."
+      },
+      "abc_enable": {
+        "schema": {
+          "extends": [
+            "mhz19.sensor.NO_ARGS_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) enables automatic baseline calibration on the sensor with the given ID."
+      },
+      "calibrate_zero": {
+        "schema": {
+          "extends": [
+            "mhz19.sensor.NO_ARGS_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) executes zero point calibration command on the sensor with the given ID."
+      },
+      "detection_range_set": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "detection_range": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "2000": null,
+                "5000": null,
+                "10000": null
+              }
+            },
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "mhz19::MHZ19Component"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) configures the detection range of the sensor with the given ID."
+      }
+    }
+  },
+  "mhz19.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "automatic_baseline_calibration": {
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: MH-Z19 has automatic calibration procedure. The automatic calibration cycle is every 24 hours after powered on. Set this value to `false` to disable ABC on boot (it's better if you use sensor indoor). Set this value to `true` to enable ABC on boot. Doesn't send calibration command if not set (default sensor logic will be used).\n\n*See also: [MH-Z19 CO_2 and Temperature Sensor](https://esphome.io/components/sensor/mhz19#configuration-variables)*"
+            },
+            "co2": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "carbon_dioxide"
+                  },
+                  "icon": {
+                    "default": "mdi:molecule-co2"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "ppm"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The CO_2 data from the sensor in parts per million (ppm). All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [MH-Z19 CO_2 and Temperature Sensor](https://esphome.io/components/sensor/mhz19#configuration-variables)*"
+            },
+            "detection_range": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "2000": null,
+                "5000": null,
+                "10000": null
+              },
+              "docs": "The CO_2 sensor can be configured to detect different ranges: 0-2000ppm, 0-5000ppm, or 0-10000ppm. Valid values are `2000ppm`, `5000ppm`, or `10000ppm`. Sensors come from the factory with one of these ranges pre-configured, and this setting persists in the sensor's non-volatile memory. If not specified, the previously configured range is used.\n\n*See also: [MH-Z19 CO_2 and Temperature Sensor](https://esphome.io/components/sensor/mhz19#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "mhz19::MHZ19Component",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "uart::UARTDevice"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for actions.\n\n*See also: [MH-Z19 CO_2 and Temperature Sensor](https://esphome.io/components/sensor/mhz19#configuration-variables)*"
+            },
+            "temperature": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the temperature sensor. Please note that this is not officially documented in the datasheet and seems to be quite inaccurate. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [MH-Z19 CO_2 and Temperature Sensor](https://esphome.io/components/sensor/mhz19#configuration-variables)*"
+            },
+            "uart_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "uart::UARTComponent",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the [UART Component](https://esphome.io/components/uart) if you want to use multiple UART buses.\n\n*See also: [MH-Z19 CO_2 and Temperature Sensor](https://esphome.io/components/sensor/mhz19#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`.\n\n*See also: [MH-Z19 CO_2 and Temperature Sensor](https://esphome.io/components/sensor/mhz19#configuration-variables)*"
+            },
+            "warmup_time": {
+              "default": "75s",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_seconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**Time**: The sensor has a warmup time and before that, it returns bogus readings (eg: 500ppm, 505ppm...). This setting discards readings until the warmup time happened (`NAN` is returned). The datasheet says preheating takes 1min, but empirical tests have shown it often takes more, so the 75s default should be enough to accommodate for that.\n\n*See also: [MH-Z19 CO_2 and Temperature Sensor](https://esphome.io/components/sensor/mhz19#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "NO_ARGS_ACTION_SCHEMA": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "mhz19::MHZ19Component"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

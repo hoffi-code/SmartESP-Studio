@@ -1,0 +1,154 @@
+{
+  "lock": {
+    "action": {
+      "lock": {
+        "schema": {
+          "extends": [
+            "lock.LOCK_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action locks a lock with the given ID on when executed."
+      },
+      "open": {
+        "schema": {
+          "extends": [
+            "lock.LOCK_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action opens (e.g. unlatch) a lock with the given ID off when executed."
+      },
+      "unlock": {
+        "schema": {
+          "extends": [
+            "lock.LOCK_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action unlocks a lock with the given ID off when executed."
+      }
+    },
+    "components": {
+      "copy": {
+        "docs": "None\n\n*See also: [Copy Component](https://esphome.io/components/copy#copy-lock)*"
+      },
+      "output": {
+        "docs": "The `output` lock platform allows you to use any output component as a lock.\n\n*See also: [Generic Output Lock](https://esphome.io/components/lock/output)*"
+      },
+      "template": {
+        "docs": "The `template` lock platform allows you to create simple locks out of just actions and an optional value lambda. Once defined, it will automatically appear in Home Assistant as a lock and can be controlled through the frontend.\n\n*See also: [Template Lock](https://esphome.io/components/lock/template)*"
+      }
+    },
+    "condition": {
+      "is_locked": {
+        "schema": {
+          "extends": [
+            "lock.LOCK_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [Condition](https://esphome.io/automations/actions#all-conditions) checks if the given lock is LOCKED (or UNLOCKED)."
+      },
+      "is_unlocked": {
+        "schema": {
+          "extends": [
+            "lock.LOCK_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    },
+    "schemas": {
+      "LOCK_ACTION_SCHEMA": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "lock::Lock"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "_LOCK_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "mqtt_id": {
+              "id_type": {
+                "class": "mqtt::MQTTLockComponent",
+                "parents": [
+                  "mqtt::MQTTComponent",
+                  "Component"
+                ]
+              },
+              "key": "Optional"
+            },
+            "on_lock": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: An automation to perform when the lock is locked. See [`lock.on_lock` / `lock.on_unlock` Trigger](https://esphome.io/components/lock#lock-on_lock_unlock_trigger).\n\n*See also: [Lock Component](https://esphome.io/components/lock#base-lock-configuration)*"
+            },
+            "on_unlock": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: An automation to perform when the lock is unlocked. See [`lock.on_lock` / `lock.on_unlock` Trigger](https://esphome.io/components/lock#lock-on_lock_unlock_trigger)..\n\n*See also: [Lock Component](https://esphome.io/components/lock#base-lock-configuration)*"
+            },
+            "web_server": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "sorting_group_id": {
+                    "key": "Optional",
+                    "type": "use_id",
+                    "use_id_type": "int"
+                  },
+                  "sorting_weight": {
+                    "key": "Optional"
+                  },
+                  "web_server_id": {
+                    "key": "Optional",
+                    "type": "use_id",
+                    "use_id_type": "web_server::WebServer"
+                  }
+                }
+              },
+              "type": "schema",
+              "visibility": "advanced"
+            },
+            "id": {
+              "docs": "**string**: Manually specify the ID for code generation. At least one of **id** and **name** must be specified.\n\n*See also: [Lock Component](https://esphome.io/components/lock#base-lock-configuration)*"
+            },
+            "name": {
+              "key": "Optional",
+              "docs": "**string**: The name of the lock. At least one of **id** and **name** must be specified.\n\n*See also: [Lock Component](https://esphome.io/components/lock#base-lock-configuration)*"
+            },
+            "icon": {
+              "key": "Optional",
+              "docs": "**icon**: Manually set the icon to use for the lock in the frontend.\n\n*See also: [Lock Component](https://esphome.io/components/lock#base-lock-configuration)*"
+            },
+            "internal": {
+              "key": "Optional",
+              "docs": "**boolean**: Mark this component as internal. Internal components will not be exposed to the frontend (like Home Assistant). Only specifying an `id` without a `name` will implicitly set this to true.\n\n*See also: [Lock Component](https://esphome.io/components/lock#base-lock-configuration)*"
+            },
+            "disabled_by_default": {
+              "key": "Optional",
+              "docs": "**boolean**: If true, then this entity should not be added to any client's frontend, (usually Home Assistant) without the user manually enabling it (via the Home Assistant UI). Defaults to `false`.\n\n*See also: [Lock Component](https://esphome.io/components/lock#base-lock-configuration)*"
+            },
+            "entity_category": {
+              "key": "Optional",
+              "docs": "**string**: The category of the entity. See [https://developers.home-assistant.io/docs/core/entity/#generic-properties](https://developers.home-assistant.io/docs/core/entity/#generic-properties) for a list of available options. Set to `\"\"` to remove the default entity category.\n\n*See also: [Lock Component](https://esphome.io/components/lock#base-lock-configuration)*"
+            }
+          },
+          "extends": [
+            "core.ENTITY_BASE_SCHEMA",
+            "core.MQTT_COMMAND_COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

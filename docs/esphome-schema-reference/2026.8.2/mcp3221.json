@@ -1,0 +1,66 @@
+{
+  "mcp3221.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "2"
+            },
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "72",
+              "key": "Optional",
+              "docs": "**int**: Defaults to ``0x48``. ``0b1001XXX`` - ``X``: See packaging for the last 3 bits\n\n*See also: [MCP3221 12-bit ADC](https://esphome.io/components/sensor/mcp3221#configuration-variables)*"
+            },
+            "device_class": {
+              "default": "voltage"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "icon": {
+              "default": "mdi:scale"
+            },
+            "id": {
+              "id_type": {
+                "class": "mcp3221::MCP3221Sensor",
+                "parents": [
+                  "sensor::Sensor",
+                  "EntityBase",
+                  "voltage_sampler::VoltageSampler",
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              }
+            },
+            "reference_voltage": {
+              "default": "3.3V",
+              "key": "Optional",
+              "docs": "**float**: The reference voltage. Should be ``VCC``, range 2.7V to 5.5V\n\n*See also: [MCP3221 12-bit ADC](https://esphome.io/components/sensor/mcp3221#configuration-variables)*"
+            },
+            "state_class": {
+              "default": "measurement"
+            },
+            "unit_of_measurement": {
+              "default": "V"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to ``60s``.\n\n*See also: [MCP3221 12-bit ADC](https://esphome.io/components/sensor/mcp3221#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

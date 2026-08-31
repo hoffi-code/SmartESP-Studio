@@ -1,0 +1,66 @@
+{
+  "aqi.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "0"
+            },
+            "calculation_type": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "CAQI": {
+                  "docs": "European Common Air Quality Index. Returns values from 0 upward, where higher values indicate worse air quality. Typically 0-25 is very low, 25-50 is low, 50-75 is medium, 75-100 is high, and >100 is very high. The CAQI specification defines no maximum, so readings above 100 are always reported unbounded."
+                },
+                "AQI": {
+                  "docs": "US EPA Air Quality Index breakpoint formula applied to PM2.5 and PM10 only. Returns values from 0-500, where higher values indicate worse air quality. The scale is defined only up to 500, so readings above the top breakpoint are clamped to 500 unless `extended_range` is enabled. **This is not a full EPA AQI** \u2014 the official standard covers five pollutant categories and also requires ozone, CO, SO\u2082, and NO\u2082 measurements. Based on the [EPA Technical Assistance Document](https://document.airnow.gov/technical-assistance-document-for-the-reporting-of-daily-air-quailty.pdf)."
+                }
+              },
+              "docs": "**enum**: The AQI calculation standard to use. Must be one of:\n\n*See also: [Air Quality Index (AQI)](https://esphome.io/components/sensor/aqi#configuration-variables)*"
+            },
+            "device_class": {
+              "default": "aqi"
+            },
+            "extended_range": {
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Applies only to `calculation_type: AQI`. By default a reading above the top of the US AQI scale is clamped to 500. When set to `true`, the index is instead linearly extrapolated past 500 so that extreme pollution is reported as an \"over-range\" value (for example, above 500) rather than saturating. This goes beyond what the EPA specification defines. Setting this option together with `calculation_type: CAQI` is a configuration error, because CAQI has no defined maximum and is always reported unbounded.\n\n*See also: [Air Quality Index (AQI)](https://esphome.io/components/sensor/aqi#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "aqi::AQISensor",
+                "parents": [
+                  "sensor::Sensor",
+                  "EntityBase",
+                  "Component"
+                ]
+              }
+            },
+            "pm_10_0": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "sensor::Sensor",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id) of a [Sensor](https://esphome.io/components/sensor/)**: The sensor providing PM10 concentration readings in \u00b5g/m\u00b3.\n\n*See also: [Air Quality Index (AQI)](https://esphome.io/components/sensor/aqi#configuration-variables)*"
+            },
+            "pm_2_5": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "sensor::Sensor",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id) of a [Sensor](https://esphome.io/components/sensor/)**: The sensor providing PM2.5 concentration readings in \u00b5g/m\u00b3.\n\n*See also: [Air Quality Index (AQI)](https://esphome.io/components/sensor/aqi#configuration-variables)*"
+            },
+            "state_class": {
+              "default": "measurement"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

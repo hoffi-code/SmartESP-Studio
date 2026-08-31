@@ -1,0 +1,78 @@
+{
+  "water_heater": {
+    "components": {
+      "template": {
+        "docs": "The `template` water heater platform allows you to create simple water heaters out of just a few actions and lambdas. Once defined, it will automatically appear in Home Assistant as a water heater entity and can be controlled through the frontend.\n\n*See also: [Template Water Heater](https://esphome.io/components/water_heater/template)*"
+      }
+    },
+    "schemas": {
+      "_WATER_HEATER_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "visual": {
+              "default": "{}",
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "max_temperature": {
+                    "key": "Optional",
+                    "docs": "**float**: Override the maximum temperature shown in the frontend.\n\n*See also: [Water Heater Component](https://esphome.io/components/water_heater#base-water-heater-configuration)*"
+                  },
+                  "min_temperature": {
+                    "key": "Optional",
+                    "docs": "**float**: Override the minimum temperature shown in the frontend.\n\n*See also: [Water Heater Component](https://esphome.io/components/water_heater#base-water-heater-configuration)*"
+                  },
+                  "target_temperature_step": {
+                    "key": "Optional",
+                    "docs": "**float**: Override the temperature steps shown in the frontend.\n\n*See also: [Water Heater Component](https://esphome.io/components/water_heater#base-water-heater-configuration)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "Configuration for the frontend representation.\n\n*See also: [Water Heater Component](https://esphome.io/components/water_heater#base-water-heater-configuration)*"
+            },
+            "id": {
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The water heater to control.\n\n*See also: [Water Heater Component](https://esphome.io/components/water_heater#water_heatercontrol-action)*"
+            },
+            "name": {
+              "key": "Optional",
+              "docs": "**string**: The name for the water heater. At least one of **id** and **name** must be specified.\n\n*See also: [Water Heater Component](https://esphome.io/components/water_heater#base-water-heater-configuration)*"
+            },
+            "icon": {
+              "key": "Optional",
+              "docs": "**icon**: Manually set the icon to use for the water heater in the frontend.\n\n*See also: [Water Heater Component](https://esphome.io/components/water_heater#base-water-heater-configuration)*"
+            },
+            "supported_modes": {
+              "key": "Optional",
+              "docs": "**list**: Static list of operation modes that will be exposed to the frontend (for example Home Assistant). When not specified, all modes supported by the platform are exposed. > **Note** > This option is platform-dependent. Not all water heater platforms allow configuring supported modes.\n\n*See also: [Water Heater Component](https://esphome.io/components/water_heater#base-water-heater-configuration)*"
+            },
+            "internal": {
+              "key": "Optional",
+              "docs": "**boolean**: Mark this component as internal. Internal components will not be exposed to the frontend (like Home Assistant). Only specifying an `id` without a `name` will implicitly set this to true.\n\n*See also: [Water Heater Component](https://esphome.io/components/water_heater#base-water-heater-configuration)*"
+            },
+            "disabled_by_default": {
+              "key": "Optional",
+              "docs": "**boolean**: If true, this entity should not be added to any client's frontend, (usually Home Assistant) without the user manually enabling it (via the Home Assistant UI). Defaults to `false`.\n\n*See also: [Water Heater Component](https://esphome.io/components/water_heater#base-water-heater-configuration)*"
+            },
+            "entity_category": {
+              "key": "Optional",
+              "docs": "**string**: The category of the entity. See [https://developers.home-assistant.io/docs/core/entity/#generic-properties](https://developers.home-assistant.io/docs/core/entity/#generic-properties) for a list of available options. Set to `\"\"` to remove the default entity category.\n\n*See also: [Water Heater Component](https://esphome.io/components/water_heater#base-water-heater-configuration)*"
+            },
+            "mode": {
+              "key": "Optional",
+              "docs": "**string**: The operation mode to set. See [Modes](https://esphome.io/components/water_heater#water-heater-modes) for available options.\n\n*See also: [Water Heater Component](https://esphome.io/components/water_heater#water_heatercontrol-action)*"
+            },
+            "target_temperature": {
+              "key": "Optional",
+              "docs": "**float**: The target temperature to set (e.g., `60.0`).\n\n*See also: [Water Heater Component](https://esphome.io/components/water_heater#water_heatercontrol-action)*"
+            }
+          },
+          "extends": [
+            "core.ENTITY_BASE_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

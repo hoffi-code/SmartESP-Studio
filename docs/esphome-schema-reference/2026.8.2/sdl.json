@@ -1,0 +1,428 @@
+{
+  "sdl.binary_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {},
+            "key": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "SDLK_UNKNOWN": null,
+                "SDLK_RETURN": null,
+                "SDLK_ESCAPE": null,
+                "SDLK_BACKSPACE": null,
+                "SDLK_TAB": null,
+                "SDLK_SPACE": null,
+                "SDLK_EXCLAIM": null,
+                "SDLK_QUOTEDBL": null,
+                "SDLK_HASH": null,
+                "SDLK_PERCENT": null,
+                "SDLK_DOLLAR": null,
+                "SDLK_AMPERSAND": null,
+                "SDLK_QUOTE": null,
+                "SDLK_LEFTPAREN": null,
+                "SDLK_RIGHTPAREN": null,
+                "SDLK_ASTERISK": null,
+                "SDLK_PLUS": null,
+                "SDLK_COMMA": null,
+                "SDLK_MINUS": null,
+                "SDLK_PERIOD": null,
+                "SDLK_SLASH": null,
+                "SDLK_0": null,
+                "SDLK_1": null,
+                "SDLK_2": null,
+                "SDLK_3": null,
+                "SDLK_4": null,
+                "SDLK_5": null,
+                "SDLK_6": null,
+                "SDLK_7": null,
+                "SDLK_8": null,
+                "SDLK_9": null,
+                "SDLK_COLON": null,
+                "SDLK_SEMICOLON": null,
+                "SDLK_LESS": null,
+                "SDLK_EQUALS": null,
+                "SDLK_GREATER": null,
+                "SDLK_QUESTION": null,
+                "SDLK_AT": null,
+                "SDLK_LEFTBRACKET": null,
+                "SDLK_BACKSLASH": null,
+                "SDLK_RIGHTBRACKET": null,
+                "SDLK_CARET": null,
+                "SDLK_UNDERSCORE": null,
+                "SDLK_BACKQUOTE": null,
+                "SDLK_a": null,
+                "SDLK_b": null,
+                "SDLK_c": null,
+                "SDLK_d": null,
+                "SDLK_e": null,
+                "SDLK_f": null,
+                "SDLK_g": null,
+                "SDLK_h": null,
+                "SDLK_i": null,
+                "SDLK_j": null,
+                "SDLK_k": null,
+                "SDLK_l": null,
+                "SDLK_m": null,
+                "SDLK_n": null,
+                "SDLK_o": null,
+                "SDLK_p": null,
+                "SDLK_q": null,
+                "SDLK_r": null,
+                "SDLK_s": null,
+                "SDLK_t": null,
+                "SDLK_u": null,
+                "SDLK_v": null,
+                "SDLK_w": null,
+                "SDLK_x": null,
+                "SDLK_y": null,
+                "SDLK_z": null,
+                "SDLK_CAPSLOCK": null,
+                "SDLK_F1": null,
+                "SDLK_F2": null,
+                "SDLK_F3": null,
+                "SDLK_F4": null,
+                "SDLK_F5": null,
+                "SDLK_F6": null,
+                "SDLK_F7": null,
+                "SDLK_F8": null,
+                "SDLK_F9": null,
+                "SDLK_F10": null,
+                "SDLK_F11": null,
+                "SDLK_F12": null,
+                "SDLK_PRINTSCREEN": null,
+                "SDLK_SCROLLLOCK": null,
+                "SDLK_PAUSE": null,
+                "SDLK_INSERT": null,
+                "SDLK_HOME": null,
+                "SDLK_PAGEUP": null,
+                "SDLK_DELETE": null,
+                "SDLK_END": null,
+                "SDLK_PAGEDOWN": null,
+                "SDLK_RIGHT": null,
+                "SDLK_LEFT": null,
+                "SDLK_DOWN": null,
+                "SDLK_UP": null,
+                "SDLK_NUMLOCKCLEAR": null,
+                "SDLK_KP_DIVIDE": null,
+                "SDLK_KP_MULTIPLY": null,
+                "SDLK_KP_MINUS": null,
+                "SDLK_KP_PLUS": null,
+                "SDLK_KP_ENTER": null,
+                "SDLK_KP_1": null,
+                "SDLK_KP_2": null,
+                "SDLK_KP_3": null,
+                "SDLK_KP_4": null,
+                "SDLK_KP_5": null,
+                "SDLK_KP_6": null,
+                "SDLK_KP_7": null,
+                "SDLK_KP_8": null,
+                "SDLK_KP_9": null,
+                "SDLK_KP_0": null,
+                "SDLK_KP_PERIOD": null,
+                "SDLK_APPLICATION": null,
+                "SDLK_POWER": null,
+                "SDLK_KP_EQUALS": null,
+                "SDLK_F13": null,
+                "SDLK_F14": null,
+                "SDLK_F15": null,
+                "SDLK_F16": null,
+                "SDLK_F17": null,
+                "SDLK_F18": null,
+                "SDLK_F19": null,
+                "SDLK_F20": null,
+                "SDLK_F21": null,
+                "SDLK_F22": null,
+                "SDLK_F23": null,
+                "SDLK_F24": null,
+                "SDLK_EXECUTE": null,
+                "SDLK_HELP": null,
+                "SDLK_MENU": null,
+                "SDLK_SELECT": null,
+                "SDLK_STOP": null,
+                "SDLK_AGAIN": null,
+                "SDLK_UNDO": null,
+                "SDLK_CUT": null,
+                "SDLK_COPY": null,
+                "SDLK_PASTE": null,
+                "SDLK_FIND": null,
+                "SDLK_MUTE": null,
+                "SDLK_VOLUMEUP": null,
+                "SDLK_VOLUMEDOWN": null,
+                "SDLK_KP_COMMA": null,
+                "SDLK_KP_EQUALSAS400": null,
+                "SDLK_ALTERASE": null,
+                "SDLK_SYSREQ": null,
+                "SDLK_CANCEL": null,
+                "SDLK_CLEAR": null,
+                "SDLK_PRIOR": null,
+                "SDLK_RETURN2": null,
+                "SDLK_SEPARATOR": null,
+                "SDLK_OUT": null,
+                "SDLK_OPER": null,
+                "SDLK_CLEARAGAIN": null,
+                "SDLK_CRSEL": null,
+                "SDLK_EXSEL": null,
+                "SDLK_KP_00": null,
+                "SDLK_KP_000": null,
+                "SDLK_THOUSANDSSEPARATOR": null,
+                "SDLK_DECIMALSEPARATOR": null,
+                "SDLK_CURRENCYUNIT": null,
+                "SDLK_CURRENCYSUBUNIT": null,
+                "SDLK_KP_LEFTPAREN": null,
+                "SDLK_KP_RIGHTPAREN": null,
+                "SDLK_KP_LEFTBRACE": null,
+                "SDLK_KP_RIGHTBRACE": null,
+                "SDLK_KP_TAB": null,
+                "SDLK_KP_BACKSPACE": null,
+                "SDLK_KP_A": null,
+                "SDLK_KP_B": null,
+                "SDLK_KP_C": null,
+                "SDLK_KP_D": null,
+                "SDLK_KP_E": null,
+                "SDLK_KP_F": null,
+                "SDLK_KP_XOR": null,
+                "SDLK_KP_POWER": null,
+                "SDLK_KP_PERCENT": null,
+                "SDLK_KP_LESS": null,
+                "SDLK_KP_GREATER": null,
+                "SDLK_KP_AMPERSAND": null,
+                "SDLK_KP_DBLAMPERSAND": null,
+                "SDLK_KP_VERTICALBAR": null,
+                "SDLK_KP_DBLVERTICALBAR": null,
+                "SDLK_KP_COLON": null,
+                "SDLK_KP_HASH": null,
+                "SDLK_KP_SPACE": null,
+                "SDLK_KP_AT": null,
+                "SDLK_KP_EXCLAM": null,
+                "SDLK_KP_MEMSTORE": null,
+                "SDLK_KP_MEMRECALL": null,
+                "SDLK_KP_MEMCLEAR": null,
+                "SDLK_KP_MEMADD": null,
+                "SDLK_KP_MEMSUBTRACT": null,
+                "SDLK_KP_MEMMULTIPLY": null,
+                "SDLK_KP_MEMDIVIDE": null,
+                "SDLK_KP_PLUSMINUS": null,
+                "SDLK_KP_CLEAR": null,
+                "SDLK_KP_CLEARENTRY": null,
+                "SDLK_KP_BINARY": null,
+                "SDLK_KP_OCTAL": null,
+                "SDLK_KP_DECIMAL": null,
+                "SDLK_KP_HEXADECIMAL": null,
+                "SDLK_LCTRL": null,
+                "SDLK_LSHIFT": null,
+                "SDLK_LALT": null,
+                "SDLK_LGUI": null,
+                "SDLK_RCTRL": null,
+                "SDLK_RSHIFT": null,
+                "SDLK_RALT": null,
+                "SDLK_RGUI": null,
+                "SDLK_MODE": null,
+                "SDLK_AUDIONEXT": null,
+                "SDLK_AUDIOPREV": null,
+                "SDLK_AUDIOSTOP": null,
+                "SDLK_AUDIOPLAY": null,
+                "SDLK_AUDIOMUTE": null,
+                "SDLK_MEDIASELECT": null,
+                "SDLK_WWW": null,
+                "SDLK_MAIL": null,
+                "SDLK_CALCULATOR": null,
+                "SDLK_COMPUTER": null,
+                "SDLK_AC_SEARCH": null,
+                "SDLK_AC_HOME": null,
+                "SDLK_AC_BACK": null,
+                "SDLK_AC_FORWARD": null,
+                "SDLK_AC_STOP": null,
+                "SDLK_AC_REFRESH": null,
+                "SDLK_AC_BOOKMARKS": null,
+                "SDLK_BRIGHTNESSDOWN": null,
+                "SDLK_BRIGHTNESSUP": null,
+                "SDLK_DISPLAYSWITCH": null,
+                "SDLK_KBDILLUMTOGGLE": null,
+                "SDLK_KBDILLUMDOWN": null,
+                "SDLK_KBDILLUMUP": null,
+                "SDLK_EJECT": null,
+                "SDLK_SLEEP": null,
+                "SDLK_APP1": null,
+                "SDLK_APP2": null,
+                "SDLK_AUDIOREWIND": null,
+                "SDLK_AUDIOFASTFORWARD": null,
+                "SDLK_SOFTLEFT": null,
+                "SDLK_SOFTRIGHT": null,
+                "SDLK_CALL": null,
+                "SDLK_ENDCALL": null
+              },
+              "docs": "The ID of an [SDL key](https://www.libsdl.org/release/SDL-1.2.15/docs/html/sdlkey.html).\n\n*See also: [SDL Binary Sensor](https://esphome.io/components/binary_sensor/sdl#configuration-variables)*"
+            },
+            "sdl_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "sdl::Sdl"
+            }
+          },
+          "extends": [
+            "binary_sensor._BINARY_SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "sdl.display": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "dimensions": {
+              "key": "Required",
+              "schema": {
+                "config_vars": {
+                  "height": {
+                    "key": "Required",
+                    "type": "integer"
+                  },
+                  "width": {
+                    "key": "Required",
+                    "type": "integer"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "id": {
+              "id_type": {
+                "class": "sdl::Sdl",
+                "parents": [
+                  "display::Display",
+                  "PollingComponent",
+                  "Component",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [SDL2 Display on host platform](https://esphome.io/components/display/sdl#configuration-variables)*"
+            },
+            "sdl_options": {
+              "default": "",
+              "key": "Optional",
+              "docs": "**string**: Build arguments if required to specify include or library paths. Should not be required if SDL2 is properly installed.\n\n*See also: [SDL2 Display on host platform](https://esphome.io/components/display/sdl#configuration-variables)*"
+            },
+            "window_options": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "always_on_top": {
+                    "default": "False",
+                    "key": "Optional",
+                    "type": "boolean",
+                    "docs": "**boolean**: Whether to always draw the display window above other windows or not\n\n*See also: [SDL2 Display on host platform](https://esphome.io/components/display/sdl#configuration-variables)*"
+                  },
+                  "borderless": {
+                    "default": "False",
+                    "key": "Optional",
+                    "type": "boolean",
+                    "docs": "**boolean**: Whether to draw the display window with or without borders\n\n*See also: [SDL2 Display on host platform](https://esphome.io/components/display/sdl#configuration-variables)*"
+                  },
+                  "fullscreen": {
+                    "default": "False",
+                    "key": "Optional",
+                    "type": "boolean",
+                    "docs": "**boolean**: Whether to draw the display window in fullscreen or not. This may resize the resolution of the host display to match the SDL display dimensions\n\n*See also: [SDL2 Display on host platform](https://esphome.io/components/display/sdl#configuration-variables)*"
+                  },
+                  "position": {
+                    "key": "Optional",
+                    "schema": {
+                      "config_vars": {
+                        "centered_on_display": {
+                          "key": "Optional",
+                          "type": "integer",
+                          "docs": "**int**: For use with multiple display screens. Centers the window on the specified display number. Display numbering starts at 0. May not be used with `x` or `y`.\n\n*See also: [SDL2 Display on host platform](https://esphome.io/components/display/sdl#configuration-variables)*"
+                        },
+                        "x": {
+                          "key": "Optional",
+                          "type": "integer",
+                          "docs": "**int**: X position of the display window in pixels\n\n*See also: [SDL2 Display on host platform](https://esphome.io/components/display/sdl#configuration-variables)*"
+                        },
+                        "y": {
+                          "key": "Optional",
+                          "type": "integer",
+                          "docs": "**int**: Y position of the display window in pixels\n\n*See also: [SDL2 Display on host platform](https://esphome.io/components/display/sdl#configuration-variables)*"
+                        }
+                      }
+                    },
+                    "type": "schema",
+                    "docs": "Specify the position of the display window on the host system. If not specified, SDL will choose a default position. Either `x` and `y` or `centered_on_display` may be used, but not together.\n\n*See also: [SDL2 Display on host platform](https://esphome.io/components/display/sdl#configuration-variables)*"
+                  },
+                  "resizable": {
+                    "default": "False",
+                    "key": "Optional",
+                    "type": "boolean",
+                    "docs": "**boolean**: Whether the display window can be manually resized\n\n*See also: [SDL2 Display on host platform](https://esphome.io/components/display/sdl#configuration-variables)*"
+                  },
+                  "skip_taskbar": {
+                    "default": "False",
+                    "key": "Optional",
+                    "type": "boolean",
+                    "docs": "**boolean**: Whether to skip adding a taskbar icon for the display window or not\n\n*See also: [SDL2 Display on host platform](https://esphome.io/components/display/sdl#configuration-variables)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "Options that affect how the display renders on the host system. All default to false, except position, which defaults to SDL's undefined position\n\n*See also: [SDL2 Display on host platform](https://esphome.io/components/display/sdl#configuration-variables)*"
+            },
+            "lambda": {
+              "key": "Optional",
+              "docs": "**[lambda](https://esphome.io/automations/templates#config-lambda)**: The lambda to use for rendering the content on the display. See [Display Rendering Engine](https://esphome.io/components/display#display-engine) for more information.\n\n*See also: [SDL2 Display on host platform](https://esphome.io/components/display/sdl#configuration-variables)*"
+            },
+            "update_interval": {
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to re-draw the screen. Defaults to `1s`.\n\n*See also: [SDL2 Display on host platform](https://esphome.io/components/display/sdl#configuration-variables)*"
+            },
+            "pages": {
+              "key": "Optional",
+              "docs": "**list**: Show pages instead of a single lambda. See [Display Pages](https://esphome.io/components/display#display-pages).\n\n*See also: [SDL2 Display on host platform](https://esphome.io/components/display/sdl#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "display.FULL_DISPLAY_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "sdl.touchscreen": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "sdl::SdlTouchscreen",
+                "parents": [
+                  "touchscreen::Touchscreen",
+                  "PollingComponent",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually set the ID of this touchscreen.\n\n*See also: [SDL2 Touch Screen Emulator](https://esphome.io/components/touchscreen/sdl#configuration-variables)*"
+            },
+            "sdl_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "sdl::Sdl"
+            }
+          },
+          "extends": [
+            "touchscreen.TOUCHSCREEN_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

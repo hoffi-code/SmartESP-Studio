@@ -1,0 +1,110 @@
+{
+  "microphone": {
+    "action": {
+      "capture": {
+        "schema": {
+          "extends": [
+            "microphone.MICROPHONE_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action will start capturing audio data from the microphone. The data will be passed to any components listening and will be available in the `on_data` trigger."
+      },
+      "mute": {
+        "schema": {
+          "extends": [
+            "microphone.MICROPHONE_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action will apply a software mute to the audio data from the microphone before passing it to any listening components."
+      },
+      "stop_capture": {
+        "schema": {
+          "extends": [
+            "microphone.MICROPHONE_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action will stop capturing audio data from the microphone."
+      },
+      "unmute": {
+        "schema": {
+          "extends": [
+            "microphone.MICROPHONE_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action will disable applying a software mute initiated with `microphone.mute`."
+      }
+    },
+    "components": {
+      "i2s_audio": {
+        "dependencies": [
+          "i2s_audio"
+        ]
+      }
+    },
+    "condition": {
+      "is_capturing": {
+        "schema": {
+          "extends": [
+            "microphone.MICROPHONE_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This condition will check if the microphone is currently capturing audio data."
+      },
+      "is_muted": {
+        "schema": {
+          "extends": [
+            "microphone.MICROPHONE_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This condition will check if the microphone is currently apply a software mute."
+      }
+    },
+    "schemas": {
+      "MICROPHONE_ACTION_SCHEMA": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "microphone::Microphone",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The microphone to check. Defaults to the only one in YAML.\n\n*See also: [Microphone Components](https://esphome.io/components/microphone#microphoneon_data-trigger)*"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "MICROPHONE_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "bits_per_sample": {
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: The bits per sample to use as input to the component. May be restricted by the component to a specific value.\n\n*See also: [Microphone Components](https://esphome.io/components/microphone#base-microphone-configuration)*"
+            },
+            "num_channels": {
+              "key": "Optional",
+              "type": "integer"
+            },
+            "on_data": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform when new data is received.\n\n*See also: [Microphone Components](https://esphome.io/components/microphone#base-microphone-configuration)*"
+            },
+            "sample_rate": {
+              "key": "Optional",
+              "type": "integer"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

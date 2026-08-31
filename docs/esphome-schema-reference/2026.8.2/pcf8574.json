@@ -1,0 +1,63 @@
+{
+  "pcf8574": {
+    "pin": {
+      "schema": {
+        "extends": [
+          "pcf8574.PCF8574_PIN_SCHEMA"
+        ]
+      },
+      "type": "schema"
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "33",
+              "key": "Optional",
+              "docs": "**int**: The I\u00b2C address of the driver. Defaults to `0x21`.\n\n*See also: [PCF8574 I/O Expander](https://esphome.io/components/pcf8574#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "pcf8574::PCF8574Component",
+                "parents": [
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "Required",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id to use for this PCF8574 component.\n\n*See also: [PCF8574 I/O Expander](https://esphome.io/components/pcf8574#configuration-variables)*"
+            },
+            "interrupt_pin": {
+              "internal": true,
+              "key": "Optional",
+              "modes": [
+                "input"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin connected to the INT output of the PCF8574/PCF8575. When configured, the component becomes interrupt-driven instead of polling \u2014 it only reads the chip when a pin actually changes state, significantly reducing I\u00b2C bus traffic and CPU usage. The INT pin is active-low and open-drain, so an external or internal pull-up resistor is required. Must be an internal GPIO pin (not another expander pin).\n\n*See also: [PCF8574 I/O Expander](https://esphome.io/components/pcf8574#configuration-variables)*"
+            },
+            "pcf8575": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Whether this is a 16-pin PCF8575. Defaults to `false`.\n\n*See also: [PCF8574 I/O Expander](https://esphome.io/components/pcf8574#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

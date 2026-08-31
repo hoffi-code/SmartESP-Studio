@@ -1,0 +1,219 @@
+{
+  "as7341.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "57",
+              "key": "Optional"
+            },
+            "astep": {
+              "default": "599",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "The number of integration steps. Default is `599`. Must be between `0` and `65534`.\n\n*See also: [AS7341 Spectral Color Sensor](https://esphome.io/components/sensor/as7341#configuration-variables)*"
+            },
+            "atime": {
+              "default": "29",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "The integration time per step in increments of 2.78\u00b5s. Default is `29`. Must be between `0` and `255`.\n\n*See also: [AS7341 Spectral Color Sensor](https://esphome.io/components/sensor/as7341#configuration-variables)*"
+            },
+            "clear": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "as7341.sensor.SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The reading for the clear channel. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [AS7341 Spectral Color Sensor](https://esphome.io/components/sensor/as7341#configuration-variables)*"
+            },
+            "f1": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "as7341.sensor.SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The reading for the 415nm channel. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [AS7341 Spectral Color Sensor](https://esphome.io/components/sensor/as7341#configuration-variables)*"
+            },
+            "f2": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "as7341.sensor.SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The reading for the 445nm channel. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [AS7341 Spectral Color Sensor](https://esphome.io/components/sensor/as7341#configuration-variables)*"
+            },
+            "f3": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "as7341.sensor.SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The reading for the 480nm channel. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [AS7341 Spectral Color Sensor](https://esphome.io/components/sensor/as7341#configuration-variables)*"
+            },
+            "f4": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "as7341.sensor.SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The reading for the 515nm channel. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [AS7341 Spectral Color Sensor](https://esphome.io/components/sensor/as7341#configuration-variables)*"
+            },
+            "f5": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "as7341.sensor.SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The reading for the 555nm channel. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [AS7341 Spectral Color Sensor](https://esphome.io/components/sensor/as7341#configuration-variables)*"
+            },
+            "f6": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "as7341.sensor.SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The reading for the 590nm channel. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [AS7341 Spectral Color Sensor](https://esphome.io/components/sensor/as7341#configuration-variables)*"
+            },
+            "f7": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "as7341.sensor.SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The reading for the 630nm channel. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [AS7341 Spectral Color Sensor](https://esphome.io/components/sensor/as7341#configuration-variables)*"
+            },
+            "f8": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "as7341.sensor.SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The reading for the 680nm channel. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [AS7341 Spectral Color Sensor](https://esphome.io/components/sensor/as7341#configuration-variables)*"
+            },
+            "gain": {
+              "default": "X8",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "X0.5": {
+                  "docs": null
+                },
+                "X1": {
+                  "docs": null
+                },
+                "X2": {
+                  "docs": null
+                },
+                "X4": {
+                  "docs": null
+                },
+                "X8": {
+                  "docs": "*default*"
+                },
+                "X16": {
+                  "docs": null
+                },
+                "X32": {
+                  "docs": null
+                },
+                "X64": {
+                  "docs": null
+                },
+                "X128": {
+                  "docs": null
+                },
+                "X256": {
+                  "docs": null
+                },
+                "X512": {
+                  "docs": null
+                }
+              },
+              "docs": "The gain used by the device. A higher gain may be more suitable for lower-light environments. Must be one of:\n\n*See also: [AS7341 Spectral Color Sensor](https://esphome.io/components/sensor/as7341#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "as7341::AS7341Component",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "nir": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "as7341.sensor.SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The reading for the NIR (near-infrared) channel. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [AS7341 Spectral Color Sensor](https://esphome.io/components/sensor/as7341#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "SENSOR_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "0"
+            },
+            "device_class": {
+              "default": ""
+            },
+            "icon": {
+              "default": "mdi:brightness-5"
+            },
+            "state_class": {
+              "default": "measurement"
+            },
+            "unit_of_measurement": {
+              "default": "#"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

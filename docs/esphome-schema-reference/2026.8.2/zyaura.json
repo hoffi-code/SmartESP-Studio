@@ -1,0 +1,126 @@
+{
+  "zyaura.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "clock_pin": {
+              "internal": true,
+              "key": "Required",
+              "modes": [
+                "input"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The pin where the clock bus is connected.\n\n*See also: [ZyAura CO2 & Temperature & Humidity Sensor](https://esphome.io/components/sensor/zyaura#configuration-variables)*"
+            },
+            "co2": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "carbon_dioxide"
+                  },
+                  "icon": {
+                    "default": "mdi:molecule-co2"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "ppm"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the CO2 sensor.\n\n*See also: [ZyAura CO2 & Temperature & Humidity Sensor](https://esphome.io/components/sensor/zyaura#configuration-variables)*"
+            },
+            "data_pin": {
+              "internal": true,
+              "key": "Required",
+              "modes": [
+                "input"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The pin where the data bus is connected.\n\n*See also: [ZyAura CO2 & Temperature & Humidity Sensor](https://esphome.io/components/sensor/zyaura#configuration-variables)*"
+            },
+            "humidity": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "humidity"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "%"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the humidity sensor\n\n*See also: [ZyAura CO2 & Temperature & Humidity Sensor](https://esphome.io/components/sensor/zyaura#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "zyaura::ZyAuraSensor",
+                "parents": [
+                  "PollingComponent",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "temperature": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the temperature sensor.\n\n*See also: [ZyAura CO2 & Temperature & Humidity Sensor](https://esphome.io/components/sensor/zyaura#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`.\n\n*See also: [ZyAura CO2 & Temperature & Humidity Sensor](https://esphome.io/components/sensor/zyaura#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

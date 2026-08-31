@@ -1,0 +1,62 @@
+{
+  "opt3001.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "1"
+            },
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "68",
+              "key": "Optional",
+              "docs": "**int**: Manually specify the I\u00b2C address of the sensor. Defaults to `0x44` (address if address pin is pulled low). If the address pin is pulled high, the address is `0x45`. If the address pin is connected to SDA, the address is `0x46`. If the address pin is connected to SCL, the address is `0x47`.\n\n*See also: [OPT3001 Ambient Light Sensor](https://esphome.io/components/sensor/opt3001#configuration-variables)*"
+            },
+            "device_class": {
+              "default": "illuminance"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "opt3001::OPT3001Sensor",
+                "parents": [
+                  "sensor::Sensor",
+                  "EntityBase",
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [OPT3001 Ambient Light Sensor](https://esphome.io/components/sensor/opt3001#configuration-variables)*"
+            },
+            "state_class": {
+              "default": "measurement"
+            },
+            "unit_of_measurement": {
+              "default": "lx"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`.\n\n*See also: [OPT3001 Ambient Light Sensor](https://esphome.io/components/sensor/opt3001#configuration-variables)*"
+            },
+            "name": {
+              "key": "Optional",
+              "docs": "**string**: The name for the sensor.\n\n*See also: [OPT3001 Ambient Light Sensor](https://esphome.io/components/sensor/opt3001#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

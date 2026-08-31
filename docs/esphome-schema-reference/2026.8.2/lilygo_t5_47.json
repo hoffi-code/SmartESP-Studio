@@ -1,0 +1,127 @@
+{
+  "lilygo_t5_47.touchscreen": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "90",
+              "key": "Optional"
+            },
+            "calibration": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "x_max": {
+                    "key": "Required",
+                    "type": "integer"
+                  },
+                  "x_min": {
+                    "key": "Required",
+                    "type": "integer"
+                  },
+                  "y_max": {
+                    "key": "Required",
+                    "type": "integer"
+                  },
+                  "y_min": {
+                    "key": "Required",
+                    "type": "integer"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "display": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "display::Display"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "lilygo_t5_47::LilygoT547Touchscreen",
+                "parents": [
+                  "touchscreen::Touchscreen",
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually set the ID of this touchscreen.\n\n*See also: [Lilygo T5 4.7\\\" Touchscreen](https://esphome.io/components/touchscreen/lilygo_t5_47#configuration-variables)*"
+            },
+            "interrupt_pin": {
+              "internal": true,
+              "key": "Required",
+              "modes": [
+                "input"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The touch detection pin. Must be `GPIO13`.\n\n*See also: [Lilygo T5 4.7\\\" Touchscreen](https://esphome.io/components/touchscreen/lilygo_t5_47#configuration-variables)*"
+            },
+            "on_release": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "on_touch": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "on_update": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "touch_timeout": {
+              "default": "250ms",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema"
+            },
+            "transform": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "mirror_x": {
+                    "default": "False",
+                    "key": "Optional",
+                    "type": "boolean"
+                  },
+                  "mirror_y": {
+                    "default": "False",
+                    "key": "Optional",
+                    "type": "boolean"
+                  },
+                  "swap_xy": {
+                    "default": "False",
+                    "key": "Optional",
+                    "type": "boolean"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "update_interval": {
+              "default": "50ms",
+              "key": "Optional"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,185 @@
+{
+  "shelly_dimmer.light": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "boot0_pin": {
+              "default": "GPIO4",
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: Pin connected with \"BOOT0\" of STM32. The default is \"GPIO4\".\n\n*See also: [Shelly Dimmer](https://esphome.io/components/light/shelly_dimmer#configuration-variables)*"
+            },
+            "current": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "current"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "A"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Sensor of the current in Amperes. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Shelly Dimmer](https://esphome.io/components/light/shelly_dimmer#configuration-variables)*"
+            },
+            "firmware": {
+              "default": "51.6",
+              "key": "Optional",
+              "maybe": "version",
+              "schema": {
+                "config_vars": {
+                  "sha256": {
+                    "key": "Optional"
+                  },
+                  "update": {
+                    "default": "False",
+                    "key": "Optional",
+                    "type": "boolean"
+                  },
+                  "url": {
+                    "key": "Optional"
+                  },
+                  "version": {
+                    "key": "Required"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "gamma_correct": {
+              "default": "1.0"
+            },
+            "leading_edge": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: [Dimming mode](https://en.wikipedia.org/wiki/Dimmer#Solid-state_dimmer): `true` means leading edge, `false` is trailing edge. Defaults to `false`.\n\n*See also: [Shelly Dimmer](https://esphome.io/components/light/shelly_dimmer#configuration-variables)*"
+            },
+            "max_brightness": {
+              "data_type": "uint16_t",
+              "default": "1000",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Maximum brightness value on a scale from 0..1000, the default is 1000.\n\n*See also: [Shelly Dimmer](https://esphome.io/components/light/shelly_dimmer#configuration-variables)*"
+            },
+            "min_brightness": {
+              "data_type": "uint16_t",
+              "default": "0",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Minimum brightness value on a scale from 0..1000, the default is 0.\n\n*See also: [Shelly Dimmer](https://esphome.io/components/light/shelly_dimmer#configuration-variables)*"
+            },
+            "nrst_pin": {
+              "default": "GPIO5",
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: Pin connected with \"NRST\" of STM32. The default is \"GPIO5\".\n\n*See also: [Shelly Dimmer](https://esphome.io/components/light/shelly_dimmer#configuration-variables)*"
+            },
+            "output_id": {
+              "id_type": {
+                "class": "shelly_dimmer::ShellyDimmer",
+                "parents": [
+                  "light::LightOutput",
+                  "PollingComponent",
+                  "Component",
+                  "uart::UARTDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "power": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "power"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "W"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Sensor of the active power in Watts. Only accurate if neutral is connected. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Shelly Dimmer](https://esphome.io/components/light/shelly_dimmer#configuration-variables)*"
+            },
+            "uart_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "uart::UARTComponent",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the UART hub.\n\n*See also: [Shelly Dimmer](https://esphome.io/components/light/shelly_dimmer#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "10s",
+              "key": "Optional"
+            },
+            "voltage": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "voltage"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "V"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Sensor of the voltage in Volts. Only accurate if neutral is connected. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Shelly Dimmer](https://esphome.io/components/light/shelly_dimmer#configuration-variables)*"
+            },
+            "warmup_brightness": {
+              "data_type": "uint16_t",
+              "default": "100",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Brightness threshold below which the dimmer switches on later in mains current cycle. [This might help with dimming LEDs](https://github.com/jamesturton/shelly-dimmer-stm32/pull/23). The value is from 0..1000 with an default of 0.\n\n*See also: [Shelly Dimmer](https://esphome.io/components/light/shelly_dimmer#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "light.BRIGHTNESS_ONLY_LIGHT_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

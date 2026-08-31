@@ -1,0 +1,20 @@
+{
+  "web_server_base": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "web_server_base::WebServerBase",
+                "parents": []
+              },
+              "key": "GeneratedID"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

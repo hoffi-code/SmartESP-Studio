@@ -1,0 +1,308 @@
+{
+  "mipi_rgb.display": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "byte_order": {
+              "default": "big_endian",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "little_endian": null,
+                "big_endian": null
+              }
+            },
+            "color_order": {
+              "default": "RGB",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "RGB": null,
+                "BGR": null
+              },
+              "docs": "Should be one of `bgr` (default) or `rgb`.\n\n*See also: [MIPI RGB Display Driver](https://esphome.io/components/display/mipi_rgb#configuration-options)*"
+            },
+            "data_pins": {
+              "default": "{'red': [45, 48, 47, 21, 14], 'green': [5, 6, 7, 15, 16, 4], 'blue': [8, 3, 46, 9, 1]}",
+              "key": "Required",
+              "schema": {
+                "config_vars": {
+                  "blue": {
+                    "key": "Required",
+                    "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: Exactly 5 pins for the blue databits, listed from least to most significant bit.\n\n*See also: [MIPI RGB Display Driver](https://esphome.io/components/display/mipi_rgb#configuration-options)*"
+                  },
+                  "green": {
+                    "key": "Required",
+                    "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: Exactly 6 pins for the green databits, listed from least to most significant bit.\n\n*See also: [MIPI RGB Display Driver](https://esphome.io/components/display/mipi_rgb#configuration-options)*"
+                  },
+                  "red": {
+                    "key": "Required",
+                    "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: Exactly 5 pins for the red databits, listed from least to most significant bit.\n\n*See also: [MIPI RGB Display Driver](https://esphome.io/components/display/mipi_rgb#configuration-options)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "A list of pins used for the databus. Specified in 3 groups.\n\n*See also: [MIPI RGB Display Driver](https://esphome.io/components/display/mipi_rgb#configuration-options)*"
+            },
+            "de_pin": {
+              "default": "40",
+              "internal": true,
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The DE pin.\n\n*See also: [MIPI RGB Display Driver](https://esphome.io/components/display/mipi_rgb#configuration-options)*"
+            },
+            "dimensions": {
+              "key": "Required",
+              "schema": {
+                "config_vars": {
+                  "height": {
+                    "key": "Required",
+                    "docs": "**int**: Specifies height of display in pixels.\n\n*See also: [MIPI RGB Display Driver](https://esphome.io/components/display/mipi_rgb#configuration-options)*"
+                  },
+                  "offset_height": {
+                    "default": "0",
+                    "key": "Optional",
+                    "docs": "**int**: Specify an offset for the y-direction of the display. Default is 0.\n\n*See also: [MIPI RGB Display Driver](https://esphome.io/components/display/mipi_rgb#configuration-options)*"
+                  },
+                  "offset_width": {
+                    "default": "0",
+                    "key": "Optional",
+                    "docs": "**int**: Specify an offset for the x-direction of the display, typically used when an LCD is smaller than the maximum supported by the driver chip. Default is 0\n\n*See also: [MIPI RGB Display Driver](https://esphome.io/components/display/mipi_rgb#configuration-options)*"
+                  },
+                  "pad_height": {
+                    "key": "Optional"
+                  },
+                  "pad_width": {
+                    "key": "Optional"
+                  },
+                  "width": {
+                    "key": "Required",
+                    "docs": "**int**: Specifies width of display.\n\n*See also: [MIPI RGB Display Driver](https://esphome.io/components/display/mipi_rgb#configuration-options)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "Dimensions of the screen, specified either as *width* **x** *height* (e.g `320x240`) or with separate config keys.\n\n*See also: [MIPI RGB Display Driver](https://esphome.io/components/display/mipi_rgb#configuration-options)*"
+            },
+            "draw_rounding": {
+              "default": "2",
+              "key": "Optional"
+            },
+            "enable_pin": {
+              "is_list": true,
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin"
+            },
+            "hsync_back_porch": {
+              "default": "8",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: The horizontal back porch length.\n\n*See also: [MIPI RGB Display Driver](https://esphome.io/components/display/mipi_rgb#configuration-options)*"
+            },
+            "hsync_front_porch": {
+              "default": "8",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: The horizontal front porch length.\n\n*See also: [MIPI RGB Display Driver](https://esphome.io/components/display/mipi_rgb#configuration-options)*"
+            },
+            "hsync_pin": {
+              "default": "39",
+              "internal": true,
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The Horizontal sync pin.\n\n*See also: [MIPI RGB Display Driver](https://esphome.io/components/display/mipi_rgb#configuration-options)*"
+            },
+            "hsync_pulse_width": {
+              "default": "4",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: The horizontal sync pulse width.\n\n*See also: [MIPI RGB Display Driver](https://esphome.io/components/display/mipi_rgb#configuration-options)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "mipi_rgb::MipiRgb",
+                "parents": [
+                  "display::Display",
+                  "PollingComponent",
+                  "Component",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [MIPI RGB Display Driver](https://esphome.io/components/display/mipi_rgb#configuration-options)*"
+            },
+            "init_sequence": {
+              "is_list": true,
+              "key": "Optional",
+              "docs": "**A list of byte arrays**: Specifies the init sequence for the display. Predefined boards have a default init sequence, which can be overridden. A custom board can specify the init sequence using this variable (RPI displays should provide an empty sequence in which case the SPI bus is not required.)\n\n*See also: [MIPI RGB Display Driver](https://esphome.io/components/display/mipi_rgb#configuration-options)*"
+            },
+            "invert_colors": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "Inverts the display colors, (white becomes black.) Defaults to false.\n\n*See also: [MIPI RGB Display Driver](https://esphome.io/components/display/mipi_rgb#configuration-options)*"
+            },
+            "model": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "CUSTOM": null,
+                "ESP32-8048S050": null,
+                "ESP32-8048S070": null,
+                "ESP32-S3-TOUCH-LCD-4.3": null,
+                "ESP32-S3-TOUCH-LCD-7-800X480": null,
+                "GUITION-4848S040": null,
+                "MAKERFABS-4": null,
+                "RPI": null,
+                "SEEED-INDICATOR-D1": null,
+                "ST7701S": null,
+                "T-PANEL-S3": null,
+                "T-RGB-2.1": null,
+                "T-RGB-2.8": null,
+                "UEDX48480021-MD80ET": null,
+                "WAVESHARE-3.16-320X820": null,
+                "WAVESHARE-4-480X480": null,
+                "WAVESHARE-5-1024X600": null,
+                "ZX2D10GE01R-V4848": null
+              }
+            },
+            "pclk_frequency": {
+              "default": "16MHz",
+              "key": "Optional",
+              "docs": "Set the pixel clock speed. Default is 8MHz.\n\n*See also: [MIPI RGB Display Driver](https://esphome.io/components/display/mipi_rgb#configuration-options)*"
+            },
+            "pclk_inverted": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**bool**: If the pclk is active negative (default is True)\n\n*See also: [MIPI RGB Display Driver](https://esphome.io/components/display/mipi_rgb#configuration-options)*"
+            },
+            "pclk_pin": {
+              "default": "42",
+              "internal": true,
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The PCLK pin.\n\n*See also: [MIPI RGB Display Driver](https://esphome.io/components/display/mipi_rgb#configuration-options)*"
+            },
+            "pixel_mode": {
+              "default": "16bit",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "16bit": null,
+                "18bit": null,
+                "16": null,
+                "18": null
+              },
+              "docs": "**string**: Set the pixel mode of the RGB bus interface - one of `16bit` (default) or `18bit`.\n\n*See also: [MIPI RGB Display Driver](https://esphome.io/components/display/mipi_rgb#configuration-options)*"
+            },
+            "reset_pin": {
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The RESET pin.\n\n*See also: [MIPI RGB Display Driver](https://esphome.io/components/display/mipi_rgb#configuration-options)*"
+            },
+            "transform": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "mirror_x": {
+                    "key": "Required",
+                    "type": "boolean"
+                  },
+                  "mirror_y": {
+                    "key": "Required",
+                    "type": "boolean"
+                  },
+                  "swap_xy": {
+                    "default": "False",
+                    "key": "Optional"
+                  }
+                }
+              },
+              "type": "enum",
+              "values": {
+                "disabled": null
+              },
+              "docs": "Transform the display presentation using hardware. This is typically used only to correct for displays that have x or y drivers wired backwards. To rotate the display the `rotation` option is preferred - it will automatically use hardware transform if possible. The default values for the `mirror_x` and `mirror_y` options are model dependent. For the `CUSTOM` model, use of `transform: disabled` will prevent a `rotation` being translated to a hardware transform.\n\n*See also: [MIPI RGB Display Driver](https://esphome.io/components/display/mipi_rgb#configuration-options)*"
+            },
+            "use_axis_flips": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "vsync_back_porch": {
+              "default": "8",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: The vertical back porch length.\n\n*See also: [MIPI RGB Display Driver](https://esphome.io/components/display/mipi_rgb#configuration-options)*"
+            },
+            "vsync_front_porch": {
+              "default": "8",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: The vertical front porch length.\n\n*See also: [MIPI RGB Display Driver](https://esphome.io/components/display/mipi_rgb#configuration-options)*"
+            },
+            "vsync_pin": {
+              "default": "41",
+              "internal": true,
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The Vertical sync pin.\n\n*See also: [MIPI RGB Display Driver](https://esphome.io/components/display/mipi_rgb#configuration-options)*"
+            },
+            "vsync_pulse_width": {
+              "default": "4",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: The vertical sync pulse width.\n\n*See also: [MIPI RGB Display Driver](https://esphome.io/components/display/mipi_rgb#configuration-options)*"
+            },
+            "rotation": {
+              "key": "Optional",
+              "docs": "Rotate the display presentation in software. Choose one of `0\u00b0`, `90\u00b0`, `180\u00b0`, or `270\u00b0`. This option cannot be used with `transform`.\n\n*See also: [MIPI RGB Display Driver](https://esphome.io/components/display/mipi_rgb#configuration-options)*"
+            },
+            "update_interval": {
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to re-draw the screen. Defaults to `5s`.\n\n*See also: [MIPI RGB Display Driver](https://esphome.io/components/display/mipi_rgb#configuration-options)*"
+            },
+            "lambda": {
+              "key": "Optional",
+              "docs": "**[lambda](https://esphome.io/automations/templates#config-lambda)**: The lambda to use for rendering the content on the display. See [Display Rendering Engine](https://esphome.io/components/display#display-engine) for more information.\n\n*See also: [MIPI RGB Display Driver](https://esphome.io/components/display/mipi_rgb#configuration-options)*"
+            },
+            "pages": {
+              "key": "Optional",
+              "docs": "**list**: Show pages instead of a single lambda. See [Display Pages](https://esphome.io/components/display#display-pages).\n\n*See also: [MIPI RGB Display Driver](https://esphome.io/components/display/mipi_rgb#configuration-options)*"
+            }
+          },
+          "extends": [
+            "display.FULL_DISPLAY_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,178 @@
+{
+  "esp32_rmt_led_strip.light": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "bit0_high": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_nanoseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The time to hold the data line high for a `0` bit.\n\n*See also: [ESP32 RMT LED Strip](https://esphome.io/components/light/esp32_rmt_led_strip#configuration-variables)*"
+            },
+            "bit0_low": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_nanoseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The time to hold the data line low for a `0` bit.\n\n*See also: [ESP32 RMT LED Strip](https://esphome.io/components/light/esp32_rmt_led_strip#configuration-variables)*"
+            },
+            "bit1_high": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_nanoseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The time to hold the data line high for a `1` bit.\n\n*See also: [ESP32 RMT LED Strip](https://esphome.io/components/light/esp32_rmt_led_strip#configuration-variables)*"
+            },
+            "bit1_low": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_nanoseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The time to hold the data line low for a `1` bit.\n\n*See also: [ESP32 RMT LED Strip](https://esphome.io/components/light/esp32_rmt_led_strip#configuration-variables)*"
+            },
+            "channel_colors": {
+              "key": "Required",
+              "docs": "**string**: The order in which the strip expects its color channels. List each of `R`, `G` and `B` exactly once, optionally with a single `W` in any position; for example `GRB`, `BGR`, `GRBW`, `WRGB` or `RWGB`. The value is case-insensitive. Including a `W` makes this a four channel RGBW strip.\n\n*See also: [ESP32 RMT LED Strip](https://esphome.io/components/light/esp32_rmt_led_strip#configuration-variables)*"
+            },
+            "chipset": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "WS2811": {
+                  "docs": null
+                },
+                "WS2812": {
+                  "docs": null
+                },
+                "SK6812": {
+                  "docs": null
+                },
+                "APA106": {
+                  "docs": null
+                },
+                "SM16703": {
+                  "docs": null
+                }
+              },
+              "docs": "**enum**: The name of the chipset used; determines signal timing. Not required if [specifying the timings manually](https://esphome.io/components/light/esp32_rmt_led_strip#manual-timings).\n\n*See also: [ESP32 RMT LED Strip](https://esphome.io/components/light/esp32_rmt_led_strip#configuration-variables)*"
+            },
+            "is_rgbw": {
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "is_wrgb": {
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "max_refresh_rate": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_microseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: A time interval used to limit the number of commands a light can handle per second. For example, `16ms` will limit the light to a refresh rate of about 60Hz. Defaults to sending commands as quickly as changes are made to the lights.\n\n*See also: [ESP32 RMT LED Strip](https://esphome.io/components/light/esp32_rmt_led_strip#configuration-variables)*"
+            },
+            "num_leds": {
+              "data_type": "positive_not_null_int",
+              "key": "Required",
+              "type": "integer",
+              "docs": "**int**: The number of LEDs in the strip.\n\n*See also: [ESP32 RMT LED Strip](https://esphome.io/components/light/esp32_rmt_led_strip#configuration-variables)*"
+            },
+            "output_id": {
+              "id_type": {
+                "class": "esp32_rmt_led_strip::ESP32RMTLEDStripLightOutput",
+                "parents": [
+                  "light::AddressableLight",
+                  "light::LightOutput",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "pin": {
+              "internal": true,
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin for the data line of the light.\n\n*See also: [ESP32 RMT LED Strip](https://esphome.io/components/light/esp32_rmt_led_strip#configuration-variables)*"
+            },
+            "reset_high": {
+              "default": "0 us",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_nanoseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The time to hold the data line high after writing the state. Defaults to `0 us`.\n\n*See also: [ESP32 RMT LED Strip](https://esphome.io/components/light/esp32_rmt_led_strip#configuration-variables)*"
+            },
+            "reset_low": {
+              "default": "0 us",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_nanoseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The time to hold the data line low after writing the state. Defaults to `0 us`.\n\n*See also: [ESP32 RMT LED Strip](https://esphome.io/components/light/esp32_rmt_led_strip#configuration-variables)*"
+            },
+            "rgb_order": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "RGB": null,
+                "RBG": null,
+                "GRB": null,
+                "GBR": null,
+                "BGR": null,
+                "BRG": null
+              }
+            },
+            "rmt_symbols": {
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: When `use_dma` is enabled, this sets the size of the driver's internal DMA buffer. When DMA is disabled, it specifies how much RMT memory is allocated to the component. RMT memory is shared across all components and should be allocated in multiples of the block size. On the `ESP32` and `ESP32-S2` variants, RMT memory is shared between RX and TX components. On other variants, RX and TX have dedicated RMT memory.\n\n*See also: [ESP32 RMT LED Strip](https://esphome.io/components/light/esp32_rmt_led_strip#configuration-variables)*"
+            },
+            "use_dma": {
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Enable DMA on variants that support it. If enabled `rmt_symbols` controls the DMA buffer size and can be set to a large value.\n\n*See also: [ESP32 RMT LED Strip](https://esphome.io/components/light/esp32_rmt_led_strip#configuration-variables)*"
+            },
+            "use_psram": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Set to `false` to force internal RAM allocation even if you have the PSRAM component enabled. This can be useful if you're experiencing issues like flickering with your leds strip. Defaults to `true`.\n\n*See also: [ESP32 RMT LED Strip](https://esphome.io/components/light/esp32_rmt_led_strip#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "light.ADDRESSABLE_LIGHT_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

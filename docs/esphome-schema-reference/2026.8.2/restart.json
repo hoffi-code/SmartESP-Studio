@@ -1,0 +1,69 @@
+{
+  "restart.button": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "device_class": {
+              "default": "restart"
+            },
+            "entity_category": {
+              "default": "config"
+            },
+            "icon": {
+              "default": "mdi:restart"
+            },
+            "id": {
+              "id_type": {
+                "class": "restart::RestartButton",
+                "parents": [
+                  "button::Button",
+                  "EntityBase",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            }
+          },
+          "extends": [
+            "button._BUTTON_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "restart.switch": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "entity_category": {
+              "default": "config"
+            },
+            "icon": {
+              "default": "mdi:restart"
+            },
+            "id": {
+              "id_type": {
+                "class": "restart::RestartSwitch",
+                "parents": [
+                  "switch_::Switch",
+                  "EntityBase",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            }
+          },
+          "extends": [
+            "switch._SWITCH_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

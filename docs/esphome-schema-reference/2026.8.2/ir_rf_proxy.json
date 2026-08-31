@@ -1,0 +1,88 @@
+{
+  "ir_rf_proxy.infrared": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "frequency": {
+              "default": "0",
+              "key": "Optional"
+            },
+            "id": {
+              "id_type": {
+                "class": "ir_rf_proxy::IrRfProxy",
+                "parents": [
+                  "infrared::Infrared",
+                  "EntityBase",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "receiver_frequency": {
+              "key": "Optional"
+            },
+            "remote_receiver_id": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "remote_receiver::RemoteReceiverComponent"
+            },
+            "remote_transmitter_id": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "remote_transmitter::RemoteTransmitterComponent"
+            }
+          },
+          "extends": [
+            "core.ENTITY_BASE_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "ir_rf_proxy.radio_frequency": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "frequency": {
+              "key": "Optional"
+            },
+            "id": {
+              "id_type": {
+                "class": "ir_rf_proxy::RfProxy",
+                "parents": [
+                  "radio_frequency::RadioFrequency",
+                  "EntityBase",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "on_control": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "remote_receiver_id": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "remote_receiver::RemoteReceiverComponent"
+            },
+            "remote_transmitter_id": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "remote_transmitter::RemoteTransmitterComponent"
+            }
+          },
+          "extends": [
+            "core.ENTITY_BASE_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

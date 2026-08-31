@@ -1,0 +1,418 @@
+{
+  "media_player": {
+    "action": {
+      "clear_playlist": {
+        "schema": {
+          "extends": [
+            "media_player.MEDIA_PLAYER_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action will clear the media player's playlist."
+      },
+      "enqueue": {
+        "schema": {
+          "extends": [
+            "media_player._MEDIA_URL_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action will add the specified media to the media player's queue."
+      },
+      "group_join": {
+        "schema": {
+          "extends": [
+            "media_player.MEDIA_PLAYER_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action will join the media player to a group."
+      },
+      "mute": {
+        "schema": {
+          "extends": [
+            "media_player.MEDIA_PLAYER_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action will mute the media player."
+      },
+      "next": {
+        "schema": {
+          "extends": [
+            "media_player.MEDIA_PLAYER_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action will skip to the next track."
+      },
+      "pause": {
+        "schema": {
+          "extends": [
+            "media_player.MEDIA_PLAYER_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action pauses the current playback."
+      },
+      "play": {
+        "schema": {
+          "extends": [
+            "media_player.MEDIA_PLAYER_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action will resume playing the media player."
+      },
+      "play_media": {
+        "schema": {
+          "extends": [
+            "media_player._MEDIA_URL_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action will start playing the specified media."
+      },
+      "previous": {
+        "schema": {
+          "extends": [
+            "media_player.MEDIA_PLAYER_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action will skip to the previous track."
+      },
+      "repeat_all": {
+        "schema": {
+          "extends": [
+            "media_player.MEDIA_PLAYER_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action will set the media player to repeat all tracks."
+      },
+      "repeat_off": {
+        "schema": {
+          "extends": [
+            "media_player.MEDIA_PLAYER_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action will turn off repeat mode."
+      },
+      "repeat_one": {
+        "schema": {
+          "extends": [
+            "media_player.MEDIA_PLAYER_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action will set the media player to repeat the current track."
+      },
+      "shuffle": {
+        "schema": {
+          "extends": [
+            "media_player.MEDIA_PLAYER_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action will enable shuffle mode."
+      },
+      "stop": {
+        "schema": {
+          "extends": [
+            "media_player.MEDIA_PLAYER_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action stops the current playback."
+      },
+      "toggle": {
+        "schema": {
+          "extends": [
+            "media_player.MEDIA_PLAYER_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action will pause or resume the current playback."
+      },
+      "turn_off": {
+        "schema": {
+          "extends": [
+            "media_player.MEDIA_PLAYER_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action will turn off the media player."
+      },
+      "turn_on": {
+        "schema": {
+          "extends": [
+            "media_player.MEDIA_PLAYER_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action will turn on the media player."
+      },
+      "unmute": {
+        "schema": {
+          "extends": [
+            "media_player.MEDIA_PLAYER_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action will unmute the media player."
+      },
+      "unshuffle": {
+        "schema": {
+          "extends": [
+            "media_player.MEDIA_PLAYER_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action will disable shuffle mode."
+      },
+      "volume_down": {
+        "schema": {
+          "extends": [
+            "media_player.MEDIA_PLAYER_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action will decrease the volume of the media player."
+      },
+      "volume_set": {
+        "maybe": "volume",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "media_player::MediaPlayer"
+            },
+            "volume": {
+              "key": "Required",
+              "templatable": true
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This action will set the volume of the media player."
+      },
+      "volume_up": {
+        "schema": {
+          "extends": [
+            "media_player.MEDIA_PLAYER_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action will increase the volume of the media player."
+      }
+    },
+    "components": {
+      "sendspin": {
+        "dependencies": [
+          "sendspin"
+        ]
+      },
+      "speaker": {
+        "dependencies": [
+          "network"
+        ],
+        "docs": "The `speaker` media player platform allows you to play on-device and online audio media via [speaker components](https://esphome.io/components/speaker/).\n\n*See also: [Speaker Audio Media Player](https://esphome.io/components/media_player/speaker)*"
+      },
+      "speaker_source": {
+        "dependencies": [
+          "media_source",
+          "speaker"
+        ],
+        "docs": "The `speaker_source` media player platform orchestrates [media source](https://esphome.io/components/media_source/) components that produce audio. When a media URL is received, the platform routes it to the appropriate source based on the URI prefix. For example, a URL starting with `audio-file://` is handled by the [Audio File media source](https://esphome.io/components/media_source/audio_file/).\n\n*See also: [Speaker Source Media Player](https://esphome.io/components/media_player/speaker_source)*"
+      }
+    },
+    "condition": {
+      "is_announcing": {
+        "schema": {
+          "extends": [
+            "media_player.MEDIA_PLAYER_CONDITION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This condition checks if the media player is playing an announcement."
+      },
+      "is_idle": {
+        "schema": {
+          "extends": [
+            "media_player.MEDIA_PLAYER_CONDITION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This condition checks if the media player is idle."
+      },
+      "is_muted": {
+        "schema": {
+          "extends": [
+            "media_player.MEDIA_PLAYER_CONDITION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This condition checks if the media player is muted."
+      },
+      "is_off": {
+        "schema": {
+          "extends": [
+            "media_player.MEDIA_PLAYER_CONDITION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This condition checks if the media player is turned off."
+      },
+      "is_on": {
+        "schema": {
+          "extends": [
+            "media_player.MEDIA_PLAYER_CONDITION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This condition checks if the media player is turned on."
+      },
+      "is_paused": {
+        "schema": {
+          "extends": [
+            "media_player.MEDIA_PLAYER_CONDITION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This condition checks if the media player is paused."
+      },
+      "is_playing": {
+        "schema": {
+          "extends": [
+            "media_player.MEDIA_PLAYER_CONDITION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This condition checks if the media player is playing media."
+      }
+    },
+    "schemas": {
+      "MEDIA_PLAYER_ACTION_SCHEMA": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "announcement": {
+              "default": "False",
+              "key": "Optional",
+              "templatable": true,
+              "type": "boolean"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "media_player::MediaPlayer"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "MEDIA_PLAYER_CONDITION_SCHEMA": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "media_player::MediaPlayer"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "_MEDIA_PLAYER_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "on_announcement": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "on_idle": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "on_pause": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "on_play": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "on_state": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "on_turn_off": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform when media_player is turned off, implements the `supports_turn_off_on` trait.\n\n*See also: [Speaker Audio Media Player](https://esphome.io/components/media_player/speaker#configuration-variables)*"
+            },
+            "on_turn_on": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform when media_player is turned on, implements the `supports_turn_off_on` trait.\n\n*See also: [Speaker Audio Media Player](https://esphome.io/components/media_player/speaker#configuration-variables)*"
+            },
+            "id": {
+              "docs": "**string**: Manually specify the ID for code generation. At least one of **id** and **name** must be specified.\n\n*See also: [Media Player Components](https://esphome.io/components/media_player#base-media-player-configuration)*"
+            },
+            "name": {
+              "key": "Optional",
+              "docs": "**string**: The name of the media player. At least one of **id** and **name** must be specified.\n\n*See also: [Media Player Components](https://esphome.io/components/media_player#base-media-player-configuration)*"
+            },
+            "icon": {
+              "key": "Optional",
+              "docs": "**icon**: Manually set the icon to use for the media player in the frontend.\n\n*See also: [Media Player Components](https://esphome.io/components/media_player#base-media-player-configuration)*"
+            },
+            "internal": {
+              "key": "Optional",
+              "docs": "**boolean**: Mark this component as internal. Internal components will not be exposed to the frontend (like Home Assistant). Only specifying an `id` without a `name` will implicitly set this to true.\n\n*See also: [Media Player Components](https://esphome.io/components/media_player#base-media-player-configuration)*"
+            },
+            "disabled_by_default": {
+              "key": "Optional",
+              "docs": "**boolean**: If true, then this entity should not be added to any client's frontend, (usually Home Assistant) without the user manually enabling it (via the Home Assistant UI). Defaults to `false`.\n\n*See also: [Media Player Components](https://esphome.io/components/media_player#base-media-player-configuration)*"
+            },
+            "entity_category": {
+              "key": "Optional",
+              "docs": "**string**: The category of the entity. See [https://developers.home-assistant.io/docs/core/entity/#generic-properties](https://developers.home-assistant.io/docs/core/entity/#generic-properties) for a list of available options. Set to `\"\"` to remove the default entity category.\n\n*See also: [Media Player Components](https://esphome.io/components/media_player#base-media-player-configuration)*"
+            }
+          },
+          "extends": [
+            "core.ENTITY_BASE_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "_MEDIA_URL_ACTION_SCHEMA": {
+        "maybe": "media_url",
+        "schema": {
+          "config_vars": {
+            "announcement": {
+              "default": "False",
+              "key": "Optional",
+              "templatable": true,
+              "type": "boolean"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "media_player::MediaPlayer"
+            },
+            "media_url": {
+              "key": "Required",
+              "templatable": true
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

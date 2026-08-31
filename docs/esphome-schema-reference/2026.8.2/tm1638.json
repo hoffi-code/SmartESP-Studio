@@ -1,0 +1,170 @@
+{
+  "tm1638.binary_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "tm1638::TM1638Key",
+                "parents": [
+                  "binary_sensor::BinarySensor",
+                  "EntityBase"
+                ]
+              }
+            },
+            "key": {
+              "key": "Required",
+              "type": "integer"
+            },
+            "tm1638_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "tm1638::TM1638Component"
+            }
+          },
+          "extends": [
+            "binary_sensor._BINARY_SENSOR_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "tm1638.display": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "clk_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin you have the CLK line hooked up to.\n\n*See also: [TM1638 7 Segment Display Keypad & LED Module](https://esphome.io/components/display/tm1638#configuration-variables)*"
+            },
+            "dio_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin you have the DIO line hooked up to.\n\n*See also: [TM1638 7 Segment Display Keypad & LED Module](https://esphome.io/components/display/tm1638#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "tm1638::TM1638Component",
+                "parents": [
+                  "PollingComponent",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [TM1638 7 Segment Display Keypad & LED Module](https://esphome.io/components/display/tm1638#configuration-variables)*"
+            },
+            "intensity": {
+              "default": "7",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: The intensity with which the TM1638 should drive the outputs. Range is from 0 (least intense) to 7 (the default). This setting will affect the 7 segment display and the 8 individual LED lights.\n\n*See also: [TM1638 7 Segment Display Keypad & LED Module](https://esphome.io/components/display/tm1638#configuration-variables)*"
+            },
+            "stb_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin you have the STB line hooked up to.\n\n*See also: [TM1638 7 Segment Display Keypad & LED Module](https://esphome.io/components/display/tm1638#configuration-variables)*"
+            },
+            "update_interval": {
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to re-draw the screen. Defaults to `1s`.\n\n*See also: [TM1638 7 Segment Display Keypad & LED Module](https://esphome.io/components/display/tm1638#configuration-variables)*"
+            },
+            "lambda": {
+              "key": "Optional",
+              "docs": "**[lambda](https://esphome.io/automations/templates#config-lambda)**: The lambda to use for rendering the content on the TM1638. See [Rendering Lambda](https://esphome.io/components/display/tm1638#display-tm1638_lambda) for more information.\n\n*See also: [TM1638 7 Segment Display Keypad & LED Module](https://esphome.io/components/display/tm1638#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "display.BASIC_DISPLAY_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "tm1638.output": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "tm1638::TM1638OutputLed",
+                "parents": [
+                  "output::BinaryOutput",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "led": {
+              "key": "Required",
+              "type": "integer"
+            },
+            "tm1638_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "tm1638::TM1638Component"
+            }
+          },
+          "extends": [
+            "output.BINARY_OUTPUT_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "tm1638.switch": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "tm1638::TM1638SwitchLed",
+                "parents": [
+                  "switch_::Switch",
+                  "EntityBase",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "led": {
+              "key": "Required",
+              "type": "integer"
+            },
+            "tm1638_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "tm1638::TM1638Component"
+            }
+          },
+          "extends": [
+            "switch._SWITCH_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

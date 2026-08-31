@@ -1,0 +1,164 @@
+{
+  "m5stack_8angle": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "67",
+              "key": "Optional",
+              "docs": "**int**: Manually specify the I\u00b2C address of the device. Defaults to `0x43`.\n\n*See also: [M5Stack Unit 8 Angle](https://esphome.io/components/sensor/m5stack_8angle#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the [I\u00b2C Component](https://esphome.io/components/i2c) if you need\n\n*See also: [M5Stack Unit 8 Angle](https://esphome.io/components/sensor/m5stack_8angle#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "m5stack_8angle::M5Stack8AngleComponent",
+                "parents": [
+                  "i2c::I2CDevice",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [M5Stack Unit 8 Angle](https://esphome.io/components/sensor/m5stack_8angle#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "m5stack_8angle.binary_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "m5stack_8angle::M5Stack8AngleSwitchBinarySensor",
+                "parents": [
+                  "binary_sensor::BinarySensor",
+                  "EntityBase",
+                  "PollingComponent",
+                  "Component"
+                ]
+              }
+            },
+            "m5stack_8angle_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "m5stack_8angle::M5Stack8AngleComponent"
+            },
+            "update_interval": {
+              "default": "10s",
+              "key": "Optional"
+            }
+          },
+          "extends": [
+            "binary_sensor._BINARY_SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "m5stack_8angle.light": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "m5stack_8angle_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "m5stack_8angle::M5Stack8AngleComponent"
+            },
+            "output_id": {
+              "id_type": {
+                "class": "m5stack_8angle::M5Stack8AngleLightOutput",
+                "parents": [
+                  "light::AddressableLight",
+                  "light::LightOutput",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            }
+          },
+          "extends": [
+            "light.ADDRESSABLE_LIGHT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "m5stack_8angle.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "2"
+            },
+            "bit_depth": {
+              "default": "8bit",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "8": null,
+                "12": null
+              }
+            },
+            "channel": {
+              "key": "Required",
+              "type": "integer"
+            },
+            "icon": {
+              "default": "mdi:rotate-right"
+            },
+            "id": {
+              "id_type": {
+                "class": "m5stack_8angle::M5Stack8AngleKnobSensor",
+                "parents": [
+                  "sensor::Sensor",
+                  "EntityBase",
+                  "PollingComponent",
+                  "Component"
+                ]
+              }
+            },
+            "m5stack_8angle_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "m5stack_8angle::M5Stack8AngleComponent"
+            },
+            "raw": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "state_class": {
+              "default": "measurement"
+            },
+            "update_interval": {
+              "default": "10s",
+              "key": "Optional"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

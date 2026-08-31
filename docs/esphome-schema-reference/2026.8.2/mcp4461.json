@@ -1,0 +1,216 @@
+{
+  "mcp4461": {
+    "action": {
+      "wiper.decrease": {
+        "schema": {
+          "extends": [
+            "mcp4461.output.WIPER_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "wiper.increase": {
+        "schema": {
+          "extends": [
+            "mcp4461.output.WIPER_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Moves the wiper of the given output channel by a single tap. Only valid for the volatile channels `A`-`D` \u2014 the chip does not accept increment/decrement commands on the nonvolatile registers."
+      },
+      "wiper.set_terminal": {
+        "schema": {
+          "config_vars": {
+            "enable": {
+              "key": "Required",
+              "type": "boolean"
+            },
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "mcp4461::Mcp4461Wiper"
+            },
+            "terminal": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "a": null,
+                "b": null,
+                "w": null,
+                "h": null
+              }
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Connects or disconnects a single resistor-network terminal of the given channel at runtime. `terminal` is one of `a`, `b`, `w` or `h` (hardware shutdown state)."
+      },
+      "wiper.store_nonvolatile": {
+        "schema": {
+          "extends": [
+            "mcp4461.output.WIPER_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Immediately persists the current wiper level into the chip's nonvolatile register, bypassing the `nonvolatile_write_delay`. Most useful together with `nonvolatile: false` to persist only at deliberate moments, for example on a button press:"
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "44",
+              "key": "Optional",
+              "docs": "**int**: Manually specify the I2C address of the digipot. Defaults to `0x2C`.\n\n*See also: [MCP4461 Component](https://esphome.io/components/output/mcp4461#configuration-variables)*"
+            },
+            "disable_wiper_0": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**bool**: Disable wiper 0. Defaults to `false`.\n\n*See also: [MCP4461 Component](https://esphome.io/components/output/mcp4461#configuration-variables)*"
+            },
+            "disable_wiper_1": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**bool**: Disable wiper 1. Defaults to `false`.\n\n*See also: [MCP4461 Component](https://esphome.io/components/output/mcp4461#configuration-variables)*"
+            },
+            "disable_wiper_2": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**bool**: Disable wiper 2. Defaults to `false`.\n\n*See also: [MCP4461 Component](https://esphome.io/components/output/mcp4461#configuration-variables)*"
+            },
+            "disable_wiper_3": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**bool**: Disable wiper 3. Defaults to `false`.\n\n*See also: [MCP4461 Component](https://esphome.io/components/output/mcp4461#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "mcp4461::Mcp4461Component",
+                "parents": [
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id to use for this output component.\n\n*See also: [MCP4461 Component](https://esphome.io/components/output/mcp4461#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "mcp4461.output": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "channel": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "A": null,
+                "B": null,
+                "C": null,
+                "D": null,
+                "E": null,
+                "F": null,
+                "G": null,
+                "H": null
+              },
+              "docs": "**string**: Choose the channel of this MCP4461 output component. One of `A`, `B`, `C`, `D`, `E`, `F`, `G` or `H`.\n\n*See also: [MCP4461 Component](https://esphome.io/components/output/mcp4461#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "mcp4461::Mcp4461Wiper",
+                "parents": [
+                  "output::FloatOutput",
+                  "output::BinaryOutput",
+                  "Parented<mcp4461::Mcp4461Component>",
+                  "Parented"
+                ]
+              },
+              "key": "Required",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id to use for this output component.\n\n*See also: [MCP4461 Component](https://esphome.io/components/output/mcp4461#configuration-variables)*"
+            },
+            "initial_value": {
+              "key": "Optional",
+              "docs": "**float**: Set initial wiper value. Valid range is `0 - 1.0`. For the nonvolatile channels `E`-`H`, this value is only written when it differs from the value already stored on the chip, to protect the EEPROM's limited write endurance.\n\n*See also: [MCP4461 Component](https://esphome.io/components/output/mcp4461#configuration-variables)*"
+            },
+            "mcp4461_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "mcp4461::Mcp4461Component",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the [MCP4461](https://esphome.io/components/output/mcp4461#mcp4461-component). Use this if you have multiple MCP4461 ICs you want to use at the same time.\n\n*See also: [MCP4461 Component](https://esphome.io/components/output/mcp4461#configuration-variables)*"
+            },
+            "nonvolatile": {
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**bool**: Only for the volatile channels `A`-`D`. When enabled, every level change is automatically mirrored into the chip's matching nonvolatile wiper register once the level has been stable for `nonvolatile_write_delay` \u2014 the chip then restores that level by itself on the next power-on. Defaults to `true`.\n\n*See also: [MCP4461 Component](https://esphome.io/components/output/mcp4461#configuration-variables)*"
+            },
+            "nonvolatile_write_delay": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: How long a level must remain unchanged before it is persisted. This debounces fast level bursts (for example light transitions) and protects the EEPROM endurance (roughly one million write cycles, and each write occupies the chip for up to 10 ms). Defaults to `1s`.\n\n*See also: [MCP4461 Component](https://esphome.io/components/output/mcp4461#configuration-variables)*"
+            },
+            "terminal_a": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**bool**: Set to `false` if terminal \"A\" shall be disabled on boot. Defaults to `true`\n\n*See also: [MCP4461 Component](https://esphome.io/components/output/mcp4461#configuration-variables)*"
+            },
+            "terminal_b": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**bool**: Set to `false` if terminal \"B\" shall be disabled on boot. Defaults to `true`\n\n*See also: [MCP4461 Component](https://esphome.io/components/output/mcp4461#configuration-variables)*"
+            },
+            "terminal_w": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**bool**: Set to `false` if terminal \"W\" shall be disabled on boot. Defaults to `true`\n\n*See also: [MCP4461 Component](https://esphome.io/components/output/mcp4461#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "output.FLOAT_OUTPUT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "WIPER_ACTION_SCHEMA": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "mcp4461::Mcp4461Wiper"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

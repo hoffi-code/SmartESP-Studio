@@ -1,0 +1,134 @@
+{
+  "psram": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "disabled": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**bool**: Don't try to initialize the PSRAM. This is needed if one of the configured components autoloads psram but the ESP32 module doesn't have PSRAM and you need to use one of the PSRAM control lines for something else. e.g. ethernet. Defaults to `false`.\n\n*See also: [PSRAM](https://esphome.io/components/psram#configuration-variables)*"
+            },
+            "enable_ecc": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**bool**: For octal mode, enable ECC (Error Correction Code) for the PSRAM (default is off.) ECC is a method of detecting and correcting single-bit errors in memory. It will reduce the available PSRAM size and speed by 1/16th, but also increases the rated temperature range of some ESP32 modules.\n\n*See also: [PSRAM](https://esphome.io/components/psram#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "psram::PsramComponent",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "ignore_not_found": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**bool**: When ``true`` (default), the firmware ignores PSRAM initialisation failures and continues to boot. When ``false``, other components can configure larger WiFi buffers for faster data transfer, but **PSRAM must be available or the device will fail to boot.**\n\n*See also: [PSRAM](https://esphome.io/components/psram#configuration-variables)*"
+            },
+            "mode": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "quad": {
+                  "variants": [
+                    "ESP32",
+                    "ESP32C5",
+                    "ESP32C61",
+                    "ESP32H4",
+                    "ESP32S2",
+                    "ESP32S3"
+                  ]
+                },
+                "octal": {
+                  "variants": [
+                    "ESP32S3",
+                    "ESP32S31"
+                  ]
+                },
+                "hex": {
+                  "variants": [
+                    "ESP32P4"
+                  ]
+                }
+              },
+              "docs": "Defines the operating mode the PSRAM should utilize. One of `quad`, `octal` or `hex`. Defaults to `quad` for ESP32, ESP32-C5, ESP32-C61, ESP32-S2 and ESP32-H4, `octal` for ESP32-S31, and `hex` for ESP32-P4. ESP32-S3 has no default and *requires* this option to be set. See notes below.\n\n*See also: [PSRAM](https://esphome.io/components/psram#configuration-variables)*"
+            },
+            "speed": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "40MHZ": {
+                  "variants": [
+                    "ESP32",
+                    "ESP32C5",
+                    "ESP32C61",
+                    "ESP32S2",
+                    "ESP32S3",
+                    "ESP32S31"
+                  ]
+                },
+                "80MHZ": {
+                  "variants": [
+                    "ESP32",
+                    "ESP32C5",
+                    "ESP32C61",
+                    "ESP32S2",
+                    "ESP32S3"
+                  ]
+                },
+                "120MHZ": {
+                  "variants": [
+                    "ESP32",
+                    "ESP32C5",
+                    "ESP32S2",
+                    "ESP32S3"
+                  ]
+                },
+                "32MHZ": {
+                  "variants": [
+                    "ESP32H4"
+                  ]
+                },
+                "64MHZ": {
+                  "variants": [
+                    "ESP32H4"
+                  ]
+                },
+                "100MHZ": {
+                  "variants": [
+                    "ESP32S31",
+                    "ESP32P4"
+                  ]
+                },
+                "200MHZ": {
+                  "variants": [
+                    "ESP32S31",
+                    "ESP32P4"
+                  ]
+                },
+                "250MHZ": {
+                  "variants": [
+                    "ESP32S31"
+                  ]
+                },
+                "20MHZ": {
+                  "variants": [
+                    "ESP32P4"
+                  ]
+                }
+              },
+              "docs": "**int**: The speed at which the PSRAM should operate. The supported values depend on the variant: `40MHz`, `80MHz` or `120MHz` for ESP32, ESP32-C5, ESP32-S2 and ESP32-S3; `40MHz`, `100MHz`, `200MHz` or `250MHz` for ESP32-S31; `32MHz` or `64MHz` for ESP32-H4; `20MHz`, `100MHz` or `200MHz` for ESP32-P4. Defaults to the lowest supported speed for the variant.\n\n*See also: [PSRAM](https://esphome.io/components/psram#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

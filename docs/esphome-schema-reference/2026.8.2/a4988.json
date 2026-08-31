@@ -1,0 +1,55 @@
+{
+  "a4988.stepper": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "dir_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The `DIRECTION` pin of the A4988 stepper driver.\n\n*See also: [Stepper Component](https://esphome.io/components/stepper#a4988-component)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "a4988::A4988",
+                "parents": [
+                  "stepper::Stepper",
+                  "Component"
+                ]
+              },
+              "key": "Required",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Specify the ID of the stepper so that you can control it.\n\n*See also: [Stepper Component](https://esphome.io/components/stepper#a4988-component)*"
+            },
+            "sleep_pin": {
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: Optionally also use the `SLEEP` pin of the A4988 stepper driver. If specified, the driver will be put into sleep mode as soon as the stepper reaches the target steps.\n\n*See also: [Stepper Component](https://esphome.io/components/stepper#a4988-component)*"
+            },
+            "step_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The `STEP` pin of the A4988 stepper driver.\n\n*See also: [Stepper Component](https://esphome.io/components/stepper#a4988-component)*"
+            }
+          },
+          "extends": [
+            "stepper.STEPPER_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "ens160_base": {
+    "schemas": {
+      "CONFIG_SCHEMA_BASE": {
+        "schema": {
+          "config_vars": {
+            "aqi": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "aqi"
+                  },
+                  "icon": {
+                    "default": "mdi:chemical-weapon"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "compensation": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "humidity": {
+                    "key": "Required",
+                    "type": "use_id",
+                    "use_id_type": "sensor::Sensor"
+                  },
+                  "temperature": {
+                    "key": "Required",
+                    "type": "use_id",
+                    "use_id_type": "sensor::Sensor"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "eco2": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "carbon_dioxide"
+                  },
+                  "icon": {
+                    "default": "mdi:molecule-co2"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "ppm"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "tvoc": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "volatile_organic_compounds_parts"
+                  },
+                  "icon": {
+                    "default": "mdi:radiator"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "ppb"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

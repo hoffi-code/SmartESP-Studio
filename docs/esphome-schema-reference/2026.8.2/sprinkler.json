@@ -1,0 +1,779 @@
+{
+  "sprinkler": {
+    "action": {
+      "clear_queued_valves": {
+        "schema": {
+          "extends": [
+            "sprinkler.SPRINKLER_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Removes all queued valves from the controller's queue. Please see [The Sprinkler Controller Queue](https://esphome.io/components/sprinkler#sprinkler-controller-sprinkler_controller_queue) section below for more detail and examples."
+      },
+      "next_valve": {
+        "schema": {
+          "extends": [
+            "sprinkler.SPRINKLER_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Advances to the next valve (numerically). If `manual_selection_delay` is configured, the controller will wait before activating the selected valve. If no valve is active, the first valve (as they appear in the controller's configuration) will be started. Setting `next_prev_ignore_disabled` to `true` will cause this action to skip valves that are not enabled via their valve enable switch (see above)."
+      },
+      "pause": {
+        "schema": {
+          "extends": [
+            "sprinkler.SPRINKLER_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Immediately turns off all valves, saving the active valve and the amount of time remaining so that the cycle may be resumed later on."
+      },
+      "previous_valve": {
+        "schema": {
+          "extends": [
+            "sprinkler.SPRINKLER_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Advances to the previous valve (numerically). If `manual_selection_delay` is configured, the controller will wait before activating the selected valve. If no valve is active, the last valve (as they appear in the controller's configuration) will be started. Setting `next_prev_ignore_disabled` to `true` will cause this action to skip valves that are not enabled via their valve enable switch (see above)."
+      },
+      "queue_valve": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "sprinkler::Sprinkler"
+            },
+            "run_duration": {
+              "default": "0s",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_seconds"
+                ]
+              },
+              "templatable": true,
+              "type": "schema"
+            },
+            "valve_number": {
+              "data_type": "positive_int",
+              "key": "Required",
+              "templatable": true,
+              "type": "integer"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Adds the specified valve into the controller's queue. When the queue is enabled, valves in the queue take precedence over valves scheduled as a part of a full cycle of the system (when auto-advance is enabled). If `run_duration` is not specified or is zero, the sprinkler controller will use the valve's configured run duration. Valves are numbered in the order they appear in the sprinkler controller's configuration starting at zero (0). *Note that, at present, the queue has a hard-coded limit of 100 entries to limit memory use.* Please see [The Sprinkler Controller Queue](https://esphome.io/components/sprinkler#sprinkler-controller-sprinkler_controller_queue) section below for more detail and examples."
+      },
+      "resume": {
+        "schema": {
+          "extends": [
+            "sprinkler.SPRINKLER_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Resumes a cycle placed on hold with `sprinkler.pause`. If there is no paused cycle, this action will do nothing."
+      },
+      "resume_or_start_full_cycle": {
+        "schema": {
+          "extends": [
+            "sprinkler.SPRINKLER_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Resumes a cycle placed on hold with `sprinkler.pause`, but if no cycle was paused, starts a full cycle (equivalent to `sprinkler.start_full_cycle`  )."
+      },
+      "set_divider": {
+        "maybe": "divider",
+        "schema": {
+          "config_vars": {
+            "divider": {
+              "data_type": "positive_int",
+              "key": "Required",
+              "templatable": true,
+              "type": "integer"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "sprinkler::Sprinkler"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "The divider value sets both the multiplier and repeat values as follows:"
+      },
+      "set_multiplier": {
+        "maybe": "multiplier",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "sprinkler::Sprinkler"
+            },
+            "multiplier": {
+              "data_type": "positive_float",
+              "key": "Required",
+              "templatable": true
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Sets the multiplier value used to proportionally increase or decrease the run duration for all valves/zones. For seasonal changes, it's easier to use the multiplier to adjust the watering time instead of adjusting the run durations directly. Set your run duration to the time you want for 'mild' weather (spring/autumn) and then use the multiplier to increase (summer) or decrease (winter) the calculated run times. When a given valve is activated, this value is multiplied by the valve's run duration (see below) to determine the valve's actual run duration. *Note that a multiplier value of zero is allowed; if the multiplier value is zero, the sprinkler controller will not start any valves.* **This can result in confusing/unexpected behavior if a visual indication of this condition is not available!**"
+      },
+      "set_repeat": {
+        "maybe": "repeat",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "sprinkler::Sprinkler"
+            },
+            "repeat": {
+              "data_type": "positive_int",
+              "key": "Required",
+              "templatable": true,
+              "type": "integer"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Specifies the number of times full cycles should be repeated. **Note that the total number of cycles the controller will run is equal to the repeat value plus one.** For example, with a `repeat` value of 1, the initial cycle will run, then the repeat cycle will run, resulting in a total of two cycles."
+      },
+      "set_valve_run_duration": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "sprinkler::Sprinkler"
+            },
+            "run_duration": {
+              "key": "Required",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_seconds"
+                ]
+              },
+              "templatable": true,
+              "type": "schema"
+            },
+            "valve_number": {
+              "data_type": "positive_int",
+              "key": "Required",
+              "templatable": true,
+              "type": "integer"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Sets the run duration for the specified valve. When the valve is activated, this value is multiplied by the multiplier value (see above) to determine the valve's actual run duration."
+      },
+      "shutdown": {
+        "schema": {
+          "extends": [
+            "sprinkler.SPRINKLER_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Initiates a shutdown of all valves/the system, respecting any configured pump or valve stop delays."
+      },
+      "start_from_queue": {
+        "schema": {
+          "extends": [
+            "sprinkler.SPRINKLER_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Starts the controller running valves from its queue. If no valves are in the queue, this action does nothing; otherwise, this disables the controller's \"auto-advance\" feature so that only queued valves/zones will run. Queued valves will remain on for either the amount of time specified in the queue request or for their configured `run_duration` multiplied by the controller's multiplier value (if the queue request run duration is not specified or is zero). *Note that queued valves ignore whether the valve is enabled; that is, queued valves will always run once the controller is started, unless, of course, the queue is (manually) cleared prior to the queue reaching them. Also note that, at present, the queue has a hard-coded limit of 100 entries to limit memory use.* See [The Sprinkler Controller Queue](https://esphome.io/components/sprinkler#sprinkler-controller-sprinkler_controller_queue) section below for more detail."
+      },
+      "start_full_cycle": {
+        "schema": {
+          "extends": [
+            "sprinkler.SPRINKLER_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Starts a full cycle of the system. This enables the controller's \"auto-advance\" feature and disables the queue. The controller will iterate through all enabled valves/zones. They will each run for their configured `run_duration` multiplied by the controller's multiplier value. *Note that if NO valves are enabled when this action is called, the controller will automatically enable all valves.*"
+      },
+      "start_single_valve": {
+        "maybe": "valve_number",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "sprinkler::Sprinkler"
+            },
+            "run_duration": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_seconds"
+                ]
+              },
+              "templatable": true,
+              "type": "schema"
+            },
+            "valve_number": {
+              "data_type": "positive_int",
+              "key": "Required",
+              "templatable": true,
+              "type": "integer"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Starts a single valve. This disables the controller's \"auto-advance\" and queue features so that only this valve/zone will run. The valve will remain on for the specified duration or (if `run_duration` is not specified or is zero) for its configured `run_duration` multiplied by the controller's multiplier value. *Note that this action ignores whether the valve is enabled; that is, when called, the specified valve will always run.* Valves are numbered in the order they appear in the sprinkler controller's configuration starting at zero (0)."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "auto_advance_switch": {
+              "key": "Optional",
+              "maybe": "name",
+              "schema": {
+                "config_vars": {
+                  "entity_category": {
+                    "default": "config"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "sprinkler::SprinklerControllerSwitch",
+                      "parents": [
+                        "switch_::Switch",
+                        "EntityBase",
+                        "Component"
+                      ]
+                    },
+                    "key": "GeneratedID"
+                  },
+                  "restore_mode": {
+                    "default": "RESTORE_DEFAULT_OFF"
+                  }
+                },
+                "extends": [
+                  "switch._SWITCH_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "***string***: Required with more than one valve. The name for the sprinkler controller's \"auto-advance\" switch as it will appear in the front end. When this switch is turned on while a valve is active, when the valve's `run_duration` is reached, the sprinkler controller will automatically advance to the next enabled valve as a part of a \"full cycle\" of the system. When turned off, the sprinkler controller will shut down after the active valve's `run_duration` is reached (unless there are valves in the queue -- see [The Sprinkler Controller Queue](https://esphome.io/components/sprinkler#sprinkler-controller-sprinkler_controller_queue) section below for more detail). This switch will not appear in the front end if the controller is configured with only one valve.\n\n*See also: [Sprinkler Controller](https://esphome.io/components/sprinkler#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "sprinkler::Sprinkler",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation. While optional, this is necessary to identify the controller instance (particularly in cases where more than one is defined) when calling controller actions (see below) such as `start_full_cycle` or `shutdown`.\n\n*See also: [Sprinkler Controller](https://esphome.io/components/sprinkler#configuration-variables)*"
+            },
+            "main_switch": {
+              "key": "Optional",
+              "maybe": "name",
+              "schema": {
+                "config_vars": {
+                  "id": {
+                    "id_type": {
+                      "class": "sprinkler::SprinklerControllerSwitch",
+                      "parents": [
+                        "switch_::Switch",
+                        "EntityBase",
+                        "Component"
+                      ]
+                    },
+                    "key": "GeneratedID"
+                  }
+                },
+                "extends": [
+                  "switch._SWITCH_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "***string***: Required with more than one valve. The name for the sprinkler controller's main switch as it will appear in the front end. This switch, when turned on, calls the `sprinkler.resume_or_start_full_cycle` action; when turned off, it calls the `sprinkler.shutdown` action (see below). It will appear to be \"on\" when any valve on the controller is active. This switch will not appear in the front end if the controller is configured with only one valve.\n\n*See also: [Sprinkler Controller](https://esphome.io/components/sprinkler#configuration-variables)*"
+            },
+            "manual_selection_delay": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_seconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The amount of time the controller should wait to activate a valve after the `next_valve` and `previous_valve` actions are called. Useful if the control interface consists of only forward/reverse buttons as the button(s) may be pressed multiple times to make the selection.\n\n*See also: [Sprinkler Controller](https://esphome.io/components/sprinkler#configuration-variables)*"
+            },
+            "multiplier_number": {
+              "key": "Optional",
+              "maybe": "name",
+              "schema": {
+                "config_vars": {
+                  "entity_category": {
+                    "default": "config"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "sprinkler::SprinklerControllerNumber",
+                      "parents": [
+                        "number::Number",
+                        "EntityBase",
+                        "Component"
+                      ]
+                    },
+                    "key": "GeneratedID"
+                  },
+                  "initial_value": {
+                    "data_type": "positive_float",
+                    "default": "1",
+                    "key": "Optional"
+                  },
+                  "max_value": {
+                    "data_type": "positive_float",
+                    "default": "10",
+                    "key": "Optional"
+                  },
+                  "min_value": {
+                    "data_type": "positive_float",
+                    "default": "0",
+                    "key": "Optional"
+                  },
+                  "restore_value": {
+                    "default": "True",
+                    "key": "Optional",
+                    "type": "boolean"
+                  },
+                  "set_action": {
+                    "key": "Optional",
+                    "type": "trigger"
+                  },
+                  "step": {
+                    "data_type": "positive_float",
+                    "default": "0.1",
+                    "key": "Optional"
+                  }
+                },
+                "extends": [
+                  "number._NUMBER_SCHEMA",
+                  "core.COMPONENT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "***string***: The name of the [number](https://esphome.io/components/number/) component that should be presented to the front end (Home Assistant) to enable control of the sprinkler controller's `multiplier` value. See [Using the Sprinkler Controller's Numbers](https://esphome.io/components/sprinkler#sprinkler-controller-sprinkler_controller_numbers) below for more detail.\n\n*See also: [Sprinkler Controller](https://esphome.io/components/sprinkler#configuration-variables)*"
+            },
+            "name": {
+              "key": "Optional",
+              "type": "string"
+            },
+            "next_prev_ignore_disabled": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Set to `true` to cause [`sprinkler.next_valve` action](https://esphome.io/components/sprinkler#sprinkler-controller-action_next_valve) and [`sprinkler.previous_valve` action](https://esphome.io/components/sprinkler#sprinkler-controller-action_previous_valve) to skip over valves that are not enabled. Defaults to `false`.\n\n*See also: [Sprinkler Controller](https://esphome.io/components/sprinkler#configuration-variables)*"
+            },
+            "pump_start_pump_delay": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_seconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The delay in seconds from when a distribution valve is opened to when the associated pump is activated. Useful to ensure pressure does not build up from running the pump when no distribution valves are open. May not be used with `pump_start_valve_delay`.\n\n*See also: [Sprinkler Controller](https://esphome.io/components/sprinkler#configuration-variables)*"
+            },
+            "pump_start_valve_delay": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_seconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The delay in seconds from when a pump is started to when the associated distribution valve is opened. Useful for systems where distribution valves require sufficient pressure to fully/quickly close. May not be used with `pump_start_pump_delay`.\n\n*See also: [Sprinkler Controller](https://esphome.io/components/sprinkler#configuration-variables)*"
+            },
+            "pump_stop_pump_delay": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_seconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The delay in seconds from when a distribution valve is closed to when the respective pump is deactivated. Useful for systems where distribution valves require sufficient pressure to fully/quickly close. May not be used with `pump_stop_valve_delay`.\n\n*See also: [Sprinkler Controller](https://esphome.io/components/sprinkler#configuration-variables)*"
+            },
+            "pump_stop_valve_delay": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_seconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The delay in seconds from when a pump is deactivated to when the respective distribution valve is closed. Useful to ensure pressure does not build up from running the pump when no distribution valves are open or to allow the main line out to distribution valves to drain. May not be used with `pump_stop_pump_delay`.\n\n*See also: [Sprinkler Controller](https://esphome.io/components/sprinkler#configuration-variables)*"
+            },
+            "pump_switch_off_during_valve_open_delay": {
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: If set to `true`, the pump will be switched off during the `valve_open_delay` interval; otherwise, it remains on. This may only be specified when `valve_open_delay` is configured (see above). Defaults to `false`.\n\n*See also: [Sprinkler Controller](https://esphome.io/components/sprinkler#configuration-variables)*"
+            },
+            "queue_enable_switch": {
+              "key": "Optional",
+              "maybe": "name",
+              "schema": {
+                "config_vars": {
+                  "entity_category": {
+                    "default": "config"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "sprinkler::SprinklerControllerSwitch",
+                      "parents": [
+                        "switch_::Switch",
+                        "EntityBase",
+                        "Component"
+                      ]
+                    },
+                    "key": "GeneratedID"
+                  },
+                  "restore_mode": {
+                    "default": "RESTORE_DEFAULT_OFF"
+                  }
+                },
+                "extends": [
+                  "switch._SWITCH_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "***string***: The name for the sprinkler controller's queue enable switch as it will appear in the front end. When this switch is turned on or not provided, the controller will select the next valve/zone to run based on the contents of the queue; the queue takes precedence over valves that would otherwise run as a part of a full cycle of the system (when auto-advance is on/enabled). See [The Sprinkler Controller Queue](https://esphome.io/components/sprinkler#sprinkler-controller-sprinkler_controller_queue) section below for more detail.\n\n*See also: [Sprinkler Controller](https://esphome.io/components/sprinkler#configuration-variables)*"
+            },
+            "repeat": {
+              "data_type": "positive_int",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: The number of times a full cycle should be repeated. Defaults to 0. May not be used with `repeat_number`.\n\n*See also: [Sprinkler Controller](https://esphome.io/components/sprinkler#configuration-variables)*"
+            },
+            "repeat_number": {
+              "key": "Optional",
+              "maybe": "name",
+              "schema": {
+                "config_vars": {
+                  "entity_category": {
+                    "default": "config"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "sprinkler::SprinklerControllerNumber",
+                      "parents": [
+                        "number::Number",
+                        "EntityBase",
+                        "Component"
+                      ]
+                    },
+                    "key": "GeneratedID"
+                  },
+                  "initial_value": {
+                    "data_type": "positive_int",
+                    "default": "0",
+                    "key": "Optional",
+                    "type": "integer"
+                  },
+                  "max_value": {
+                    "data_type": "positive_int",
+                    "default": "10",
+                    "key": "Optional",
+                    "type": "integer"
+                  },
+                  "min_value": {
+                    "data_type": "positive_int",
+                    "default": "0",
+                    "key": "Optional",
+                    "type": "integer"
+                  },
+                  "restore_value": {
+                    "default": "True",
+                    "key": "Optional",
+                    "type": "boolean"
+                  },
+                  "set_action": {
+                    "key": "Optional",
+                    "type": "trigger"
+                  },
+                  "step": {
+                    "data_type": "positive_int",
+                    "default": "1",
+                    "key": "Optional",
+                    "type": "integer"
+                  }
+                },
+                "extends": [
+                  "number._NUMBER_SCHEMA",
+                  "core.COMPONENT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "***string***: The name of the [number](https://esphome.io/components/number/) component that should be presented to the front end (Home Assistant) to enable control of the sprinkler controller's `repeat` value. May not be used with `repeat`. See [Using the Sprinkler Controller's Numbers](https://esphome.io/components/sprinkler#sprinkler-controller-sprinkler_controller_numbers) below for more detail.\n\n*See also: [Sprinkler Controller](https://esphome.io/components/sprinkler#configuration-variables)*"
+            },
+            "reverse_switch": {
+              "key": "Optional",
+              "maybe": "name",
+              "schema": {
+                "config_vars": {
+                  "entity_category": {
+                    "default": "config"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "sprinkler::SprinklerControllerSwitch",
+                      "parents": [
+                        "switch_::Switch",
+                        "EntityBase",
+                        "Component"
+                      ]
+                    },
+                    "key": "GeneratedID"
+                  },
+                  "restore_mode": {
+                    "default": "RESTORE_DEFAULT_OFF"
+                  }
+                },
+                "extends": [
+                  "switch._SWITCH_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "***string***: The name for the sprinkler controller's reverse switch as it will appear in the front end. When this switch is turned on, the controller will iterate through the valves in reverse order (last-to-first as they appear in the controller's configuration). When this switch is turned off or not provided, the controller will iterate through the valves first-to-last. This switch will not appear in the front end if the controller is configured with only one valve.\n\n*See also: [Sprinkler Controller](https://esphome.io/components/sprinkler#configuration-variables)*"
+            },
+            "standby_switch": {
+              "key": "Optional",
+              "maybe": "name",
+              "schema": {
+                "config_vars": {
+                  "entity_category": {
+                    "default": "config"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "sprinkler::SprinklerControllerSwitch",
+                      "parents": [
+                        "switch_::Switch",
+                        "EntityBase",
+                        "Component"
+                      ]
+                    },
+                    "key": "GeneratedID"
+                  },
+                  "restore_mode": {
+                    "default": "RESTORE_DEFAULT_OFF"
+                  }
+                },
+                "extends": [
+                  "switch._SWITCH_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "***string***: The name for the sprinkler controller's standby switch as it will appear in the front end. When this switch is turned on, the controller *will not start any valves.* **This can result in confusing/unexpected behavior if there is no visual indication of this condition!**\n\n*See also: [Sprinkler Controller](https://esphome.io/components/sprinkler#configuration-variables)*"
+            },
+            "valve_open_delay": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_seconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The *minimum* delay in seconds that should be inserted between (distribution) valve switching -- in other words, the amount of time that must elapse between one valve switching off and the next one switching on. Useful for systems with valves which depend on sufficient water pressure to close. May not be used with `valve_overlap`.\n\n*See also: [Sprinkler Controller](https://esphome.io/components/sprinkler#configuration-variables)*"
+            },
+            "valve_overlap": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_seconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The amount of time in seconds that the current valve and the next valve should run simultaneously as the next valve/zone starts up. This may help prevent pipes from banging as valves close. May not be used with `valve_open_delay`.\n\n*See also: [Sprinkler Controller](https://esphome.io/components/sprinkler#configuration-variables)*"
+            },
+            "valves": {
+              "is_list": true,
+              "key": "Required",
+              "schema": {
+                "config_vars": {
+                  "enable_switch": {
+                    "key": "Optional",
+                    "maybe": "name",
+                    "schema": {
+                      "config_vars": {
+                        "entity_category": {
+                          "default": "config"
+                        },
+                        "id": {
+                          "id_type": {
+                            "class": "sprinkler::SprinklerControllerSwitch",
+                            "parents": [
+                              "switch_::Switch",
+                              "EntityBase",
+                              "Component"
+                            ]
+                          },
+                          "key": "GeneratedID"
+                        },
+                        "restore_mode": {
+                          "default": "RESTORE_DEFAULT_OFF"
+                        }
+                      },
+                      "extends": [
+                        "switch._SWITCH_SCHEMA"
+                      ]
+                    },
+                    "type": "schema",
+                    "docs": "***string***: The name for the switch component to be used to enable this valve to be run as a part of a full cycle of the system. When this switch is turned off, the valve will be excluded from a full cycle of the system. When this switch is turned on or not provided, the controller will include the valve in a full cycle of the system.\n\n*See also: [Sprinkler Controller](https://esphome.io/components/sprinkler#configuration-variables)*"
+                  },
+                  "pump_switch_id": {
+                    "key": "Optional",
+                    "type": "use_id",
+                    "use_id_type": "switch_::Switch",
+                    "docs": "**[Switch](https://esphome.io/components/switch#config-switch)**: This is the [switch](https://esphome.io/components/switch#config-switch) component to be used to control the valve's pump or upstream electric valve. Typically this would be a [GPIO switch](https://esphome.io/components/switch/gpio/) wired to control a relay or other switching device which in turn would activate the respective pump/valve. For latching valves/pumps, use an [H-Bridge switch](https://esphome.io/components/switch/hbridge/). *It is not recommended to expose this switch to the front end; please see* [An Important Note about GPIO Switches and Control](https://esphome.io/components/sprinkler#an-important-note-about-gpio-switches-and-control) *below for more detail.*\n\n*See also: [Sprinkler Controller](https://esphome.io/components/sprinkler#configuration-variables)*"
+                  },
+                  "run_duration": {
+                    "key": "Optional",
+                    "schema": {
+                      "extends": [
+                        "core.positive_time_period_seconds"
+                      ]
+                    },
+                    "type": "schema",
+                    "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: Required when `run_duration_number` is not provided. The duration in seconds this valve should remain on/open after it is activated. When a given valve is activated, the controller's multiplier value is multiplied by this value to determine the actual run duration for the valve, thus allowing the run duration for all valves/zones to be proportionally increased or decreased as desired. May not be used with `run_duration_number`.\n\n*See also: [Sprinkler Controller](https://esphome.io/components/sprinkler#configuration-variables)*"
+                  },
+                  "run_duration_number": {
+                    "key": "Optional",
+                    "maybe": "name",
+                    "schema": {
+                      "config_vars": {
+                        "entity_category": {
+                          "default": "config"
+                        },
+                        "id": {
+                          "id_type": {
+                            "class": "sprinkler::SprinklerControllerNumber",
+                            "parents": [
+                              "number::Number",
+                              "EntityBase",
+                              "Component"
+                            ]
+                          },
+                          "key": "GeneratedID"
+                        },
+                        "initial_value": {
+                          "data_type": "positive_int",
+                          "default": "900",
+                          "key": "Optional",
+                          "type": "integer"
+                        },
+                        "max_value": {
+                          "data_type": "positive_int",
+                          "default": "86400",
+                          "key": "Optional",
+                          "type": "integer"
+                        },
+                        "min_value": {
+                          "data_type": "positive_int",
+                          "default": "1",
+                          "key": "Optional",
+                          "type": "integer"
+                        },
+                        "restore_value": {
+                          "default": "True",
+                          "key": "Optional",
+                          "type": "boolean"
+                        },
+                        "set_action": {
+                          "key": "Optional",
+                          "type": "trigger"
+                        },
+                        "step": {
+                          "data_type": "positive_int",
+                          "default": "1",
+                          "key": "Optional",
+                          "type": "integer"
+                        },
+                        "unit_of_measurement": {
+                          "default": "s",
+                          "type": "enum",
+                          "values": {
+                            "min": null,
+                            "s": null
+                          }
+                        }
+                      },
+                      "extends": [
+                        "number._NUMBER_SCHEMA",
+                        "core.COMPONENT_SCHEMA"
+                      ]
+                    },
+                    "type": "schema",
+                    "docs": "***string***: The name of the [number](https://esphome.io/components/number/) component that should be presented to the front end (Home Assistant) to enable control of the valve's `run_duration` value. May not be used with `run_duration`. See [Using the Sprinkler Controller's Numbers](https://esphome.io/components/sprinkler#sprinkler-controller-sprinkler_controller_numbers) below for more detail. **Pro tip:** Want times in minutes? Add `unit_of_measurement: min` to the number configuration. See [Using the Sprinkler Controller's Numbers](https://esphome.io/components/sprinkler#sprinkler-controller-sprinkler_controller_numbers) for more detail.\n\n*See also: [Sprinkler Controller](https://esphome.io/components/sprinkler#configuration-variables)*"
+                  },
+                  "valve_switch": {
+                    "key": "Required",
+                    "maybe": "name",
+                    "schema": {
+                      "config_vars": {
+                        "id": {
+                          "id_type": {
+                            "class": "sprinkler::SprinklerControllerSwitch",
+                            "parents": [
+                              "switch_::Switch",
+                              "EntityBase",
+                              "Component"
+                            ]
+                          },
+                          "key": "GeneratedID"
+                        }
+                      },
+                      "extends": [
+                        "switch._SWITCH_SCHEMA"
+                      ]
+                    },
+                    "type": "schema",
+                    "docs": "***string***: The name for the switch component to be used to control the valve for this part of the sprinkler system (often referred to as a \"zone\"). When this switch is turned on, the controller's \"auto-advance\" feature is disabled and it will activate the associated valve for its `run_duration` multiplied by the controller's multiplier value. When this switch is turned off, the `sprinkler.shutdown` action is called (see below).\n\n*See also: [Sprinkler Controller](https://esphome.io/components/sprinkler#configuration-variables)*"
+                  },
+                  "valve_switch_id": {
+                    "key": "Optional",
+                    "type": "use_id",
+                    "use_id_type": "switch_::Switch",
+                    "docs": "**[Switch](https://esphome.io/components/switch#config-switch)**: This is the [switch](https://esphome.io/components/switch#config-switch) component to be used to control the valve that operates the given section or zone of the sprinkler system. Typically this would be a [GPIO switch](https://esphome.io/components/switch/gpio/) wired to control a relay or other switching device which in turn would activate the respective valve. For latching valves, use an [H-Bridge switch](https://esphome.io/components/switch/hbridge/). *It is not recommended to expose this switch to the front end; please see* [An Important Note about GPIO Switches and Control](https://esphome.io/components/sprinkler#an-important-note-about-gpio-switches-and-control) *below for more detail.*\n\n*See also: [Sprinkler Controller](https://esphome.io/components/sprinkler#configuration-variables)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "***list***: A list of valves the controller should use. Each valve consists of:\n\n*See also: [Sprinkler Controller](https://esphome.io/components/sprinkler#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "SPRINKLER_ACTION_SCHEMA": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "sprinkler::Sprinkler"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

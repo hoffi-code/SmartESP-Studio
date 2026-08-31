@@ -1,0 +1,357 @@
+{
+  "hub75": {
+    "action": {
+      "set_brightness": {
+        "maybe": "brightness",
+        "schema": {
+          "config_vars": {
+            "brightness": {
+              "key": "Required",
+              "templatable": true,
+              "type": "integer"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "::esphome::hub75::HUB75Display"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This action allows you to dynamically change the brightness of the display at runtime."
+      }
+    }
+  },
+  "hub75.display": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "a_pin": {
+              "key": "[pin schema](/guides/configuration-types#pin-schema)",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "Row address bit 0.\n\n*See also: [HUB75 RGB LED Matrix Display](https://esphome.io/components/display/hub75#configuration-variables)*"
+            },
+            "b1_pin": {
+              "key": "[pin schema](/guides/configuration-types#pin-schema)",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "Blue data pin for top half.\n\n*See also: [HUB75 RGB LED Matrix Display](https://esphome.io/components/display/hub75#configuration-variables)*"
+            },
+            "b2_pin": {
+              "key": "[pin schema](/guides/configuration-types#pin-schema)",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "Blue data pin for bottom half.\n\n*See also: [HUB75 RGB LED Matrix Display](https://esphome.io/components/display/hub75#configuration-variables)*"
+            },
+            "b_pin": {
+              "key": "[pin schema](/guides/configuration-types#pin-schema)",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "Row address bit 1.\n\n*See also: [HUB75 RGB LED Matrix Display](https://esphome.io/components/display/hub75#configuration-variables)*"
+            },
+            "bit_depth": {
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Color bit depth (4-12). Higher values = better color accuracy but slower refresh. Defaults to `8`.\n\n*See also: [HUB75 RGB LED Matrix Display](https://esphome.io/components/display/hub75#configuration-variables)*"
+            },
+            "board": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "adafruit-matrix-portal-s3": null,
+                "apollo-automation-m1-rev4": null,
+                "apollo-automation-m1-rev6": null,
+                "huidu-hd-wf1": null,
+                "huidu-hd-wf2": null,
+                "esp32-trinity": null
+              },
+              "docs": "**string**: Board preset name. One of: `adafruit-matrix-portal-s3`, `apollo-automation-m1-rev4`, `apollo-automation-m1-rev6`, `huidu-hd-wf2`. When specified, automatically configures all pin mappings.\n\n*See also: [HUB75 RGB LED Matrix Display](https://esphome.io/components/display/hub75#configuration-variables)*"
+            },
+            "brightness": {
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Initial brightness level (0-255). Defaults to `128`.\n\n*See also: [HUB75 RGB LED Matrix Display](https://esphome.io/components/display/hub75#configuration-variables)*"
+            },
+            "c_pin": {
+              "key": "[pin schema](/guides/configuration-types#pin-schema)",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "Row address bit 2.\n\n*See also: [HUB75 RGB LED Matrix Display](https://esphome.io/components/display/hub75#configuration-variables)*"
+            },
+            "clk_pin": {
+              "key": "[pin schema](/guides/configuration-types#pin-schema)",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "Clock pin.\n\n*See also: [HUB75 RGB LED Matrix Display](https://esphome.io/components/display/hub75#configuration-variables)*"
+            },
+            "clock_phase": {
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Invert clock phase. Defaults to `false`. Required to be `true` for MBI5124 driver.\n\n*See also: [HUB75 RGB LED Matrix Display](https://esphome.io/components/display/hub75#configuration-variables)*"
+            },
+            "clock_speed": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "8MHZ": {
+                  "docs": "8 MHz"
+                },
+                "10MHZ": {
+                  "docs": "10 MHz"
+                },
+                "16MHZ": {
+                  "docs": "16 MHz"
+                },
+                "20MHZ": {
+                  "docs": "20 MHz (default)"
+                }
+              },
+              "docs": "**enum**: Output clock speed. Defaults to `20MHZ`. One of:\n\n*See also: [HUB75 RGB LED Matrix Display](https://esphome.io/components/display/hub75#configuration-variables)*"
+            },
+            "d_pin": {
+              "key": "[pin schema](/guides/configuration-types#pin-schema)",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "Row address bit 3.\n\n*See also: [HUB75 RGB LED Matrix Display](https://esphome.io/components/display/hub75#configuration-variables)*"
+            },
+            "double_buffer": {
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Enable double buffering to prevent tearing. Defaults to `false`. Set to `false` when using LVGL.\n\n*See also: [HUB75 RGB LED Matrix Display](https://esphome.io/components/display/hub75#configuration-variables)*"
+            },
+            "e_pin": {
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: Row address bit 4. Required for 1/32 scan panels (32+ rows), omit for 1/16 scan panels.\n\n*See also: [HUB75 RGB LED Matrix Display](https://esphome.io/components/display/hub75#configuration-variables)*"
+            },
+            "g1_pin": {
+              "key": "[pin schema](/guides/configuration-types#pin-schema)",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "Green data pin for top half.\n\n*See also: [HUB75 RGB LED Matrix Display](https://esphome.io/components/display/hub75#configuration-variables)*"
+            },
+            "g2_pin": {
+              "key": "[pin schema](/guides/configuration-types#pin-schema)",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "Green data pin for bottom half.\n\n*See also: [HUB75 RGB LED Matrix Display](https://esphome.io/components/display/hub75#configuration-variables)*"
+            },
+            "gamma_correct": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "LINEAR": {
+                  "docs": "No gamma correction (raw values)"
+                },
+                "CIE1931": {
+                  "docs": "CIE 1931 perceptual curve (recommended for most displays)"
+                },
+                "GAMMA_2_2": {
+                  "docs": "Standard 2.2 gamma curve"
+                }
+              },
+              "docs": "**enum**: Gamma correction mode. One of:\n\n*See also: [HUB75 RGB LED Matrix Display](https://esphome.io/components/display/hub75#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "::esphome::hub75::HUB75Display",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "display::Display",
+                  "PollingComponent",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "lat_pin": {
+              "key": "[pin schema](/guides/configuration-types#pin-schema)",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "Latch/strobe pin.\n\n*See also: [HUB75 RGB LED Matrix Display](https://esphome.io/components/display/hub75#configuration-variables)*"
+            },
+            "latch_blanking": {
+              "data_type": "positive_int",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Number of clock cycles OE is blanked during LAT pulse. Defaults to `1`.\n\n*See also: [HUB75 RGB LED Matrix Display](https://esphome.io/components/display/hub75#configuration-variables)*"
+            },
+            "layout": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "HORIZONTAL": {
+                  "docs": "Simple left-to-right horizontal chain (single row)"
+                },
+                "TOP_LEFT_DOWN": {
+                  "docs": "Serpentine: start top-left, rows top\u2192bottom"
+                },
+                "TOP_RIGHT_DOWN": {
+                  "docs": "Serpentine: start top-right, rows top\u2192bottom"
+                },
+                "BOTTOM_LEFT_UP": {
+                  "docs": "Serpentine: start bottom-left, rows bottom\u2192top"
+                },
+                "BOTTOM_RIGHT_UP": {
+                  "docs": "Serpentine: start bottom-right, rows bottom\u2192top"
+                },
+                "TOP_LEFT_DOWN_ZIGZAG": {
+                  "docs": "Zigzag: start top-left (all panels upright)"
+                },
+                "TOP_RIGHT_DOWN_ZIGZAG": {
+                  "docs": "Zigzag: start top-right (all panels upright)"
+                },
+                "BOTTOM_LEFT_UP_ZIGZAG": {
+                  "docs": "Zigzag: start bottom-left (all panels upright)"
+                },
+                "BOTTOM_RIGHT_UP_ZIGZAG": {
+                  "docs": "Zigzag: start bottom-right (all panels upright)"
+                }
+              },
+              "docs": "**enum**: Physical panel chaining pattern. Defaults to `HORIZONTAL`. One of:\n\n*See also: [HUB75 RGB LED Matrix Display](https://esphome.io/components/display/hub75#configuration-variables)*"
+            },
+            "layout_cols": {
+              "data_type": "positive_int",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Number of panels arranged horizontally. Defaults to `1`.\n\n*See also: [HUB75 RGB LED Matrix Display](https://esphome.io/components/display/hub75#configuration-variables)*"
+            },
+            "layout_rows": {
+              "data_type": "positive_int",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Number of panels arranged vertically. Defaults to `1`.\n\n*See also: [HUB75 RGB LED Matrix Display](https://esphome.io/components/display/hub75#configuration-variables)*"
+            },
+            "min_refresh_rate": {
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Minimum panel refresh rate in Hz (40-200). The panel may refresh faster than this, but won't go slower. Auto-calculated from `update_interval` (defaults to 60 Hz when `update_interval: never`). Rarely needs to be set manually.\n\n*See also: [HUB75 RGB LED Matrix Display](https://esphome.io/components/display/hub75#configuration-variables)*"
+            },
+            "oe_pin": {
+              "key": "[pin schema](/guides/configuration-types#pin-schema)",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "Output enable pin.\n\n*See also: [HUB75 RGB LED Matrix Display](https://esphome.io/components/display/hub75#configuration-variables)*"
+            },
+            "panel_height": {
+              "data_type": "positive_int",
+              "key": "Required",
+              "type": "integer",
+              "docs": "**int**: Height of a single panel in pixels (e.g., `32`).\n\n*See also: [HUB75 RGB LED Matrix Display](https://esphome.io/components/display/hub75#configuration-variables)*"
+            },
+            "panel_width": {
+              "data_type": "positive_int",
+              "key": "Required",
+              "type": "integer",
+              "docs": "**int**: Width of a single panel in pixels (e.g., `64`).\n\n*See also: [HUB75 RGB LED Matrix Display](https://esphome.io/components/display/hub75#configuration-variables)*"
+            },
+            "r1_pin": {
+              "key": "[pin schema](/guides/configuration-types#pin-schema)",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "Red data pin for top half.\n\n*See also: [HUB75 RGB LED Matrix Display](https://esphome.io/components/display/hub75#configuration-variables)*"
+            },
+            "r2_pin": {
+              "key": "[pin schema](/guides/configuration-types#pin-schema)",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "Red data pin for bottom half.\n\n*See also: [HUB75 RGB LED Matrix Display](https://esphome.io/components/display/hub75#configuration-variables)*"
+            },
+            "rotation": {
+              "type": "enum",
+              "values": {
+                "0": null,
+                "90": null,
+                "180": null,
+                "270": null
+              }
+            },
+            "scan_wiring": {
+              "key": "Optional",
+              "docs": "**enum**: Panel scan wiring pattern. Defaults to `STANDARD_TWO_SCAN`. One of:\n\n*See also: [HUB75 RGB LED Matrix Display](https://esphome.io/components/display/hub75#configuration-variables)*"
+            },
+            "shift_driver": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "GENERIC": {
+                  "docs": "Standard shift register (default)"
+                },
+                "FM6126A": {
+                  "docs": "FM6126A / ICN2038S driver (very common)"
+                },
+                "ICN2038S": {
+                  "docs": "Alias for FM6126A"
+                },
+                "FM6124": {
+                  "docs": "FM6124 driver"
+                },
+                "MBI5124": {
+                  "docs": "MBI5124 driver (requires `clock_phase: true`)"
+                },
+                "DP3246": {
+                  "docs": "DP3246 driver"
+                }
+              },
+              "docs": "**enum**: LED shift register driver chip type. Defaults to `GENERIC`. One of:\n\n*See also: [HUB75 RGB LED Matrix Display](https://esphome.io/components/display/hub75#configuration-variables)*"
+            },
+            "update_interval": {
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: Display update frequency. Defaults to `16ms` (~60 FPS). Set to `never` when using LVGL.\n\n*See also: [HUB75 RGB LED Matrix Display](https://esphome.io/components/display/hub75#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "display.FULL_DISPLAY_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

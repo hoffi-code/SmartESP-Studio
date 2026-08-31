@@ -1,0 +1,130 @@
+{
+  "script": {
+    "action": {
+      "execute": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "script::Script"
+            },
+            "string": {
+              "key": "Optional",
+              "key_type": "validate_parameter_name",
+              "templatable": true
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This action executes the script. The script **mode** dictates what will happen if the script was already running."
+      },
+      "stop": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "script::Script"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This action allows you to stop a given script during execution. If the script is not running, it does nothing. This is useful if you want to stop a script that contains a `delay` action, `wait_until` action, or is inside a `while` loop, etc. You can also call this action from the script itself, and any subsequent action will not be executed."
+      },
+      "wait": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "script::Script"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This action suspends execution of the automation until a script has finished executing."
+      }
+    },
+    "condition": {
+      "is_running": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "script::Script"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [condition](https://esphome.io/automations/actions#all-conditions) allows you to check if a given script is running. In case scripts are run in `parallel`, this condition only tells you if at least one script of the given id is running, not how many. Not designed for use with [while](https://esphome.io/automations/actions#while-action); instead try [script.wait](https://esphome.io/components/script#script-wait-action)."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "has_required_var": true,
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "script::Script"
+              },
+              "key": "Required",
+              "type": "string",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The [ID](https://esphome.io/guides/configuration-types#id) of the script. Use this to interact with the script using the script actions.\n\n*See also: [Script Component](https://esphome.io/components/script#configuration-variables)*"
+            },
+            "max_runs": {
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Allows limiting the maximum number of script instances.\n\n*See also: [Script Component](https://esphome.io/components/script#configuration-variables)*"
+            },
+            "mode": {
+              "default": "single",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "single": {
+                  "docs": null
+                },
+                "restart": {
+                  "docs": null
+                },
+                "queued": {
+                  "docs": null
+                },
+                "parallel": {
+                  "docs": null
+                }
+              },
+              "docs": "**string**: Controls what happens when a script is invoked while it is still running from one or more previous invocations. Default to `single`.\n\n*See also: [Script Component](https://esphome.io/components/script#configuration-variables)*"
+            },
+            "parameters": {
+              "default": "{}",
+              "key": "Optional",
+              "key_type": "validate_parameter_name",
+              "schema": {
+                "config_vars": {
+                  "string": {}
+                }
+              },
+              "type": "schema",
+              "docs": "**[Script Parameters](https://esphome.io/components/script#script-parameters)**: A script can define one or more parameters that must be provided in order to execute. All parameters defined here are mandatory and must be given when calling the script.\n\n*See also: [Script Component](https://esphome.io/components/script#configuration-variables)*"
+            },
+            "then": {
+              "type": "trigger",
+              "key": "Required",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action to perform.\n\n*See also: [Script Component](https://esphome.io/components/script#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

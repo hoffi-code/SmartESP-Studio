@@ -1,0 +1,81 @@
+{
+  "dac7678": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "72",
+              "key": "Optional",
+              "docs": "**int**: The I\u00b2C address of the driver.\n\n*See also: [DAC7678](https://esphome.io/components/output/dac7678#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "dac7678::DAC7678Output",
+                "parents": [
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id to use for\n\n*See also: [DAC7678](https://esphome.io/components/output/dac7678#configuration-variables)*"
+            },
+            "internal_reference": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**bool**: State of the internal reference.\n\n*See also: [DAC7678](https://esphome.io/components/output/dac7678#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "dac7678.output": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "channel": {
+              "key": "Required",
+              "type": "integer",
+              "docs": "**int**: Chose the channel of the DAC7678 of this output component. Must be in range from 0 to 7.\n\n*See also: [DAC7678](https://esphome.io/components/output/dac7678#configuration-variables)*"
+            },
+            "dac7678_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "dac7678::DAC7678Output",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the [DAC7678 hub](https://esphome.io/components/output/dac7678#dac7678-component). Use this if you have multiple DAC7678 devices.\n\n*See also: [DAC7678](https://esphome.io/components/output/dac7678#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "dac7678::DAC7678Channel",
+                "parents": [
+                  "output::FloatOutput",
+                  "output::BinaryOutput"
+                ]
+              },
+              "key": "Required",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id to use for this output component.\n\n*See also: [DAC7678](https://esphome.io/components/output/dac7678#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "output.FLOAT_OUTPUT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

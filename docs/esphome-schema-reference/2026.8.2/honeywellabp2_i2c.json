@@ -1,0 +1,109 @@
+{
+  "honeywellabp2_i2c.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "40",
+              "key": "Optional"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "honeywellabp2_i2c::HONEYWELLABP2Sensor",
+                "parents": [
+                  "sensor::Sensor",
+                  "EntityBase",
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "pressure": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "pressure"
+                  },
+                  "max_pressure": {
+                    "key": "Required",
+                    "docs": "**int or float**: Maximum pressure for the pressure sensor.\n\n*See also: [Honeywell ABP 2 Pressure Sensors](https://esphome.io/components/sensor/honeywellabp2_i2c#configuration-variables)*"
+                  },
+                  "min_pressure": {
+                    "key": "Required",
+                    "docs": "**int or float**: Minimum pressure for the pressure sensor.\n\n*See also: [Honeywell ABP 2 Pressure Sensors](https://esphome.io/components/sensor/honeywellabp2_i2c#configuration-variables)*"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "transfer_function": {
+                    "key": "Required",
+                    "type": "enum",
+                    "values": {
+                      "A": null,
+                      "B": null
+                    },
+                    "docs": "**\"A\" or \"B\"**: Transfer function used by the pressure sensor.\n\n*See also: [Honeywell ABP 2 Pressure Sensors](https://esphome.io/components/sensor/honeywellabp2_i2c#configuration-variables)*"
+                  },
+                  "unit_of_measurement": {
+                    "default": "Pa"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the pressure sensor.\n\n*See also: [Honeywell ABP 2 Pressure Sensors](https://esphome.io/components/sensor/honeywellabp2_i2c#configuration-variables)*"
+            },
+            "temperature": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the temperature sensor. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Honeywell ABP 2 Pressure Sensors](https://esphome.io/components/sensor/honeywellabp2_i2c#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`.\n\n*See also: [Honeywell ABP 2 Pressure Sensors](https://esphome.io/components/sensor/honeywellabp2_i2c#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

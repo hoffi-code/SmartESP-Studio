@@ -1,0 +1,303 @@
+{
+  "pid.climate": {
+    "action": {
+      "autotune": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "pid::PIDClimate",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: ID of the PID Climate to start autotuning for.\n\n*See also: [PID Climate](https://esphome.io/components/climate/pid#climatepidautotune-action)*"
+            },
+            "negative_output": {
+              "default": "-1.0",
+              "key": "Optional",
+              "docs": "**float**: The negative output power to drive the cool output at. Defaults to `-1.0`.\n\n*See also: [PID Climate](https://esphome.io/components/climate/pid#climatepidautotune-action)*"
+            },
+            "noiseband": {
+              "default": "0.25",
+              "key": "Optional",
+              "docs": "**float**: The noiseband of the process (=sensor) variable. The value of the PID controller must be able to reach this value. Defaults to `0.25`.\n\n*See also: [PID Climate](https://esphome.io/components/climate/pid#climatepidautotune-action)*"
+            },
+            "positive_output": {
+              "default": "1.0",
+              "key": "Optional",
+              "docs": "**float**: The positive output power to drive the heat output at. Defaults to `1.0`.\n\n*See also: [PID Climate](https://esphome.io/components/climate/pid#climatepidautotune-action)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This action starts the autotune process of the PID controller."
+      },
+      "reset_integral_term": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "pid::PIDClimate",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: ID of the PID Climate being reset.\n\n*See also: [PID Climate](https://esphome.io/components/climate/pid#climatepidreset_integral_term-action)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This action resets the integral term of the PID controller to 0. This might be necessary under certain conditions to avoid the control loop to overshoot (or undershoot) a target."
+      },
+      "set_control_parameters": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "pid::PIDClimate",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: ID of the PID Climate to start autotuning for.\n\n*See also: [PID Climate](https://esphome.io/components/climate/pid#climatepidset_control_parameters-action)*"
+            },
+            "kd": {
+              "default": "0.0",
+              "key": "Optional",
+              "templatable": true,
+              "docs": "**float**: The factor for the derivative term of the PID controller. Defaults to `0`.\n\n*See also: [PID Climate](https://esphome.io/components/climate/pid#climatepidset_control_parameters-action)*"
+            },
+            "ki": {
+              "default": "0.0",
+              "key": "Optional",
+              "templatable": true,
+              "docs": "**float**: The factor for the integral term of the PID controller. Defaults to `0`.\n\n*See also: [PID Climate](https://esphome.io/components/climate/pid#climatepidset_control_parameters-action)*"
+            },
+            "kp": {
+              "key": "Required",
+              "templatable": true,
+              "docs": "**float**: The factor for the proportional term of the PID controller.\n\n*See also: [PID Climate](https://esphome.io/components/climate/pid#climatepidset_control_parameters-action)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This action sets new values for the control parameters of the PID controller. This can be used to manually tune the PID controller. Make sure to take update the values you want on the YAML file! They will reset on the next reboot."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "control_parameters": {
+              "key": "Required",
+              "schema": {
+                "config_vars": {
+                  "derivative_averaging_samples": {
+                    "data_type": "positive_not_null_int",
+                    "default": "1",
+                    "key": "Optional",
+                    "type": "integer",
+                    "docs": "**int**: average the derivative term over this many samples. Many controllers don't use the derivative term because it is sensitive to slight changes in the input sensor. By taking an average of the derivative term it might become more useful for you. Most PID controllers call this derivative filtering. The derivative term is used to pre-act so don't filter too much. Defaults to `1` which is no sampling/averaging.\n\n*See also: [PID Climate](https://esphome.io/components/climate/pid#configuration-variables)*"
+                  },
+                  "kd": {
+                    "default": "0.0",
+                    "key": "Optional",
+                    "docs": "**float**: The factor for the derivative term of the PID controller. Defaults to `0`.\n\n*See also: [PID Climate](https://esphome.io/components/climate/pid#configuration-variables)*"
+                  },
+                  "ki": {
+                    "default": "0.0",
+                    "key": "Optional",
+                    "docs": "**float**: The factor for the integral term of the PID controller. Defaults to `0`.\n\n*See also: [PID Climate](https://esphome.io/components/climate/pid#configuration-variables)*"
+                  },
+                  "kp": {
+                    "key": "Required",
+                    "docs": "**float**: The factor for the proportional term of the PID controller.\n\n*See also: [PID Climate](https://esphome.io/components/climate/pid#configuration-variables)*"
+                  },
+                  "max_integral": {
+                    "default": "1",
+                    "key": "Optional",
+                    "docs": "**float**: The maximum value of the integral term multiplied by `ki` to prevent windup. Defaults to `1`.\n\n*See also: [PID Climate](https://esphome.io/components/climate/pid#configuration-variables)*"
+                  },
+                  "min_integral": {
+                    "default": "-1",
+                    "key": "Optional",
+                    "docs": "**float**: The minimum value of the integral term multiplied by `ki` to prevent windup. Defaults to `-1`.\n\n*See also: [PID Climate](https://esphome.io/components/climate/pid#configuration-variables)*"
+                  },
+                  "output_averaging_samples": {
+                    "data_type": "positive_not_null_int",
+                    "default": "1",
+                    "key": "Optional",
+                    "type": "integer",
+                    "docs": "**int**: average the output over this many samples. PID controllers can be quite sensitive to small changes on the input sensor. By averaging the last X output samples, the temperature can be more stable. However, the larger the sampling window, the less responsive the PID controller. Defaults to `1` which is no sampling/averaging.\n\n*See also: [PID Climate](https://esphome.io/components/climate/pid#configuration-variables)*"
+                  },
+                  "starting_integral_term": {
+                    "default": "0.0",
+                    "key": "Optional",
+                    "docs": "**float**: Set the initial output, by priming the integral term. This is useful for when your system is rebooted and you don't want to wait for it to get back equilibrium.\n\n*See also: [PID Climate](https://esphome.io/components/climate/pid#configuration-variables)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "Control parameters of the PID controller.\n\n*See also: [PID Climate](https://esphome.io/components/climate/pid#configuration-variables)*"
+            },
+            "cool_output": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "output::FloatOutput",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of a [float output](https://esphome.io/components/output#config-output) that decreases the current temperature. At least one of `heat_output` and `cool_output` must be specified.\n\n*See also: [PID Climate](https://esphome.io/components/climate/pid#configuration-variables)*"
+            },
+            "deadband_parameters": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "deadband_output_averaging_samples": {
+                    "data_type": "positive_not_null_int",
+                    "default": "1",
+                    "key": "Optional",
+                    "type": "integer",
+                    "docs": "**int**: Typically when inside the deadband the PID Controller has reached a state of equilibrium, so it advantageous to use a higher number of output samples like 10-30 samples. Defaults to `1` which is no sampling/averaging.\n\n*See also: [PID Climate](https://esphome.io/components/climate/pid#configuration-variables)*"
+                  },
+                  "kd_multiplier": {
+                    "default": "0.0",
+                    "key": "Optional",
+                    "docs": "**float**: Set the `kd` gain when inside the deadband. Recommended this is set to `0`. Defaults to `0`.\n\n*See also: [PID Climate](https://esphome.io/components/climate/pid#configuration-variables)*"
+                  },
+                  "ki_multiplier": {
+                    "default": "0.0",
+                    "key": "Optional",
+                    "docs": "**float**: Set the `ki` gain when inside the deadband. Defaults to `0`.\n\n*See also: [PID Climate](https://esphome.io/components/climate/pid#configuration-variables)*"
+                  },
+                  "kp_multiplier": {
+                    "default": "0.1",
+                    "key": "Optional",
+                    "docs": "**float**: Set the `kp` gain when inside the deadband. Defaults to `0`.\n\n*See also: [PID Climate](https://esphome.io/components/climate/pid#configuration-variables)*"
+                  },
+                  "threshold_high": {
+                    "key": "Required"
+                  },
+                  "threshold_low": {
+                    "key": "Required"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "Enables a deadband to stabilise and minimise changes in the output when the temperature is close to the target temperature. See [Deadband Setup](https://esphome.io/components/climate/pid#deadband-setup).\n\n*See also: [PID Climate](https://esphome.io/components/climate/pid#configuration-variables)*"
+            },
+            "default_target_temperature": {
+              "key": "Required",
+              "docs": "**float**: The default target temperature (setpoint) for the control algorithm. This can be dynamically set in the frontend later.\n\n*See also: [PID Climate](https://esphome.io/components/climate/pid#configuration-variables)*"
+            },
+            "heat_output": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "output::FloatOutput",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of a [float output](https://esphome.io/components/output#config-output) that increases the current temperature. At least one of `heat_output` and `cool_output` must be specified.\n\n*See also: [PID Climate](https://esphome.io/components/climate/pid#configuration-variables)*"
+            },
+            "humidity_sensor": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "sensor::Sensor",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: If specified, this sensor is used to measure the current humidity. This is used for information only and does not influence temperature control.\n\n*See also: [PID Climate](https://esphome.io/components/climate/pid#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "pid::PIDClimate",
+                "parents": [
+                  "climate::Climate",
+                  "EntityBase",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "sensor": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "sensor::Sensor",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The sensor that is used to measure the current temperature.\n\n*See also: [PID Climate](https://esphome.io/components/climate/pid#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "climate._CLIMATE_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "pid.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "1"
+            },
+            "climate_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "pid::PIDClimate",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the pid climate to get the values from.\n\n*See also: [PID Climate](https://esphome.io/components/climate/pid#pid-sensor)*"
+            },
+            "icon": {
+              "default": "mdi:gauge"
+            },
+            "id": {
+              "id_type": {
+                "class": "pid::PIDClimateSensor",
+                "parents": [
+                  "sensor::Sensor",
+                  "EntityBase",
+                  "Component"
+                ]
+              }
+            },
+            "state_class": {
+              "default": "measurement"
+            },
+            "type": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "RESULT": {
+                  "docs": "The resulting value (sum of P, I, and D terms)."
+                },
+                "ERROR": {
+                  "docs": "The calculated error (setpoint - process_variable)"
+                },
+                "PROPORTIONAL": {
+                  "docs": "The proportional term of the PID controller."
+                },
+                "INTEGRAL": {
+                  "docs": "The integral term of the PID controller."
+                },
+                "DERIVATIVE": {
+                  "docs": "The derivative term of the PID controller."
+                },
+                "HEAT": {
+                  "docs": "The resulting heating power to the supplied to the `heat_output`."
+                },
+                "COOL": {
+                  "docs": "The resulting cooling power to the supplied to the `cool_output`."
+                },
+                "KP": {
+                  "docs": "The current factor for the proportional term of the PID controller."
+                },
+                "KI": {
+                  "docs": "The current factor for the integral term of the PID controller."
+                },
+                "KD": {
+                  "docs": "The current factor for the differential term of the PID controller."
+                }
+              },
+              "docs": "**string**: The value to monitor. One of\n\n*See also: [PID Climate](https://esphome.io/components/climate/pid#pid-sensor)*"
+            },
+            "unit_of_measurement": {
+              "default": "%"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

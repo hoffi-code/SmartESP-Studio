@@ -1,0 +1,92 @@
+{
+  "vl53l0x.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "2"
+            },
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "41",
+              "key": "Optional",
+              "docs": "**int**: Manually specify the i2c address of the sensor. Defaults to `0x29`. If an address other the `0x29` is specified, the sensor will be dynamically re-addressed at startup. A dynamic re-address of sensor requires the `enable_pin` configuration variable to be assigned. If more then one VL53L0X sensor is used on the same i2c bus, a unique address must be specified per sensor.\n\n*See also: [VL53L0X Time Of Flight Distance Sensor](https://esphome.io/components/sensor/vl53l0x#configuration-variables)*"
+            },
+            "enable_pin": {
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin connected to XSHUT on vl53l0x to enable/disable sensor. **Required** if not using address `0x29` which is the cause if you have multiple VL53L0X on the same i2c bus. In this case you have to assign a different pin to each VL53L0X.\n\n*See also: [VL53L0X Time Of Flight Distance Sensor](https://esphome.io/components/sensor/vl53l0x#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "icon": {
+              "default": "mdi:arrow-expand-vertical"
+            },
+            "id": {
+              "id_type": {
+                "class": "vl53l0x::VL53L0XSensor",
+                "parents": [
+                  "sensor::Sensor",
+                  "EntityBase",
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              }
+            },
+            "long_range": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Set the sensor in long range mode. The signal_rate_limit is overruled to `0.1`. Defaults to `false`.\n\n*See also: [VL53L0X Time Of Flight Distance Sensor](https://esphome.io/components/sensor/vl53l0x#configuration-variables)*"
+            },
+            "signal_rate_limit": {
+              "default": "0.25",
+              "key": "Optional",
+              "docs": "**float**: Set the return signal rate limit in units of MCPS (mega counts per second). This is the minimum signal amplitude detected by the sensor necessary for it to report a valid reading. Setting a lower value may increase the range of the sensor but also increases the chance of getting inaccurate readings. Defaults to `0.25`.\n\n*See also: [VL53L0X Time Of Flight Distance Sensor](https://esphome.io/components/sensor/vl53l0x#configuration-variables)*"
+            },
+            "state_class": {
+              "default": "measurement"
+            },
+            "timeout": {
+              "default": "10ms",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: Sensor setup timeout. Default to `10ms`.\n\n*See also: [VL53L0X Time Of Flight Distance Sensor](https://esphome.io/components/sensor/vl53l0x#configuration-variables)*"
+            },
+            "timing_budget": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_microseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: Set the timing budget the sensor will use for a single range measurement. Range is from 20000us - 4294967295us, inclusive. The timing budget allows the user to trade off speed for accuracy. If not specified, the default timing budget is 33000us.\n\n*See also: [VL53L0X Time Of Flight Distance Sensor](https://esphome.io/components/sensor/vl53l0x#configuration-variables)*"
+            },
+            "unit_of_measurement": {
+              "default": "m"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`.\n\n*See also: [VL53L0X Time Of Flight Distance Sensor](https://esphome.io/components/sensor/vl53l0x#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

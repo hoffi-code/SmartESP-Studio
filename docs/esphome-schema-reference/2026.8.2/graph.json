@@ -1,0 +1,225 @@
+{
+  "graph": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "border": {
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Draw a border around the legend. Defaults to `true`.\n\n*See also: [Graph Component](https://esphome.io/components/graph#configuration-variables)*"
+            },
+            "color": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "Color",
+              "docs": "Sets the color of the sensor trace.\n\n*See also: [Graph Component](https://esphome.io/components/graph#configuration-variables)*"
+            },
+            "duration": {
+              "key": "Required",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_seconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The total graph history duration.\n\n*See also: [Graph Component](https://esphome.io/components/graph#configuration-variables)*"
+            },
+            "height": {
+              "data_type": "positive_not_null_int",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Legend height in pixels. If not specified, height is automatically calculated.\n\n*See also: [Graph Component](https://esphome.io/components/graph#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "graph::Graph",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "Required",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID with which you will be able to reference the graph later in your display code.\n\n*See also: [Graph Component](https://esphome.io/components/graph#configuration-variables)*"
+            },
+            "legend": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "border": {
+                    "key": "Optional",
+                    "type": "boolean"
+                  },
+                  "direction": {
+                    "key": "Optional",
+                    "type": "enum",
+                    "values": {
+                      "AUTO": null,
+                      "HORIZONTAL": null,
+                      "VERTICAL": null
+                    }
+                  },
+                  "height": {
+                    "data_type": "positive_not_null_int",
+                    "key": "Optional",
+                    "type": "integer"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "graph::GraphLegend",
+                      "parents": []
+                    },
+                    "key": "GeneratedID"
+                  },
+                  "name_font": {
+                    "key": "Required",
+                    "type": "use_id",
+                    "use_id_type": "font::Font"
+                  },
+                  "show_lines": {
+                    "key": "Optional",
+                    "type": "boolean"
+                  },
+                  "show_units": {
+                    "key": "Optional",
+                    "type": "boolean"
+                  },
+                  "show_values": {
+                    "key": "Optional",
+                    "type": "enum",
+                    "values": {
+                      "NONE": null,
+                      "AUTO": null,
+                      "BESIDE": null,
+                      "BELOW": null
+                    }
+                  },
+                  "value_font": {
+                    "key": "Optional",
+                    "type": "use_id",
+                    "use_id_type": "font::Font"
+                  },
+                  "width": {
+                    "data_type": "positive_not_null_int",
+                    "key": "Optional",
+                    "type": "integer"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "Configures a legend for the graph traces. See [Legend Options](https://esphome.io/components/graph#legend-options).\n\n*See also: [Graph Component](https://esphome.io/components/graph#configuration-variables)*"
+            },
+            "line_thickness": {
+              "data_type": "positive_int",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "Defaults to 3\n\n*See also: [Graph Component](https://esphome.io/components/graph#configuration-variables)*"
+            },
+            "line_type": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "SOLID": null,
+                "DOTTED": null,
+                "DASHED": null
+              },
+              "docs": "Specifies the plot line-type. Can be one of the following: `SOLID`, `DOTTED`, `DASHED`. Defaults to `SOLID`.\n\n*See also: [Graph Component](https://esphome.io/components/graph#configuration-variables)*"
+            },
+            "max_range": {
+              "key": "Optional",
+              "docs": "Specifies the maximum Y-axis range.\n\n*See also: [Graph Component](https://esphome.io/components/graph#configuration-variables)*"
+            },
+            "max_value": {
+              "key": "Optional",
+              "docs": "Specifies the maximum Y-axis value.\n\n*See also: [Graph Component](https://esphome.io/components/graph#configuration-variables)*"
+            },
+            "min_range": {
+              "key": "Optional",
+              "docs": "Specifies the minimum Y-axis range.\n\n*See also: [Graph Component](https://esphome.io/components/graph#configuration-variables)*"
+            },
+            "min_value": {
+              "key": "Optional",
+              "docs": "Specifies the minimum Y-axis value.\n\n*See also: [Graph Component](https://esphome.io/components/graph#configuration-variables)*"
+            },
+            "sensor": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "sensor::Sensor",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The sensor value to plot\n\n*See also: [Graph Component](https://esphome.io/components/graph#configuration-variables)*"
+            },
+            "traces": {
+              "is_list": true,
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "color": {
+                    "key": "Optional",
+                    "type": "use_id",
+                    "use_id_type": "Color"
+                  },
+                  "continuous": {
+                    "key": "Optional",
+                    "type": "boolean"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "graph::GraphTrace",
+                      "parents": []
+                    },
+                    "key": "GeneratedID"
+                  },
+                  "line_thickness": {
+                    "data_type": "positive_int",
+                    "key": "Optional",
+                    "type": "integer"
+                  },
+                  "line_type": {
+                    "key": "Optional",
+                    "type": "enum",
+                    "values": {
+                      "SOLID": null,
+                      "DOTTED": null,
+                      "DASHED": null
+                    }
+                  },
+                  "name": {
+                    "key": "Optional",
+                    "type": "string"
+                  },
+                  "sensor": {
+                    "key": "Required",
+                    "type": "use_id",
+                    "use_id_type": "sensor::Sensor"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "Use this to specify more than a single trace.\n\n*See also: [Graph Component](https://esphome.io/components/graph#configuration-variables)*"
+            },
+            "width": {
+              "data_type": "positive_not_null_int",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Legend width in pixels. If not specified, width is automatically calculated.\n\n*See also: [Graph Component](https://esphome.io/components/graph#configuration-variables)*"
+            },
+            "x_grid": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_seconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "Specifies the time per division. If not specified, no vertical grid will be drawn.\n\n*See also: [Graph Component](https://esphome.io/components/graph#configuration-variables)*"
+            },
+            "y_grid": {
+              "key": "Optional",
+              "docs": "**float**: Specifies the number of units per division. If not specified, no horizontal grid will be drawn.\n\n*See also: [Graph Component](https://esphome.io/components/graph#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

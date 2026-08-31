@@ -1,0 +1,327 @@
+{
+  "modbus_client": {
+    "action": {
+      "read_coils": {
+        "schema": {
+          "config_vars": {
+            "count": {
+              "default": "1",
+              "key": "Optional",
+              "templatable": true,
+              "type": "integer",
+              "docs": "**templatable**: 1-2000 coils to read. Defaults to `1`.\n\n*See also: [Modbus Client](https://esphome.io/components/modbus_client#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "modbus_client._TYPED_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Reads one or more coils (function code `0x01`)."
+      },
+      "read_discrete_inputs": {
+        "schema": {
+          "config_vars": {
+            "count": {
+              "default": "1",
+              "key": "Optional",
+              "templatable": true,
+              "type": "integer",
+              "docs": "**templatable**: 1-2000 discrete inputs to read. Defaults to `1`.\n\n*See also: [Modbus Client](https://esphome.io/components/modbus_client#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "modbus_client._TYPED_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Reads one or more discrete inputs (function code `0x02`)."
+      },
+      "read_holding_registers": {
+        "schema": {
+          "extends": [
+            "modbus_client._READ_REGISTERS_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Reads one or more holding registers (function code `0x03`)."
+      },
+      "read_input_registers": {
+        "schema": {
+          "extends": [
+            "modbus_client._READ_REGISTERS_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Reads one or more input registers (function code `0x04`)."
+      },
+      "read_write_multiple_registers": {
+        "schema": {
+          "config_vars": {
+            "read_address": {
+              "data_type": "hex_uint16_t",
+              "key": "Required",
+              "templatable": true,
+              "docs": "**templatable**: Address of the first holding register to read back.\n\n*See also: [Modbus Client](https://esphome.io/components/modbus_client#configuration-variables)*"
+            },
+            "read_count": {
+              "default": "1",
+              "key": "Optional",
+              "templatable": true,
+              "type": "integer",
+              "docs": "**templatable**: 1-125 registers to read back. Defaults to `1`.\n\n*See also: [Modbus Client](https://esphome.io/components/modbus_client#configuration-variables)*"
+            },
+            "values": {
+              "data_type": "hex_uint16_t",
+              "is_list": true,
+              "key": "Required",
+              "templatable": true,
+              "docs": "**templatable**: Registers to **write**, `write_address` first. 1-121 registers - the `0x17` write ceiling, lower than the 123 of a plain write. As a lambda it must return a `std::vector<uint16_t>`.\n\n*See also: [Modbus Client](https://esphome.io/components/modbus_client#configuration-variables)*"
+            },
+            "write_address": {
+              "data_type": "hex_uint16_t",
+              "key": "Required",
+              "templatable": true,
+              "docs": "**templatable**: Address of the first holding register to write.\n\n*See also: [Modbus Client](https://esphome.io/components/modbus_client#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "modbus_client._ACTION_BASE_SCHEMA",
+            "modbus_client._REPLY_HANDLERS_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Writes one block of holding registers and reads another back in a single transaction (function code `0x17`). Per the Modbus specification the write is performed **before** the read, so when the two ranges overlap the read returns the values just written. Because the write travels in the same frame, an `on_no_response` retry re-sends it - avoid retries on registers whose writes have side effects (command or trigger registers, counters, one-shot commits). For queue priority and duplicate suppression the hub classifies `0x17` as a write, so a second identical send while one is in flight is refused with `on_not_sent` rather than requeued the way a plain read would be."
+      },
+      "send": {
+        "schema": {
+          "config_vars": {
+            "on_response": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations/)**: Fires on a standard-conforming reply. The lambda variable it carries depends on the action - see below.\n\n*See also: [Modbus Client](https://esphome.io/components/modbus_client#configuration-variables)*"
+            },
+            "pdu": {
+              "data_type": "hex_uint8_t",
+              "is_list": true,
+              "key": "Required",
+              "templatable": true,
+              "docs": "**templatable**: The PDU to send: function code followed by data. The device address and CRC are added automatically - do **not** include them. Maximum 253 bytes (the Modbus PDU limit): an empty or over-long YAML list fails config validation. As a lambda it must return a `modbus::helpers::PduBuffer` (a fixed-capacity stack vector, not `std::vector`): `return {0x03, 0x00, 0x10, 0x00, 0x01};` works, and so does directly returning the result of a `modbus::helpers::create_*_pdu()` builder - see [Building PDUs with Helpers](https://esphome.io/components/modbus_client#building-pdus-with-helpers). Unlike the YAML list, a lambda result isn't length-checked: one over 253 bytes is silently truncated to the limit rather than rejected. An empty lambda result (or a builder that fails - see below) also produces an empty PDU; the hub refuses to send it, and `on_not_sent` fires.\n\n*See also: [Modbus Client](https://esphome.io/components/modbus_client#configuration-variables)*"
+            },
+            "address": {
+              "key": "Required",
+              "docs": "**templatable**: The Modbus device address the frame is sent to. Accepts `0`-`255`; the valid Modbus device range is `1`-`247`, and `0` is broadcast (no reply will ever arrive; see [Behavior](https://esphome.io/components/modbus_client#behavior)).\n\n*See also: [Modbus Client](https://esphome.io/components/modbus_client#configuration-variables)*"
+            },
+            "on_sent": {
+              "key": "Optional",
+              "docs": "**[Automation](https://esphome.io/automations/)**: Fires when the frame is written to the wire. Lambda variable: `request` (`std::span<const uint8_t>`, the PDU sent).\n\n*See also: [Modbus Client](https://esphome.io/components/modbus_client#configuration-variables)*"
+            },
+            "on_error": {
+              "key": "Optional",
+              "docs": "**[Automation](https://esphome.io/automations/)**: Fires on a Modbus exception response. Lambda variables: `request` (`std::span<const uint8_t>`) and `exception_code` (`modbus::ExceptionCode`, an enum - cast to `int`/`uint8_t` to print).\n\n*See also: [Modbus Client](https://esphome.io/components/modbus_client#configuration-variables)*"
+            },
+            "on_no_response": {
+              "key": "Optional",
+              "docs": "Fires when the device does not answer within the hub's `send_wait_time`. Same three forms as `modbus_client.send`'s `on_no_response` above: a returning lambda, a `then:` automation, or a `then:` automation with a nested `retry:` returning lambda.\n\n*See also: [Modbus Client](https://esphome.io/components/modbus_client#configuration-variables)*"
+            },
+            "on_not_sent": {
+              "key": "Optional",
+              "docs": "**[Automation](https://esphome.io/automations/)**: Fires when the frame never reached the wire - a duplicate write already pending, a full send queue, an invalid request, or a queued frame cancelled by another device or automation clearing the queue for the same address. See [Behavior](https://esphome.io/components/modbus_client#behavior). Lambda variable: `request` (`std::span<const uint8_t>`, the PDU that was not sent).\n\n*See also: [Modbus Client](https://esphome.io/components/modbus_client#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "modbus_client._ACTION_BASE_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This action queues a custom Modbus frame for transmission and optionally handles the outcome."
+      },
+      "write_multiple_coils": {
+        "schema": {
+          "config_vars": {
+            "values": {
+              "is_list": true,
+              "key": "Required",
+              "templatable": true,
+              "type": "boolean",
+              "docs": "**templatable**: Coils to write, `start_address` first. 1-1968 coils. As a lambda it must return a `std::vector<bool>`.\n\n*See also: [Modbus Client](https://esphome.io/components/modbus_client#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "modbus_client._TYPED_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Writes one or more consecutive coils (function code `0x0F`)."
+      },
+      "write_multiple_registers": {
+        "schema": {
+          "config_vars": {
+            "values": {
+              "data_type": "hex_uint16_t",
+              "is_list": true,
+              "key": "Required",
+              "templatable": true,
+              "docs": "**templatable**: Registers to write, `start_address` first. 1-123 registers. As a lambda it must return a `std::vector<uint16_t>`.\n\n*See also: [Modbus Client](https://esphome.io/components/modbus_client#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "modbus_client._TYPED_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Writes one or more consecutive holding registers (function code `0x10`)."
+      },
+      "write_single_coil": {
+        "schema": {
+          "config_vars": {
+            "value": {
+              "key": "Required",
+              "templatable": true,
+              "type": "boolean",
+              "docs": "**templatable**: The value to write.\n\n*See also: [Modbus Client](https://esphome.io/components/modbus_client#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "modbus_client._TYPED_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Writes a single coil (function code `0x05`)."
+      },
+      "write_single_register": {
+        "schema": {
+          "config_vars": {
+            "value": {
+              "data_type": "hex_uint16_t",
+              "key": "Required",
+              "templatable": true,
+              "docs": "**templatable**: The value to write.\n\n*See also: [Modbus Client](https://esphome.io/components/modbus_client#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "modbus_client._TYPED_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Writes a single holding register (function code `0x06`)."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "key": "Required",
+              "docs": "**int**: The Modbus device address every call from this client targets. Unlike [Modbus Controller](https://esphome.io/components/modbus_controller/), there is no default.\n\n*See also: [Modbus Client](https://esphome.io/components/modbus_client#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "modbus::ModbusClientDevice",
+                "parents": []
+              },
+              "key": "Required",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID to use in lambdas. Unlike most components it is not generated for you: the device is only reachable through `id()`, so an entry without one is rejected.\n\n*See also: [Modbus Client](https://esphome.io/components/modbus_client#configuration-variables)*"
+            },
+            "modbus_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "modbus::ModbusClientHub",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The Modbus hub to send on. Automatically assigned when a single hub is configured.\n\n*See also: [Modbus Client](https://esphome.io/components/modbus_client#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "_ACTION_BASE_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "key": "Required",
+              "templatable": true,
+              "docs": "**templatable**: The device address the frame is sent to. Accepts `0`-`255`; the valid Modbus device range is `1`-`247`, and `0` is broadcast (no reply will ever arrive; see [Behavior](https://esphome.io/components/modbus_client#behavior)).\n\n*See also: [Modbus Client](https://esphome.io/components/modbus_client#configuration-variables)*"
+            },
+            "modbus_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "modbus::ModbusClientHub",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The Modbus hub to send on. Automatically assigned when a single hub is configured.\n\n*See also: [Modbus Client](https://esphome.io/components/modbus_client#configuration-variables)*"
+            },
+            "on_error": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations/)**: Fires on a Modbus exception response. Lambda variables: `request` (`std::span<const uint8_t>`, the request PDU this action sent - same as in `on_response`) and `exception_code` (`modbus::ExceptionCode`, an enum - cast to `int`/`uint8_t` to print). There is no `response` span, as an exception carries no data payload.\n\n*See also: [Modbus Client](https://esphome.io/components/modbus_client#configuration-variables)*"
+            },
+            "on_no_response": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "Fires when the device does not answer within the hub's `send_wait_time`. `request` (`std::span<const uint8_t>`, the PDU that got no reply) is available in every form. Three ways to write it:\n\n*See also: [Modbus Client](https://esphome.io/components/modbus_client#configuration-variables)*"
+            },
+            "on_not_sent": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations/)**: Fires when the frame never reached the wire - for example, an empty PDU, a duplicate write already pending (see [Duplicate suppression](https://esphome.io/components/modbus_client#behavior)), a full send queue, or cancelled by another device or automation clearing the queue for the same address. Distinct from a timeout: nothing was transmitted. Lambda variable: `request` (`std::span<const uint8_t>`, the PDU that was not sent).\n\n*See also: [Modbus Client](https://esphome.io/components/modbus_client#configuration-variables)*"
+            },
+            "on_sent": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations/)**: Fires when the frame is written to the wire. Lambda variable: `request` (`std::span<const uint8_t>`, the PDU sent). This fires once per transmission, before any reply, and does not fire when the send ends in `on_not_sent` (nothing was transmitted). Exactly one of `on_response`/`on_error`/`on_no_response`/`on_not_sent` follows each transmission attempt - a retry reopens this cycle for its own attempt; see [Behavior](https://esphome.io/components/modbus_client#behavior).\n\n*See also: [Modbus Client](https://esphome.io/components/modbus_client#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "_READ_REGISTERS_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "count": {
+              "default": "1",
+              "key": "Optional",
+              "templatable": true,
+              "type": "integer",
+              "docs": "**templatable**: 1-125 registers to read. Defaults to `1`.\n\n*See also: [Modbus Client](https://esphome.io/components/modbus_client#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "modbus_client._TYPED_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "_REPLY_HANDLERS_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "on_custom_response": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "on_response": {
+              "key": "Optional",
+              "type": "trigger"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "_TYPED_ACTION_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "start_address": {
+              "data_type": "hex_uint16_t",
+              "key": "Required",
+              "templatable": true
+            }
+          },
+          "extends": [
+            "modbus_client._ACTION_BASE_SCHEMA",
+            "modbus_client._REPLY_HANDLERS_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

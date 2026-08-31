@@ -1,0 +1,49 @@
+{
+  "router.speaker": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "bits_per_sample": {
+              "key": "Required",
+              "type": "integer",
+              "docs": "**positive integer**: The bit depth of the audio stream. Must be between `8` and `32`. Every output speaker must use this bit depth.\n\n*See also: [Router Speaker](https://esphome.io/components/speaker/router#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "router::Router",
+                "parents": [
+                  "Component",
+                  "speaker::Speaker"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The router speaker to control. Defaults to the only one in your YAML.\n\n*See also: [Router Speaker](https://esphome.io/components/speaker/router#routerspeakerswitch_output-action)*"
+            },
+            "num_channels": {
+              "key": "Required",
+              "type": "integer",
+              "docs": "**positive integer**: The number of audio channels. Either `1` or `2`. Every output speaker must use this number of channels.\n\n*See also: [Router Speaker](https://esphome.io/components/speaker/router#configuration-variables)*"
+            },
+            "output_speakers": {
+              "is_list": true,
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "speaker::Speaker",
+              "docs": "**list of [IDs](https://esphome.io/guides/configuration-types#id)**: A list of [speakers](https://esphome.io/components/speaker/) the router can output to. Must have at least 2 and at most 8 speakers. The first speaker listed is the active output when the device boots.\n\n*See also: [Router Speaker](https://esphome.io/components/speaker/router#configuration-variables)*"
+            },
+            "sample_rate": {
+              "key": "Required",
+              "type": "integer",
+              "docs": "**positive integer**: The sample rate of the audio stream in Hz. Must be between `8000` and `96000`. Every output speaker must use this sample rate.\n\n*See also: [Router Speaker](https://esphome.io/components/speaker/router#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

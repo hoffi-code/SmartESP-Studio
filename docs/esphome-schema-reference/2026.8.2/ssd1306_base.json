@@ -1,0 +1,93 @@
+{
+  "ssd1306_base": {
+    "schemas": {
+      "SSD1306_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "brightness": {
+              "default": "1.0",
+              "key": "Optional",
+              "docs": "**percentage**: Set display brightness in %. Only can be used with SSD1305. Defaults to `100%`.\n\n*See also: [SSD1306 OLED Display](https://esphome.io/components/display/ssd1306#configuration-variables)*"
+            },
+            "contrast": {
+              "default": "1.0",
+              "key": "Optional",
+              "docs": "**percentage**: Set display contrast in %. Defaults to `100%`.\n\n*See also: [SSD1306 OLED Display](https://esphome.io/components/display/ssd1306#configuration-variables)*"
+            },
+            "external_vcc": {
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Set this to true if you have the VCC pin connected to an external power supply. Defaults to `false`.\n\n*See also: [SSD1306 OLED Display](https://esphome.io/components/display/ssd1306#configuration-variables)*"
+            },
+            "flip_x": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Flip the horizontal axis on the screen. Defaults to `true`.\n\n*See also: [SSD1306 OLED Display](https://esphome.io/components/display/ssd1306#configuration-variables)*"
+            },
+            "flip_y": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Flip the vertical axis on the screen. Defaults to `true`.\n\n*See also: [SSD1306 OLED Display](https://esphome.io/components/display/ssd1306#configuration-variables)*"
+            },
+            "invert": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Invert all pixel state on the display. Defaults to `false`.\n\n*See also: [SSD1306 OLED Display](https://esphome.io/components/display/ssd1306#configuration-variables)*"
+            },
+            "model": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "SSD1306_128X32": null,
+                "SSD1306_128X64": null,
+                "SSD1306_96X16": null,
+                "SSD1306_64X48": null,
+                "SSD1306_64X32": null,
+                "SSD1306_72X40": null,
+                "SH1106_128X32": null,
+                "SH1106_128X64": null,
+                "SH1106_96X16": null,
+                "SH1106_64X48": null,
+                "SH1107_128X64": null,
+                "SH1107_128X128": null,
+                "SSD1305_128X32": null,
+                "SSD1305_128X64": null
+              },
+              "docs": "The model of the display. Options are:\n\n*See also: [SSD1306 OLED Display](https://esphome.io/components/display/ssd1306#configuration-variables)*"
+            },
+            "offset_x": {
+              "default": "0",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Set this option if some horizontal pixel is missing. Numbers are only allowed between `0~128`. Defaults to `0`.\n\n*See also: [SSD1306 OLED Display](https://esphome.io/components/display/ssd1306#configuration-variables)*"
+            },
+            "offset_y": {
+              "default": "0",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Set this option if some vertical pixel is missing. Numbers are only allowed between `0~128`. Defaults to `0`.\n\n*See also: [SSD1306 OLED Display](https://esphome.io/components/display/ssd1306#configuration-variables)*"
+            },
+            "reset_pin": {
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The RESET pin. Defaults to not connected.\n\n*See also: [SSD1306 OLED Display](https://esphome.io/components/display/ssd1306#configuration-variables)*"
+            },
+            "update_interval": {}
+          },
+          "extends": [
+            "display.FULL_DISPLAY_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

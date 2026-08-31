@@ -1,0 +1,40 @@
+{
+  "zephyr_pwm.output": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "frequency": {
+              "default": "1kHz",
+              "key": "Optional",
+              "schema": {},
+              "type": "schema",
+              "docs": "**frequency**: The frequency to run the PWM with. Lower frequencies have more visual artifacts, but can represent much more colors. Defaults to `1kHz`.\n\n*See also: [Zephyr PWM Output](https://esphome.io/components/output/zephyr_pwm#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "zephyr_pwm::ZephyrPWMChannel",
+                "parents": [
+                  "output::FloatOutput",
+                  "output::BinaryOutput",
+                  "Component"
+                ]
+              },
+              "key": "Required",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id to use for this output component.\n\n*See also: [Zephyr PWM Output](https://esphome.io/components/output/zephyr_pwm#configuration-variables)*"
+            },
+            "pin": {
+              "key": "Required",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin to use PWM on.\n\n*See also: [Zephyr PWM Output](https://esphome.io/components/output/zephyr_pwm#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "output.FLOAT_OUTPUT_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

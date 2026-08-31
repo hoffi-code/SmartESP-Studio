@@ -1,0 +1,235 @@
+{
+  "kamstrup_kmp.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "custom": {
+              "is_list": true,
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "command": {
+                    "data_type": "hex_uint16_t",
+                    "key": "Required",
+                    "docs": "**2-byte hex**: The KMP command code (e.g. 0x003C).\n\n*See also: [Kamstrup Meter Protocol [KMP]](https://esphome.io/components/sensor/kamstrup_kmp#example-configuration-entry)*"
+                  },
+                  "device_class": {
+                    "default": ""
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": ""
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "List of custom sensors.\n\n*See also: [Kamstrup Meter Protocol [KMP]](https://esphome.io/components/sensor/kamstrup_kmp#example-configuration-entry)*"
+            },
+            "flow": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "volume_flow_rate"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "L/h"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Water flow. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Kamstrup Meter Protocol [KMP]](https://esphome.io/components/sensor/kamstrup_kmp#example-configuration-entry)*"
+            },
+            "heat_energy": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "3"
+                  },
+                  "device_class": {
+                    "default": "energy"
+                  },
+                  "state_class": {
+                    "default": "total_increasing"
+                  },
+                  "unit_of_measurement": {
+                    "default": "GJ"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Heat energy delivered. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Kamstrup Meter Protocol [KMP]](https://esphome.io/components/sensor/kamstrup_kmp#example-configuration-entry)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "kamstrup_kmp::KamstrupKMPComponent",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "uart::UARTDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "power": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "3"
+                  },
+                  "device_class": {
+                    "default": "power"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "kW"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Current power delivered. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Kamstrup Meter Protocol [KMP]](https://esphome.io/components/sensor/kamstrup_kmp#example-configuration-entry)*"
+            },
+            "temp1": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Temperatue of sensor 1. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Kamstrup Meter Protocol [KMP]](https://esphome.io/components/sensor/kamstrup_kmp#example-configuration-entry)*"
+            },
+            "temp2": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Temperatue of sensor 2. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Kamstrup Meter Protocol [KMP]](https://esphome.io/components/sensor/kamstrup_kmp#example-configuration-entry)*"
+            },
+            "temp_diff": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "K"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Temperature difference between the 2 sensors. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Kamstrup Meter Protocol [KMP]](https://esphome.io/components/sensor/kamstrup_kmp#example-configuration-entry)*"
+            },
+            "uart_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "uart::UARTComponent"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "The polling interval. Defaults to `60s`.\n\n*See also: [Kamstrup Meter Protocol [KMP]](https://esphome.io/components/sensor/kamstrup_kmp#example-configuration-entry)*"
+            },
+            "volume": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "volume"
+                  },
+                  "state_class": {
+                    "default": "total_increasing"
+                  },
+                  "unit_of_measurement": {
+                    "default": "m\u00b3"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Volume. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Kamstrup Meter Protocol [KMP]](https://esphome.io/components/sensor/kamstrup_kmp#example-configuration-entry)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

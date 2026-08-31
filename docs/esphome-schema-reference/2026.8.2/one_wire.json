@@ -1,0 +1,21 @@
+{
+  "one_wire": {
+    "components": {
+      "ds2484": {
+        "dependencies": [
+          "i2c"
+        ],
+        "docs": "The `ds2484` platform provides access to 1-Wire busses via DS2484 device using the [I\u00b2C Bus](https://esphome.io/components/i2c) for communication.\n\n*See also: [1-Wire Bus via DS2484](https://esphome.io/components/one_wire/ds2484)*"
+      },
+      "ds248x": {
+        "dependencies": [
+          "ds248x"
+        ]
+      },
+      "gpio": {
+        "docs": "The `gpio` platform uses the CPU to generate the bus signals on an on-board GPIO pin.\n\n*See also: [1-Wire Bus via GPIO](https://esphome.io/components/one_wire/gpio)*"
+      }
+    },
+    "schemas": {}
+  }
+}

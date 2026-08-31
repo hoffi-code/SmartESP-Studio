@@ -1,0 +1,196 @@
+{
+  "apds9960": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "57",
+              "key": "Optional",
+              "docs": "**int**: The I\u00b2C address of the sensor. Defaults to `0x39`.\n\n*See also: [APDS9960 Sensor](https://esphome.io/components/sensor/apds9960#configuration-variables)*"
+            },
+            "ambient_light_gain": {
+              "default": "4x",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "1x": null,
+                "4x": null,
+                "16x": null,
+                "64x": null
+              },
+              "docs": "**int**: The ambient light gain level. One of 1x, 4x, 16x, 64x. Defaults to `4x`.\n\n*See also: [APDS9960 Sensor](https://esphome.io/components/sensor/apds9960#configuration-variables)*"
+            },
+            "gesture_gain": {
+              "default": "4x",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "1x": null,
+                "2x": null,
+                "4x": null,
+                "8x": null
+              },
+              "docs": "**int**: The proximity gain level. One of 1x, 2x, 4x, 8x. Defaults to `4x`.\n\n*See also: [APDS9960 Sensor](https://esphome.io/components/sensor/apds9960#configuration-variables)*"
+            },
+            "gesture_led_drive": {
+              "default": "100mA",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "100ma": null,
+                "50ma": null,
+                "25ma": null,
+                "12.5ma": null
+              },
+              "docs": "**int**: The gesture LED drive level in mA. One of 100mA, 50mA, 25mA, 12.5mA. Defaults to `100mA`.\n\n*See also: [APDS9960 Sensor](https://esphome.io/components/sensor/apds9960#configuration-variables)*"
+            },
+            "gesture_wait_time": {
+              "default": "2.8ms",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "0ms": null,
+                "2.8ms": null,
+                "5.6ms": null,
+                "8.4ms": null,
+                "14ms": null,
+                "22.4ms": null,
+                "30.8ms": null,
+                "39.2ms": null
+              },
+              "docs": "**int**: The gesture wait time in ms. One of 0ms, 2.8ms, 5.6ms, 8.4ms, 14ms, 22.4ms, 30.8ms, 39.2ms. Defaults to `2.8ms`.\n\n*See also: [APDS9960 Sensor](https://esphome.io/components/sensor/apds9960#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "apds9960::APDS9960",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "led_drive": {
+              "default": "100mA",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "100ma": null,
+                "50ma": null,
+                "25ma": null,
+                "12.5ma": null
+              },
+              "docs": "**int**: The LED drive level in mA. One of 100mA, 50mA, 25mA, 12.5mA. Defaults to `100mA`.\n\n*See also: [APDS9960 Sensor](https://esphome.io/components/sensor/apds9960#configuration-variables)*"
+            },
+            "proximity_gain": {
+              "default": "4x",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "1x": null,
+                "2x": null,
+                "4x": null,
+                "8x": null
+              },
+              "docs": "**int**: The proximity gain level. One of 1x, 2x, 4x, 8x. Defaults to `4x`.\n\n*See also: [APDS9960 Sensor](https://esphome.io/components/sensor/apds9960#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`.\n\n*See also: [APDS9960 Sensor](https://esphome.io/components/sensor/apds9960#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "apds9960.binary_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "apds9960_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "apds9960::APDS9960"
+            },
+            "device_class": {
+              "default": "moving"
+            },
+            "direction": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "up": null,
+                "down": null,
+                "left": null,
+                "right": null
+              },
+              "docs": "**string**: The direction to measure. One of:\n\n*See also: [APDS9960 Sensor](https://esphome.io/components/sensor/apds9960#binary-sensor)*"
+            }
+          },
+          "extends": [
+            "binary_sensor._BINARY_SENSOR_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "apds9960.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "1"
+            },
+            "apds9960_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "apds9960::APDS9960"
+            },
+            "icon": {
+              "default": "mdi:lightbulb"
+            },
+            "state_class": {
+              "default": "measurement"
+            },
+            "type": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "clear": null,
+                "red": null,
+                "green": null,
+                "blue": null,
+                "proximity": null
+              },
+              "docs": "**string**: The type of sensor measurement. One of\n\n*See also: [APDS9960 Sensor](https://esphome.io/components/sensor/apds9960#sensor)*"
+            },
+            "unit_of_measurement": {
+              "default": "%"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

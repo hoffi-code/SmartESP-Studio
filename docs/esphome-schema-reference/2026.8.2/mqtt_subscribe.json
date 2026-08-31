@@ -1,0 +1,83 @@
+{
+  "mqtt_subscribe.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "1"
+            },
+            "id": {
+              "id_type": {
+                "class": "mqtt_subscribe::MQTTSubscribeSensor",
+                "parents": [
+                  "sensor::Sensor",
+                  "EntityBase",
+                  "Component"
+                ]
+              }
+            },
+            "mqtt_parent_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "mqtt::MQTTClientComponent"
+            },
+            "qos": {
+              "default": "0",
+              "key": "Optional",
+              "docs": "**int**: The MQTT QoS to subscribe with. Defaults to `0`.\n\n*See also: [MQTT Subscribe Sensor](https://esphome.io/components/sensor/mqtt_subscribe#configuration-variables)*"
+            },
+            "topic": {
+              "key": "Required",
+              "docs": "**string**: The MQTT topic to listen for numeric messages.\n\n*See also: [MQTT Subscribe Sensor](https://esphome.io/components/sensor/mqtt_subscribe#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "mqtt_subscribe.text_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "mqtt_subscribe::MQTTSubscribeTextSensor",
+                "parents": [
+                  "text_sensor::TextSensor",
+                  "EntityBase",
+                  "Component"
+                ]
+              }
+            },
+            "mqtt_parent_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "mqtt::MQTTClientComponent"
+            },
+            "qos": {
+              "default": "0",
+              "key": "Optional",
+              "docs": "**int**: The MQTT QoS to subscribe with. Defaults to `0`.\n\n*See also: [MQTT Subscribe Text Sensor](https://esphome.io/components/text_sensor/mqtt_subscribe#configuration-variables)*"
+            },
+            "topic": {
+              "key": "Required",
+              "docs": "**string**: The MQTT topic to listen for string data.\n\n*See also: [MQTT Subscribe Text Sensor](https://esphome.io/components/text_sensor/mqtt_subscribe#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "text_sensor._TEXT_SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

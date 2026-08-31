@@ -1,0 +1,30 @@
+{
+  "mopeka_ble": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "mopeka_ble::MopekaListener",
+                "parents": [
+                  "ble_device_base::ESPBTDeviceListener"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "show_sensors_without_sync": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean"
+            }
+          },
+          "extends": [
+            "ble_device_base.BLE_DEVICE_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

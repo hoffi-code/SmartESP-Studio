@@ -1,0 +1,295 @@
+{
+  "ruuvitag.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "acceleration": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "3"
+                  },
+                  "icon": {
+                    "default": "mdi:axis-arrow"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "G"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the acceleration sensor.\n\n*See also: [RuuviTag Open Source BLE Sensor](https://esphome.io/components/sensor/ruuvitag#configuration-variables)*"
+            },
+            "acceleration_x": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "3"
+                  },
+                  "icon": {
+                    "default": "mdi:axis-x-arrow"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "G"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the acceleration x sensor.\n\n*See also: [RuuviTag Open Source BLE Sensor](https://esphome.io/components/sensor/ruuvitag#configuration-variables)*"
+            },
+            "acceleration_y": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "3"
+                  },
+                  "icon": {
+                    "default": "mdi:axis-y-arrow"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "G"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the acceleration y sensor.\n\n*See also: [RuuviTag Open Source BLE Sensor](https://esphome.io/components/sensor/ruuvitag#configuration-variables)*"
+            },
+            "acceleration_z": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "3"
+                  },
+                  "icon": {
+                    "default": "mdi:axis-z-arrow"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "G"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the acceleration z sensor.\n\n*See also: [RuuviTag Open Source BLE Sensor](https://esphome.io/components/sensor/ruuvitag#configuration-variables)*"
+            },
+            "battery_voltage": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "3"
+                  },
+                  "device_class": {
+                    "default": "voltage"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "V"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the battery voltage sensor.\n\n*See also: [RuuviTag Open Source BLE Sensor](https://esphome.io/components/sensor/ruuvitag#configuration-variables)*"
+            },
+            "humidity": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "humidity"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "%"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the humidity sensor\n\n*See also: [RuuviTag Open Source BLE Sensor](https://esphome.io/components/sensor/ruuvitag#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "ruuvitag::RuuviTag",
+                "parents": [
+                  "ble_device_base::ESPBTDeviceListener",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "mac_address": {
+              "key": "Required",
+              "docs": "**MAC Address**: The MAC address of the RuuviTag device.\n\n*See also: [RuuviTag Open Source BLE Sensor](https://esphome.io/components/sensor/ruuvitag#configuration-variables)*"
+            },
+            "measurement_sequence_number": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "icon": {
+                    "default": "mdi:gauge"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the measurement sequence number sensor\n\n*See also: [RuuviTag Open Source BLE Sensor](https://esphome.io/components/sensor/ruuvitag#configuration-variables)*"
+            },
+            "movement_counter": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "icon": {
+                    "default": "mdi:gauge"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the movement count sensor\n\n*See also: [RuuviTag Open Source BLE Sensor](https://esphome.io/components/sensor/ruuvitag#configuration-variables)*"
+            },
+            "pressure": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "pressure"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "hPa"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the pressure sensor.\n\n*See also: [RuuviTag Open Source BLE Sensor](https://esphome.io/components/sensor/ruuvitag#configuration-variables)*"
+            },
+            "temperature": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the temperature sensor.\n\n*See also: [RuuviTag Open Source BLE Sensor](https://esphome.io/components/sensor/ruuvitag#configuration-variables)*"
+            },
+            "tx_power": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "signal_strength"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "dBm"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the transmit power sensor\n\n*See also: [RuuviTag Open Source BLE Sensor](https://esphome.io/components/sensor/ruuvitag#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA",
+            "ble_device_base.BLE_DEVICE_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

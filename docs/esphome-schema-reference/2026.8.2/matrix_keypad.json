@@ -1,0 +1,133 @@
+{
+  "matrix_keypad": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "columns": {
+              "is_list": true,
+              "key": "Required",
+              "schema": {
+                "config_vars": {
+                  "pin": {
+                    "key": "Required",
+                    "modes": [
+                      "input"
+                    ],
+                    "schema": true,
+                    "type": "pin"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "**list**: A list of [pins](https://esphome.io/guides/configuration-types#pin-schema) where the vertical matrix lines are connected, in order from left to right. These pins need to be input capable with pullups enabled. If there is no internal pullup, then an external one is required.\n\n*See also: [Matrix keypad](https://esphome.io/components/matrix_keypad#configuration-variables)*"
+            },
+            "debounce_time": {
+              "default": "1",
+              "key": "Optional",
+              "type": "integer"
+            },
+            "has_diodes": {
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: For pads where row pins are outputs, and the keys are connected with diodes. Defaults to `false`.\n\n*See also: [Matrix keypad](https://esphome.io/components/matrix_keypad#configuration-variables)*"
+            },
+            "has_pulldowns": {
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: For pads where the column lines have external pulldowns. Defaults to `false`.\n\n*See also: [Matrix keypad](https://esphome.io/components/matrix_keypad#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "matrix_keypad::MatrixKeypad",
+                "parents": [
+                  "key_provider::KeyProvider",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Set the ID of this device for use in lambdas.\n\n*See also: [Matrix keypad](https://esphome.io/components/matrix_keypad#configuration-variables)*"
+            },
+            "keys": {
+              "key": "Optional",
+              "type": "string",
+              "docs": "**string**: The keys present on the matrix, from top left to bottom right, row by row. Required for `key_collector` and `binary_sensor` (if using key selection).\n\n*See also: [Matrix keypad](https://esphome.io/components/matrix_keypad#configuration-variables)*"
+            },
+            "on_key": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "rows": {
+              "is_list": true,
+              "key": "Required",
+              "schema": {
+                "config_vars": {
+                  "pin": {
+                    "key": "Required",
+                    "modes": [
+                      "output"
+                    ],
+                    "schema": true,
+                    "type": "pin"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "**list**: A list of [pins](https://esphome.io/guides/configuration-types#pin-schema) where the horrizontal matrix lines are connected, in order from top to bottom. These pins need to be output capable.\n\n*See also: [Matrix keypad](https://esphome.io/components/matrix_keypad#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "matrix_keypad.binary_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "col": {
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**integer**: The column of the key.\n\n*See also: [Matrix keypad](https://esphome.io/components/matrix_keypad#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "matrix_keypad::MatrixKeypadBinarySensor",
+                "parents": [
+                  "binary_sensor::BinarySensor",
+                  "EntityBase"
+                ]
+              },
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Set the ID of this key for use in lambdas.\n\n*See also: [Matrix keypad](https://esphome.io/components/matrix_keypad#configuration-variables)*"
+            },
+            "key": {
+              "key": "Optional",
+              "type": "string",
+              "docs": "**string**: The key from `keys` configuration entry above.\n\n*See also: [Matrix keypad](https://esphome.io/components/matrix_keypad#configuration-variables)*"
+            },
+            "keypad_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "matrix_keypad::MatrixKeypad",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the keypad to process keypresses from.\n\n*See also: [Matrix keypad](https://esphome.io/components/matrix_keypad#configuration-variables)*"
+            },
+            "row": {
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**integer**: The row of the key.\n\n*See also: [Matrix keypad](https://esphome.io/components/matrix_keypad#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "binary_sensor._BINARY_SENSOR_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

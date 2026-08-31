@@ -1,0 +1,388 @@
+{
+  "http_request": {
+    "action": {
+      "get": {
+        "maybe": "url",
+        "schema": {
+          "config_vars": {
+            "method": {
+              "default": "GET",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "GET": null
+              }
+            }
+          },
+          "extends": [
+            "http_request.HTTP_REQUEST_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) sends a GET request."
+      },
+      "post": {
+        "maybe": "url",
+        "schema": {
+          "config_vars": {
+            "body": {
+              "key": "Optional",
+              "templatable": true,
+              "type": "string",
+              "docs": "**string**: A HTTP body string to send with request.\n\n*See also: [HTTP Request](https://esphome.io/components/http_request#configuration-variables)*"
+            },
+            "json": {
+              "key": "Optional",
+              "key_type": "string",
+              "schema": {
+                "config_vars": {
+                  "string": {
+                    "templatable": true,
+                    "type": "string"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "**mapping**: A HTTP body in JSON format. Values are [templatable](https://esphome.io/automations/templates). See [Examples](https://esphome.io/components/http_request#examples).\n\n*See also: [HTTP Request](https://esphome.io/components/http_request#configuration-variables)*"
+            },
+            "method": {
+              "default": "POST",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "POST": null
+              }
+            }
+          },
+          "extends": [
+            "http_request.HTTP_REQUEST_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) sends a POST request."
+      },
+      "send": {
+        "schema": {
+          "config_vars": {
+            "body": {
+              "key": "Optional",
+              "templatable": true,
+              "type": "string"
+            },
+            "json": {
+              "key": "String",
+              "key_type": "string",
+              "schema": {
+                "config_vars": {
+                  "string": {
+                    "templatable": true,
+                    "type": "string"
+                  }
+                }
+              },
+              "type": "schema"
+            },
+            "method": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "GET": null,
+                "POST": null,
+                "PUT": null,
+                "DELETE": null,
+                "PATCH": null
+              },
+              "docs": "**string**: HTTP method to use (`GET`, `POST`, `PUT`, `DELETE`, `PATCH`  ).\n\n*See also: [HTTP Request](https://esphome.io/components/http_request#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "http_request.HTTP_REQUEST_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) sends a request."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "buffer_size_rx": {
+              "data_type": "uint16_t",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**integer**: Change HTTP receive buffer size. Defaults to `512`.\n\n*See also: [HTTP Request](https://esphome.io/components/http_request#configuration-variables)*"
+            },
+            "buffer_size_tx": {
+              "data_type": "uint16_t",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**integer**: Change HTTP transmit buffer size. Defaults to `512`.\n\n*See also: [HTTP Request](https://esphome.io/components/http_request#configuration-variables)*"
+            },
+            "ca_certificate_path": {
+              "key": "Optional",
+              "docs": "**file path**: Path to a CA certificate bundle. Not required on MacOS (the inbuilt CA bundle is used and SSL enabled by default).\n\n*See also: [HTTP Request](https://esphome.io/components/http_request#configuration-variables)*"
+            },
+            "esp8266_disable_ssl_support": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Determines whether to include HTTPS/SSL support in the firmware binary. Excluding the SSL libraries from your build will result in a smaller binary, which may be necessary for memory-constrained devices (512 kB or 1 MB). If you see `Error: ESP does not have enough space to store OTA file` in your device's logs, you may need to enable this option. Defaults to `false`. By setting this option to `true`  :\n\n*See also: [HTTP Request](https://esphome.io/components/http_request#configuration-variables)*"
+            },
+            "follow_redirects": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Enable following HTTP redirects. Defaults to `true`.\n\n*See also: [HTTP Request](https://esphome.io/components/http_request#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "http_request::HttpRequestComponent",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [HTTP Request](https://esphome.io/components/http_request#configuration-variables)*"
+            },
+            "redirect_limit": {
+              "default": "3",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**integer**: Maximum amount of redirects to follow when enabled. Defaults to `3`.\n\n*See also: [HTTP Request](https://esphome.io/components/http_request#configuration-variables)*"
+            },
+            "timeout": {
+              "default": "4.5s",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: Timeout for request. Defaults to `4.5s`. On ESP32 this applies to each network operation (DNS lookup, connect, TLS handshake, every read and write) rather than to the request as a whole.\n\n*See also: [HTTP Request](https://esphome.io/components/http_request#configuration-variables)*"
+            },
+            "tls_buffer_size_rx": {
+              "data_type": "uint16_t",
+              "default": "512",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**integer**: Change TLS receive buffer size. Should be set to `16384` to fit the TLS record size of modern HTTP servers. This will increase RAM usage significantly and may require removing other components to free up RAM. You can check the max free heap block using the [Debug Component](https://esphome.io/components/debug/). If the server is configured to support the MFL TLS extension then this can be reduced, but most popular servers (Traefik, Caddy, Cloudflare) don't support it and nginx has it disabled by default. Defaults to `512`.\n\n*See also: [HTTP Request](https://esphome.io/components/http_request#configuration-variables)*"
+            },
+            "tls_buffer_size_tx": {
+              "data_type": "uint16_t",
+              "default": "512",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**integer**: Change TLS transmit buffer size. Defaults to `512`.\n\n*See also: [HTTP Request](https://esphome.io/components/http_request#configuration-variables)*"
+            },
+            "useragent": {
+              "default": "ESPHome/2026.8.2 (https://esphome.io)",
+              "key": "Optional",
+              "type": "string",
+              "docs": "**string**: User-Agent header for requests. Defaults to `ESPHome/<version> (https://esphome.io)` where `<version>` is the version of ESPHome the device is running. For example: `ESPHome/2024.6.0 (https://esphome.io)`\n\n*See also: [HTTP Request](https://esphome.io/components/http_request#configuration-variables)*"
+            },
+            "verify_ssl": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: When set to `true` (default), SSL/TLS certificates will be validated upon connection; if invalid, the connection will be aborted. To accomplish this, ESP-IDF's default ESP x509 certificate bundle is included in the build. This certificate bundle includes the complete list of root certificates from Mozilla's NSS root certificate store. **Supported on ESP32 only; must be explicitly set to false on other platforms.**\n\n*See also: [HTTP Request](https://esphome.io/components/http_request#configuration-variables)*"
+            },
+            "watchdog_timeout": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_not_null_time_period",
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: Change the watchdog timeout during connection/data transfer. May be useful on slow connections or connections with high latency. On ESP32 this defaults to three times `timeout` plus one second, and never less than the `watchdog_timeout` set in the [ESP32 platform](https://esphome.io/components/esp32) configuration; requests run on the main loop, so without this the task watchdog could reboot the device while a request waits on a slow server. On RP2040 there is no default. **Do not raise this value unless you are experiencing device reboots due to watchdog timeouts;** doing so may prevent the device from rebooting due to a legitimate problem. **Only available on ESP32 and RP2040**.\n\n*See also: [HTTP Request](https://esphome.io/components/http_request#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "HTTP_REQUEST_ACTION_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "capture_response": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: when set to `true`, the response data will be captured and placed into the `body` variable as a `std::string` for use in [lambdas](https://esphome.io/automations/templates#config-lambda). Defaults to `false`.\n\n*See also: [HTTP Request](https://esphome.io/components/http_request#configuration-variables)*"
+            },
+            "collect_headers": {
+              "is_list": true,
+              "key": "Optional",
+              "type": "string",
+              "docs": "**list of strings**: List of the names of HTTP headers to collect from the response.\n\n*See also: [HTTP Request](https://esphome.io/components/http_request#configuration-variables)*"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "http_request::HttpRequestComponent"
+            },
+            "max_response_buffer_size": {
+              "default": "1kB",
+              "key": "Optional",
+              "docs": "**integer**: The maximum buffer size to be used to store the response. Defaults to `1 kB`.\n\n*See also: [HTTP Request](https://esphome.io/components/http_request#configuration-variables)*"
+            },
+            "on_error": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform if the request cannot be completed.\n\n*See also: [HTTP Request](https://esphome.io/components/http_request#configuration-variables)*"
+            },
+            "on_response": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform after the request is received.\n\n*See also: [HTTP Request](https://esphome.io/components/http_request#configuration-variables)*"
+            },
+            "request_headers": {
+              "key": "Optional",
+              "key_type": "string",
+              "schema": {
+                "config_vars": {
+                  "string": {
+                    "templatable": true,
+                    "type": "string"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "**mapping**: Map of HTTP headers. Values are [templatable](https://esphome.io/automations/templates).\n\n*See also: [HTTP Request](https://esphome.io/components/http_request#configuration-variables)*"
+            },
+            "url": {
+              "key": "Required",
+              "templatable": true,
+              "docs": "**string**: URL to which to send the request.\n\n*See also: [HTTP Request](https://esphome.io/components/http_request#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "http_request.ota": {
+    "action": {
+      "flash": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "http_request::OtaHttpRequestComponent"
+            },
+            "md5": {
+              "key": "Optional",
+              "templatable": true,
+              "type": "string",
+              "docs": "**string**: The [MD5sum](https://en.wikipedia.org/wiki/Md5sum) of the firmware file pointed to by `url` (below). May not be used with `md5_url` (below); must be specified if `md5_url` is not.\n\n*See also: [OTA Update via HTTP Request](https://esphome.io/components/ota/http_request#configuration-variables)*"
+            },
+            "md5_url": {
+              "key": "Optional",
+              "templatable": true,
+              "docs": "**string**: The URL of the file containing an [MD5sum](https://en.wikipedia.org/wiki/Md5sum) of the firmware file pointed to by `url` (below). May not be used with `md5` (above); must be specified if `md5` is not.\n\n*See also: [OTA Update via HTTP Request](https://esphome.io/components/ota/http_request#configuration-variables)*"
+            },
+            "password": {
+              "key": "Optional",
+              "sensitive": true,
+              "sensitive_source": "explicit",
+              "templatable": true,
+              "type": "string",
+              "docs": "**string**: The password to use for HTTP basic authentication.\n\n*See also: [OTA Update via HTTP Request](https://esphome.io/components/ota/http_request#configuration-variables)*"
+            },
+            "url": {
+              "key": "Required",
+              "templatable": true,
+              "docs": "**string**: The URL of the binary file containing the (new) firmware to be installed.\n\n*See also: [OTA Update via HTTP Request](https://esphome.io/components/ota/http_request#configuration-variables)*"
+            },
+            "username": {
+              "key": "Optional",
+              "templatable": true,
+              "type": "string",
+              "docs": "**string**: The username to use for HTTP basic authentication.\n\n*See also: [OTA Update via HTTP Request](https://esphome.io/components/ota/http_request#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This action triggers the download and installation of the updated firmware from the configured URL. As it's an ESPHome [action](https://esphome.io/automations/actions#all-actions), it may be used in any ESPHome [automation(s)](https://esphome.io/automations)."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "http_request_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "http_request::HttpRequestComponent"
+            },
+            "id": {
+              "id_type": {
+                "class": "http_request::OtaHttpRequestComponent",
+                "parents": [
+                  "ota::OTAComponent",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            }
+          },
+          "extends": [
+            "ota.BASE_OTA_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "http_request.update": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "http_request_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "http_request::HttpRequestComponent"
+            },
+            "id": {
+              "id_type": {
+                "class": "http_request::HttpRequestUpdate",
+                "parents": [
+                  "update::UpdateEntity",
+                  "EntityBase",
+                  "PollingComponent",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "ota_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "http_request::OtaHttpRequestComponent"
+            },
+            "source": {
+              "key": "Required"
+            },
+            "update_interval": {
+              "default": "6h",
+              "key": "Optional"
+            }
+          },
+          "extends": [
+            "update._UPDATE_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,331 @@
+{
+  "rd03d": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "rd03d::RD03DComponent",
+                "parents": [
+                  "Component",
+                  "uart::UARTDevice"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID for this component.\n\n*See also: [RD-03D mmWave Radar](https://esphome.io/components/sensor/rd03d#configuration-variables)*"
+            },
+            "throttle": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: Minimum time between sensor updates. The radar sends data very frequently; use this to reduce the update rate sent to Home Assistant. For example, ``500ms`` or ``1s``.\n\n*See also: [RD-03D mmWave Radar](https://esphome.io/components/sensor/rd03d#configuration-variables)*"
+            },
+            "tracking_mode": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "single": null,
+                "multi": null
+              },
+              "docs": "**string**: The tracking mode to configure. If not specified, no command is sent and the radar uses its default mode (typically multi-target). Requires a TX pin to be configured.\n\n*See also: [RD-03D mmWave Radar](https://esphome.io/components/sensor/rd03d#configuration-variables)*"
+            },
+            "uart_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "uart::UARTComponent",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the [UART Component](https://esphome.io/components/uart) to use. Required if you have multiple UARTs configured.\n\n*See also: [RD-03D mmWave Radar](https://esphome.io/components/sensor/rd03d#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "rd03d.binary_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "rd03d_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "rd03d::RD03DComponent",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the RD-03D component.\n\n*See also: [RD-03D mmWave Radar](https://esphome.io/components/sensor/rd03d#configuration-variables)*"
+            },
+            "target": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "occupancy"
+                  }
+                },
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "True if any target is detected. All options from [Binary Sensor](https://esphome.io/components/binary_sensor#config-binary_sensor).\n\n*See also: [RD-03D mmWave Radar](https://esphome.io/components/sensor/rd03d#configuration-variables)*"
+            },
+            "target_1": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "occupancy"
+                  }
+                },
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "target_2": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "occupancy"
+                  }
+                },
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "target_3": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "occupancy"
+                  }
+                },
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "rd03d.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "rd03d_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "rd03d::RD03DComponent",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the RD-03D component.\n\n*See also: [RD-03D mmWave Radar](https://esphome.io/components/sensor/rd03d#configuration-variables)*"
+            },
+            "target_1": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "rd03d.sensor.TARGET_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "target_2": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "rd03d.sensor.TARGET_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "target_3": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "rd03d.sensor.TARGET_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "target_count": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "**int**: Total number of targets currently detected (0 to 3). All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [RD-03D mmWave Radar](https://esphome.io/components/sensor/rd03d#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "TARGET_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "angle": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "distance": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "distance"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "mm"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "resolution": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "distance"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "mm"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "speed": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "speed"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "mm/s"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "x": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "distance"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "mm"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "y": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "distance"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "mm"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

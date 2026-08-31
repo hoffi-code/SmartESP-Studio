@@ -1,0 +1,75 @@
+{
+  "binary.fan": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "direction_output": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "output::BinaryOutput",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id of the [output](https://esphome.io/components/output/) to use for the direction state of the fan. Default is empty.\n\n*See also: [Binary Fan](https://esphome.io/components/fan/binary#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "binary::BinaryFan",
+                "parents": [
+                  "fan::Fan",
+                  "EntityBase",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "oscillation_output": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "output::BinaryOutput",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id of the [output](https://esphome.io/components/output/) to use for the oscillation state of this fan. Default is empty.\n\n*See also: [Binary Fan](https://esphome.io/components/fan/binary#configuration-variables)*"
+            },
+            "output": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "output::BinaryOutput",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id of the binary output component to use for this fan.\n\n*See also: [Binary Fan](https://esphome.io/components/fan/binary#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "fan._FAN_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "binary.light": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "output": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "output::BinaryOutput",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id of the binary [Output Component](https://esphome.io/components/output/) to use for this light.\n\n*See also: [Binary Light](https://esphome.io/components/light/binary#configuration-variables)*"
+            },
+            "output_id": {
+              "id_type": {
+                "class": "binary::BinaryLightOutput",
+                "parents": [
+                  "light::LightOutput"
+                ]
+              },
+              "key": "GeneratedID"
+            }
+          },
+          "extends": [
+            "light.BINARY_LIGHT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

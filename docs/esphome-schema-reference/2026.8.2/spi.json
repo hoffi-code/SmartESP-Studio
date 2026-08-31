@@ -1,0 +1,139 @@
+{
+  "spi": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "type": "typed",
+        "typed_key": "type",
+        "types": {
+          "octal": {
+            "config_vars": {
+              "clk_pin": {
+                "key": "Required",
+                "modes": [
+                  "output"
+                ],
+                "schema": true,
+                "type": "pin",
+                "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin used for the clock line of the SPI bus.\n\n*See also: [SPI Bus](https://esphome.io/components/spi#configuration-variables)*"
+              },
+              "data_pins": {
+                "internal": true,
+                "is_list": true,
+                "key": "Required",
+                "modes": [
+                  "output"
+                ],
+                "type": "pin",
+                "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: Must be a list of exactly 4 pins to be used for the quad SPI output data lines, or exactly 8 pins for octal mode. Not used for single mode.\n\n*See also: [SPI Bus](https://esphome.io/components/spi#configuration-variables)*"
+              },
+              "id": {
+                "id_type": {
+                  "class": "spi::OctalSPIComponent",
+                  "parents": [
+                    "Component"
+                  ]
+                },
+                "key": "GeneratedID",
+                "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID for this SPI hub if you need multiple SPI hubs.\n\n*See also: [SPI Bus](https://esphome.io/components/spi#configuration-variables)*"
+              },
+              "interface": {
+                "default": "hardware",
+                "key": "Optional",
+                "type": "string",
+                "docs": "Controls which hardware or software SPI implementation should be used.\n\n*See also: [SPI Bus](https://esphome.io/components/spi#configuration-variables)*"
+              }
+            }
+          },
+          "quad": {
+            "config_vars": {
+              "clk_pin": {
+                "key": "Required",
+                "modes": [
+                  "output"
+                ],
+                "schema": true,
+                "type": "pin",
+                "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin used for the clock line of the SPI bus.\n\n*See also: [SPI Bus](https://esphome.io/components/spi#configuration-variables)*"
+              },
+              "data_pins": {
+                "internal": true,
+                "is_list": true,
+                "key": "Required",
+                "modes": [
+                  "output"
+                ],
+                "type": "pin",
+                "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: Must be a list of exactly 4 pins to be used for the quad SPI output data lines, or exactly 8 pins for octal mode. Not used for single mode.\n\n*See also: [SPI Bus](https://esphome.io/components/spi#configuration-variables)*"
+              },
+              "id": {
+                "id_type": {
+                  "class": "spi::QuadSPIComponent",
+                  "parents": [
+                    "Component"
+                  ]
+                },
+                "key": "GeneratedID",
+                "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID for this SPI hub if you need multiple SPI hubs.\n\n*See also: [SPI Bus](https://esphome.io/components/spi#configuration-variables)*"
+              },
+              "interface": {
+                "default": "hardware",
+                "key": "Optional",
+                "type": "string",
+                "docs": "Controls which hardware or software SPI implementation should be used.\n\n*See also: [SPI Bus](https://esphome.io/components/spi#configuration-variables)*"
+              }
+            }
+          },
+          "single": {
+            "config_vars": {
+              "clk_pin": {
+                "key": "Required",
+                "modes": [
+                  "output"
+                ],
+                "schema": true,
+                "type": "pin",
+                "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin used for the clock line of the SPI bus.\n\n*See also: [SPI Bus](https://esphome.io/components/spi#configuration-variables)*"
+              },
+              "id": {
+                "id_type": {
+                  "class": "spi::SPIComponent",
+                  "parents": [
+                    "Component"
+                  ]
+                },
+                "key": "GeneratedID",
+                "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID for this SPI hub if you need multiple SPI hubs.\n\n*See also: [SPI Bus](https://esphome.io/components/spi#configuration-variables)*"
+              },
+              "interface": {
+                "default": "any",
+                "key": "Optional",
+                "type": "string",
+                "docs": "Controls which hardware or software SPI implementation should be used.\n\n*See also: [SPI Bus](https://esphome.io/components/spi#configuration-variables)*"
+              },
+              "miso_pin": {
+                "key": "Optional",
+                "modes": [
+                  "input"
+                ],
+                "schema": true,
+                "type": "pin",
+                "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin used for the MISO line of the SPI bus.\n\n*See also: [SPI Bus](https://esphome.io/components/spi#configuration-variables)*"
+              },
+              "mosi_pin": {
+                "key": "Optional",
+                "modes": [
+                  "output"
+                ],
+                "schema": true,
+                "type": "pin",
+                "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin used for the MOSI line of the SPI bus.\n\n*See also: [SPI Bus](https://esphome.io/components/spi#configuration-variables)*"
+              }
+            }
+          }
+        },
+        "docs": "Choose between `single` for standard 1 bit bus SPI (the default), `quad` and `octal`."
+      }
+    }
+  }
+}

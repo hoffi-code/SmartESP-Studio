@@ -1,0 +1,97 @@
+{
+  "bm8563": {
+    "action": {
+      "read_time": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "bm8563::BM8563"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [Action](https://esphome.io/automations/actions#config-action) triggers a synchronization of the current system time from the RTC hardware."
+      },
+      "start_timer": {
+        "schema": {
+          "config_vars": {
+            "duration": {
+              "key": "Required",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_seconds"
+                ]
+              },
+              "templatable": true,
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The time duration for the timer.\n\n*See also: [BM8563 Time Source](https://esphome.io/components/time/bm8563#bm8563start_timer-action)*"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "bm8563::BM8563",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the BM8563 component if you have multiple components.\n\n*See also: [BM8563 Time Source](https://esphome.io/components/time/bm8563#bm8563start_timer-action)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [Action](https://esphome.io/automations/actions#config-action) starts the RTC timer."
+      },
+      "write_time": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "bm8563::BM8563"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [Action](https://esphome.io/automations/actions#config-action) triggers a synchronization of the current system time to the RTC hardware."
+      }
+    }
+  },
+  "bm8563.time": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "81",
+              "key": "Optional",
+              "docs": "**int**: Manually specify the I\u00b2C address of the RTC. Defaults to `0x51`.\n\n*See also: [BM8563 Time Source](https://esphome.io/components/time/bm8563#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "bm8563::BM8563",
+                "parents": [
+                  "time::RealTimeClock",
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            }
+          },
+          "extends": [
+            "time.TIME_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

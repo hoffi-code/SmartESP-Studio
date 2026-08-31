@@ -1,0 +1,87 @@
+{
+  "partition.light": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "output_id": {
+              "id_type": {
+                "class": "partition::PartitionLightOutput",
+                "parents": [
+                  "light::AddressableLight",
+                  "light::LightOutput",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "segments": {
+              "is_list": true,
+              "key": "Required",
+              "schema": {
+                "config_vars": {
+                  "addressable_light_id": {
+                    "id_type": {
+                      "class": "light::AddressableLightWrapper",
+                      "parents": []
+                    },
+                    "key": "GeneratedID"
+                  },
+                  "from": {
+                    "data_type": "positive_int",
+                    "key": "Required",
+                    "type": "integer",
+                    "docs": "**int**: The index of the first LED to address in the segment. Counting starts with 0, so first LED is 0.\n\n*See also: [Light Partition](https://esphome.io/components/light/partition#configuration-variables)*"
+                  },
+                  "id": {
+                    "key": "Required",
+                    "type": "use_id",
+                    "use_id_type": "light::AddressableLightState",
+                    "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the addressable light to be controlled by this segment.\n\n*See also: [Light Partition](https://esphome.io/components/light/partition#configuration-variables)*"
+                  },
+                  "light_id": {
+                    "id_type": {
+                      "class": "light::LightState",
+                      "parents": [
+                        "EntityBase",
+                        "Component"
+                      ]
+                    },
+                    "key": "GeneratedID"
+                  },
+                  "reversed": {
+                    "default": "False",
+                    "key": "Optional",
+                    "type": "boolean",
+                    "docs": "**boolean**: Whether to reverse the order of LEDs in this segment. Defaults to `false`.\n\n*See also: [Light Partition](https://esphome.io/components/light/partition#configuration-variables)*"
+                  },
+                  "single_light_id": {
+                    "key": "Required",
+                    "type": "use_id",
+                    "use_id_type": "light::LightState",
+                    "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of a single addressable or non-addressable light. If an addressable light is specified, it will be treated as a single light in the partition.\n\n*See also: [Light Partition](https://esphome.io/components/light/partition#configuration-variables)*"
+                  },
+                  "to": {
+                    "data_type": "positive_int",
+                    "key": "Required",
+                    "type": "integer",
+                    "docs": "**int**: The index of the last LED to address in this segment.\n\n*See also: [Light Partition](https://esphome.io/components/light/partition#configuration-variables)*"
+                  }
+                },
+                "extends": [
+                  "core.COMPONENT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "**list**: A list of segments included in this partition. *For addressable segments:*\n\n*See also: [Light Partition](https://esphome.io/components/light/partition#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "light.ADDRESSABLE_LIGHT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

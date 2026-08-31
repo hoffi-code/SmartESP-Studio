@@ -1,0 +1,130 @@
+{
+  "hmc5883l.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "30",
+              "key": "Optional",
+              "docs": "**int**: Manually specify the I\u00b2C address of the sensor. Defaults to `0x1E`.\n\n*See also: [HMC5883L Magnetometer](https://esphome.io/components/sensor/hmc5883l#configuration-variables)*"
+            },
+            "field_strength_x": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "hmc5883l.sensor.field_strength_schema"
+                ]
+              },
+              "type": "schema",
+              "docs": "The field strength in microtesla along the X-Axis. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [HMC5883L Magnetometer](https://esphome.io/components/sensor/hmc5883l#configuration-variables)*"
+            },
+            "field_strength_y": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "hmc5883l.sensor.field_strength_schema"
+                ]
+              },
+              "type": "schema",
+              "docs": "The field strength in microtesla along the Y-Axis. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [HMC5883L Magnetometer](https://esphome.io/components/sensor/hmc5883l#configuration-variables)*"
+            },
+            "field_strength_z": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "hmc5883l.sensor.field_strength_schema"
+                ]
+              },
+              "type": "schema",
+              "docs": "The field strength in microtesla along the Z-Axis. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [HMC5883L Magnetometer](https://esphome.io/components/sensor/hmc5883l#configuration-variables)*"
+            },
+            "heading": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "icon": {
+                    "default": "mdi:screen-rotation"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The heading of the sensor in degrees. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [HMC5883L Magnetometer](https://esphome.io/components/sensor/hmc5883l#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "hmc5883l::HMC5883LComponent",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [HMC5883L Magnetometer](https://esphome.io/components/sensor/hmc5883l#configuration-variables)*"
+            },
+            "oversampling": {
+              "default": "1x",
+              "key": "Optional",
+              "docs": "Number of readings to average over for each sample. One of `1x`, `2x`, `4x`, `8x`. Defaults to `1x`.\n\n*See also: [HMC5883L Magnetometer](https://esphome.io/components/sensor/hmc5883l#configuration-variables)*"
+            },
+            "range": {
+              "default": "130\u00b5T",
+              "key": "Optional",
+              "docs": "Select a range / gain preset. This does not affect the scale of the values published but allows one to avoid overflows at the cost of reading resolution. Supported values are 88\u00b5T, 130\u00b5T, 190\u00b5T, 250\u00b5T, 400\u00b5T, 470\u00b5T, 560\u00b5T, 810\u00b5T. Default range is \u00b1130\u00b5T.\n\n*See also: [HMC5883L Magnetometer](https://esphome.io/components/sensor/hmc5883l#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`.\n\n*See also: [HMC5883L Magnetometer](https://esphome.io/components/sensor/hmc5883l#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "field_strength_schema": {
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "1"
+            },
+            "icon": {
+              "default": "mdi:magnet"
+            },
+            "state_class": {
+              "default": "measurement"
+            },
+            "unit_of_measurement": {
+              "default": "\u00b5T"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,160 @@
+{
+  "hlw8032.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "apparent_power": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "apparent_power"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "VA"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the apparent power value of the sensor in volt amps. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [HLW8032 Power Sensor](https://esphome.io/components/sensor/hlw8032#configuration-variables)*"
+            },
+            "current": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "current"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "A"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the current value of the sensor in amperes. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [HLW8032 Power Sensor](https://esphome.io/components/sensor/hlw8032#configuration-variables)*"
+            },
+            "current_resistor": {
+              "default": "0.001",
+              "key": "Optional",
+              "docs": "**float**: The value of the shunt resistor for current measurement. Default value is `0.001 ohm`.\n\n*See also: [HLW8032 Power Sensor](https://esphome.io/components/sensor/hlw8032#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "hlw8032::HLW8032Component",
+                "parents": [
+                  "Component",
+                  "uart::UARTDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "power": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "power"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "W"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the (active) power value of the sensor in watts. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [HLW8032 Power Sensor](https://esphome.io/components/sensor/hlw8032#configuration-variables)*"
+            },
+            "power_factor": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "power_factor"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the power factor value of the sensor. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [HLW8032 Power Sensor](https://esphome.io/components/sensor/hlw8032#configuration-variables)*"
+            },
+            "uart_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "uart::UARTComponent",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the [UART Component](https://esphome.io/components/uart) if you want to use multiple UART buses.\n\n*See also: [HLW8032 Power Sensor](https://esphome.io/components/sensor/hlw8032#configuration-variables)*"
+            },
+            "voltage": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "voltage"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "V"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the voltage value of the sensor in V (RMS). All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [HLW8032 Power Sensor](https://esphome.io/components/sensor/hlw8032#configuration-variables)*"
+            },
+            "voltage_divider": {
+              "data_type": "positive_float",
+              "default": "1.72",
+              "key": "Optional",
+              "docs": "**float**: The value of the voltage divider on the board as `R_upstream / (R_downstream * 1000)`. Default value is `1.72`.\n\n*See also: [HLW8032 Power Sensor](https://esphome.io/components/sensor/hlw8032#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

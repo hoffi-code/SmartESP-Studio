@@ -1,0 +1,73 @@
+{
+  "ble_presence.binary_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "ibeacon_major": {
+              "data_type": "uint16_t",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: The iBeacon major identifier of the beacon that needs\n\n*See also: [Bluetooth Low Energy Device](https://esphome.io/components/binary_sensor/ble_presence#configuration-variables)*"
+            },
+            "ibeacon_minor": {
+              "data_type": "uint16_t",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: The iBeacon minor identifier of the beacon that needs\n\n*See also: [Bluetooth Low Energy Device](https://esphome.io/components/binary_sensor/ble_presence#configuration-variables)*"
+            },
+            "ibeacon_uuid": {
+              "key": "Optional",
+              "docs": "**string**: The [universally unique identifier](https://en.wikipedia.org/wiki/Universally_unique_identifier)\n\n*See also: [Bluetooth Low Energy Device](https://esphome.io/components/binary_sensor/ble_presence#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "ble_presence::BLEPresenceDevice",
+                "parents": [
+                  "binary_sensor::BinarySensor",
+                  "EntityBase",
+                  "Component",
+                  "ble_device_base::ESPBTDeviceListener"
+                ]
+              }
+            },
+            "irk": {
+              "key": "Optional",
+              "docs": "**16 byte hex string**: The Identity Resolving Key (IRK) to track for this\n\n*See also: [Bluetooth Low Energy Device](https://esphome.io/components/binary_sensor/ble_presence#configuration-variables)*"
+            },
+            "mac_address": {
+              "key": "Optional",
+              "docs": "**MAC Address**: The MAC address to track for this\n\n*See also: [Bluetooth Low Energy Device](https://esphome.io/components/binary_sensor/ble_presence#configuration-variables)*"
+            },
+            "min_rssi": {
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: at which minimum RSSI level would the component report the device be present.\n\n*See also: [Bluetooth Low Energy Device](https://esphome.io/components/binary_sensor/ble_presence#configuration-variables)*"
+            },
+            "service_uuid": {
+              "key": "Optional",
+              "docs": "**string**: 16 bit, 32 bit, or 128 bit BLE Service UUID\n\n*See also: [Bluetooth Low Energy Device](https://esphome.io/components/binary_sensor/ble_presence#configuration-variables)*"
+            },
+            "timeout": {
+              "default": "5min",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The delay after last detecting the device before publishing not present state.\n\n*See also: [Bluetooth Low Energy Device](https://esphome.io/components/binary_sensor/ble_presence#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "binary_sensor._BINARY_SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA",
+            "ble_device_base.BLE_DEVICE_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,185 @@
+{
+  "bk72xx_ble_tracker": {
+    "action": {
+      "start_scan": {
+        "schema": {
+          "config_vars": {
+            "continuous": {
+              "key": "Optional",
+              "templatable": true,
+              "type": "boolean"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "bk72xx_ble_tracker::BK72xxBLETracker"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Start a scan. The optional [templatable](https://esphome.io/automations/templates#config-templatable) `continuous` overrides the scan mode until the next `start_scan` or `stop_scan` (the YAML-configured value itself is untouched); without it the mode configured under `scan_parameters` is restored (a previous `stop_scan` does not stick as \"one-shot\"). This differs from `esp32_ble_tracker.start_scan`, where an omitted `continuous` always forces a one-shot scan. Invoked while a scan is already running, a mode switch re-anchors the running scan's `duration` window instead of restarting the radio (the `on_scan_end` period clock is unaffected); a same-mode call is a no-op \u2014 it does not extend the running scan."
+      },
+      "stop_scan": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "bk72xx_ble_tracker::BK72xxBLETracker"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Stop a running scan; also cancels a start that is still being retried, and switches the scanner to one-shot until a later `start_scan` restores the configured mode. Accepts the bare-id shorthand (`bk72xx_ble_tracker.stop_scan: my_tracker`) like `esp32_ble_tracker.stop_scan`."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "bk72xx_ble_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "bk72xx_ble::BK72xxBLE"
+            },
+            "id": {
+              "id_type": {
+                "class": "bk72xx_ble_tracker::BK72xxBLETracker",
+                "parents": [
+                  "ble_device_base::BLEHub",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used to reference this component in lambdas.\n\n*See also: [BK72xx Bluetooth Low Energy Tracker Hub](https://esphome.io/components/bk72xx_ble_tracker#configuration-variables)*"
+            },
+            "on_ble_advertise": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "mac_address": {
+                    "is_list": true,
+                    "key": "Optional",
+                    "docs": "**MAC Address or list of MAC Address**: Filter to specific devices.\n\n*See also: [BK72xx Bluetooth Low Energy Tracker Hub](https://esphome.io/components/bk72xx_ble_tracker#configuration-variables)*"
+                  },
+                  "then": {
+                    "type": "trigger"
+                  }
+                }
+              },
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform when a Bluetooth advertisement is received. A variable `x` of type `ble_device_base::ESPBTDevice` is passed to the automation.\n\n*See also: [BK72xx Bluetooth Low Energy Tracker Hub](https://esphome.io/components/bk72xx_ble_tracker#configuration-variables)*"
+            },
+            "on_ble_manufacturer_data_advertise": {
+              "has_required_var": true,
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "mac_address": {
+                    "key": "Optional",
+                    "docs": "**MAC Address**: Filter to a single device.\n\n*See also: [BK72xx Bluetooth Low Energy Tracker Hub](https://esphome.io/components/bk72xx_ble_tracker#configuration-variables)*"
+                  },
+                  "manufacturer_id": {
+                    "key": "Required",
+                    "docs": "**string**: 16-, 32- or 128-bit BLE manufacturer ID in hex.\n\n*See also: [BK72xx Bluetooth Low Energy Tracker Hub](https://esphome.io/components/bk72xx_ble_tracker#configuration-variables)*"
+                  },
+                  "then": {
+                    "type": "trigger"
+                  }
+                }
+              },
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: The same for manufacturer data. A variable `x` with the manufacturer data bytes (`std::vector<uint8_t>`) is passed.\n\n*See also: [BK72xx Bluetooth Low Energy Tracker Hub](https://esphome.io/components/bk72xx_ble_tracker#configuration-variables)*"
+            },
+            "on_ble_service_data_advertise": {
+              "has_required_var": true,
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "mac_address": {
+                    "key": "Optional",
+                    "docs": "**MAC Address**: Filter to a single device.\n\n*See also: [BK72xx Bluetooth Low Energy Tracker Hub](https://esphome.io/components/bk72xx_ble_tracker#configuration-variables)*"
+                  },
+                  "service_uuid": {
+                    "key": "Required",
+                    "docs": "**string**: 16-, 32- or 128-bit BLE service UUID in hex.\n\n*See also: [BK72xx Bluetooth Low Energy Tracker Hub](https://esphome.io/components/bk72xx_ble_tracker#configuration-variables)*"
+                  },
+                  "then": {
+                    "type": "trigger"
+                  }
+                }
+              },
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform when an advertisement carries matching service data. A variable `x` with the service data bytes (`std::vector<uint8_t>`) is passed to the automation.\n\n*See also: [BK72xx Bluetooth Low Energy Tracker Hub](https://esphome.io/components/bk72xx_ble_tracker#configuration-variables)*"
+            },
+            "on_scan_end": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform when a scan session ends (its `duration` elapsed, or `stop_scan` was called).\n\n*See also: [BK72xx Bluetooth Low Energy Tracker Hub](https://esphome.io/components/bk72xx_ble_tracker#configuration-variables)*"
+            },
+            "scan_parameters": {
+              "default": "{}",
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "active": {
+                    "default": "True",
+                    "key": "Optional",
+                    "type": "boolean",
+                    "docs": "**boolean**: Whether to send scan requests and receive scan responses (device names and other data some devices only put in the scan response). An advertisement and its scan response are merged and delivered as one frame, the same behavior as the ESP32 tracker. Active scanning transmits during each window, which adds radio cost on the single-core SoC \u2014 see [Use on a single-core chip](https://esphome.io/components/bk72xx_ble_tracker#use-on-a-single-core-chip). Defaults to `true`. A scanner-mode request from Home Assistant (for example through [`bluetooth_proxy`](https://esphome.io/components/bluetooth_proxy/)) switches the mode at runtime regardless of this setting.\n\n*See also: [BK72xx Bluetooth Low Energy Tracker Hub](https://esphome.io/components/bk72xx_ble_tracker#configuration-variables)*"
+                  },
+                  "continuous": {
+                    "default": "True",
+                    "key": "Optional",
+                    "type": "boolean",
+                    "docs": "**boolean**: When `true` the scanner runs permanently, with the `duration` period used only for per-session bookkeeping. When `false` a started scan runs for `duration` and then stops \u2014 note that nothing starts the first scan automatically, so pair it with the `bk72xx_ble_tracker.start_scan` action (for example from `api.on_client_connected`, so the single-core radio only scans while Home Assistant is connected). Defaults to `true`.\n\n*See also: [BK72xx Bluetooth Low Energy Tracker Hub](https://esphome.io/components/bk72xx_ble_tracker#configuration-variables)*"
+                  },
+                  "duration": {
+                    "default": "5min",
+                    "key": "Optional",
+                    "schema": {
+                      "extends": [
+                        "core.positive_time_period_seconds"
+                      ]
+                    },
+                    "type": "schema",
+                    "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The length of each complete scan session. When `continuous` is `true` the scanner restarts immediately after each session ends. Defaults to `5min`.\n\n*See also: [BK72xx Bluetooth Low Energy Tracker Hub](https://esphome.io/components/bk72xx_ble_tracker#configuration-variables)*"
+                  },
+                  "interval": {
+                    "default": "100ms",
+                    "key": "Optional",
+                    "schema": {
+                      "extends": [
+                        "core.positive_time_period"
+                      ]
+                    },
+                    "type": "schema",
+                    "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval between each consecutive scan window. The scanner cycles through the three BLE advertising channels at this rate. Defaults to `100ms` \u2014 the BK reference scan rate, which together with the default `window` gives a 30% duty cycle. A larger interval lowers the duty cycle and frees more CPU time for WiFi on the single-core SoC, at the cost of catching fewer advertisements.\n\n*See also: [BK72xx Bluetooth Low Energy Tracker Hub](https://esphome.io/components/bk72xx_ble_tracker#configuration-variables)*"
+                  },
+                  "window": {
+                    "default": "30ms",
+                    "key": "Optional",
+                    "schema": {
+                      "extends": [
+                        "core.positive_time_period"
+                      ]
+                    },
+                    "type": "schema",
+                    "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The time the receiver is actively listening for packets on a channel during each scan interval. Must be \u2264 `interval`. Defaults to `30ms` (a 30% duty cycle with the default `interval`).\n\n*See also: [BK72xx Bluetooth Low Energy Tracker Hub](https://esphome.io/components/bk72xx_ble_tracker#configuration-variables)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "Advanced parameters for configuring the scan behavior. See also [this guide by Texas Instruments](https://dev.ti.com/tirex/explore/content/simplelink_academy_cc2640r2sdk_5_10_02_00/modules/blestack/ble_scan_adv_basic/ble_scan_adv_basic.html#scanning-basics) for background reading. > [!NOTE] > Scanning defaults to **active**, like the other BLE trackers. Passive scanning > (`scan_parameters.active: false`) is sufficient for BTHome/ATC thermometers and most > beacons \u2014 they broadcast all their data in the advertisement (no scan response) \u2014 and > keeps the radio cost of each window minimal on the single-core SoC.\n\n*See also: [BK72xx Bluetooth Low Energy Tracker Hub](https://esphome.io/components/bk72xx_ble_tracker#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

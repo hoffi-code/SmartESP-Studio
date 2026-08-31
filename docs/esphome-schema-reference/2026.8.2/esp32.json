@@ -1,0 +1,1473 @@
+{
+  "esp32": {
+    "pin": {
+      "schema": {
+        "config_vars": {
+          "allow_other_uses": {
+            "key": "Optional",
+            "type": "boolean"
+          },
+          "drive_strength": {
+            "default": "20mA",
+            "key": "Optional",
+            "type": "enum",
+            "values": {
+              "5.0": null,
+              "10.0": null,
+              "20.0": null,
+              "40.0": null
+            }
+          },
+          "id": {
+            "id_type": {
+              "class": "esp32::ESP32InternalGPIOPin",
+              "parents": [
+                "InternalGPIOPin",
+                "GPIOPin"
+              ]
+            },
+            "key": "GeneratedID"
+          },
+          "ignore_pin_validation_error": {
+            "default": "False",
+            "key": "Optional",
+            "type": "boolean"
+          },
+          "ignore_strapping_warning": {
+            "default": "False",
+            "key": "Optional",
+            "type": "boolean"
+          },
+          "inverted": {
+            "default": "False",
+            "key": "Optional",
+            "type": "boolean"
+          },
+          "mode": {
+            "default": "{}",
+            "key": "Optional",
+            "modes": [],
+            "schema": {
+              "config_vars": {
+                "input": {
+                  "default": "False",
+                  "key": "Optional",
+                  "type": "boolean"
+                },
+                "open_drain": {
+                  "default": "False",
+                  "key": "Optional",
+                  "type": "boolean"
+                },
+                "output": {
+                  "default": "False",
+                  "key": "Optional",
+                  "type": "boolean"
+                },
+                "pulldown": {
+                  "default": "False",
+                  "key": "Optional",
+                  "type": "boolean"
+                },
+                "pullup": {
+                  "default": "False",
+                  "key": "Optional",
+                  "type": "boolean"
+                }
+              }
+            },
+            "type": "pin"
+          },
+          "number": {
+            "key": "Required"
+          }
+        }
+      },
+      "type": "schema"
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "board": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "4d_systems_esp32s3_gen4_r8n16": {
+                  "docs": "4D Systems GEN4-ESP32 16MB (ESP32S3-R8N16)"
+                },
+                "adafruit_camera_esp32s3": {
+                  "docs": "Adafruit pyCamera S3"
+                },
+                "adafruit_feather_esp32_v2": {
+                  "docs": "Adafruit Feather ESP32 V2"
+                },
+                "adafruit_feather_esp32c6": {
+                  "docs": "Adafruit Feather ESP32-C6"
+                },
+                "adafruit_feather_esp32s2": {
+                  "docs": "Adafruit Feather ESP32-S2"
+                },
+                "adafruit_feather_esp32s2_reversetft": {
+                  "docs": "Adafruit Feather ESP32-S2 Reverse TFT"
+                },
+                "adafruit_feather_esp32s2_tft": {
+                  "docs": "Adafruit Feather ESP32-S2 TFT"
+                },
+                "adafruit_feather_esp32s3": {
+                  "docs": "Adafruit Feather ESP32-S3 2MB PSRAM"
+                },
+                "adafruit_feather_esp32s3_nopsram": {
+                  "docs": "Adafruit Feather ESP32-S3 No PSRAM"
+                },
+                "adafruit_feather_esp32s3_reversetft": {
+                  "docs": "Adafruit Feather ESP32-S3 Reverse TFT"
+                },
+                "adafruit_feather_esp32s3_tft": {
+                  "docs": "Adafruit Feather ESP32-S3 TFT"
+                },
+                "adafruit_funhouse_esp32s2": {
+                  "docs": "Adafruit FunHouse"
+                },
+                "adafruit_itsybitsy_esp32": {
+                  "docs": "Adafruit ItsyBitsy ESP32"
+                },
+                "adafruit_magtag29_esp32s2": {
+                  "docs": "Adafruit MagTag 2.9"
+                },
+                "adafruit_matrixportal_esp32s3": {
+                  "docs": "Adafruit MatrixPortal ESP32-S3"
+                },
+                "adafruit_metro_esp32s2": {
+                  "docs": "Adafruit Metro ESP32-S2"
+                },
+                "adafruit_metro_esp32s3": {
+                  "docs": "Adafruit Metro ESP32-S3"
+                },
+                "adafruit_qtpy_esp32": {
+                  "docs": "Adafruit QT Py ESP32"
+                },
+                "adafruit_qtpy_esp32c3": {
+                  "docs": "Adafruit QT Py ESP32-C3"
+                },
+                "adafruit_qtpy_esp32s2": {
+                  "docs": "Adafruit QT Py ESP32-S2"
+                },
+                "adafruit_qtpy_esp32s3_n4r2": {
+                  "docs": "Adafruit QT Py ESP32-S3 (4M Flash 2M PSRAM)"
+                },
+                "adafruit_qtpy_esp32s3_nopsram": {
+                  "docs": "Adafruit QT Py ESP32-S3 No PSRAM"
+                },
+                "adafruit_qualia_s3_rgb666": {
+                  "docs": "Adafruit Qualia ESP32-S3 RGB666"
+                },
+                "airm2m_core_esp32c3": {
+                  "docs": "AirM2M CORE ESP32C3"
+                },
+                "alksesp32": {
+                  "docs": "ALKS ESP32"
+                },
+                "arduino_nano_esp32": {
+                  "docs": "Arduino Nano ESP32"
+                },
+                "arduino_nesso_n1": {
+                  "docs": "Arduino Nesso-N1"
+                },
+                "atd147_s3": {
+                  "docs": "ArtronShop ATD1.47-S3"
+                },
+                "atmegazero_esp32s2": {
+                  "docs": "EspinalLab ATMegaZero ESP32-S2"
+                },
+                "aventen_s3_sync": {
+                  "docs": "Aventen S3 Sync"
+                },
+                "az-delivery-devkit-v4": {
+                  "docs": "AZ-Delivery ESP-32 Dev Kit C V4"
+                },
+                "bee_data_logger": {
+                  "docs": "Smart Bee Data Logger"
+                },
+                "bee_motion": {
+                  "docs": "Smart Bee Motion"
+                },
+                "bee_motion_mini": {
+                  "docs": "Smart Bee Motion Mini"
+                },
+                "bee_motion_s3": {
+                  "docs": "Smart Bee Motion S3"
+                },
+                "bee_s3": {
+                  "docs": "Smart Bee S3"
+                },
+                "bpi-bit": {
+                  "docs": "BPI-Bit"
+                },
+                "bpi-centi-s3": {
+                  "docs": "BPI-Centi-S3"
+                },
+                "bpi_leaf_s3": {
+                  "docs": "BPI-Leaf-S3"
+                },
+                "cnrs_aw2eth": {
+                  "docs": "CNRS AW2ETH"
+                },
+                "connaxio_espoir": {
+                  "docs": "Connaxio's Espoir"
+                },
+                "cytron_maker_feather_aiot_s3": {
+                  "docs": "Cytron Maker Feather AIoT S3"
+                },
+                "d-duino-32": {
+                  "docs": "D-duino-32"
+                },
+                "deneyapkart": {
+                  "docs": "Deneyap Kart"
+                },
+                "deneyapkart1A": {
+                  "docs": "Deneyap Kart 1A"
+                },
+                "deneyapkart1Av2": {
+                  "docs": "Deneyap Kart 1A v2"
+                },
+                "deneyapkartg": {
+                  "docs": "Deneyap Kart G"
+                },
+                "deneyapmini": {
+                  "docs": "Deneyap Mini"
+                },
+                "deneyapminiv2": {
+                  "docs": "Deneyap Mini v2"
+                },
+                "denky32": {
+                  "docs": "Denky32 (WROOM32)"
+                },
+                "denky_d4": {
+                  "docs": "Denky D4 (PICO-V3-02)"
+                },
+                "dfrobot_beetle_esp32c3": {
+                  "docs": "DFRobot Beetle ESP32-C3"
+                },
+                "dfrobot_firebeetle2_esp32c6": {
+                  "docs": "DFRobot FireBeetle 2 ESP32-C6"
+                },
+                "dfrobot_firebeetle2_esp32e": {
+                  "docs": "DFRobot Firebeetle 2 ESP32-E"
+                },
+                "dfrobot_firebeetle2_esp32s3": {
+                  "docs": "DFRobot Firebeetle 2 ESP32-S3"
+                },
+                "dfrobot_romeo_esp32s3": {
+                  "docs": "DFRobot Romeo ESP32-S3"
+                },
+                "dpu_esp32": {
+                  "docs": "TAMC DPU ESP32"
+                },
+                "edgebox-esp-100": {
+                  "docs": "Seeed Studio Edgebox-ESP-100"
+                },
+                "esp-wrover-kit": {
+                  "docs": "Espressif ESP-WROVER-KIT"
+                },
+                "esp32-c2-devkitm-1": {
+                  "docs": "Espressif ESP32-C2-DevKitM-1"
+                },
+                "esp32-c3-devkitc-02": {
+                  "docs": "Espressif ESP32-C3-DevKitC-02"
+                },
+                "esp32-c3-devkitm-1": {
+                  "docs": "Espressif ESP32-C3-DevKitM-1"
+                },
+                "esp32-c3-m1i-kit": {
+                  "docs": "Ai-Thinker ESP-C3-M1-I-Kit"
+                },
+                "esp32-c5-devkitc-1": {
+                  "docs": "Espressif ESP32-C5-DevKitC-1 4MB no PSRAM"
+                },
+                "esp32-c5-devkitc1-n16r4": {
+                  "docs": "Espressif ESP32-C5-DevKitC-1 N16R4 (16 MB Flash Quad, 4 MB PSRAM Quad)"
+                },
+                "esp32-c5-devkitc1-n4": {
+                  "docs": "Espressif ESP32-C5-DevKitC-1 N4 (4MB no PSRAM)"
+                },
+                "esp32-c5-devkitc1-n8r4": {
+                  "docs": "Espressif ESP32-C5-DevKitC-1 N8R4 (8 MB Flash Quad, 4 MB PSRAM Quad)"
+                },
+                "esp32-c6-devkitc-1": {
+                  "docs": "Espressif ESP32-C6-DevKitC-1"
+                },
+                "esp32-c6-devkitm-1": {
+                  "docs": "Espressif ESP32-C6-DevKitM-1"
+                },
+                "esp32-c61-devkitc1": {
+                  "docs": "Espressif ESP32-C61-DevKitC-1 (4 MB Flash)"
+                },
+                "esp32-c61-devkitc1-n8r2": {
+                  "docs": "Espressif ESP32-C61-DevKitC-1 N8R2 (8 MB Flash Quad, 2 MB PSRAM Quad)"
+                },
+                "esp32-devkitlipo": {
+                  "docs": "OLIMEX ESP32-DevKit-LiPo"
+                },
+                "esp32-evb": {
+                  "docs": "OLIMEX ESP32-EVB"
+                },
+                "esp32-gateway": {
+                  "docs": "OLIMEX ESP32-GATEWAY"
+                },
+                "esp32-h2-devkitm-1": {
+                  "docs": "Espressif ESP32-H2-DevKit"
+                },
+                "esp32-p4": {
+                  "docs": "Espressif ESP32-P4 ES (pre rev.300) generic"
+                },
+                "esp32-p4-evboard": {
+                  "docs": "Espressif ESP32-P4 Function EV Board (ES pre rev.300)"
+                },
+                "esp32-p4_r3": {
+                  "docs": "Espressif ESP32-P4 rev.300 generic"
+                },
+                "esp32-p4_r3-evboard": {
+                  "docs": "Espressif ESP32-P4 Function EV Board v1.6 (rev.301)"
+                },
+                "esp32-pico-devkitm-2": {
+                  "docs": "Espressif ESP32-PICO-DevKitM-2"
+                },
+                "esp32-poe": {
+                  "docs": "OLIMEX ESP32-PoE"
+                },
+                "esp32-poe-iso": {
+                  "docs": "OLIMEX ESP32-PoE-ISO"
+                },
+                "esp32-pro": {
+                  "docs": "OLIMEX ESP32-PRO"
+                },
+                "esp32-s2-franzininho": {
+                  "docs": "Franzininho WiFi Board"
+                },
+                "esp32-s2-kaluga-1": {
+                  "docs": "Espressif ESP32-S2-Kaluga-1 Kit"
+                },
+                "esp32-s2-saola-1": {
+                  "docs": "Espressif ESP32-S2-Saola-1"
+                },
+                "esp32-s3-devkitc-1": {
+                  "docs": "Espressif ESP32-S3-DevKitC-1-N8 (8 MB QD, No PSRAM)"
+                },
+                "esp32-s3-devkitc-1-n32r8v": {
+                  "docs": "Espressif ESP32-S3-DevKitC-1-N32R8V (32 MB Flash Octal, 8 MB PSRAM Octal)"
+                },
+                "esp32-s3-devkitc1-n16r16": {
+                  "docs": "Espressif ESP32-S3-DevKitC-1-N16R16V (16 MB Flash Quad, 16 MB PSRAM Octal)"
+                },
+                "esp32-s3-devkitc1-n16r2": {
+                  "docs": "Espressif ESP32-S3-DevKitC-1-N16R2 (16 MB Flash Quad, 2 MB PSRAM Quad)"
+                },
+                "esp32-s3-devkitc1-n16r8": {
+                  "docs": "Espressif ESP32-S3-DevKitC-1-N16R8V (16 MB Flash Quad, 8 MB PSRAM Octal)"
+                },
+                "esp32-s3-devkitc1-n4r2": {
+                  "docs": "Espressif ESP32-S3-DevKitC-1-N4R2 (4 MB Flash Quad, 2 MB PSRAM Quad)"
+                },
+                "esp32-s3-devkitc1-n4r8": {
+                  "docs": "Espressif ESP32-S3-DevKitC-1-N4R8 (4 MB Flash Quad, 8 MB PSRAM Octal)"
+                },
+                "esp32-s3-devkitc1-n8r2": {
+                  "docs": "Espressif ESP32-S3-DevKitC-1-N8R2 (8 MB Flash Quad, 2 MB PSRAM quad)"
+                },
+                "esp32-s3-devkitc1-n8r8": {
+                  "docs": "Espressif ESP32-S3-DevKitC-1-N8R8 (8 MB Flash Quad, 8 MB PSRAM Octal)"
+                },
+                "esp32-s3-devkitm-1": {
+                  "docs": "Espressif ESP32-S3-DevKitM-1"
+                },
+                "esp32-s3-fh4r2": {
+                  "docs": "Espressif ESP32-S3-FH4R2 (4 MB QD, 2MB PSRAM)"
+                },
+                "esp32-solo1": {
+                  "docs": "Espressif Generic ESP32-solo1 4M Flash"
+                },
+                "esp320": {
+                  "docs": "Electronic SweetPeas ESP320"
+                },
+                "esp32cam": {
+                  "docs": "AI Thinker ESP32-CAM"
+                },
+                "esp32dev": {
+                  "docs": "Espressif ESP32 Dev Module"
+                },
+                "esp32doit-devkit-v1": {
+                  "docs": "DOIT ESP32 DEVKIT V1"
+                },
+                "esp32doit-espduino": {
+                  "docs": "DOIT ESPduino32"
+                },
+                "esp32s3_120_16_8-qio_opi": {
+                  "docs": "ESP32-S3 16MB QIO, 8MB OPI PSRAM"
+                },
+                "esp32s3_powerfeather": {
+                  "docs": "ESP32-S3 PowerFeather"
+                },
+                "esp32s3box": {
+                  "docs": "Espressif ESP32-S3-Box"
+                },
+                "esp32s3camlcd": {
+                  "docs": "ESP32S3 CAM LCD"
+                },
+                "esp32s3usbotg": {
+                  "docs": "Espressif ESP32-S3-USB-OTG"
+                },
+                "esp32thing": {
+                  "docs": "SparkFun ESP32 Thing"
+                },
+                "esp32thing_plus": {
+                  "docs": "SparkFun ESP32 Thing Plus"
+                },
+                "esp32vn-iot-uno": {
+                  "docs": "ESP32vn IoT Uno"
+                },
+                "espea32": {
+                  "docs": "April Brother ESPea32"
+                },
+                "espectro32": {
+                  "docs": "ESPectro32"
+                },
+                "espino32": {
+                  "docs": "ESPino32"
+                },
+                "etboard": {
+                  "docs": "ETBoard"
+                },
+                "featheresp32": {
+                  "docs": "Adafruit ESP32 Feather"
+                },
+                "featheresp32-s2": {
+                  "docs": "Adafruit ESP32-S2 Feather Development Board"
+                },
+                "firebeetle32": {
+                  "docs": "FireBeetle-ESP32"
+                },
+                "fm-devkit": {
+                  "docs": "ESP32 FM DevKit"
+                },
+                "franzininho_wifi_esp32s2": {
+                  "docs": "Franzininho WiFi"
+                },
+                "franzininho_wifi_msc_esp32s2": {
+                  "docs": "Franzininho WiFi MSC"
+                },
+                "freenove-esp32-s3-n8r8": {
+                  "docs": "Freenove ESP32-S3 WROOM N8R8 (8MB Flash / 8MB PSRAM)"
+                },
+                "freenove_esp32_s3_wroom": {
+                  "docs": "Freenove ESP32-S3 WROOM N8R8 (8MB Flash / 8MB PSRAM)"
+                },
+                "freenove_esp32_wrover": {
+                  "docs": "Freenove ESP32-Wrover"
+                },
+                "frogboard": {
+                  "docs": "Frog Board ESP32"
+                },
+                "healthypi4": {
+                  "docs": "ProtoCentral HealthyPi 4"
+                },
+                "heltec_wifi_kit_32": {
+                  "docs": "Heltec WiFi Kit 32"
+                },
+                "heltec_wifi_kit_32_V3": {
+                  "docs": "Heltec WiFi Kit 32 (V3)"
+                },
+                "heltec_wifi_kit_32_v2": {
+                  "docs": "Heltec WiFi Kit 32 (V2)"
+                },
+                "heltec_wifi_lora_32": {
+                  "docs": "Heltec WiFi LoRa 32"
+                },
+                "heltec_wifi_lora_32_V2": {
+                  "docs": "Heltec WiFi LoRa 32 (V2)"
+                },
+                "heltec_wifi_lora_32_V3": {
+                  "docs": "Heltec WiFi LoRa 32 (V3)"
+                },
+                "heltec_wireless_stick": {
+                  "docs": "Heltec Wireless Stick"
+                },
+                "heltec_wireless_stick_lite": {
+                  "docs": "Heltec Wireless Stick Lite"
+                },
+                "honeylemon": {
+                  "docs": "HONEYLemon"
+                },
+                "hornbill32dev": {
+                  "docs": "Hornbill ESP32 Dev"
+                },
+                "hornbill32minima": {
+                  "docs": "Hornbill ESP32 Minima"
+                },
+                "huidu_hd_wf1": {
+                  "docs": "Huidu HD-WF1"
+                },
+                "huidu_hd_wf2": {
+                  "docs": "Huidu HD-WF2"
+                },
+                "huidu_hd_wf4": {
+                  "docs": "Huidu HD-WF4"
+                },
+                "imbrios-logsens-v1p1": {
+                  "docs": "Imbrios LogSens V1P1"
+                },
+                "inex_openkb": {
+                  "docs": "INEX OpenKB"
+                },
+                "intorobot": {
+                  "docs": "IntoRobot Fig"
+                },
+                "iotaap_magnolia": {
+                  "docs": "IoTaaP Magnolia"
+                },
+                "iotbusio": {
+                  "docs": "oddWires IoT-Bus Io"
+                },
+                "iotbusproteus": {
+                  "docs": "oddWires IoT-Bus Proteus"
+                },
+                "ioxesp32": {
+                  "docs": "ArtronShop IOXESP32"
+                },
+                "ioxesp32ps": {
+                  "docs": "ArtronShop IOXESP32PS"
+                },
+                "jczn_2432s028r": {
+                  "docs": "ESP32-2432S028R CYD"
+                },
+                "kb32-ft": {
+                  "docs": "MakerAsia KB32-FT"
+                },
+                "kits-edu": {
+                  "docs": "KITS ESP32 EDU"
+                },
+                "labplus_mpython": {
+                  "docs": "Labplus mPython"
+                },
+                "lilka_v2": {
+                  "docs": "Lilka v2"
+                },
+                "lilygo-t-display": {
+                  "docs": "LilyGo T-Display"
+                },
+                "lilygo-t-display-s3": {
+                  "docs": "LilyGo T-Display-S3"
+                },
+                "lilygo-t-energy-s3": {
+                  "docs": "LilyGo T-Energy-S3"
+                },
+                "lilygo-t3-s3": {
+                  "docs": "LilyGo T3-S3"
+                },
+                "lionbit": {
+                  "docs": "Lion:Bit Dev Board"
+                },
+                "lionbits3": {
+                  "docs": "Lion:Bit S3 STEM Dev Board"
+                },
+                "lolin32": {
+                  "docs": "WEMOS LOLIN32"
+                },
+                "lolin32_lite": {
+                  "docs": "WEMOS LOLIN32 Lite"
+                },
+                "lolin_c3_mini": {
+                  "docs": "WEMOS LOLIN C3 Mini"
+                },
+                "lolin_d32": {
+                  "docs": "WEMOS LOLIN D32"
+                },
+                "lolin_d32_pro": {
+                  "docs": "WEMOS LOLIN D32 PRO"
+                },
+                "lolin_s2_mini": {
+                  "docs": "WEMOS LOLIN S2 Mini"
+                },
+                "lolin_s2_pico": {
+                  "docs": "WEMOS LOLIN S2 PICO"
+                },
+                "lolin_s3": {
+                  "docs": "WEMOS LOLIN S3"
+                },
+                "lolin_s3_mini": {
+                  "docs": "WEMOS LOLIN S3 Mini"
+                },
+                "lolin_s3_mini_pro": {
+                  "docs": "WEMOS LOLIN S3 Mini Pro"
+                },
+                "lolin_s3_pro": {
+                  "docs": "WEMOS LOLIN S3 PRO"
+                },
+                "lopy": {
+                  "docs": "Pycom LoPy"
+                },
+                "lopy4": {
+                  "docs": "Pycom LoPy4"
+                },
+                "m5stack-atom": {
+                  "docs": "M5Stack-ATOM"
+                },
+                "m5stack-atoms3": {
+                  "docs": "M5Stack AtomS3"
+                },
+                "m5stack-atoms3u": {
+                  "docs": "M5Stack AtomS3U"
+                },
+                "m5stack-core-esp32": {
+                  "docs": "M5Stack Core ESP32"
+                },
+                "m5stack-core-esp32-16M": {
+                  "docs": "M5Stack Core ESP32 16M"
+                },
+                "m5stack-core2": {
+                  "docs": "M5Stack Core2"
+                },
+                "m5stack-coreink": {
+                  "docs": "M5Stack-Core Ink"
+                },
+                "m5stack-cores3": {
+                  "docs": "M5Stack CoreS3"
+                },
+                "m5stack-fire": {
+                  "docs": "M5Stack FIRE"
+                },
+                "m5stack-grey": {
+                  "docs": "M5Stack GREY ESP32"
+                },
+                "m5stack-stamps3": {
+                  "docs": "M5Stack StampS3"
+                },
+                "m5stack-station": {
+                  "docs": "M5Stack Station"
+                },
+                "m5stack-tab5-p4": {
+                  "docs": "M5STACK Tab5 esp32-p4 Board (ES pre rev.300)"
+                },
+                "m5stack-timer-cam": {
+                  "docs": "M5Stack Timer CAM"
+                },
+                "m5stack_paper": {
+                  "docs": "M5Stack Paper"
+                },
+                "m5stamp-pico": {
+                  "docs": "M5Stamp-Pico"
+                },
+                "m5stick-c": {
+                  "docs": "M5Stick-C"
+                },
+                "magicbit": {
+                  "docs": "MagicBit"
+                },
+                "mgbot-iotik32a": {
+                  "docs": "MGBOT IOTIK 32A"
+                },
+                "mgbot-iotik32b": {
+                  "docs": "MGBOT IOTIK 32B"
+                },
+                "mhetesp32devkit": {
+                  "docs": "MH ET LIVE ESP32DevKIT"
+                },
+                "mhetesp32minikit": {
+                  "docs": "MH ET LIVE ESP32MiniKit"
+                },
+                "microduino-core-esp32": {
+                  "docs": "Microduino Core ESP32"
+                },
+                "micros2": {
+                  "docs": "microS2"
+                },
+                "minimain_esp32s2": {
+                  "docs": "Deparment of Alchemy MiniMain ESP32-S2"
+                },
+                "motorgo_mini_1": {
+                  "docs": "MotorGo Mini 1 (ESP32-S3)"
+                },
+                "namino_arancio": {
+                  "docs": "Namino Arancio"
+                },
+                "namino_rosso": {
+                  "docs": "Namino Rosso"
+                },
+                "nano32": {
+                  "docs": "MakerAsia Nano32"
+                },
+                "nebulas3": {
+                  "docs": "Kinetic Dynamics Nebula S3"
+                },
+                "nina_w10": {
+                  "docs": "u-blox NINA-W10 series"
+                },
+                "node32s": {
+                  "docs": "Node32s"
+                },
+                "nodemcu-32s": {
+                  "docs": "NodeMCU-32S"
+                },
+                "nodemcu-32s2": {
+                  "docs": "Ai-Thinker NodeMCU-32S2 (ESP-12K)"
+                },
+                "nologo_esp32c3_super_mini": {
+                  "docs": "Nologo ESP32C3 SuperMini"
+                },
+                "nscreen-32": {
+                  "docs": "YeaCreate NSCREEN-32"
+                },
+                "odroid_esp32": {
+                  "docs": "ODROID-GO"
+                },
+                "onehorse32dev": {
+                  "docs": "Onehorse ESP32 Dev Module"
+                },
+                "oroca_edubot": {
+                  "docs": "OROCA EduBot"
+                },
+                "pico32": {
+                  "docs": "ESP32 Pico Kit"
+                },
+                "piranha_esp32": {
+                  "docs": "Fishino Piranha ESP-32"
+                },
+                "pocket_32": {
+                  "docs": "Dongsen Tech Pocket 32"
+                },
+                "pycom_gpy": {
+                  "docs": "Pycom GPy"
+                },
+                "qchip": {
+                  "docs": "Qchip"
+                },
+                "quantum": {
+                  "docs": "Noduino Quantum"
+                },
+                "redpill_esp32s3": {
+                  "docs": "Munich Labs RedPill ESP32-S3"
+                },
+                "roboheart_hercules": {
+                  "docs": "RoboHeart Hercules"
+                },
+                "rymcu-esp32-s3-devkitc-1": {
+                  "docs": "RYMCU ESP32-S3-DevKitC-1-N8R2 (8 MB QD, 2 MB PSRAM)"
+                },
+                "s_odi_ultra": {
+                  "docs": "S.ODI Ultra v1"
+                },
+                "seeed_xiao_esp32_s3_plus": {
+                  "docs": "Seeed Studio XIAO ESP32S3 Plus"
+                },
+                "seeed_xiao_esp32c3": {
+                  "docs": "Seeed Studio XIAO ESP32C3"
+                },
+                "seeed_xiao_esp32c5": {
+                  "docs": "Seeed Studio XIAO ESP32C5"
+                },
+                "seeed_xiao_esp32c6": {
+                  "docs": "Seeed Studio XIAO ESP32C6"
+                },
+                "seeed_xiao_esp32s3": {
+                  "docs": "Seeed Studio XIAO ESP32S3"
+                },
+                "sensebox_mcu_esp32s2": {
+                  "docs": "senseBox MCU-S2 ESP32-S2"
+                },
+                "sensesiot_weizen": {
+                  "docs": "LOGISENSES Senses Weizen"
+                },
+                "sg-o_airMon": {
+                  "docs": "SG-O AirMon"
+                },
+                "sparkfun_esp32_iot_redboard": {
+                  "docs": "SparkFun ESP32 IoT RedBoard"
+                },
+                "sparkfun_esp32c6_thing_plus": {
+                  "docs": "Sparkfun ESP32-C6 Thing Plus"
+                },
+                "sparkfun_esp32micromod": {
+                  "docs": "SparkFun ESP32 MicroMod"
+                },
+                "sparkfun_esp32s2_thing_plus": {
+                  "docs": "SparkFun ESP32-S2 Thing Plus"
+                },
+                "sparkfun_esp32s2_thing_plus_c": {
+                  "docs": "SparkFun ESP32 Thing Plus C"
+                },
+                "sparkfun_esp32s3_thing_plus": {
+                  "docs": "SPARKFUN_ESP32S3_THING_PLUS"
+                },
+                "sparkfun_lora_gateway_1-channel": {
+                  "docs": "SparkFun LoRa Gateway 1-Channel"
+                },
+                "sparkfun_pro_micro_esp32c3": {
+                  "docs": "SparkFun Pro Micro ESP32-C3"
+                },
+                "sparkfun_qwiic_pocket_esp32c6": {
+                  "docs": "SparkFun ESP32-C6 Qwiic Pocket"
+                },
+                "tamc_termod_s3": {
+                  "docs": "TAMC Termod S3"
+                },
+                "tinypico": {
+                  "docs": "Unexpected Maker TinyPICO"
+                },
+                "trueverit-iot-driver": {
+                  "docs": "Trueverit ESP32 Universal IoT Driver"
+                },
+                "trueverit-iot-driver-mk2": {
+                  "docs": "Trueverit ESP32 Universal IoT Driver MK II"
+                },
+                "trueverit-iot-driver-mk3": {
+                  "docs": "Trueverit ESP32 Universal IoT Driver MK III"
+                },
+                "ttgo-lora32-v1": {
+                  "docs": "TTGO LoRa32-OLED V1"
+                },
+                "ttgo-lora32-v2": {
+                  "docs": "TTGO LoRa32-OLED V2"
+                },
+                "ttgo-lora32-v21": {
+                  "docs": "TTGO LoRa32-OLED v2.1.6"
+                },
+                "ttgo-t-beam": {
+                  "docs": "TTGO T-Beam"
+                },
+                "ttgo-t-oi-plus": {
+                  "docs": "TTGO T-OI PLUS RISC-V ESP32-C3"
+                },
+                "ttgo-t-watch": {
+                  "docs": "TTGO T-Watch"
+                },
+                "ttgo-t1": {
+                  "docs": "TTGO T1"
+                },
+                "ttgo-t7-v13-mini32": {
+                  "docs": "TTGO T7 V1.3 Mini32"
+                },
+                "ttgo-t7-v14-mini32": {
+                  "docs": "TTGO T7 V1.4 Mini32"
+                },
+                "turta_iot_node": {
+                  "docs": "Turta IoT Node"
+                },
+                "um_bling": {
+                  "docs": "Unexpected Maker BLING!"
+                },
+                "um_edges3_d": {
+                  "docs": "Unexpected Maker EDGES3[D]"
+                },
+                "um_feathers2": {
+                  "docs": "Unexpected Maker FeatherS2"
+                },
+                "um_feathers2_neo": {
+                  "docs": "Unexpected Maker FeatherS2 Neo"
+                },
+                "um_feathers3": {
+                  "docs": "Unexpected Maker FeatherS3"
+                },
+                "um_feathers3_neo": {
+                  "docs": "Unexpected Maker FeatherS3 Neo"
+                },
+                "um_nanos3": {
+                  "docs": "Unexpected Maker NanoS3"
+                },
+                "um_omgs3": {
+                  "docs": "Unexpected Maker OMGS3"
+                },
+                "um_pros3": {
+                  "docs": "Unexpected Maker PROS3"
+                },
+                "um_rmp": {
+                  "docs": "Unexpected Maker RMP"
+                },
+                "um_squixl": {
+                  "docs": "Unexpected Maker SQUiXL"
+                },
+                "um_tinyc6": {
+                  "docs": "Unexpected Maker TinyC6"
+                },
+                "um_tinys2": {
+                  "docs": "Unexpected Maker TinyS2"
+                },
+                "um_tinys3": {
+                  "docs": "Unexpected Maker TinyS3"
+                },
+                "unphone7": {
+                  "docs": "unPhone 7"
+                },
+                "unphone8": {
+                  "docs": "unPhone 8"
+                },
+                "unphone9": {
+                  "docs": "unPhone 9"
+                },
+                "upesy_wroom": {
+                  "docs": "uPesy ESP32 Wroom DevKit"
+                },
+                "upesy_wrover": {
+                  "docs": "uPesy ESP32 Wrover DevKit"
+                },
+                "valtrack_v4_mfw_esp32_c3": {
+                  "docs": "Valetron Systems VALTRACK-V4MVF"
+                },
+                "valtrack_v4_vts_esp32_c3": {
+                  "docs": "Valetron Systems VALTRACK-V4VTS"
+                },
+                "vintlabs-devkit-v1": {
+                  "docs": "VintLabs ESP32 Devkit"
+                },
+                "watchy": {
+                  "docs": "SQFMI Watchy v2.0"
+                },
+                "waveshare_esp32_s3_zero": {
+                  "docs": "Waveshare ESP32-S3-Zero"
+                },
+                "waveshare_esp32s3_touch_lcd_128": {
+                  "docs": "Waveshare ESP32-S3-Touch-LCD-1.28 (16 MB QD, 2MB PSRAM)"
+                },
+                "weactstudio_esp32c3coreboard": {
+                  "docs": "WeAct Studio ESP32C3CoreBoard"
+                },
+                "wemos_d1_mini32": {
+                  "docs": "WEMOS D1 MINI ESP32"
+                },
+                "wemos_d1_uno32": {
+                  "docs": "WEMOS D1 R32"
+                },
+                "wemosbat": {
+                  "docs": "WeMos WiFi and Bluetooth Battery"
+                },
+                "wesp32": {
+                  "docs": "Silicognition wESP32"
+                },
+                "widora-air": {
+                  "docs": "Widora AIR"
+                },
+                "wifiduino32": {
+                  "docs": "Blinker WiFiduino32"
+                },
+                "wifiduino32c3": {
+                  "docs": "Blinker WiFiduinoV2 (ESP32-C3)"
+                },
+                "wifiduino32s3": {
+                  "docs": "Blinker WiFiduino32S3"
+                },
+                "wipy3": {
+                  "docs": "Pycom WiPy3"
+                },
+                "ws_esp32_s3_matrix": {
+                  "docs": "Waveshare ESP32-S3-Matrix"
+                },
+                "wt32-eth01": {
+                  "docs": "Wireless-Tag WT32-ETH01 Ethernet Module"
+                },
+                "wt32-sc01-plus": {
+                  "docs": "wt32-sc01-plus"
+                },
+                "xinabox_cw02": {
+                  "docs": "XinaBox CW02"
+                },
+                "yb_esp32s3_amp": {
+                  "docs": "YelloByte YB-ESP32-S3-AMP"
+                },
+                "yb_esp32s3_amp_v2": {
+                  "docs": "YelloByte YB-ESP32-S3-AMP (Rev.2)"
+                },
+                "yb_esp32s3_amp_v3": {
+                  "docs": "YelloByte YB-ESP32-S3-AMP (Rev.3)"
+                },
+                "yb_esp32s3_dac": {
+                  "docs": "YelloByte YB-ESP32-S3-DAC"
+                },
+                "yb_esp32s3_drv": {
+                  "docs": "YelloByte YB-ESP32-S3-DRV"
+                },
+                "yb_esp32s3_eth": {
+                  "docs": "YelloByte YB-ESP32-S3-ETH"
+                }
+              },
+              "docs": "**string**: The PlatformIO board ID that should be used. Choose the appropriate board from [this list](https://registry.platformio.org/platforms/platformio/espressif32/boards) (the icon next to the name can be used to copy the board ID). *This only affects pin aliases and some internal settings*; This setting is no longer recommended, `variant` should be used instead.\n\n*See also: [ESP32 Platform](https://esphome.io/components/esp32#configuration-variables)*"
+            },
+            "cpu_frequency": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "400MHZ": null,
+                "64MHZ": null,
+                "40MHZ": null,
+                "160MHZ": null,
+                "48MHZ": null,
+                "120MHZ": null,
+                "360MHZ": null,
+                "16MHZ": null,
+                "80MHZ": null,
+                "32MHZ": null,
+                "96MHZ": null,
+                "320MHZ": null,
+                "240MHZ": null
+              },
+              "docs": "**string**: The CPU frequency to use. Defaults to the maximum supported frequency for the variant. The allowed values depend on the variant:\n\n*See also: [ESP32 Platform](https://esphome.io/components/esp32#configuration-variables)*"
+            },
+            "engineering_sample": {
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: **ESP32-P4 only.** Set to `true` if your board has engineering sample silicon (rev < 3.0). When using `variant: esp32p4` without specifying a `board`, a warning is logged if this option is not explicitly set. Defaults to `false`.\n\n*See also: [ESP32 Platform](https://esphome.io/components/esp32#configuration-variables)*"
+            },
+            "flash_frequency": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "120MHZ": null,
+                "80MHZ": null,
+                "64MHZ": null,
+                "60MHZ": null,
+                "48MHZ": null,
+                "40MHZ": null,
+                "32MHZ": null,
+                "30MHZ": null,
+                "26MHZ": null,
+                "24MHZ": null,
+                "20MHZ": null,
+                "16MHZ": null
+              },
+              "docs": "**string**: The SPI frequency used to access the flash chip, for example `80MHz` or `40MHz`. The supported values depend on the variant and are checked at build time. When not set, the board definition (PlatformIO) or the ESP-IDF default decides. **Warning: specifying a frequency your flash chip does not support will cause the ESP32 to fail to boot.**\n\n*See also: [ESP32 Platform](https://esphome.io/components/esp32#configuration-variables)*"
+            },
+            "flash_mode": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "qio": null,
+                "qout": null,
+                "dio": null,
+                "dout": null,
+                "opi": null
+              },
+              "docs": "**string**: The SPI mode used to access the flash chip. One of `qio`, `qout`, `dio`, `dout` or `opi` (octal flash chips only). When not set, the board definition (PlatformIO) or the ESP-IDF default decides. **Warning: specifying a mode your flash chip does not support will cause the ESP32 to fail to boot.**\n\n*See also: [ESP32 Platform](https://esphome.io/components/esp32#configuration-variables)*"
+            },
+            "flash_size": {
+              "default": "4MB",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "2MB": null,
+                "4MB": null,
+                "8MB": null,
+                "16MB": null,
+                "32MB": null
+              },
+              "docs": "**string**: The amount of flash memory available on the ESP32 board/module. One of `2MB`, `4MB`, `8MB`, `16MB` or `32MB`. Defaults to `4MB`. **Warning: specifying a size larger than that available on your board will cause the ESP32 to fail to boot.**\n\n*See also: [ESP32 Platform](https://esphome.io/components/esp32#configuration-variables)*"
+            },
+            "framework": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "advanced": {
+                    "default": "{}",
+                    "key": "Optional",
+                    "schema": {
+                      "config_vars": {
+                        "adc_oneshot_in_iram": {
+                          "default": "False",
+                          "key": "Optional",
+                          "type": "boolean"
+                        },
+                        "assertion_level": {
+                          "key": "Optional",
+                          "type": "enum",
+                          "values": {
+                            "DISABLE": null,
+                            "ENABLE": null,
+                            "SILENT": null
+                          }
+                        },
+                        "compiler_optimization": {
+                          "default": "SIZE",
+                          "key": "Optional",
+                          "type": "enum",
+                          "values": {
+                            "DEBUG": null,
+                            "NONE": null,
+                            "PERF": null,
+                            "SIZE": null
+                          }
+                        },
+                        "disable_debug_stubs": {
+                          "default": "True",
+                          "key": "Optional",
+                          "type": "boolean"
+                        },
+                        "disable_dev_null_vfs": {
+                          "default": "True",
+                          "key": "Optional",
+                          "type": "boolean"
+                        },
+                        "disable_fatfs": {
+                          "default": "True",
+                          "key": "Optional",
+                          "type": "boolean"
+                        },
+                        "disable_libc_locks_in_iram": {
+                          "default": "True",
+                          "key": "Optional",
+                          "type": "boolean"
+                        },
+                        "disable_mbedtls_peer_cert": {
+                          "default": "True",
+                          "key": "Optional",
+                          "type": "boolean"
+                        },
+                        "disable_mbedtls_pkcs7": {
+                          "default": "True",
+                          "key": "Optional",
+                          "type": "boolean"
+                        },
+                        "disable_ocd_aware": {
+                          "default": "True",
+                          "key": "Optional",
+                          "type": "boolean"
+                        },
+                        "disable_regi2c_in_iram": {
+                          "default": "True",
+                          "key": "Optional",
+                          "type": "boolean"
+                        },
+                        "disable_usb_serial_jtag_secondary": {
+                          "default": "True",
+                          "key": "Optional",
+                          "type": "boolean"
+                        },
+                        "disable_vfs_support_dir": {
+                          "default": "True",
+                          "key": "Optional",
+                          "type": "boolean"
+                        },
+                        "disable_vfs_support_select": {
+                          "default": "True",
+                          "key": "Optional",
+                          "type": "boolean"
+                        },
+                        "disable_vfs_support_termios": {
+                          "default": "True",
+                          "key": "Optional",
+                          "type": "boolean"
+                        },
+                        "enable_full_printf": {
+                          "default": "False",
+                          "key": "Optional",
+                          "type": "boolean"
+                        },
+                        "enable_idf_experimental_features": {
+                          "default": "False",
+                          "key": "Optional",
+                          "type": "boolean"
+                        },
+                        "enable_lwip_assert": {
+                          "default": "True",
+                          "key": "Optional",
+                          "type": "boolean"
+                        },
+                        "enable_lwip_bridge_interface": {
+                          "default": "False",
+                          "key": "Optional",
+                          "type": "boolean"
+                        },
+                        "enable_lwip_check_thread_safety": {
+                          "default": "True",
+                          "key": "Optional",
+                          "type": "boolean"
+                        },
+                        "enable_lwip_dhcp_server": {
+                          "default_without": {
+                            "components": [
+                              "wifi"
+                            ],
+                            "value": "False"
+                          },
+                          "key": "Optional",
+                          "type": "boolean"
+                        },
+                        "enable_lwip_mdns_queries": {
+                          "default": "True",
+                          "key": "Optional",
+                          "type": "boolean"
+                        },
+                        "enable_lwip_tcpip_core_locking": {
+                          "default": "True",
+                          "key": "Optional",
+                          "type": "boolean"
+                        },
+                        "enable_ota_downgrade_protection": {
+                          "default": "False",
+                          "key": "Optional",
+                          "type": "boolean"
+                        },
+                        "enable_ota_rollback": {
+                          "default": "True",
+                          "key": "Optional",
+                          "type": "boolean"
+                        },
+                        "execute_from_psram": {
+                          "default": "False",
+                          "key": "Optional",
+                          "type": "boolean"
+                        },
+                        "freertos_in_iram": {
+                          "default": "False",
+                          "key": "Optional",
+                          "type": "boolean"
+                        },
+                        "heap_in_iram": {
+                          "default": "False",
+                          "key": "Optional",
+                          "type": "boolean"
+                        },
+                        "ignore_efuse_custom_mac": {
+                          "default": "False",
+                          "key": "Optional",
+                          "type": "boolean"
+                        },
+                        "ignore_efuse_mac_crc": {
+                          "default": "False",
+                          "key": "Optional",
+                          "type": "boolean"
+                        },
+                        "include_builtin_idf_components": {
+                          "default": "[]",
+                          "is_list": true,
+                          "key": "Optional",
+                          "type": "string"
+                        },
+                        "loop_task_stack_size": {
+                          "default": "8192",
+                          "key": "Optional",
+                          "type": "integer"
+                        },
+                        "minimum_chip_revision": {
+                          "key": "Optional",
+                          "type": "enum",
+                          "values": {
+                            "0.0": null,
+                            "1.0": null,
+                            "1.1": null,
+                            "2.0": null,
+                            "3.0": null,
+                            "3.1": null
+                          }
+                        },
+                        "nvs_encryption": {
+                          "key": "Optional",
+                          "schema": {
+                            "config_vars": {
+                              "key_id": {
+                                "key": "Required",
+                                "type": "integer"
+                              }
+                            }
+                          },
+                          "type": "schema"
+                        },
+                        "ringbuf_in_iram": {
+                          "default": "False",
+                          "key": "Optional",
+                          "type": "boolean"
+                        },
+                        "signed_ota_verification": {
+                          "key": "Optional",
+                          "schema": {
+                            "config_vars": {
+                              "signing_key": {
+                                "key": "Optional"
+                              },
+                              "signing_scheme": {
+                                "default": "rsa3072",
+                                "key": "Optional",
+                                "type": "enum",
+                                "values": {
+                                  "rsa3072": null,
+                                  "ecdsa256": null,
+                                  "ecdsa_v1": null
+                                }
+                              },
+                              "verification_key": {
+                                "key": "Optional"
+                              },
+                              "verification_keys": {
+                                "is_list": true,
+                                "key": "Optional"
+                              }
+                            }
+                          },
+                          "type": "schema"
+                        },
+                        "sram1_as_iram": {
+                          "default": "False",
+                          "key": "Optional",
+                          "type": "boolean"
+                        },
+                        "use_full_certificate_bundle": {
+                          "default": "False",
+                          "key": "Optional",
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "type": "schema",
+                    "visibility": "yaml_only"
+                  },
+                  "components": {
+                    "default": "[]",
+                    "is_list": true,
+                    "key": "Optional",
+                    "schema": {
+                      "config_vars": {
+                        "name": {
+                          "key": "Required",
+                          "type": "string"
+                        },
+                        "path": {
+                          "key": "Optional",
+                          "type": "string"
+                        },
+                        "ref": {
+                          "key": "Optional",
+                          "type": "string"
+                        },
+                        "source": {
+                          "key": "Optional"
+                        }
+                      }
+                    },
+                    "type": "schema",
+                    "visibility": "yaml_only"
+                  },
+                  "log_level": {
+                    "default": "ERROR",
+                    "key": "Optional",
+                    "type": "enum",
+                    "values": {
+                      "NONE": null,
+                      "ERROR": null,
+                      "WARN": null,
+                      "INFO": null,
+                      "DEBUG": null,
+                      "VERBOSE": null
+                    }
+                  },
+                  "platform_version": {
+                    "key": "Optional",
+                    "visibility": "yaml_only"
+                  },
+                  "release": {
+                    "key": "Optional",
+                    "type": "string",
+                    "visibility": "yaml_only"
+                  },
+                  "sdkconfig_options": {
+                    "default": "{}",
+                    "key": "String",
+                    "key_type": "string_strict",
+                    "schema": {
+                      "config_vars": {
+                        "string": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "type": "schema",
+                    "visibility": "yaml_only"
+                  },
+                  "source": {
+                    "key": "Optional",
+                    "type": "string",
+                    "visibility": "yaml_only"
+                  },
+                  "type": {
+                    "key": "Optional",
+                    "type": "enum",
+                    "values": {
+                      "esp-idf": null,
+                      "arduino": null
+                    }
+                  },
+                  "version": {
+                    "default": "recommended",
+                    "key": "Optional",
+                    "type": "string"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "Options for the underlying framework used by ESPHome. See [Framework](https://esphome.io/components/esp32#framework).\n\n*See also: [ESP32 Platform](https://esphome.io/components/esp32#configuration-variables)*"
+            },
+            "partitions": {
+              "is_list": true,
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "name": {
+                    "key": "Required",
+                    "type": "string"
+                  },
+                  "size": {
+                    "key": "Required",
+                    "type": "integer"
+                  },
+                  "subtype": {
+                    "key": "Required",
+                    "type": "integer"
+                  },
+                  "type": {
+                    "key": "Required",
+                    "type": "integer"
+                  }
+                }
+              },
+              "type": "schema",
+              "visibility": "yaml_only",
+              "docs": "**filename or list**: A partition table CSV file or a list of custom partitions to add. See [Partitions](https://esphome.io/components/esp32#partitions).\n\n*See also: [ESP32 Platform](https://esphome.io/components/esp32#configuration-variables)*"
+            },
+            "toolchain": {
+              "key": "Optional",
+              "visibility": "advanced",
+              "docs": "**[Toolchain](https://esphome.io/components/esp32#esp32-toolchain)**: Toolchain used to build the firmware. The `platformio` toolchain is deprecated and will be removed in 2027.2.0.\n\n*See also: [ESP32 Platform](https://esphome.io/components/esp32#configuration-variables)*"
+            },
+            "variant": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "ESP32": null,
+                "ESP32C2": null,
+                "ESP32C3": null,
+                "ESP32C5": null,
+                "ESP32C6": null,
+                "ESP32C61": null,
+                "ESP32H2": null,
+                "ESP32H4": null,
+                "ESP32H21": null,
+                "ESP32P4": null,
+                "ESP32S2": null,
+                "ESP32S3": null,
+                "ESP32S31": null
+              },
+              "docs": "**string**: The ESP32 mcu/chip to use for this device configuration. One of `esp32`, `esp32s2`, `esp32s3`, `esp32s31`, `esp32c2`, `esp32c3`, `esp32c5`, `esp32c6`, `esp32c61`, `esp32h2`, `esp32h4`, `esp32h21` or `esp32p4`. This must match the hardware in use, or it will fail to flash.\n\n*See also: [ESP32 Platform](https://esphome.io/components/esp32#configuration-variables)*"
+            },
+            "watchdog_timeout": {
+              "default": "5s",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_seconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The timeout applied to the ESP-IDF task watchdog. If a subscribed task fails to feed the watchdog within this period, the device will reboot. Useful for power-managed devices or long blocking operations that need extended watchdog windows. Defaults to `5s`, valid range is `5s` to `60s`. Note: OTA updates temporarily raise the watchdog to `15s` when the configured timeout is below that threshold.\n\n*See also: [ESP32 Platform](https://esphome.io/components/esp32#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

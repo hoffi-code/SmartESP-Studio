@@ -1,0 +1,198 @@
+{
+  "web_server": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "allowed_origins": {
+              "is_list": true,
+              "key": "Optional",
+              "docs": "**list of strings**: A list of origins that browsers are allowed to make cross-origin requests from. See [Cross-Origin Requests](https://esphome.io/components/web_server#cross-origin-requests) for details. Each entry must exactly match the requesting page's `Origin` header (e.g. `https://app.esphome.io`). A single `\"*\"` entry (quoted, since an unquoted `*` is invalid YAML) allows any origin, but this is not recommended.\n\n*See also: [Web Server Component](https://esphome.io/components/web_server#configuration-variables)*"
+            },
+            "auth": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "password": {
+                    "key": "Required",
+                    "sensitive": true,
+                    "sensitive_source": "explicit",
+                    "type": "string",
+                    "docs": "**string**: The password to check for authentication.\n\n*See also: [Web Server Component](https://esphome.io/components/web_server#configuration-variables)*"
+                  },
+                  "type": {
+                    "key": "Optional",
+                    "type": "enum",
+                    "values": {
+                      "basic": {
+                        "docs": "Sends the password in an easily reversible (Base64) form on every request.",
+                        "default": true
+                      },
+                      "digest": {
+                        "docs": "Sends only hashes, keeping the password off the network. Recommended."
+                      }
+                    },
+                    "docs": "**string**: The HTTP authentication scheme. Both show the same login prompt in the browser; the difference is on the network. One of:\n\n*See also: [Web Server Component](https://esphome.io/components/web_server#configuration-variables)*"
+                  },
+                  "username": {
+                    "key": "Required",
+                    "type": "string",
+                    "docs": "**string**: The username to use for authentication.\n\n*See also: [Web Server Component](https://esphome.io/components/web_server#configuration-variables)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "Enables HTTP authentication with a username and password.\n\n*See also: [Web Server Component](https://esphome.io/components/web_server#configuration-variables)*"
+            },
+            "compression": {
+              "default": "gzip",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "gzip": null,
+                "br": null
+              },
+              "docs": "**string**: The compression algorithm used for embedded web assets when `local` is enabled. Options are `gzip` or `br` (Brotli). Brotli provides smaller embedded web assets (~10% smaller than gzip), but some browsers only support Brotli over HTTPS connections. Since ESPHome devices typically serve over HTTP, gzip is recommended for maximum compatibility. Defaults to `gzip`.\n\n*See also: [Web Server Component](https://esphome.io/components/web_server#configuration-variables)*"
+            },
+            "css_include": {
+              "key": "Optional",
+              "docs": "**local file**: Path to local file to be included in web server index page. Contents of this file will be served as `/0.css` and used as CSS stylesheet by internal webserver. Useful when building device without internet access, where you want to use built-in AP and webserver.\n\n*See also: [Web Server Component](https://esphome.io/components/web_server#configuration-variables)*"
+            },
+            "css_url": {
+              "key": "Optional",
+              "type": "string",
+              "docs": "**url**: The URL that should be used for the CSS stylesheet. Defaults to [https://oi.esphome.io/v1/webserver-v1.min.css](https://oi.esphome.io/v1/webserver-v1.min.css) (updates will go to `v2`, `v3`, etc). Can be set to empty string.\n\n*See also: [Web Server Component](https://esphome.io/components/web_server#configuration-variables)*"
+            },
+            "enable_private_network_access": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Enables support for [Private Network Access](https://wicg.github.io/private-network-access) and the [Private Network Access Permission Prompt](https://wicg.github.io/private-network-access/#permission-prompt). When enabled, preflight requests are authorized against `allowed_origins`, so `allowed_origins` must also be set. Defaults to `false`.\n\n*See also: [Web Server Component](https://esphome.io/components/web_server#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "web_server::WebServer",
+                "parents": [
+                  "Component",
+                  "Controller"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [Web Server OTA Updates](https://esphome.io/components/ota/web_server#configuration-variables)*"
+            },
+            "include_internal": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Whether `internal` entities should be displayed on the web interface. Defaults to `false`.\n\n*See also: [Web Server Component](https://esphome.io/components/web_server#configuration-variables)*"
+            },
+            "js_include": {
+              "key": "Optional",
+              "docs": "**local file**: Path to local file to be included in web server index page. Contents of this file will be served as `/0.js` and used as JS script by internal webserver. Useful when building device without internet access, where you want to use built-in AP and webserver.\n\n*See also: [Web Server Component](https://esphome.io/components/web_server#configuration-variables)*"
+            },
+            "js_url": {
+              "key": "Optional",
+              "type": "string",
+              "docs": "**url**: The URL that should be used for the JS script. Defaults to [https://oi.esphome.io/v1/webserver-v1.min.js](https://oi.esphome.io/v1/webserver-v1.min.js). Can be set to empty string.\n\n*See also: [Web Server Component](https://esphome.io/components/web_server#configuration-variables)*"
+            },
+            "local": {
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Include supporting javascript locally allowing it to work without internet access. Defaults to `false`.\n\n*See also: [Web Server Component](https://esphome.io/components/web_server#configuration-variables)*"
+            },
+            "log": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Turn on or off the log feature inside the web server. When enabled, the device also streams logs over the `/events` endpoint, so [`esphome logs`](https://esphome.io/guides/cli/#logs-command) can view logs over the network on devices that have no [native API](https://esphome.io/components/api/) configured. Defaults to `true`.\n\n*See also: [Web Server Component](https://esphome.io/components/web_server#configuration-variables)*"
+            },
+            "ota": {
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Explicitly disable OTA updates through the web server interface. Only accepts `false`. This option is typically used when you have both `web_server` and `captive_portal` configured, and you want OTA updates to be available only through the captive portal. Since `captive_portal` automatically loads the web server OTA platform, setting this to `false` prevents OTA access through the regular web interface while maintaining it for captive portal access. To enable OTA for web server, use the `web_server` OTA platform instead.\n\n*See also: [Web Server Component](https://esphome.io/components/web_server#configuration-variables)*"
+            },
+            "port": {
+              "data_type": "port",
+              "default": "80",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: The port the web server should open its socket on.\n\n*See also: [Web Server Component](https://esphome.io/components/web_server#configuration-variables)*"
+            },
+            "sorting_groups": {
+              "is_list": true,
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "id": {
+                    "id_type": {
+                      "class": "int",
+                      "parents": null
+                    },
+                    "key": "Required",
+                    "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for the group.\n\n*See also: [Web Server Component](https://esphome.io/components/web_server#configuration-variables)*"
+                  },
+                  "name": {
+                    "key": "Required",
+                    "type": "string",
+                    "docs": "**string**: A string representing the group name which is displayed as the header of the group\n\n*See also: [Web Server Component](https://esphome.io/components/web_server#configuration-variables)*"
+                  },
+                  "sorting_weight": {
+                    "key": "Optional",
+                    "docs": "**float**: A float representing the weight of the group. A group with a smaller\n\n*See also: [Web Server Component](https://esphome.io/components/web_server#configuration-variables)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "**list**: Available only on `version: 3`. A list of group ID's and names to group the entities. See [Webserver Entity Grouping](https://esphome.io/components/web_server#config-webserver-grouping).\n\n*See also: [Web Server Component](https://esphome.io/components/web_server#configuration-variables)*"
+            },
+            "version": {
+              "default": "2",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "1": null,
+                "2": null,
+                "3": null
+              },
+              "docs": "**string**: `1`, `2` or `3`. Version 1 displays as a table. Version 2 uses web components and has more functionality. Version 3 uses HA-Styling. Defaults to `2`. Version 1 is deprecated and will be removed in 2027.1.0; please migrate to version 2 (the default) or version 3.\n\n*See also: [Web Server Component](https://esphome.io/components/web_server#configuration-variables)*"
+            },
+            "web_server_base_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "web_server_base::WebServerBase"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "web_server.ota": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "web_server::WebServerOTAComponent",
+                "parents": [
+                  "ota::OTAComponent",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            }
+          },
+          "extends": [
+            "ota.BASE_OTA_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

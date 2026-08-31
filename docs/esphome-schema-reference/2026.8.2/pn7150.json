@@ -1,0 +1,19 @@
+{
+  "pn7150": {
+    "condition": {
+      "is_writing": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "pn7150::PN7150"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    },
+    "schemas": {}
+  }
+}

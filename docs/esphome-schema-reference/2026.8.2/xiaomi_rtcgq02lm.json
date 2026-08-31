@@ -1,0 +1,153 @@
+{
+  "xiaomi_rtcgq02lm": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "bindkey": {
+              "key": "Required",
+              "sensitive": true,
+              "sensitive_source": "explicit"
+            },
+            "id": {
+              "id_type": {
+                "class": "xiaomi_rtcgq02lm::XiaomiRTCGQ02LM",
+                "parents": [
+                  "ble_device_base::ESPBTDeviceListener",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "mac_address": {
+              "key": "Required"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA",
+            "ble_device_base.BLE_DEVICE_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "xiaomi_rtcgq02lm.binary_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "button": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "timeout": {
+                    "default": "200ms",
+                    "key": "Optional",
+                    "schema": {
+                      "extends": [
+                        "core.positive_time_period_milliseconds"
+                      ]
+                    },
+                    "type": "schema"
+                  }
+                },
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "xiaomi_rtcgq02lm::XiaomiRTCGQ02LM"
+            },
+            "light": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "light"
+                  }
+                },
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "motion": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "motion"
+                  },
+                  "timeout": {
+                    "default": "5s",
+                    "key": "Optional",
+                    "schema": {
+                      "extends": [
+                        "core.positive_time_period_milliseconds"
+                      ]
+                    },
+                    "type": "schema"
+                  }
+                },
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "xiaomi_rtcgq02lm.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "battery_level": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "battery"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "%"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "xiaomi_rtcgq02lm::XiaomiRTCGQ02LM"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

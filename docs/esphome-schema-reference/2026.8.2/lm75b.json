@@ -1,0 +1,57 @@
+{
+  "lm75b.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "3"
+            },
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "72",
+              "key": "Optional",
+              "docs": "**int**: Manually specify the I\u00b2C address of the sensor. Defaults to `0x48`.\n\n*See also: [LM75B Temperature Sensor](https://esphome.io/components/sensor/lm75b#configuration-variables)*"
+            },
+            "device_class": {
+              "default": "temperature"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "lm75b::LM75BComponent",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice",
+                  "sensor::Sensor",
+                  "EntityBase"
+                ]
+              }
+            },
+            "state_class": {
+              "default": "measurement"
+            },
+            "unit_of_measurement": {
+              "default": "\u00b0C"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`.\n\n*See also: [LM75B Temperature Sensor](https://esphome.io/components/sensor/lm75b#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

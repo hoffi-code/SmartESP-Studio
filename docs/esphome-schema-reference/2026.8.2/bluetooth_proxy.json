@@ -1,0 +1,79 @@
+{
+  "bluetooth_proxy": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "active": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "cache_services": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "connection_slots": {
+              "data_type": "positive_int",
+              "default": "3",
+              "key": "Optional",
+              "type": "integer"
+            },
+            "connections": {
+              "is_list": true,
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "backend_id": {
+                    "id_type": {
+                      "class": "bluetooth_connection::BluedroidGattClient",
+                      "parents": [
+                        "Component"
+                      ]
+                    },
+                    "key": "GeneratedID"
+                  },
+                  "esp32_ble_id": {
+                    "key": "GeneratedID",
+                    "type": "use_id",
+                    "use_id_type": "esp32_ble_tracker::ESP32BLETracker"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "bluetooth_connection::BluetoothConnection",
+                      "parents": []
+                    },
+                    "key": "GeneratedID"
+                  }
+                },
+                "extends": [
+                  "core.COMPONENT_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "esp32_ble_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "esp32_ble_tracker::ESP32BLETracker"
+            },
+            "id": {
+              "id_type": {
+                "class": "bluetooth_proxy::BluetoothProxy",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

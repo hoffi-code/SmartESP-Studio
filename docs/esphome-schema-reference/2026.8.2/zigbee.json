@@ -1,0 +1,147 @@
+{
+  "zigbee": {
+    "action": {
+      "factory_reset": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "zigbee::ZigbeeComponent"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#config-action) triggers a factory reset of the Zigbee device. It handles leaving the Zigbee network."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "zigbee::ZigbeeComponent",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID to use for this `zigbee` component.\n\n*See also: [Zigbee Component](https://esphome.io/components/zigbee#configuration-variables)*"
+            },
+            "ieee802154_vendor_oui": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "random": null
+              },
+              "docs": "**int**: Sets the Vendor Organizationally Unique Identifier (OUI). This allows replacing Nordic Semiconductor's default company ID with your own. The value must be a 24-bit integer in the range `0x000000` to `0xFFFFFF`. Alternatively, set to `random` to generate a new random OUI on every firmware compilation. This is useful during development to force the coordinator (ZHA/Z2M) to recognize the device as new after firmware updates.\n\n*See also: [Zigbee Component](https://esphome.io/components/zigbee#configuration-variables)*"
+            },
+            "model": {
+              "key": "Optional",
+              "type": "string",
+              "docs": "**string**: Model Identifier of the Zigbee device. Defaults to the ESPHome node name.\n\n*See also: [Zigbee Component](https://esphome.io/components/zigbee#configuration-variables)*"
+            },
+            "on_join": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations#automation)**: Automation to run when the device joins the network. In [Lambdas](https://esphome.io/automations/templates#config-lambda) you can get the join type with `x`. It is `true` for join and `false` for rejoin.\n\n*See also: [Zigbee Component](https://esphome.io/components/zigbee#configuration-variables)*"
+            },
+            "on_start": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations#automation)**: Automation to run when the Zigbee stack is fully initialized and can be interacted with. It will then try to (re-)join a network.\n\n*See also: [Zigbee Component](https://esphome.io/components/zigbee#configuration-variables)*"
+            },
+            "power_source": {
+              "default": "DC_SOURCE",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "UNKNOWN": null,
+                "MAINS_SINGLE_PHASE": null,
+                "MAINS_THREE_PHASE": null,
+                "BATTERY": null,
+                "DC_SOURCE": null,
+                "EMERGENCY_MAINS_CONST": null,
+                "EMERGENCY_MAINS_TRANSF": null
+              },
+              "docs": "**enum**: Indicates what kind of power the device uses. Affects sleep behavior. One of `UNKNOWN`, `MAINS_SINGLE_PHASE`, `MAINS_THREE_PHASE`, `BATTERY`, `DC_SOURCE`, `EMERGENCY_MAINS_CONST`, or `EMERGENCY_MAINS_TRANSF`. Defaults to `DC_SOURCE`.\n\n*See also: [Zigbee Component](https://esphome.io/components/zigbee#configuration-variables)*"
+            },
+            "router": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: If true the Zigbee role will be `router` instead of `end device` and it will forward Zigbee packets from other devices. Routers drain more power than end devices and need to be always on for a stable Zigbee network. For this reasons battery-powered devices should not be used as routers. Defaults to `false`.\n\n*See also: [Zigbee Component](https://esphome.io/components/zigbee#configuration-variables)*"
+            },
+            "sleepy": {
+              "default_with": {
+                "components": [
+                  "nrf52"
+                ],
+                "value": "False"
+              },
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Disable RX during idle to reduce power consumption for battery-powered devices. It may cause stability problems with the Zigbee connection. Defaults to `false`.\n\n*See also: [Zigbee Component](https://esphome.io/components/zigbee#configuration-variables)*"
+            },
+            "wipe_on_boot": {
+              "default_with": {
+                "components": [
+                  "nrf52"
+                ],
+                "value": "False"
+              },
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "once": {
+                  "docs": "Erase data only on first boot after flashing new firmware, then preserve."
+                }
+              },
+              "docs": "Erases all non-volatile memory data on boot, including Zigbee network pairing and preferences (e.g., last switch state). One of:\n\n*See also: [Zigbee Component](https://esphome.io/components/zigbee#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "zigbee.time": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "zigbee::ZigbeeTime",
+                "parents": [
+                  "time::RealTimeClock",
+                  "PollingComponent",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "update_interval": {
+              "default": "1s"
+            },
+            "zigbee_id": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "zigbee::ZigbeeComponent"
+            }
+          },
+          "extends": [
+            "time.TIME_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "apds9306.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "1"
+            },
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "82",
+              "key": "Optional",
+              "docs": "**int**: The I\u00b2C address of the sensor. Should be `0x52` according to datasheet (\"Contact factory for other addressing options\").\n\n*See also: [APDS9306 Sensor](https://esphome.io/components/sensor/apds9306#configuration-variables)*"
+            },
+            "bit_width": {
+              "default": "18",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "20": {
+                  "docs": null
+                },
+                "19": {
+                  "docs": null
+                },
+                "18": {
+                  "docs": null
+                },
+                "17": {
+                  "docs": null
+                },
+                "16": {
+                  "docs": null
+                },
+                "13": {
+                  "docs": null
+                }
+              },
+              "docs": "**int**: The bit width/resolution of the ambient light sensor. One of:\n\n*See also: [APDS9306 Sensor](https://esphome.io/components/sensor/apds9306#configuration-variables)*"
+            },
+            "device_class": {
+              "default": "illuminance"
+            },
+            "gain": {
+              "default": "1",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "1": null,
+                "3": null,
+                "6": null,
+                "9": null,
+                "18": null
+              },
+              "docs": "**int**: The gain of the ambient light sensor. One of 1, 3, 6, 9, 18. Defaults to `1`.\n\n*See also: [APDS9306 Sensor](https://esphome.io/components/sensor/apds9306#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "icon": {
+              "default": "mdi:lightbulb"
+            },
+            "id": {
+              "id_type": {
+                "class": "apds9306::APDS9306",
+                "parents": [
+                  "sensor::Sensor",
+                  "EntityBase",
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              }
+            },
+            "measurement_rate": {
+              "default": "100ms",
+              "key": "Optional",
+              "docs": "**int**: The measurement rate of the ambient light sensor in milliseconds. One of:\n\n*See also: [APDS9306 Sensor](https://esphome.io/components/sensor/apds9306#configuration-variables)*"
+            },
+            "state_class": {
+              "default": "measurement"
+            },
+            "unit_of_measurement": {
+              "default": "lx"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval at which the sensor reading will be updated. Defaults to `60s`.\n\n*See also: [APDS9306 Sensor](https://esphome.io/components/sensor/apds9306#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

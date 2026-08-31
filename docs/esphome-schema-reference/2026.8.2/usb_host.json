@@ -1,0 +1,81 @@
+{
+  "usb_host": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "devices": {
+              "is_list": true,
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "id": {
+                    "id_type": {
+                      "class": "usb_host::USBClient",
+                      "parents": [
+                        "Component"
+                      ]
+                    },
+                    "key": "GeneratedID"
+                  },
+                  "pid": {
+                    "data_type": "hex_uint16_t",
+                    "key": "Required"
+                  },
+                  "vid": {
+                    "data_type": "hex_uint16_t",
+                    "key": "Required"
+                  }
+                },
+                "extends": [
+                  "core.COMPONENT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "**list**: A list of devices to configure.\n\n*See also: [USB Host Interface](https://esphome.io/components/usb_host#configuration-variables)*"
+            },
+            "enable_hubs": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Whether to include support for hubs. Defaults to `false`.\n\n*See also: [USB Host Interface](https://esphome.io/components/usb_host#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "usb_host::USBHost",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: An id to assign to the device.\n\n*See also: [USB Host Interface](https://esphome.io/components/usb_host#configuration-variables)*"
+            },
+            "max_packet_size": {
+              "default": "64",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "64": null,
+                "128": null,
+                "256": null,
+                "512": null,
+                "1024": null
+              },
+              "docs": "**int**: Maximum USB packet size in bytes. Defaults to `64` (USB Full Speed). Valid option values are 64, 128, 256, 512 and 1024. Intended for use with USB-HS capable devices like the ESP32-P4.\n\n*See also: [USB Host Interface](https://esphome.io/components/usb_host#configuration-variables)*"
+            },
+            "max_transfer_requests": {
+              "default": "16",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Maximum number of concurrent USB transfer requests. Range: 1-32. Defaults to `16`. Increase this value for high-throughput devices (e.g., USB UART at 115200+ baud) if you see \"All X transfer slots in use\" errors.\n\n*See also: [USB Host Interface](https://esphome.io/components/usb_host#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,306 @@
+{
+  "mipi_spi.display": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "buffer_size": {
+              "key": "Optional",
+              "docs": "The percentage of screen size to allocate buffer memory. The default is `100%` when PSRAM is configured, and otherwise will be calculated to achieve a buffer size less than 20K bytes. See the discussion below about buffer sizes.\n\n*See also: [MIPI SPI Display Driver](https://esphome.io/components/display/mipi_spi#configuration-options)*"
+            },
+            "bus_mode": {
+              "default": "single",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "single": null
+              },
+              "docs": "Select the SPI bus mode for the display driver. Options are `single` (default), `quad` and `octal`.\n\n*See also: [MIPI SPI Display Driver](https://esphome.io/components/display/mipi_spi#configuration-options)*"
+            },
+            "byte_order": {
+              "default": "big_endian",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "big_endian": null,
+                "little_endian": null
+              },
+              "docs": "The byte order of the display buffer. Options are `big_endian` (default) and `little_endian`. This affects the byte order for the buffer when using 16 bit color depth. The default is appropriate for the majority of displays.\n\n*See also: [MIPI SPI Display Driver](https://esphome.io/components/display/mipi_spi#configuration-options)*"
+            },
+            "color_depth": {
+              "default": "16",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "16": null,
+                "8": null,
+                "16bit": null,
+                "8bit": null
+              },
+              "docs": "The color depth of the display buffer, expressed in bits. Options are `16` (default) and `8`. 8 bit depth will result in only 256 possible colors and should be used only if the microcontroller has limited memory. The driver will convert the 8 bit color to the display chip's required format.\n\n*See also: [MIPI SPI Display Driver](https://esphome.io/components/display/mipi_spi#configuration-options)*"
+            },
+            "color_order": {
+              "default": "BGR",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "RGB": null,
+                "BGR": null
+              },
+              "docs": "Should be one of `bgr` (default) or `rgb`. This specifies the order of the color channels in the display panel. The default is `bgr` for most displays, but some displays may require `rgb`. It does not affect the color order of the display buffer, which is always RGB.\n\n*See also: [MIPI SPI Display Driver](https://esphome.io/components/display/mipi_spi#configuration-options)*"
+            },
+            "cs_pin": {
+              "default": "40",
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The CS pin.\n\n*See also: [MIPI SPI Display Driver](https://esphome.io/components/display/mipi_spi#configuration-options)*"
+            },
+            "data_rate": {
+              "default": "80MHz",
+              "key": "Optional",
+              "docs": "The SPI data rate. Defaults to 10MHz but board presets may override this. The maximum achievable data rate will depend on the chip type (e.g. ESP32 vs ESP32-S3), the pins used (on ESP32 using the default SPI pins allows higher rates), and the connection type (on-board connections will support higher rates than long cables or DuPont wires.) If in doubt, start with a low speed and test higher rates to find what works.\n\n*See also: [MIPI SPI Display Driver](https://esphome.io/components/display/mipi_spi#configuration-options)*"
+            },
+            "dc_pin": {
+              "default": "39",
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The DC pin. Not required or permitted for quad SPI.\n\n*See also: [MIPI SPI Display Driver](https://esphome.io/components/display/mipi_spi#configuration-options)*"
+            },
+            "dimensions": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "height": {
+                    "key": "Required",
+                    "docs": "**int**: Specifies height of display in pixels.\n\n*See also: [MIPI SPI Display Driver](https://esphome.io/components/display/mipi_spi#configuration-options)*"
+                  },
+                  "offset_height": {
+                    "default": "0",
+                    "key": "Optional",
+                    "docs": "**int**: Specify an offset for the y-direction of the display. Default is 0.\n\n*See also: [MIPI SPI Display Driver](https://esphome.io/components/display/mipi_spi#configuration-options)*"
+                  },
+                  "offset_width": {
+                    "default": "0",
+                    "key": "Optional",
+                    "docs": "**int**: Specify an offset for the x-direction of the display, typically used when an LCD is smaller than the maximum supported by the driver chip. Default is 0\n\n*See also: [MIPI SPI Display Driver](https://esphome.io/components/display/mipi_spi#configuration-options)*"
+                  },
+                  "pad_height": {
+                    "key": "Optional",
+                    "docs": "**int**: Specify additional pixels recognized by the controller after the offset and height. This represents pixels on the bottom of the display that are addressable by the driver chip but not visible. Default is 0. Used to calculate native dimensions and support hardware rotation.\n\n*See also: [MIPI SPI Display Driver](https://esphome.io/components/display/mipi_spi#configuration-options)*"
+                  },
+                  "pad_width": {
+                    "key": "Optional",
+                    "docs": "**int**: Specify additional pixels recognized by the controller after the offset and width. This represents pixels on the right side of the display that are addressable by the driver chip but not visible. Default is 0. Used to calculate native dimensions and support hardware rotation.\n\n*See also: [MIPI SPI Display Driver](https://esphome.io/components/display/mipi_spi#configuration-options)*"
+                  },
+                  "width": {
+                    "key": "Required",
+                    "docs": "**int**: Specifies width of display.\n\n*See also: [MIPI SPI Display Driver](https://esphome.io/components/display/mipi_spi#configuration-options)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "Dimensions of the screen, specified either as *width* **x** *height* (e.g `320x240`  ) or with separate config keys. If not provided the dimensions will be determined by the model selected. This is required for the `CUSTOM` model, and is optional for other models. The dimensions are specified in pixels, and the width and height must be greater than 0. The following keys are available:\n\n*See also: [MIPI SPI Display Driver](https://esphome.io/components/display/mipi_spi#configuration-options)*"
+            },
+            "draw_rounding": {
+              "default": "1",
+              "key": "Optional",
+              "docs": "The rounding factor for drawing operations. Defaults to 2. Some chips require a higher value to avoid display artifacts. Must be a power of 2.\n\n*See also: [MIPI SPI Display Driver](https://esphome.io/components/display/mipi_spi#configuration-options)*"
+            },
+            "enable_pin": {
+              "is_list": true,
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: An optional pin to enable the display, if required. A list of pins can be provided for displays that require multiple enable pins. A full pin configuration may be provided to set the pin mode and inverted property. By default the pin will be driven high to enable the display.\n\n*See also: [MIPI SPI Display Driver](https://esphome.io/components/display/mipi_spi#configuration-options)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "mipi_spi::MipiSpi",
+                "parents": [
+                  "display::Display",
+                  "PollingComponent",
+                  "Component",
+                  "Component",
+                  "spi::SPIDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "init_sequence": {
+              "is_list": true,
+              "key": "Optional",
+              "docs": "Allows custom initialisation sequences to be added. See below for more information.\n\n*See also: [MIPI SPI Display Driver](https://esphome.io/components/display/mipi_spi#configuration-options)*"
+            },
+            "invert_colors": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Specifies whether the display colors should be inverted. Options are `true` or `false`. Defaults to `false`.\n\n*See also: [MIPI SPI Display Driver](https://esphome.io/components/display/mipi_spi#configuration-options)*"
+            },
+            "model": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "ADAFRUIT-FUNHOUSE": null,
+                "ADAFRUIT-S2-TFT-FEATHER": null,
+                "AXS15231": null,
+                "CO5300": null,
+                "CUSTOM": null,
+                "ESP-VOCAT": null,
+                "ESP32-2424S012": null,
+                "ESP32-2432S028": null,
+                "ESP32-2432S028-7789": null,
+                "ESP32-2432S028-9342": null,
+                "GC9107": null,
+                "GC9A01A": null,
+                "GC9D01N": null,
+                "GEEKMAGIC-SMALLTV": null,
+                "GEEKMAGIC-SMALLTV-PRO": null,
+                "ILI9341": null,
+                "ILI9342": null,
+                "ILI9481": null,
+                "ILI9486": null,
+                "ILI9488": null,
+                "ILI9488_A": null,
+                "JC3248W535": null,
+                "JC3636W518": null,
+                "JC3636W518V2": null,
+                "JC4827W543": null,
+                "LANBON-L8": null,
+                "M5CORE": null,
+                "M5CORE2": null,
+                "M5STACK-ATOMS3R-GC9107": null,
+                "PICO-RESTOUCH-LCD-3.5": null,
+                "RM690B0": null,
+                "S3BOX": null,
+                "S3BOXLITE": null,
+                "ST7735": null,
+                "ST7789P": null,
+                "ST7789V": null,
+                "ST7796": null,
+                "T-DISPLAY": null,
+                "T-DISPLAY-S3": null,
+                "T-DISPLAY-S3-AMOLED": null,
+                "T-DISPLAY-S3-AMOLED-PLUS": null,
+                "T-DISPLAY-S3-PRO": null,
+                "T-EMBED": null,
+                "T4-S3": null,
+                "WAVESHARE-1.83-V2": null,
+                "WAVESHARE-4-TFT": null,
+                "WAVESHARE-ESP32-C6-LCD-1.47": null,
+                "WAVESHARE-ESP32-S3-GEEK": null,
+                "WAVESHARE-ESP32-S3-TOUCH-AMOLED-1.64": null,
+                "WAVESHARE-ESP32-S3-TOUCH-AMOLED-1.75": null,
+                "WAVESHARE-ESP32-S3-TOUCH-AMOLED-2.16": null,
+                "WAVESHARE-ESP32-S3-TOUCH-LCD-3.49": null,
+                "WAVESHARE-ESP32-S3-TOUCH-LCD-3.5B": null,
+                "WT32-SC01-PLUS": null
+              },
+              "docs": "Chosen from the lists of supported chips and models above, or `CUSTOM` for custom displays.\n\n*See also: [MIPI SPI Display Driver](https://esphome.io/components/display/mipi_spi#configuration-options)*"
+            },
+            "pixel_mode": {
+              "default": "16bit",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "16bit": null,
+                "18bit": null
+              },
+              "docs": "Select the interface mode for the display driver. Options are `16bit` (default) and `18bit`. Most displays require 16 bit mode, and it is preferred unless the display requires 18 bit mode.\n\n*See also: [MIPI SPI Display Driver](https://esphome.io/components/display/mipi_spi#configuration-options)*"
+            },
+            "release_device": {
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "reset_pin": {
+              "default": "41",
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The RESET pin.\n\n*See also: [MIPI SPI Display Driver](https://esphome.io/components/display/mipi_spi#configuration-options)*"
+            },
+            "spi_16": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "Set to `true` on boards where single bit SPI is used but drives the display in parallel via a 16 bit shift register.\n\n*See also: [MIPI SPI Display Driver](https://esphome.io/components/display/mipi_spi#configuration-options)*"
+            },
+            "spi_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "spi::SPIComponent"
+            },
+            "spi_mode": {
+              "default": "MODE0",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "MODE0": null,
+                "MODE1": null,
+                "MODE2": null,
+                "MODE3": null,
+                "0": null,
+                "1": null,
+                "2": null,
+                "3": null
+              },
+              "docs": "The SPI mode. Options are `MODE0`, `MODE1`, `MODE2`, and `MODE3`. Defaults to `MODE3` for octal SPI and single bit SPI with no CS pin, or `MODE0` otherwise.\n\n*See also: [MIPI SPI Display Driver](https://esphome.io/components/display/mipi_spi#configuration-options)*"
+            },
+            "transform": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "mirror_x": {
+                    "key": "Required",
+                    "type": "boolean"
+                  },
+                  "mirror_y": {
+                    "key": "Required",
+                    "type": "boolean"
+                  },
+                  "swap_xy": {
+                    "key": "Required",
+                    "type": "boolean"
+                  }
+                }
+              },
+              "type": "enum",
+              "values": {
+                "disabled": null
+              },
+              "docs": "Can be used to mirror and/or swap the x and y axes. Should not be required unless using the `CUSTOM` model. When selecting a predefined model, simply use `rotation` instead to orient the display, for example to switch from portrait to landscape. If this option is specified, then the `dimensions` option must also be provided. The value can either be the string `disabled` to disable hardware transform, or a dictionary with the options listed below. For the `CUSTOM` model, use `transform: disabled` if the display does not support axis swapping, which will prevent a `rotation` being translated to a hardware transform.\n\n*See also: [MIPI SPI Display Driver](https://esphome.io/components/display/mipi_spi#configuration-options)*"
+            },
+            "use_axis_flips": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "If true, the driver will use alternate bits in the MADCTL register to implement x and y mirroring. Defaults to false.\n\n*See also: [MIPI SPI Display Driver](https://esphome.io/components/display/mipi_spi#configuration-options)*"
+            },
+            "rotation": {
+              "key": "Optional",
+              "docs": "Rotate the display presentation. Choose one of `0\u00b0`, `90\u00b0`, `180\u00b0`, or `270\u00b0`. If the driver chip supports hardware rotation for the given orientation this will be translated to the appropriate hardware command. If hardware rotation is not supported, the display will be rotated in software.\n\n*See also: [MIPI SPI Display Driver](https://esphome.io/components/display/mipi_spi#configuration-options)*"
+            }
+          },
+          "extends": [
+            "display.FULL_DISPLAY_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

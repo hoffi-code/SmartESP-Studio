@@ -1,0 +1,16 @@
+{
+  "substitutions": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "key": "String",
+        "key_type": "validate_substitution_key",
+        "schema": {
+          "config_vars": {
+            "string": {}
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,226 @@
+{
+  "gree.climate": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "humidity_sensor": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "sensor::Sensor"
+            },
+            "id": {
+              "id_type": {
+                "class": "gree::GreeClimate",
+                "parents": [
+                  "climate_ir::ClimateIR",
+                  "climate::Climate",
+                  "EntityBase",
+                  "Component",
+                  "remote_base::RemoteReceiverListener",
+                  "remote_base::RemoteTransmittable"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "model": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "generic": null,
+                "yan": null,
+                "yaa": null,
+                "yac": null,
+                "yac1fb9": null,
+                "yx1ff": null,
+                "yag": null
+              }
+            },
+            "receiver_id": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "remote_base::RemoteReceiverBase"
+            },
+            "sensor": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "sensor::Sensor"
+            },
+            "supports_cool": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "supports_heat": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "transmitter_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "remote_base::RemoteTransmitterBase"
+            }
+          },
+          "extends": [
+            "climate._CLIMATE_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "gree.switch": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "gree_id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "gree::GreeClimate"
+            },
+            "health": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "switch"
+                  },
+                  "entity_category": {
+                    "default": "config"
+                  },
+                  "icon": {
+                    "default": "mdi:pine-tree"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "gree::GreeModeBitSwitch",
+                      "parents": [
+                        "switch_::Switch",
+                        "EntityBase",
+                        "Component"
+                      ]
+                    },
+                    "key": "GeneratedID"
+                  },
+                  "restore_mode": {
+                    "default": "RESTORE_DEFAULT_OFF"
+                  }
+                },
+                "extends": [
+                  "switch._SWITCH_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "light": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "switch"
+                  },
+                  "entity_category": {
+                    "default": "config"
+                  },
+                  "icon": {
+                    "default": "mdi:led-outline"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "gree::GreeModeBitSwitch",
+                      "parents": [
+                        "switch_::Switch",
+                        "EntityBase",
+                        "Component"
+                      ]
+                    },
+                    "key": "GeneratedID"
+                  },
+                  "restore_mode": {
+                    "default": "RESTORE_DEFAULT_OFF"
+                  }
+                },
+                "extends": [
+                  "switch._SWITCH_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "turbo": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "switch"
+                  },
+                  "entity_category": {
+                    "default": "config"
+                  },
+                  "icon": {
+                    "default": "mdi:car-turbocharger"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "gree::GreeModeBitSwitch",
+                      "parents": [
+                        "switch_::Switch",
+                        "EntityBase",
+                        "Component"
+                      ]
+                    },
+                    "key": "GeneratedID"
+                  },
+                  "restore_mode": {
+                    "default": "RESTORE_DEFAULT_OFF"
+                  }
+                },
+                "extends": [
+                  "switch._SWITCH_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "xfan": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "switch"
+                  },
+                  "entity_category": {
+                    "default": "config"
+                  },
+                  "icon": {
+                    "default": "mdi:wall-sconce-flat"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "gree::GreeModeBitSwitch",
+                      "parents": [
+                        "switch_::Switch",
+                        "EntityBase",
+                        "Component"
+                      ]
+                    },
+                    "key": "GeneratedID"
+                  },
+                  "restore_mode": {
+                    "default": "RESTORE_DEFAULT_OFF"
+                  }
+                },
+                "extends": [
+                  "switch._SWITCH_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "sdp3x.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "3"
+            },
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "33",
+              "key": "Optional",
+              "docs": "**int**: The I\u00b2C address of the sensor. Defaults to `0x21`.\n\n*See also: [SDP3x / SDP800 Series Differential Pressure Sensor](https://esphome.io/components/sensor/sdp3x#configuration-variables)*"
+            },
+            "device_class": {
+              "default": "pressure"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "sdp3x::SDP3XComponent",
+                "parents": [
+                  "sensor::Sensor",
+                  "EntityBase",
+                  "PollingComponent",
+                  "Component",
+                  "sensirion_common::SensirionI2CDevice",
+                  "i2c::I2CDevice"
+                ]
+              }
+            },
+            "measurement_mode": {
+              "default": "differential_pressure",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "mass_flow": null,
+                "differential_pressure": null
+              },
+              "docs": "The measurement mode of the sensor. Valid options are `differential_pressure` and `mass_flow`. Defaults to `differential_pressure`.\n\n*See also: [SDP3x / SDP800 Series Differential Pressure Sensor](https://esphome.io/components/sensor/sdp3x#configuration-variables)*"
+            },
+            "state_class": {
+              "default": "measurement"
+            },
+            "unit_of_measurement": {
+              "default": "hPa"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`.\n\n*See also: [SDP3x / SDP800 Series Differential Pressure Sensor](https://esphome.io/components/sensor/sdp3x#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

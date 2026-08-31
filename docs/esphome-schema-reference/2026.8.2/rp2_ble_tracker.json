@@ -1,0 +1,88 @@
+{
+  "rp2_ble_tracker": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "rp2_ble_tracker::RP2BLETracker",
+                "parents": [
+                  "ble_device_base::BLEHub",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used to reference this component.\n\n*See also: [RP2 BLE Tracker](https://esphome.io/components/rp2_ble_tracker#configuration-variables)*"
+            },
+            "rp2040_ble_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "rp2040_ble::RP2040BLE",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the [RP2040 BLE](https://esphome.io/components/rp2040_ble/) component this tracker uses.\n\n*See also: [RP2 BLE Tracker](https://esphome.io/components/rp2_ble_tracker#configuration-variables)*"
+            },
+            "scan_parameters": {
+              "default": "{}",
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "active": {
+                    "default": "True",
+                    "key": "Optional",
+                    "type": "boolean",
+                    "docs": "**boolean**: Whether to send scan requests asking devices for more data after their advertisement. The scan response arrives as a separate report; it is not merged into the advertisement. Turning this off saves power on the advertising devices and radio time on the shared CYW43439. Defaults to `true`.\n\n*See also: [RP2 BLE Tracker](https://esphome.io/components/rp2_ble_tracker#configuration-variables)*"
+                  },
+                  "continuous": {
+                    "default": "True",
+                    "key": "Optional",
+                    "type": "boolean",
+                    "docs": "**boolean**: If true, scanning starts at boot and runs forever. If false, scanning does **not** start automatically; a scan must be started from a lambda (`id(my_tracker).start_scan();`) and stops again after `duration`. Defaults to `true`.\n\n*See also: [RP2 BLE Tracker](https://esphome.io/components/rp2_ble_tracker#configuration-variables)*"
+                  },
+                  "duration": {
+                    "default": "5min",
+                    "key": "Optional",
+                    "schema": {
+                      "extends": [
+                        "core.positive_time_period_seconds"
+                      ]
+                    },
+                    "type": "schema",
+                    "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: Length of one scan period. In continuous mode the scan period restarts every `duration`; in non-continuous mode the scan stops after this long. Must cover at least three scan intervals. Defaults to `5min`.\n\n*See also: [RP2 BLE Tracker](https://esphome.io/components/rp2_ble_tracker#configuration-variables)*"
+                  },
+                  "interval": {
+                    "default": "100ms",
+                    "key": "Optional",
+                    "schema": {
+                      "extends": [
+                        "core.positive_time_period"
+                      ]
+                    },
+                    "type": "schema",
+                    "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: How often the radio opens a scan window. The controller accepts 2.5 ms to 10240 ms in 0.625 ms steps. Defaults to `100ms`.\n\n*See also: [RP2 BLE Tracker](https://esphome.io/components/rp2_ble_tracker#configuration-variables)*"
+                  },
+                  "window": {
+                    "default": "30ms",
+                    "key": "Optional",
+                    "schema": {
+                      "extends": [
+                        "core.positive_time_period"
+                      ]
+                    },
+                    "type": "schema",
+                    "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: How long the radio listens within each interval. Must not be larger than the interval; the same range and step apply. Defaults to `30ms`.\n\n*See also: [RP2 BLE Tracker](https://esphome.io/components/rp2_ble_tracker#configuration-variables)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "Tune how the scan runs.\n\n*See also: [RP2 BLE Tracker](https://esphome.io/components/rp2_ble_tracker#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

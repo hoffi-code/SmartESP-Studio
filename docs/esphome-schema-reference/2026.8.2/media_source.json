@@ -1,0 +1,16 @@
+{
+  "media_source": {
+    "components": {
+      "audio_file": {
+        "dependencies": [
+          "audio_file"
+        ]
+      },
+      "audio_http": {
+        "docs": "The `audio_http` media source platform plays audio streamed from HTTP and HTTPS URLs. Audio is fetched over the network and decoded on the device.\n\n*See also: [Audio HTTP Media Source](https://esphome.io/components/media_source/audio_http)*"
+      },
+      "sendspin": {}
+    },
+    "schemas": {}
+  }
+}

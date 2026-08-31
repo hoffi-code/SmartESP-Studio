@@ -1,0 +1,31 @@
+{
+  "rp2040_ble": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "enable_on_boot": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: If enabled, the BLE interface will be enabled on boot. Defaults to `true`.\n\n*See also: [RP2040 BLE Component](https://esphome.io/components/rp2040_ble#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "rp2040_ble::RP2040BLE",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

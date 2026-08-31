@@ -1,0 +1,36 @@
+{
+  "spa06_i2c.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "119",
+              "key": "Optional"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "spa06_i2c::SPA06I2CComponent",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              }
+            }
+          },
+          "extends": [
+            "spa06_base.CONFIG_SCHEMA_BASE"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

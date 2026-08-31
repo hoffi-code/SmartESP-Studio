@@ -1,0 +1,58 @@
+{
+  "stts22h.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "2"
+            },
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "60",
+              "key": "Optional",
+              "docs": "**int**: The I\u00b2C address of the sensor. Defaults to `0x3C`. The address is determined by the ADDR pin configuration on the sensor. Possible addresses: `0x38`, `0x3C`, `0x3E`, `0x3F`.\n\n*See also: [STTS22H Temperature Sensor](https://esphome.io/components/sensor/stts22h#configuration-variables)*"
+            },
+            "device_class": {
+              "default": "temperature"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the [I\u00b2C Bus](https://esphome.io/components/i2c) if you want to use multiple I\u00b2C buses.\n\n*See also: [STTS22H Temperature Sensor](https://esphome.io/components/sensor/stts22h#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "stts22h::STTS22HComponent",
+                "parents": [
+                  "sensor::Sensor",
+                  "EntityBase",
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              }
+            },
+            "state_class": {
+              "default": "measurement"
+            },
+            "unit_of_measurement": {
+              "default": "\u00b0C"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`.\n\n*See also: [STTS22H Temperature Sensor](https://esphome.io/components/sensor/stts22h#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

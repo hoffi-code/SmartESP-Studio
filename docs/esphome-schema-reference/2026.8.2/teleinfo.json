@@ -1,0 +1,127 @@
+{
+  "teleinfo": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "historical_mode": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "Whether to use historical mode or standard mode. With historical mode, baudrate of 1200 must be used whereas 9600 must be used in standard mode. Defaults to `false`.\n\n*See also: [Teleinformation from Linky electrical counter.](https://esphome.io/components/sensor/teleinfo#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "teleinfo::TeleInfo",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "uart::UARTDevice"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation or multiple hubs.\n\n*See also: [Teleinformation from Linky electrical counter.](https://esphome.io/components/sensor/teleinfo#configuration-variables)*"
+            },
+            "uart_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "uart::UARTComponent",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the [UART Component](https://esphome.io/components/uart) if you want to use multiple UART buses.\n\n*See also: [Teleinformation from Linky electrical counter.](https://esphome.io/components/sensor/teleinfo#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`.\n\n*See also: [Teleinformation from Linky electrical counter.](https://esphome.io/components/sensor/teleinfo#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "TELEINFO_LISTENER_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "tag_name": {
+              "key": "Required",
+              "type": "string"
+            },
+            "teleinfo_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "teleinfo::TeleInfo"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "teleinfo.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "0"
+            },
+            "device_class": {
+              "default": "energy"
+            },
+            "icon": {
+              "default": "mdi:flash"
+            },
+            "id": {
+              "id_type": {
+                "class": "teleinfo::TeleInfoSensor",
+                "parents": [
+                  "sensor::Sensor",
+                  "EntityBase",
+                  "Component"
+                ]
+              }
+            },
+            "state_class": {
+              "default": "total_increasing"
+            },
+            "unit_of_measurement": {
+              "default": "Wh"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA",
+            "teleinfo.TELEINFO_LISTENER_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "teleinfo.text_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "teleinfo::TeleInfoTextSensor",
+                "parents": [
+                  "text_sensor::TextSensor",
+                  "EntityBase",
+                  "Component"
+                ]
+              }
+            }
+          },
+          "extends": [
+            "text_sensor._TEXT_SENSOR_SCHEMA",
+            "teleinfo.TELEINFO_LISTENER_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

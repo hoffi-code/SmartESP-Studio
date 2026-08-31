@@ -1,0 +1,94 @@
+{
+  "lightwaverf": {
+    "action": {
+      "send_raw": {
+        "schema": {
+          "config_vars": {
+            "code": {
+              "key": "Required",
+              "docs": "**list hex**: The raw dump in an array of hex\n\n*See also: [LightWaveRF](https://esphome.io/components/lightwaverf#configuration-variables)*"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "lightwaverf::LightWaveRF"
+            },
+            "inverted": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Send the signal inverted\n\n*See also: [LightWaveRF](https://esphome.io/components/lightwaverf#configuration-variables)*"
+            },
+            "name": {
+              "key": "Required",
+              "type": "string",
+              "docs": "**string**: The name to give for the action\n\n*See also: [LightWaveRF](https://esphome.io/components/lightwaverf#configuration-variables)*"
+            },
+            "pulse_length": {
+              "default": "330",
+              "key": "Optional",
+              "type": "integer"
+            },
+            "repeat": {
+              "default": "10",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: The number of times the message will be repeated\n\n*See also: [LightWaveRF](https://esphome.io/components/lightwaverf#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Send the raw data that has been captured via the dump system"
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "lightwaverf::LightWaveRF",
+                "parents": [
+                  "Component",
+                  "PollingComponent",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "read_pin": {
+              "default": "13",
+              "internal": true,
+              "key": "Optional",
+              "modes": [
+                "input"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin that the receiver is connected to\n\n*See also: [LightWaveRF](https://esphome.io/components/lightwaverf#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "1s",
+              "key": "Optional"
+            },
+            "write_pin": {
+              "default": "14",
+              "internal": true,
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin that the transmitter is connected to\n\n*See also: [LightWaveRF](https://esphome.io/components/lightwaverf#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

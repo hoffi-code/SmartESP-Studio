@@ -1,0 +1,69 @@
+{
+  "rgbct.light": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "blue": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "output::FloatOutput",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id of the float [Output Component](https://esphome.io/components/output/) to use for the blue channel.\n\n*See also: [RGBCT Light](https://esphome.io/components/light/rgbct#configuration-variables)*"
+            },
+            "cold_white_color_temperature": {
+              "key": "Required",
+              "docs": "**float**: The coldest color temperature supported by this light. This is the lowest value when expressed in [mireds](https://en.wikipedia.org/wiki/Mired), or the highest value when expressed in Kelvin.\n\n*See also: [RGBCT Light](https://esphome.io/components/light/rgbct#configuration-variables)*"
+            },
+            "color_interlock": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: When enabled, this will prevent white leds being on at the same time as RGB leds. See [Color Interlock](https://esphome.io/components/light/rgbw#color-interlock) for more information. Defaults to `false`.\n\n*See also: [RGBCT Light](https://esphome.io/components/light/rgbct#configuration-variables)*"
+            },
+            "color_temperature": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "output::FloatOutput",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id of the float [Output Component](https://esphome.io/components/output/) to use for the color temperature channel.\n\n*See also: [RGBCT Light](https://esphome.io/components/light/rgbct#configuration-variables)*"
+            },
+            "green": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "output::FloatOutput",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id of the float [Output Component](https://esphome.io/components/output/) to use for the green channel.\n\n*See also: [RGBCT Light](https://esphome.io/components/light/rgbct#configuration-variables)*"
+            },
+            "output_id": {
+              "id_type": {
+                "class": "rgbct::RGBCTLightOutput",
+                "parents": [
+                  "light::LightOutput"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "red": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "output::FloatOutput",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id of the float [Output Component](https://esphome.io/components/output/) to use for the red channel.\n\n*See also: [RGBCT Light](https://esphome.io/components/light/rgbct#configuration-variables)*"
+            },
+            "warm_white_color_temperature": {
+              "key": "Required",
+              "docs": "**float**: The warmest color temperature supported by this light. This is the highest value when expressed in [mireds](https://en.wikipedia.org/wiki/Mired), or the lowest value when expressed in Kelvin.\n\n*See also: [RGBCT Light](https://esphome.io/components/light/rgbct#configuration-variables)*"
+            },
+            "white_brightness": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "output::FloatOutput",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id of the float [Output Component](https://esphome.io/components/output/) to use for the brightness of the white leds.\n\n*See also: [RGBCT Light](https://esphome.io/components/light/rgbct#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "light.RGB_LIGHT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

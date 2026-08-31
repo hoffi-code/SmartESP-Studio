@@ -1,0 +1,859 @@
+{
+  "openthread_info.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "attach_attempts": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "openthread_info::AttachAttemptsOpenThreadInfo",
+                      "parents": [
+                        "sensor::Sensor",
+                        "EntityBase",
+                        "PollingComponent",
+                        "Component"
+                      ]
+                    }
+                  },
+                  "state_class": {
+                    "default": "total_increasing"
+                  },
+                  "unit_of_measurement": {
+                    "default": ""
+                  },
+                  "update_interval": {
+                    "default": "30s",
+                    "key": "Optional"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA",
+                  "core.COMPONENT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Total MLE attach attempts since boot. All options from [Sensor](https://esphome.io/components/sensor#config-sensor). Default update interval: `30s`.\n\n*See also: [OpenThread Info Sensor](https://esphome.io/components/sensor/openthread_info#configuration-variables)*"
+            },
+            "parent_average_rssi": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "signal_strength"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "openthread_info::ParentAverageRssiOpenThreadInfo",
+                      "parents": [
+                        "sensor::Sensor",
+                        "EntityBase",
+                        "PollingComponent",
+                        "Component"
+                      ]
+                    }
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "dBm"
+                  },
+                  "update_interval": {
+                    "default": "5s",
+                    "key": "Optional"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA",
+                  "core.COMPONENT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The average RSSI of the parent, in dBm. Only valid when the device is an attached child; the sensor skips publishing otherwise. All options from [Sensor](https://esphome.io/components/sensor#config-sensor). Default update interval: `5s`.\n\n*See also: [OpenThread Info Sensor](https://esphome.io/components/sensor/openthread_info#configuration-variables)*"
+            },
+            "parent_changes": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "openthread_info::ParentChangesOpenThreadInfo",
+                      "parents": [
+                        "sensor::Sensor",
+                        "EntityBase",
+                        "PollingComponent",
+                        "Component"
+                      ]
+                    }
+                  },
+                  "state_class": {
+                    "default": "total_increasing"
+                  },
+                  "unit_of_measurement": {
+                    "default": ""
+                  },
+                  "update_interval": {
+                    "default": "30s",
+                    "key": "Optional"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA",
+                  "core.COMPONENT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Total MLE parent changes since boot. All options from [Sensor](https://esphome.io/components/sensor#config-sensor). Default update interval: `30s`.\n\n*See also: [OpenThread Info Sensor](https://esphome.io/components/sensor/openthread_info#configuration-variables)*"
+            },
+            "parent_last_rssi": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "signal_strength"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "openthread_info::ParentLastRssiOpenThreadInfo",
+                      "parents": [
+                        "sensor::Sensor",
+                        "EntityBase",
+                        "PollingComponent",
+                        "Component"
+                      ]
+                    }
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "dBm"
+                  },
+                  "update_interval": {
+                    "default": "5s",
+                    "key": "Optional"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA",
+                  "core.COMPONENT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The RSSI of the last frame received from the parent, in dBm. Only valid when the device is an attached child; the sensor skips publishing otherwise. All options from [Sensor](https://esphome.io/components/sensor#config-sensor). Default update interval: `5s`.\n\n*See also: [OpenThread Info Sensor](https://esphome.io/components/sensor/openthread_info#configuration-variables)*"
+            },
+            "parent_link_quality_in": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "openthread_info::ParentLinkQualityInOpenThreadInfo",
+                      "parents": [
+                        "sensor::Sensor",
+                        "EntityBase",
+                        "PollingComponent",
+                        "Component"
+                      ]
+                    }
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": ""
+                  },
+                  "update_interval": {
+                    "default": "5s",
+                    "key": "Optional"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA",
+                  "core.COMPONENT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Incoming link quality from the parent (0-3). Only valid when the device is an attached child. All options from [Sensor](https://esphome.io/components/sensor#config-sensor). Default update interval: `5s`.\n\n*See also: [OpenThread Info Sensor](https://esphome.io/components/sensor/openthread_info#configuration-variables)*"
+            },
+            "parent_link_quality_out": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "openthread_info::ParentLinkQualityOutOpenThreadInfo",
+                      "parents": [
+                        "sensor::Sensor",
+                        "EntityBase",
+                        "PollingComponent",
+                        "Component"
+                      ]
+                    }
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": ""
+                  },
+                  "update_interval": {
+                    "default": "5s",
+                    "key": "Optional"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA",
+                  "core.COMPONENT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Outgoing link quality to the parent (0-3). Only valid when the device is an attached child. All options from [Sensor](https://esphome.io/components/sensor#config-sensor). Default update interval: `5s`.\n\n*See also: [OpenThread Info Sensor](https://esphome.io/components/sensor/openthread_info#configuration-variables)*"
+            },
+            "partition_id_changes": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "openthread_info::PartitionIdChangesOpenThreadInfo",
+                      "parents": [
+                        "sensor::Sensor",
+                        "EntityBase",
+                        "PollingComponent",
+                        "Component"
+                      ]
+                    }
+                  },
+                  "state_class": {
+                    "default": "total_increasing"
+                  },
+                  "unit_of_measurement": {
+                    "default": ""
+                  },
+                  "update_interval": {
+                    "default": "30s",
+                    "key": "Optional"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA",
+                  "core.COMPONENT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Total MLE partition ID changes since boot. All options from [Sensor](https://esphome.io/components/sensor#config-sensor). Default update interval: `30s`.\n\n*See also: [OpenThread Info Sensor](https://esphome.io/components/sensor/openthread_info#configuration-variables)*"
+            },
+            "rx_err_fcs": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "openthread_info::RxErrFcsOpenThreadInfo",
+                      "parents": [
+                        "sensor::Sensor",
+                        "EntityBase",
+                        "PollingComponent",
+                        "Component"
+                      ]
+                    }
+                  },
+                  "state_class": {
+                    "default": "total_increasing"
+                  },
+                  "unit_of_measurement": {
+                    "default": ""
+                  },
+                  "update_interval": {
+                    "default": "30s",
+                    "key": "Optional"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA",
+                  "core.COMPONENT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Total MAC RX FCS (Frame Check Sequence) errors since boot. All options from [Sensor](https://esphome.io/components/sensor#config-sensor). Default update interval: `30s`.\n\n*See also: [OpenThread Info Sensor](https://esphome.io/components/sensor/openthread_info#configuration-variables)*"
+            },
+            "rx_total": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "openthread_info::RxTotalOpenThreadInfo",
+                      "parents": [
+                        "sensor::Sensor",
+                        "EntityBase",
+                        "PollingComponent",
+                        "Component"
+                      ]
+                    }
+                  },
+                  "state_class": {
+                    "default": "total_increasing"
+                  },
+                  "unit_of_measurement": {
+                    "default": ""
+                  },
+                  "update_interval": {
+                    "default": "30s",
+                    "key": "Optional"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA",
+                  "core.COMPONENT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Total MAC RX frames received since boot. All options from [Sensor](https://esphome.io/components/sensor#config-sensor). Default update interval: `30s`.\n\n*See also: [OpenThread Info Sensor](https://esphome.io/components/sensor/openthread_info#configuration-variables)*"
+            },
+            "tx_err_abort": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "openthread_info::TxErrAbortOpenThreadInfo",
+                      "parents": [
+                        "sensor::Sensor",
+                        "EntityBase",
+                        "PollingComponent",
+                        "Component"
+                      ]
+                    }
+                  },
+                  "state_class": {
+                    "default": "total_increasing"
+                  },
+                  "unit_of_measurement": {
+                    "default": ""
+                  },
+                  "update_interval": {
+                    "default": "30s",
+                    "key": "Optional"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA",
+                  "core.COMPONENT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Total MAC TX abort errors since boot. All options from [Sensor](https://esphome.io/components/sensor#config-sensor). Default update interval: `30s`.\n\n*See also: [OpenThread Info Sensor](https://esphome.io/components/sensor/openthread_info#configuration-variables)*"
+            },
+            "tx_err_cca": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "openthread_info::TxErrCcaOpenThreadInfo",
+                      "parents": [
+                        "sensor::Sensor",
+                        "EntityBase",
+                        "PollingComponent",
+                        "Component"
+                      ]
+                    }
+                  },
+                  "state_class": {
+                    "default": "total_increasing"
+                  },
+                  "unit_of_measurement": {
+                    "default": ""
+                  },
+                  "update_interval": {
+                    "default": "30s",
+                    "key": "Optional"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA",
+                  "core.COMPONENT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Total MAC TX CCA (Clear Channel Assessment) errors since boot. All options from [Sensor](https://esphome.io/components/sensor#config-sensor). Default update interval: `30s`.\n\n*See also: [OpenThread Info Sensor](https://esphome.io/components/sensor/openthread_info#configuration-variables)*"
+            },
+            "tx_retries": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "openthread_info::TxRetriesOpenThreadInfo",
+                      "parents": [
+                        "sensor::Sensor",
+                        "EntityBase",
+                        "PollingComponent",
+                        "Component"
+                      ]
+                    }
+                  },
+                  "state_class": {
+                    "default": "total_increasing"
+                  },
+                  "unit_of_measurement": {
+                    "default": ""
+                  },
+                  "update_interval": {
+                    "default": "30s",
+                    "key": "Optional"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA",
+                  "core.COMPONENT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Total MAC TX frame retransmissions since boot. All options from [Sensor](https://esphome.io/components/sensor#config-sensor). Default update interval: `30s`.\n\n*See also: [OpenThread Info Sensor](https://esphome.io/components/sensor/openthread_info#configuration-variables)*"
+            },
+            "tx_total": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "openthread_info::TxTotalOpenThreadInfo",
+                      "parents": [
+                        "sensor::Sensor",
+                        "EntityBase",
+                        "PollingComponent",
+                        "Component"
+                      ]
+                    }
+                  },
+                  "state_class": {
+                    "default": "total_increasing"
+                  },
+                  "unit_of_measurement": {
+                    "default": ""
+                  },
+                  "update_interval": {
+                    "default": "30s",
+                    "key": "Optional"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA",
+                  "core.COMPONENT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Total MAC TX frame transmissions since boot. All options from [Sensor](https://esphome.io/components/sensor#config-sensor). Default update interval: `30s`.\n\n*See also: [OpenThread Info Sensor](https://esphome.io/components/sensor/openthread_info#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "openthread_info.text_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "channel": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "openthread_info::ChannelOpenThreadInfo",
+                      "parents": [
+                        "text_sensor::TextSensor",
+                        "EntityBase",
+                        "PollingComponent",
+                        "Component"
+                      ]
+                    }
+                  },
+                  "update_interval": {
+                    "default": "1s",
+                    "key": "Optional"
+                  }
+                },
+                "extends": [
+                  "text_sensor._TEXT_SENSOR_SCHEMA",
+                  "core.COMPONENT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Expose the Thread network channel (11-26) as a text sensor. All options from [Text Sensor](https://esphome.io/components/text_sensor#config-text_sensor).\n\n*See also: [OpenThread Info Text Sensor](https://esphome.io/components/text_sensor/openthread_info#configuration-variables)*"
+            },
+            "eui64": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "openthread_info::Eui64OpenThreadInfo",
+                      "parents": [
+                        "text_sensor::TextSensor",
+                        "EntityBase",
+                        "Component"
+                      ]
+                    }
+                  },
+                  "update_interval": {
+                    "default": "1h",
+                    "key": "Optional"
+                  }
+                },
+                "extends": [
+                  "text_sensor._TEXT_SENSOR_SCHEMA",
+                  "core.COMPONENT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Expose the EUI-64 address as a text sensor. This is the unique 64-bit identifier for the device. All options from [Text Sensor](https://esphome.io/components/text_sensor#config-text_sensor).\n\n*See also: [OpenThread Info Text Sensor](https://esphome.io/components/text_sensor/openthread_info#configuration-variables)*"
+            },
+            "ext_addr": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "openthread_info::ExtAddrOpenThreadInfo",
+                      "parents": [
+                        "text_sensor::TextSensor",
+                        "EntityBase",
+                        "PollingComponent",
+                        "Component"
+                      ]
+                    }
+                  },
+                  "update_interval": {
+                    "default": "1s",
+                    "key": "Optional"
+                  }
+                },
+                "extends": [
+                  "text_sensor._TEXT_SENSOR_SCHEMA",
+                  "core.COMPONENT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Expose the IEEE 802.15.4 Extended MAC address as a text sensor. All options from [Text Sensor](https://esphome.io/components/text_sensor#config-text_sensor).\n\n*See also: [OpenThread Info Text Sensor](https://esphome.io/components/text_sensor/openthread_info#configuration-variables)*"
+            },
+            "ext_pan_id": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "openthread_info::ExtPanIdOpenThreadInfo",
+                      "parents": [
+                        "text_sensor::TextSensor",
+                        "EntityBase",
+                        "PollingComponent",
+                        "Component"
+                      ]
+                    }
+                  },
+                  "update_interval": {
+                    "default": "1s",
+                    "key": "Optional"
+                  }
+                },
+                "extends": [
+                  "text_sensor._TEXT_SENSOR_SCHEMA",
+                  "core.COMPONENT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Expose the Extended PAN ID as a text sensor. This is a 64-bit extended identifier for the Thread network. All options from [Text Sensor](https://esphome.io/components/text_sensor#config-text_sensor).\n\n*See also: [OpenThread Info Text Sensor](https://esphome.io/components/text_sensor/openthread_info#configuration-variables)*"
+            },
+            "ip_address": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "openthread_info::IPAddressOpenThreadInfo",
+                      "parents": [
+                        "text_sensor::TextSensor",
+                        "EntityBase",
+                        "PollingComponent",
+                        "Component"
+                      ]
+                    }
+                  },
+                  "update_interval": {
+                    "default": "1s",
+                    "key": "Optional"
+                  }
+                },
+                "extends": [
+                  "text_sensor._TEXT_SENSOR_SCHEMA",
+                  "core.COMPONENT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Expose the off-mesh routable IPv6 address of the Thread device as a text sensor. This is the address used for communication outside the Thread mesh network. All options from [Text Sensor](https://esphome.io/components/text_sensor#config-text_sensor).\n\n*See also: [OpenThread Info Text Sensor](https://esphome.io/components/text_sensor/openthread_info#configuration-variables)*"
+            },
+            "network_key": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "openthread_info::NetworkKeyOpenThreadInfo",
+                      "parents": [
+                        "text_sensor::TextSensor",
+                        "EntityBase",
+                        "PollingComponent",
+                        "Component"
+                      ]
+                    }
+                  },
+                  "update_interval": {
+                    "default": "1s",
+                    "key": "Optional"
+                  }
+                },
+                "extends": [
+                  "text_sensor._TEXT_SENSOR_SCHEMA",
+                  "core.COMPONENT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Expose the Thread network key as a text sensor. All options from [Text Sensor](https://esphome.io/components/text_sensor#config-text_sensor). > [!WARNING] > The `network_key` sensor exposes sensitive security credentials that could allow unauthorized access to your > Thread network. Only enable this sensor if you need it for debugging purposes and understand the security > implications.\n\n*See also: [OpenThread Info Text Sensor](https://esphome.io/components/text_sensor/openthread_info#configuration-variables)*"
+            },
+            "network_name": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "openthread_info::NetworkNameOpenThreadInfo",
+                      "parents": [
+                        "text_sensor::TextSensor",
+                        "EntityBase",
+                        "PollingComponent",
+                        "Component"
+                      ]
+                    }
+                  },
+                  "update_interval": {
+                    "default": "1s",
+                    "key": "Optional"
+                  }
+                },
+                "extends": [
+                  "text_sensor._TEXT_SENSOR_SCHEMA",
+                  "core.COMPONENT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Expose the Thread network name as a text sensor. All options from [Text Sensor](https://esphome.io/components/text_sensor#config-text_sensor).\n\n*See also: [OpenThread Info Text Sensor](https://esphome.io/components/text_sensor/openthread_info#configuration-variables)*"
+            },
+            "pan_id": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "openthread_info::PanIdOpenThreadInfo",
+                      "parents": [
+                        "text_sensor::TextSensor",
+                        "EntityBase",
+                        "PollingComponent",
+                        "Component"
+                      ]
+                    }
+                  },
+                  "update_interval": {
+                    "default": "1s",
+                    "key": "Optional"
+                  }
+                },
+                "extends": [
+                  "text_sensor._TEXT_SENSOR_SCHEMA",
+                  "core.COMPONENT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Expose the Personal Area Network ID (PAN ID) as a text sensor. This is a 16-bit identifier for the Thread network. All options from [Text Sensor](https://esphome.io/components/text_sensor#config-text_sensor).\n\n*See also: [OpenThread Info Text Sensor](https://esphome.io/components/text_sensor/openthread_info#configuration-variables)*"
+            },
+            "rloc16": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "openthread_info::Rloc16OpenThreadInfo",
+                      "parents": [
+                        "text_sensor::TextSensor",
+                        "EntityBase",
+                        "PollingComponent",
+                        "Component"
+                      ]
+                    }
+                  },
+                  "update_interval": {
+                    "default": "1s",
+                    "key": "Optional"
+                  }
+                },
+                "extends": [
+                  "text_sensor._TEXT_SENSOR_SCHEMA",
+                  "core.COMPONENT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Expose the Router Locator (RLOC16) address as a text sensor. This is a 16-bit address used for routing within the Thread network. All options from [Text Sensor](https://esphome.io/components/text_sensor#config-text_sensor).\n\n*See also: [OpenThread Info Text Sensor](https://esphome.io/components/text_sensor/openthread_info#configuration-variables)*"
+            },
+            "role": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "openthread_info::RoleOpenThreadInfo",
+                      "parents": [
+                        "text_sensor::TextSensor",
+                        "EntityBase",
+                        "PollingComponent",
+                        "Component"
+                      ]
+                    }
+                  },
+                  "update_interval": {
+                    "default": "1s",
+                    "key": "Optional"
+                  }
+                },
+                "extends": [
+                  "text_sensor._TEXT_SENSOR_SCHEMA",
+                  "core.COMPONENT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Expose the current device role in the Thread network (Leader, Router, Child, Detached, etc.) as a text sensor. All options from [Text Sensor](https://esphome.io/components/text_sensor#config-text_sensor).\n\n*See also: [OpenThread Info Text Sensor](https://esphome.io/components/text_sensor/openthread_info#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

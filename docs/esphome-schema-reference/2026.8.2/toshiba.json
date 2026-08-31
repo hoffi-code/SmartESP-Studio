@@ -1,0 +1,68 @@
+{
+  "toshiba.climate": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "humidity_sensor": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "sensor::Sensor"
+            },
+            "id": {
+              "id_type": {
+                "class": "toshiba::ToshibaClimate",
+                "parents": [
+                  "climate_ir::ClimateIR",
+                  "climate::Climate",
+                  "EntityBase",
+                  "Component",
+                  "remote_base::RemoteReceiverListener",
+                  "remote_base::RemoteTransmittable"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "model": {
+              "default": "generic",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "GENERIC": null,
+                "RAC-PT1411HWRU-C": null,
+                "RAC-PT1411HWRU-F": null,
+                "RAS-2819T": null
+              }
+            },
+            "receiver_id": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "remote_base::RemoteReceiverBase"
+            },
+            "sensor": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "sensor::Sensor"
+            },
+            "supports_cool": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "supports_heat": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean"
+            }
+          },
+          "extends": [
+            "climate._CLIMATE_SCHEMA",
+            "core.COMPONENT_SCHEMA",
+            "remote_base.REMOTE_TRANSMITTABLE_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

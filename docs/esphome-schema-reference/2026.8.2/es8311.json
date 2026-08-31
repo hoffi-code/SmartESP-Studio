@@ -1,0 +1,84 @@
+{
+  "es8311.audio_dac": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "24",
+              "key": "Optional",
+              "docs": "**int**: The I\u00b2C address of the driver. Defaults to `0x18`.\n\n*See also: [ES8311](https://esphome.io/components/audio_dac/es8311#configuration-variables)*"
+            },
+            "bits_per_sample": {
+              "default": "16bit",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "16": null,
+                "24": null,
+                "32": null
+              },
+              "docs": "**enum**: The bit depth of the audio samples. One of `16bit`, `24bit`, or `32bit`. Defaults to `16bit`.\n\n*See also: [ES8311](https://esphome.io/components/audio_dac/es8311#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus",
+              "docs": "The ID of the [I\u00b2C bus](https://esphome.io/components/i2c) the ES8311 is connected to.\n\n*See also: [ES8311](https://esphome.io/components/audio_dac/es8311#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "es8311::ES8311",
+                "parents": [
+                  "audio_dac::AudioDac",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "mic_gain": {
+              "default": "42DB",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "0DB": null,
+                "6DB": null,
+                "12DB": null,
+                "18DB": null,
+                "24DB": null,
+                "30DB": null,
+                "36DB": null,
+                "42DB": null
+              },
+              "docs": "**enum**: The gain applied to the ADC microphones. One of `0DB`, `6DB`, `12DB`, `18DB`, `24DB`, `30DB`, `36DB`, `42DB`. Defaults to `42DB`.\n\n*See also: [ES8311](https://esphome.io/components/audio_dac/es8311#configuration-variables)*"
+            },
+            "sample_rate": {
+              "default": "16000",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**positive integer**: I2S sample rate. Defaults to `16000`.\n\n*See also: [ES8311](https://esphome.io/components/audio_dac/es8311#configuration-variables)*"
+            },
+            "use_mclk": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**bool**: Use the MCLK signal to control the clock. Defaults to `True`.\n\n*See also: [ES8311](https://esphome.io/components/audio_dac/es8311#configuration-variables)*"
+            },
+            "use_microphone": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**bool**: Configure the codec's ADC to use PDM microphone input instead of analog. Defaults to False.\n\n*See also: [ES8311](https://esphome.io/components/audio_dac/es8311#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

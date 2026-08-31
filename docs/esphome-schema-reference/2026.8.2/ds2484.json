@@ -1,0 +1,52 @@
+{
+  "ds2484.one_wire": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "active_pullup": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**defaults to `false`**: enables DS2484 `active_pullup`.\n\n*See also: [1-Wire Bus via DS2484](https://esphome.io/components/one_wire/ds2484#configuration-variables)*"
+            },
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "24",
+              "key": "Optional",
+              "docs": "**int**: The I\u00b2C address of the device. Defaults to `0x18`.\n\n*See also: [1-Wire Bus via DS2484](https://esphome.io/components/one_wire/ds2484#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the [I2C](https://esphome.io/components/i2c/). Required if you have configured multiple I2C busses.\n\n*See also: [1-Wire Bus via DS2484](https://esphome.io/components/one_wire/ds2484#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "ds2484::DS2484OneWireBus",
+                "parents": [
+                  "one_wire::OneWireBus",
+                  "i2c::I2CDevice",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation. Required if you have multiple 1-Wire busses.\n\n*See also: [1-Wire Bus via DS2484](https://esphome.io/components/one_wire/ds2484#configuration-variables)*"
+            },
+            "strong_pullup": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**defaults to `false`**: enables DS2484 `strong_pullup`.\n\n*See also: [1-Wire Bus via DS2484](https://esphome.io/components/one_wire/ds2484#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

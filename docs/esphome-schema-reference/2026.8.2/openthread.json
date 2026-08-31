@@ -1,0 +1,132 @@
+{
+  "openthread": {
+    "action": {
+      "set_poll_period": {
+        "maybe": "poll_period",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "openthread::OpenThreadComponent"
+            },
+            "poll_period": {
+              "key": "Required",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "templatable": true,
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The poll period to apply, e.g. the short form `openthread.set_poll_period: 5s`.\n\n*See also: [OpenThread Component](https://esphome.io/components/openthread#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Sets the poll period at runtime on an MTD device. When `poll_period` > 0 the radio is off while idle (sleepy end device); when 0 the radio is always on. This action is a no-op on FTD devices."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "channel": {
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: Channel number from 11 to 26.\n\n*See also: [OpenThread Component](https://esphome.io/components/openthread#configuration-variables)*"
+            },
+            "device_type": {
+              "default": "FTD",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "FTD": null,
+                "MTD": null
+              },
+              "docs": "**enum**: OpenThread Device Type, either `FTD` or `MTD`. Defaults to `FTD`. On nRF52840 this selects the matching Nordic prebuilt OpenThread library.\n\n*See also: [OpenThread Component](https://esphome.io/components/openthread#configuration-variables)*"
+            },
+            "ext_pan_id": {
+              "key": "Optional",
+              "docs": "**string**: 8-byte Extended Personal Area Network ID (XPAN ID).\n\n*See also: [OpenThread Component](https://esphome.io/components/openthread#configuration-variables)*"
+            },
+            "force_dataset": {
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**bool**: Forces ESPHome to override any OpenThread network dataset previously stored on the device, ensuring the configured dataset is applied at startup. Defaults to `false`.\n\n*See also: [OpenThread Component](https://esphome.io/components/openthread#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "openthread::OpenThreadComponent",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "mdns_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "mdns::MDNSComponent"
+            },
+            "mesh_local_prefix": {
+              "key": "Optional",
+              "docs": "**ipv6network**: Used to build Mesh-Local IPv6 addresses (ML-EIDs), which are unique to each Thread device within the network partition.\n\n*See also: [OpenThread Component](https://esphome.io/components/openthread#configuration-variables)*"
+            },
+            "network_key": {
+              "key": "Optional",
+              "docs": "**string**: OpenThread network key.\n\n*See also: [OpenThread Component](https://esphome.io/components/openthread#configuration-variables)*"
+            },
+            "network_name": {
+              "key": "Optional",
+              "type": "string",
+              "docs": "**string**: A human-readable Network Name.\n\n*See also: [OpenThread Component](https://esphome.io/components/openthread#configuration-variables)*"
+            },
+            "output_power": {
+              "key": "Optional",
+              "docs": "**integer**: The amount of TX power for the Thread 802.15.4 radio in dBm. Range depends on the chip variant: ESP32-C5/C6 from `-15dBm` to `20dBm`, ESP32-H2 from `-24dBm` to `20dBm`. Defaults to the platform default (typically `0dBm`). Ensure the configured value complies with local regulatory limits.\n\n*See also: [OpenThread Component](https://esphome.io/components/openthread#configuration-variables)*"
+            },
+            "pan_id": {
+              "key": "Optional",
+              "docs": "**string**: 2-byte Personal Area Network ID (PAN ID).\n\n*See also: [OpenThread Component](https://esphome.io/components/openthread#configuration-variables)*"
+            },
+            "poll_period": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: When set on an MTD device, the parent router enqueues any messages and waits for the child to submit a poll data request.\n\n*See also: [OpenThread Component](https://esphome.io/components/openthread#configuration-variables)*"
+            },
+            "pskc": {
+              "key": "Optional",
+              "docs": "**string**: PSKc is used to authenticate an external Thread Commissioner to a Thread network.\n\n*See also: [OpenThread Component](https://esphome.io/components/openthread#configuration-variables)*"
+            },
+            "srp_id": {
+              "id_type": {
+                "class": "openthread::OpenThreadSrpComponent",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "tlv": {
+              "key": "Optional",
+              "type": "string",
+              "docs": "**string**: The Thread dataset as a hex-encoded TLV string, taken from the Thread information in Home Assistant. **Required** on nRF52840.\n\n*See also: [OpenThread Component](https://esphome.io/components/openthread#configuration-variables)*"
+            },
+            "use_address": {
+              "key": "Optional",
+              "type": "string",
+              "docs": "**string**: Manually override the address used to connect to the device. Defaults to an auto-generated value.\n\n*See also: [OpenThread Component](https://esphome.io/components/openthread#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

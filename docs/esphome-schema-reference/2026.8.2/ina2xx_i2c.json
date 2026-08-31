@@ -1,0 +1,49 @@
+{
+  "ina2xx_i2c.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "64",
+              "key": "Optional",
+              "docs": "**int**: Manually specify the I\u00b2C address of the sensor. Defaults to `0x40`.\n\n*See also: [INA2xx family of digital power monitors](https://esphome.io/components/sensor/ina2xx#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "ina2xx_i2c::INA2XXI2C",
+                "parents": [
+                  "ina2xx_base::INA2XX",
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "model": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "INA228": null,
+                "INA238": null,
+                "INA237": null
+              },
+              "docs": "**string**: The model of the INA2xx sensor. Options are `INA229`, `INA239`.\n\n*See also: [INA2xx family of digital power monitors](https://esphome.io/components/sensor/ina2xx#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "ina2xx_base.INA2XX_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

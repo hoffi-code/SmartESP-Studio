@@ -1,0 +1,65 @@
+{
+  "pn532_spi": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "cs_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin on the ESP that the chip select line is connected to.\n\n*See also: [PN532 NFC/RFID](https://esphome.io/components/binary_sensor/pn532#configuration-variables)*"
+            },
+            "data_rate": {
+              "key": "Optional"
+            },
+            "id": {
+              "id_type": {
+                "class": "pn532_spi::PN532Spi",
+                "parents": [
+                  "pn532::PN532",
+                  "PollingComponent",
+                  "Component",
+                  "spi::SPIDevice"
+                ]
+              },
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID for this component.\n\n*See also: [PN532 NFC/RFID](https://esphome.io/components/binary_sensor/pn532#configuration-variables)*"
+            },
+            "release_device": {
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "spi_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "spi::SPIComponent",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the [SPI Component](https://esphome.io/components/spi) if you want to use multiple SPI buses.\n\n*See also: [PN532 NFC/RFID](https://esphome.io/components/binary_sensor/pn532#configuration-variables)*"
+            },
+            "spi_mode": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "MODE0": null,
+                "MODE1": null,
+                "MODE2": null,
+                "MODE3": null,
+                "0": null,
+                "1": null,
+                "2": null,
+                "3": null
+              }
+            }
+          },
+          "extends": [
+            "pn532.PN532_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

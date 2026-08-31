@@ -1,0 +1,318 @@
+{
+  "cover": {
+    "action": {
+      "close": {
+        "schema": {
+          "extends": [
+            "cover.COVER_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) closes the cover with the given ID when executed."
+      },
+      "control": {
+        "schema": {
+          "extends": [
+            "cover.COVER_CONTROL_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) is a more generic version of the other cover actions and allows all cover attributes to be set."
+      },
+      "open": {
+        "schema": {
+          "extends": [
+            "cover.COVER_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) opens the cover with the given ID when executed."
+      },
+      "stop": {
+        "schema": {
+          "extends": [
+            "cover.COVER_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) stops the cover with the given ID when executed."
+      },
+      "toggle": {
+        "schema": {
+          "extends": [
+            "cover.COVER_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [action](https://esphome.io/automations/actions#all-actions) toggles the cover with the given ID when executed, cycling through the states close/stop/open/stop... This allows the cover to be controlled by a single push button."
+      }
+    },
+    "components": {
+      "am43": {
+        "dependencies": [
+          "ble_client"
+        ],
+        "docs": "The `am43` cover platform allows you to control an AM43 based BLE cover motor. These devices are sold under various brands, such as Zemismart and A-OK. The platform connects to the device over the ESP32's BLE peripheral and both controls and fetches the position and state of the motor.\n\n*See also: [AM43 Cover](https://esphome.io/components/cover/am43)*"
+      },
+      "copy": {
+        "docs": "None\n\n*See also: [Copy Component](https://esphome.io/components/copy#copy-cover)*"
+      },
+      "current_based": {
+        "docs": "The `current_based` cover platform allows you to create covers with position control by using current sensors to detect the fully-open and fully-closed states. This is pretty useful when using motors with integrated mechanical endstops. During cover operation, the component monitors the current consumption to detect when the motor has stopped.\n\n*See also: [Current Based Cover](https://esphome.io/components/cover/current_based)*"
+      },
+      "endstop": {
+        "docs": "The `endstop` cover platform allows you to create covers with position control that have endstops at both ends of the cover to detect the fully-open and fully-closed states. When any of these endstops are reached, the cover is stopped (via `stop_action`  ) and the corresponding state is sent out.\n\n*See also: [Endstop Cover](https://esphome.io/components/cover/endstop)*"
+      },
+      "feedback": {
+        "docs": "The `feedback` cover platform allows you to create covers with position control that can optionally have feedback from sensors to detect the fully-open and fully-closed states (endstops), and from sensors to detect actual movement (opening/closing). In all the cases the current position is approximated with the time the cover has been moving in a direction.\n\n*See also: [Feedback Cover](https://esphome.io/components/cover/feedback)*"
+      },
+      "he60r": {
+        "docs": "<Image src=\"/images/he60r.jpg\" width={239} height={300} layout=\"constrained\" alt=\"\" />\n\n*See also: [HE60R Garage Door Opener](https://esphome.io/components/cover/he60r)*"
+      },
+      "hoermann_hcp": {
+        "dependencies": [
+          "hoermann_hcp"
+        ],
+        "docs": "The `hoermann_hcp` cover platform exposes the garage door as a [cover](https://esphome.io/components/cover/). It supports opening, closing, stopping and moving to a position, and reports the position and operation as provided by the motor.\n\n*See also: [H\u00f6rmann Cover](https://esphome.io/components/cover/hoermann_hcp#cover)*"
+      },
+      "template": {
+        "docs": "The `template` cover platform allows you to create simple covers out of just a few actions and a value lambda. Once defined, it will automatically appear in Home Assistant as a cover and can be controlled through the frontend.\n\n*See also: [Template Cover](https://esphome.io/components/cover/template)*"
+      },
+      "time_based": {
+        "docs": "The `time_based` cover platform allows you to create covers with position control that do not have any position feedback. The state of the cover is thus always an assumed one, the current position is approximated with the time the cover has been moving in a direction. The state of the cover can be restored at node reboot.\n\n*See also: [Time Based Cover](https://esphome.io/components/cover/time_based)*"
+      },
+      "tormatic": {
+        "docs": "The `tormatic` cover platform allows you to control Tormatic and Novoferm garage door drives manufactured in 2016 onwards. The following models should be supported:\n\n*See also: [Tormatic/Novoferm Cover](https://esphome.io/components/cover/tormatic)*"
+      },
+      "tuya": {
+        "dependencies": [
+          "tuya"
+        ]
+      }
+    },
+    "condition": {
+      "is_closed": {
+        "schema": {
+          "extends": [
+            "cover.COVER_CONDITION_SCHEMA"
+          ],
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The cover to check.\n\n*See also: [Cover Component](https://esphome.io/components/cover#coveris_closed-condition)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [condition](https://esphome.io/automations/actions#all-conditions) checks if the cover with the given ID is fully closed."
+      },
+      "is_open": {
+        "schema": {
+          "extends": [
+            "cover.COVER_CONDITION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "This [condition](https://esphome.io/automations/actions#all-conditions) checks if the cover with the given ID is fully open."
+      }
+    },
+    "schemas": {
+      "COVER_ACTION_SCHEMA": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "cover::Cover"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "COVER_CONDITION_SCHEMA": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "cover::Cover",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The cover to check.\n\n*See also: [Cover Component](https://esphome.io/components/cover#coveris_open-condition)*"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "COVER_CONTROL_ACTION_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "cover::Cover",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The cover to control.\n\n*See also: [Cover Component](https://esphome.io/components/cover#covercontrol-action)*"
+            },
+            "position": {
+              "key": "Optional",
+              "templatable": true,
+              "docs": "**float**: The cover position to set.\n\n*See also: [Cover Component](https://esphome.io/components/cover#covercontrol-action)*"
+            },
+            "state": {
+              "key": "Optional",
+              "templatable": true,
+              "type": "enum",
+              "values": {
+                "OPEN": null,
+                "CLOSED": null
+              },
+              "docs": "**string**: The state to set the cover to - one of `OPEN` or `CLOSE`.\n\n*See also: [Cover Component](https://esphome.io/components/cover#covercontrol-action)*"
+            },
+            "stop": {
+              "key": "Optional",
+              "templatable": true,
+              "type": "boolean",
+              "docs": "**boolean**: Whether to stop the cover.\n\n*See also: [Cover Component](https://esphome.io/components/cover#covercontrol-action)*"
+            },
+            "tilt": {
+              "key": "Optional",
+              "templatable": true,
+              "docs": "**float**: The tilt position to set. In range 0% - 100%.\n\n*See also: [Cover Component](https://esphome.io/components/cover#covercontrol-action)*"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "_COVER_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "device_class": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "awning": null,
+                "blind": null,
+                "curtain": null,
+                "damper": null,
+                "door": null,
+                "": null,
+                "garage": null,
+                "gate": null,
+                "shade": null,
+                "shutter": null,
+                "window": null
+              },
+              "visibility": "advanced",
+              "docs": "**string**: The device class for the sensor. See [https://www.home-assistant.io/integrations/cover/#device-class](https://www.home-assistant.io/integrations/cover/#device-class) for a list of available options.\n\n*See also: [Cover Component](https://esphome.io/components/cover#base-cover-configuration)*"
+            },
+            "mqtt_id": {
+              "id_type": {
+                "class": "mqtt::MQTTCoverComponent",
+                "parents": [
+                  "mqtt::MQTTComponent",
+                  "Component"
+                ]
+              },
+              "key": "Optional"
+            },
+            "mqtt_json_state_payload": {
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: When set to `true`, state changes will be published only to the `state_topic` as a single JSON object per state change. Example: ```json { \"state\": \"open\", \"position\": 100, \"tilt\": 50 } ``` When `false`, individual values are published to the `state_topic`, `position_state_topic`, and `tilt_state_topic` separately. Defaults to `false`.\n\n*See also: [Cover Component](https://esphome.io/components/cover#base-cover-configuration)*"
+            },
+            "on_closed": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "on_closing": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "on_idle": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "on_open": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "on_opened": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "on_opening": {
+              "key": "Optional",
+              "type": "trigger"
+            },
+            "position_command_topic": {
+              "key": "Optional",
+              "docs": "**string**: The topic to receive cover position commands on.\n\n*See also: [Cover Component](https://esphome.io/components/cover#base-cover-configuration)*"
+            },
+            "position_state_topic": {
+              "key": "Optional",
+              "docs": "**string**: The topic to publish cover position changes to. Not valid if `mqtt_json_state_payload` is set to `true`.\n\n*See also: [Cover Component](https://esphome.io/components/cover#base-cover-configuration)*"
+            },
+            "tilt_command_topic": {
+              "key": "Optional",
+              "docs": "**string**: The topic to receive cover tilt commands on.\n\n*See also: [Cover Component](https://esphome.io/components/cover#base-cover-configuration)*"
+            },
+            "tilt_state_topic": {
+              "key": "Optional",
+              "docs": "**string**: The topic to publish cover cover tilt state changes to. Not valid if `mqtt_json_state_payload` is set to `true`.\n\n*See also: [Cover Component](https://esphome.io/components/cover#base-cover-configuration)*"
+            },
+            "web_server": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "sorting_group_id": {
+                    "key": "Optional",
+                    "type": "use_id",
+                    "use_id_type": "int"
+                  },
+                  "sorting_weight": {
+                    "key": "Optional"
+                  },
+                  "web_server_id": {
+                    "key": "Optional",
+                    "type": "use_id",
+                    "use_id_type": "web_server::WebServer"
+                  }
+                }
+              },
+              "type": "schema",
+              "visibility": "advanced"
+            },
+            "id": {
+              "docs": "**string**: Manually specify the ID for code generation. At least one of **id** and **name** must be specified.\n\n*See also: [Cover Component](https://esphome.io/components/cover#base-cover-configuration)*"
+            },
+            "name": {
+              "key": "Optional",
+              "docs": "**string**: The name for the cover. At least one of **id** and **name** must be specified.\n\n*See also: [Cover Component](https://esphome.io/components/cover#base-cover-configuration)*"
+            },
+            "icon": {
+              "key": "Optional",
+              "docs": "**icon**: Manually set the icon to use for the cover in the frontend.\n\n*See also: [Cover Component](https://esphome.io/components/cover#base-cover-configuration)*"
+            },
+            "internal": {
+              "key": "Optional",
+              "docs": "**boolean**: Mark this component as internal. Internal components will not be exposed to the frontend (like Home Assistant). Only specifying an `id` without a `name` will implicitly set this to true.\n\n*See also: [Cover Component](https://esphome.io/components/cover#base-cover-configuration)*"
+            },
+            "disabled_by_default": {
+              "key": "Optional",
+              "docs": "**boolean**: If true, then this entity should not be added to any client's frontend, (usually Home Assistant) without the user manually enabling it (via the Home Assistant UI). Defaults to `false`.\n\n*See also: [Cover Component](https://esphome.io/components/cover#base-cover-configuration)*"
+            },
+            "entity_category": {
+              "key": "Optional",
+              "docs": "**string**: The category of the entity. See [https://developers.home-assistant.io/docs/core/entity/#generic-properties](https://developers.home-assistant.io/docs/core/entity/#generic-properties) for a list of available options. Set to `\"\"` to remove the default entity category.\n\n*See also: [Cover Component](https://esphome.io/components/cover#base-cover-configuration)*"
+            }
+          },
+          "extends": [
+            "core.ENTITY_BASE_SCHEMA",
+            "core.MQTT_COMMAND_COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

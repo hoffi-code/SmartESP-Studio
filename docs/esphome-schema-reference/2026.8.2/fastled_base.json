@@ -1,0 +1,57 @@
+{
+  "fastled_base": {
+    "schemas": {
+      "BASE_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "max_refresh_rate": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_microseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: A time interval used to limit the number of commands a light can handle per second. For example 16ms will limit the light to a refresh rate of about 60Hz. Defaults to the default value for the used chipset.\n\n*See also: [FastLED Light](https://esphome.io/components/light/fastled#configuration-variables)*"
+            },
+            "num_leds": {
+              "data_type": "positive_not_null_int",
+              "key": "Required",
+              "type": "integer",
+              "docs": "**int**: The number of LEDs attached.\n\n*See also: [FastLED Light](https://esphome.io/components/light/fastled#configuration-variables)*"
+            },
+            "output_id": {
+              "id_type": {
+                "class": "fastled_base::FastLEDLightOutput",
+                "parents": [
+                  "light::AddressableLight",
+                  "light::LightOutput",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "rgb_order": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "RGB": null,
+                "RBG": null,
+                "GRB": null,
+                "GBR": null,
+                "BRG": null,
+                "BGR": null
+              },
+              "docs": "**string**: The order of the RGB channels. Use this if your light doesn't seem to map the RGB light channels correctly. For example if your light shows up green when you set a red color through the frontend. Valid values are `RGB`, `RBG`, `GRB`, `GBR`, `BRG` and `BGR`. Defaults to `RGB`.\n\n*See also: [FastLED Light](https://esphome.io/components/light/fastled#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "light.ADDRESSABLE_LIGHT_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

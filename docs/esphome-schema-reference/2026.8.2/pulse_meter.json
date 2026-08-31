@@ -1,0 +1,109 @@
+{
+  "pulse_meter": {
+    "action": {
+      "set_total_pulses": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "pulse_meter::PulseMeterSensor"
+            },
+            "value": {
+              "data_type": "uint32_t",
+              "key": "Required",
+              "templatable": true,
+              "type": "integer"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Using this action, you are able to reset/set the total pulse count. This can be useful if you would like the `total` sensor to match what you see on your meter you are trying to match."
+      }
+    }
+  },
+  "pulse_meter.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "2"
+            },
+            "icon": {
+              "default": "mdi:pulse"
+            },
+            "id": {
+              "id_type": {
+                "class": "pulse_meter::PulseMeterSensor",
+                "parents": [
+                  "sensor::Sensor",
+                  "EntityBase",
+                  "Component"
+                ]
+              }
+            },
+            "internal_filter": {
+              "default": "13us",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: If a pulse shorter than this time is detected, it is discarded. Defaults to `13us`. This acts as a debounce filter to eliminate input noise, so choose a value a little less than your expected minimum pulse width.\n\n*See also: [Pulse Meter Sensor](https://esphome.io/components/sensor/pulse_meter#configuration-variables)*"
+            },
+            "internal_filter_mode": {
+              "default": "EDGE",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "EDGE": null,
+                "PULSE": null
+              },
+              "docs": "**string**: Determines how the internal filter is applied. One of `EDGE` or `PULSE`. Defaults to `EDGE`.\n\n*See also: [Pulse Meter Sensor](https://esphome.io/components/sensor/pulse_meter#configuration-variables)*"
+            },
+            "pin": {
+              "key": "Required",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The pin to count pulses on.\n\n*See also: [Pulse Meter Sensor](https://esphome.io/components/sensor/pulse_meter#configuration-variables)*"
+            },
+            "state_class": {
+              "default": "measurement"
+            },
+            "timeout": {
+              "default": "5min",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: If we don't see a pulse for this length of time, we assume *0 pulses/s*. Defaults to `5 min`.\n\n*See also: [Pulse Meter Sensor](https://esphome.io/components/sensor/pulse_meter#configuration-variables)*"
+            },
+            "total": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "icon": {
+                    "default": "mdi:pulse"
+                  },
+                  "state_class": {
+                    "default": "total_increasing"
+                  },
+                  "unit_of_measurement": {
+                    "default": "pulses"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: An additional sensor that outputs the total number of pulses counted.\n\n*See also: [Pulse Meter Sensor](https://esphome.io/components/sensor/pulse_meter#configuration-variables)*"
+            },
+            "unit_of_measurement": {
+              "default": "pulses/min"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

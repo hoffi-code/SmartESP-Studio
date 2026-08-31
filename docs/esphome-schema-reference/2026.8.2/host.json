@@ -1,0 +1,108 @@
+{
+  "host": {
+    "pin": {
+      "schema": {
+        "config_vars": {
+          "allow_other_uses": {
+            "key": "Optional",
+            "type": "boolean"
+          },
+          "id": {
+            "id_type": {
+              "class": "host::HostGPIOPin",
+              "parents": [
+                "InternalGPIOPin",
+                "GPIOPin"
+              ]
+            },
+            "key": "GeneratedID"
+          },
+          "inverted": {
+            "default": "False",
+            "key": "Optional",
+            "type": "boolean"
+          },
+          "mode": {
+            "default": "{}",
+            "key": "Optional",
+            "modes": [],
+            "schema": {
+              "config_vars": {
+                "input": {
+                  "default": "False",
+                  "key": "Optional",
+                  "type": "boolean"
+                },
+                "open_drain": {
+                  "default": "False",
+                  "key": "Optional",
+                  "type": "boolean"
+                },
+                "output": {
+                  "default": "False",
+                  "key": "Optional",
+                  "type": "boolean"
+                },
+                "pulldown": {
+                  "default": "False",
+                  "key": "Optional",
+                  "type": "boolean"
+                },
+                "pullup": {
+                  "default": "False",
+                  "key": "Optional",
+                  "type": "boolean"
+                }
+              }
+            },
+            "type": "pin"
+          },
+          "number": {
+            "key": "Required"
+          }
+        }
+      },
+      "type": "schema"
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "mac_address": {
+              "default": "98:35:69:ab:f6:79",
+              "key": "Optional",
+              "docs": "**MAC address**: A dummy MAC address to use when communicating with HA.\n\n*See also: [Host Platform](https://esphome.io/components/host#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "host.time": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "host::HostTime",
+                "parents": [
+                  "time::RealTimeClock",
+                  "PollingComponent",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            }
+          },
+          "extends": [
+            "time.TIME_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,515 @@
+{
+  "ezo_pmp": {
+    "action": {
+      "arbitrary_command": {
+        "schema": {
+          "config_vars": {
+            "command": {
+              "key": "Required",
+              "templatable": true,
+              "type": "string"
+            },
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "ezo_pmp::EzoPMP"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "change_i2c_address": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "key": "Required",
+              "templatable": true,
+              "type": "integer",
+              "docs": "**int**: The new I2C address for the pump.\n\n*See also: [Atlas Scientific Peristaltic Pump](https://esphome.io/components/ezo_pmp#configuration-variables)*"
+            },
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "ezo_pmp::EzoPMP",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the pump.\n\n*See also: [Atlas Scientific Peristaltic Pump](https://esphome.io/components/ezo_pmp#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Changes the i2c address of the pump to the provided value. After the address is changed you must upload a new version of the ESPHome firmware with the updated I2C address for the pump to work."
+      },
+      "clear_calibration": {
+        "schema": {
+          "extends": [
+            "ezo_pmp.EZO_PMP_NO_ARGS_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Clear the calibration values stored in the pump. You can check the calibration status by using the [Calibration Status](https://esphome.io/components/ezo_pmp#ezo_pmp-calibration_status_text_sensor) sensor."
+      },
+      "clear_total_volume_dosed": {
+        "schema": {
+          "extends": [
+            "ezo_pmp.EZO_PMP_NO_ARGS_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Clear the values of the [Current Volume Dosed](https://esphome.io/components/ezo_pmp#ezo_pmp-current_volume_dosed_sensor), [Total Volume Dosed](https://esphome.io/components/ezo_pmp#ezo_pmp-total_volume_dosed_sensor) and [Absolute Total Volume Dosed](https://esphome.io/components/ezo_pmp#ezo_pmp-absolute_total_volume_dosed_sensor) sensors."
+      },
+      "dose_continuously": {
+        "schema": {
+          "extends": [
+            "ezo_pmp.EZO_PMP_NO_ARGS_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Use this action in an [automations](https://esphome.io/automations) to have the peristaltic pump dose continuously at the [Maximum Flow Rate](https://esphome.io/components/ezo_pmp#ezo_pmp-max_flow_rate_sensor). The pump will automatically stop after 20 days of running in continuous mode."
+      },
+      "dose_volume": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "ezo_pmp::EzoPMP",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the pump.\n\n*See also: [Atlas Scientific Peristaltic Pump](https://esphome.io/components/ezo_pmp#configuration-variables)*"
+            },
+            "volume": {
+              "key": "Required",
+              "templatable": true,
+              "docs": "**float**: The volume to dose in milliliters. If negative, pump will run in reverse.\n\n*See also: [Atlas Scientific Peristaltic Pump](https://esphome.io/components/ezo_pmp#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Use this action in an [automations](https://esphome.io/automations) to have the peristaltic pump dose an specific volume (in milliliters) at the [Maximum Flow Rate](https://esphome.io/components/ezo_pmp#ezo_pmp-max_flow_rate_sensor). If the volume is negative the pump will run backwards."
+      },
+      "dose_volume_over_time": {
+        "schema": {
+          "config_vars": {
+            "duration": {
+              "key": "Required",
+              "templatable": true,
+              "type": "integer",
+              "docs": "**int**: The time (in minutes) the pump will take to dose the volume requested.\n\n*See also: [Atlas Scientific Peristaltic Pump](https://esphome.io/components/ezo_pmp#configuration-variables)*"
+            },
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "ezo_pmp::EzoPMP",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the pump.\n\n*See also: [Atlas Scientific Peristaltic Pump](https://esphome.io/components/ezo_pmp#configuration-variables)*"
+            },
+            "volume": {
+              "key": "Required",
+              "templatable": true,
+              "docs": "**float**: The volume to dose in milliliters. If negative, pump will run in reverse.\n\n*See also: [Atlas Scientific Peristaltic Pump](https://esphome.io/components/ezo_pmp#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Use this action in an [automations](https://esphome.io/automations) to have the peristaltic pump dose an specific `volume` (in milliliters) over the provided `duration` (in minutes). At the end of the time period the pump will have dosed the specified `volume`. If the volume is negative the pump will run backwards."
+      },
+      "dose_with_constant_flow_rate": {
+        "schema": {
+          "config_vars": {
+            "duration": {
+              "key": "Required",
+              "templatable": true,
+              "type": "integer",
+              "docs": "**int**: The time (in minutes) the pump will dose the volume requested every minute.\n\n*See also: [Atlas Scientific Peristaltic Pump](https://esphome.io/components/ezo_pmp#configuration-variables)*"
+            },
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "ezo_pmp::EzoPMP",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the pump.\n\n*See also: [Atlas Scientific Peristaltic Pump](https://esphome.io/components/ezo_pmp#configuration-variables)*"
+            },
+            "volume_per_minute": {
+              "key": "Required",
+              "templatable": true,
+              "docs": "**float**: The volume to dose in milliliters every minute. If negative, pump will run in reverse.\n\n*See also: [Atlas Scientific Peristaltic Pump](https://esphome.io/components/ezo_pmp#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Use this action in an [automations](https://esphome.io/automations) to have the peristaltic pump dose an specific `volume` (in milliliters) every minute for the provided `duration` (in minutes). At the end of the time period the pump will have dosed the specified `volume` times the `duration`. If the volume is negative the pump will run backwards."
+      },
+      "find": {
+        "schema": {
+          "extends": [
+            "ezo_pmp.EZO_PMP_NO_ARGS_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Use this action to make the LED on the Pump control board to blink for a minute. The pump will not respond to any other action while the LED is blinking."
+      },
+      "pause_dosing": {
+        "schema": {
+          "extends": [
+            "ezo_pmp.EZO_PMP_NO_ARGS_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Use this action to pause a Dosing command that was previously issued. To determine if the dosing is paused or not, you can use the [Is Paused](https://esphome.io/components/ezo_pmp#ezo_pmp-is_paused_binary_sensor) sensor. If the pump is currently paused, issuing this action again will unpause it."
+      },
+      "set_calibration_volume": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "ezo_pmp::EzoPMP",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the pump.\n\n*See also: [Atlas Scientific Peristaltic Pump](https://esphome.io/components/ezo_pmp#configuration-variables)*"
+            },
+            "volume": {
+              "key": "Required",
+              "templatable": true,
+              "docs": "**float**: The volume measured as part of the calibration process.\n\n*See also: [Atlas Scientific Peristaltic Pump](https://esphome.io/components/ezo_pmp#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Use this action to calibrate the peristaltic pump. The EZO-PMP needs two forms of calibration: absolute volume and volume over time. You can check the calibration status by using the [Calibration Status](https://esphome.io/components/ezo_pmp#ezo_pmp-calibration_status_text_sensor) sensor. For the procedure on calibrating the pump check the datasheet."
+      },
+      "stop_dosing": {
+        "schema": {
+          "extends": [
+            "ezo_pmp.EZO_PMP_NO_ARGS_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Use this action to stop the current Dosing command."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "103",
+              "key": "Optional",
+              "docs": "**int**: Specify the I\u00b2C address of the sensor. Defaults to 103.\n\n*See also: [Atlas Scientific Peristaltic Pump](https://esphome.io/components/ezo_pmp#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "ezo_pmp::EzoPMP",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Specify the ID of the pump so that you can control it.\n\n*See also: [Atlas Scientific Peristaltic Pump](https://esphome.io/components/ezo_pmp#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`.\n\n*See also: [Atlas Scientific Peristaltic Pump](https://esphome.io/components/ezo_pmp#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "EZO_PMP_NO_ARGS_ACTION_SCHEMA": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "ezo_pmp::EzoPMP",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the pump.\n\n*See also: [Atlas Scientific Peristaltic Pump](https://esphome.io/components/ezo_pmp#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "ezo_pmp.binary_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "ezo_pmp::EzoPMP"
+            },
+            "is_paused": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": ""
+                  },
+                  "entity_category": {
+                    "default": ""
+                  }
+                },
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "pump_state": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "running"
+                  },
+                  "entity_category": {
+                    "default": ""
+                  }
+                },
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "ezo_pmp.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "absolute_total_volume_dosed": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": ""
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "mL"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "current_volume_dosed": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": ""
+                  },
+                  "entity_category": {
+                    "default": ""
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "mL"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "ezo_pmp::EzoPMP",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Set the ID of this sensor for use in lambdas.\n\n*See also: [Atlas Scientific Peristaltic Pump](https://esphome.io/components/ezo_pmp#configuration-variables)*"
+            },
+            "last_volume_requested": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": ""
+                  },
+                  "entity_category": {
+                    "default": ""
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "mL"
+                  },
+                  "id": {
+                    "key": "GeneratedID",
+                    "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Set the ID of this sensor for use in lambdas.\n\n*See also: [Atlas Scientific Peristaltic Pump](https://esphome.io/components/ezo_pmp#configuration-variables)*"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "max_flow_rate": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": ""
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "state_class": {
+                    "default": ""
+                  },
+                  "unit_of_measurement": {
+                    "default": "mL/min"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "pump_voltage": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "voltage"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "V"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "total_volume_dosed": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": ""
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "mL"
+                  },
+                  "id": {
+                    "key": "GeneratedID",
+                    "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Set the ID of this sensor for use in lambdas.\n\n*See also: [Atlas Scientific Peristaltic Pump](https://esphome.io/components/ezo_pmp#configuration-variables)*"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "ezo_pmp.text_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "calibration_status": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "entity_category": {
+                    "default": "diagnostic"
+                  }
+                },
+                "extends": [
+                  "text_sensor._TEXT_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "dosing_mode": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "entity_category": {
+                    "default": ""
+                  }
+                },
+                "extends": [
+                  "text_sensor._TEXT_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "ezo_pmp::EzoPMP"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

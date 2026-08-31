@@ -1,0 +1,251 @@
+{
+  "emc2101": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "76",
+              "key": "Optional",
+              "docs": "**int**: Manually specify the I\u00b2C address of the sensor. Defaults to `0x4C`.\n\n*See also: [EMC2101 Fan Controller and Temperature sensor](https://esphome.io/components/emc2101#configuration-variables)*"
+            },
+            "dac": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "conversion_rate": {
+                    "default": "16",
+                    "key": "Optional",
+                    "type": "enum",
+                    "values": {
+                      "1/16": null,
+                      "1/8": null,
+                      "1/4": null,
+                      "1/2": null,
+                      "1": null,
+                      "2": null,
+                      "4": null,
+                      "8": null,
+                      "16": null,
+                      "32": null
+                    },
+                    "docs": "**string**: The number of digital to analog conversions perfomed per second. One of `1/16`, `1/8`, `1/4`, `1/2`, `1`, `2`, `4`, `8`, `16`, `32`. Defaults to `16`.\n\n*See also: [EMC2101 Fan Controller and Temperature sensor](https://esphome.io/components/emc2101#configuration-variables)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "Enable DAC output.\n\n*See also: [EMC2101 Fan Controller and Temperature sensor](https://esphome.io/components/emc2101#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "emc2101::Emc2101Component",
+                "parents": [
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "inverted": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Inverts the output so 0 means 100% duty cycle and 1 means 0%. Defaults to `false`.\n\n*See also: [EMC2101 Fan Controller and Temperature sensor](https://esphome.io/components/emc2101#configuration-variables)*"
+            },
+            "pwm": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "divider": {
+                    "data_type": "uint8_t",
+                    "default": "1",
+                    "key": "Optional",
+                    "type": "integer",
+                    "docs": "**int**: Value for the frequency divider. Defaults to `1`.\n\n*See also: [EMC2101 Fan Controller and Temperature sensor](https://esphome.io/components/emc2101#configuration-variables)*"
+                  },
+                  "resolution": {
+                    "default": "23",
+                    "key": "Optional",
+                    "type": "integer",
+                    "docs": "**int**: Determines effective resolution and the frequency of the PWM signal. Defaults to `23`.\n\n*See also: [EMC2101 Fan Controller and Temperature sensor](https://esphome.io/components/emc2101#configuration-variables)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "Enable PWM output.\n\n*See also: [EMC2101 Fan Controller and Temperature sensor](https://esphome.io/components/emc2101#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "EMC2101_COMPONENT_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "emc2101_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "emc2101::Emc2101Component"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "emc2101.output": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "emc2101::EMC2101Output",
+                "parents": [
+                  "output::FloatOutput",
+                  "output::BinaryOutput"
+                ]
+              },
+              "key": "Required",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID to use for code generation, and for reference by dependent components.\n\n*See also: [EMC2101 Fan Controller and Temperature sensor](https://esphome.io/components/emc2101#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "emc2101.EMC2101_COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "emc2101.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "duty_cycle": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "icon": {
+                    "default": "mdi:percent"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "%"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "external_temperature": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "3"
+                  },
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "id": {
+              "id_type": {
+                "class": "emc2101::EMC2101Sensor",
+                "parents": [
+                  "PollingComponent",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "internal_temperature": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "speed": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "icon": {
+                    "default": "mdi:fan"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "RPM"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional"
+            }
+          },
+          "extends": [
+            "emc2101.EMC2101_COMPONENT_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

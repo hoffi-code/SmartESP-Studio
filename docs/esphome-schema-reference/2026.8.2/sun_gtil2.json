@@ -1,0 +1,262 @@
+{
+  "sun_gtil2": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "sun_gtil2::SunGTIL2",
+                "parents": [
+                  "Component",
+                  "uart::UARTDevice"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id to use for this component.\n\n*See also: [SUN_GTIL2 Grid Tie Inverter](https://esphome.io/components/sun_gtil2#configuration-variables)*"
+            },
+            "uart_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "uart::UARTComponent",
+              "docs": "The UART Bus ID for receiving messages sent from the inverter's controller to the display.\n\n*See also: [SUN_GTIL2 Grid Tie Inverter](https://esphome.io/components/sun_gtil2#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "sun_gtil2.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "ac_power": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "power"
+                  },
+                  "icon": {
+                    "default": "mdi:flash"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "W"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The inverter's output power. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [SUN_GTIL2 Grid Tie Inverter](https://esphome.io/components/sun_gtil2#configuration-variables)*"
+            },
+            "ac_voltage": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "voltage"
+                  },
+                  "icon": {
+                    "default": "mdi:flash"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "V"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The grid voltage measured by the inverter. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [SUN_GTIL2 Grid Tie Inverter](https://esphome.io/components/sun_gtil2#configuration-variables)*"
+            },
+            "dc_power": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "power"
+                  },
+                  "icon": {
+                    "default": "mdi:flash"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "W"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The inverter's input power. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [SUN_GTIL2 Grid Tie Inverter](https://esphome.io/components/sun_gtil2#configuration-variables)*"
+            },
+            "dc_voltage": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "voltage"
+                  },
+                  "icon": {
+                    "default": "mdi:flash"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "V"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The voltage of your DC source. (battery or solar panels) All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [SUN_GTIL2 Grid Tie Inverter](https://esphome.io/components/sun_gtil2#configuration-variables)*"
+            },
+            "limiter_power": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "power"
+                  },
+                  "icon": {
+                    "default": "mdi:flash"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "W"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The power measured by the inverter's \"Internal\" limiter. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [SUN_GTIL2 Grid Tie Inverter](https://esphome.io/components/sun_gtil2#configuration-variables)*"
+            },
+            "sun_gtil2_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "sun_gtil2::SunGTIL2",
+              "docs": "Manually specify the ID of the sun_gtil2 instance if there are multiple.\n\n*See also: [SUN_GTIL2 Grid Tie Inverter](https://esphome.io/components/sun_gtil2#configuration-variables)*"
+            },
+            "temperature": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "icon": {
+                    "default": "mdi:thermometer"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The temperature of your inverter's heatsink. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [SUN_GTIL2 Grid Tie Inverter](https://esphome.io/components/sun_gtil2#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "sun_gtil2.text_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "serial_number": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "id": {}
+                },
+                "extends": [
+                  "text_sensor._TEXT_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The inverter's serial number. All options from [Text Sensor](https://esphome.io/components/text_sensor#config-text_sensor).\n\n*See also: [SUN_GTIL2 Grid Tie Inverter](https://esphome.io/components/sun_gtil2#configuration-variables)*"
+            },
+            "state": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "id": {}
+                },
+                "extends": [
+                  "text_sensor._TEXT_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The inverter's state. All options from [Text Sensor](https://esphome.io/components/text_sensor#config-text_sensor).\n\n*See also: [SUN_GTIL2 Grid Tie Inverter](https://esphome.io/components/sun_gtil2#configuration-variables)*"
+            },
+            "sun_gtil2_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "sun_gtil2::SunGTIL2",
+              "docs": "Manually specify the ID of the sun_gtil2 instance if there are multiple.\n\n*See also: [SUN_GTIL2 Grid Tie Inverter](https://esphome.io/components/sun_gtil2#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "tinyusb": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "tinyusb::TinyUSB",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID for this component.\n\n*See also: [TinyUSB](https://esphome.io/components/tinyusb#configuration-variables)*"
+            },
+            "usb_lang_id": {
+              "data_type": "uint16_t",
+              "default": "1033",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: USB language identifier. Defaults to `0x0409` (English - United States).\n\n*See also: [TinyUSB](https://esphome.io/components/tinyusb#configuration-variables)*"
+            },
+            "usb_manufacturer_str": {
+              "default": "ESPHome",
+              "key": "Optional",
+              "type": "string",
+              "docs": "**string**: Manufacturer string descriptor. Defaults to `\"ESPHome\"`.\n\n*See also: [TinyUSB](https://esphome.io/components/tinyusb#configuration-variables)*"
+            },
+            "usb_product_id": {
+              "data_type": "uint16_t",
+              "default": "16385",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: USB product identifier. Defaults to `0x4001`.\n\n*See also: [TinyUSB](https://esphome.io/components/tinyusb#configuration-variables)*"
+            },
+            "usb_product_str": {
+              "default": "ESPHome",
+              "key": "Optional",
+              "type": "string",
+              "docs": "**string**: Product name string descriptor. Defaults to `\"ESPHome\"`.\n\n*See also: [TinyUSB](https://esphome.io/components/tinyusb#configuration-variables)*"
+            },
+            "usb_serial_str": {
+              "default": "",
+              "key": "Optional",
+              "type": "string",
+              "docs": "**string**: Serial number string descriptor. If not specified, the device's MAC address will be used.\n\n*See also: [TinyUSB](https://esphome.io/components/tinyusb#configuration-variables)*"
+            },
+            "usb_vendor_id": {
+              "data_type": "uint16_t",
+              "default": "12346",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: USB vendor identifier. Defaults to `0x303A` (Espressif Systems).\n\n*See also: [TinyUSB](https://esphome.io/components/tinyusb#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

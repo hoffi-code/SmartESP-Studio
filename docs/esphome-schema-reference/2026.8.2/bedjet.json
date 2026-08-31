@@ -1,0 +1,226 @@
+{
+  "bedjet": {
+    "schemas": {
+      "BEDJET_CLIENT_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "bedjet_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "bedjet::BedJetHub",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the Bedjet component.\n\n*See also: [BedJet](https://esphome.io/components/climate/bedjet#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "ble_client_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "ble_client::BLEClient",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the BLE Client.\n\n*See also: [BedJet](https://esphome.io/components/climate/bedjet#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "bedjet::BedJetHub",
+                "parents": [
+                  "ble_client::BLEClientNode",
+                  "PollingComponent",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [BedJet](https://esphome.io/components/climate/bedjet#configuration-variables)*"
+            },
+            "receive_timeout": {
+              "default": "0s",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema"
+            },
+            "time_id": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "time::RealTimeClock",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of a [Time](https://esphome.io/components/time/) which can be used to set the time on the BedJet device.\n\n*See also: [BedJet](https://esphome.io/components/climate/bedjet#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "15s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to dispatch status changes to child components. Defaults to `5s`. Each child component can decide whether to publish its own updated state on this interval, or use another (longer) update interval to throttle its own updates.\n\n*See also: [BedJet](https://esphome.io/components/climate/bedjet#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "bedjet.climate": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "heat_mode": {
+              "default": "heat",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "heat": {
+                  "docs": "Default"
+                },
+                "extended": {
+                  "docs": "Setting `hvac_mode=extended` uses BedJet \"EXT HEAT\" mode. Whichever is not selected will be made available as a custom preset."
+                }
+              },
+              "docs": "**string**: The primary heating mode to use for `HVACMode.HEAT`  :\n\n*See also: [BedJet](https://esphome.io/components/climate/bedjet#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "bedjet::BedJetClimate",
+                "parents": [
+                  "climate::Climate",
+                  "EntityBase",
+                  "PollingComponent",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "temperature_source": {
+              "default": "ambient",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "outlet": {
+                  "docs": "The temperature of the air being discharged by the BedJet will be"
+                },
+                "ambient": {
+                  "docs": "Default"
+                }
+              },
+              "docs": "**string**: The temperature that should be used as the climate entity's current temperature:\n\n*See also: [BedJet](https://esphome.io/components/climate/bedjet#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional"
+            }
+          },
+          "extends": [
+            "climate._CLIMATE_SCHEMA",
+            "core.COMPONENT_SCHEMA",
+            "bedjet.BEDJET_CLIENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "bedjet.fan": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "bedjet::BedJetFan",
+                "parents": [
+                  "fan::Fan",
+                  "EntityBase",
+                  "PollingComponent",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional"
+            }
+          },
+          "extends": [
+            "fan._FAN_SCHEMA",
+            "core.COMPONENT_SCHEMA",
+            "bedjet.BEDJET_CLIENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "bedjet.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "ambient_temperature": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "If specified, the temperature of the room the BedJet is in will be reported as a sensor. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [BedJet](https://esphome.io/components/climate/bedjet#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "bedjet::BedjetSensor",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "outlet_temperature": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "If specified, the temperature of the air being discharged from the BedJet will be reported as a sensor. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [BedJet](https://esphome.io/components/climate/bedjet#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "bedjet.BEDJET_CLIENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

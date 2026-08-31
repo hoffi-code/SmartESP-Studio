@@ -1,0 +1,168 @@
+{
+  "safe_mode": {
+    "action": {
+      "mark_successful": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "safe_mode::SafeModeComponent"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This action marks the boot as successful, preventing safe mode from being invoked. This is useful for devices that take a sensor reading and then enter deep sleep, rather than waiting for the `boot_is_good_after` time to elapse."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "boot_is_good_after": {
+              "default": "1min",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The amount of time after which the boot is considered successful.\n\n*See also: [Safe Mode](https://esphome.io/components/safe_mode#configuration-variables)*"
+            },
+            "boot_is_good_on_shutdown": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Whether an orderly shutdown (entering deep sleep, a restart or\n\n*See also: [Safe Mode](https://esphome.io/components/safe_mode#configuration-variables)*"
+            },
+            "disabled": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Set to `true` to disable safe_mode. [Ota](https://esphome.io/components/ota/) automatically\n\n*See also: [Safe Mode](https://esphome.io/components/safe_mode#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "safe_mode::SafeModeComponent",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "num_attempts": {
+              "data_type": "positive_not_null_int",
+              "default": "10",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: The number of failed boot attempts which must occur before invoking safe mode.\n\n*See also: [Safe Mode](https://esphome.io/components/safe_mode#configuration-variables)*"
+            },
+            "on_safe_mode": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An action to be performed once when safe mode is invoked.\n\n*See also: [Safe Mode](https://esphome.io/components/safe_mode#configuration-variables)*"
+            },
+            "reboot_timeout": {
+              "default": "5min",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The amount of time to wait before rebooting when in safe mode.\n\n*See also: [Safe Mode](https://esphome.io/components/safe_mode#configuration-variables)*"
+            },
+            "storage": {
+              "default": "rtc",
+              "key": "Optional",
+              "docs": "**string**: Where to persist the boot-attempt counter. One of:\n\n*See also: [Safe Mode](https://esphome.io/components/safe_mode#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "safe_mode.button": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "device_class": {
+              "default": "restart"
+            },
+            "entity_category": {
+              "default": "config"
+            },
+            "icon": {
+              "default": "mdi:restart-alert"
+            },
+            "id": {
+              "id_type": {
+                "class": "safe_mode::SafeModeButton",
+                "parents": [
+                  "button::Button",
+                  "EntityBase",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "safe_mode": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "safe_mode::SafeModeComponent"
+            }
+          },
+          "extends": [
+            "button._BUTTON_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "safe_mode.switch": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "entity_category": {
+              "default": "config"
+            },
+            "icon": {
+              "default": "mdi:restart-alert"
+            },
+            "id": {
+              "id_type": {
+                "class": "safe_mode::SafeModeSwitch",
+                "parents": [
+                  "switch_::Switch",
+                  "EntityBase",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "safe_mode": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "safe_mode::SafeModeComponent"
+            }
+          },
+          "extends": [
+            "switch._SWITCH_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

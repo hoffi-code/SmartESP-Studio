@@ -1,0 +1,123 @@
+{
+  "sm2135": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "clock_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin which SCLK is\n\n*See also: [SM2135 LED driver](https://esphome.io/components/output/sm2135#configuration-variables)*"
+            },
+            "cw_current": {
+              "default": "10mA",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "10mA": null,
+                "15mA": null,
+                "20mA": null,
+                "25mA": null,
+                "30mA": null,
+                "35mA": null,
+                "40mA": null,
+                "45mA": null,
+                "50mA": null,
+                "55mA": null,
+                "60mA": null
+              },
+              "docs": "**current**: The current used for the white channel. Defaults to `10mA`. Can be one of `10mA`, `15mA`, `20mA`, `25mA`, `30mA`, `35mA`, `40mA`, `45mA`, `50mA`, `55mA`, `60mA`.\n\n*See also: [SM2135 LED driver](https://esphome.io/components/output/sm2135#configuration-variables)*"
+            },
+            "data_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin used for MOSI.\n\n*See also: [SM2135 LED driver](https://esphome.io/components/output/sm2135#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "sm2135::SM2135",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id to use for\n\n*See also: [SM2135 LED driver](https://esphome.io/components/output/sm2135#configuration-variables)*"
+            },
+            "rgb_current": {
+              "default": "20mA",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "10mA": null,
+                "15mA": null,
+                "20mA": null,
+                "25mA": null,
+                "30mA": null,
+                "35mA": null,
+                "40mA": null,
+                "45mA": null
+              },
+              "docs": "**current**: The current used for the RGB channel. Defaults to `20mA`. Can be one of `10mA`, `15mA`, `20mA`, `25mA`, `30mA`, `35mA`, `40mA`, `45mA`.\n\n*See also: [SM2135 LED driver](https://esphome.io/components/output/sm2135#configuration-variables)*"
+            },
+            "separate_modes": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**bool**: Use separate RGB/CW modes instead of writing all 5 values as RGB. Defaults to `true`, keep it at `true` if your SM2135 chip variant does not support simultaneous CW and RGB modes (e.g. SM2135E). Set this to `false` when your SM2135 chip variant supports having CW and RGB leds on at the same time (e.g. SM2135EH/SM2135EJ).\n\n*See also: [SM2135 LED driver](https://esphome.io/components/output/sm2135#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "sm2135.output": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "channel": {
+              "key": "Required",
+              "type": "integer",
+              "docs": "**int**: Chose the channel of the SM2135 chain of this output component.\n\n*See also: [SM2135 LED driver](https://esphome.io/components/output/sm2135#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "sm2135::SM2135::Channel",
+                "parents": [
+                  "output::FloatOutput",
+                  "output::BinaryOutput"
+                ]
+              },
+              "key": "Required",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id to use for this output component.\n\n*See also: [SM2135 LED driver](https://esphome.io/components/output/sm2135#configuration-variables)*"
+            },
+            "sm2135_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "sm2135::SM2135",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the [Component/Hub](https://esphome.io/components/output/sm2135#sm2135-component). Use this if you have multiple SM2135 chains you want to use at the same time.\n\n*See also: [SM2135 LED driver](https://esphome.io/components/output/sm2135#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "output.FLOAT_OUTPUT_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

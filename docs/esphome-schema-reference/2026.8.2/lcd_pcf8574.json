@@ -1,0 +1,48 @@
+{
+  "lcd_pcf8574.display": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "63",
+              "key": "Optional",
+              "docs": "**int**: The [I\u00b2C](https://esphome.io/components/i2c) address of the PCF8574 chip, defaults to `0x3F`.\n\n*See also: [Character-Based LCD Display](https://esphome.io/components/display/lcd_display#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "lcd_pcf8574::PCF8574LCDDisplay",
+                "parents": [
+                  "lcd_base::LCDDisplay",
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [Character-Based LCD Display](https://esphome.io/components/display/lcd_display#configuration-variables)*"
+            },
+            "lambda": {
+              "key": "Optional",
+              "docs": "**[lambda](https://esphome.io/automations/templates#config-lambda)**: The lambda to use for rendering the content on the display. See [Rendering Lambda](https://esphome.io/components/display/lcd_display#display-lcd_lambda) for more information.\n\n*See also: [Character-Based LCD Display](https://esphome.io/components/display/lcd_display#configuration-variables)*"
+            },
+            "update_interval": {
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to re-draw the screen. Defaults to `1s`.\n\n*See also: [Character-Based LCD Display](https://esphome.io/components/display/lcd_display#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "lcd_base.LCD_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

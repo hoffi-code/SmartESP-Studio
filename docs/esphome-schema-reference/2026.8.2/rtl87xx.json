@@ -1,0 +1,22 @@
+{
+  "rtl87xx": {
+    "pin": {
+      "schema": {
+        "extends": [
+          "bk72xx.PIN_SCHEMA"
+        ]
+      },
+      "type": "schema"
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "extends": [
+            "libretiny.BASE_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

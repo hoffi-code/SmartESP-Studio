@@ -1,0 +1,19 @@
+{
+  "ble_device_base": {
+    "schemas": {
+      "BLE_DEVICE_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "ble_hub_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "ble_device_base::BLEHub",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The BLE tracker hub to receive advertisements from. Auto-generated when only one tracker is configured; set it explicitly to disambiguate multiple trackers. Replaces the former `esp32_ble_id` key, which still works as a deprecated alias until ESPHome 2027.2.0.\n\n*See also: [Bluetooth Low Energy Device](https://esphome.io/components/binary_sensor/ble_presence#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

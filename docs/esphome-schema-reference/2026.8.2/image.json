@@ -1,0 +1,25 @@
+{
+  "image": {
+    "components": {
+      "animation": {
+        "dependencies": [
+          "display"
+        ]
+      },
+      "file": {
+        "docs": "The `file` platform of the [image](https://esphome.io/components/image/) component embeds a static image into the firmware at compile time. The image can come from a file stored alongside your configuration, be downloaded from a URL, or be one of the freely available Material Design Icons.\n\n*See also: [File](https://esphome.io/components/image/file)*"
+      },
+      "online_image": {
+        "dependencies": [
+          "http_request"
+        ]
+      },
+      "sendspin": {
+        "dependencies": [
+          "sendspin"
+        ]
+      }
+    },
+    "schemas": {}
+  }
+}

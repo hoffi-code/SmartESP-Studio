@@ -1,0 +1,231 @@
+{
+  "gdk101": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "24",
+              "key": "Optional"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "gdk101::GDK101Component",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "gdk101.binary_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "gdk101_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "gdk101::GDK101Component"
+            },
+            "vibrations": {
+              "key": "Required",
+              "schema": {
+                "config_vars": {
+                  "device_class": {
+                    "default": "vibration"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "icon": {
+                    "default": "mdi:vibrate"
+                  }
+                },
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Vibration status. All options from [Binary Sensor](https://esphome.io/components/binary_sensor#config-binary_sensor).\n\n*See also: [FTLab GDK101 Gamma Radiation Sensor Module](https://esphome.io/components/sensor/gdk101#example-configuration-entry)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "gdk101.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "gdk101_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "gdk101::GDK101Component"
+            },
+            "measurement_duration": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "duration"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "icon": {
+                    "default": "mdi:timer-outline"
+                  },
+                  "state_class": {
+                    "default": "total_increasing"
+                  },
+                  "unit_of_measurement": {
+                    "default": "s"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Total time of measurement. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [FTLab GDK101 Gamma Radiation Sensor Module](https://esphome.io/components/sensor/gdk101#example-configuration-entry)*"
+            },
+            "radiation_dose_per_10m": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": ""
+                  },
+                  "icon": {
+                    "default": "mdi:radioactive"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b5Sv/h"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Radiation average dose per 10 minutes. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [FTLab GDK101 Gamma Radiation Sensor Module](https://esphome.io/components/sensor/gdk101#example-configuration-entry)*"
+            },
+            "radiation_dose_per_1m": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": ""
+                  },
+                  "icon": {
+                    "default": "mdi:radioactive"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b5Sv/h"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Radiation average dose per 1 minute. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [FTLab GDK101 Gamma Radiation Sensor Module](https://esphome.io/components/sensor/gdk101#example-configuration-entry)*"
+            },
+            "status": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Sensor status. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [FTLab GDK101 Gamma Radiation Sensor Module](https://esphome.io/components/sensor/gdk101#example-configuration-entry)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "gdk101.text_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "gdk101_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "gdk101::GDK101Component"
+            },
+            "version": {
+              "key": "Required",
+              "schema": {
+                "config_vars": {
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "icon": {
+                    "default": "mdi:chip"
+                  }
+                },
+                "extends": [
+                  "text_sensor._TEXT_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Firmware version of the module. All options from [Text Sensor](https://esphome.io/components/text_sensor#config-text_sensor).\n\n*See also: [FTLab GDK101 Gamma Radiation Sensor Module](https://esphome.io/components/sensor/gdk101#example-configuration-entry)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

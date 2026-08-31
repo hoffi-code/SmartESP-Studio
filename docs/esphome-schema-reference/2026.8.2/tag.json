@@ -1,0 +1,96 @@
+{
+  "tag": {
+    "action": {
+      "emulation_off": {
+        "schema": {
+          "extends": [
+            "pn7160.SIMPLE_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Use this action to disable card (tag) emulation mode. The PN7160 will no longer respond to requests from other readers, such as smartphones."
+      },
+      "emulation_on": {
+        "schema": {
+          "extends": [
+            "pn7160.SIMPLE_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Use this action to enable card (tag) emulation mode. The PN7160 will respond to requests from other readers, such as smartphones."
+      },
+      "polling_off": {
+        "schema": {
+          "extends": [
+            "pn7160.SIMPLE_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Use this action to disable card (tag) reading/writing. The PN7160 will no longer read or write cards/tags."
+      },
+      "polling_on": {
+        "schema": {
+          "extends": [
+            "pn7160.SIMPLE_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Use this action to enable card (tag) reading/writing. The PN7160 will read or write cards/tags."
+      },
+      "set_clean_mode": {
+        "schema": {
+          "extends": [
+            "pn7160.SIMPLE_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Use this action to invoke \"clean mode\" -- the next tag presented to the PN7160 will be \"cleaned\", removing all data from the tag."
+      },
+      "set_emulation_message": {
+        "schema": {
+          "extends": [
+            "pn7160.SET_MESSAGE_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Use this action to set the NDEF message used for card (tag) emulation mode, when enabled (see below)."
+      },
+      "set_format_mode": {
+        "schema": {
+          "extends": [
+            "pn7160.SIMPLE_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Use this action to invoke \"format mode\" -- the next tag presented to the PN7160 will be \"formatted\", leaving only an empty NDEF message structure on the tag."
+      },
+      "set_read_mode": {
+        "schema": {
+          "extends": [
+            "pn7160.SIMPLE_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Use this action to invoke \"read mode\" -- the next tag presented to the PN7160 will be read. This is the default mode that the component operates in."
+      },
+      "set_write_message": {
+        "schema": {
+          "extends": [
+            "pn7160.SET_MESSAGE_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Use this action to set the NDEF message used for \"write mode\" (see below)."
+      },
+      "set_write_mode": {
+        "schema": {
+          "extends": [
+            "pn7160.SIMPLE_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Use this action to invoke \"write mode\" -- the next tag presented to the PN7160 will have its NDEF message set to the message defined by the `tag.set_write_message` action (see above). **Note that a message must be set before this mode may be invoked.**"
+      }
+    }
+  }
+}

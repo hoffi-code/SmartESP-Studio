@@ -1,0 +1,223 @@
+{
+  "bme680.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "118",
+              "key": "Optional",
+              "docs": "**int**: Manually specify the I\u00b2C address of the sensor. Defaults to `0x76`. Another address can be `0x77`.\n\n*See also: [BME680 Temperature+Pressure+Humidity+Gas Sensor](https://esphome.io/components/sensor/bme680#configuration-variables)*"
+            },
+            "gas_resistance": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "icon": {
+                    "default": "mdi:gas-cylinder"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u03a9"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the gas sensor.\n\n*See also: [BME680 Temperature+Pressure+Humidity+Gas Sensor](https://esphome.io/components/sensor/bme680#configuration-variables)*"
+            },
+            "heater": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "duration": {
+                    "default": "150ms",
+                    "key": "Optional",
+                    "schema": {
+                      "extends": [
+                        "core.positive_time_period_milliseconds"
+                      ]
+                    },
+                    "type": "schema",
+                    "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The duration the heater should be active. Maximum value is `4032ms`. Defaults to `150ms`.\n\n*See also: [BME680 Temperature+Pressure+Humidity+Gas Sensor](https://esphome.io/components/sensor/bme680#configuration-variables)*"
+                  },
+                  "temperature": {
+                    "default": "320",
+                    "key": "Optional",
+                    "type": "integer",
+                    "docs": "**int**: The target temperature of the heater between 200 and 400 \u00b0C. Defaults to `320`.\n\n*See also: [BME680 Temperature+Pressure+Humidity+Gas Sensor](https://esphome.io/components/sensor/bme680#configuration-variables)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "The settings for the internal heater for the gas sensor. Set this to disable the internal heater.\n\n*See also: [BME680 Temperature+Pressure+Humidity+Gas Sensor](https://esphome.io/components/sensor/bme680#configuration-variables)*"
+            },
+            "humidity": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "humidity"
+                  },
+                  "oversampling": {
+                    "default": "16X",
+                    "key": "Optional",
+                    "type": "enum",
+                    "values": {
+                      "NONE": null,
+                      "1X": null,
+                      "2X": null,
+                      "4X": null,
+                      "8X": null,
+                      "16X": null
+                    },
+                    "docs": "The oversampling parameter for the temperature sensor. See [Oversampling Options](https://esphome.io/components/sensor/bme680#bme680-oversampling).\n\n*See also: [BME680 Temperature+Pressure+Humidity+Gas Sensor](https://esphome.io/components/sensor/bme680#configuration-variables)*"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "%"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the humidity sensor.\n\n*See also: [BME680 Temperature+Pressure+Humidity+Gas Sensor](https://esphome.io/components/sensor/bme680#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "bme680::BME680Component",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "iir_filter": {
+              "default": "OFF",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "OFF": null,
+                "1X": null,
+                "3X": null,
+                "7X": null,
+                "15X": null,
+                "31X": null,
+                "63X": null,
+                "127X": null
+              },
+              "docs": "Set up an Infinite Impulse Response filter to increase accuracy. One of `OFF`, `1x`, `3x`, `7x`, `15x`, `31x`, `63x` and `127x`. Defaults to `OFF`.\n\n*See also: [BME680 Temperature+Pressure+Humidity+Gas Sensor](https://esphome.io/components/sensor/bme680#configuration-variables)*"
+            },
+            "pressure": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "atmospheric_pressure"
+                  },
+                  "oversampling": {
+                    "default": "16X",
+                    "key": "Optional",
+                    "type": "enum",
+                    "values": {
+                      "NONE": null,
+                      "1X": null,
+                      "2X": null,
+                      "4X": null,
+                      "8X": null,
+                      "16X": null
+                    },
+                    "docs": "The oversampling parameter for the temperature sensor. See [Oversampling Options](https://esphome.io/components/sensor/bme680#bme680-oversampling).\n\n*See also: [BME680 Temperature+Pressure+Humidity+Gas Sensor](https://esphome.io/components/sensor/bme680#configuration-variables)*"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "hPa"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the pressure sensor.\n\n*See also: [BME680 Temperature+Pressure+Humidity+Gas Sensor](https://esphome.io/components/sensor/bme680#configuration-variables)*"
+            },
+            "temperature": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "oversampling": {
+                    "default": "16X",
+                    "key": "Optional",
+                    "type": "enum",
+                    "values": {
+                      "NONE": null,
+                      "1X": null,
+                      "2X": null,
+                      "4X": null,
+                      "8X": null,
+                      "16X": null
+                    },
+                    "docs": "The oversampling parameter for the temperature sensor. See [Oversampling Options](https://esphome.io/components/sensor/bme680#bme680-oversampling).\n\n*See also: [BME680 Temperature+Pressure+Humidity+Gas Sensor](https://esphome.io/components/sensor/bme680#configuration-variables)*"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the temperature sensor.\n\n*See also: [BME680 Temperature+Pressure+Humidity+Gas Sensor](https://esphome.io/components/sensor/bme680#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`.\n\n*See also: [BME680 Temperature+Pressure+Humidity+Gas Sensor](https://esphome.io/components/sensor/bme680#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

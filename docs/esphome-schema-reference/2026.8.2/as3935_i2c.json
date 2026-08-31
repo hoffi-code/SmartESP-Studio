@@ -1,0 +1,37 @@
+{
+  "as3935_i2c": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "3",
+              "key": "Optional"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "as3935_i2c::I2CAS3935Component",
+                "parents": [
+                  "as3935::AS3935Component",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              }
+            }
+          },
+          "extends": [
+            "as3935.AS3935_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

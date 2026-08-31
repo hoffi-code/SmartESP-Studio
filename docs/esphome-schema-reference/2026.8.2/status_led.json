@@ -1,0 +1,72 @@
+{
+  "status_led": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "status_led::StatusLED",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [Status LED](https://esphome.io/components/status_led#configuration-variables)*"
+            },
+            "pin": {
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The GPIO pin to control the LED on.\n\n*See also: [Status LED Light](https://esphome.io/components/light/status_led#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "status_led.light": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "output": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "output::BinaryOutput"
+            },
+            "output_id": {
+              "id_type": {
+                "class": "status_led::StatusLEDLightOutput",
+                "parents": [
+                  "light::LightOutput",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "pin": {
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin"
+            }
+          },
+          "extends": [
+            "light.BINARY_LIGHT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "audio_file": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "extends": [
+            "audio_file.MEDIA_FILE_TYPE_SCHEMA"
+          ],
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID for this media source.\n\n*See also: [Audio File Media Source](https://esphome.io/components/media_source/audio_file#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "MEDIA_FILE_TYPE_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "file": {
+              "key": "Required",
+              "docs": "**string**: Path to audio file. Can be a local file path or a URL.\n\n*See also: [Speaker Audio Media Player](https://esphome.io/components/media_player/speaker#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "audio::AudioFile",
+                "parents": []
+              },
+              "key": "Required",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Unique ID for the file.\n\n*See also: [Speaker Audio Media Player](https://esphome.io/components/media_player/speaker#configuration-variables)*"
+            },
+            "raw_data_id": {
+              "id_type": {
+                "class": "uint8_t",
+                "parents": null
+              },
+              "key": "GeneratedID"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "audio_file.media_source": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "data_type": "_MEDIA_SOURCE_SCHEMA"
+      }
+    }
+  }
+}

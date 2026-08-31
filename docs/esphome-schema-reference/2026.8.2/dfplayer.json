@@ -1,0 +1,329 @@
+{
+  "dfplayer": {
+    "action": {
+      "pause": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "dfplayer::DFPlayer"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Pauses playback, playback can be resumed from the same position with `dfplayer.start`."
+      },
+      "play": {
+        "maybe": "file",
+        "schema": {
+          "config_vars": {
+            "file": {
+              "key": "Required",
+              "templatable": true,
+              "type": "integer",
+              "docs": "**int**: The global track number (from all tracks in the device).\n\n*See also: [DF-Player mini](https://esphome.io/components/dfplayer#dfplayerplay-action)*"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "dfplayer::DFPlayer"
+            },
+            "loop": {
+              "key": "Optional",
+              "templatable": true,
+              "type": "boolean",
+              "docs": "**boolean**: Repeats playing the same track. Defaults to `false`.\n\n*See also: [DF-Player mini](https://esphome.io/components/dfplayer#dfplayerplay-action)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Plays a track."
+      },
+      "play_folder": {
+        "schema": {
+          "config_vars": {
+            "file": {
+              "key": "Optional",
+              "templatable": true,
+              "type": "integer",
+              "docs": "**int**: The file number inside the folder to play. Optional only if `loop` is not set.\n\n*See also: [DF-Player mini](https://esphome.io/components/dfplayer#dfplayerplay_folder-action)*"
+            },
+            "folder": {
+              "key": "Required",
+              "templatable": true,
+              "type": "integer",
+              "docs": "**int**: The folder number.\n\n*See also: [DF-Player mini](https://esphome.io/components/dfplayer#dfplayerplay_folder-action)*"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "dfplayer::DFPlayer"
+            },
+            "loop": {
+              "key": "Optional",
+              "templatable": true,
+              "type": "boolean",
+              "docs": "**boolean**: Repeats playing all files in the folder. Causes `file` to be ignored. Defaults to `false`.\n\n*See also: [DF-Player mini](https://esphome.io/components/dfplayer#dfplayerplay_folder-action)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Plays files inside numbered folders, folders must be numbered from 1 and with leading zeros. Like `01`, `02`, ... etc. Files inside the folders must be numbered with two leading zeros, like `001.mp3`, `002.mp3`, ... etc. Folder numbers can range from 1 to 99 and file name from 1 to 255 or folder number from 1 to 10 and file number from 1 to 1000."
+      },
+      "play_mp3": {
+        "maybe": "file",
+        "schema": {
+          "config_vars": {
+            "file": {
+              "key": "Required",
+              "templatable": true,
+              "type": "integer",
+              "docs": "**int**: The file number inside the `mp3` folder to play.\n\n*See also: [DF-Player mini](https://esphome.io/components/dfplayer#dfplayerplay_mp3-action)*"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "dfplayer::DFPlayer"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Plays a track inside the folder `mp3`. Files inside the folder must be numbered from 1 to 9999, like `0001.mp3`, `0002.mp3`, ... etc. The folder name needs to be `mp3`, placed under the SD card root directory, and the mp3 file name needs to be 4 digits, for example, \"0001.mp3\", placed under the mp3 folder. If you want, you can add additional text after the number in the filename, for example, `0001hello.mp3`, but must always be referenced by number only in yaml."
+      },
+      "play_next": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "dfplayer::DFPlayer"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Starts playback of next track or skips to the next track."
+      },
+      "play_previous": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "dfplayer::DFPlayer"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Plays the previously played track."
+      },
+      "random": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "dfplayer::DFPlayer"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Randomly plays all tracks."
+      },
+      "reset": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "dfplayer::DFPlayer"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Module reset."
+      },
+      "set_device": {
+        "maybe": "device",
+        "schema": {
+          "config_vars": {
+            "device": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "USB": null,
+                "TF_CARD": null
+              }
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "dfplayer::DFPlayer"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Changes the device in use. Valid values are `TF_CARD` and `USB`."
+      },
+      "set_eq": {
+        "maybe": "eq_preset",
+        "schema": {
+          "config_vars": {
+            "eq_preset": {
+              "key": "Required",
+              "templatable": true,
+              "type": "enum",
+              "values": {
+                "NORMAL": null,
+                "POP": null,
+                "ROCK": null,
+                "JAZZ": null,
+                "CLASSIC": null,
+                "BASS": null
+              },
+              "docs": "**enum**: Eq Preset value. Valid values are `NORMAL`, `POP`, `ROCK`, `JAZZ`, `CLASSIC` and `BASS`.\n\n*See also: [DF-Player mini](https://esphome.io/components/dfplayer#dfplayerset_eq-action)*"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "dfplayer::DFPlayer"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Changes audio equalization preset."
+      },
+      "set_volume": {
+        "maybe": "volume",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "dfplayer::DFPlayer"
+            },
+            "volume": {
+              "key": "Required",
+              "templatable": true,
+              "type": "integer",
+              "docs": "**int**: The volume value. Valid values goes from `0` to `30`.\n\n*See also: [DF-Player mini](https://esphome.io/components/dfplayer#dfplayerset_volume-action)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Changes volume."
+      },
+      "sleep": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "dfplayer::DFPlayer"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Enters sleep mode. Playback is stopped and the action `dfplayer.set_device: TF_CARD` should be send for playback to be enabled again."
+      },
+      "start": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "dfplayer::DFPlayer"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Starts playing a track or resumes paused playback."
+      },
+      "stop": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "dfplayer::DFPlayer"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Stops playback."
+      },
+      "volume_down": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "dfplayer::DFPlayer"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Turn volume down."
+      },
+      "volume_up": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "dfplayer::DFPlayer"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Turn volume up."
+      }
+    },
+    "condition": {
+      "is_playing": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "dfplayer::DFPlayer"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This Condition returns true while playback is active."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "dfplayer::DFPlayer",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID used for code generation.\n\n*See also: [DF-Player mini](https://esphome.io/components/dfplayer#configuration-variables)*"
+            },
+            "on_finished_playback": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An action to be performed when playback is finished.\n\n*See also: [DF-Player mini](https://esphome.io/components/dfplayer#configuration-variables)*"
+            },
+            "uart_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "uart::UARTComponent",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the UART hub.\n\n*See also: [DF-Player mini](https://esphome.io/components/dfplayer#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

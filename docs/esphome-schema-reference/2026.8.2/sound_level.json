@@ -1,0 +1,163 @@
+{
+  "sound_level": {
+    "action": {
+      "start": {
+        "schema": {
+          "extends": [
+            "sound_level.sensor.SOUND_LEVEL_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Starts measuring sound levels. Does nothing in passive mode."
+      },
+      "stop": {
+        "schema": {
+          "extends": [
+            "sound_level.sensor.SOUND_LEVEL_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Stops measuring sound levels. Does nothing in passive mode."
+      }
+    }
+  },
+  "sound_level.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "sound_level::SoundLevelComponent",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "measurement_duration": {
+              "default": "1000ms",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The time duration for each sound level measurement. Ranges from `50ms` to `60s`. Defaults to `1000ms`.\n\n*See also: [Sound Level Sensor](https://esphome.io/components/sensor/sound_level#configuration-variables)*"
+            },
+            "microphone": {
+              "default": "{}",
+              "key": "Optional",
+              "maybe": "microphone",
+              "schema": {
+                "config_vars": {
+                  "bits_per_sample": {
+                    "default": "16",
+                    "key": "Optional",
+                    "type": "integer"
+                  },
+                  "channels": {
+                    "default": "0",
+                    "is_list": true,
+                    "key": "Optional",
+                    "type": "integer"
+                  },
+                  "gain_factor": {
+                    "default": "1",
+                    "key": "Optional",
+                    "type": "integer"
+                  },
+                  "id": {
+                    "id_type": {
+                      "class": "microphone::MicrophoneSource",
+                      "parents": []
+                    },
+                    "key": "GeneratedID"
+                  },
+                  "microphone": {
+                    "key": "GeneratedID",
+                    "type": "use_id",
+                    "use_id_type": "microphone::Microphone"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "**[Microphone Source Configuration](https://esphome.io/components/microphone#config-microphone-source)**: The [microphone](https://esphome.io/components/microphone/) settings to use for input. Multiple channels may be selected.\n\n*See also: [Sound Level Sensor](https://esphome.io/components/sensor/sound_level#configuration-variables)*"
+            },
+            "passive": {
+              "key": "Required",
+              "type": "boolean",
+              "docs": "**boolean**: Whether passive mode is enabled. See [Passive Mode](https://esphome.io/components/sensor/sound_level#sound_level-passive).\n\n*See also: [Sound Level Sensor](https://esphome.io/components/sensor/sound_level#configuration-variables)*"
+            },
+            "peak": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "sound_pressure"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "dB"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the peak loudness sensor.\n\n*See also: [Sound Level Sensor](https://esphome.io/components/sensor/sound_level#configuration-variables)*"
+            },
+            "rms": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "sound_pressure"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "dB"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "The information for the Root Mean Square loudness sensor.\n\n*See also: [Sound Level Sensor](https://esphome.io/components/sensor/sound_level#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "SOUND_LEVEL_ACTION_SCHEMA": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "sound_level::SoundLevelComponent"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

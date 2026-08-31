@@ -1,0 +1,76 @@
+{
+  "ttp229_bsf": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "ttp229_bsf::TTP229BSFComponent",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "scl_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin"
+            },
+            "sdo_pin": {
+              "key": "Required",
+              "modes": [
+                "input",
+                "pullup"
+              ],
+              "schema": true,
+              "type": "pin"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "ttp229_bsf.binary_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "channel": {
+              "key": "Required",
+              "type": "integer"
+            },
+            "id": {
+              "id_type": {
+                "class": "ttp229_bsf::TTP229BSFChannel",
+                "parents": [
+                  "binary_sensor::BinarySensor",
+                  "EntityBase"
+                ]
+              },
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually set the ID of this component.\n\n*See also: [TTP229 Capacitive Touch Sensor](https://esphome.io/components/binary_sensor/ttp229#configuration-variables)*"
+            },
+            "ttp229_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "ttp229_bsf::TTP229BSFComponent"
+            }
+          },
+          "extends": [
+            "binary_sensor._BINARY_SENSOR_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

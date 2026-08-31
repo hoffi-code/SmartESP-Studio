@@ -1,0 +1,51 @@
+{
+  "camera_encoder": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "type": "typed",
+        "typed_key": "type",
+        "types": {
+          "esp32_camera": {
+            "config_vars": {
+              "buffer_expand_size": {
+                "default": "1024",
+                "key": "Optional",
+                "type": "integer",
+                "docs": "**int**: Number of bytes to expand the output buffer if it is too small to hold the JPEG-encoded image. A value of `0` disables expansion.\n\n*See also: [Camera Encoder](https://esphome.io/components/camera/camera_encoder#configuration-variables)*"
+              },
+              "buffer_size": {
+                "default": "4096",
+                "key": "Optional",
+                "type": "integer",
+                "docs": "**int**: Initial size of the output buffer in bytes, used to store the JPEG-encoded image data.\n\n*See also: [Camera Encoder](https://esphome.io/components/camera/camera_encoder#configuration-variables)*"
+              },
+              "encoder_buffer_id": {
+                "id_type": {
+                  "class": "camera_encoder::EncoderBufferImpl",
+                  "parents": []
+                },
+                "key": "GeneratedID"
+              },
+              "id": {
+                "id_type": {
+                  "class": "camera_encoder::ESP32CameraJPEGEncoder",
+                  "parents": [
+                    "camera::Encoder"
+                  ]
+                },
+                "key": "GeneratedID"
+              },
+              "quality": {
+                "default": "80",
+                "key": "Optional",
+                "type": "integer",
+                "docs": "**int**: Sets JPEG compression quality. Valid values range from `1` (lowest quality, highest compression) to `100` (best quality, least compression). Defaults: `80`.\n\n*See also: [Camera Encoder](https://esphome.io/components/camera/camera_encoder#configuration-variables)*"
+              }
+            }
+          }
+        },
+        "docs": "`esp32_camera`"
+      }
+    }
+  }
+}

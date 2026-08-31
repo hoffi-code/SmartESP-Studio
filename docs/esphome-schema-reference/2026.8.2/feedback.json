@@ -1,0 +1,163 @@
+{
+  "feedback.cover": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "acceleration_wait_time": {
+              "default": "0s",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: Considers a wait time needed by the cover to actually start moving after command is issued and takes it into account when computing cover position (useful for heavy covers with large inertia). Intended to not accumulate error when doing multiple partial open/close actions). The open/close duration includes one instance of this delay, as it is the total amount of time from issuing a command to reaching endstop. Defaults to `0s`.\n\n*See also: [Feedback Cover](https://esphome.io/components/cover/feedback#configuration-variables)*"
+            },
+            "assumed_state": {
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Whether the true state of the cover is not known. This will make the Home Assistant frontend show buttons for both OPEN and CLOSE actions, instead of hiding or disabling one of them. Defaults to `true` if no sensor is available to known the actual state of the cover.\n\n*See also: [Feedback Cover](https://esphome.io/components/cover/feedback#configuration-variables)*"
+            },
+            "close_action": {
+              "key": "Required",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action that should be performed when the remote requests the cover to be closed.\n\n*See also: [Feedback Cover](https://esphome.io/components/cover/feedback#configuration-variables)*"
+            },
+            "close_duration": {
+              "key": "Required",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The amount of time it takes the cover to close from the fully-open state.\n\n*See also: [Feedback Cover](https://esphome.io/components/cover/feedback#configuration-variables)*"
+            },
+            "close_endstop": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "binary_sensor::BinarySensor",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the [Binary Sensor](https://esphome.io/components/binary_sensor#config-binary_sensor) that turns on when the closed position is reached.\n\n*See also: [Feedback Cover](https://esphome.io/components/cover/feedback#configuration-variables)*"
+            },
+            "close_obstacle_sensor": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "binary_sensor::BinarySensor",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the [Binary Sensor](https://esphome.io/components/binary_sensor#config-binary_sensor) that turns on when an obstacle that blocks the close direction is detected.\n\n*See also: [Feedback Cover](https://esphome.io/components/cover/feedback#configuration-variables)*"
+            },
+            "close_sensor": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "binary_sensor::BinarySensor",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the [Binary Sensor](https://esphome.io/components/binary_sensor#config-binary_sensor) that turns on when the cover is moving in the close direction.\n\n*See also: [Feedback Cover](https://esphome.io/components/cover/feedback#configuration-variables)*"
+            },
+            "direction_change_wait_time": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: Stops cover and forces a wait time between changes in direction, and takes it into account when computing cover position (useful to protect motors). When this option is set (even at 0s) if an open/close action is invoked while the cover is moving in the opposite direction, then and intermediate stop action will be invoked to generate the delay.\n\n*See also: [Feedback Cover](https://esphome.io/components/cover/feedback#configuration-variables)*"
+            },
+            "has_built_in_endstop": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Indicates that the cover has built in end stop detectors. In this configuration the `stop_action` is not performed when the open or close time is completed and if the cover is commanded to open or close the corresponding actions will be performed without checking current state. Defaults to `false`.\n\n*See also: [Feedback Cover](https://esphome.io/components/cover/feedback#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "feedback::FeedbackCover",
+                "parents": [
+                  "cover::Cover",
+                  "EntityBase",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "infer_endstop_from_movement": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Whether to infer endstop state from the movement sensor. Requires movement sensors to be set, no endstop sensors and to have builtin endstops. Defaults to `false`.\n\n*See also: [Feedback Cover](https://esphome.io/components/cover/feedback#configuration-variables)*"
+            },
+            "max_duration": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The maximum duration the cover should be opening or closing. Useful for protecting from dysfunctional endstops. Requires internal, builtin or inferred endstops.\n\n*See also: [Feedback Cover](https://esphome.io/components/cover/feedback#configuration-variables)*"
+            },
+            "obstacle_rollback": {
+              "default": "10%",
+              "key": "Optional",
+              "docs": "**percentage**: The percentage of rollback the cover will perform in case of obstacle detection while moving. Defaults to `10%`.\n\n*See also: [Feedback Cover](https://esphome.io/components/cover/feedback#configuration-variables)*"
+            },
+            "open_action": {
+              "key": "Required",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action that should be performed when the remote requests the cover to be opened.\n\n*See also: [Feedback Cover](https://esphome.io/components/cover/feedback#configuration-variables)*"
+            },
+            "open_duration": {
+              "key": "Required",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The amount of time it takes the cover to open up from the fully-closed state.\n\n*See also: [Feedback Cover](https://esphome.io/components/cover/feedback#configuration-variables)*"
+            },
+            "open_endstop": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "binary_sensor::BinarySensor",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the [Binary Sensor](https://esphome.io/components/binary_sensor#config-binary_sensor) that turns on when the open position is reached.\n\n*See also: [Feedback Cover](https://esphome.io/components/cover/feedback#configuration-variables)*"
+            },
+            "open_obstacle_sensor": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "binary_sensor::BinarySensor",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the [Binary Sensor](https://esphome.io/components/binary_sensor#config-binary_sensor) that turns on when an obstacle that blocks the open direction is detected.\n\n*See also: [Feedback Cover](https://esphome.io/components/cover/feedback#configuration-variables)*"
+            },
+            "open_sensor": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "binary_sensor::BinarySensor",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the [Binary Sensor](https://esphome.io/components/binary_sensor#config-binary_sensor) that turns on when the cover is moving in the open direction.\n\n*See also: [Feedback Cover](https://esphome.io/components/cover/feedback#configuration-variables)*"
+            },
+            "stop_action": {
+              "key": "Required",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: The action that should be performed when the remote requests the cover to be closed or an endstop is reached.\n\n*See also: [Feedback Cover](https://esphome.io/components/cover/feedback#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "1000ms",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_milliseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to publish updated position information to the UI while the cover is moving. Defaults to `1s`.\n\n*See also: [Feedback Cover](https://esphome.io/components/cover/feedback#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "cover._COVER_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

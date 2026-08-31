@@ -1,0 +1,320 @@
+{
+  "fan": {
+    "action": {
+      "cycle_speed": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "fan::Fan",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the fan.\n\n*See also: [Fan Component](https://esphome.io/components/fan#fancycle_speed-action)*"
+            },
+            "off_speed_cycle": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Determines if the fan will cycle off after cycling though its highest speed. Can be `true` or `false`. If `false` fan will cycle to its lowest speed instead of turning off. Defaults to `true`.\n\n*See also: [Fan Component](https://esphome.io/components/fan#fancycle_speed-action)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Increments through speed levels of the fan with the given ID when executed. If the fan's speed level is set to maximum when executed, fan will cycle off unless `off_speed_cycle` is set to `false`."
+      },
+      "toggle": {
+        "schema": {
+          "extends": [
+            "fan.FAN_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Toggles the ON/OFF state of the fan with the given ID when executed."
+      },
+      "turn_off": {
+        "schema": {
+          "extends": [
+            "fan.FAN_ACTION_SCHEMA"
+          ]
+        },
+        "type": "schema",
+        "docs": "Turns the fan with the given ID off when executed."
+      },
+      "turn_on": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "direction": {
+              "key": "Optional",
+              "templatable": true,
+              "type": "enum",
+              "values": {
+                "FORWARD": null,
+                "REVERSE": null
+              },
+              "docs": "**string**: Set the direction of the fan. Can be either `forward` or `reverse`. Defaults to not changing the direction.\n\n*See also: [Fan Component](https://esphome.io/components/fan#fanturn_on-action)*"
+            },
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "fan::Fan",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the fan.\n\n*See also: [Fan Component](https://esphome.io/components/fan#fanturn_on-action)*"
+            },
+            "oscillating": {
+              "key": "Optional",
+              "templatable": true,
+              "type": "boolean",
+              "docs": "**boolean**: Set the oscillation state of the fan. Defaults to not affecting oscillation.\n\n*See also: [Fan Component](https://esphome.io/components/fan#fanturn_on-action)*"
+            },
+            "speed": {
+              "key": "Optional",
+              "templatable": true,
+              "type": "integer",
+              "docs": "**int**: Set the speed level of the fan. Can be a number between 1 and the maximum speed level of the fan.\n\n*See also: [Fan Component](https://esphome.io/components/fan#fanturn_on-action)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Turns the fan with the given ID on when executed."
+      }
+    },
+    "components": {
+      "bedjet": {
+        "dependencies": [
+          "bedjet"
+        ],
+        "docs": "The `fan` platform exposes the BedJet's fan-related functionality, including on/off and speed control.\n\n*See also: [BedJet](https://esphome.io/components/climate/bedjet#bedjet-fan)*"
+      },
+      "binary": {
+        "docs": "The `binary` fan platform lets you represent any binary [Output Component](https://esphome.io/components/output/) as a fan.\n\n*See also: [Binary Fan](https://esphome.io/components/fan/binary)*"
+      },
+      "copy": {
+        "docs": "None\n\n*See also: [Copy Component](https://esphome.io/components/copy#copy-fan)*"
+      },
+      "hbridge": {
+        "docs": "The `hbridge` fan platform allows you to use a compatible *h-bridge* (L298N, DRV8871, MX1508, BTS7960, L9110S, DRV8833, TB6612, etc.) to control a fan (or motor/solenoid).\n\n*See also: [H-bridge Fan](https://esphome.io/components/fan/hbridge)*"
+      },
+      "speed": {
+        "docs": "The `speed` fan platform lets you represent any float [Output Component](https://esphome.io/components/output/) as a fan that supports speed settings.\n\n*See also: [Speed Fan](https://esphome.io/components/fan/speed)*"
+      },
+      "template": {
+        "docs": "The `template` fan platform lets you create a fan interface using only triggers.\n\n*See also: [Template Fan](https://esphome.io/components/fan/template)*"
+      },
+      "tuya": {
+        "dependencies": [
+          "tuya"
+        ]
+      }
+    },
+    "condition": {
+      "is_off": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "fan::Fan"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "is_on": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "fan::Fan"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "This [condition](https://esphome.io/automations/actions#all-conditions) passes if the given fan is on or off."
+      }
+    },
+    "schemas": {
+      "FAN_ACTION_SCHEMA": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "fan::Fan"
+            }
+          }
+        },
+        "type": "schema"
+      },
+      "_FAN_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "direction_command_topic": {
+              "key": "Optional",
+              "docs": "**string**: The topic to receive fan direction commands on (options: forward, reverse, toggle).\n\n*See also: [Fan Component](https://esphome.io/components/fan#base-fan-configuration)*"
+            },
+            "direction_state_topic": {
+              "key": "Optional",
+              "docs": "**string**: The topic to publish fan direction state changes to (options: forward, reverse).\n\n*See also: [Fan Component](https://esphome.io/components/fan#base-fan-configuration)*"
+            },
+            "mqtt_id": {
+              "id_type": {
+                "class": "mqtt::MQTTFanComponent",
+                "parents": [
+                  "mqtt::MQTTComponent",
+                  "Component"
+                ]
+              },
+              "key": "Optional"
+            },
+            "on_direction_set": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: An automation to perform when the fan direction is changed. See [`fan.on_direction_set` Trigger](https://esphome.io/components/fan#fan-on_direction_set-trigger).\n\n*See also: [Fan Component](https://esphome.io/components/fan#base-fan-configuration)*"
+            },
+            "on_oscillating_set": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: An automation to perform when the fan oscillating state is changed. See [`fan.on_oscillating_set` Trigger](https://esphome.io/components/fan#fan-on_oscillating_set-trigger).\n\n*See also: [Fan Component](https://esphome.io/components/fan#base-fan-configuration)*"
+            },
+            "on_preset_set": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: An automation to perform when the fan preset mode is changed. See [`fan.on_preset_set` Trigger](https://esphome.io/components/fan#fan-on_preset_set-trigger).\n\n*See also: [Fan Component](https://esphome.io/components/fan#base-fan-configuration)*"
+            },
+            "on_speed_set": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: An automation to perform when the fan speed is changed. See [`fan.on_speed_set` Trigger](https://esphome.io/components/fan#fan-on_speed_set-trigger).\n\n*See also: [Fan Component](https://esphome.io/components/fan#base-fan-configuration)*"
+            },
+            "on_state": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: An automation to perform when the fan state is changed. See [`fan.on_state` Trigger](https://esphome.io/components/fan#fan-on_state-trigger).\n\n*See also: [Fan Component](https://esphome.io/components/fan#base-fan-configuration)*"
+            },
+            "on_turn_off": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: An automation to perform when the fan is turned off. See [`fan.on_turn_on` / `fan.on_turn_off` Trigger](https://esphome.io/components/fan#fan-on_turn_on_off_trigger).\n\n*See also: [Fan Component](https://esphome.io/components/fan#base-fan-configuration)*"
+            },
+            "on_turn_on": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Action](https://esphome.io/automations/actions#all-actions)**: An automation to perform when the fan is turned on. See [`fan.on_turn_on` / `fan.on_turn_off` Trigger](https://esphome.io/components/fan#fan-on_turn_on_off_trigger).\n\n*See also: [Fan Component](https://esphome.io/components/fan#base-fan-configuration)*"
+            },
+            "oscillation_command_topic": {
+              "key": "Optional",
+              "docs": "**string**: The topic to receive oscillation commands on.\n\n*See also: [Fan Component](https://esphome.io/components/fan#base-fan-configuration)*"
+            },
+            "oscillation_state_topic": {
+              "key": "Optional",
+              "docs": "**string**: The topic to publish fan oscillation state changes to.\n\n*See also: [Fan Component](https://esphome.io/components/fan#base-fan-configuration)*"
+            },
+            "restore_mode": {
+              "default": "ALWAYS_OFF",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "NO_RESTORE": {
+                  "docs": "Don't restore any state."
+                },
+                "ALWAYS_OFF": {
+                  "docs": "Default"
+                },
+                "ALWAYS_ON": {
+                  "docs": "Always initialize the fan as ON on bootup."
+                },
+                "RESTORE_DEFAULT_OFF": {
+                  "docs": "Attempt to restore state and default to OFF if not possible to restore."
+                },
+                "RESTORE_DEFAULT_ON": {
+                  "docs": "Attempt to restore state and default to ON."
+                },
+                "RESTORE_INVERTED_DEFAULT_OFF": {
+                  "docs": "Attempt to restore state inverted from the previous state and default to OFF."
+                },
+                "RESTORE_INVERTED_DEFAULT_ON": {
+                  "docs": "Attempt to restore state inverted from the previous state and default to ON."
+                }
+              },
+              "docs": "Control how the fan attempts to restore state on boot.\n\n*See also: [Fan Component](https://esphome.io/components/fan#base-fan-configuration)*"
+            },
+            "speed_command_topic": {
+              "key": "Optional",
+              "docs": "**string**: The topic to receive speed commands on (options: LOW, MEDIUM, HIGH).\n\n*See also: [Fan Component](https://esphome.io/components/fan#base-fan-configuration)*"
+            },
+            "speed_level_command_topic": {
+              "key": "Optional",
+              "docs": "**int**: The topic to receive numeric speed commands on (range: 0 to speed count).\n\n*See also: [Fan Component](https://esphome.io/components/fan#base-fan-configuration)*"
+            },
+            "speed_level_state_topic": {
+              "key": "Optional",
+              "docs": "**int**: The topic to publish numeric fan speed state changes to (range: 0 to speed count).\n\n*See also: [Fan Component](https://esphome.io/components/fan#base-fan-configuration)*"
+            },
+            "speed_state_topic": {
+              "key": "Optional",
+              "docs": "**string**: The topic to publish fan speed state changes to (options: LOW, MEDIUM, HIGH).\n\n*See also: [Fan Component](https://esphome.io/components/fan#base-fan-configuration)*"
+            },
+            "web_server": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "sorting_group_id": {
+                    "key": "Optional",
+                    "type": "use_id",
+                    "use_id_type": "int"
+                  },
+                  "sorting_weight": {
+                    "key": "Optional"
+                  },
+                  "web_server_id": {
+                    "key": "Optional",
+                    "type": "use_id",
+                    "use_id_type": "web_server::WebServer"
+                  }
+                }
+              },
+              "type": "schema",
+              "visibility": "advanced"
+            },
+            "id": {
+              "docs": "**string**: Manually specify the ID for code generation. At least one of **id** and **name** must be specified.\n\n*See also: [Fan Component](https://esphome.io/components/fan#base-fan-configuration)*"
+            },
+            "name": {
+              "key": "Optional",
+              "docs": "**string**: The name of the fan. At least one of **id** and **name** must be specified.\n\n*See also: [Fan Component](https://esphome.io/components/fan#base-fan-configuration)*"
+            },
+            "icon": {
+              "key": "Optional",
+              "docs": "**icon**: Manually set the icon to use for the fan in the frontend.\n\n*See also: [Fan Component](https://esphome.io/components/fan#base-fan-configuration)*"
+            },
+            "internal": {
+              "key": "Optional",
+              "docs": "**boolean**: Mark this component as internal. Internal components will not be exposed to the frontend (like Home Assistant). Only specifying an `id` without a `name` will implicitly set this to true.\n\n*See also: [Fan Component](https://esphome.io/components/fan#base-fan-configuration)*"
+            },
+            "disabled_by_default": {
+              "key": "Optional",
+              "docs": "**boolean**: If true, then this entity should not be added to any client's frontend (usually Home Assistant) without the user manually enabling it (via the Home Assistant UI). Defaults to `false`.\n\n*See also: [Fan Component](https://esphome.io/components/fan#base-fan-configuration)*"
+            },
+            "entity_category": {
+              "key": "Optional",
+              "docs": "**string**: The category of the entity. See [https://developers.home-assistant.io/docs/core/entity/#generic-properties](https://developers.home-assistant.io/docs/core/entity/#generic-properties) for a list of available options. Set to `\"\"` to remove the default entity category.\n\n*See also: [Fan Component](https://esphome.io/components/fan#base-fan-configuration)*"
+            }
+          },
+          "extends": [
+            "core.ENTITY_BASE_SCHEMA",
+            "core.MQTT_COMMAND_COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "_PRESET_MODES_SCHEMA": {
+        "is_list": true,
+        "type": "string"
+      }
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "xl9535": {
+    "pin": {
+      "schema": {
+        "extends": [
+          "xl9535.XL9535_PIN_SCHEMA"
+        ]
+      },
+      "type": "schema"
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "32",
+              "key": "Optional",
+              "docs": "**int**: The I\u00b2C address of the driver. Defaults to `0x20`.\n\n*See also: [XL9535 I/O Expander](https://esphome.io/components/xl9535#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "xl9535::XL9535Component",
+                "parents": [
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "Required",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id to use for this `xl9535` component.\n\n*See also: [XL9535 I/O Expander](https://esphome.io/components/xl9535#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

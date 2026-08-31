@@ -1,0 +1,142 @@
+{
+  "pulse_counter": {
+    "action": {
+      "set_total_pulses": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "pulse_counter::PulseCounterSensor"
+            },
+            "value": {
+              "data_type": "uint32_t",
+              "key": "Required",
+              "templatable": true,
+              "type": "integer"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Using this action, you are able to reset/set the total pulse count. This can be useful if you would like the `total` sensor to match what you see on your meter you are trying to match."
+      }
+    }
+  },
+  "pulse_counter.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "2"
+            },
+            "count_mode": {
+              "default": "{'rising_edge': 'INCREMENT', 'falling_edge': 'DISABLE'}",
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "falling_edge": {
+                    "key": "Required",
+                    "type": "enum",
+                    "values": {
+                      "DISABLE": null,
+                      "INCREMENT": null,
+                      "DECREMENT": null
+                    },
+                    "docs": "What to do when a falling edge is detected. One of `DISABLE`, `INCREMENT` and `DECREMENT`.\n\n*See also: [Pulse Counter Sensor](https://esphome.io/components/sensor/pulse_counter#configuration-variables)*"
+                  },
+                  "rising_edge": {
+                    "key": "Required",
+                    "type": "enum",
+                    "values": {
+                      "DISABLE": null,
+                      "INCREMENT": null,
+                      "DECREMENT": null
+                    },
+                    "docs": "What to do when a rising edge is detected. One of `DISABLE`, `INCREMENT` and `DECREMENT`.\n\n*See also: [Pulse Counter Sensor](https://esphome.io/components/sensor/pulse_counter#configuration-variables)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "Configure how the counter should behave on a detected rising edge/falling edge.\n\n*See also: [Pulse Counter Sensor](https://esphome.io/components/sensor/pulse_counter#configuration-variables)*"
+            },
+            "icon": {
+              "default": "mdi:pulse"
+            },
+            "id": {
+              "id_type": {
+                "class": "pulse_counter::PulseCounterSensor",
+                "parents": [
+                  "sensor::Sensor",
+                  "EntityBase",
+                  "PollingComponent",
+                  "Component"
+                ]
+              }
+            },
+            "internal_filter": {
+              "default": "13us",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_microseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: If a pulse shorter than this time is detected, it's discarded and no pulse is counted. Defaults to `13us`. On the ESP32, when using the hardware pulse counter this value can not be higher than `13us`, for the ESP8266 or with `use_pcnt: false` you can use larger intervals too. If you enable this, set up the `count_mode` to increase on the falling edge, not leading edge. For S0 pulse meters that are used to meter power consumption 50-100 ms is a reasonable value.\n\n*See also: [Pulse Counter Sensor](https://esphome.io/components/sensor/pulse_counter#configuration-variables)*"
+            },
+            "pin": {
+              "key": "Required",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: The pin to count pulses on.\n\n*See also: [Pulse Counter Sensor](https://esphome.io/components/sensor/pulse_counter#configuration-variables)*"
+            },
+            "state_class": {
+              "default": "measurement"
+            },
+            "total": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "icon": {
+                    "default": "mdi:pulse"
+                  },
+                  "state_class": {
+                    "default": "total_increasing"
+                  },
+                  "unit_of_measurement": {
+                    "default": "pulses"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Report the total number of pulses.\n\n*See also: [Pulse Counter Sensor](https://esphome.io/components/sensor/pulse_counter#configuration-variables)*"
+            },
+            "unit_of_measurement": {
+              "default": "pulses/min"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`.\n\n*See also: [Pulse Counter Sensor](https://esphome.io/components/sensor/pulse_counter#configuration-variables)*"
+            },
+            "use_pcnt": {
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Use hardware `PCNT` pulse counter. Only supported on ESP32. Defaults to `true`.\n\n*See also: [Pulse Counter Sensor](https://esphome.io/components/sensor/pulse_counter#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

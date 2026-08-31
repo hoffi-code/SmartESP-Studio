@@ -1,0 +1,215 @@
+{
+  "uponor_smatrix": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "uponor_smatrix::UponorSmatrixComponent",
+                "parents": [
+                  "Component",
+                  "uart::UARTDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "time_device_address": {
+              "data_type": "device_address",
+              "key": "Optional",
+              "docs": "**int**: The 32 bit device address of the thermostat that keeps the system time. This will be automatically detected from the bus if not specified. It needs to be the device address of the first thermostat that was paired to the controller, and the one where you can manually change the date and time via the buttons on the thermostat.\n\n*See also: [Uponor Smatrix Base Pulse Underfloor Heating](https://esphome.io/components/uponor_smatrix#configuration-variables)*"
+            },
+            "time_id": {
+              "key": "Optional",
+              "type": "use_id",
+              "use_id_type": "time::RealTimeClock",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Specify the ID of the [Time Component](https://esphome.io/components/time/) to use as the time source if you want ESPHome to automatically synchronize the date and time of the thermostats.\n\n*See also: [Uponor Smatrix Base Pulse Underfloor Heating](https://esphome.io/components/uponor_smatrix#configuration-variables)*"
+            },
+            "uart_id": {
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the [UART Component](https://esphome.io/components/uart) if you want to use multiple UART buses.\n\n*See also: [Uponor Smatrix Base Pulse Underfloor Heating](https://esphome.io/components/uponor_smatrix#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA",
+            "uart.UART_DEVICE_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "UPONOR_SMATRIX_DEVICE_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "device_address",
+              "key": "Required",
+              "docs": "**int**: The 32 bit device address of the thermostat. See [Getting started](https://esphome.io/components/uponor_smatrix#uponor-gettingstarted) on how to find the address.\n\n*See also: [Uponor Smatrix Base Pulse Underfloor Heating](https://esphome.io/components/uponor_smatrix#configuration-variables)*"
+            },
+            "uponor_smatrix_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "uponor_smatrix::UponorSmatrixComponent",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the `uponor_smatrix` hub component if you want to use multiple hub components on one ESPHome device.\n\n*See also: [Uponor Smatrix Base Pulse Underfloor Heating](https://esphome.io/components/uponor_smatrix#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "uponor_smatrix.climate": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "uponor_smatrix::UponorSmatrixClimate",
+                "parents": [
+                  "climate::Climate",
+                  "EntityBase",
+                  "Component",
+                  "uponor_smatrix::UponorSmatrixDevice",
+                  "Parented<uponor_smatrix::UponorSmatrixComponent>",
+                  "Parented"
+                ]
+              },
+              "key": "GeneratedID"
+            }
+          },
+          "extends": [
+            "climate._CLIMATE_SCHEMA",
+            "uponor_smatrix.UPONOR_SMATRIX_DEVICE_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "uponor_smatrix.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "external_temperature": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "A sensor reading the current external temperature the thermostat reports. This comes from an optionally attached external temperature sensor that can measure the floor or outdoor temperature. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Uponor Smatrix Base Pulse Underfloor Heating](https://esphome.io/components/uponor_smatrix#configuration-variables)*"
+            },
+            "humidity": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "humidity"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "%"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "A sensor reading the current humidity the thermostat reports. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Uponor Smatrix Base Pulse Underfloor Heating](https://esphome.io/components/uponor_smatrix#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "uponor_smatrix::UponorSmatrixSensor",
+                "parents": [
+                  "sensor::Sensor",
+                  "EntityBase",
+                  "Component",
+                  "uponor_smatrix::UponorSmatrixDevice",
+                  "Parented<uponor_smatrix::UponorSmatrixComponent>",
+                  "Parented"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "target_temperature": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "A sensor reading the currently set target temperature the thermostat reports. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Uponor Smatrix Base Pulse Underfloor Heating](https://esphome.io/components/uponor_smatrix#configuration-variables)*"
+            },
+            "temperature": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "A sensor reading the current temperature the thermostat reports. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [Uponor Smatrix Base Pulse Underfloor Heating](https://esphome.io/components/uponor_smatrix#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA",
+            "uponor_smatrix.UPONOR_SMATRIX_DEVICE_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

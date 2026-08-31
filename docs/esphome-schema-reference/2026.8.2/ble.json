@@ -1,0 +1,17 @@
+{
+  "ble": {
+    "action": {
+      "disable": {
+        "docs": "This action turns off the BLE interface on demand."
+      },
+      "enable": {
+        "docs": "This action turns on the BLE interface on demand."
+      }
+    },
+    "condition": {
+      "enabled": {
+        "docs": "This [Condition](https://esphome.io/automations/actions#all-conditions) checks if BLE is currently enabled or not."
+      }
+    }
+  }
+}

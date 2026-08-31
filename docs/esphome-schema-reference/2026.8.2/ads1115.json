@@ -1,0 +1,148 @@
+{
+  "ads1115": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "key": "Required",
+              "docs": "**int**: The i\u00b2c address of the sensor. See [I\u00b2C Addresses](https://esphome.io/components/sensor/ads1115#ads1115_i2c_addresses) for more information.\n\n*See also: [ADS1115 4-Channel 16-Bit A/D Converter](https://esphome.io/components/sensor/ads1115#configuration-variables)*"
+            },
+            "continuous_mode": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Set if the ADS1115 should continuously measure voltages or only measure them when an update is called. Please enable this for the [Ct Clamp](https://esphome.io/components/sensor/ct_clamp/) component. Defaults to `off`.\n\n*See also: [ADS1115 4-Channel 16-Bit A/D Converter](https://esphome.io/components/sensor/ads1115#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "ads1115::ADS1115Component",
+                "parents": [
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID for this ADS1115 Hub. Use this if you want to use multiple ADS1115 hubs at once.\n\n*See also: [ADS1115 4-Channel 16-Bit A/D Converter](https://esphome.io/components/sensor/ads1115#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "ads1115.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "3"
+            },
+            "ads1115_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "ads1115::ADS1115Component",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the\n\n*See also: [ADS1115 4-Channel 16-Bit A/D Converter](https://esphome.io/components/sensor/ads1115#configuration-variables)*"
+            },
+            "device_class": {
+              "default": "voltage"
+            },
+            "gain": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "6.144": null,
+                "4.096": null,
+                "2.048": null,
+                "1.024": null,
+                "0.512": null,
+                "0.256": null
+              },
+              "docs": "**float**: The gain of this sensor.\n\n*See also: [ADS1115 4-Channel 16-Bit A/D Converter](https://esphome.io/components/sensor/ads1115#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "ads1115::ADS1115Sensor",
+                "parents": [
+                  "sensor::Sensor",
+                  "EntityBase",
+                  "PollingComponent",
+                  "Component",
+                  "voltage_sampler::VoltageSampler"
+                ]
+              }
+            },
+            "multiplexer": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "A0_A1": null,
+                "A0_A3": null,
+                "A1_A3": null,
+                "A2_A3": null,
+                "A0_GND": null,
+                "A1_GND": null,
+                "A2_GND": null,
+                "A3_GND": null
+              },
+              "docs": "The multiplexer channel of this sensor. Effectively means between which pins you\n\n*See also: [ADS1115 4-Channel 16-Bit A/D Converter](https://esphome.io/components/sensor/ads1115#configuration-variables)*"
+            },
+            "resolution": {
+              "default": "16_BITS",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "16_BITS": null,
+                "12_BITS": null
+              },
+              "docs": "**string**: the resolution of this sensor. Defaults to `16 bits`.\n\n*See also: [ADS1115 4-Channel 16-Bit A/D Converter](https://esphome.io/components/sensor/ads1115#configuration-variables)*"
+            },
+            "sample_rate": {
+              "default": "860",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "8": null,
+                "16": null,
+                "32": null,
+                "64": null,
+                "128": null,
+                "250": null,
+                "475": null,
+                "860": null
+              },
+              "docs": "**int**: The sample rate of this sensor. Defaults to `860`.\n\n*See also: [ADS1115 4-Channel 16-Bit A/D Converter](https://esphome.io/components/sensor/ads1115#configuration-variables)*"
+            },
+            "state_class": {
+              "default": "measurement"
+            },
+            "unit_of_measurement": {
+              "default": "V"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval\n\n*See also: [ADS1115 4-Channel 16-Bit A/D Converter](https://esphome.io/components/sensor/ads1115#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

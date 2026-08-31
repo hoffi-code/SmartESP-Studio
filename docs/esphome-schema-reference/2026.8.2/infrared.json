@@ -1,0 +1,12 @@
+{
+  "infrared": {
+    "components": {
+      "ir_rf_proxy": {
+        "dependencies": [
+          "infrared"
+        ]
+      }
+    },
+    "schemas": {}
+  }
+}

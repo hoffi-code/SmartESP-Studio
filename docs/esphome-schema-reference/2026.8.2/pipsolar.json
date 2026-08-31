@@ -1,0 +1,2115 @@
+{
+  "pipsolar": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "pipsolar::Pipsolar",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id to use for this pipsolar component.\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "uart_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "uart::UARTComponent",
+              "docs": "The uart Bus ID\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "1s",
+              "key": "Optional"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "PIPSOLAR_COMPONENT_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "pipsolar_id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "pipsolar::Pipsolar"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "pipsolar.binary_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "ac_charging_status": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "ac charging status\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "add_sbu_priority_version": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "add sbu priority version\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "alarm_on_when_primary_source_interrupt": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "alarm on when primary source interrupt\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "backlight_on": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "backlight on\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "battery_voltage_to_steady_while_charging": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "battery voltage to steady while charging\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "charging_status": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "charging status\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "charging_to_floating_mode": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "charging to floating mode\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "configuration_status": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "configuration status\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "dustproof_installed": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "dustproof installed\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "fault_battery_open": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "fault battery open\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "fault_battery_short": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "fault battery short\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "fault_bus_over": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "fault bus over\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "fault_bus_soft_fail": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "fault bus soft fail\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "fault_bus_under": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "fault bus under\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "fault_code": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "fault code\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "fault_code_record": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "fault code record\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "fault_current_sensor_failed": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "fault current sensor failed\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "fault_dc_dc_over_current": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "fault dc dc over current\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "fault_inverter_fault": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "fault inverter fault\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "fault_inverter_over_current": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "fault inverter over current\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "fault_inverter_soft_failed": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "fault inverter soft failed\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "fault_inverter_voltage_too_high": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "fault inverter voltage too high\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "fault_inverter_voltage_too_low": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "fault inverter voltage too low\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "fault_mppt_overload": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "fault mppt overload\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "fault_op_dc_voltage_over": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "fault op dc voltage over\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "fault_opvshort": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "fault opvshort\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "fault_self_test_failed": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "fault_self_test_failed\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "faults_present": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "faults present\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "lcd_escape_to_default": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "lcd escape to default\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "load_status": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "load status\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "over_temperature_restart_function": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "over temperature restart function\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "overload_bypass_function": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "overload bypass function\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "overload_restart_function": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "overload restart function\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "power_saving": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "power saving\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "scc_charging_status": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "scc charging status\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "scc_firmware_version": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "scc firmware version\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "silence_buzzer_open_buzzer": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "silence buzzer open buzzer\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "switch_on": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "switch on\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "warning_battery_derating": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "warning battery derating\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "warning_battery_equalization": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "warning battery equalization\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "warning_battery_low_alarm": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "warning battery low alarm\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "warning_battery_too_low_to_charge": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "warning battery too low to charge\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "warning_battery_under_shutdown": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "warning battery under shutdown\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "warning_battery_voltage_high": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "warning battery voltage high\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "warning_eeprom_failed": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "warning eeprom failed\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "warning_fan_lock": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "warning fan lock\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "warning_high_ac_input_during_bus_soft_start": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "warning high ac input during bus soft start\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "warning_line_fail": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "warning line fail\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "warning_low_pv_energy": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "warning low pv energy\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "warning_mppt_overload": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "warning mppt overload\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "warning_over_load": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "warning over load\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "warning_over_temperature": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "warning over temperature\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "warning_power_limit": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "warning power limit\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "warning_power_loss": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "warning power loss\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "warning_pv_voltage_high": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "warning pv voltage high\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "warnings_present": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "binary_sensor._BINARY_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "warnings present\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "pipsolar.PIPSOLAR_COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "pipsolar.output": {
+    "action": {
+      "set_level": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "pipsolar::PipsolarOutput",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the output.\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#outputpipsolarset_level-action)*"
+            },
+            "value": {
+              "data_type": "positive_float",
+              "key": "Required",
+              "templatable": true,
+              "docs": "**percentage**: The target level.\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#outputpipsolarset_level-action)*"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "To use your outputs in [automations](https://esphome.io/automations) or templates, you can use this action to set the target level of the output."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "battery_float_voltage": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "id": {
+                    "id_type": {
+                      "class": "pipsolar::PipsolarOutput",
+                      "parents": [
+                        "output::FloatOutput",
+                        "output::BinaryOutput"
+                      ]
+                    },
+                    "key": "Required"
+                  },
+                  "possible_values": {
+                    "data_type": "positive_float",
+                    "default": "[48.0, 49.0, 50.0, 51.0]",
+                    "is_list": true,
+                    "key": "Optional",
+                    "docs": "**list**: a list of possible values default: 48.0,49.0,50.0,51.0\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+                  }
+                },
+                "extends": [
+                  "output.FLOAT_OUTPUT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "battery float voltage;\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "battery_recharge_voltage": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "id": {
+                    "id_type": {
+                      "class": "pipsolar::PipsolarOutput",
+                      "parents": [
+                        "output::FloatOutput",
+                        "output::BinaryOutput"
+                      ]
+                    },
+                    "key": "Required"
+                  },
+                  "possible_values": {
+                    "data_type": "positive_float",
+                    "default": "[44.0, 45.0, 46.0, 47.0, 48.0, 49.0, 50.0, 51.0]",
+                    "is_list": true,
+                    "key": "Optional",
+                    "docs": "**list**: a list of possible values default: 44.0,45.0,46.0,47.0,48.0,49.0,50.0,51.0\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+                  }
+                },
+                "extends": [
+                  "output.FLOAT_OUTPUT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "battery recharge voltage;\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "battery_redischarge_voltage": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "id": {
+                    "id_type": {
+                      "class": "pipsolar::PipsolarOutput",
+                      "parents": [
+                        "output::FloatOutput",
+                        "output::BinaryOutput"
+                      ]
+                    },
+                    "key": "Required"
+                  },
+                  "possible_values": {
+                    "data_type": "positive_float",
+                    "default": "[0, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58]",
+                    "is_list": true,
+                    "key": "Optional",
+                    "docs": "**list**: a list of possible values default: 00.0,48.0,49,50.0,51.0,52,53,54,55,56,57,58\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+                  }
+                },
+                "extends": [
+                  "output.FLOAT_OUTPUT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "battery redischarge voltage;\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "battery_type": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "id": {
+                    "id_type": {
+                      "class": "pipsolar::PipsolarOutput",
+                      "parents": [
+                        "output::FloatOutput",
+                        "output::BinaryOutput"
+                      ]
+                    },
+                    "key": "Required"
+                  },
+                  "possible_values": {
+                    "data_type": "positive_float",
+                    "default": "[0, 1, 2]",
+                    "is_list": true,
+                    "key": "Optional",
+                    "docs": "**list**: a list of possible values default: 0,1,2\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+                  }
+                },
+                "extends": [
+                  "output.FLOAT_OUTPUT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "battery type;\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "battery_under_voltage": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "id": {
+                    "id_type": {
+                      "class": "pipsolar::PipsolarOutput",
+                      "parents": [
+                        "output::FloatOutput",
+                        "output::BinaryOutput"
+                      ]
+                    },
+                    "key": "Required"
+                  },
+                  "possible_values": {
+                    "data_type": "positive_float",
+                    "default": "[40.0, 40.1, 42, 43, 44, 45, 46, 47, 48.0]",
+                    "is_list": true,
+                    "key": "Optional",
+                    "docs": "**list**: a list of possible values default: 40.0,40.1,42,43,44,45,46,47,48.0\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+                  }
+                },
+                "extends": [
+                  "output.FLOAT_OUTPUT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "battery under voltage;\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "charger_source_priority": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "id": {
+                    "id_type": {
+                      "class": "pipsolar::PipsolarOutput",
+                      "parents": [
+                        "output::FloatOutput",
+                        "output::BinaryOutput"
+                      ]
+                    },
+                    "key": "Required"
+                  },
+                  "possible_values": {
+                    "data_type": "positive_float",
+                    "default": "[0, 1, 2, 3]",
+                    "is_list": true,
+                    "key": "Optional",
+                    "docs": "**list**: a list of possible values default: 0,1,2,3\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+                  }
+                },
+                "extends": [
+                  "output.FLOAT_OUTPUT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "charger source priority;\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "current_max_ac_charging_current": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "id": {
+                    "id_type": {
+                      "class": "pipsolar::PipsolarOutput",
+                      "parents": [
+                        "output::FloatOutput",
+                        "output::BinaryOutput"
+                      ]
+                    },
+                    "key": "Required"
+                  },
+                  "possible_values": {
+                    "data_type": "positive_float",
+                    "default": "[2, 10, 20]",
+                    "is_list": true,
+                    "key": "Optional",
+                    "docs": "**list**: a list of possible values default: 2,10,20\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+                  }
+                },
+                "extends": [
+                  "output.FLOAT_OUTPUT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "current max ac charging current;\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "current_max_charging_current": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "id": {
+                    "id_type": {
+                      "class": "pipsolar::PipsolarOutput",
+                      "parents": [
+                        "output::FloatOutput",
+                        "output::BinaryOutput"
+                      ]
+                    },
+                    "key": "Required"
+                  },
+                  "possible_values": {
+                    "data_type": "positive_float",
+                    "default": "[10, 20, 30, 40]",
+                    "is_list": true,
+                    "key": "Optional",
+                    "docs": "**list**: a list of possible values default: 10,20,30,40\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+                  }
+                },
+                "extends": [
+                  "output.FLOAT_OUTPUT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "current max charging current;\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "output_source_priority": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "id": {
+                    "id_type": {
+                      "class": "pipsolar::PipsolarOutput",
+                      "parents": [
+                        "output::FloatOutput",
+                        "output::BinaryOutput"
+                      ]
+                    },
+                    "key": "Required"
+                  },
+                  "possible_values": {
+                    "data_type": "positive_float",
+                    "default": "[0, 1, 2]",
+                    "is_list": true,
+                    "key": "Optional",
+                    "docs": "**list**: a list of possible values default: 0,1,2\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+                  }
+                },
+                "extends": [
+                  "output.FLOAT_OUTPUT_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "output source priority;\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "pipsolar.PIPSOLAR_COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "pipsolar.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "ac_output_active_power": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "power"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "W"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "ac output active power\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "ac_output_apparent_power": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "apparent_power"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "VA"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "ac output apparent power\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "ac_output_frequency": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "frequency"
+                  },
+                  "icon": {
+                    "default": "mdi:current-ac"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "Hz"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "ac output frequency\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "ac_output_rating_active_power": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "power"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "W"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "AC output rating active power\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "ac_output_rating_apparent_power": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "apparent_power"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "VA"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "AC output rating apparent power\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "ac_output_rating_current": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "current"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "A"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "AC output rating current\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "ac_output_rating_frequency": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "frequency"
+                  },
+                  "icon": {
+                    "default": "mdi:current-ac"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "Hz"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "AC output rating frequency\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "ac_output_rating_voltage": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "voltage"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "V"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "AC output rating voltage\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "ac_output_voltage": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "voltage"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "V"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "ac output voltage\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "battery_bulk_voltage": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "voltage"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "V"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "battery bulk voltage\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "battery_capacity_percent": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "battery"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "%"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "battery capacity percent\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "battery_charging_current": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "current"
+                  },
+                  "icon": {
+                    "default": "mdi:current-dc"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "A"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "battery charging current\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "battery_discharge_current": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "current"
+                  },
+                  "icon": {
+                    "default": "mdi:current-dc"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "A"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "battery discharge current\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "battery_float_voltage": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "voltage"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "V"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "battery float voltage\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "battery_rating_voltage": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "voltage"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "V"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "battery rating voltage\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "battery_recharge_voltage": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "voltage"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "V"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "battery recharge voltage\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "battery_redischarge_voltage": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "battery re-discharge voltage\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "battery_type": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "battery type\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "battery_under_voltage": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "voltage"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "V"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "battery under voltage\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "battery_voltage": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "voltage"
+                  },
+                  "icon": {
+                    "default": "mdi:battery"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "V"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "battery voltage\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "battery_voltage_offset_for_fans_on": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "voltage"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "V"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "battery voltage offset for fans on\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "battery_voltage_scc": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "voltage"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "V"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "battery voltage from scc\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "bus_voltage": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "voltage"
+                  },
+                  "icon": {
+                    "default": "mdi:flash"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "V"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "bus voltage\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "charger_source_priority": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "charger source priority\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "current_max_ac_charging_current": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "current"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "A"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "current max ac charging current\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "current_max_charging_current": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "current"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "A"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "current max charging current\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "eeprom_version": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "eeprom version\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "grid_frequency": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "frequency"
+                  },
+                  "icon": {
+                    "default": "mdi:current-ac"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "Hz"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "grid frequency\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "grid_rating_current": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "current"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "A"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "grid rating current\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "grid_rating_voltage": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "voltage"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "V"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "grid rating voltage\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "grid_voltage": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "voltage"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "V"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "grid voltage\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "input_voltage_range": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "input voltage range\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "inverter_heat_sink_temperature": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "inverter heatsink temperature\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "machine_type": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "machine type\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "output_load_percent": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "icon": {
+                    "default": "mdi:gauge"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "%"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "output load percentage\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "output_mode": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "output mode\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "output_source_priority": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "output source priority\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "parallel_max_num": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "parallel max num\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "pv_charging_power": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "device_class": {
+                    "default": "power"
+                  },
+                  "icon": {
+                    "default": "mdi:solar-power"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "W"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "pc charging power\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "pv_input_current_for_battery": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "current"
+                  },
+                  "icon": {
+                    "default": "mdi:solar-panel"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "A"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "pv input current for battery\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "pv_input_voltage": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "voltage"
+                  },
+                  "icon": {
+                    "default": "mdi:solar-panel"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "V"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "pv input voltage\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "pv_ok_condition_for_parallel": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "PV OK condition for parallel\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "pv_power_balance": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "PV power balance mode\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "topology": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "topology\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "pipsolar.PIPSOLAR_COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "pipsolar.switch": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "input_voltage_range": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "pipsolar.switch.PIPSWITCH_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "input voltage range\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "output_source_priority_battery": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "pipsolar.switch.PIPSWITCH_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "output source priority battery\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "output_source_priority_hybrid": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "pipsolar.switch.PIPSWITCH_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "output source priority hybrid\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "output_source_priority_solar": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "pipsolar.switch.PIPSWITCH_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "output source priority solar\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "output_source_priority_utility": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "pipsolar.switch.PIPSWITCH_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "output source priority utility\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "pv_ok_condition_for_parallel": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "pipsolar.switch.PIPSWITCH_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "pv ok condition for parallel\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "pv_power_balance": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "pipsolar.switch.PIPSWITCH_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "pv power balance\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "pipsolar.PIPSOLAR_COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      },
+      "PIPSWITCH_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "icon": {
+              "default": "mdi:power"
+            },
+            "id": {
+              "id_type": {
+                "class": "pipsolar::PipsolarSwitch",
+                "parents": [
+                  "switch_::Switch",
+                  "EntityBase",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            }
+          },
+          "extends": [
+            "switch._SWITCH_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "pipsolar.text_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "device_mode": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "text_sensor._TEXT_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "device mode response\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "last_qflag": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "text_sensor._TEXT_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "last qflag reponse\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "last_qmn": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "text_sensor._TEXT_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "last qmn reponse\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "last_qmod": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "text_sensor._TEXT_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "last qmod reponse\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "last_qpigs": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "text_sensor._TEXT_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "last qpigs reponse\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "last_qpiri": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "text_sensor._TEXT_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "last qpiri reponse\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "last_qpiws": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "text_sensor._TEXT_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "last qpiws reponse\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            },
+            "last_qt": {
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "text_sensor._TEXT_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "last qt reponse\n\n*See also: [PipSolar PV Inverter](https://esphome.io/components/pipsolar#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "pipsolar.PIPSOLAR_COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

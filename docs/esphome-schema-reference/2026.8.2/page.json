@@ -1,0 +1,50 @@
+{
+  "page.display": {
+    "action": {
+      "show": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "templatable": true,
+              "type": "use_id",
+              "use_id_type": "display::DisplayPage"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Show a specific page."
+      },
+      "show_next": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "templatable": true,
+              "type": "use_id",
+              "use_id_type": "display::Display"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Shows the next or previous page, wraps around at the end."
+      },
+      "show_previous": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "templatable": true,
+              "type": "use_id",
+              "use_id_type": "display::Display"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

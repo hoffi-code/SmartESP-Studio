@@ -1,0 +1,82 @@
+{
+  "rc522": {
+    "schemas": {
+      "RC522_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "rc522::RC522",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "on_tag": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform when a tag is read. See [`on_tag` Trigger](https://esphome.io/components/binary_sensor/rc522#rc522-on_tag).\n\n*See also: [RC522 NFC/RFID](https://esphome.io/components/binary_sensor/rc522#configuration-variables)*"
+            },
+            "on_tag_removed": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations)**: An automation to perform after a tag is removed. See [`on_tag_removed` Trigger](https://esphome.io/components/binary_sensor/rc522#rc522-on_tag_removed).\n\n*See also: [RC522 NFC/RFID](https://esphome.io/components/binary_sensor/rc522#configuration-variables)*"
+            },
+            "reset_pin": {
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The pin connected to the RST line. Some tests shows the RC522 working okay without this.\n\n*See also: [RC522 NFC/RFID](https://esphome.io/components/binary_sensor/rc522#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "1s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The duration of each scan on the RC522. This affects the duration that the individual binary sensors stay active when they're found. If a device is not found within this time window, it will be marked as not present. Defaults to `1s`.\n\n*See also: [RC522 NFC/RFID](https://esphome.io/components/binary_sensor/rc522#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "rc522.binary_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "rc522::RC522BinarySensor",
+                "parents": [
+                  "binary_sensor::BinarySensor",
+                  "EntityBase"
+                ]
+              }
+            },
+            "rc522_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "rc522::RC522"
+            },
+            "uid": {
+              "key": "Required"
+            }
+          },
+          "extends": [
+            "binary_sensor._BINARY_SENSOR_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

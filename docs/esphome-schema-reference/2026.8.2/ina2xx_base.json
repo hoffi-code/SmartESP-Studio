@@ -1,0 +1,307 @@
+{
+  "ina2xx_base": {
+    "schemas": {
+      "INA2XX_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "adc_averaging": {
+              "default": "128",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "1": null,
+                "4": null,
+                "16": null,
+                "64": null,
+                "128": null,
+                "256": null,
+                "512": null,
+                "1024": null
+              },
+              "docs": "**integer**: Selects ADC sample averaging count. Defaults to `128`. Valid values are `1`, `4`, `16`, `64`, `128`, `256`, `512`, `1024`.\n\n*See also: [INA2xx family of digital power monitors](https://esphome.io/components/sensor/ina2xx#configuration-variables)*"
+            },
+            "adc_range": {
+              "default": "0",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**`0` or `1`**: Selects the range for differential input across shunt resistor. `0` for \u00b1163.84 mV, `1` for \u00b140.96 mV range. Defaults to `0`.\n\n*See also: [INA2xx family of digital power monitors](https://esphome.io/components/sensor/ina2xx#configuration-variables)*"
+            },
+            "adc_time": {
+              "default": "4120 us",
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "bus_voltage": {
+                    "default": "4120 us",
+                    "key": "Optional",
+                    "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: Conversion time for bus voltage measurement.\n\n*See also: [INA2xx family of digital power monitors](https://esphome.io/components/sensor/ina2xx#configuration-variables)*"
+                  },
+                  "shunt_voltage": {
+                    "default": "4120 us",
+                    "key": "Optional",
+                    "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: Conversion time for shunt voltage measurement.\n\n*See also: [INA2xx family of digital power monitors](https://esphome.io/components/sensor/ina2xx#configuration-variables)*"
+                  },
+                  "temperature": {
+                    "default": "4120 us",
+                    "key": "Optional",
+                    "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: Conversion time for temperature measurement.\n\n*See also: [INA2xx family of digital power monitors](https://esphome.io/components/sensor/ina2xx#configuration-variables)*"
+                  }
+                }
+              },
+              "type": "schema",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The time in microseconds to perform a single ADC conversion. Defaults to `4120 us`. Valid values are `50 us`, `84 us`, `150 us`, `280 us`, `540 us`, `1052 us`, `2074 us`, `4120 us`. Instead of one time for all ADC measurements, separate configuration of conversion times for shunt voltage, bus voltage, and temperature measurements possible. Options are the same as for `adc_time`.\n\n*See also: [INA2xx family of digital power monitors](https://esphome.io/components/sensor/ina2xx#configuration-variables)*"
+            },
+            "bus_voltage": {
+              "key": "Optional",
+              "maybe": "name",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "5"
+                  },
+                  "device_class": {
+                    "default": "voltage"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "V"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Bus voltage output, V\n\n*See also: [INA2xx family of digital power monitors](https://esphome.io/components/sensor/ina2xx#configuration-variables)*"
+            },
+            "charge": {
+              "key": "Optional",
+              "maybe": "name",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "8"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "Ah"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Calculated charge output, Ah (*INA228/229 only*)\n\n*See also: [INA2xx family of digital power monitors](https://esphome.io/components/sensor/ina2xx#configuration-variables)*"
+            },
+            "charge_coulombs": {
+              "key": "Optional",
+              "maybe": "name",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "8"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "C"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Calculated charge output, Coulombs (*INA228/229 only*)\n\n*See also: [INA2xx family of digital power monitors](https://esphome.io/components/sensor/ina2xx#configuration-variables)*"
+            },
+            "current": {
+              "key": "Optional",
+              "maybe": "name",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "8"
+                  },
+                  "device_class": {
+                    "default": "current"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "A"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Calculated current output, A\n\n*See also: [INA2xx family of digital power monitors](https://esphome.io/components/sensor/ina2xx#configuration-variables)*"
+            },
+            "energy": {
+              "key": "Optional",
+              "maybe": "name",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "8"
+                  },
+                  "device_class": {
+                    "default": "energy"
+                  },
+                  "state_class": {
+                    "default": "total_increasing"
+                  },
+                  "unit_of_measurement": {
+                    "default": "Wh"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Calculated energy output, Wh (*INA228/229 only*)\n\n*See also: [INA2xx family of digital power monitors](https://esphome.io/components/sensor/ina2xx#configuration-variables)*"
+            },
+            "energy_joules": {
+              "key": "Optional",
+              "maybe": "name",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "8"
+                  },
+                  "device_class": {
+                    "default": "energy"
+                  },
+                  "state_class": {
+                    "default": "total_increasing"
+                  },
+                  "unit_of_measurement": {
+                    "default": "J"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Calculated energy output, Joules (*INA228/229 only*)\n\n*See also: [INA2xx family of digital power monitors](https://esphome.io/components/sensor/ina2xx#configuration-variables)*"
+            },
+            "max_current": {
+              "key": "Required",
+              "docs": "**float**: The maximum current you are expecting. Component will use it to calibrate the sensor. No default value.\n\n*See also: [INA2xx family of digital power monitors](https://esphome.io/components/sensor/ina2xx#configuration-variables)*"
+            },
+            "power": {
+              "key": "Optional",
+              "maybe": "name",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "6"
+                  },
+                  "device_class": {
+                    "default": "power"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "W"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Calculated power output, always positive, W\n\n*See also: [INA2xx family of digital power monitors](https://esphome.io/components/sensor/ina2xx#configuration-variables)*"
+            },
+            "reset_on_boot": {
+              "default": "True",
+              "key": "Optional",
+              "type": "boolean",
+              "docs": "**boolean**: Whether or not to reset the device configuration (including counters) on component initialization. Defaults to `true`; set `false` to preserve counters through ESPHome resets.\n\n*See also: [INA2xx family of digital power monitors](https://esphome.io/components/sensor/ina2xx#configuration-variables)*"
+            },
+            "shunt_resistance": {
+              "key": "Required",
+              "docs": "**float**: The value of the shunt resistor used for current calculation. No default value.\n\n*See also: [INA2xx family of digital power monitors](https://esphome.io/components/sensor/ina2xx#configuration-variables)*"
+            },
+            "shunt_voltage": {
+              "key": "Optional",
+              "maybe": "name",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "5"
+                  },
+                  "device_class": {
+                    "default": "voltage"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "mV"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Differential voltage measured across the shunt, mV\n\n*See also: [INA2xx family of digital power monitors](https://esphome.io/components/sensor/ina2xx#configuration-variables)*"
+            },
+            "temperature": {
+              "key": "Optional",
+              "maybe": "name",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "5"
+                  },
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Internal die temperature measurement, \u00b0C\n\n*See also: [INA2xx family of digital power monitors](https://esphome.io/components/sensor/ina2xx#configuration-variables)*"
+            },
+            "temperature_coefficient": {
+              "default": "0",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**integer from `0` to `16383`**: Temperature coefficient (ppm/\u00b0C) of the shunt for temperature compensation correction. Only applicable to INA228 and INA229 devices. Zero value means no compensation is done. Defaults to `0`.\n\n*See also: [INA2xx family of digital power monitors](https://esphome.io/components/sensor/ina2xx#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`.\n\n*See also: [INA2xx family of digital power monitors](https://esphome.io/components/sensor/ina2xx#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

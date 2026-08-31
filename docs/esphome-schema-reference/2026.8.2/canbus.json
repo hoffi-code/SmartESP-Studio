@@ -1,0 +1,140 @@
+{
+  "canbus": {
+    "action": {
+      "send": {
+        "maybe": "data",
+        "schema": {
+          "config_vars": {
+            "can_id": {
+              "key": "Optional",
+              "type": "integer"
+            },
+            "canbus_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "canbus::CanbusComponent"
+            },
+            "data": {
+              "key": "Required",
+              "templatable": true
+            },
+            "remote_transmission_request": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "use_extended_id": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "The CAN bus can transmit frames by means of the `canbus.send` action. There are several ways to use it:"
+      }
+    },
+    "components": {
+      "esp32_can": {
+        "dependencies": [
+          "esp32"
+        ],
+        "docs": "The ESP32 has an integrated CAN controller and therefore doesn't necessarily need an external controller. Some variants (ESP32-C5, ESP32-C6, ESP32-P4) have multiple CAN controllers - see [Multiple CAN Controllers](https://esphome.io/components/canbus/esp32_can#multiple-can-controllers) below. You only need to specify the RX and TX pins. Any GPIO will work.\n\n*See also: [ESP32 CAN](https://esphome.io/components/canbus/esp32_can)*"
+      },
+      "mcp2515": {
+        "dependencies": [
+          "spi"
+        ],
+        "docs": "The MCP2515 communicates with ESPHome via the [SPI bus](https://esphome.io/components/spi); to use it, you must have at least one [SPI bus](https://esphome.io/components/spi) with both the `mosi_pin` and `miso_pin` defined in your ESPHome configuration.\n\n*See also: [MCP2515](https://esphome.io/components/canbus/mcp2515)*"
+      }
+    },
+    "schemas": {
+      "CANBUS_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "bit_rate": {
+              "default": "125KBPS",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "1KBPS": null,
+                "5KBPS": null,
+                "10KBPS": null,
+                "12K5BPS": null,
+                "16KBPS": null,
+                "20KBPS": null,
+                "25KBPS": null,
+                "31K25BPS": null,
+                "33KBPS": null,
+                "40KBPS": null,
+                "50KBPS": null,
+                "80KBPS": null,
+                "83K3BPS": null,
+                "95KBPS": null,
+                "100KBPS": null,
+                "125KBPS": null,
+                "200KBPS": null,
+                "250KBPS": null,
+                "500KBPS": null,
+                "800KBPS": null,
+                "1000KBPS": null
+              }
+            },
+            "can_id": {
+              "key": "Required",
+              "type": "integer"
+            },
+            "id": {
+              "id_type": {
+                "class": "canbus::CanbusComponent",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "on_frame": {
+              "has_required_var": true,
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "can_id": {
+                    "key": "Required",
+                    "type": "integer"
+                  },
+                  "can_id_mask": {
+                    "default": "536870911",
+                    "key": "Optional",
+                    "type": "integer"
+                  },
+                  "remote_transmission_request": {
+                    "key": "Optional",
+                    "type": "boolean"
+                  },
+                  "then": {
+                    "type": "trigger"
+                  },
+                  "use_extended_id": {
+                    "default": "False",
+                    "key": "Optional",
+                    "type": "boolean"
+                  }
+                }
+              },
+              "type": "trigger"
+            },
+            "use_extended_id": {
+              "default": "False",
+              "key": "Optional",
+              "type": "boolean"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

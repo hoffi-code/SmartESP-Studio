@@ -1,0 +1,150 @@
+{
+  "pcm5122": {
+    "pin": {
+      "schema": {
+        "extends": [
+          "pcm5122.audio_dac.PIN_SCHEMA"
+        ]
+      },
+      "type": "schema"
+    }
+  },
+  "pcm5122.audio_dac": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "77",
+              "key": "Optional",
+              "docs": "**int**: The I\u00b2C address of the device. Defaults to `0x4D`.\n\n*See also: [PCM5122](https://esphome.io/components/audio_dac/pcm5122#configuration-variables)*"
+            },
+            "analog_gain": {
+              "default": "0db",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "0db": null,
+                "-6db": null
+              },
+              "docs": "**enum**: The analog output gain applied by the PCM5122. One of `0db` or `-6db`. Defaults to `0db`.\n\n*See also: [PCM5122](https://esphome.io/components/audio_dac/pcm5122#configuration-variables)*"
+            },
+            "bits_per_sample": {
+              "default": "16bit",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "16": null,
+                "24": null,
+                "32": null
+              },
+              "docs": "**enum**: The bit depth of the audio samples. One of `16bit`, `24bit`, or `32bit`. Defaults to `16bit`.\n\n*See also: [PCM5122](https://esphome.io/components/audio_dac/pcm5122#configuration-variables)*"
+            },
+            "channel_mix": {
+              "default": "stereo",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "stereo": {
+                  "docs": "default"
+                },
+                "left": {
+                  "docs": "Left channel data to both outputs."
+                },
+                "right": {
+                  "docs": "Right channel data to both outputs."
+                },
+                "swapped": {
+                  "docs": "Left and right outputs swapped."
+                }
+              },
+              "docs": "**enum**: How audio channel data is routed to the left and right outputs. One of:\n\n*See also: [PCM5122](https://esphome.io/components/audio_dac/pcm5122#configuration-variables)*"
+            },
+            "enable_pin": {
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: GPIO pin connected to the PCM5122's XSMT (soft mute) pin. Held low during `setup()` and driven high once initialization succeeds. Omit if XSMT is hardwired high.\n\n*See also: [PCM5122](https://esphome.io/components/audio_dac/pcm5122#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus",
+              "docs": "The ID of the [I\u00b2C bus](https://esphome.io/components/i2c) the PCM5122 is connected to.\n\n*See also: [PCM5122](https://esphome.io/components/audio_dac/pcm5122#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "pcm5122::PCM5122",
+                "parents": [
+                  "audio_dac::AudioDac",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "volume_max_db": {
+              "default": "0dB",
+              "key": "Optional",
+              "docs": "**dB**: The volume level that maps to the maximum volume (fully turned up). Must be greater than `volume_min_db`. Range: `-103.0dB` to `24.0dB`. Defaults to `0dB`.\n\n*See also: [PCM5122](https://esphome.io/components/audio_dac/pcm5122#configuration-variables)*"
+            },
+            "volume_min_db": {
+              "default": "-52.5dB",
+              "key": "Optional",
+              "docs": "**dB**: The volume level that maps to the minimum volume (fully turned down). Must be less than `volume_max_db`. Range: `-103.0dB` to `24.0dB`. Defaults to `-52.5dB`.\n\n*See also: [PCM5122](https://esphome.io/components/audio_dac/pcm5122#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "pcm5122.switch": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "entity_category": {
+              "default": "config"
+            },
+            "id": {
+              "id_type": {
+                "class": "pcm5122::PCM5122PowerSwitch",
+                "parents": [
+                  "switch_::Switch",
+                  "EntityBase"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "pcm5122": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "pcm5122::PCM5122"
+            },
+            "power_mode": {
+              "default": "powerdown",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "standby": null,
+                "powerdown": null
+              }
+            }
+          },
+          "extends": [
+            "switch._SWITCH_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

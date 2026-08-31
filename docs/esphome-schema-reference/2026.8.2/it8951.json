@@ -1,0 +1,40 @@
+{
+  "it8951": {
+    "action": {
+      "update": {
+        "maybe": "id",
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "Required",
+              "type": "use_id",
+              "use_id_type": "it8951::IT8951Display"
+            },
+            "mode": {
+              "key": "Optional",
+              "templatable": true,
+              "type": "enum",
+              "values": {
+                "INIT": null,
+                "DU": null,
+                "GC16": null,
+                "GL16": null,
+                "GLR16": null,
+                "GLD16": null,
+                "DU4": null,
+                "A2": null,
+                "FAST": null,
+                "FULL": null
+              }
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Trigger a display update with an optional waveform mode override:"
+      }
+    }
+  },
+  "it8951.display": {
+    "schemas": {}
+  }
+}

@@ -1,0 +1,389 @@
+{
+  "bme68x_bsec2": {
+    "schemas": {
+      "CONFIG_SCHEMA_BASE": {
+        "schema": {
+          "config_vars": {
+            "algorithm_output": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "classification": null,
+                "regression": null
+              }
+            },
+            "id": {
+              "id_type": {
+                "class": "bme68x_bsec2::BME68xBSEC2Component",
+                "parents": [
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "model": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "bme680": null,
+                "bme688": null
+              }
+            },
+            "operating_age": {
+              "default": "28d",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "4d": null,
+                "28d": null
+              }
+            },
+            "raw_data_id": {
+              "id_type": {
+                "class": "uint8_t",
+                "parents": null
+              },
+              "key": "GeneratedID"
+            },
+            "sample_rate": {
+              "default": "LP",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "LP": null,
+                "ULP": null
+              }
+            },
+            "state_save_interval": {
+              "default": "6hours",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_minutes"
+                ]
+              },
+              "type": "schema"
+            },
+            "supply_voltage": {
+              "default": "3.3V",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "1.8V": null,
+                "3.3V": null
+              }
+            },
+            "temperature_offset": {
+              "default": "0",
+              "key": "Optional"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "bme68x_bsec2.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "bme68x_bsec2_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "bme68x_bsec2::BME68xBSEC2Component",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the `bme68x_bsec2_i2c` component sensors will refer to. Useful when multiple devices are present in your configuration.\n\n*See also: [BME68x Temperature, Humidity, Pressure & Gas Sensor via BSEC2](https://esphome.io/components/sensor/bme68x_bsec2#configuration-variables)*"
+            },
+            "breath_voc_equivalent": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "volatile_organic_compounds_parts"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "ppm"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Configuration for the Breath VOC equivalent humidity sensor.\n\n*See also: [BME68x Temperature, Humidity, Pressure & Gas Sensor via BSEC2](https://esphome.io/components/sensor/bme68x_bsec2#configuration-variables)*"
+            },
+            "co2_equivalent": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "carbon_dioxide"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "ppm"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Configuration for the CO\u2082 equivalent sensor.\n\n*See also: [BME68x Temperature, Humidity, Pressure & Gas Sensor via BSEC2](https://esphome.io/components/sensor/bme68x_bsec2#configuration-variables)*"
+            },
+            "gas_resistance": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "icon": {
+                    "default": "mdi:gas-cylinder"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u03a9"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Configuration for the gas sensor.\n\n*See also: [BME68x Temperature, Humidity, Pressure & Gas Sensor via BSEC2](https://esphome.io/components/sensor/bme68x_bsec2#configuration-variables)*"
+            },
+            "humidity": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "humidity"
+                  },
+                  "icon": {
+                    "default": "mdi:water-percent"
+                  },
+                  "sample_rate": {
+                    "key": "Optional",
+                    "type": "enum",
+                    "values": {
+                      "LP": null,
+                      "ULP": null
+                    },
+                    "docs": "**string**: Optional sample rate override for this sensor. Can be `LP` for low power consumption, sampling every 3 seconds or `ULP` for ultra-low power, sampling every 5 minutes.\n\n*See also: [BME68x Temperature, Humidity, Pressure & Gas Sensor via BSEC2](https://esphome.io/components/sensor/bme68x_bsec2#configuration-variables)*"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "%"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Configuration for the humidity sensor.\n\n*See also: [BME68x Temperature, Humidity, Pressure & Gas Sensor via BSEC2](https://esphome.io/components/sensor/bme68x_bsec2#configuration-variables)*"
+            },
+            "iaq": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "icon": {
+                    "default": "mdi:gauge"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "IAQ"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Configuration for the IAQ sensor.\n\n*See also: [BME68x Temperature, Humidity, Pressure & Gas Sensor via BSEC2](https://esphome.io/components/sensor/bme68x_bsec2#configuration-variables)*"
+            },
+            "iaq_accuracy": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "icon": {
+                    "default": "mdi:checkbox-marked-circle-outline"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Configuration for the numeric IAQ accuracy sensor.\n\n*See also: [BME68x Temperature, Humidity, Pressure & Gas Sensor via BSEC2](https://esphome.io/components/sensor/bme68x_bsec2#configuration-variables)*"
+            },
+            "iaq_static": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "icon": {
+                    "default": "mdi:gauge"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "IAQ"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Configuration for the IAQ static sensor.\n\n*See also: [BME68x Temperature, Humidity, Pressure & Gas Sensor via BSEC2](https://esphome.io/components/sensor/bme68x_bsec2#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "EntityBase",
+                "parents": []
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: This ID has no effect other than providing a target for package management.\n\n*See also: [BME68x Temperature, Humidity, Pressure & Gas Sensor via BSEC2](https://esphome.io/components/sensor/bme68x_bsec2#configuration-variables)*"
+            },
+            "pressure": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "atmospheric_pressure"
+                  },
+                  "sample_rate": {
+                    "key": "Optional",
+                    "type": "enum",
+                    "values": {
+                      "LP": null,
+                      "ULP": null
+                    },
+                    "docs": "**string**: Optional sample rate override for this sensor. Can be `LP` for low power consumption, sampling every 3 seconds or `ULP` for ultra-low power, sampling every 5 minutes.\n\n*See also: [BME68x Temperature, Humidity, Pressure & Gas Sensor via BSEC2](https://esphome.io/components/sensor/bme68x_bsec2#configuration-variables)*"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "hPa"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Configuration for the pressure sensor.\n\n*See also: [BME68x Temperature, Humidity, Pressure & Gas Sensor via BSEC2](https://esphome.io/components/sensor/bme68x_bsec2#configuration-variables)*"
+            },
+            "temperature": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "1"
+                  },
+                  "device_class": {
+                    "default": "temperature"
+                  },
+                  "icon": {
+                    "default": "mdi:thermometer"
+                  },
+                  "sample_rate": {
+                    "key": "Optional",
+                    "type": "enum",
+                    "values": {
+                      "LP": null,
+                      "ULP": null
+                    },
+                    "docs": "**string**: Optional sample rate override for this sensor. Can be `LP` for low power consumption, sampling every 3 seconds or `ULP` for ultra-low power, sampling every 5 minutes.\n\n*See also: [BME68x Temperature, Humidity, Pressure & Gas Sensor via BSEC2](https://esphome.io/components/sensor/bme68x_bsec2#configuration-variables)*"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "\u00b0C"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Configuration for the temperature sensor.\n\n*See also: [BME68x Temperature, Humidity, Pressure & Gas Sensor via BSEC2](https://esphome.io/components/sensor/bme68x_bsec2#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "bme68x_bsec2.text_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "bme68x_bsec2_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "bme68x_bsec2::BME68xBSEC2Component",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the `bme68x_bsec2_i2c` component the text sensor will refer to. Useful when multiple devices are present in your configuration.\n\n*See also: [BME68x Temperature, Humidity, Pressure & Gas Sensor via BSEC2](https://esphome.io/components/sensor/bme68x_bsec2#configuration-variables)*"
+            },
+            "iaq_accuracy": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "icon": {
+                    "default": "mdi:checkbox-marked-circle-outline"
+                  }
+                },
+                "extends": [
+                  "text_sensor._TEXT_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Configuration for the IAQ accuracy sensor. Shows: `Stabilizing`, `Uncertain`, `Calibrating`, `Calibrated`.\n\n*See also: [BME68x Temperature, Humidity, Pressure & Gas Sensor via BSEC2](https://esphome.io/components/sensor/bme68x_bsec2#configuration-variables)*"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

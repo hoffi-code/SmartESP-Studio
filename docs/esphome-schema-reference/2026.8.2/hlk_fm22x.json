@@ -1,0 +1,299 @@
+{
+  "hlk_fm22x": {
+    "action": {
+      "delete": {
+        "maybe": "face_id",
+        "schema": {
+          "config_vars": {
+            "face_id": {
+              "key": "Required",
+              "templatable": true,
+              "type": "integer"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "hlk_fm22x::HlkFm22xComponent"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Removes the enrolled face from the slot number defined."
+      },
+      "delete_all": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "hlk_fm22x::HlkFm22xComponent"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Removes all enrolled faces."
+      },
+      "enroll": {
+        "maybe": "name",
+        "schema": {
+          "config_vars": {
+            "direction": {
+              "data_type": "uint8_t",
+              "key": "Required",
+              "templatable": true,
+              "type": "integer"
+            },
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "hlk_fm22x::HlkFm22xComponent"
+            },
+            "name": {
+              "key": "Required",
+              "templatable": true,
+              "type": "string"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Starts the face enrollment process with a name and direction. To successfully enroll a face, you need to successfully and consecutively scan the face from all directions. A failure in one direction will require enrolling the face again from the start."
+      },
+      "reset": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "hlk_fm22x::HlkFm22xComponent"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Resets the module. Can be useful after a failed enrollment or scan if the module isn't responding correctly. If this command fails it will mark the module as failed."
+      },
+      "scan": {
+        "schema": {
+          "config_vars": {
+            "id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "hlk_fm22x::HlkFm22xComponent"
+            }
+          }
+        },
+        "type": "schema",
+        "docs": "Scans and tries to match to an enrolled face. Triggers one of the on_face_scan triggers."
+      }
+    },
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "id": {
+              "id_type": {
+                "class": "hlk_fm22x::HlkFm22xComponent",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "uart::UARTDevice"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**ID**: Manually specify the ID used for code generation.\n\n*See also: [HLK-FM22x Face Recognition Module](https://esphome.io/components/hlk_fm22x#configuration-variables)*"
+            },
+            "on_enrollment_done": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations/)**: An action to be performed when a face enrollment step is successful. See [`on_enrollment_done`](https://esphome.io/components/hlk_fm22x#on_enrollment_done-trigger).\n\n*See also: [HLK-FM22x Face Recognition Module](https://esphome.io/components/hlk_fm22x#configuration-variables)*"
+            },
+            "on_enrollment_failed": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations/)**: An action to be performed when a face enrollment step failed. See [`on_enrollment_failed`](https://esphome.io/components/hlk_fm22x#on_enrollment_failed-trigger).\n\n*See also: [HLK-FM22x Face Recognition Module](https://esphome.io/components/hlk_fm22x#configuration-variables)*"
+            },
+            "on_face_info": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations/)**: An action to be performed when face information is available. See [`on_face_info`](https://esphome.io/components/hlk_fm22x#on_face_info-trigger).\n\n*See also: [HLK-FM22x Face Recognition Module](https://esphome.io/components/hlk_fm22x#configuration-variables)*"
+            },
+            "on_face_scan_invalid": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations/)**: An action to be performed when the face scan failed. See [`on_face_scan_invalid`](https://esphome.io/components/hlk_fm22x#on_face_scan_invalid-trigger).\n\n*See also: [HLK-FM22x Face Recognition Module](https://esphome.io/components/hlk_fm22x#configuration-variables)*"
+            },
+            "on_face_scan_matched": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations/)**: An action to be performed when an enrolled face is scanned and recognized. See [`on_face_scan_matched`](https://esphome.io/components/hlk_fm22x#on_face_scan_matched-trigger).\n\n*See also: [HLK-FM22x Face Recognition Module](https://esphome.io/components/hlk_fm22x#configuration-variables)*"
+            },
+            "on_face_scan_unmatched": {
+              "key": "Optional",
+              "type": "trigger",
+              "docs": "**[Automation](https://esphome.io/automations/)**: An action to be performed when an unknown face is scanned. See [`on_face_scan_unmatched`](https://esphome.io/components/hlk_fm22x#on_face_scan_unmatched-trigger).\n\n*See also: [HLK-FM22x Face Recognition Module](https://esphome.io/components/hlk_fm22x#configuration-variables)*"
+            },
+            "uart_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "uart::UARTComponent",
+              "docs": "**ID**: Manually specify the ID of the UART hub.\n\n*See also: [HLK-FM22x Face Recognition Module](https://esphome.io/components/hlk_fm22x#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "50ms",
+              "key": "Optional"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "hlk_fm22x.binary_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "hlk_fm22x_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "hlk_fm22x::HlkFm22xComponent"
+            },
+            "icon": {
+              "default": "mdi:key-plus"
+            }
+          },
+          "extends": [
+            "binary_sensor._BINARY_SENSOR_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "hlk_fm22x.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "face_count": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "icon": {
+                    "default": "mdi:face-recognition"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "hlk_fm22x_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "hlk_fm22x::HlkFm22xComponent"
+            },
+            "last_face_id": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "icon": {
+                    "default": "mdi:account"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "status": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "0"
+                  },
+                  "entity_category": {
+                    "default": "diagnostic"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  },
+  "hlk_fm22x.text_sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "hlk_fm22x_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "hlk_fm22x::HlkFm22xComponent"
+            },
+            "last_face_name": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "icon": {
+                    "default": "mdi:account"
+                  }
+                },
+                "extends": [
+                  "text_sensor._TEXT_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            },
+            "version": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "entity_category": {
+                    "default": "diagnostic"
+                  },
+                  "icon": {
+                    "default": "mdi:restart"
+                  }
+                },
+                "extends": [
+                  "text_sensor._TEXT_SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema"
+            }
+          }
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

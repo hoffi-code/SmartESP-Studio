@@ -1,0 +1,74 @@
+{
+  "x9c.output": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "cs_pin": {
+              "internal": true,
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: Chip Select pin\n\n*See also: [X9C Potentiometer Output](https://esphome.io/components/output/x9c#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "x9c::X9cOutput",
+                "parents": [
+                  "output::FloatOutput",
+                  "output::BinaryOutput",
+                  "Component"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The id to use for this output component.\n\n*See also: [X9C Potentiometer Output](https://esphome.io/components/output/x9c#configuration-variables)*"
+            },
+            "inc_pin": {
+              "internal": true,
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: Increment pin\n\n*See also: [X9C Potentiometer Output](https://esphome.io/components/output/x9c#configuration-variables)*"
+            },
+            "initial_value": {
+              "default": "1.0",
+              "key": "Optional",
+              "docs": "**float**: Manually specify the initial potentiometer value, between `0.01` and `1.0`. Defaults to `1.0`.\n\n*See also: [X9C Potentiometer Output](https://esphome.io/components/output/x9c#configuration-variables)*"
+            },
+            "step_delay": {
+              "default": "1us",
+              "key": "Optional",
+              "schema": {
+                "extends": [
+                  "core.positive_time_period_microseconds"
+                ]
+              },
+              "type": "schema",
+              "docs": "**int**: Manually specify the delay between steps (in microseconds) between `1us` and `100us`. Defaults to `1us`.\n\n*See also: [X9C Potentiometer Output](https://esphome.io/components/output/x9c#configuration-variables)*"
+            },
+            "ud_pin": {
+              "internal": true,
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: Up/Down pin\n\n*See also: [X9C Potentiometer Output](https://esphome.io/components/output/x9c#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "output.FLOAT_OUTPUT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

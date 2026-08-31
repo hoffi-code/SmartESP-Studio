@@ -1,0 +1,154 @@
+{
+  "ina219.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "address": {
+              "data_type": "hex_uint8_t",
+              "default": "64",
+              "key": "Optional",
+              "docs": "**int**: Manually specify the I\u00b2C address of the sensor. Defaults to `0x40`.\n\n*See also: [INA219 DC Current Sensor](https://esphome.io/components/sensor/ina219#configuration-variables)*"
+            },
+            "bus_voltage": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "voltage"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "V"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the bus voltage (voltage of the high side contact) value of the sensor in V. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [INA219 DC Current Sensor](https://esphome.io/components/sensor/ina219#configuration-variables)*"
+            },
+            "current": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "3"
+                  },
+                  "device_class": {
+                    "default": "current"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "A"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the current value of the sensor in amperes. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [INA219 DC Current Sensor](https://esphome.io/components/sensor/ina219#configuration-variables)*"
+            },
+            "i2c_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "i2c::I2CBus"
+            },
+            "id": {
+              "id_type": {
+                "class": "ina219::INA219Component",
+                "parents": [
+                  "PollingComponent",
+                  "Component",
+                  "i2c::I2CDevice"
+                ]
+              },
+              "key": "GeneratedID"
+            },
+            "max_current": {
+              "default": "3.2",
+              "key": "Optional",
+              "docs": "**float**: The maximum current you are expecting. ESPHome will use this to configure the sensor optimally. Defaults to `3.2A`.\n\n*See also: [INA219 DC Current Sensor](https://esphome.io/components/sensor/ina219#configuration-variables)*"
+            },
+            "max_voltage": {
+              "default": "32.0",
+              "key": "Optional",
+              "docs": "**float**: The maximum bus voltage you are expecting. ESPHome will use this to configure the sensor optimally. Defaults to `32V` (the max).\n\n*See also: [INA219 DC Current Sensor](https://esphome.io/components/sensor/ina219#configuration-variables)*"
+            },
+            "power": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "power"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "W"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the power value of the sensor in watts. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [INA219 DC Current Sensor](https://esphome.io/components/sensor/ina219#configuration-variables)*"
+            },
+            "shunt_resistance": {
+              "default": "0.1",
+              "key": "Optional",
+              "docs": "**float**: The value of the shunt resistor on the board for current calculation. Defaults to `0.1 ohm`.\n\n*See also: [INA219 DC Current Sensor](https://esphome.io/components/sensor/ina219#configuration-variables)*"
+            },
+            "shunt_voltage": {
+              "key": "Optional",
+              "schema": {
+                "config_vars": {
+                  "accuracy_decimals": {
+                    "default": "2"
+                  },
+                  "device_class": {
+                    "default": "voltage"
+                  },
+                  "state_class": {
+                    "default": "measurement"
+                  },
+                  "unit_of_measurement": {
+                    "default": "V"
+                  }
+                },
+                "extends": [
+                  "sensor._SENSOR_SCHEMA"
+                ]
+              },
+              "type": "schema",
+              "docs": "Use the shunt voltage (voltage across the shunt resistor) value of the sensor in V. All options from [Sensor](https://esphome.io/components/sensor).\n\n*See also: [INA219 DC Current Sensor](https://esphome.io/components/sensor/ina219#configuration-variables)*"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`.\n\n*See also: [INA219 DC Current Sensor](https://esphome.io/components/sensor/ina219#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

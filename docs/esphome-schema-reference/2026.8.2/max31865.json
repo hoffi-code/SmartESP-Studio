@@ -1,0 +1,106 @@
+{
+  "max31865.sensor": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "schema": {
+          "config_vars": {
+            "accuracy_decimals": {
+              "default": "2"
+            },
+            "cs_pin": {
+              "key": "Required",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin Schema](https://esphome.io/guides/configuration-types#pin-schema)**: The Chip Select pin of the SPI interface.\n\n*See also: [MAX31865 Platinum RTD Temperature Sensor](https://esphome.io/components/sensor/max31865#configuration-variables)*"
+            },
+            "data_rate": {
+              "key": "Optional"
+            },
+            "device_class": {
+              "default": "temperature"
+            },
+            "id": {
+              "id_type": {
+                "class": "max31865::MAX31865Sensor",
+                "parents": [
+                  "sensor::Sensor",
+                  "EntityBase",
+                  "PollingComponent",
+                  "Component",
+                  "spi::SPIDevice"
+                ]
+              }
+            },
+            "mains_filter": {
+              "default": "60HZ",
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "50HZ": null,
+                "60HZ": null
+              },
+              "docs": "**string**: The mains power frequency to reject (`50 Hz` or `60 Hz`  ). Defaults to `60 Hz`.\n\n*See also: [MAX31865 Platinum RTD Temperature Sensor](https://esphome.io/components/sensor/max31865#configuration-variables)*"
+            },
+            "reference_resistance": {
+              "key": "Required",
+              "docs": "**float**: Reference resistor on the PCB. Adafruit's PT100 (#3328) uses 430 \u03a9, their PT1000 (#3648) uses 4300 \u03a9.\n\n*See also: [MAX31865 Platinum RTD Temperature Sensor](https://esphome.io/components/sensor/max31865#configuration-variables)*"
+            },
+            "release_device": {
+              "key": "Optional",
+              "type": "boolean"
+            },
+            "rtd_nominal_resistance": {
+              "key": "Required",
+              "docs": "**float**: Nominal resistance of the RTD at 0\u00b0C. PT100 is 100 \u03a9, PT1000 is 1000 \u03a9.\n\n*See also: [MAX31865 Platinum RTD Temperature Sensor](https://esphome.io/components/sensor/max31865#configuration-variables)*"
+            },
+            "rtd_wires": {
+              "default": "4",
+              "key": "Optional",
+              "type": "integer",
+              "docs": "**int**: The number of RTD wires. Be sure to solder board jumpers to match! Defaults to `4`.\n\n*See also: [MAX31865 Platinum RTD Temperature Sensor](https://esphome.io/components/sensor/max31865#configuration-variables)*"
+            },
+            "spi_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "spi::SPIComponent",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID of the [SPI Component](https://esphome.io/components/spi) if you want to use multiple SPI buses.\n\n*See also: [MAX31865 Platinum RTD Temperature Sensor](https://esphome.io/components/sensor/max31865#configuration-variables)*"
+            },
+            "spi_mode": {
+              "key": "Optional",
+              "type": "enum",
+              "values": {
+                "MODE0": null,
+                "MODE1": null,
+                "MODE2": null,
+                "MODE3": null,
+                "0": null,
+                "1": null,
+                "2": null,
+                "3": null
+              }
+            },
+            "state_class": {
+              "default": "measurement"
+            },
+            "unit_of_measurement": {
+              "default": "\u00b0C"
+            },
+            "update_interval": {
+              "default": "60s",
+              "key": "Optional",
+              "docs": "**[Time](https://esphome.io/guides/configuration-types#time)**: The interval to check the sensor. Defaults to `60s`.\n\n*See also: [MAX31865 Platinum RTD Temperature Sensor](https://esphome.io/components/sensor/max31865#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "sensor._SENSOR_SCHEMA",
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}

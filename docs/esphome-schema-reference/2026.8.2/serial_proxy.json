@@ -1,0 +1,73 @@
+{
+  "serial_proxy": {
+    "schemas": {
+      "CONFIG_SCHEMA": {
+        "is_list": true,
+        "schema": {
+          "config_vars": {
+            "dtr_pin": {
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: GPIO pin to use as the DTR (Data Terminal Ready) modem control output. The state of this pin may be controlled by the API client at runtime.\n\n*See also: [Serial Proxy](https://esphome.io/components/serial_proxy#configuration-variables)*"
+            },
+            "id": {
+              "id_type": {
+                "class": "serial_proxy::SerialProxy",
+                "parents": [
+                  "Component",
+                  "uart::UARTDevice"
+                ]
+              },
+              "key": "GeneratedID",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: Manually specify the ID to use for code generation.\n\n*See also: [Serial Proxy](https://esphome.io/components/serial_proxy#configuration-variables)*"
+            },
+            "name": {
+              "key": "Required",
+              "type": "string",
+              "docs": "**string**: A human-readable name for this serial port, used to identify it to API clients.\n\n*See also: [Serial Proxy](https://esphome.io/components/serial_proxy#configuration-variables)*"
+            },
+            "port_type": {
+              "key": "Required",
+              "type": "enum",
+              "values": {
+                "TTL": {
+                  "docs": "Standard TTL logic-level UART (3.3V or 5V). Typically used for direct connections to most microcontrollers."
+                },
+                "RS232": {
+                  "docs": "RS-232 standard serial port (typically \u00b112V levels via an appropriate line-driver IC). Typically used for PC-style serial connections, often with a DB9-type connector."
+                },
+                "RS485": {
+                  "docs": "RS-485 differential serial bus. Typically used for industrial/multi-drop serial networks."
+                }
+              },
+              "docs": "**string**: The electrical type of the serial port. One of:\n\n*See also: [Serial Proxy](https://esphome.io/components/serial_proxy#configuration-variables)*"
+            },
+            "rts_pin": {
+              "key": "Optional",
+              "modes": [
+                "output"
+              ],
+              "schema": true,
+              "type": "pin",
+              "docs": "**[Pin](https://esphome.io/guides/configuration-types#pin)**: GPIO pin to use as the RTS (Request to Send) modem control output. The state of this pin may be controlled by the API client at runtime.\n\n*See also: [Serial Proxy](https://esphome.io/components/serial_proxy#configuration-variables)*"
+            },
+            "uart_id": {
+              "key": "GeneratedID",
+              "type": "use_id",
+              "use_id_type": "uart::UARTComponent",
+              "docs": "**[ID](https://esphome.io/guides/configuration-types#id)**: The ID of the [UART](https://esphome.io/components/uart/) component this proxy is attached to.\n\n*See also: [Serial Proxy](https://esphome.io/components/serial_proxy#configuration-variables)*"
+            }
+          },
+          "extends": [
+            "core.COMPONENT_SCHEMA"
+          ]
+        },
+        "type": "schema"
+      }
+    }
+  }
+}
