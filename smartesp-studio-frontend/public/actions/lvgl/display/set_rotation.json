@@ -1,0 +1,18 @@
+{
+  "id": "lvgl.display.set_rotation",
+  "fields": [
+    {
+      "key": "rotation",
+      "label": "Rotation",
+      "type": "select",
+      "required": true,
+      "lvl": "normal",
+      "options": [
+        "0",
+        "90",
+        "180",
+        "270"
+      ]
+    }
+  ]
+}

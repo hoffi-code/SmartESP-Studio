@@ -1,0 +1,22 @@
+{
+  "id": "lvgl.image.update",
+  "fields": [
+    {
+      "key": "id",
+      "label": "LVGL image",
+      "type": "id_ref",
+      "required": true,
+      "placeholder": "my_image",
+      "domain": "",
+      "lvl": "normal"
+    },
+    {
+      "key": "src",
+      "label": "Image",
+      "type": "id_ref",
+      "required": false,
+      "lvl": "normal",
+      "domain": "image"
+    }
+  ]
+}

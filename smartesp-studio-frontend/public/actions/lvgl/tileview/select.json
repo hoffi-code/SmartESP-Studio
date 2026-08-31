@@ -1,0 +1,37 @@
+{
+  "id": "lvgl.tileview.select",
+  "fields": [
+    {
+      "key": "id",
+      "label": "LVGL tileview",
+      "type": "id_ref",
+      "required": true,
+      "placeholder": "my_tileview",
+      "domain": "",
+      "lvl": "normal"
+    },
+    {
+      "key": "column",
+      "label": "Column",
+      "type": "number",
+      "required": false,
+      "lvl": "normal",
+      "templatable": true
+    },
+    {
+      "key": "row",
+      "label": "Row",
+      "type": "number",
+      "required": false,
+      "lvl": "normal",
+      "templatable": true
+    },
+    {
+      "key": "animated",
+      "label": "Animated",
+      "type": "boolean",
+      "required": false,
+      "lvl": "normal"
+    }
+  ]
+}

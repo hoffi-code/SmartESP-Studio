@@ -1,0 +1,27 @@
+{
+  "id": "lvgl.widget.set_z_index",
+  "fields": [
+    {
+      "key": "id",
+      "label": "LVGL widget",
+      "type": "id_ref",
+      "required": true,
+      "placeholder": "lvgl_widget_id",
+      "domain": "",
+      "lvl": "normal"
+    },
+    {
+      "key": "position",
+      "label": "Position",
+      "type": "select",
+      "required": true,
+      "lvl": "normal",
+      "options": [
+        "TOP",
+        "BOTTOM",
+        "UP",
+        "DOWN"
+      ]
+    }
+  ]
+}

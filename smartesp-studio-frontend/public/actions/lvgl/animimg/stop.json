@@ -1,0 +1,14 @@
+{
+  "id": "lvgl.animimg.stop",
+  "fields": [
+    {
+      "key": "id",
+      "label": "LVGL animimg",
+      "type": "id_ref",
+      "required": true,
+      "placeholder": "my_animimg",
+      "domain": "",
+      "lvl": "normal"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "id": "lvgl.roller.update",
+  "fields": [
+    {
+      "key": "id",
+      "label": "LVGL roller",
+      "type": "id_ref",
+      "required": true,
+      "placeholder": "my_roller",
+      "domain": "",
+      "lvl": "normal"
+    },
+    {
+      "key": "selected_index",
+      "label": "Selected index",
+      "type": "number",
+      "required": false,
+      "lvl": "normal",
+      "templatable": true
+    },
+    {
+      "key": "animated",
+      "label": "Animated",
+      "type": "boolean",
+      "required": false,
+      "lvl": "normal"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "id": "lvgl.page.update",
+  "fields": [
+    {
+      "key": "id",
+      "label": "LVGL page",
+      "type": "id_ref",
+      "required": true,
+      "placeholder": "my_page",
+      "domain": "",
+      "lvl": "normal"
+    },
+    {
+      "key": "skip",
+      "label": "Skip in navigation",
+      "type": "boolean",
+      "required": false,
+      "lvl": "normal"
+    }
+  ]
+}

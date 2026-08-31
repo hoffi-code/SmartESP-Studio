@@ -1,0 +1,29 @@
+{
+  "id": "lvgl.tabview.select",
+  "fields": [
+    {
+      "key": "id",
+      "label": "LVGL tabview",
+      "type": "id_ref",
+      "required": true,
+      "placeholder": "my_tabview",
+      "domain": "",
+      "lvl": "normal"
+    },
+    {
+      "key": "index",
+      "label": "Tab index",
+      "type": "number",
+      "required": true,
+      "lvl": "normal",
+      "templatable": true
+    },
+    {
+      "key": "animated",
+      "label": "Animated",
+      "type": "boolean",
+      "required": false,
+      "lvl": "normal"
+    }
+  ]
+}

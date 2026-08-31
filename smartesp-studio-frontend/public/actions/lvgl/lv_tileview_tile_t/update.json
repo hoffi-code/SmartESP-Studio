@@ -1,0 +1,14 @@
+{
+  "id": "lvgl.lv_tileview_tile_t.update",
+  "fields": [
+    {
+      "key": "id",
+      "label": "LVGL lv_tileview_tile_t",
+      "type": "id_ref",
+      "required": true,
+      "placeholder": "my_lv_tileview_tile_t",
+      "domain": "",
+      "lvl": "normal"
+    }
+  ]
+}

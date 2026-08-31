@@ -1,0 +1,14 @@
+{
+  "id": "lvgl.dropdown_list.update",
+  "fields": [
+    {
+      "key": "id",
+      "label": "LVGL dropdown_list",
+      "type": "id_ref",
+      "required": true,
+      "placeholder": "my_dropdown_list",
+      "domain": "",
+      "lvl": "normal"
+    }
+  ]
+}

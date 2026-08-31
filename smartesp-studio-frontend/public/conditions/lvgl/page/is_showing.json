@@ -1,0 +1,14 @@
+{
+  "id": "lvgl.page.is_showing",
+  "fields": [
+    {
+      "key": "id",
+      "label": "LVGL page",
+      "type": "id_ref",
+      "required": true,
+      "placeholder": "lvgl_page_id",
+      "domain": "",
+      "lvl": "normal"
+    }
+  ]
+}

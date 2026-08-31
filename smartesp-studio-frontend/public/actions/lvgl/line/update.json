@@ -1,0 +1,40 @@
+{
+  "id": "lvgl.line.update",
+  "fields": [
+    {
+      "key": "id",
+      "label": "LVGL line",
+      "type": "id_ref",
+      "required": true,
+      "placeholder": "my_line",
+      "domain": "",
+      "lvl": "normal"
+    },
+    {
+      "key": "points",
+      "label": "Points",
+      "type": "list",
+      "required": false,
+      "lvl": "normal",
+      "item": {
+        "type": "object",
+        "fields": [
+          {
+            "key": "x",
+            "label": "X",
+            "type": "number",
+            "required": true,
+            "lvl": "normal"
+          },
+          {
+            "key": "y",
+            "label": "Y",
+            "type": "number",
+            "required": true,
+            "lvl": "normal"
+          }
+        ]
+      }
+    }
+  ]
+}

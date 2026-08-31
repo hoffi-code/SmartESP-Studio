@@ -1,0 +1,14 @@
+{
+  "id": "lvgl.buttonmatrix.update",
+  "fields": [
+    {
+      "key": "id",
+      "label": "LVGL buttonmatrix",
+      "type": "id_ref",
+      "required": true,
+      "placeholder": "my_buttonmatrix",
+      "domain": "",
+      "lvl": "normal"
+    }
+  ]
+}

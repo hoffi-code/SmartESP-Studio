@@ -1,0 +1,14 @@
+{
+  "id": "lvgl.tabview.update",
+  "fields": [
+    {
+      "key": "id",
+      "label": "LVGL tabview",
+      "type": "id_ref",
+      "required": true,
+      "placeholder": "my_tabview",
+      "domain": "",
+      "lvl": "normal"
+    }
+  ]
+}

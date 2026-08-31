@@ -1,0 +1,14 @@
+{
+  "id": "lvgl.canvas.update",
+  "fields": [
+    {
+      "key": "id",
+      "label": "LVGL canvas",
+      "type": "id_ref",
+      "required": true,
+      "placeholder": "my_canvas",
+      "domain": "",
+      "lvl": "normal"
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "id": "lvgl.canvas.draw_rectangle",
+  "fields": [
+    {
+      "key": "id",
+      "label": "LVGL canvas",
+      "type": "id_ref",
+      "required": true,
+      "placeholder": "my_canvas",
+      "domain": "",
+      "lvl": "normal"
+    },
+    {
+      "key": "x",
+      "label": "X",
+      "type": "number",
+      "required": true,
+      "lvl": "normal",
+      "templatable": true
+    },
+    {
+      "key": "y",
+      "label": "Y",
+      "type": "number",
+      "required": true,
+      "lvl": "normal",
+      "templatable": true
+    },
+    {
+      "key": "width",
+      "label": "Width",
+      "type": "number",
+      "required": true,
+      "lvl": "normal",
+      "templatable": true
+    },
+    {
+      "key": "height",
+      "label": "Height",
+      "type": "number",
+      "required": true,
+      "lvl": "normal",
+      "templatable": true
+    },
+    {
+      "key": "bg_color",
+      "label": "Fill color",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "#336699"
+    },
+    {
+      "key": "border_color",
+      "label": "Border color",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "#000000"
+    },
+    {
+      "key": "border_width",
+      "label": "Border width",
+      "type": "number",
+      "required": false,
+      "lvl": "normal",
+      "templatable": true
+    },
+    {
+      "key": "radius",
+      "label": "Corner radius",
+      "type": "number",
+      "required": false,
+      "lvl": "normal",
+      "templatable": true
+    },
+    {
+      "key": "opa",
+      "label": "Opacity",
+      "type": "number",
+      "required": false,
+      "lvl": "normal",
+      "templatable": true
+    }
+  ]
+}

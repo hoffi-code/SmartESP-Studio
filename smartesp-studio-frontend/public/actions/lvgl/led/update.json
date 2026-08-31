@@ -1,0 +1,31 @@
+{
+  "id": "lvgl.led.update",
+  "fields": [
+    {
+      "key": "id",
+      "label": "LVGL led",
+      "type": "id_ref",
+      "required": true,
+      "placeholder": "my_led",
+      "domain": "",
+      "lvl": "normal"
+    },
+    {
+      "key": "color",
+      "label": "Color",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "#ff0000"
+    },
+    {
+      "key": "brightness",
+      "label": "Brightness",
+      "type": "number",
+      "required": false,
+      "lvl": "normal",
+      "templatable": true,
+      "placeholder": "255"
+    }
+  ]
+}

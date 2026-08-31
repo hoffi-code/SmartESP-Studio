@@ -1,0 +1,14 @@
+{
+  "id": "lvgl.spinner.update",
+  "fields": [
+    {
+      "key": "id",
+      "label": "LVGL spinner",
+      "type": "id_ref",
+      "required": true,
+      "placeholder": "my_spinner",
+      "domain": "",
+      "lvl": "normal"
+    }
+  ]
+}

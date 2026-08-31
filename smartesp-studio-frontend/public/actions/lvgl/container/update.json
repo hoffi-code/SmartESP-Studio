@@ -1,0 +1,14 @@
+{
+  "id": "lvgl.container.update",
+  "fields": [
+    {
+      "key": "id",
+      "label": "LVGL container",
+      "type": "id_ref",
+      "required": true,
+      "placeholder": "my_container",
+      "domain": "",
+      "lvl": "normal"
+    }
+  ]
+}

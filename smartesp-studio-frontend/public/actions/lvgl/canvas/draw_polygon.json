@@ -1,0 +1,72 @@
+{
+  "id": "lvgl.canvas.draw_polygon",
+  "fields": [
+    {
+      "key": "id",
+      "label": "LVGL canvas",
+      "type": "id_ref",
+      "required": true,
+      "placeholder": "my_canvas",
+      "domain": "",
+      "lvl": "normal"
+    },
+    {
+      "key": "points",
+      "label": "Points",
+      "type": "list",
+      "required": true,
+      "lvl": "normal",
+      "item": {
+        "type": "object",
+        "fields": [
+          {
+            "key": "x",
+            "label": "X",
+            "type": "number",
+            "required": true,
+            "lvl": "normal"
+          },
+          {
+            "key": "y",
+            "label": "Y",
+            "type": "number",
+            "required": true,
+            "lvl": "normal"
+          }
+        ]
+      }
+    },
+    {
+      "key": "bg_color",
+      "label": "Fill color",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "#336699"
+    },
+    {
+      "key": "border_color",
+      "label": "Border color",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "#000000"
+    },
+    {
+      "key": "border_width",
+      "label": "Border width",
+      "type": "number",
+      "required": false,
+      "lvl": "normal",
+      "templatable": true
+    },
+    {
+      "key": "opa",
+      "label": "Opacity",
+      "type": "number",
+      "required": false,
+      "lvl": "normal",
+      "templatable": true
+    }
+  ]
+}

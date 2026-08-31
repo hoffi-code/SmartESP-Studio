@@ -1,0 +1,31 @@
+{
+  "id": "lvgl.canvas.fill",
+  "fields": [
+    {
+      "key": "id",
+      "label": "LVGL canvas",
+      "type": "id_ref",
+      "required": true,
+      "placeholder": "my_canvas",
+      "domain": "",
+      "lvl": "normal"
+    },
+    {
+      "key": "color",
+      "label": "Color",
+      "type": "text",
+      "required": true,
+      "lvl": "normal",
+      "placeholder": "#000000"
+    },
+    {
+      "key": "opa",
+      "label": "Opacity",
+      "type": "number",
+      "required": false,
+      "lvl": "normal",
+      "templatable": true,
+      "placeholder": "100%"
+    }
+  ]
+}

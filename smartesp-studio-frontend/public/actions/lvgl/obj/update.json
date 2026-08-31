@@ -1,0 +1,14 @@
+{
+  "id": "lvgl.obj.update",
+  "fields": [
+    {
+      "key": "id",
+      "label": "LVGL obj",
+      "type": "id_ref",
+      "required": true,
+      "placeholder": "my_obj",
+      "domain": "",
+      "lvl": "normal"
+    }
+  ]
+}

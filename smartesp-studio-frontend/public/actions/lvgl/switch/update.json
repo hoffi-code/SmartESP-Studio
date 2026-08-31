@@ -1,0 +1,14 @@
+{
+  "id": "lvgl.switch.update",
+  "fields": [
+    {
+      "key": "id",
+      "label": "LVGL switch",
+      "type": "id_ref",
+      "required": true,
+      "placeholder": "my_switch",
+      "domain": "",
+      "lvl": "normal"
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "id": "lvgl.canvas.draw_line",
+  "fields": [
+    {
+      "key": "id",
+      "label": "LVGL canvas",
+      "type": "id_ref",
+      "required": true,
+      "placeholder": "my_canvas",
+      "domain": "",
+      "lvl": "normal"
+    },
+    {
+      "key": "points",
+      "label": "Points",
+      "type": "list",
+      "required": true,
+      "lvl": "normal",
+      "item": {
+        "type": "object",
+        "fields": [
+          {
+            "key": "x",
+            "label": "X",
+            "type": "number",
+            "required": true,
+            "lvl": "normal"
+          },
+          {
+            "key": "y",
+            "label": "Y",
+            "type": "number",
+            "required": true,
+            "lvl": "normal"
+          }
+        ]
+      }
+    },
+    {
+      "key": "color",
+      "label": "Color",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "#ffffff"
+    },
+    {
+      "key": "width",
+      "label": "Width",
+      "type": "number",
+      "required": false,
+      "lvl": "normal",
+      "templatable": true
+    },
+    {
+      "key": "opa",
+      "label": "Opacity",
+      "type": "number",
+      "required": false,
+      "lvl": "normal",
+      "templatable": true
+    }
+  ]
+}

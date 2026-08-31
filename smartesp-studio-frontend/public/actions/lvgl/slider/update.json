@@ -1,0 +1,43 @@
+{
+  "id": "lvgl.slider.update",
+  "fields": [
+    {
+      "key": "id",
+      "label": "LVGL slider",
+      "type": "id_ref",
+      "required": true,
+      "placeholder": "my_slider",
+      "domain": "",
+      "lvl": "normal"
+    },
+    {
+      "key": "value",
+      "label": "Value",
+      "type": "number",
+      "required": false,
+      "lvl": "normal",
+      "templatable": true
+    },
+    {
+      "key": "min_value",
+      "label": "Min value",
+      "type": "number",
+      "required": false,
+      "lvl": "normal"
+    },
+    {
+      "key": "max_value",
+      "label": "Max value",
+      "type": "number",
+      "required": false,
+      "lvl": "normal"
+    },
+    {
+      "key": "animated",
+      "label": "Animated",
+      "type": "boolean",
+      "required": false,
+      "lvl": "normal"
+    }
+  ]
+}
