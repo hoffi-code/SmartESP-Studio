@@ -9,6 +9,7 @@ export const COMPONENT_DOMAINS = new Set([
   "display",
   "event",
   "fan",
+  "image",
   "light",
   "lock",
   "media_player",
