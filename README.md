@@ -4,42 +4,20 @@
 </a>
 
 
-SmartESP Studio is a Home Assistant ingress add-on for building, organizing, validating, compiling, and deploying ESPHome configurations through a schema-driven visual editor.
+SmartESP Studio is a web app for building, organizing, validating, compiling, and deploying ESPHome configurations through a schema-driven visual editor. It ships as a standalone Docker image; a Home Assistant ingress add-on was the original form and is currently on hold (see Installation Options).
 
-The repository contains the full add-on:
+The repository contains:
 
-- `smartesp-studio/` -> backend Home Assistant add-on and API
+- `smartesp-studio/` -> Flask backend and API
 - `smartesp-studio-frontend/` -> Vue 3 frontend (Dashboard + Builder)
 
-The add-on is designed to let users manage complete ESPHome projects without hand-editing YAML unless they want to.
+It lets users manage complete ESPHome projects without hand-editing YAML unless they want to.
 
 ---
 
 ## Installation Options
 
-SmartESP Studio can be installed in two supported modes from this same repository.
-
-### Home Assistant OS / Supervised Add-On
-
-Use this option if your Home Assistant installation has the add-on store.
-
-1. Open Home Assistant.
-2. Go to Settings -> Add-ons -> Add-on Store.
-3. Open the menu in the top-right corner and choose Repositories.
-4. Add this repository URL:
-
-   ```text
-   https://github.com/hoffi-code/SmartESP-Studio
-   ```
-
-5. Find SmartESP Studio in the add-on store.
-6. Install it.
-7. Start the add-on.
-8. Open the SmartESP Studio UI from the add-on page or sidebar.
-
-This is the original installation mode. It uses Home Assistant ingress, the existing `smartesp-studio/config.json`, and the existing add-on `smartesp-studio/Dockerfile`. Existing add-on users keep the same update path through Home Assistant.
-
-### Docker Standalone
+### Docker Standalone (current)
 
 Use this option if you run Home Assistant Container, or if you want SmartESP Studio as a separate Docker service outside the Home Assistant add-on system.
 
@@ -75,20 +53,18 @@ docker compose -f compose.bridge.yaml up -d
 
 Bridge networking may require manual IP addresses for devices because `.local` mDNS resolution, online/offline status, logs, and OTA can be less reliable without host networking.
 
-### Key Differences
-
-| Area | Home Assistant add-on | Docker standalone |
-|---|---|---|
-| Install method | Home Assistant add-on store | Docker Compose / Docker image |
-| Runtime access | Home Assistant ingress | Direct web app on port `8099` by default |
-| Supervisor required | Yes | No |
-| Recommended network | Managed by Home Assistant | `network_mode: host` on Linux |
-| Default storage | `/config/smartesp` | `/config/smartesp` inside the container volume |
-| Shared ESPHome path | `use_esphome_shared_path=true` -> `/config/esphome` | `SES_USE_ESPHOME_SHARED_PATH=true` -> `/config/esphome` |
-| Updates | Home Assistant update flow | `docker compose pull && docker compose up -d` or optional external updater |
-| Authentication | Home Assistant ingress/session | Optional Basic Auth with `SES_AUTH_MODE=basic` |
+The standalone image is published to GHCR as `ghcr.io/hoffi-code/smartesp-studio` (`:latest`, plus `:<version>` tags). It is built multi-arch (`amd64` / `arm64`) by `.github/workflows/docker-standalone.yml` on pushes to `main` (`:edge`) and on `v*.*.*` tags.
 
 Do not expose the Docker standalone service directly to the internet. If you use Docker standalone on a LAN, change the default Basic Auth password in `docker/.env` or protect the service with another trusted access layer.
+
+### Home Assistant add-on (currently unavailable)
+
+The project started as a Home Assistant ingress add-on. That distribution path is
+on hold: the add-on `smartesp-studio/Dockerfile` is built by the Supervisor with
+`smartesp-studio/` as its context and can no longer see the separate
+`smartesp-studio-frontend/` tree, so it is not buildable as-is. Details in
+`CONTRIBUTING.md` and `REFACTORING.md` (§9). Until it is reworked, use the Docker
+standalone image above.
 
 ---
 
@@ -176,11 +152,12 @@ Important files:
 - `smartesp-studio/server.py`
 - `smartesp-studio/config.json`
 - `smartesp-studio/run.sh`
-- `smartesp-studio/Dockerfile`
-- `smartesp-studio/web/`
+- `smartesp-studio/Dockerfile.standalone` (the maintained image; builds the frontend in a stage and copies it to `/web`)
+- `smartesp-studio/Dockerfile` (HA add-on build, currently not buildable)
+- `docker/` (Compose examples)
 
 ### Frontend (`smartesp-studio-frontend/`)
-- Vue 3 + Vite app embedded inside the add-on
+- Vue 3 + Vite app, served as a static bundle by the backend
 - contains:
   - Dashboard
   - Builder
@@ -247,9 +224,9 @@ Important files:
 - validate / compile / OTA / serial flash / logs
 
 The `Install -> Serial port (HA Server)` option enumerates serial devices visible to
-the add-on and runs the ESPHome upload process on the Home Assistant host. This is
-separate from the existing browser Web Serial option. The add-on must be granted
-access to the host serial devices before this option can be used.
+the backend host and runs the ESPHome upload process there. This is separate from
+the browser Web Serial option. The container must be granted access to the host
+serial devices before this option can be used.
 
 ### Display workflow
 - create text/icon/image/shape/graph/animation elements
@@ -304,7 +281,7 @@ Derived storage:
   - `<base>/esp_assets/audio/*`
   - manifest/index JSON files for each asset family
 
-Add-on runtime state:
+Runtime state:
 
 - jobs: `/data/jobs/*.json` and `/data/jobs/*.log`
 - devices: `/data/devices.json`
@@ -373,18 +350,28 @@ VITE_DEV_OFFLINE=1
 In that mode the frontend reads catalog/schemas from `public/` and skips backend catalog/schema endpoints.
 
 ### Backend
-The backend is packaged as a Home Assistant add-on. In normal development you edit:
+From `smartesp-studio/`:
 
-- `smartesp-studio/server.py`
-- `smartesp-studio/config.json`
-- `smartesp-studio/run.sh`
+```bash
+pip install -r requirements-dev.txt
+ruff check .
+python -m pytest
+python server.py   # serves on PORT (default 8099)
+```
 
-After backend changes you rebuild/restart the add-on.
+Point the dev frontend at a running backend, or run the backend against a
+frontend `dist/` build via `WEB_ROOT`.
 
-### Deploy frontend into add-on
-1. build frontend in `smartesp-studio-frontend/`
-2. copy `dist/*` into `smartesp-studio/web/`
-3. rebuild/restart the add-on
+### Standalone image
+`smartesp-studio/Dockerfile.standalone` is a multi-stage build (Node stage builds
+the frontend, runtime stage copies it to `/web`) with the repo root as context:
+
+```bash
+docker build -f smartesp-studio/Dockerfile.standalone -t smartesp-studio:local \
+  --build-arg BUILD_VERSION=dev .
+```
+
+No separate "deploy frontend" step — the image builds and bundles it.
 
 ---
 

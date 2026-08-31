@@ -24,8 +24,9 @@
 
 - One logical change per commit; keep the message body on the *why*, not a restatement of the diff.
 - Run the relevant checks above before committing -- CI (`.github/workflows/checks.yml`) runs the
-  same lint/test/build split for frontend and backend. Docker builds aren't part of CI yet; check
-  those locally if you touched a Dockerfile (see below).
+  same lint/test/build split for frontend and backend on every PR. The image build lives in a
+  separate workflow (`.github/workflows/docker-standalone.yml`) that only runs on pushes to `main`
+  and `v*.*.*` tags, not on PRs -- build it locally if you touched a Dockerfile (see below).
 - `smartesp-studio/Dockerfile` (the Home Assistant add-on build) is currently not buildable -- see
   the comment at its top. Only `Dockerfile.standalone` (built from the repo root, see
   `.github/workflows/docker-standalone.yml`) is maintained right now.
