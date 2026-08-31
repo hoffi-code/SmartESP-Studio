@@ -9,7 +9,9 @@
       :node="node"
       :schema="widgetSchema"
       :id-index="idIndex"
+      :page-index="pageIndex"
       @update="$emit('update', $event)"
+      @field-edit="$emit('field-edit', $event)"
     />
     <div v-else class="note">Loading widget schema...</div>
   </div>
@@ -33,10 +35,15 @@ const props = defineProps({
   idIndex: {
     type: Array,
     default: () => []
+  },
+  // Index of the page holding this widget -- feeds the yaml-preview scopeId.
+  pageIndex: {
+    type: Number,
+    default: 0
   }
 });
 
-defineEmits(["update"]);
+defineEmits(["update", "field-edit"]);
 
 const widgetSchema = computed(() => {
   const type = props.node?.type;

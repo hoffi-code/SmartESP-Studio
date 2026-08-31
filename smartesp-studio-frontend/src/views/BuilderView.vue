@@ -179,6 +179,7 @@
             :yaml-preview="yamlPreview"
             :main-preview-target-key="mainPreviewTargetKey"
             :preview-sync-request="previewSyncRequest"
+            :preview-pulse-request="lvglPreviewPulse"
             :is-hydrating="isHydrating"
             :display-automation-has-interval="displayAutomationHasInterval"
             :hub-notice-domains="hubNoticeDomains"
@@ -397,7 +398,9 @@
             :lvgl-config="config.lvgl"
             :widget-schemas="lvglWidgetSchemas"
             :id-index="idIndex"
+            :external-select="lvglExternalSelect"
             @update="handleLvglUpdate"
+            @field-edit="handleLvglFieldEdit"
           />
         </div>
 
@@ -1709,6 +1712,10 @@ const previewMode = computed({
   }
 });
 const previewSyncRequest = ref(0);
+// { pageIndex, uiId, token } -- YAML preview line click -> select that LVGL widget.
+const lvglExternalSelect = ref(null);
+// { scopeId, path, token } -- LVGL inspector edit -> pulse the matching preview line.
+const lvglPreviewPulse = ref(null);
 
 watch(
   () => splitPreviewEnabled.value,
@@ -2277,6 +2284,17 @@ const activateYamlOriginScope = (origin) => {
     if (Number.isInteger(index) && index >= 0 && index < (config.value.components || []).length) {
       openComponentViewer(index);
     }
+    return;
+  }
+  if (scopeId.startsWith("lvgl:")) {
+    activeTab.value = "LVGL";
+    const parts = scopeId.split(":"); // lvgl:page:<i>:widget:<uiId>
+    const pageIndex = Number.parseInt(parts[2], 10);
+    lvglExternalSelect.value = {
+      pageIndex: Number.isInteger(pageIndex) ? pageIndex : 0,
+      uiId: parts[4] || "",
+      token: (lvglExternalSelect.value?.token || 0) + 1
+    };
     return;
   }
   if (scopeId.startsWith("tab:Busses:")) {
@@ -3412,6 +3430,11 @@ const handleAutomationDetailUpdate = ({ path, value }) => {
 const handleLvglUpdate = (nextLvgl) => {
   config.value.lvgl = nextLvgl;
   saveConfig();
+};
+
+const handleLvglFieldEdit = ({ scopeId, path } = {}) => {
+  if (!scopeId) return;
+  lvglPreviewPulse.value = { scopeId, path: path || [], token: (lvglPreviewPulse.value?.token || 0) + 1 };
 };
 
 const handleCustomConfigUpdate = (value) => {

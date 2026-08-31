@@ -1,100 +1,98 @@
 <template>
-  <section class="lvgl-builder">
-    <div class="lvgl-builder__trigger">
-      <button type="button" class="secondary" @click="openModal">LVGL configurator</button>
-      <span v-if="lvglConfig" class="note">{{ pageCount }} page(s), {{ widgetCount }} top-level widget(s)</span>
+  <div class="components-header">
+    <div class="components-title">
+      <h2>LVGL</h2>
+      <a
+        class="filter-help"
+        href="https://esphome.io/components/lvgl/"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Documentation"
+      >
+        ?
+      </a>
+    </div>
+  </div>
+
+  <div class="module-card__body lvgl-builder">
+    <div class="lvgl-pages-bar">
+      <span class="lvgl-pages-bar__label">Pages</span>
+      <div class="lvgl-page-list">
+        <button
+          v-for="(page, index) in pages"
+          :key="`${page.id || 'page'}-${index}`"
+          type="button"
+          class="lvgl-page-item"
+          :class="{ active: index === activePageIndex }"
+          @click="selectPage(index)"
+        >
+          {{ page.id || `page_${index}` }}
+        </button>
+        <span v-if="!pages.length" class="note">No pages yet.</span>
+      </div>
+      <button type="button" class="secondary compact" @click="addPage">Add page</button>
+      <button
+        v-if="activePageIndex >= 0 && pages.length"
+        type="button"
+        class="secondary compact"
+        @click="removeActivePage"
+      >
+        Remove page
+      </button>
     </div>
 
-    <div v-if="isOpen" class="lvgl-config-backdrop" @click.self="isOpen = false">
-      <div class="lvgl-config-card" role="dialog" aria-modal="true">
-        <header class="lvgl-config-header">
-          <h3>LVGL configurator</h3>
-        </header>
-
-        <div class="lvgl-config-body">
-          <section class="lvgl-config-panel">
-            <div class="lvgl-config-panel__header">
-              <h4>Pages</h4>
-              <button type="button" class="secondary compact" @click="addPage">Add page</button>
-            </div>
-            <div class="lvgl-page-list">
-              <button
-                v-for="(page, index) in pages"
-                :key="`${page.id || 'page'}-${index}`"
-                type="button"
-                class="lvgl-page-item"
-                :class="{ active: index === activePageIndex }"
-                @click="selectPage(index)"
-              >
-                {{ page.id || `page_${index}` }}
-              </button>
-              <div v-if="!pages.length" class="note">No pages yet.</div>
-            </div>
+    <div class="lvgl-config-body__cols">
+      <section class="lvgl-config-panel">
+        <div class="lvgl-config-panel__header">
+          <h4>Widgets</h4>
+          <div class="lvgl-config-panel__actions">
+            <select v-model="widgetTypeToAdd" class="lvgl-widget-type-select" :disabled="activePageIndex < 0">
+              <option v-for="widget in LVGL_WIDGETS" :key="widget.type" :value="widget.type">{{ widget.label }}</option>
+            </select>
             <button
-              v-if="activePageIndex >= 0 && pages.length"
               type="button"
               class="secondary compact"
-              @click="removeActivePage"
+              :disabled="activePageIndex < 0"
+              @click="addWidget(widgetTypeToAdd)"
             >
-              Remove page
+              Add
             </button>
-          </section>
-
-          <section class="lvgl-config-panel">
-            <div class="lvgl-config-panel__header">
-              <h4>Widgets</h4>
-              <div class="lvgl-config-panel__actions">
-                <select v-model="widgetTypeToAdd" class="lvgl-widget-type-select" :disabled="activePageIndex < 0">
-                  <option v-for="widget in LVGL_WIDGETS" :key="widget.type" :value="widget.type">{{ widget.label }}</option>
-                </select>
-                <button
-                  type="button"
-                  class="secondary compact"
-                  :disabled="activePageIndex < 0"
-                  @click="addWidget(widgetTypeToAdd)"
-                >
-                  Add
-                </button>
-              </div>
-            </div>
-            <div class="lvgl-widget-tree">
-              <LvglWidgetTreeItem
-                v-for="widget in activePageWidgets"
-                :key="widget.uiId"
-                :node="widget"
-                :selected-id="selectedWidgetId"
-                @select="selectedWidgetId = $event"
-              />
-              <div v-if="!activePageWidgets.length" class="note">No widgets on this page yet.</div>
-            </div>
-            <button v-if="selectedWidgetId" type="button" class="secondary compact" @click="removeSelectedWidget">
-              Remove widget
-            </button>
-          </section>
-
-          <section class="lvgl-config-panel lvgl-config-panel--inspector">
-            <div class="lvgl-config-panel__header">
-              <h4>Inspector</h4>
-            </div>
-            <LvglWidgetInspector
-              :node="selectedWidget"
-              :widget-schemas="widgetSchemas"
-              :id-index="idIndex"
-              @update="handleInspectorUpdate"
-            />
-          </section>
+          </div>
         </div>
-
-        <div class="lvgl-config-footer">
-          <button type="button" class="secondary compact" @click="isOpen = false">Close</button>
+        <div class="lvgl-widget-tree">
+          <LvglWidgetTreeItem
+            v-for="widget in activePageWidgets"
+            :key="widget.uiId"
+            :node="widget"
+            :selected-id="selectedWidgetId"
+            @select="selectedWidgetId = $event"
+          />
+          <div v-if="!activePageWidgets.length" class="note">No widgets on this page yet.</div>
         </div>
-      </div>
+        <button v-if="selectedWidgetId" type="button" class="secondary compact" @click="removeSelectedWidget">
+          Remove widget
+        </button>
+      </section>
+
+      <section class="lvgl-config-panel lvgl-config-panel--inspector">
+        <div class="lvgl-config-panel__header">
+          <h4>Inspector</h4>
+        </div>
+        <LvglWidgetInspector
+          :node="selectedWidget"
+          :widget-schemas="widgetSchemas"
+          :id-index="idIndex"
+          :page-index="activePageIndex"
+          @update="handleInspectorUpdate"
+          @field-edit="emit('field-edit', $event)"
+        />
+      </section>
     </div>
-  </section>
+  </div>
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import LvglWidgetTreeItem from "./LvglWidgetTreeItem.vue";
 import LvglWidgetInspector from "./LvglWidgetInspector.vue";
 import { LVGL_WIDGETS, lvglWidgetDefaults } from "../../utils/lvglWidgets";
@@ -112,12 +110,17 @@ const props = defineProps({
   idIndex: {
     type: Array,
     default: () => []
+  },
+  // { pageIndex, uiId, token } pushed by BuilderView when a YAML preview line is
+  // clicked -- selects the matching page + widget so the inspector can be pulsed.
+  externalSelect: {
+    type: Object,
+    default: null
   }
 });
 
-const emit = defineEmits(["update"]);
+const emit = defineEmits(["update", "field-edit"]);
 
-const isOpen = ref(false);
 const activePageIndex = ref(0);
 const selectedWidgetId = ref("");
 const widgetTypeToAdd = ref(LVGL_WIDGETS[0]?.type || "label");
@@ -131,8 +134,6 @@ const nextUiId = () => {
 const emptyLvglConfig = () => ({ displays: [], touchscreens: [], bufferSize: "", bgColor: "", pages: [] });
 
 const pages = computed(() => props.lvglConfig?.pages || []);
-const pageCount = computed(() => pages.value.length);
-const widgetCount = computed(() => pages.value.reduce((total, page) => total + (page.widgets?.length || 0), 0));
 const activePageWidgets = computed(() => pages.value[activePageIndex.value]?.widgets || []);
 
 const findWidgetById = (nodes, uiId) => {
@@ -146,12 +147,26 @@ const findWidgetById = (nodes, uiId) => {
 
 const selectedWidget = computed(() => findWidgetById(activePageWidgets.value, selectedWidgetId.value));
 
-const openModal = () => {
+// The config-frame panel is always mounted, so lazily seed an empty lvgl config
+// on first render instead of on a modal open.
+onMounted(() => {
   if (!props.lvglConfig) {
     emit("update", emptyLvglConfig());
   }
-  isOpen.value = true;
-};
+});
+
+watch(
+  () => props.externalSelect,
+  (sel) => {
+    if (!sel) return;
+    if (sel.pageIndex >= 0 && sel.pageIndex < pages.value.length) {
+      activePageIndex.value = sel.pageIndex;
+    }
+    if (findWidgetById(activePageWidgets.value, sel.uiId)) {
+      selectedWidgetId.value = sel.uiId;
+    }
+  }
+);
 
 const selectPage = (index) => {
   activePageIndex.value = index;
@@ -218,48 +233,55 @@ const handleInspectorUpdate = (nextNode) => {
 </script>
 
 <style scoped>
-.lvgl-builder__trigger {
+.lvgl-builder {
+  min-width: 0;
+}
+
+.lvgl-pages-bar {
   display: flex;
   align-items: center;
-  gap: 10px;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
-.lvgl-config-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(15, 23, 42, 0.45);
-  display: grid;
-  place-items: center;
-  z-index: 60;
+.lvgl-pages-bar__label {
+  font-weight: 600;
+  font-size: 13px;
 }
 
-.lvgl-config-card {
-  width: min(1000px, 92vw);
-  max-height: 85vh;
-  background: #fff;
-  border-radius: 14px;
-  border: 1px solid var(--border);
+.lvgl-page-list {
   display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.lvgl-config-header {
-  padding: 14px 18px;
-  border-bottom: 1px solid var(--border);
-}
-
-.lvgl-config-header h3 {
-  margin: 0;
-}
-
-.lvgl-config-body {
+  flex-wrap: wrap;
+  gap: 4px;
   flex: 1;
+  min-width: 0;
+}
+
+.lvgl-page-item {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--navy);
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.lvgl-page-item:hover {
+  background: var(--border);
+}
+
+.lvgl-page-item.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.lvgl-config-body__cols {
   display: grid;
-  grid-template-columns: 220px 1fr 1fr;
+  grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
   gap: 14px;
-  padding: 14px 18px;
-  overflow: auto;
+  align-items: start;
 }
 
 .lvgl-config-panel {
@@ -291,7 +313,6 @@ const handleInspectorUpdate = (nextNode) => {
   flex: 1;
 }
 
-.lvgl-page-list,
 .lvgl-widget-tree {
   display: flex;
   flex-direction: column;
@@ -302,30 +323,9 @@ const handleInspectorUpdate = (nextNode) => {
   min-height: 120px;
 }
 
-.lvgl-page-item {
-  text-align: left;
-  border: none;
-  background: transparent;
-  color: var(--navy);
-  font-weight: 500;
-  padding: 6px 8px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.lvgl-page-item:hover {
-  background: var(--border);
-}
-
-.lvgl-page-item.active {
-  background: var(--accent);
-  color: #fff;
-}
-
-.lvgl-config-footer {
-  padding: 10px 18px;
-  border-top: 1px solid var(--border);
-  display: flex;
-  justify-content: flex-end;
+@media (max-width: 900px) {
+  .lvgl-config-body__cols {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 </style>

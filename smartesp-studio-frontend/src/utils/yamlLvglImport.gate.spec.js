@@ -145,7 +145,7 @@ describe("LVGL Seam 6 gate — reported ESPTaster button/label/image tree", () =
     const lvgl = await parseLvglSection(originalDoc.lvgl, schemaContext);
 
     const lines = buildLvglYamlLines(lvgl, widgetSchemas);
-    const reExportedDoc = loadYaml(lines.join("\n"));
+    const reExportedDoc = loadYaml(lines.map((line) => line.text).join("\n"));
 
     expect(reExportedDoc.lvgl).toEqual(originalDoc.lvgl);
   });

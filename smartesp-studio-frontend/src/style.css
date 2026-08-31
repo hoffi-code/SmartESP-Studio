@@ -1592,6 +1592,22 @@ button:disabled {
   background: rgba(103, 145, 212, 0.12);
 }
 
+.yaml-preview-line--pulse {
+  animation: yamlPreviewLinePulse 1s ease;
+}
+
+@keyframes yamlPreviewLinePulse {
+  0% {
+    background: rgba(103, 145, 212, 0);
+  }
+  15% {
+    background: rgba(103, 145, 212, 0.4);
+  }
+  100% {
+    background: rgba(103, 145, 212, 0);
+  }
+}
+
 .schema-field--stacked {
   align-items: start;
 }

@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { buildLvglYamlLines } from "./schemaLvglYaml";
 
+const asText = (lines) => lines.map((line) => line.text).join("\n");
+
 const labelSchema = {
   fields: [
     { key: "id", type: "id", required: false },
@@ -39,7 +41,7 @@ describe("buildLvglYamlLines", () => {
     };
 
     const lines = buildLvglYamlLines(lvgl, { label: labelSchema });
-    expect(lines.join("\n")).toBe(
+    expect(asText(lines)).toBe(
       [
         "lvgl:",
         "  displays:",
@@ -59,6 +61,44 @@ describe("buildLvglYamlLines", () => {
         '            text_color: "0x3FFFFF"'
       ].join("\n")
     );
+  });
+
+  it("tags widget lines with an lvgl scopeId and per-field origin paths", () => {
+    const lvgl = {
+      pages: [
+        {
+          id: "main_page",
+          widgets: [
+            {
+              uiId: "w1",
+              type: "label",
+              common: { id: "label_1" },
+              props: { text: "Couch" },
+              children: []
+            }
+          ]
+        }
+      ]
+    };
+
+    const lines = buildLvglYamlLines(lvgl, { label: labelSchema });
+    const headerLine = lines.find((line) => line.text.trim() === "- label:");
+    expect(headerLine.origin).toMatchObject({
+      owner: "lvgl",
+      type: "section",
+      scopeId: "lvgl:page:0:widget:w1",
+      tabKey: "lvgl"
+    });
+
+    const textLine = lines.find((line) => line.text.trim() === 'text: "Couch"');
+    expect(textLine.origin).toMatchObject({ scopeId: "lvgl:page:0:widget:w1", path: ["text"] });
+
+    const idLine = lines.find((line) => line.text.trim() === "id: label_1");
+    expect(idLine.origin).toMatchObject({ scopeId: "lvgl:page:0:widget:w1", path: ["id"] });
+
+    // Root/page structural lines stay unclickable.
+    expect(lines.find((line) => line.text === "lvgl:").origin).toBeNull();
+    expect(lines.find((line) => line.text === "    - id: main_page").origin).toBeNull();
   });
 
   it("emits an unsupported widget as an opaque raw block, nested under its parent", () => {
@@ -82,7 +122,7 @@ describe("buildLvglYamlLines", () => {
     };
 
     const lines = buildLvglYamlLines(lvgl, { label: labelSchema });
-    const text = lines.join("\n");
+    const text = asText(lines);
     expect(text).toContain("widgets:");
     expect(text).toContain("- button:");
     expect(text).toContain("id: btn_1");
@@ -122,8 +162,7 @@ describe("buildLvglYamlLines", () => {
       ]
     };
 
-    const lines = buildLvglYamlLines(lvgl, { button: buttonSchema });
-    const text = lines.join("\n");
+    const text = asText(buildLvglYamlLines(lvgl, { button: buttonSchema }));
     expect(text).toContain("- button:");
     expect(text).toContain("id: btn_1");
     expect(text).toContain("on_click:");
@@ -165,7 +204,7 @@ describe("buildLvglYamlLines", () => {
       ]
     };
 
-    const text = buildLvglYamlLines(lvgl, { slider: sliderSchema }).join("\n");
+    const text = asText(buildLvglYamlLines(lvgl, { slider: sliderSchema }));
     expect(text).toContain("- slider:");
     expect(text).toContain("id: vol");
     expect(text).toContain("value: 40");
@@ -194,7 +233,7 @@ describe("buildLvglYamlLines", () => {
       ]
     };
 
-    const text = buildLvglYamlLines(lvgl, { slider: sliderSchema }).join("\n");
+    const text = asText(buildLvglYamlLines(lvgl, { slider: sliderSchema }));
     expect(text).toContain("value: 10");
     expect(text).toContain("scales:");
     expect(text).toContain("count: 5");
@@ -207,6 +246,6 @@ describe("buildLvglYamlLines", () => {
     };
 
     const lines = buildLvglYamlLines(lvgl, {});
-    expect(lines.join("\n")).toBe(["lvgl:", "  pages:", "    - id: main_page", "      widgets:"].join("\n"));
+    expect(asText(lines)).toBe(["lvgl:", "  pages:", "    - id: main_page", "      widgets:"].join("\n"));
   });
 });

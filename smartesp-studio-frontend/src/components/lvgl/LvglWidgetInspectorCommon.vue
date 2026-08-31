@@ -6,6 +6,7 @@
       :field="field"
       :path="[]"
       :value="common"
+      :context-scope-id="scopeId"
       @update="handleFieldUpdate"
     />
   </div>
@@ -18,6 +19,11 @@ defineProps({
   common: {
     type: Object,
     default: () => ({})
+  },
+  // yaml-preview scopeId of the owning widget, so common fields can be pulsed too.
+  scopeId: {
+    type: String,
+    default: ""
   }
 });
 

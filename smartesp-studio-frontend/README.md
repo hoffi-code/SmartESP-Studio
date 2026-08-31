@@ -17,14 +17,18 @@ state lives in composables + `localStorage`.
 Display-configurator UI lives under `components/display/` (`DisplayBuilder.vue` +
 `DisplayCanvas.vue` + `DisplayInspector*.vue`, backed by `composables/display/*`) -- a bespoke
 editor for the `display:` lambda, not part of the generic schema-field system. `components/lvgl/`
-is the same shell for `lvgl:` (`LvglBuilder.vue` = pages/widget-tree modal), but the per-widget
-inspector is schema-driven: `LvglWidgetInspectorGeneric.vue` renders the widget's JSON schema.
+is the same shell for `lvgl:` (`LvglBuilder.vue` = pages strip + widget tree + inspector, rendered
+inline in the config frame like every other Builder tab), but the per-widget inspector is
+schema-driven: `LvglWidgetInspectorGeneric.vue` renders the widget's JSON schema.
 `utils/lvglWidgets.js` is the registry -- adding a widget type = one schema JSON under
 `public/schemas/components/lvgl/widgets/` (`extends` `base_component/lvgl_widget_style.json` for the
 shared style fields) + one `LVGL_WIDGETS` entry; import (`utils/yamlLvglImport.js`) and export
 (`utils/schemaLvglYaml.js`) are generic. Widget schemas are curated subsets -- YAML keys they don't
 model are round-tripped verbatim via `node.extra`. The inspector groups `group: "style"` fields and
-`on_*` triggers into collapsible sections.
+`on_*` triggers into collapsible sections. `buildLvglYamlLines` stamps each widget's preview lines
+with an `lvgl:page:<i>:widget:<uiId>` origin, so clicking an LVGL line in the YAML preview selects
+that widget (`BuilderView.activateYamlOriginScope` -> `LvglBuilder.externalSelect`) and an inspector
+edit pulses the matching preview line back (`field-edit` -> `lvglPreviewPulse` -> `useBuilderPreview`).
 
 ## Import/export pipeline
 

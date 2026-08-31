@@ -1,5 +1,23 @@
 import { dump } from "js-yaml";
-import { pushYamlLine, renderYamlObject } from "./schemaYaml";
+import { appendYamlLines, linesWithOrigins, pushYamlLine, renderYamlObject } from "./schemaYaml";
+
+// scopeId that ties a preview line back to a widget in the inline LVGL builder.
+// Mirrored verbatim by LvglWidgetInspectorGeneric's data-schema-scope-id and by
+// BuilderView.activateYamlOriginScope's `lvgl:` branch.
+const widgetScopeId = (pageIndex, uiId) => `lvgl:page:${pageIndex}:widget:${uiId}`;
+
+const lvglOrigin = (scopeId, { type = "field", path = [], suppressFocus = false } = {}) => ({
+  owner: "lvgl",
+  type,
+  scopeId,
+  tabKey: "lvgl",
+  path: Array.isArray(path) ? path : [],
+  fieldKey: path[path.length - 1] || "",
+  modeLevel: "Simple",
+  confidence: type === "section" ? "section" : "exact",
+  contentKind: "schema",
+  suppressFocus: Boolean(suppressFocus)
+});
 
 // Re-emit widget keys the curated schema doesn't model (see parseWidgetNode's
 // `extra`). Rendered as raw YAML at the widget's field indent so a partial
@@ -29,15 +47,18 @@ const buildWidgetFieldValue = (node) => {
 };
 
 // `dashIndent` is the column of the `- ` marker for this widget's own list item.
-const serializeWidgetNode = (node, dashIndent, lines, widgetSchemas) => {
+const serializeWidgetNode = (node, pageIndex, dashIndent, lines, widgetSchemas) => {
   if (!node) return;
+
+  const scopeId = widgetScopeId(pageIndex, node.uiId);
+  const sectionOrigin = lvglOrigin(scopeId, { type: "section" });
 
   if (node.type === "unsupported") {
     const rawLines = (node.rawYaml || "").split("\n");
     if (!rawLines[0]) return;
-    pushYamlLine(lines, `${" ".repeat(dashIndent)}- ${rawLines[0]}`);
+    pushYamlLine(lines, `${" ".repeat(dashIndent)}- ${rawLines[0]}`, sectionOrigin);
     rawLines.slice(1).forEach((line) => {
-      pushYamlLine(lines, line ? `${" ".repeat(dashIndent + 2)}${line}` : "");
+      pushYamlLine(lines, line ? `${" ".repeat(dashIndent + 2)}${line}` : "", sectionOrigin);
     });
     return;
   }
@@ -47,35 +68,42 @@ const serializeWidgetNode = (node, dashIndent, lines, widgetSchemas) => {
 
   const value = buildWidgetFieldValue(node);
   const objectLines = [];
-  renderYamlObject(value, schema.fields, dashIndent + 4, objectLines, value, null);
+  renderYamlObject(value, schema.fields, dashIndent + 4, objectLines, value, null, {
+    owner: "lvgl",
+    scopeId,
+    tabKey: "lvgl",
+    path: [],
+    modeLevel: "Simple"
+  });
   const extraLines = renderExtraLines(node.extra, dashIndent + 4);
 
   if (!objectLines.length && !extraLines.length && !(node.children || []).length) {
-    pushYamlLine(lines, `${" ".repeat(dashIndent)}- ${node.type}: {}`);
+    pushYamlLine(lines, `${" ".repeat(dashIndent)}- ${node.type}: {}`, sectionOrigin);
     return;
   }
 
-  pushYamlLine(lines, `${" ".repeat(dashIndent)}- ${node.type}:`);
-  objectLines.forEach((line) => lines.push(line));
-  extraLines.forEach((line) => pushYamlLine(lines, line));
+  pushYamlLine(lines, `${" ".repeat(dashIndent)}- ${node.type}:`, sectionOrigin);
+  appendYamlLines(lines, objectLines);
+  extraLines.forEach((line) => pushYamlLine(lines, line, sectionOrigin));
 
   if ((node.children || []).length) {
-    pushYamlLine(lines, `${" ".repeat(dashIndent + 4)}widgets:`);
-    node.children.forEach((child) => serializeWidgetNode(child, dashIndent + 6, lines, widgetSchemas));
+    pushYamlLine(lines, `${" ".repeat(dashIndent + 4)}widgets:`, sectionOrigin);
+    node.children.forEach((child) => serializeWidgetNode(child, pageIndex, dashIndent + 6, lines, widgetSchemas));
   }
 };
 
-const serializePage = (page, dashIndent, lines, widgetSchemas) => {
+const serializePage = (page, pageIndex, dashIndent, lines, widgetSchemas) => {
   pushYamlLine(lines, `${" ".repeat(dashIndent)}- id: ${page.id}`);
   if ((page.widgets || []).length) {
     pushYamlLine(lines, `${" ".repeat(dashIndent + 2)}widgets:`);
-    page.widgets.forEach((widget) => serializeWidgetNode(widget, dashIndent + 4, lines, widgetSchemas));
+    page.widgets.forEach((widget) => serializeWidgetNode(widget, pageIndex, dashIndent + 4, lines, widgetSchemas));
   }
 };
 
-// Builds the `lvgl:` block's YAML lines from config.lvgl. `widgetSchemas` maps widget type
+// Builds the `lvgl:` block's preview lines from config.lvgl. `widgetSchemas` maps widget type
 // ("label", ...) to its loaded JSON schema -- a widget whose schema isn't loaded yet is skipped
-// rather than emitted incorrectly.
+// rather than emitted incorrectly. Returns `{ text, origin }[]`; widget lines carry an origin
+// (scopeId `lvgl:page:<i>:widget:<uiId>`) so the preview can jump to the inline builder.
 export const buildLvglYamlLines = (lvglConfig, widgetSchemas = {}) => {
   if (!lvglConfig) return [];
   const lines = [];
@@ -97,8 +125,8 @@ export const buildLvglYamlLines = (lvglConfig, widgetSchemas = {}) => {
   }
   if ((lvglConfig.pages || []).length) {
     pushYamlLine(lines, "  pages:");
-    lvglConfig.pages.forEach((page) => serializePage(page, 4, lines, widgetSchemas));
+    lvglConfig.pages.forEach((page, pageIndex) => serializePage(page, pageIndex, 4, lines, widgetSchemas));
   }
 
-  return lines;
+  return linesWithOrigins(lines);
 };

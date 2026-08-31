@@ -759,7 +759,7 @@ export const useBuilderYamlPreview = ({
     const lvglLines = buildLvglYamlLines(config.value.lvgl, lvglWidgetSchemas.value);
     if (lvglLines.length) {
       pushPreviewLine(lines, "", "lvgl", null);
-      lvglLines.forEach((line) => pushPreviewLine(lines, line, "lvgl", null));
+      lvglLines.forEach((line) => pushPreviewLine(lines, line.text, "lvgl", line.origin));
     }
 
     while (lines.length && String(lines[0]?.text || "").trim() === "") {
