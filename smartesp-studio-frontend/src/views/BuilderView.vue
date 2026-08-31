@@ -3600,7 +3600,8 @@ onMounted(async () => {
   try {
     lvglWidgetSchemas.value = {
       label: await loadSchemaByPath("components/lvgl/widgets/label.json"),
-      button: await loadSchemaByPath("components/lvgl/widgets/button.json")
+      button: await loadSchemaByPath("components/lvgl/widgets/button.json"),
+      image: await loadSchemaByPath("components/lvgl/widgets/image.json")
     };
   } catch (error) {
     console.error("LVGL widget schemas load failed", error);

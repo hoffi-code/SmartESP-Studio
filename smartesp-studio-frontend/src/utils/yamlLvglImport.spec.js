@@ -31,10 +31,20 @@ const homeassistantActionDefinition = {
   fields: [{ key: "action", type: "text", required: true }]
 };
 
+const imageSchema = {
+  fields: [
+    { key: "id", type: "id", required: false },
+    { key: "y", type: "number", required: false },
+    { key: "src", type: "id_ref", required: false, domain: "image" },
+    { key: "image_recolor", type: "text", required: false }
+  ]
+};
+
 const schemaContext = {
   loadWidgetSchema: async (type) => {
     if (type === "label") return labelSchema;
     if (type === "button") return buttonSchema;
+    if (type === "image") return imageSchema;
     return null;
   },
   loadActionCatalog: async () => [{ id: "homeassistant.action", schemaUrl: "actions/homeassistant/action.json" }],
@@ -72,6 +82,17 @@ describe("parseWidgetNode", () => {
     expect(node.props.text).toBe("Couch");
     expect(node.props.on_click).toHaveLength(1);
     expect(node.props.on_click[0]).toMatchObject({ type: "homeassistant.action", config: { action: "switch.toggle" } });
+  });
+
+  it("parses a supported image widget", async () => {
+    const node = await parseWidgetNode(
+      { image: { id: "img_1", y: -8, src: "icon_couch", image_recolor: "0x3FFFFF" } },
+      schemaContext
+    );
+
+    expect(node.type).toBe("image");
+    expect(node.common).toMatchObject({ id: "img_1", y: -8 });
+    expect(node.props).toEqual({ src: "icon_couch", image_recolor: "0x3FFFFF" });
   });
 
   it("keeps a widget type without a loadWidgetSchema/loaded schema as an opaque raw-YAML node", async () => {
