@@ -6,6 +6,22 @@ Alle nennenswerten Änderungen an SmartESP Studio. Format angelehnt an
 Breaking Changes in einem `MINOR`-Sprung passieren und sind hier als **Breaking**
 markiert.
 
+## [Unreleased]
+
+### Added
+
+- **LVGL-Baum-UX** – bei ausgewähltem Widget: Umsortieren (↑/↓), Einrücken
+  (unter das vorige Geschwister hängen), Ausrücken (aus dem Eltern-Widget
+  herausziehen) und „+ child" (gewählten Typ als Kind anlegen). Nicht
+  unterstützte Widgets haben jetzt einen editierbaren Roh-YAML-Editor mit
+  Validierung statt nur einem Hinweis; Kind-Widgets darunter bleiben im Baum
+  bearbeitbar.
+
+### Fixed
+
+- Kinder eines nicht unterstützten Widgets gingen beim Export verloren –
+  `serializeWidgetNode` schreibt sie jetzt als `widgets:` unter den Roh-Block.
+
 ## [0.2.0] – 2026-08-31
 
 ### Added
