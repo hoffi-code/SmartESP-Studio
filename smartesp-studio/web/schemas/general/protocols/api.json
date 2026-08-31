@@ -177,6 +177,58 @@
       "default": false
     },
     {
+      "key": "on_client_connected",
+      "type": "list",
+      "required": false,
+      "lvl": "advanced",
+      "dependsOn": {
+        "key": "enabled",
+        "value": true
+      },
+      "item": {
+        "type": "object",
+        "fields": [
+          {
+            "key": "then",
+            "type": "list",
+            "required": false,
+            "lvl": "advanced",
+            "item": {
+              "type": "object",
+              "fields": [],
+              "extends": "base_actions.json"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "key": "on_client_disconnected",
+      "type": "list",
+      "required": false,
+      "lvl": "advanced",
+      "dependsOn": {
+        "key": "enabled",
+        "value": true
+      },
+      "item": {
+        "type": "object",
+        "fields": [
+          {
+            "key": "then",
+            "type": "list",
+            "required": false,
+            "lvl": "advanced",
+            "item": {
+              "type": "object",
+              "fields": [],
+              "extends": "base_actions.json"
+            }
+          }
+        ]
+      }
+    },
+    {
       "key": "custom_config",
       "type": "raw_yaml",
       "required": false,

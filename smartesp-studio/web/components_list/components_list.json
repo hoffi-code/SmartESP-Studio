@@ -2935,6 +2935,20 @@
       "subcategories": []
     },
     {
+      "title": "Image Components",
+      "slug": "image-components",
+      "items": [
+        {
+          "name": "File",
+          "path": "components/image/file",
+          "id": "image/file",
+          "available": true,
+          "schemaPath": "components/image/file.json"
+        }
+      ],
+      "subcategories": []
+    },
+    {
       "title": "Light Components",
       "slug": "light-components",
       "items": [

@@ -54,7 +54,7 @@
       "lvl": "advanced"
     },
     {
-      "key": "voc",
+      "key": "voc_index",
       "type": "object",
       "required": false,
       "lvl": "simple",
@@ -113,7 +113,7 @@
       "extends": "base_sensor.json"
     },
     {
-      "key": "nox",
+      "key": "nox_index",
       "type": "object",
       "required": false,
       "lvl": "simple",
