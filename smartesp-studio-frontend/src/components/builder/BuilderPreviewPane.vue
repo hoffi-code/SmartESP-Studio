@@ -87,7 +87,10 @@
             :key="line.id"
             type="button"
             class="yaml-preview-line"
-            :class="{ 'yaml-preview-line--clickable': Boolean(line.origin) }"
+            :class="{
+              'yaml-preview-line--clickable': Boolean(line.origin),
+              'yaml-preview-line--pulse': line.id === pulsedLineId
+            }"
             @click="handleYamlLineClick(line)"
           ><span v-if="line.html" v-html="line.html"></span><span v-else>&nbsp;</span></button></code></pre>
         </div>
@@ -129,6 +132,10 @@ const props = defineProps({
     type: Number,
     default: 0
   },
+  previewPulseRequest: {
+    type: Object,
+    default: null
+  },
   isHydrating: {
     type: Boolean,
     default: false
@@ -152,6 +159,7 @@ const preview = useBuilderPreview({
   yamlPreview: toRef(props, "yamlPreview"),
   mainPreviewTargetKey: toRef(props, "mainPreviewTargetKey"),
   previewSyncRequest: toRef(props, "previewSyncRequest"),
+  previewPulseRequest: toRef(props, "previewPulseRequest"),
   isHydrating: toRef(props, "isHydrating"),
   displayAutomationHasInterval: toRef(props, "displayAutomationHasInterval"),
   hubNoticeDomains: computed(() => props.hubNoticeDomains || [])
@@ -165,6 +173,7 @@ const {
   handleCopyPreview,
   highlightedYamlLines,
   hasPreviewScrollbar,
+  pulsedLineId,
   previewScrollInner,
   previewTabList,
   previewTabMeasureButtons,

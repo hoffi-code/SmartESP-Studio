@@ -1,5 +1,6 @@
 import { computed, nextTick, onBeforeUnmount, onBeforeUpdate, onMounted, ref, watch } from "vue";
 import { highlightYamlFallback, highlightYamlLineToHtml } from "../../utils/yamlSyntaxHighlight";
+import { encodeFieldPath } from "../../utils/yamlDocumentModel";
 
 // This composable owns the complete YAML preview UX for BuilderView.
 // It keeps preview concerns isolated from builder state concerns:
@@ -15,6 +16,7 @@ export const useBuilderPreview = ({
   yamlPreview,
   mainPreviewTargetKey,
   previewSyncRequest,
+  previewPulseRequest,
   isHydrating,
   displayAutomationHasInterval,
   hubNoticeDomains
@@ -31,6 +33,8 @@ export const useBuilderPreview = ({
   const highlightedYamlLines = ref([]);
   const copySuccess = ref(false);
   let copyResetTimer = null;
+  const pulsedLineId = ref("");
+  let pulseResetTimer = null;
 
   const previewContent = computed(() => {
     if (!splitPreviewEnabled.value) return yamlPreview.value;
@@ -248,6 +252,30 @@ export const useBuilderPreview = ({
     }
   );
 
+  // An inline-builder field edit (currently LVGL only) asks for the matching
+  // preview line to flash, so the YAML <-> form link is visible both ways.
+  watch(
+    () => previewPulseRequest?.value,
+    (req) => {
+      if (!req?.scopeId) return;
+      void nextTick(() => {
+        const wantedPath = encodeFieldPath(req.path || []);
+        const match = (highlightedYamlLines.value || []).find(
+          (line) =>
+            line.origin?.scopeId === req.scopeId &&
+            encodeFieldPath(line.origin?.path || []) === wantedPath
+        );
+        if (!match) return;
+        pulsedLineId.value = match.id;
+        if (pulseResetTimer) clearTimeout(pulseResetTimer);
+        pulseResetTimer = setTimeout(() => {
+          if (pulsedLineId.value === match.id) pulsedLineId.value = "";
+          pulseResetTimer = null;
+        }, 1100);
+      });
+    }
+  );
+
   watch(
     () => splitPreviewEnabled.value,
     (enabled) => {
@@ -312,6 +340,9 @@ export const useBuilderPreview = ({
     if (copyResetTimer) {
       clearTimeout(copyResetTimer);
     }
+    if (pulseResetTimer) {
+      clearTimeout(pulseResetTimer);
+    }
   });
 
   return {
@@ -322,6 +353,7 @@ export const useBuilderPreview = ({
     handleCopyPreview,
     highlightedYamlLines,
     hasPreviewScrollbar,
+    pulsedLineId,
     previewScrollInner,
     previewTabList,
     previewTabMeasureButtons,

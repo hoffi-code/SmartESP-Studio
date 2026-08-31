@@ -137,6 +137,31 @@ describe("LvglWidgetInspectorGeneric", () => {
     expect(patch.props.bg_color).toBe("0x101010");
   });
 
+  it("stamps the widget yaml-preview scopeId on the panel and its fields", () => {
+    const wrapper = mount(LvglWidgetInspectorGeneric, {
+      props: { node: buttonNode(), schema: buttonSchema(), pageIndex: 2 }
+    });
+
+    const scopeId = "lvgl:page:2:widget:w1";
+    expect(wrapper.get(".lvgl-widget-inspector-panel").attributes("data-schema-scope-id")).toBe(scopeId);
+    const textField = wrapper
+      .findAll("[data-schema-scope-id]")
+      .find((el) => el.attributes("data-schema-field-path") === "text");
+    expect(textField.attributes("data-schema-scope-id")).toBe(scopeId);
+  });
+
+  it("emits field-edit with the scopeId and edited path on any change", async () => {
+    const wrapper = mount(LvglWidgetInspectorGeneric, {
+      props: { node: buttonNode(), schema: buttonSchema(), pageIndex: 0 }
+    });
+
+    await wrapper.get("#schema-text").setValue("Hi");
+    expect(wrapper.emitted("field-edit").at(-1)[0]).toEqual({ scopeId: "lvgl:page:0:widget:w1", path: ["text"] });
+
+    await wrapper.get("#schema-width").setValue("90");
+    expect(wrapper.emitted("field-edit").at(-1)[0]).toEqual({ scopeId: "lvgl:page:0:widget:w1", path: ["width"] });
+  });
+
   it("shows a note when the schema has no type-specific fields", () => {
     const commonOnly = {
       fields: [

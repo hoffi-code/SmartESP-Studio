@@ -1,6 +1,11 @@
 <template>
-  <div class="lvgl-widget-inspector-panel">
-    <LvglWidgetInspectorCommon :common="node.common || {}" @update="handleCommonUpdate" />
+  <div
+    class="lvgl-widget-inspector-panel"
+    :data-schema-scope-id="widgetScopeId"
+    data-schema-target="scope"
+    data-schema-field-path=""
+  >
+    <LvglWidgetInspectorCommon :common="node.common || {}" :scope-id="widgetScopeId" @update="handleCommonUpdate" />
     <SchemaField
       v-for="field in settingFields"
       :key="field.key"
@@ -9,6 +14,7 @@
       :value="node.props || {}"
       :root-value="node.props || {}"
       :id-index="idIndex"
+      :context-scope-id="widgetScopeId"
       @update="handlePropsUpdate"
     />
     <p v-if="!settingFields.length && !triggerFields.length" class="note">
@@ -27,6 +33,7 @@
         :value="node.props || {}"
         :root-value="node.props || {}"
         :id-index="idIndex"
+        :context-scope-id="widgetScopeId"
         @update="handlePropsUpdate"
       />
     </details>
@@ -40,6 +47,7 @@
         :value="node.props || {}"
         :root-value="node.props || {}"
         :id-index="idIndex"
+        :context-scope-id="widgetScopeId"
         @update="handlePropsUpdate"
       />
     </details>
@@ -66,10 +74,18 @@ const props = defineProps({
   idIndex: {
     type: Array,
     default: () => []
+  },
+  // Index of the page holding this widget -- must match the scopeId the yaml
+  // preview stamps on this widget's lines (see schemaLvglYaml.widgetScopeId).
+  pageIndex: {
+    type: Number,
+    default: 0
   }
 });
 
-const emit = defineEmits(["update"]);
+const emit = defineEmits(["update", "field-edit"]);
+
+const widgetScopeId = computed(() => `lvgl:page:${props.pageIndex}:widget:${props.node.uiId}`);
 
 // The Common panel owns id/x/y/width/height/align; everything else in the schema
 // is rendered here against node.props. Action-list triggers (on_*) are grouped
@@ -91,12 +107,14 @@ const extraKeys = computed(() => Object.keys(props.node?.extra || {}));
 
 const handleCommonUpdate = (patch) => {
   emit("update", { ...props.node, common: { ...(props.node.common || {}), ...patch } });
+  Object.keys(patch || {}).forEach((key) => emit("field-edit", { scopeId: widgetScopeId.value, path: [key] }));
 };
 
 const handlePropsUpdate = ({ path, value }) => {
   const key = path?.[0];
   if (!key) return;
   emit("update", { ...props.node, props: { ...(props.node.props || {}), [key]: value } });
+  emit("field-edit", { scopeId: widgetScopeId.value, path: [key] });
 };
 </script>
 

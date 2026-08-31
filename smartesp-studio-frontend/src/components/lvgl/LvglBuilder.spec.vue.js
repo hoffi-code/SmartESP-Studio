@@ -17,17 +17,19 @@ const LABEL_SCHEMA = {
 };
 const widgetSchemas = { label: LABEL_SCHEMA };
 
+const clickByText = async (wrapper, text) => {
+  const button = wrapper.findAll("button").find((btn) => btn.text() === text);
+  await button.trigger("click");
+};
+
 const addWidget = async (wrapper, type) => {
   await wrapper.get("select.lvgl-widget-type-select").setValue(type);
-  const addButton = wrapper.findAll("button").find((btn) => btn.text() === "Add");
-  await addButton.trigger("click");
+  await clickByText(wrapper, "Add");
 };
 
 describe("LvglBuilder", () => {
-  it("initializes an empty lvgl config the first time the modal is opened", async () => {
+  it("seeds an empty lvgl config on mount when none exists yet", () => {
     const wrapper = mount(LvglBuilder, { props: { lvglConfig: null } });
-
-    await wrapper.get("button").trigger("click");
 
     expect(wrapper.emitted("update")).toHaveLength(1);
     expect(wrapper.emitted("update")[0][0]).toEqual({
@@ -37,14 +39,14 @@ describe("LvglBuilder", () => {
       bgColor: "",
       pages: []
     });
-    expect(wrapper.find(".lvgl-config-backdrop").exists()).toBe(true);
+    // Rendered inline in the config frame -- no modal backdrop.
+    expect(wrapper.find(".lvgl-config-backdrop").exists()).toBe(false);
+    expect(wrapper.find(".lvgl-pages-bar").exists()).toBe(true);
   });
 
-  it("does not re-initialize an existing lvgl config when opened again", async () => {
+  it("does not re-seed an existing lvgl config", () => {
     const lvglConfig = { displays: [], touchscreens: [], bufferSize: "", bgColor: "", pages: [] };
     const wrapper = mount(LvglBuilder, { props: { lvglConfig } });
-
-    await wrapper.get("button").trigger("click");
 
     expect(wrapper.emitted("update")).toBeUndefined();
   });
@@ -52,9 +54,8 @@ describe("LvglBuilder", () => {
   it("adds a page and selects it", async () => {
     const lvglConfig = { displays: [], touchscreens: [], bufferSize: "", bgColor: "", pages: [] };
     const wrapper = mount(LvglBuilder, { props: { lvglConfig } });
-    await wrapper.get("button").trigger("click");
 
-    await wrapper.get("button.secondary.compact").trigger("click");
+    await clickByText(wrapper, "Add page");
 
     const patch = wrapper.emitted("update").at(-1)[0];
     expect(patch.pages).toHaveLength(1);
@@ -64,7 +65,6 @@ describe("LvglBuilder", () => {
   it("adds a widget of the picked type to the active page", async () => {
     const lvglConfig = { displays: [], touchscreens: [], bufferSize: "", bgColor: "", pages: [{ id: "main_page", widgets: [] }] };
     const wrapper = mount(LvglBuilder, { props: { lvglConfig, widgetSchemas } });
-    await wrapper.get("button").trigger("click");
 
     await addWidget(wrapper, "label");
 
@@ -81,7 +81,6 @@ describe("LvglBuilder", () => {
     const widget = { uiId: "w1", type: "label", common: {}, props: { text: "Old" }, children: [] };
     const lvglConfig = { displays: [], touchscreens: [], bufferSize: "", bgColor: "", pages: [{ id: "main_page", widgets: [widget] }] };
     const wrapper = mount(LvglBuilder, { props: { lvglConfig, widgetSchemas } });
-    await wrapper.get("button").trigger("click");
     await wrapper.get(".lvgl-tree-node__button").trigger("click");
 
     await wrapper.get("#schema-text").setValue("New text");
@@ -90,15 +89,45 @@ describe("LvglBuilder", () => {
     expect(patch.pages[0].widgets[0].props.text).toBe("New text");
   });
 
+  it("re-emits field-edit with the widget scopeId when the inspector changes a field", async () => {
+    const widget = { uiId: "w1", type: "label", common: {}, props: { text: "Old" }, children: [] };
+    const lvglConfig = { displays: [], touchscreens: [], bufferSize: "", bgColor: "", pages: [{ id: "main_page", widgets: [widget] }] };
+    const wrapper = mount(LvglBuilder, { props: { lvglConfig, widgetSchemas } });
+    await wrapper.get(".lvgl-tree-node__button").trigger("click");
+
+    await wrapper.get("#schema-text").setValue("New text");
+
+    const edit = wrapper.emitted("field-edit").at(-1)[0];
+    expect(edit).toEqual({ scopeId: "lvgl:page:0:widget:w1", path: ["text"] });
+  });
+
+  it("selects a page + widget from an external-select command", async () => {
+    const widgetA = { uiId: "w1", type: "label", common: {}, props: { text: "A" }, children: [] };
+    const widgetB = { uiId: "w2", type: "label", common: {}, props: { text: "B" }, children: [] };
+    const lvglConfig = {
+      displays: [],
+      touchscreens: [],
+      bufferSize: "",
+      bgColor: "",
+      pages: [
+        { id: "page_0", widgets: [widgetA] },
+        { id: "page_1", widgets: [widgetB] }
+      ]
+    };
+    const wrapper = mount(LvglBuilder, { props: { lvglConfig, widgetSchemas } });
+
+    await wrapper.setProps({ externalSelect: { pageIndex: 1, uiId: "w2", token: 1 } });
+
+    expect(wrapper.get("#schema-text").element.value).toBe("B");
+  });
+
   it("removes the selected widget", async () => {
     const widget = { uiId: "w1", type: "label", common: {}, props: { text: "Label" }, children: [] };
     const lvglConfig = { displays: [], touchscreens: [], bufferSize: "", bgColor: "", pages: [{ id: "main_page", widgets: [widget] }] };
     const wrapper = mount(LvglBuilder, { props: { lvglConfig, widgetSchemas } });
-    await wrapper.get("button").trigger("click");
 
     await wrapper.get(".lvgl-tree-node__button").trigger("click");
-    const removeButton = wrapper.findAll("button").find((btn) => btn.text() === "Remove widget");
-    await removeButton.trigger("click");
+    await clickByText(wrapper, "Remove widget");
 
     const patch = wrapper.emitted("update").at(-1)[0];
     expect(patch.pages[0].widgets).toEqual([]);

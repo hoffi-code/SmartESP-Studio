@@ -55,13 +55,21 @@ export const pushYamlLine = (lines, text, origin = null) => {
   setLineOrigin(lines, index, origin);
 };
 
-const appendYamlLines = (target, source) => {
+export const appendYamlLines = (target, source) => {
   const sourceOrigins = lineOriginList(source);
   source.forEach((line, index) => {
     const targetIndex = target.length;
     target.push(line);
     if (sourceOrigins[index]) setLineOrigin(target, targetIndex, sourceOrigins[index]);
   });
+};
+
+// Pairs a raw string-line array with the origins tracked for it in the WeakMap,
+// so a caller that assembled lines via pushYamlLine/renderYamlObject can hand out
+// clickable {text, origin} entries instead of bare strings.
+export const linesWithOrigins = (lines) => {
+  const origins = lineOriginList(lines);
+  return (lines || []).map((text, index) => ({ text, origin: origins[index] || null }));
 };
 
 const makeSourceOrigin = (context, overrides = {}) => {
