@@ -91,9 +91,14 @@
           />
           <div v-if="!activePageWidgets.length" class="note">No widgets on this page yet.</div>
         </div>
-        <button v-if="selectedWidgetId" type="button" class="secondary compact" @click="removeSelectedWidget">
-          Remove widget
-        </button>
+        <div v-if="selectedWidget" class="lvgl-tree-actions">
+          <button type="button" class="secondary compact" :disabled="!canMoveUp" title="Move up" @click="moveSelected(-1)">↑</button>
+          <button type="button" class="secondary compact" :disabled="!canMoveDown" title="Move down" @click="moveSelected(1)">↓</button>
+          <button type="button" class="secondary compact" :disabled="!canIndent" title="Nest under previous sibling" @click="indentSelected">⇥</button>
+          <button type="button" class="secondary compact" :disabled="!canOutdent" title="Move out of parent" @click="outdentSelected">⇤</button>
+          <button type="button" class="secondary compact" title="Add selected type as a child" @click="addChildWidget(widgetTypeToAdd)">+ child</button>
+          <button type="button" class="secondary compact" @click="removeSelectedWidget">Remove</button>
+        </div>
       </section>
     </div>
 
@@ -412,6 +417,108 @@ const replaceWidgetById = (nodes, uiId, nextNode) =>
     node.uiId === uiId ? nextNode : { ...node, children: replaceWidgetById(node.children, uiId, nextNode) }
   );
 
+// --- tree structure ops (all return a new top-level widgets array) ---
+
+const addChildById = (nodes, parentUiId, child) =>
+  (nodes || []).map((node) =>
+    node.uiId === parentUiId
+      ? { ...node, children: [...(node.children || []), child] }
+      : { ...node, children: addChildById(node.children, parentUiId, child) }
+  );
+
+// Swap uiId with its sibling `delta` positions away, at whatever depth it sits.
+const reorderSibling = (nodes, uiId, delta) => {
+  const list = nodes || [];
+  const idx = list.findIndex((node) => node.uiId === uiId);
+  if (idx !== -1) {
+    const target = idx + delta;
+    if (target < 0 || target >= list.length) return list;
+    const next = list.slice();
+    [next[idx], next[target]] = [next[target], next[idx]];
+    return next;
+  }
+  return list.map((node) => ({ ...node, children: reorderSibling(node.children, uiId, delta) }));
+};
+
+// Move uiId to be the last child of its immediately-preceding sibling.
+const indentNode = (nodes, uiId) => {
+  const list = nodes || [];
+  const idx = list.findIndex((node) => node.uiId === uiId);
+  if (idx > 0) {
+    const prev = list[idx - 1];
+    const next = list.slice();
+    next[idx - 1] = { ...prev, children: [...(prev.children || []), list[idx]] };
+    next.splice(idx, 1);
+    return next;
+  }
+  if (idx === 0) return list;
+  return list.map((node) => ({ ...node, children: indentNode(node.children, uiId) }));
+};
+
+// Move uiId out of its parent, to sit right after the parent among its siblings.
+const outdentNode = (nodes, uiId) => {
+  const list = nodes || [];
+  const next = [];
+  for (const node of list) {
+    const childIdx = (node.children || []).findIndex((child) => child.uiId === uiId);
+    if (childIdx !== -1) {
+      const children = node.children.slice();
+      const [moved] = children.splice(childIdx, 1);
+      next.push({ ...node, children });
+      next.push(moved);
+    } else {
+      next.push({ ...node, children: outdentNode(node.children, uiId) });
+    }
+  }
+  return next;
+};
+
+const mutateActivePageWidgets = (fn) => {
+  const current = props.lvglConfig;
+  if (!current || activePageIndex.value < 0) return;
+  const nextPages = current.pages.map((page, index) =>
+    index === activePageIndex.value ? { ...page, widgets: fn(page.widgets || []) } : page
+  );
+  emit("update", { ...current, pages: nextPages });
+};
+
+// Sibling list + position of the selected widget within the active page tree.
+const findSiblingContext = (nodes, uiId, parent = null) => {
+  const list = nodes || [];
+  const idx = list.findIndex((node) => node.uiId === uiId);
+  if (idx !== -1) return { siblings: list, index: idx, parent };
+  for (const node of list) {
+    const found = findSiblingContext(node.children, uiId, node);
+    if (found) return found;
+  }
+  return null;
+};
+
+const selectedContext = computed(() =>
+  selectedWidgetId.value ? findSiblingContext(activePageWidgets.value, selectedWidgetId.value) : null
+);
+const canMoveUp = computed(() => (selectedContext.value?.index ?? 0) > 0);
+const canMoveDown = computed(() => {
+  const ctx = selectedContext.value;
+  return Boolean(ctx) && ctx.index < ctx.siblings.length - 1;
+});
+const canIndent = computed(() => canMoveUp.value);
+const canOutdent = computed(() => Boolean(selectedContext.value?.parent));
+
+const addChildWidget = (type) => {
+  if (!selectedWidgetId.value || !type) return;
+  const child = { uiId: nextUiId(), type, common: {}, props: lvglWidgetDefaults(type), children: [] };
+  mutateActivePageWidgets((widgets) => addChildById(widgets, selectedWidgetId.value, child));
+  selectedWidgetId.value = child.uiId;
+};
+
+const moveSelected = (delta) =>
+  mutateActivePageWidgets((widgets) => reorderSibling(widgets, selectedWidgetId.value, delta));
+const indentSelected = () =>
+  mutateActivePageWidgets((widgets) => indentNode(widgets, selectedWidgetId.value));
+const outdentSelected = () =>
+  mutateActivePageWidgets((widgets) => outdentNode(widgets, selectedWidgetId.value));
+
 const handleInspectorUpdate = (nextNode) => {
   const current = props.lvglConfig;
   if (!current || !selectedWidgetId.value) return;
@@ -573,6 +680,12 @@ const handleCanvasResize = ({ dim, value }) => {
   border-radius: 8px;
   padding: 6px;
   min-height: 120px;
+}
+
+.lvgl-tree-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
 }
 
 @media (max-width: 900px) {

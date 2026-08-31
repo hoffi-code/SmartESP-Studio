@@ -1,9 +1,11 @@
 <template>
   <div class="lvgl-widget-inspector">
     <div v-if="!node" class="note">Select a widget to edit it.</div>
-    <div v-else-if="node.type === 'unsupported'" class="note">
-      {{ node.originalType }} widgets aren't editable yet -- kept as raw YAML on save.
-    </div>
+    <LvglRawYamlEditor
+      v-else-if="node.type === 'unsupported'"
+      :node="node"
+      @update="$emit('update', $event)"
+    />
     <LvglWidgetInspectorGeneric
       v-else-if="widgetSchema"
       :node="node"
@@ -20,6 +22,7 @@
 <script setup>
 import { computed } from "vue";
 import LvglWidgetInspectorGeneric from "./LvglWidgetInspectorGeneric.vue";
+import LvglRawYamlEditor from "./LvglRawYamlEditor.vue";
 import { lvglWidgetByType } from "../../utils/lvglWidgets";
 
 const props = defineProps({
