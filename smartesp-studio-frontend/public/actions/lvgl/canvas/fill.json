@@ -13,10 +13,11 @@
     {
       "key": "color",
       "label": "Color",
-      "type": "text",
+      "type": "color",
       "required": true,
       "lvl": "normal",
-      "placeholder": "#000000"
+      "placeholder": "0xRRGGBB",
+      "colorFormat": "hex0x"
     },
     {
       "key": "opa",

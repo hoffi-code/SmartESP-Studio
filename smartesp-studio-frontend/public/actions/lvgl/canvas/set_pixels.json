@@ -39,10 +39,11 @@
     {
       "key": "color",
       "label": "Color",
-      "type": "text",
+      "type": "color",
       "required": true,
       "lvl": "normal",
-      "placeholder": "#ffffff"
+      "placeholder": "0xRRGGBB",
+      "colorFormat": "hex0x"
     },
     {
       "key": "opa",

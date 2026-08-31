@@ -38,31 +38,35 @@
     },
     {
       "key": "background_color",
-      "type": "text",
+      "type": "color",
       "required": false,
       "lvl": "advanced",
-      "placeholder": "BLACK"
+      "placeholder": "BLACK",
+      "colorFormat": "hex"
     },
     {
       "key": "background_pressed_color",
-      "type": "text",
+      "type": "color",
       "required": false,
       "lvl": "advanced",
-      "placeholder": "GRAY"
+      "placeholder": "GRAY",
+      "colorFormat": "hex"
     },
     {
       "key": "foreground_color",
-      "type": "text",
+      "type": "color",
       "required": false,
       "lvl": "advanced",
-      "placeholder": "WHITE"
+      "placeholder": "WHITE",
+      "colorFormat": "hex"
     },
     {
       "key": "foreground_pressed_color",
-      "type": "text",
+      "type": "color",
       "required": false,
       "lvl": "advanced",
-      "placeholder": "WHITE"
+      "placeholder": "WHITE",
+      "colorFormat": "hex"
     },
     {
       "key": "visible",

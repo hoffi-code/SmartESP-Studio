@@ -67,10 +67,11 @@
     },
     {
       "key": "image_recolor",
-      "type": "text",
+      "type": "color",
       "required": false,
       "lvl": "normal",
-      "placeholder": "0xFFFFFF"
+      "placeholder": "0xRRGGBB",
+      "colorFormat": "hex0x"
     },
     {
       "key": "image_recolor_opa",

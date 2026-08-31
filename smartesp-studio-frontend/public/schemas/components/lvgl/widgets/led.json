@@ -59,10 +59,11 @@
     },
     {
       "key": "color",
-      "type": "text",
+      "type": "color",
       "required": false,
       "lvl": "normal",
-      "placeholder": "0xFF0000"
+      "placeholder": "0xRRGGBB",
+      "colorFormat": "hex0x"
     },
     {
       "key": "brightness",

@@ -13,20 +13,22 @@
     {
       "key": "bg_color",
       "label": "Background color",
-      "type": "text",
+      "type": "color",
       "templatable": false,
       "required": false,
       "lvl": "normal",
-      "placeholder": "#336699"
+      "placeholder": "0xRRGGBB",
+      "colorFormat": "hex0x"
     },
     {
       "key": "text_color",
       "label": "Text color",
-      "type": "text",
+      "type": "color",
       "templatable": false,
       "required": false,
       "lvl": "normal",
-      "placeholder": "#ffffff"
+      "placeholder": "0xRRGGBB",
+      "colorFormat": "hex0x"
     },
     {
       "key": "border_width",

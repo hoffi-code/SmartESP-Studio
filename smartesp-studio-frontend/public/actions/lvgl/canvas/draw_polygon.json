@@ -39,18 +39,20 @@
     {
       "key": "bg_color",
       "label": "Fill color",
-      "type": "text",
+      "type": "color",
       "required": false,
       "lvl": "normal",
-      "placeholder": "#336699"
+      "placeholder": "0xRRGGBB",
+      "colorFormat": "hex0x"
     },
     {
       "key": "border_color",
       "label": "Border color",
-      "type": "text",
+      "type": "color",
       "required": false,
       "lvl": "normal",
-      "placeholder": "#000000"
+      "placeholder": "0xRRGGBB",
+      "colorFormat": "hex0x"
     },
     {
       "key": "border_width",

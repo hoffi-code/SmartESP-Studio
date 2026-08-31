@@ -36,6 +36,14 @@
       <IconPicker :open="iconPickerOpen" :selected="iconName" :initial-query="iconName" @close="handleIconClose" @select="handleIconSelect" />
     </div>
 
+    <ColorField
+      v-else-if="isColorField"
+      :model-value="resolvedValue"
+      :field="field"
+      :input-id="inputId"
+      @update:model-value="(colorValue) => emit('update', { path: fieldPath, value: wrapInputValue(colorValue) })"
+    />
+
     <div v-else-if="isTemplatableField" class="schema-templatable">
       <div class="schema-templatable-toolbar">
         <button type="button" class="secondary compact btn-standard" :class="{ 'is-active': templatableMode === 'literal' }" @click="setTemplatableMode('literal')">Value</button>
@@ -137,6 +145,7 @@
 
 <script setup>
 import GpioField from './GpioField.vue';
+import ColorField from './ColorField.vue';
 import IconPicker from '../IconPicker.vue';
 import SchemaField from '../SchemaField.vue';
 import { ID_REF_EMPTY_OPTION } from '../../utils/schemaIdRefs';
@@ -217,6 +226,7 @@ defineProps({
   idRefOptions: { type: Array, default: () => [] },
   selectIdRef: { type: Function, required: true },
   isGpioField: Boolean,
+  isColorField: Boolean,
   fieldPath: { type: Array, default: () => [] },
   wrapInputValue: { type: Function, required: true },
   showInlineAction: Boolean,
