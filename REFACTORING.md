@@ -485,3 +485,17 @@ HA-Action-`id`-Referenzen ohne Ziel). Automatisierte Checks vorab grün: FE `lin
 - YAML-file-Import end-to-end (OS-Dateidialog).
 - Job-Typen außer Validate; Job-Cancel.
 - `root_map`-Konflikt (Komponente ausgegraut), Online/Offline-Badge-Polling (keine registrierten Geräte).
+
+---
+
+## 11. Push + PR
+
+`refactor/overhaul` gepusht, **PR #1** gegen `main` (`hoffi-code/ESPConfig-Designer` — Remote-Repo
+trägt noch den alten Namen). Erster CI-Lauf überhaupt für das Repo (`main` hat weder CI noch Tests).
+
+**Ein Bug dabei rausgefallen** (`1c8f27d`): Die Testmodule laden `server.py` direkt, das beim Import
+`bootstrap_storage()` → `os.makedirs(TARGET_DIR)` ausführt. Default ist `/config/esphome` → auf dem
+Linux-Runner `PermissionError: '/config'` schon bei der Collection, vor dem ersten Test. Lokal (Windows:
+`C:\config\…`, anlegbar; Container: root) unsichtbar. Fix: `smartesp-studio/conftest.py` lenkt
+`TARGET_DIR` & Co. auf ein `tempfile.mkdtemp()`, sofern nicht gesetzt — pytest lädt die conftest vor den
+Testmodulen. CI danach grün (frontend + backend), PR `mergeable_state: clean`.
