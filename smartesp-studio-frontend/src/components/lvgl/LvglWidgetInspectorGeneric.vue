@@ -37,6 +37,21 @@
         @update="handlePropsUpdate"
       />
     </details>
+    <details v-if="layoutFields.length" class="lvgl-widget-inspector-panel__section">
+      <summary>Layout</summary>
+      <p class="note">Flex/grid container setup, per-cell placement and <code>align_to</code>.</p>
+      <SchemaField
+        v-for="field in layoutFields"
+        :key="field.key"
+        :field="field"
+        :path="[]"
+        :value="node.props || {}"
+        :root-value="node.props || {}"
+        :id-index="idIndex"
+        :context-scope-id="widgetScopeId"
+        @update="handlePropsUpdate"
+      />
+    </details>
     <details v-if="stateFields.length" class="lvgl-widget-inspector-panel__section">
       <summary>States</summary>
       <p class="note">Per-state style overrides (pressed, checked, ...).</p>
@@ -129,13 +144,19 @@ const isTriggerField = (field) =>
 const isStyleField = (field) => field?.group === "style";
 const isStateField = (field) => field?.group === "states";
 const isPartField = (field) => field?.group === "parts";
+const isLayoutField = (field) => field?.group === "layout";
 const isGroupedField = (field) =>
-  isTriggerField(field) || isStyleField(field) || isStateField(field) || isPartField(field);
+  isTriggerField(field) ||
+  isStyleField(field) ||
+  isStateField(field) ||
+  isPartField(field) ||
+  isLayoutField(field);
 
 const settingFields = computed(() =>
   typeSpecificFields.value.filter((field) => !isGroupedField(field))
 );
 const styleFields = computed(() => typeSpecificFields.value.filter(isStyleField));
+const layoutFields = computed(() => typeSpecificFields.value.filter(isLayoutField));
 const stateFields = computed(() => typeSpecificFields.value.filter(isStateField));
 const partFields = computed(() => typeSpecificFields.value.filter(isPartField));
 const triggerFields = computed(() => typeSpecificFields.value.filter(isTriggerField));

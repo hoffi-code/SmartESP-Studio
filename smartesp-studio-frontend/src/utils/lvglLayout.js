@@ -72,9 +72,15 @@ const resolveDim = (value, parentDim, intrinsic) => {
   return intrinsic;
 };
 
-// A parent using flex/grid ignores its children's x/y. Our curated schemas don't
-// model layout, so it rides along in node.extra.
+// A parent using flex/grid ignores its children's x/y. Layout lives in
+// node.props.layout since the flex/grid schema landed; older opaque nodes may
+// still carry the flat keys in node.extra.
 const isLayoutContainer = (node) => {
+  const layout = node?.props?.layout;
+  if (layout && typeof layout === "object") {
+    const type = String(layout.type || "").toUpperCase();
+    return type === "FLEX" || type === "GRID" || Boolean(layout.flex_flow || layout.grid_columns || layout.grid_rows);
+  }
   const extra = node?.extra || {};
   return Boolean(
     extra.flex_flow || extra.grid_rows || extra.grid_columns ||
@@ -82,7 +88,7 @@ const isLayoutContainer = (node) => {
   );
 };
 
-const hasAlignTo = (node) => Boolean(node?.extra?.align_to);
+const hasAlignTo = (node) => Boolean(node?.props?.align_to || node?.extra?.align_to);
 
 let counter = 0;
 
