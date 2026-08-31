@@ -160,6 +160,7 @@
     :id-ref-options="idRefMenuOptions"
     :select-id-ref="selectIdRef"
     :is-gpio-field="isGpioField"
+    :is-color-field="isColorField"
     :field-path="fieldPath"
     :wrap-input-value="wrapInputValue"
     :show-inline-action="showInlineAction"
@@ -346,6 +347,7 @@ const isSlugField = computed(() => props.field.type === "slug");
 const isNameField = computed(() => props.field.key === "name");
 const isIdRefField = computed(() => props.field.type === "id_ref");
 const isGpioField = computed(() => props.field.type === "gpio");
+const isColorField = computed(() => props.field.type === "color");
 const isAutoField = computed(() =>
   Boolean(
     (props.field.type === "ssid" && props.field.settings?.autoPath) ||

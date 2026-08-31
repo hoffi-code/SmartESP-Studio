@@ -38,17 +38,19 @@
     },
     {
       "key": "background_color",
-      "type": "text",
+      "type": "color",
       "required": false,
       "lvl": "advanced",
-      "placeholder": "BLACK"
+      "placeholder": "BLACK",
+      "colorFormat": "hex"
     },
     {
       "key": "foreground_color",
-      "type": "text",
+      "type": "color",
       "required": false,
       "lvl": "advanced",
-      "placeholder": "WHITE"
+      "placeholder": "WHITE",
+      "colorFormat": "hex"
     },
     {
       "key": "font_id",

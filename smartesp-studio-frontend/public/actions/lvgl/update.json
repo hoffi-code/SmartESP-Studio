@@ -4,11 +4,12 @@
     {
       "key": "disp_bg_color",
       "label": "Background color",
-      "type": "text",
+      "type": "color",
       "templatable": false,
       "required": false,
       "lvl": "normal",
-      "placeholder": "#000000"
+      "placeholder": "0xRRGGBB",
+      "colorFormat": "hex0x"
     },
     {
       "key": "disp_bg_image",

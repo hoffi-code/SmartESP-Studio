@@ -229,6 +229,7 @@ export const formatYamlValue = (value, fieldType) => {
     }
     if (
       resolvedType === "text" ||
+      resolvedType === "color" ||
       resolvedType === "icon" ||
       resolvedType === "ssid" ||
       resolvedType === "password"

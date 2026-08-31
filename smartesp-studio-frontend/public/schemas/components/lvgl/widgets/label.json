@@ -66,17 +66,19 @@
     },
     {
       "key": "text_color",
-      "type": "text",
+      "type": "color",
       "required": false,
       "lvl": "normal",
-      "placeholder": "0xFFFFFF"
+      "placeholder": "0xRRGGBB",
+      "colorFormat": "hex0x"
     },
     {
       "key": "bg_color",
-      "type": "text",
+      "type": "color",
       "required": false,
       "lvl": "normal",
-      "placeholder": "0x000000"
+      "placeholder": "0xRRGGBB",
+      "colorFormat": "hex0x"
     },
     {
       "key": "on_click",
