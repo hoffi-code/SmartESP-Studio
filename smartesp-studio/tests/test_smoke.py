@@ -68,6 +68,22 @@ class RouteSmokeTests(unittest.TestCase):
         self.assertEqual(204, response.status_code)
         self.assertEqual("", response.get_data(as_text=True))
 
+    def test_mdi_font_cannot_be_deleted(self):
+        response = self.client.delete(
+            "/api/assets/fonts/materialdesignicons-webfont.ttf", headers=INGRESS
+        )
+        self.assertEqual(409, response.status_code)
+        self.assertEqual("error", response.json["status"])
+
+    def test_mdi_font_cannot_be_renamed(self):
+        response = self.client.post(
+            "/api/assets/rename",
+            headers=INGRESS,
+            json={"kind": "fonts", "from": "materialdesignicons-webfont.ttf", "to": "mdi.ttf"},
+        )
+        self.assertEqual(409, response.status_code)
+        self.assertEqual("error", response.json["status"])
+
 
 if __name__ == "__main__":
     unittest.main()

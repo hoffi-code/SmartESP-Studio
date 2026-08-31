@@ -355,7 +355,9 @@ geprüft — kein echter ESPHome-Toolchain-Lauf lokal.
    skalieren, Zoom/Pan/Fit, Reorder per Drag, Delete/Copy/Paste, Reset (Confirm) — YAML enthält das
    generierte `display`-Lambda.
 7. **Asset-Manager:** Modal öffnen (Manifest lädt), je Tab (Images/Fonts/Audio) Upload (gültige
-   Datei), Rename (Prompt), Delete (Confirm), Suche, geschützte MDI-Font ausgeblendet.
+   Datei), Rename (Prompt), Delete (Confirm), Suche. Geschützte MDI-Font (`materialdesignicons-webfont.ttf`)
+   wird gelistet, aber ohne Rename/Delete-Menü (`protected`-Flag im Manifest); die Endpunkte
+   `/api/assets/rename` und `DELETE /api/assets/fonts/...` weisen sie mit `409` ab.
 8. **Secrets:** Modal öffnen (`secrets.yaml` lädt), Syntax-Highlight, ungültiges YAML → Save
    deaktiviert + Fehleranzeige, gültige Änderung → Save (`POST /api/secrets/raw`).
 9. **YAML-Import:** Import-Menü → „YAML file" (lokale Datei → Editor → Analyse-Report → Confirm →

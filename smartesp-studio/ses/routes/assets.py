@@ -121,6 +121,9 @@ def api_assets_rename():
     if not source_name or not target_name:
         return json_error("Invalid filename", "ASSET_INVALID_FILENAME", 400)
 
+    if assets.is_protected_asset(kind, source_name):
+        return json_error("This file is protected and cannot be renamed", "ASSET_PROTECTED", 409)
+
     meta = assets.asset_meta_for_kind(kind)
     if not assets.validate_asset_extension(source_name, meta["extensions"]):
         return json_error("Unsupported source extension", "ASSET_UNSUPPORTED_EXTENSION", 400)
@@ -177,6 +180,9 @@ def api_assets_file(kind, filename):
         if guessed:
             return send_from_directory(meta["folder"], safe_name, mimetype=guessed)
         return send_from_directory(meta["folder"], safe_name)
+
+    if assets.is_protected_asset(parsed_kind, safe_name):
+        return json_error("This file is protected and cannot be deleted", "ASSET_PROTECTED", 409)
 
     with config.ASSET_LOCK:
         target = os.path.join(meta["folder"], safe_name)

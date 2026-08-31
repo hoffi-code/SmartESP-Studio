@@ -1,16 +1,13 @@
 import { computed } from "vue";
 import { deriveGoogleFontStyle } from "../../utils/displayFonts";
-
-const PROTECTED_LOCAL_FONT_FILE = "materialdesignicons-webfont.ttf";
+import { isProtectedAsset } from "../../utils/protectedAssets";
 
 // Shared font-source/-variant handling for text elements and graph-legend name/value fonts.
 // `prefix` namespaces the patch field names: "" -> fontSource/fontFamily/..., "legendName" ->
 // legendNameFontSource/legendNameFontFamily/..., "legendValue" -> legendValueFontSource/...
 export function useDisplayFontControls({ localFonts, googleFonts, assetsBase }) {
   const visibleLocalFonts = computed(() =>
-    (localFonts.value || []).filter(
-      (font) => String(font?.file || "").trim().toLowerCase() !== PROTECTED_LOCAL_FONT_FILE
-    )
+    (localFonts.value || []).filter((font) => !isProtectedAsset(font))
   );
 
   const findVisibleLocalFont = (file) => visibleLocalFonts.value.find((item) => item.file === file);

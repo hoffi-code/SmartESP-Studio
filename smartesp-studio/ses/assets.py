@@ -8,6 +8,18 @@ from urllib.parse import quote
 from ses import config
 from ses.io import read_json_file, timestamp_to_utc, write_json_file
 
+# The Material Design Icons webfont ships with the app and is referenced verbatim
+# by the generated display YAML, so it must not be renamed or deleted through the
+# API. The Asset Manager also surfaces this as a per-entry "protected" flag.
+PROTECTED_ASSET_FILES = {
+    "fonts": frozenset({"materialdesignicons-webfont.ttf"}),
+}
+
+
+def is_protected_asset(kind: str, filename: str) -> bool:
+    name = str(filename or "").strip().lower()
+    return name in PROTECTED_ASSET_FILES.get(kind, frozenset())
+
 
 def normalize_asset_label(filename: str) -> str:
     base = os.path.splitext(filename)[0]
@@ -181,6 +193,7 @@ def build_asset_entries(kind: str) -> List[dict]:
                 "mtime": timestamp_to_utc(stats.st_mtime),
                 "type": ext.lower().lstrip("."),
                 "isAnimation": is_animation,
+                "protected": is_protected_asset(kind, name),
                 "url": f"/api/assets/{kind}/{quote(name)}",
             }
         )

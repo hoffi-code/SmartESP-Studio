@@ -87,6 +87,7 @@
 
 <script setup>
 import { computed, ref, watch } from "vue";
+import { isProtectedAsset } from "../../utils/protectedAssets";
 
 const props = defineProps({
   open: {
@@ -223,12 +224,7 @@ const formatDate = (value) => {
 
 const menuKey = (item) => `${activeKind.value}:${String(item?.file || "")}`;
 
-const isProtectedFont = (item) => {
-  if (activeKind.value !== "fonts") return false;
-  return String(item?.file || "").trim().toLowerCase() === "materialdesignicons-webfont.ttf";
-};
-
-const canManageItem = (item) => !isProtectedFont(item);
+const canManageItem = (item) => !isProtectedAsset(item);
 
 const toggleItemMenu = (item) => {
   const key = menuKey(item);
