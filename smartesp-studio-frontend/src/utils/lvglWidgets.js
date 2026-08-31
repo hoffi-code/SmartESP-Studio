@@ -23,7 +23,13 @@ export const LVGL_WIDGETS = [
   { type: "line", label: "Line", schemaPath: widgetPath("line"), defaults: {} },
   { type: "arc", label: "Arc", schemaPath: widgetPath("arc"), defaults: {} },
   { type: "bar", label: "Bar", schemaPath: widgetPath("bar"), defaults: {} },
-  { type: "slider", label: "Slider", schemaPath: widgetPath("slider"), defaults: {} }
+  { type: "slider", label: "Slider", schemaPath: widgetPath("slider"), defaults: {} },
+  { type: "switch", label: "Switch", schemaPath: widgetPath("switch"), defaults: {} },
+  { type: "checkbox", label: "Checkbox", schemaPath: widgetPath("checkbox"), defaults: { text: "Checkbox" } },
+  { type: "dropdown", label: "Dropdown", schemaPath: widgetPath("dropdown"), defaults: {} },
+  { type: "roller", label: "Roller", schemaPath: widgetPath("roller"), defaults: {} },
+  { type: "spinbox", label: "Spinbox", schemaPath: widgetPath("spinbox"), defaults: {} },
+  { type: "textarea", label: "Text area", schemaPath: widgetPath("textarea"), defaults: {} }
 ];
 
 export const LVGL_WIDGET_TYPES = new Set(LVGL_WIDGETS.map((widget) => widget.type));

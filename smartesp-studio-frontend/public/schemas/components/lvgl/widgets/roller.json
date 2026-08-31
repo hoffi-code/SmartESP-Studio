@@ -1,0 +1,93 @@
+{
+  "id": "lvgl.widget.roller",
+  "domain": "lvgl",
+  "widgetType": "roller",
+  "helpUrl": "https://esphome.io/components/lvgl/widgets/roller/",
+  "fields": [
+    {
+      "key": "id",
+      "type": "id",
+      "required": false,
+      "lvl": "simple",
+      "placeholder": "roller_id"
+    },
+    {
+      "key": "x",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "0"
+    },
+    {
+      "key": "y",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "0"
+    },
+    {
+      "key": "width",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "SIZE_CONTENT"
+    },
+    {
+      "key": "height",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "SIZE_CONTENT"
+    },
+    {
+      "key": "align",
+      "type": "select",
+      "required": false,
+      "lvl": "simple",
+      "options": [
+        "TOP_LEFT",
+        "TOP_MID",
+        "TOP_RIGHT",
+        "LEFT_MID",
+        "CENTER",
+        "RIGHT_MID",
+        "BOTTOM_LEFT",
+        "BOTTOM_MID",
+        "BOTTOM_RIGHT"
+      ]
+    },
+    {
+      "key": "options",
+      "type": "list",
+      "required": false,
+      "lvl": "simple",
+      "item": {
+        "type": "text"
+      }
+    },
+    {
+      "key": "selected_index",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "0"
+    },
+    {
+      "key": "mode",
+      "type": "select",
+      "required": false,
+      "lvl": "normal",
+      "options": [
+        "NORMAL",
+        "INFINITE"
+      ]
+    },
+    {
+      "key": "visible_row_count",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "3"
+    }
+  ]
+}

@@ -1,0 +1,102 @@
+{
+  "id": "lvgl.widget.textarea",
+  "domain": "lvgl",
+  "widgetType": "textarea",
+  "helpUrl": "https://esphome.io/components/lvgl/widgets/textarea/",
+  "fields": [
+    {
+      "key": "id",
+      "type": "id",
+      "required": false,
+      "lvl": "simple",
+      "placeholder": "textarea_id"
+    },
+    {
+      "key": "x",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "0"
+    },
+    {
+      "key": "y",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "0"
+    },
+    {
+      "key": "width",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "SIZE_CONTENT"
+    },
+    {
+      "key": "height",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "SIZE_CONTENT"
+    },
+    {
+      "key": "align",
+      "type": "select",
+      "required": false,
+      "lvl": "simple",
+      "options": [
+        "TOP_LEFT",
+        "TOP_MID",
+        "TOP_RIGHT",
+        "LEFT_MID",
+        "CENTER",
+        "RIGHT_MID",
+        "BOTTOM_LEFT",
+        "BOTTOM_MID",
+        "BOTTOM_RIGHT"
+      ]
+    },
+    {
+      "key": "text",
+      "type": "text",
+      "required": false,
+      "lvl": "simple",
+      "placeholder": ""
+    },
+    {
+      "key": "placeholder_text",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": ""
+    },
+    {
+      "key": "max_length",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "0"
+    },
+    {
+      "key": "one_line",
+      "type": "boolean",
+      "required": false,
+      "lvl": "normal",
+      "default": false
+    },
+    {
+      "key": "password_mode",
+      "type": "boolean",
+      "required": false,
+      "lvl": "normal",
+      "default": false
+    },
+    {
+      "key": "accepted_chars",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": ""
+    }
+  ]
+}

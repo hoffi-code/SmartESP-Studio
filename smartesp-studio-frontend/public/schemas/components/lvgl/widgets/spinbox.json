@@ -1,0 +1,102 @@
+{
+  "id": "lvgl.widget.spinbox",
+  "domain": "lvgl",
+  "widgetType": "spinbox",
+  "helpUrl": "https://esphome.io/components/lvgl/widgets/spinbox/",
+  "fields": [
+    {
+      "key": "id",
+      "type": "id",
+      "required": false,
+      "lvl": "simple",
+      "placeholder": "spinbox_id"
+    },
+    {
+      "key": "x",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "0"
+    },
+    {
+      "key": "y",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "0"
+    },
+    {
+      "key": "width",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "SIZE_CONTENT"
+    },
+    {
+      "key": "height",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "SIZE_CONTENT"
+    },
+    {
+      "key": "align",
+      "type": "select",
+      "required": false,
+      "lvl": "simple",
+      "options": [
+        "TOP_LEFT",
+        "TOP_MID",
+        "TOP_RIGHT",
+        "LEFT_MID",
+        "CENTER",
+        "RIGHT_MID",
+        "BOTTOM_LEFT",
+        "BOTTOM_MID",
+        "BOTTOM_RIGHT"
+      ]
+    },
+    {
+      "key": "value",
+      "type": "text",
+      "required": false,
+      "lvl": "simple",
+      "placeholder": "0"
+    },
+    {
+      "key": "range_from",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "0"
+    },
+    {
+      "key": "range_to",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "100"
+    },
+    {
+      "key": "step",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "1"
+    },
+    {
+      "key": "digits",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "4"
+    },
+    {
+      "key": "decimal_places",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "0"
+    }
+  ]
+}
