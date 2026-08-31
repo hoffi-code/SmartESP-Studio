@@ -402,10 +402,40 @@ Route-Split und Gate B1 siehe §8 oben — B1 ist komplett abgeschlossen.
 ### Danach (Reihenfolge fix, Entscheidungen getroffen)
 
 1. ~~**B1 fertigstellen** → Gate~~ **erledigt** (curl-Sweep aller Endpunktgruppen + realer Job-Durchlauf im Container, siehe §8).
-2. **F1** (BuilderView: 4 Seams) + **F5** (DashboardView, DisplayInspector) — erst `@vue/test-utils`+jsdom,
-   dann Charakterisierungstests je Extraktion. Gate: voller Browser-Durchlauf.
-3. **Phase 4** — Docker-Multistage (Frontend im Image, `smartesp-studio/web/` raus), `dependabot.yml`,
-   `CONTRIBUTING.md` + Modul-Doku. Gate.
-4. **Abschluss-Feature-Prüfung** (11-Punkte-Checkliste, `plans/…` „Feature-Prüfung").
-5. `icon.png` (quadratisch, HA-Add-on-Store) — braucht Asset vom Nutzer.
+2. ~~**F1** (BuilderView: 4 Seams) + **F5** (DashboardView, DisplayInspector)~~ **Code erledigt** (siehe §6/§7).
+   **Gate abweichend von Plan:** der browserbasierte Durchlauf ist in dieser Sitzung nicht möglich
+   (keine Chrome-Extension verbunden) — automatisierte Absicherung (`lint`/`test`/`build`,
+   Backend-`pytest`, curl-Sweep gegen den frisch gebauten Container) ist grün, der manuelle
+   Klick-Durchlauf bleibt offen. Auf Nutzerentscheidung mit Phase 4 fortgesetzt statt zu blockieren.
+3. ~~**Phase 4** — Docker-Multistage (Frontend im Image, `smartesp-studio/web/` raus), `dependabot.yml`,
+   `CONTRIBUTING.md` + Modul-Doku. Gate.~~ **erledigt**, siehe §9.
+4. **Abschluss-Feature-Prüfung** (11-Punkte-Checkliste, `plans/…` „Feature-Prüfung") — noch offen,
+   hängt am selben Chrome-Extension-Blocker wie der F1+F5-Gate-Durchlauf.
+5. `icon.png` (quadratisch, HA-Add-on-Store) — braucht Asset vom Nutzer. Betrifft ohnehin nur den
+   jetzt zurückgestellten HA-Add-on-Weg (siehe §9), nicht den Standalone-Pfad.
 6. Push + PR, sobald der Nutzer grünes Licht gibt.
+
+## 9. Phase 4 — Repo-Hygiene (erledigt)
+
+- **R2 (Docker-Multistage):** `Dockerfile.standalone` bekam eine `node:22-alpine`-Vorstufe
+  (`npm ci && npm run build`), die Laufzeitstufe kopiert `--from=web /app/dist /web` statt eines
+  vorgebauten, eingecheckten `web/`. Build-Context ist jetzt der Repo-Root
+  (`docker-standalone.yml`: `context: .`), `.dockerignore` (Repo-Root, neu) hält den größeren
+  Context schlank. `smartesp-studio/web/` per `git rm -r --cached` aus dem Repo entfernt,
+  `.gitignore` ergänzt. Verifiziert: `docker build --check` beide Dockerfiles, `docker compose
+  config` alle 3 Compose-Dateien, Standalone-Image **ohne** eingechecktes `web/` gebaut + Container
+  gestartet (`/api/health`, `/`, Component-Catalog, LVGL-Schemas — alle ok).
+- **Entscheidung HA-Add-on-Weg (mit Nutzer abgestimmt):** zurückgestellt, nicht CI-Artefakt-basiert
+  nachgebaut. `smartesp-studio/Dockerfile` (Supervisor-Build, Context = `smartesp-studio/`) kann
+  `smartesp-studio-frontend/` strukturell nicht sehen und ist damit **nicht mehr baubar** — Hinweis
+  dazu direkt im Dockerfile. Einzig gepflegter Verteilweg aktuell: das Standalone-Image (GHCR,
+  `docker/compose*.yaml`).
+- **R1** ist damit automatisch erledigt — `web/schemas` war ohnehin nur eine Kopie von
+  `smartesp-studio-frontend/public/`; einzige Quelle ist jetzt `public/`, `/web` im Image ist
+  abgeleitet. Die wiederkehrenden „Rebuild add-on web bundle"-Commits entfallen.
+- **R4:** `.github/dependabot.yml` — npm (`/smartesp-studio-frontend`), pip (`/smartesp-studio`),
+  github-actions, wöchentlich.
+- **R6:** `CONTRIBUTING.md` (Setup + Check-Kommandos beider Repo-Hälften, Hinweis auf den
+  zurückgestellten HA-Add-on-Pfad), `smartesp-studio/ses/README.md` (Modul-Landkarte),
+  `smartesp-studio-frontend/README.md` (Views/Composables-Überblick, generischer vs. bespoke
+  Import/Export-Pfad, `VITE_DEV_OFFLINE`).
