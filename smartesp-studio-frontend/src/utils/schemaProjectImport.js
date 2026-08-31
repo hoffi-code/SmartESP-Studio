@@ -338,6 +338,15 @@ const mapFieldValue = ({ yamlValue, field, path, skipPlatform, filterCatalogs, a
   }
 
   const report = emptyReport();
+
+  // ESPHome accepts a plain YAML map here as sugar for the untemplated case (e.g.
+  // `homeassistant.action.data: { entity_id: ... }`) alongside the templated lambda string --
+  // keep it as-is rather than dropping it, the generic object renderer emits it back unchanged.
+  if (field?.type === "lambda" && isPlainObject(yamlValue)) {
+    report.mappedKeys.push(path);
+    return { value: yamlValue, report };
+  }
+
   if (!isPrimitiveValue(yamlValue)) {
     report.unmappedKeys.push(path);
     report.warnings.push({
