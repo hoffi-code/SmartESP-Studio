@@ -16,6 +16,9 @@
       <button type="button" class="secondary compact" :class="{ active: viewMode === 'form' }" @click="setViewMode('form')">
         Form
       </button>
+      <button type="button" class="secondary compact" :class="{ active: viewMode === 'canvas' }" @click="setViewMode('canvas')">
+        Canvas
+      </button>
       <button type="button" class="secondary compact" :class="{ active: viewMode === 'yaml' }" @click="setViewMode('yaml')">
         YAML
       </button>
@@ -101,7 +104,7 @@
         </button>
       </section>
 
-      <section class="lvgl-config-panel lvgl-config-panel--inspector">
+      <section v-if="viewMode === 'form'" class="lvgl-config-panel lvgl-config-panel--inspector">
         <div class="lvgl-config-panel__header">
           <h4>Inspector</h4>
         </div>
@@ -114,6 +117,21 @@
           @field-edit="emit('field-edit', $event)"
         />
       </section>
+
+      <section v-else class="lvgl-config-panel">
+        <div class="lvgl-config-panel__header">
+          <h4>Canvas</h4>
+        </div>
+        <LvglCanvas
+          :page="pages[activePageIndex] || null"
+          :canvas-width="canvasW"
+          :canvas-height="canvasH"
+          :selected-id="selectedWidgetId"
+          @select="selectedWidgetId = $event"
+          @move="handleCanvasMove"
+          @resize-canvas="handleCanvasResize"
+        />
+      </section>
     </div>
   </div>
 </template>
@@ -122,6 +140,7 @@
 import { computed, onMounted, ref, watch } from "vue";
 import LvglWidgetTreeItem from "./LvglWidgetTreeItem.vue";
 import LvglWidgetInspector from "./LvglWidgetInspector.vue";
+import LvglCanvas from "./LvglCanvas.vue";
 import { LVGL_WIDGETS, lvglWidgetDefaults } from "../../utils/lvglWidgets";
 import { buildLvglYamlLines } from "../../utils/schemaLvglYaml";
 import { parseLvglSection } from "../../utils/yamlLvglImport";
@@ -162,10 +181,12 @@ const activePageIndex = ref(0);
 const selectedWidgetId = ref("");
 const widgetTypeToAdd = ref(LVGL_WIDGETS[0]?.type || "label");
 
-const viewMode = ref("form"); // "form" | "yaml"
+const viewMode = ref("form"); // "form" | "yaml" | "canvas"
 const yamlDraft = ref("");
 const yamlError = ref("");
 const applying = ref(false);
+const canvasW = ref(240);
+const canvasH = ref(320);
 
 // Same loader bundle importYamlToProjectConfig feeds parseLvglSection, but built
 // straight from the (cached) schema loaders so the LVGL tab stays self-contained.
@@ -320,6 +341,26 @@ const handleInspectorUpdate = (nextNode) => {
       : page
   );
   emit("update", { ...current, pages: nextPages });
+};
+
+const handleCanvasMove = ({ uiId, x, y }) => {
+  const current = props.lvglConfig;
+  if (!current || !uiId) return;
+  const target = findWidgetById(pages.value[activePageIndex.value]?.widgets, uiId);
+  if (!target) return;
+  const nextNode = { ...target, common: { ...(target.common || {}), x, y } };
+  const nextPages = current.pages.map((page, index) =>
+    index === activePageIndex.value ? { ...page, widgets: replaceWidgetById(page.widgets, uiId, nextNode) } : page
+  );
+  emit("update", { ...current, pages: nextPages });
+  const scopeId = `lvgl:page:${activePageIndex.value}:widget:${uiId}`;
+  emit("field-edit", { scopeId, path: ["x"] });
+  emit("field-edit", { scopeId, path: ["y"] });
+};
+
+const handleCanvasResize = ({ dim, value }) => {
+  if (dim === "width") canvasW.value = value;
+  else if (dim === "height") canvasH.value = value;
 };
 </script>
 
