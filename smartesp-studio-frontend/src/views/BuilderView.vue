@@ -542,6 +542,7 @@ import { useBuilderYamlPreview } from "../composables/builder/useBuilderYamlPrev
 import { useInstallConsoleFlow } from "../composables/useInstallConsoleFlow";
 import { loadGpioData, resolveGpioKey } from "../utils/gpioData";
 import { loadSchemaByPath } from "../utils/schemaLoader";
+import { resolveDirtyState } from "../utils/builderDirtyState";
 import {
   buildGpioUsageIndex,
   isObjectArrayLikeField
@@ -2082,6 +2083,32 @@ const materializeGeneratedPasswordsBySchemas = () => {
 const isHydrating = ref(true);
 let isMaterializingGeneratedPasswords = false;
 
+// True for a tick after a deterministic post-load normalization (generated
+// passwords, framework default) mutates config. The baseline fingerprint is
+// snapshotted in loadConfig() before any schema loads, so those later fills
+// would otherwise make an untouched saved project open showing "*". While the
+// flag is set the config deep-watcher advances the baseline instead.
+let autoNormalizationInFlight = false;
+const flagAutoNormalization = () => {
+  autoNormalizationInFlight = true;
+  nextTick(() => {
+    autoNormalizationInFlight = false;
+  });
+};
+
+const runGeneratedPasswordMaterialization = () => {
+  if (isHydrating.value) return;
+  if (isMaterializingGeneratedPasswords) return;
+  isMaterializingGeneratedPasswords = true;
+  let changed = false;
+  try {
+    changed = materializeGeneratedPasswordsBySchemas();
+  } finally {
+    isMaterializingGeneratedPasswords = false;
+  }
+  if (changed) flagAutoNormalization();
+};
+
 const gpioGuideFallbackTitle = computed(() => {
   if (gpioGuide.value?.title) return gpioGuide.value.title;
   if (platformForGpio.value === "esp8266") return "ESP8266";
@@ -2103,14 +2130,7 @@ watch(
 watch(
   () => config.value,
   () => {
-    if (isHydrating.value) return;
-    if (isMaterializingGeneratedPasswords) return;
-    isMaterializingGeneratedPasswords = true;
-    try {
-      materializeGeneratedPasswordsBySchemas();
-    } finally {
-      isMaterializingGeneratedPasswords = false;
-    }
+    runGeneratedPasswordMaterialization();
   },
   { deep: true, immediate: true }
 );
@@ -2130,14 +2150,7 @@ watch(
     componentSchemas.value
   ],
   () => {
-    if (isHydrating.value) return;
-    if (isMaterializingGeneratedPasswords) return;
-    isMaterializingGeneratedPasswords = true;
-    try {
-      materializeGeneratedPasswordsBySchemas();
-    } finally {
-      isMaterializingGeneratedPasswords = false;
-    }
+    runGeneratedPasswordMaterialization();
   },
   { deep: true }
 );
@@ -2977,13 +2990,19 @@ watch(
 watch(
   () => config.value,
   () => {
-    const shouldMarkDirty =
-      !isHydrating.value &&
-      isProjectSaved.value &&
-      persistedConfigFingerprint.value &&
-      buildConfigFingerprint(config.value) !== persistedConfigFingerprint.value;
-    if (shouldMarkDirty) {
-      config.value.isSaved = false;
+    if (!isHydrating.value && isProjectSaved.value && persistedConfigFingerprint.value) {
+      const action = resolveDirtyState({
+        isHydrating: false,
+        isProjectSaved: true,
+        baseline: persistedConfigFingerprint.value,
+        currentFingerprint: buildConfigFingerprint(config.value),
+        autoNormalizationInFlight
+      });
+      if (action === "dirty") {
+        config.value.isSaved = false;
+      } else if (action === "rebaseline") {
+        persistedConfigFingerprint.value = buildConfigFingerprint(config.value);
+      }
     }
     saveConfig();
   },
@@ -3468,16 +3487,12 @@ watch(
     if (!config.value.platformCore || typeof config.value.platformCore !== "object") {
       config.value.platformCore = {};
     }
+    if (config.value.platformCore.framework === "esp-idf") return;
+    // Deterministic default that also fires when a saved project is (re)loaded;
+    // don't let it flag the project as edited.
+    flagAutoNormalization();
     config.value.platformCore.framework = "esp-idf";
   }
-);
-
-watch(
-  () => config.value,
-  () => {
-    saveConfig();
-  },
-  { deep: true }
 );
 
 watch(
@@ -3621,6 +3636,15 @@ onMounted(async () => {
     } catch (error) {
       console.error("Network schema load failed", error);
     }
+  }
+
+  // The baseline was captured in loadConfig() before any schema loaded; the
+  // schema-driven password materialization above may have filled deterministic
+  // values since. Re-take it for a still-pristine saved project so it doesn't
+  // open showing unsaved changes.
+  await nextTick();
+  if (isProjectSaved.value && !isHydrating.value) {
+    persistedConfigFingerprint.value = buildConfigFingerprint(config.value);
   }
 });
 
