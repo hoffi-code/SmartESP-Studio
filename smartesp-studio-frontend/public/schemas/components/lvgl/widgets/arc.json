@@ -1,0 +1,120 @@
+{
+  "id": "lvgl.widget.arc",
+  "domain": "lvgl",
+  "widgetType": "arc",
+  "helpUrl": "https://esphome.io/components/lvgl/widgets/arc/",
+  "fields": [
+    {
+      "key": "id",
+      "type": "id",
+      "required": false,
+      "lvl": "simple",
+      "placeholder": "arc_id"
+    },
+    {
+      "key": "x",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "0"
+    },
+    {
+      "key": "y",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "0"
+    },
+    {
+      "key": "width",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "SIZE_CONTENT"
+    },
+    {
+      "key": "height",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "SIZE_CONTENT"
+    },
+    {
+      "key": "align",
+      "type": "select",
+      "required": false,
+      "lvl": "simple",
+      "options": [
+        "TOP_LEFT",
+        "TOP_MID",
+        "TOP_RIGHT",
+        "LEFT_MID",
+        "CENTER",
+        "RIGHT_MID",
+        "BOTTOM_LEFT",
+        "BOTTOM_MID",
+        "BOTTOM_RIGHT"
+      ]
+    },
+    {
+      "key": "value",
+      "type": "text",
+      "required": false,
+      "lvl": "simple",
+      "placeholder": "0"
+    },
+    {
+      "key": "min_value",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "0"
+    },
+    {
+      "key": "max_value",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "100"
+    },
+    {
+      "key": "start_angle",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "135"
+    },
+    {
+      "key": "end_angle",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "45"
+    },
+    {
+      "key": "rotation",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "0"
+    },
+    {
+      "key": "adjustable",
+      "type": "boolean",
+      "required": false,
+      "lvl": "normal",
+      "default": false
+    },
+    {
+      "key": "mode",
+      "type": "select",
+      "required": false,
+      "lvl": "normal",
+      "options": [
+        "NORMAL",
+        "REVERSE",
+        "SYMMETRICAL"
+      ]
+    }
+  ]
+}

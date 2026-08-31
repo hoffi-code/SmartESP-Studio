@@ -1,0 +1,99 @@
+{
+  "id": "lvgl.widget.slider",
+  "domain": "lvgl",
+  "widgetType": "slider",
+  "helpUrl": "https://esphome.io/components/lvgl/widgets/slider/",
+  "fields": [
+    {
+      "key": "id",
+      "type": "id",
+      "required": false,
+      "lvl": "simple",
+      "placeholder": "slider_id"
+    },
+    {
+      "key": "x",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "0"
+    },
+    {
+      "key": "y",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "0"
+    },
+    {
+      "key": "width",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "SIZE_CONTENT"
+    },
+    {
+      "key": "height",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "SIZE_CONTENT"
+    },
+    {
+      "key": "align",
+      "type": "select",
+      "required": false,
+      "lvl": "simple",
+      "options": [
+        "TOP_LEFT",
+        "TOP_MID",
+        "TOP_RIGHT",
+        "LEFT_MID",
+        "CENTER",
+        "RIGHT_MID",
+        "BOTTOM_LEFT",
+        "BOTTOM_MID",
+        "BOTTOM_RIGHT"
+      ]
+    },
+    {
+      "key": "value",
+      "type": "text",
+      "required": false,
+      "lvl": "simple",
+      "placeholder": "0"
+    },
+    {
+      "key": "min_value",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "0"
+    },
+    {
+      "key": "max_value",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "100"
+    },
+    {
+      "key": "animated",
+      "type": "boolean",
+      "required": false,
+      "lvl": "normal",
+      "default": true
+    },
+    {
+      "key": "mode",
+      "type": "select",
+      "required": false,
+      "lvl": "normal",
+      "options": [
+        "NORMAL",
+        "SYMMETRICAL",
+        "RANGE"
+      ]
+    }
+  ]
+}

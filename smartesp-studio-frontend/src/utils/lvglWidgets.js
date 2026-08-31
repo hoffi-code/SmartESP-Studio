@@ -12,10 +12,18 @@
 // buildWidgetFieldValue spreads them back together for export).
 export const COMMON_FIELD_KEYS = new Set(["id", "x", "y", "width", "height", "align"]);
 
+const widgetPath = (type) => `components/lvgl/widgets/${type}.json`;
+
 export const LVGL_WIDGETS = [
-  { type: "label", label: "Label", schemaPath: "components/lvgl/widgets/label.json", defaults: { text: "Label" } },
-  { type: "button", label: "Button", schemaPath: "components/lvgl/widgets/button.json", defaults: { text: "Button" } },
-  { type: "image", label: "Image", schemaPath: "components/lvgl/widgets/image.json", defaults: {} }
+  { type: "label", label: "Label", schemaPath: widgetPath("label"), defaults: { text: "Label" } },
+  { type: "button", label: "Button", schemaPath: widgetPath("button"), defaults: { text: "Button" } },
+  { type: "image", label: "Image", schemaPath: widgetPath("image"), defaults: {} },
+  { type: "obj", label: "Container", schemaPath: widgetPath("obj"), defaults: {} },
+  { type: "led", label: "LED", schemaPath: widgetPath("led"), defaults: {} },
+  { type: "line", label: "Line", schemaPath: widgetPath("line"), defaults: {} },
+  { type: "arc", label: "Arc", schemaPath: widgetPath("arc"), defaults: {} },
+  { type: "bar", label: "Bar", schemaPath: widgetPath("bar"), defaults: {} },
+  { type: "slider", label: "Slider", schemaPath: widgetPath("slider"), defaults: {} }
 ];
 
 export const LVGL_WIDGET_TYPES = new Set(LVGL_WIDGETS.map((widget) => widget.type));

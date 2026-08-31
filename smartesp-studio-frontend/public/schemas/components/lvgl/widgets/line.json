@@ -1,0 +1,85 @@
+{
+  "id": "lvgl.widget.line",
+  "domain": "lvgl",
+  "widgetType": "line",
+  "helpUrl": "https://esphome.io/components/lvgl/widgets/line/",
+  "fields": [
+    {
+      "key": "id",
+      "type": "id",
+      "required": false,
+      "lvl": "simple",
+      "placeholder": "line_id"
+    },
+    {
+      "key": "x",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "0"
+    },
+    {
+      "key": "y",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "0"
+    },
+    {
+      "key": "width",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "SIZE_CONTENT"
+    },
+    {
+      "key": "height",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "SIZE_CONTENT"
+    },
+    {
+      "key": "align",
+      "type": "select",
+      "required": false,
+      "lvl": "simple",
+      "options": [
+        "TOP_LEFT",
+        "TOP_MID",
+        "TOP_RIGHT",
+        "LEFT_MID",
+        "CENTER",
+        "RIGHT_MID",
+        "BOTTOM_LEFT",
+        "BOTTOM_MID",
+        "BOTTOM_RIGHT"
+      ]
+    },
+    {
+      "key": "points",
+      "type": "list",
+      "required": false,
+      "lvl": "normal",
+      "item": {
+        "type": "object",
+        "fields": [
+          {
+            "key": "x",
+            "type": "text",
+            "required": false,
+            "lvl": "normal",
+            "placeholder": "0"
+          },
+          {
+            "key": "y",
+            "type": "text",
+            "required": false,
+            "lvl": "normal",
+            "placeholder": "0"
+          }
+        ]
+      }
+    }
+  ]
+}
