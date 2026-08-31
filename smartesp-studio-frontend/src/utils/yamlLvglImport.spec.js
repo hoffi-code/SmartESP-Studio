@@ -40,6 +40,13 @@ const imageSchema = {
   ]
 };
 
+// Mirrors what lvgl_style_props.json resolves to: a nested style block reused by
+// every state/part key on the widget style schema.
+const styleBlockFields = [
+  { key: "bg_color", type: "color", required: false },
+  { key: "text_color", type: "color", required: false }
+];
+
 const sliderSchema = {
   fields: [
     { key: "id", type: "id", required: false },
@@ -48,7 +55,11 @@ const sliderSchema = {
     { key: "min_value", type: "text", required: false },
     { key: "max_value", type: "text", required: false },
     { key: "mode", type: "select", required: false, options: ["NORMAL", "RANGE"] },
-    { key: "on_value", type: "list", required: false, item: { type: "object", fields: [], extends: "base_actions.json" } }
+    { key: "on_value", type: "list", required: false, item: { type: "object", fields: [], extends: "base_actions.json" } },
+    { key: "pressed", type: "object", required: false, group: "states", fields: styleBlockFields },
+    { key: "checked", type: "object", required: false, group: "states", fields: styleBlockFields },
+    { key: "indicator", type: "object", required: false, group: "parts", fields: styleBlockFields },
+    { key: "knob", type: "object", required: false, group: "parts", fields: styleBlockFields }
   ]
 };
 
@@ -170,6 +181,27 @@ describe("parseWidgetNode", () => {
     expect(node.type).toBe("dropdown");
     expect(node.props.options).toEqual(["One", "Two", "Three"]);
     expect(node.props.selected_index).toBe(1);
+  });
+
+  it("maps state and part style blocks into props instead of extra", async () => {
+    const node = await parseWidgetNode(
+      {
+        slider: {
+          id: "vol",
+          value: 40,
+          pressed: { bg_color: "0xFF0000" },
+          indicator: { bg_color: "0x00FF00" },
+          knob: { bg_color: "0x0000FF", text_color: "0xFFFFFF" }
+        }
+      },
+      schemaContext
+    );
+
+    expect(node.props.value).toBe(40);
+    expect(node.props.pressed).toEqual({ bg_color: "0xFF0000" });
+    expect(node.props.indicator).toEqual({ bg_color: "0x00FF00" });
+    expect(node.props.knob).toEqual({ bg_color: "0x0000FF", text_color: "0xFFFFFF" });
+    expect(node.extra).toBeUndefined();
   });
 
   it("keeps YAML keys the curated schema does not model in node.extra", async () => {

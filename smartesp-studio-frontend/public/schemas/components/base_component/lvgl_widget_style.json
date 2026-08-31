@@ -2,176 +2,133 @@
   "id": "base.lvgl_widget_style",
   "domain": "lvgl",
   "type": "object",
+  "extends": "lvgl_style_props.json",
   "fields": [
     {
-      "key": "bg_color",
-      "type": "color",
+      "key": "checked",
+      "type": "object",
       "required": false,
       "lvl": "advanced",
-      "group": "style",
-      "placeholder": "0xRRGGBB",
-      "colorFormat": "hex0x"
+      "group": "states",
+      "extends": "lvgl_style_props.json",
+      "fields": []
     },
     {
-      "key": "bg_opa",
-      "type": "text",
+      "key": "pressed",
+      "type": "object",
       "required": false,
       "lvl": "advanced",
-      "group": "style",
-      "placeholder": "100%"
+      "group": "states",
+      "extends": "lvgl_style_props.json",
+      "fields": []
     },
     {
-      "key": "border_color",
-      "type": "color",
+      "key": "focused",
+      "type": "object",
       "required": false,
       "lvl": "advanced",
-      "group": "style",
-      "placeholder": "0xRRGGBB",
-      "colorFormat": "hex0x"
+      "group": "states",
+      "extends": "lvgl_style_props.json",
+      "fields": []
     },
     {
-      "key": "border_width",
-      "type": "text",
+      "key": "disabled",
+      "type": "object",
       "required": false,
       "lvl": "advanced",
-      "group": "style",
-      "placeholder": "0"
+      "group": "states",
+      "extends": "lvgl_style_props.json",
+      "fields": []
     },
     {
-      "key": "outline_color",
-      "type": "color",
+      "key": "edited",
+      "type": "object",
       "required": false,
       "lvl": "advanced",
-      "group": "style",
-      "placeholder": "0xRRGGBB",
-      "colorFormat": "hex0x"
+      "group": "states",
+      "extends": "lvgl_style_props.json",
+      "fields": []
     },
     {
-      "key": "outline_width",
-      "type": "text",
+      "key": "hovered",
+      "type": "object",
       "required": false,
       "lvl": "advanced",
-      "group": "style",
-      "placeholder": "0"
+      "group": "states",
+      "extends": "lvgl_style_props.json",
+      "fields": []
     },
     {
-      "key": "radius",
-      "type": "text",
+      "key": "scrolled",
+      "type": "object",
       "required": false,
       "lvl": "advanced",
-      "group": "style",
-      "placeholder": "0"
+      "group": "states",
+      "extends": "lvgl_style_props.json",
+      "fields": []
     },
     {
-      "key": "clip_corner",
-      "type": "boolean",
+      "key": "indicator",
+      "type": "object",
       "required": false,
       "lvl": "advanced",
-      "group": "style",
-      "default": false
+      "group": "parts",
+      "extends": "lvgl_style_props.json",
+      "fields": []
     },
     {
-      "key": "pad_all",
-      "type": "text",
+      "key": "knob",
+      "type": "object",
       "required": false,
       "lvl": "advanced",
-      "group": "style",
-      "placeholder": "0"
+      "group": "parts",
+      "extends": "lvgl_style_props.json",
+      "fields": []
     },
     {
-      "key": "pad_top",
-      "type": "text",
+      "key": "selected",
+      "type": "object",
       "required": false,
       "lvl": "advanced",
-      "group": "style",
-      "placeholder": "0"
+      "group": "parts",
+      "extends": "lvgl_style_props.json",
+      "fields": []
     },
     {
-      "key": "pad_bottom",
-      "type": "text",
+      "key": "items",
+      "type": "object",
       "required": false,
       "lvl": "advanced",
-      "group": "style",
-      "placeholder": "0"
+      "group": "parts",
+      "extends": "lvgl_style_props.json",
+      "fields": []
     },
     {
-      "key": "pad_left",
-      "type": "text",
+      "key": "ticks",
+      "type": "object",
       "required": false,
       "lvl": "advanced",
-      "group": "style",
-      "placeholder": "0"
+      "group": "parts",
+      "extends": "lvgl_style_props.json",
+      "fields": []
     },
     {
-      "key": "pad_right",
-      "type": "text",
+      "key": "cursor",
+      "type": "object",
       "required": false,
       "lvl": "advanced",
-      "group": "style",
-      "placeholder": "0"
+      "group": "parts",
+      "extends": "lvgl_style_props.json",
+      "fields": []
     },
     {
-      "key": "text_color",
-      "type": "color",
+      "key": "scrollbar",
+      "type": "object",
       "required": false,
       "lvl": "advanced",
-      "group": "style",
-      "placeholder": "0xRRGGBB",
-      "colorFormat": "hex0x"
-    },
-    {
-      "key": "text_font",
-      "type": "text",
-      "required": false,
-      "lvl": "advanced",
-      "group": "style",
-      "placeholder": "font_id"
-    },
-    {
-      "key": "text_align",
-      "type": "select",
-      "required": false,
-      "lvl": "advanced",
-      "group": "style",
-      "options": [
-        "LEFT",
-        "CENTER",
-        "RIGHT",
-        "AUTO"
-      ]
-    },
-    {
-      "key": "text_opa",
-      "type": "text",
-      "required": false,
-      "lvl": "advanced",
-      "group": "style",
-      "placeholder": "100%"
-    },
-    {
-      "key": "shadow_color",
-      "type": "color",
-      "required": false,
-      "lvl": "advanced",
-      "group": "style",
-      "placeholder": "0xRRGGBB",
-      "colorFormat": "hex0x"
-    },
-    {
-      "key": "shadow_width",
-      "type": "text",
-      "required": false,
-      "lvl": "advanced",
-      "group": "style",
-      "placeholder": "0"
-    },
-    {
-      "key": "opa",
-      "type": "text",
-      "required": false,
-      "lvl": "advanced",
-      "group": "style",
-      "placeholder": "100%"
+      "group": "parts",
+      "extends": "lvgl_style_props.json",
+      "fields": []
     }
   ]
 }
