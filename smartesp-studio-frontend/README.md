@@ -17,7 +17,12 @@ state lives in composables + `localStorage`.
 Display-configurator UI lives under `components/display/` (`DisplayBuilder.vue` +
 `DisplayCanvas.vue` + `DisplayInspector*.vue`, backed by `composables/display/*`) -- a bespoke
 editor for the `display:` lambda, not part of the generic schema-field system. `components/lvgl/`
-is the same pattern for `lvgl:` (`LvglBuilder.vue`, `LvglWidgetInspector*.vue`).
+is the same shell for `lvgl:` (`LvglBuilder.vue` = pages/widget-tree modal), but the per-widget
+inspector is schema-driven: `LvglWidgetInspectorGeneric.vue` renders the widget's JSON schema.
+`utils/lvglWidgets.js` is the registry -- adding a widget type = one schema JSON under
+`public/schemas/components/lvgl/widgets/` + one `LVGL_WIDGETS` entry; import
+(`utils/yamlLvglImport.js`) and export (`utils/schemaLvglYaml.js`) are already generic and need
+no per-widget change.
 
 ## Import/export pipeline
 
