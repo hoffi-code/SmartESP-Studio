@@ -1,0 +1,120 @@
+{
+  "id": "lvgl.top_level",
+  "domain": "lvgl",
+  "helpUrl": "https://esphome.io/components/lvgl/",
+  "fields": [
+    {
+      "key": "default_font",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "font_id"
+    },
+    {
+      "key": "default_group",
+      "type": "text",
+      "required": false,
+      "lvl": "advanced",
+      "placeholder": "group_id"
+    },
+    {
+      "key": "theme",
+      "type": "text",
+      "required": false,
+      "lvl": "advanced",
+      "placeholder": "theme_id"
+    },
+    {
+      "key": "disp_bg_color",
+      "type": "color",
+      "required": false,
+      "lvl": "normal",
+      "colorFormat": "hex0x",
+      "placeholder": "0xRRGGBB"
+    },
+    {
+      "key": "disp_bg_image",
+      "type": "id_ref",
+      "domain": "image",
+      "required": false,
+      "lvl": "advanced"
+    },
+    {
+      "key": "disp_bg_opa",
+      "type": "text",
+      "required": false,
+      "lvl": "advanced",
+      "placeholder": "100%"
+    },
+    {
+      "key": "transparency_key",
+      "type": "color",
+      "required": false,
+      "lvl": "advanced",
+      "colorFormat": "hex0x",
+      "placeholder": "0xRRGGBB"
+    },
+    {
+      "key": "color_depth",
+      "type": "select",
+      "required": false,
+      "lvl": "advanced",
+      "options": ["1", "8", "16", "32"]
+    },
+    {
+      "key": "byte_order",
+      "type": "select",
+      "required": false,
+      "lvl": "advanced",
+      "options": ["big_endian", "little_endian"]
+    },
+    {
+      "key": "log_level",
+      "type": "select",
+      "required": false,
+      "lvl": "advanced",
+      "options": ["NONE", "ERROR", "WARN", "INFO", "DEBUG", "TRACE", "VERBOSE"]
+    },
+    {
+      "key": "draw_rounding",
+      "type": "text",
+      "required": false,
+      "lvl": "advanced",
+      "placeholder": "2"
+    },
+    {
+      "key": "full_refresh",
+      "type": "boolean",
+      "required": false,
+      "lvl": "advanced",
+      "default": false
+    },
+    {
+      "key": "resume_on_input",
+      "type": "boolean",
+      "required": false,
+      "lvl": "advanced",
+      "default": true
+    },
+    {
+      "key": "page_wrap",
+      "type": "boolean",
+      "required": false,
+      "lvl": "advanced",
+      "default": true
+    },
+    {
+      "key": "style_definitions",
+      "type": "list",
+      "required": false,
+      "lvl": "advanced",
+      "item": {
+        "type": "object",
+        "extends": "lvgl_style_props.json",
+        "fields": [
+          { "key": "id", "type": "id", "required": true, "placeholder": "style_id" }
+        ]
+      }
+    }
+  ]
+}

@@ -347,6 +347,27 @@ describe("parseLvglSection", () => {
     expect(lvgl.pages[0].id).toBe("main_page");
     expect(lvgl.pages[0].widgets).toHaveLength(1);
     expect(lvgl.pages[0].widgets[0].type).toBe("label");
+    expect(lvgl.options).toEqual({});
+  });
+
+  it("keeps unmapped top-level lvgl keys verbatim in options", async () => {
+    const lvgl = await parseLvglSection(
+      {
+        bg_color: "0x000000",
+        default_font: "roboto_20",
+        style_definitions: [{ id: "big", text_font: "roboto_40" }],
+        theme: { obj: { bg_color: 0x112233 } },
+        pages: []
+      },
+      schemaContext
+    );
+
+    expect(lvgl.bgColor).toBe("0x000000");
+    expect(lvgl.options).toEqual({
+      default_font: "roboto_20",
+      style_definitions: [{ id: "big", text_font: "roboto_40" }],
+      theme: { obj: { bg_color: 0x112233 } }
+    });
   });
 
   it("returns null when there is no lvgl section", async () => {

@@ -320,6 +320,20 @@ describe("buildLvglYamlLines", () => {
     expect(text).toContain("flex_grow: 1");
   });
 
+  it("emits top-level options verbatim between bg_color and pages", () => {
+    const lvgl = {
+      bgColor: "0x000000",
+      options: { default_font: "roboto_20", style_definitions: [{ id: "big", text_font: "roboto_40" }] },
+      pages: [{ id: "main_page", widgets: [] }]
+    };
+    const text = asText(buildLvglYamlLines(lvgl, {}));
+    expect(text).toContain("  bg_color: 0x000000");
+    expect(text).toContain("  default_font: roboto_20");
+    expect(text).toContain("  style_definitions:");
+    expect(text).toContain("    - id: big");
+    expect(text.indexOf("default_font")).toBeLessThan(text.indexOf("pages:"));
+  });
+
   it("skips a widget whose schema has not been loaded rather than emitting it wrong", () => {
     const lvgl = {
       pages: [{ id: "main_page", widgets: [{ uiId: "w1", type: "label", common: {}, props: {}, children: [] }] }]
