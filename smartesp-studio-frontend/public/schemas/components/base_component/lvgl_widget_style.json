@@ -2,7 +2,7 @@
   "id": "base.lvgl_widget_style",
   "domain": "lvgl",
   "type": "object",
-  "extends": "lvgl_style_props.json",
+  "extends": "lvgl_widget_layout.json",
   "fields": [
     {
       "key": "checked",

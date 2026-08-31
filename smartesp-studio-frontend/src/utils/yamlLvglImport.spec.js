@@ -47,6 +47,36 @@ const styleBlockFields = [
   { key: "text_color", type: "color", required: false }
 ];
 
+// Mirrors what lvgl_widget_layout.json resolves to for the flex/grid support.
+const layoutFields = [
+  {
+    key: "layout",
+    type: "object",
+    required: false,
+    group: "layout",
+    fields: [
+      { key: "type", type: "select", options: ["FLEX", "GRID", "NONE"] },
+      { key: "flex_flow", type: "select", options: ["ROW", "ROW_WRAP"] },
+      { key: "grid_columns", type: "list", item: { type: "text" } },
+      { key: "grid_rows", type: "list", item: { type: "text" } }
+    ]
+  },
+  {
+    key: "align_to",
+    type: "object",
+    required: false,
+    group: "layout",
+    fields: [
+      { key: "id", type: "id_ref", domain: "lvgl" },
+      { key: "align", type: "select", options: ["OUT_BOTTOM_MID"] },
+      { key: "x", type: "text" },
+      { key: "y", type: "text" }
+    ]
+  },
+  { key: "flex_grow", type: "text", required: false, group: "layout" },
+  { key: "grid_cell_column_pos", type: "text", required: false, group: "layout" }
+];
+
 const sliderSchema = {
   fields: [
     { key: "id", type: "id", required: false },
@@ -59,9 +89,12 @@ const sliderSchema = {
     { key: "pressed", type: "object", required: false, group: "states", fields: styleBlockFields },
     { key: "checked", type: "object", required: false, group: "states", fields: styleBlockFields },
     { key: "indicator", type: "object", required: false, group: "parts", fields: styleBlockFields },
-    { key: "knob", type: "object", required: false, group: "parts", fields: styleBlockFields }
+    { key: "knob", type: "object", required: false, group: "parts", fields: styleBlockFields },
+    ...layoutFields
   ]
 };
+
+const objSchema = { fields: [{ key: "id", type: "id", required: false }, ...layoutFields] };
 
 const switchSchema = {
   fields: [
@@ -100,6 +133,7 @@ const schemaContext = {
     if (type === "dropdown") return dropdownSchema;
     if (type === "qrcode") return qrcodeSchema;
     if (type === "meter") return meterSchema;
+    if (type === "obj") return objSchema;
     return null;
   },
   loadActionCatalog: async () => [{ id: "homeassistant.action", schemaUrl: "actions/homeassistant/action.json" }],
@@ -206,13 +240,41 @@ describe("parseWidgetNode", () => {
 
   it("keeps YAML keys the curated schema does not model in node.extra", async () => {
     const node = await parseWidgetNode(
-      { slider: { id: "vol", value: 10, scales: [{ ticks: { count: 5 } }], flex_grow: 1 } },
+      { slider: { id: "vol", value: 10, scales: [{ ticks: { count: 5 } }], scroll_dir: "VER" } },
       schemaContext
     );
 
     expect(node.type).toBe("slider");
     expect(node.props).toEqual({ value: 10 });
-    expect(node.extra).toEqual({ scales: [{ ticks: { count: 5 } }], flex_grow: 1 });
+    expect(node.extra).toEqual({ scales: [{ ticks: { count: 5 } }], scroll_dir: "VER" });
+  });
+
+  it("maps flex/grid layout and align_to into props, not extra", async () => {
+    const node = await parseWidgetNode(
+      {
+        obj: {
+          id: "row",
+          layout: { type: "FLEX", flex_flow: "ROW_WRAP" },
+          align_to: { id: "header", align: "OUT_BOTTOM_MID", y: 4 }
+        }
+      },
+      schemaContext
+    );
+
+    expect(node.type).toBe("obj");
+    expect(node.props.layout).toEqual({ type: "FLEX", flex_flow: "ROW_WRAP" });
+    expect(node.props.align_to).toEqual({ id: "header", align: "OUT_BOTTOM_MID", y: 4 });
+    expect(node.extra).toBeUndefined();
+  });
+
+  it("maps per-child flex_grow / grid_cell placement into props", async () => {
+    const node = await parseWidgetNode(
+      { slider: { id: "vol", value: 10, flex_grow: 1, grid_cell_column_pos: 2 } },
+      schemaContext
+    );
+
+    expect(node.props).toEqual({ value: 10, flex_grow: 1, grid_cell_column_pos: 2 });
+    expect(node.extra).toBeUndefined();
   });
 
   it("parses a qrcode widget's flat fields", async () => {

@@ -91,6 +91,35 @@ describe("resolveLvglPageLayout", () => {
     expect(c2.box.y).toBeGreaterThan(c1.box.y); // stacked, not piled on the origin
   });
 
+  it("treats a props.layout flex/grid container the same as the legacy extra form", () => {
+    const layout = resolveLvglPageLayout(
+      {
+        widgets: [
+          node({
+            uiId: "row",
+            type: "obj",
+            common: { x: 0, y: 0, width: 200, height: 80 },
+            props: { layout: { type: "FLEX", flex_flow: "ROW" } },
+            children: [node({ uiId: "c1" }), node({ uiId: "c2" })]
+          })
+        ]
+      },
+      240,
+      320
+    );
+    expect(layout.find((e) => e.uiId === "c1").layoutManaged).toBe(true);
+    expect(layout.find((e) => e.uiId === "c1").positionable).toBe(false);
+  });
+
+  it("keeps a props.align_to widget non-positionable", () => {
+    const layout = resolveLvglPageLayout(
+      { widgets: [node({ uiId: "rel", common: {}, props: { align_to: { id: "x", align: "OUT_TOP_MID" } } })] },
+      240,
+      320
+    );
+    expect(layout.find((e) => e.uiId === "rel").positionable).toBe(false);
+  });
+
   it("keeps unsupported and align_to widgets non-positionable", () => {
     const layout = resolveLvglPageLayout(
       {

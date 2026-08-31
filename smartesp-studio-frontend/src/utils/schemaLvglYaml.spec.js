@@ -277,6 +277,49 @@ describe("buildLvglYamlLines", () => {
     expect(text).toContain('bg_color: "0x0000FF"');
   });
 
+  it("emits a flex/grid layout block and per-child placement from props", () => {
+    const objSchema = {
+      fields: [
+        { key: "id", type: "id" },
+        {
+          key: "layout",
+          type: "object",
+          group: "layout",
+          fields: [
+            { key: "type", type: "select", options: ["FLEX", "GRID"] },
+            { key: "grid_columns", type: "list", item: { type: "text" } }
+          ]
+        },
+        { key: "flex_grow", type: "text", group: "layout" }
+      ]
+    };
+    const lvgl = {
+      pages: [
+        {
+          id: "main_page",
+          widgets: [
+            {
+              uiId: "w1",
+              type: "obj",
+              common: { id: "grid" },
+              props: { layout: { type: "GRID", grid_columns: ["FR(1)", "FR(1)"] } },
+              children: [
+                { uiId: "w2", type: "obj", common: { id: "cell" }, props: { flex_grow: 1 }, children: [] }
+              ]
+            }
+          ]
+        }
+      ]
+    };
+
+    const text = asText(buildLvglYamlLines(lvgl, { obj: objSchema }));
+    expect(text).toContain("layout:");
+    expect(text).toContain("type: GRID");
+    expect(text).toContain("grid_columns:");
+    expect(text).toContain('- "FR(1)"');
+    expect(text).toContain("flex_grow: 1");
+  });
+
   it("skips a widget whose schema has not been loaded rather than emitting it wrong", () => {
     const lvgl = {
       pages: [{ id: "main_page", widgets: [{ uiId: "w1", type: "label", common: {}, props: {}, children: [] }] }]
