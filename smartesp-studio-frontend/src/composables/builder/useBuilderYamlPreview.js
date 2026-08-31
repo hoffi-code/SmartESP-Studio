@@ -1,4 +1,4 @@
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { isMultiInstanceBusKey } from "../../utils/busInstances";
 import { isArrayLikeSchemaField } from "../../utils/builderValidationRules";
 import { normalizeModeLevel } from "../../utils/schemaModeLevel";
@@ -11,6 +11,7 @@ import {
   formatYamlValue
 } from "../../utils/schemaYaml";
 import { createGeneratedYamlLine, createYamlDocument } from "../../utils/yamlDocumentModel";
+import { buildLvglYamlLines } from "../../utils/schemaLvglYaml";
 
 const substitutionsBlockKeys = new Set([
   "font",
@@ -271,7 +272,8 @@ export const useBuilderYamlPreview = ({
   platformDetailScopeId,
   networkDetailScopeId,
   networkOtaScopeId,
-  networkWebServerScopeId
+  networkWebServerScopeId,
+  lvglWidgetSchemas = ref({})
 }) => {
   const yamlPreviewDocument = computed(() => {
     const lines = [];
@@ -733,6 +735,12 @@ export const useBuilderYamlPreview = ({
     if (componentLines.length) {
       pushPreviewLine(lines, "", "components", null);
       appendPreviewLines(lines, componentLines, "components");
+    }
+
+    const lvglLines = buildLvglYamlLines(config.value.lvgl, lvglWidgetSchemas.value);
+    if (lvglLines.length) {
+      pushPreviewLine(lines, "", "lvgl", null);
+      lvglLines.forEach((line) => pushPreviewLine(lines, line, "lvgl", null));
     }
 
     while (lines.length && String(lines[0]?.text || "").trim() === "") {

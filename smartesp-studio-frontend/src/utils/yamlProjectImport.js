@@ -11,6 +11,7 @@ import { getTopLevelComponentDomains, identifyYamlComponents } from "./yamlCompo
 import { resolveYamlImportTargetNames } from "./yamlImportNaming";
 import { classifyYamlSections } from "./yamlSectionClassifier";
 import { isMultiInstanceBusKey } from "./busInstances";
+import { parseLvglSection } from "./yamlLvglImport";
 
 const isPlainObject = (value) => value !== null && typeof value === "object" && !Array.isArray(value);
 
@@ -314,7 +315,7 @@ const loadMissingDefinitionsById = async ({ ids, definitions, catalog, loadDefin
   return true;
 };
 
-const loadAutomationContextForSchema = async (schema, yamlValue, options = {}) => {
+export const loadAutomationContextForSchema = async (schema, yamlValue, options = {}) => {
   const needs = collectAutomationCatalogNeeds(schema?.fields);
   if (!needs.actions && !needs.conditions) return {};
 
@@ -1203,6 +1204,34 @@ export const importYamlToProjectConfig = async ({
       });
     });
   });
+
+  if (document.lvgl !== undefined) {
+    handledTopLevelKeys.add("lvgl");
+    const lvgl = await parseLvglSection(document.lvgl, {
+      loadWidgetSchema:
+        typeof loadGeneralSchema === "function"
+          ? (widgetType) => loadGeneralSchema(`components/lvgl/widgets/${widgetType}.json`)
+          : undefined,
+      loadActionCatalog,
+      loadActionDefinition,
+      loadConditionCatalog,
+      loadConditionDefinition
+    });
+    if (lvgl) {
+      projectData.lvgl = lvgl;
+      const widgetCount = lvgl.pages.reduce((total, page) => total + page.widgets.length, 0);
+      addImportReportEntry(report, {
+        path: "lvgl",
+        status: "mapped",
+        message: `Imported lvgl (${lvgl.pages.length} page${lvgl.pages.length === 1 ? "" : "s"}, ${widgetCount} top-level widget${widgetCount === 1 ? "" : "s"})`
+      });
+    } else {
+      addDroppedReportEntry(report, {
+        path: "lvgl",
+        message: "lvgl must be a YAML object to import it"
+      });
+    }
+  }
 
   Object.keys(document).forEach((key) => {
     if (handledTopLevelKeys.has(key)) return;

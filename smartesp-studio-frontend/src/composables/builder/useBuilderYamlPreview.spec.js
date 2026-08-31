@@ -113,4 +113,38 @@ describe("useBuilderYamlPreview", () => {
     expect(harness.yamlPreview.value).toBe("");
     expect(harness.previewTabs.value).toEqual([]);
   });
+
+  it("emits an lvgl block with a label widget once its schema is loaded", () => {
+    const harness = buildHarness({
+      config: ref({
+        esphomeCore: { name: "kitchen_sensor" },
+        substitutions: {},
+        platformCore: {},
+        networkCore: {},
+        protocolsCore: {},
+        systemCore: {},
+        automationCore: {},
+        bussesCore: {},
+        components: [],
+        lvgl: {
+          pages: [
+            {
+              id: "main_page",
+              widgets: [
+                { uiId: "w1", type: "label", common: { id: "label_1" }, props: { text: "Couch" }, children: [] }
+              ]
+            }
+          ]
+        }
+      }),
+      lvglWidgetSchemas: ref({
+        label: { fields: [{ key: "id", type: "id" }, { key: "text", type: "text" }] }
+      })
+    });
+    const text = harness.yamlPreview.value;
+    expect(text).toContain("lvgl:");
+    expect(text).toContain("pages:");
+    expect(text).toContain("- label:");
+    expect(text).toContain('text: "Couch"');
+  });
 });
