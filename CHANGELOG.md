@@ -54,6 +54,10 @@ markiert.
 - **Lesbare Feld-Labels** – ohne explizites `label` zeigt ein Feld jetzt
   `schema.fields.<key>.label` aus dem Katalog, sonst den humanisierten Key
   (`default_font` → „Default font", Akronyme bleiben groß) statt des rohen Keys.
+- **Deutsche Feld-Hints** – für die häufigsten ESPHome-/LVGL-Feld-Keys (`id`,
+  `name`, `update_interval`, `device_class`, Pin-Varianten, `restore_mode`,
+  MQTT-/WLAN-/API-Keys, Style-Props, …) gibt es jetzt kuratierte deutsche Hints;
+  der lange Rest fällt weiter bewusst auf `en` zurück.
 - **i18n Lazy-Loading** – der große `schema`-Feld-Katalog (~210 KB) und der
   komplette `de`-Locale werden per Code-Splitting nachgeladen statt gebundelt; das
   Haupt-Bundle schrumpft entsprechend.
