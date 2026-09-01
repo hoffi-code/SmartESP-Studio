@@ -29,7 +29,7 @@
             }
           ]"
           :style="entry.boxStyle"
-          :title="entry.layoutManaged ? 'Position controlled by parent layout' : entry.type"
+          :title="entry.layoutManaged ? t('lvgl.canvas.layoutManaged') : entry.type"
           @pointerdown.stop="onWidgetPointerDown($event, entry)"
         >
           <!-- text-only: label -->
@@ -224,7 +224,10 @@
 
 <script setup>
 import { ref, computed } from "vue";
+import { useI18n } from "vue-i18n";
 import { resolveLvglPageLayout, lvglColorToCss } from "../../utils/lvglLayout";
+
+const { t } = useI18n();
 
 const props = defineProps({
   page: { type: Object, default: null },

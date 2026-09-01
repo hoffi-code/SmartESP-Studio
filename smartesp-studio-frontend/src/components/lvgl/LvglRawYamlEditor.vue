@@ -1,9 +1,6 @@
 <template>
   <div class="lvgl-raw-yaml-editor">
-    <p class="note">
-      {{ node.originalType }} isn't a builder-supported widget. Edit its raw YAML here --
-      it's written back verbatim on save. Child widgets stay editable in the tree.
-    </p>
+    <p class="note">{{ t("lvgl.rawYaml.note", { type: node.originalType }) }}</p>
     <textarea
       v-model="draft"
       class="lvgl-raw-yaml-editor__area"
@@ -13,8 +10,8 @@
       @input="dirty = true"
     ></textarea>
     <div class="lvgl-raw-yaml-editor__bar">
-      <button type="button" class="secondary compact" :disabled="!dirty" @click="apply">Apply</button>
-      <button type="button" class="secondary compact" :disabled="!dirty" @click="reset">Reset</button>
+      <button type="button" class="secondary compact" :disabled="!dirty" @click="apply">{{ t("lvgl.rawYaml.apply") }}</button>
+      <button type="button" class="secondary compact" :disabled="!dirty" @click="reset">{{ t("lvgl.rawYaml.reset") }}</button>
       <span v-if="error" class="lvgl-raw-yaml-editor__error">{{ error }}</span>
     </div>
   </div>
@@ -22,8 +19,11 @@
 
 <script setup>
 import { ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import { dump } from "js-yaml";
 import { parseYamlText } from "../../utils/yamlProjectImport";
+
+const { t } = useI18n();
 
 const props = defineProps({
   node: {
