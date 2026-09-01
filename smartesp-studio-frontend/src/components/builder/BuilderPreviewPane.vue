@@ -55,7 +55,7 @@
             src="https://cdn.jsdelivr.net/npm/@mdi/svg/svg/comment-text-outline.svg"
             alt=""
           />
-          <span>{{ headerComment ? "Kopf-Kommentar" : "+ Kopf-Kommentar" }}</span>
+          <span>{{ headerComment ? t("builder.comment.headerEdit") : t("builder.comment.headerAdd") }}</span>
         </button>
         <button
           type="button"
@@ -113,7 +113,10 @@
 
 <script setup>
 import { computed, toRef } from "vue";
+import { useI18n } from "vue-i18n";
 import { useBuilderPreview } from "../../composables/builder/useBuilderPreview";
+
+const { t } = useI18n();
 
 // BuilderPreviewPane is the presentation layer for YAML preview only.
 // All preview state (active tab, highlighting, copy state, scroll math) lives in
