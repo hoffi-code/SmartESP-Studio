@@ -104,15 +104,16 @@
       <input :id="inputId" type="text" :value="resolvedValue" :maxlength="24" :placeholder="field.placeholder" :class="{ 'field-invalid': fieldError }" @input="onInput" />
     </div>
 
-    <div v-else-if="isIdRefField" class="schema-id schema-id-ref">
-      <input :id="inputId" type="text" :value="resolvedValue" :placeholder="field.placeholder" :class="{ 'field-invalid': idRefError }" @focus="openIdRef" @blur="scheduleCloseIdRef" @input="onIdRefInput" />
-      <span class="schema-id-ref-chevron" aria-hidden="true"></span>
-      <div v-if="idRefOpen && idRefOptions.length" class="id-ref-list">
-        <button v-for="option in idRefOptions" :key="option" type="button" class="id-ref-option" :class="{ 'id-ref-option--empty': option === ID_REF_EMPTY_OPTION }" @mousedown.prevent="selectIdRef(option)">
-          {{ option }}
-        </button>
-      </div>
-    </div>
+    <IdRefField
+      v-else-if="isIdRefField"
+      :model-value="resolvedValue"
+      :field="field"
+      :input-id="inputId"
+      :id-index="idIndex"
+      :context-component-id="contextComponentId"
+      :context-scope-id="contextScopeId"
+      @update:model-value="(idValue) => emit('update', { path: fieldPath, value: wrapInputValue(idValue) })"
+    />
 
     <GpioField
       v-else-if="isGpioField"
@@ -140,7 +141,6 @@
     <div v-if="fieldNotice" :class="['field-note','notice', fieldNotice.variant === 'warning' ? 'notice--warning' : '', fieldNotice.variant === 'error' ? 'notice--error' : '']">
       {{ fieldNotice.text }}
     </div>
-    <div v-if="idRefError" class="field-error">{{ idRefError }}</div>
   </div>
 </template>
 
@@ -148,9 +148,9 @@
 import GpioField from './GpioField.vue';
 import ColorField from './ColorField.vue';
 import FieldHint from './FieldHint.vue';
+import IdRefField from './IdRefField.vue';
 import IconPicker from '../IconPicker.vue';
 import SchemaField from '../SchemaField.vue';
-import { ID_REF_EMPTY_OPTION } from '../../utils/schemaIdRefs';
 
 // PrimitiveField groups all non-collection field renderers that still share the
 // same update contract. Keeping them together avoids over-splitting tiny field types
@@ -221,13 +221,6 @@ defineProps({
   isIdField: Boolean,
   fieldError: { type: String, default: '' },
   isIdRefField: Boolean,
-  idRefError: { type: String, default: '' },
-  idRefOpen: Boolean,
-  openIdRef: { type: Function, required: true },
-  scheduleCloseIdRef: { type: Function, required: true },
-  onIdRefInput: { type: Function, required: true },
-  idRefOptions: { type: Array, default: () => [] },
-  selectIdRef: { type: Function, required: true },
   isGpioField: Boolean,
   isColorField: Boolean,
   fieldPath: { type: Array, default: () => [] },

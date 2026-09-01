@@ -1,4 +1,7 @@
 {
+  "idRef": {
+    "noMatch": "Keine passenden Bezeichner verfügbar"
+  },
   "fields": {
     "default_font": {
       "label": "Standard-Schrift",

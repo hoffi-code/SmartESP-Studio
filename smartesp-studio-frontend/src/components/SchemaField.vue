@@ -157,13 +157,6 @@
     :is-id-field="isIdField"
     :field-error="fieldError"
     :is-id-ref-field="isIdRefField"
-    :id-ref-error="idRefError"
-    :id-ref-open="idRefOpen"
-    :open-id-ref="openIdRef"
-    :schedule-close-id-ref="scheduleCloseIdRef"
-    :on-id-ref-input="onIdRefInput"
-    :id-ref-options="idRefMenuOptions"
-    :select-id-ref="selectIdRef"
     :is-gpio-field="isGpioField"
     :is-color-field="isColorField"
     :field-path="fieldPath"
@@ -202,7 +195,6 @@ import {
   isTemplatableField as isTemplatableFieldUtil,
   wrapTemplatableValueForField
 } from "../utils/schemaTemplatable";
-import { buildIdRefMenuOptions, buildIdRefOptions, isIdRefEmptyOption } from "../utils/schemaIdRefs";
 import { encodeFieldPath } from "../utils/yamlDocumentModel";
 import { fieldModeLevel, isModeLevelVisible } from "../utils/schemaModeLevel";
 import { fieldHintI18nKey, fieldLabelI18nKey, humanizeFieldKey } from "../utils/schemaFieldLabel";
@@ -549,27 +541,7 @@ const selectOptionDropdownLabel = (option) => {
   return option === props.field.default ? `${option} (default)` : option;
 };
 
-const idOptions = computed(() => {
-  return buildIdRefOptions({
-    idIndex: props.idIndex,
-    domain: props.field?.domain || "",
-    contextComponentId: props.contextComponentId,
-    contextScopeId: props.contextScopeId,
-    allowSelfReference: Boolean(props.field?.allowSelfReference)
-  });
-});
-
-const idRefOpen = ref(false);
-const idRefQuery = ref("");
 const searchOpen = ref(false);
-
-const idRefOptions = computed(() => {
-  const term = idRefQuery.value.trim().toLowerCase();
-  if (!term) return idOptions.value;
-  return idOptions.value.filter((option) => option.toLowerCase().includes(term));
-});
-
-const idRefMenuOptions = computed(() => buildIdRefMenuOptions(idRefOptions.value));
 
 const searchOptions = computed(() => {
   const term = String(resolvedValue.value || "").trim().toLowerCase();
@@ -614,17 +586,6 @@ const fieldError = computed(() => {
     return (props.nameRegistry?.[key] || 0) > 1 ? "Name already used" : "";
   }
   return "";
-});
-
-// Inline validation for id_ref fields.
-const idRefError = computed(() => {
-  if (!isIdRefField.value) return "";
-  if (props.field?.required !== true) return "";
-  if (!idOptions.value.length) return "No matching identifiers available";
-  const value = resolvedValue.value;
-  if (!value || typeof value !== "string") return "";
-  const match = idOptions.value.some((option) => option.toLowerCase() === value.toLowerCase());
-  return match ? "" : "No matching identifiers available";
 });
 
 const hasAppliedDefault = ref(false);
@@ -784,33 +745,6 @@ const handleGenerate = () => {
 
 const handleSecretClick = () => {
   emitOpenSecrets();
-};
-
-const onIdRefInput = (event) => {
-  const value = event.target.value;
-  idRefQuery.value = value;
-  emit("update", { path: fieldPath.value, value: wrapInputValue(value) });
-};
-
-const openIdRef = () => {
-  idRefQuery.value = resolvedValue.value || "";
-  idRefOpen.value = true;
-};
-
-const scheduleCloseIdRef = () => {
-  window.setTimeout(() => {
-    idRefOpen.value = false;
-  }, 150);
-};
-
-const selectIdRef = (value) => {
-  if (isIdRefEmptyOption(value)) {
-    idRefOpen.value = false;
-    return;
-  }
-  emit("update", { path: fieldPath.value, value: wrapInputValue(value) });
-  idRefQuery.value = value;
-  idRefOpen.value = false;
 };
 
 const syncHiddenSelectedOption = (selectElement, selectedValue = selectElement?.value) => {
