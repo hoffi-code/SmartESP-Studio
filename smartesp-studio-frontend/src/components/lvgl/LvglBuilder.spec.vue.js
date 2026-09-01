@@ -354,6 +354,81 @@ describe("LvglBuilder", () => {
     expect(patch.pages[0].widgets[0].tabs.map((t) => t.name)).toEqual(["One"]);
   });
 
+  it("reorders and moves a widget between tabs", async () => {
+    const cfg = {
+      displays: [], touchscreens: [], bufferSize: "", bgColor: "", options: {},
+      pages: [
+        {
+          id: "main_page",
+          widgets: [
+            {
+              uiId: "tv",
+              type: "tabview",
+              common: {},
+              props: {},
+              children: [],
+              tabs: [
+                {
+                  uiId: "g1",
+                  name: "One",
+                  widgets: [
+                    { uiId: "wa", type: "label", common: {}, props: { text: "A" }, children: [] },
+                    { uiId: "wb", type: "label", common: {}, props: { text: "B" }, children: [] }
+                  ]
+                },
+                { uiId: "g2", name: "Two", widgets: [] }
+              ]
+            }
+          ]
+        }
+      ]
+    };
+    const wrapper = mount(LvglBuilder, { props: { lvglConfig: cfg, widgetSchemas } });
+
+    // select the second label (wb) in tab One and move it up
+    const labelRows = wrapper.findAll(".lvgl-tree-node__button").filter((r) => r.text().toLowerCase().includes("label"));
+    await labelRows[1].trigger("click");
+    await clickByText(wrapper, "↑");
+    let patch = wrapper.emitted("update").at(-1)[0];
+    expect(patch.pages[0].widgets[0].tabs[0].widgets.map((w) => w.uiId)).toEqual(["wb", "wa"]);
+
+    // move it to tab Two via the "Move to…" select
+    await wrapper.setProps({ lvglConfig: patch });
+    await wrapper.findAll(".lvgl-tree-node__button").filter((r) => r.text().toLowerCase().includes("label"))[0].trigger("click");
+    const moveSelect = wrapper.get("select.lvgl-move-group");
+    await moveSelect.setValue("g2");
+    patch = wrapper.emitted("update").at(-1)[0];
+    expect(patch.pages[0].widgets[0].tabs[0].widgets.map((w) => w.uiId)).toEqual(["wa"]);
+    expect(patch.pages[0].widgets[0].tabs[1].widgets.map((w) => w.uiId)).toEqual(["wb"]);
+  });
+
+  it("edits tile row/column metadata", async () => {
+    const cfg = {
+      displays: [], touchscreens: [], bufferSize: "", bgColor: "", options: {},
+      pages: [
+        {
+          id: "main_page",
+          widgets: [
+            {
+              uiId: "tl",
+              type: "tileview",
+              common: {},
+              props: {},
+              children: [],
+              tiles: [{ uiId: "t1", row: 0, column: 0, widgets: [] }]
+            }
+          ]
+        }
+      ]
+    };
+    const wrapper = mount(LvglBuilder, { props: { lvglConfig: cfg, widgetSchemas } });
+    await wrapper.get("button.lvgl-tree-node__group").trigger("click");
+    const metas = wrapper.findAll("input.lvgl-tile-meta");
+    await metas[1].setValue("3");
+    const patch = wrapper.emitted("update").at(-1)[0];
+    expect(patch.pages[0].widgets[0].tiles[0].column).toBe(3);
+  });
+
   it("edits an unsupported widget's raw YAML", async () => {
     const lvglConfig = {
       displays: [],
