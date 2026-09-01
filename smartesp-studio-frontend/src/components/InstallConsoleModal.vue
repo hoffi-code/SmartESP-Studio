@@ -10,7 +10,7 @@
       <div class="compile-modal-header">
         <template v-if="serialHaSelectionOpen">
           <div class="serial-selection-heading">
-            <strong>Select a serial device</strong>
+            <strong>{{ t("modals.installConsole.selectSerialDevice") }}</strong>
             <span>Choose device connected to the server.</span>
           </div>
           <button
@@ -93,6 +93,10 @@
 </template>
 
 <script setup>
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
+
 const props = defineProps({
   compileOpen: { type: Boolean, required: true },
   terminalTitle: { type: String, required: true },

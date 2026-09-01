@@ -4,12 +4,14 @@
       <header class="gpio-guide-header">
         <div>
           <div class="gpio-guide-title-row">
-            <h3>GPIO Guide</h3>
+            <h3>{{ t("modals.gpioGuide.title") }}</h3>
             <span class="gpio-guide-title">{{ titleText }}</span>
           </div>
-          <p class="gpio-guide-sub">Quick reference for the selected microcontroller.</p>
+          <p class="gpio-guide-sub">{{ t("modals.gpioGuide.subtitle") }}</p>
         </div>
-        <button type="button" class="secondary compact" @click="handleClose">Close</button>
+        <button type="button" class="secondary compact" @click="handleClose">
+          {{ t("modals.common.close") }}
+        </button>
       </header>
 
       <div class="gpio-guide-tabs">
@@ -18,30 +20,30 @@
           :class="{ active: activeTab === 'table' }"
           @click="activeTab = 'table'"
         >
-          Table
+          {{ t("modals.gpioGuide.tabTable") }}
         </button>
         <button
           type="button"
           :class="{ active: activeTab === 'notes' }"
           @click="activeTab = 'notes'"
         >
-          Notes
+          {{ t("modals.gpioGuide.tabNotes") }}
         </button>
       </div>
 
       <div class="gpio-guide-body">
         <div v-if="!guide" class="gpio-guide-empty">
-          No GPIO data available for this variant.
+          {{ t("modals.gpioGuide.empty") }}
         </div>
         <template v-else>
           <div v-if="activeTab === 'table'" class="gpio-guide-table-wrap">
             <table class="gpio-guide-table">
               <thead>
                 <tr>
-                  <th>GPIO</th>
-                  <th>Input</th>
-                  <th>Output</th>
-                  <th>Notes</th>
+                  <th>{{ t("modals.gpioGuide.colGpio") }}</th>
+                  <th>{{ t("modals.gpioGuide.colInput") }}</th>
+                  <th>{{ t("modals.gpioGuide.colOutput") }}</th>
+                  <th>{{ t("modals.gpioGuide.colNotes") }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -67,6 +69,9 @@
 
 <script setup>
 import { computed, onBeforeUnmount, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const props = defineProps({
   open: {
