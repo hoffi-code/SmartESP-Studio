@@ -2093,6 +2093,19 @@
       "subcategories": []
     },
     {
+      "title": "Color Components",
+      "slug": "color-components",
+      "items": [
+        {
+          "name": "Color",
+          "path": "components/color/color",
+          "id": "color/color",
+          "schemaPath": "components/color/color.json"
+        }
+      ],
+      "subcategories": []
+    },
+    {
       "title": "Cover Components",
       "slug": "cover-components",
       "items": [

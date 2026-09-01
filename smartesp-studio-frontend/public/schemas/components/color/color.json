@@ -1,0 +1,77 @@
+{
+  "id": "color.color",
+  "domain": "color",
+  "helpUrl": "https://esphome.io/components/color.html",
+  "fields": [
+    {
+      "key": "id",
+      "type": "id",
+      "required": true,
+      "lvl": "simple",
+      "placeholder": "color_id"
+    },
+    {
+      "key": "hex",
+      "type": "text",
+      "required": false,
+      "lvl": "simple",
+      "placeholder": "ff8800"
+    },
+    {
+      "key": "red",
+      "type": "text",
+      "required": false,
+      "lvl": "advanced",
+      "placeholder": "0-100%"
+    },
+    {
+      "key": "green",
+      "type": "text",
+      "required": false,
+      "lvl": "advanced",
+      "placeholder": "0-100%"
+    },
+    {
+      "key": "blue",
+      "type": "text",
+      "required": false,
+      "lvl": "advanced",
+      "placeholder": "0-100%"
+    },
+    {
+      "key": "white",
+      "type": "text",
+      "required": false,
+      "lvl": "advanced",
+      "placeholder": "0-100%"
+    },
+    {
+      "key": "red_int",
+      "type": "number",
+      "required": false,
+      "lvl": "advanced",
+      "placeholder": "0-255"
+    },
+    {
+      "key": "green_int",
+      "type": "number",
+      "required": false,
+      "lvl": "advanced",
+      "placeholder": "0-255"
+    },
+    {
+      "key": "blue_int",
+      "type": "number",
+      "required": false,
+      "lvl": "advanced",
+      "placeholder": "0-255"
+    },
+    {
+      "key": "white_int",
+      "type": "number",
+      "required": false,
+      "lvl": "advanced",
+      "placeholder": "0-255"
+    }
+  ]
+}
