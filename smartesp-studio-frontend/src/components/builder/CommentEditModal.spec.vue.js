@@ -55,7 +55,7 @@ describe("CommentEditModal", () => {
   });
 
   it("shows German labels once the locale switches", async () => {
-    setLocale("de");
+    await setLocale("de");
     expect(openWith("# note").text()).toContain("Löschen");
   });
 });
