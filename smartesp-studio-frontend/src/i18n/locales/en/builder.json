@@ -18,7 +18,9 @@
     "buttonAdd": "Comment",
     "buttonEdit": "Edit comment",
     "headerAdd": "+ Header comment",
-    "headerEdit": "Header comment"
+    "headerEdit": "Header comment",
+    "sectionPick": "Section comment…",
+    "sectionTitle": "Comment – {section}:"
   },
   "componentPicker": {
     "search": "Search components",

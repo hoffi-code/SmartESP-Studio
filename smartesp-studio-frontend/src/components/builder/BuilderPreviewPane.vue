@@ -69,6 +69,20 @@
           />
           <span>{{ copyLabel }}</span>
         </button>
+        <div v-if="sectionKeys.length" class="preview-section-comment">
+          <select v-model="sectionKey" :aria-label="t('builder.comment.sectionPick')">
+            <option value="">{{ t("builder.comment.sectionPick") }}</option>
+            <option v-for="key in sectionKeys" :key="key" :value="key">{{ key }}</option>
+          </select>
+          <button
+            type="button"
+            class="secondary compact"
+            :disabled="!sectionKey"
+            @click="emit('edit-section-comment', sectionKey)"
+          >
+            {{ t("builder.comment.buttonAdd") }}
+          </button>
+        </div>
         <div v-if="showDisplayAutomationNotice" class="preview-callout hljs">
           <span class="hljs-comment">
             # Interval section live in the Automation tab -
@@ -112,7 +126,7 @@
 </template>
 
 <script setup>
-import { computed, toRef } from "vue";
+import { computed, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useBuilderPreview } from "../../composables/builder/useBuilderPreview";
 
@@ -169,7 +183,7 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(["yaml-line-click", "edit-header-comment"]);
+const emit = defineEmits(["yaml-line-click", "edit-header-comment", "edit-section-comment"]);
 
 const preview = useBuilderPreview({
   splitPreviewEnabled: toRef(props, "splitPreviewEnabled"),
@@ -207,4 +221,15 @@ const handleYamlLineClick = (line) => {
   if (!line?.origin) return;
   emit("yaml-line-click", line);
 };
+
+// Top-level `key:` lines in the active tab -- what a section comment can attach to.
+const sectionKey = ref("");
+const sectionKeys = computed(() => {
+  const keys = new Set();
+  (highlightedYamlLines.value || []).forEach((line) => {
+    const match = String(line?.text || "").match(/^([a-z0-9_]+):\s*(#.*)?$/);
+    if (match) keys.add(match[1]);
+  });
+  return [...keys];
+});
 </script>

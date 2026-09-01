@@ -18,7 +18,9 @@
     "buttonAdd": "Kommentar",
     "buttonEdit": "Kommentar bearbeiten",
     "headerAdd": "+ Kopf-Kommentar",
-    "headerEdit": "Kopf-Kommentar"
+    "headerEdit": "Kopf-Kommentar",
+    "sectionPick": "Sektions-Kommentar…",
+    "sectionTitle": "Kommentar – {section}:"
   },
   "componentPicker": {
     "search": "Komponenten suchen",
