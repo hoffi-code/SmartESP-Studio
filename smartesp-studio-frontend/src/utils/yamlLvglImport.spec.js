@@ -187,6 +187,9 @@ const lineSchema = {
   ]
 };
 
+const tabviewSchema = { fields: [{ key: "id", type: "id", required: false }, { key: "position", type: "text", required: false }] };
+const tileviewSchema = { fields: [{ key: "id", type: "id", required: false }] };
+
 const schemaContext = {
   loadWidgetSchema: async (type) => {
     if (type === "label") return labelSchema;
@@ -200,6 +203,8 @@ const schemaContext = {
     if (type === "obj") return objSchema;
     if (type === "buttonmatrix") return buttonmatrixSchema;
     if (type === "line") return lineSchema;
+    if (type === "tabview") return tabviewSchema;
+    if (type === "tileview") return tileviewSchema;
     return null;
   },
   loadActionCatalog: async () => [{ id: "homeassistant.action", schemaUrl: "actions/homeassistant/action.json" }],
@@ -333,6 +338,45 @@ describe("parseWidgetNode", () => {
     );
     expect(node.props.points).toEqual([{ x: 0, y: 0 }, { x: 40, y: 20 }]);
     expect(node.extra).toBeUndefined();
+  });
+
+  it("parses a tabview's tabs with their nested widgets", async () => {
+    const node = await parseWidgetNode(
+      {
+        tabview: {
+          id: "tv",
+          position: "top",
+          tabs: [
+            { name: "One", widgets: [{ label: { id: "l1", text: "A" } }] },
+            { name: "Two", widgets: [{ label: { id: "l2", text: "B" } }, { label: { id: "l3", text: "C" } }] }
+          ]
+        }
+      },
+      schemaContext
+    );
+
+    expect(node.type).toBe("tabview");
+    expect(node.props.position).toBe("top");
+    expect(node.tabs).toHaveLength(2);
+    expect(node.tabs[0].name).toBe("One");
+    expect(node.tabs[0].widgets[0]).toMatchObject({ type: "label", common: { id: "l1" }, props: { text: "A" } });
+    expect(node.tabs[1].widgets.map((w) => w.props.text)).toEqual(["B", "C"]);
+    expect(node.extra).toBeUndefined();
+  });
+
+  it("parses a tileview's tiles with position metadata and nested widgets", async () => {
+    const node = await parseWidgetNode(
+      {
+        tileview: {
+          id: "tl",
+          tiles: [{ id: "t0", row: 0, column: 0, widgets: [{ label: { id: "x", text: "X" } }] }]
+        }
+      },
+      schemaContext
+    );
+    expect(node.tiles).toHaveLength(1);
+    expect(node.tiles[0]).toMatchObject({ id: "t0", row: 0, column: 0 });
+    expect(node.tiles[0].widgets[0].props.text).toBe("X");
   });
 
   it("keeps YAML keys the curated schema does not model in node.extra", async () => {

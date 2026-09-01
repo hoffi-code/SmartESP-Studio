@@ -359,6 +359,39 @@ describe("buildLvglYamlLines", () => {
     expect(text.indexOf("default_font")).toBeLessThan(text.indexOf("pages:"));
   });
 
+  it("emits a tabview's tabs with nested widgets", () => {
+    const tabviewSchema = { fields: [{ key: "id", type: "id" }, { key: "position", type: "text" }] };
+    const lvgl = {
+      pages: [
+        {
+          id: "main_page",
+          widgets: [
+            {
+              uiId: "tv",
+              type: "tabview",
+              common: { id: "tv" },
+              props: { position: "top" },
+              children: [],
+              tabs: [
+                { name: "One", widgets: [{ uiId: "l1", type: "label", common: { id: "l1" }, props: { text: "A" }, children: [] }] },
+                { name: "Two", widgets: [] }
+              ]
+            }
+          ]
+        }
+      ]
+    };
+
+    const text = asText(buildLvglYamlLines(lvgl, { tabview: tabviewSchema, label: labelSchema }));
+    expect(text).toContain("- tabview:");
+    expect(text).toContain('position: "top"');
+    expect(text).toContain("tabs:");
+    expect(text).toContain("- name: One");
+    expect(text).toMatch(/- name: One\n\s+widgets:\n\s+- label:/);
+    expect(text).toContain('text: "A"');
+    expect(text).toContain("- name: Two");
+  });
+
   it("skips a widget whose schema has not been loaded rather than emitting it wrong", () => {
     const lvgl = {
       pages: [{ id: "main_page", widgets: [{ uiId: "w1", type: "label", common: {}, props: {}, children: [] }] }]

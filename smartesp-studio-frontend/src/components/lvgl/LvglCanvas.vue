@@ -165,9 +165,11 @@
             <circle cx="24" cy="24" r="2.5" :fill="THEME.primary" />
           </svg>
 
-          <!-- tabview -->
+          <!-- tabview / tileview -->
           <span v-else-if="entry.render.kind === 'tabview'" class="lvgl-canvas__tabview">
-            <span class="lvgl-canvas__tabbar"><i class="is-active" /><i /><i /></span>
+            <span class="lvgl-canvas__tabbar">
+              <i v-for="(name, ti) in entry.render.tabs" :key="ti" :class="{ 'is-active': ti === 0 }">{{ name }}</i>
+            </span>
           </span>
 
           <!-- button matrix: real rows + labels -->
@@ -347,7 +349,13 @@ const render = (entry) => {
     if (!needles.length && !arcs.length) needles.push({ pct: 0.62, color: THEME.primary });
     return { kind: "meter", tickCount: Math.max(2, Math.min(40, Math.round(num(s.ticks?.count, 12)))), needles, arcs };
   }
-  if (t === "tabview" || t === "tileview") return { kind: "tabview" };
+  if (t === "tabview" || t === "tileview") {
+    const groups = entry.node.tabs || entry.node.tiles || [];
+    return {
+      kind: "tabview",
+      tabs: groups.length ? groups.map((g, i) => String(g.name || g.id || i + 1)) : ["Tab 1", "Tab 2", "Tab 3"]
+    };
+  }
   if (t === "buttonmatrix") {
     const rows = (Array.isArray(p.rows) ? p.rows : [])
       .map((r) => (Array.isArray(r?.buttons) ? r.buttons.map((b) => String(b?.text ?? "")) : []))
@@ -844,13 +852,24 @@ const onDragEnd = (event) => {
 
 .lvgl-canvas__tabbar i {
   flex: 1;
-  height: 6px;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 12px;
+  padding: 1px 3px;
+  font-style: normal;
+  font-size: 9px;
+  white-space: nowrap;
+  overflow: hidden;
   background: #e4e4ea;
   border-radius: 2px;
+  color: #6b6b74;
 }
 
 .lvgl-canvas__tabbar i.is-active {
   background: #2196f3;
+  color: #fff;
 }
 
 /* cell grid */
