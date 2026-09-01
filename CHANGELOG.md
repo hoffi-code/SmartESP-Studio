@@ -10,11 +10,15 @@ markiert.
 
 ### Added
 
+- **`font:` als eigene Komponente** – im Komponenten-Katalog unter „Font
+  Components". Schema `font/font.json` mit `file` als Typ-Auswahl
+  (`gfonts`/`local`/`web`), `size`, `bpp`, `glyphs`/`glyphsets`, `extras`. Ihre
+  IDs fließen in den ID-Index, damit LVGL-Font-Felder sie referenzieren können.
 - **id_ref „+ neu anlegen"** – Felder mit `creatable: true` (Typ `id_ref`) zeigen
   neben dem Auswahl-Dropdown einen „+"-Button. Klick öffnet einen Dialog
   (`IdDefinitionModal`), der die Ziel-Komponente über das volle Schema anlegt; die
   neue ID landet in `config.components[]`, erscheint sofort im Dropdown und ist
-  ausgewählt. Vorerst für `image`-Referenzen; `font` folgt.
+  ausgewählt. Für `image`- und `font`-Referenzen.
 - **Feld-Hints** – jedes Schema-Feld kann einen „?"-Button vor dem Label bekommen,
   der beim Klick eine Kurz-Erklärung als Popover zeigt (`FieldHint.vue`). Texte
   kommen aus dem i18n-Katalog `schema.fields.<key>.hint` bzw. aus `field.hint` im
