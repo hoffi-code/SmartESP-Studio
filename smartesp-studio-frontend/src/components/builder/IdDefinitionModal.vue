@@ -75,7 +75,7 @@ const { t } = useI18n();
 
 const draft = ref({});
 
-const PREVIEW_DOMAINS = { "image/file": "image", "font/font": "font" };
+const PREVIEW_DOMAINS = { "image/file": "image", "font/font": "font", "color/color": "color" };
 const previewDomain = computed(() => PREVIEW_DOMAINS[props.componentId] || "");
 
 const applyUpdate = ({ path, value }) => {

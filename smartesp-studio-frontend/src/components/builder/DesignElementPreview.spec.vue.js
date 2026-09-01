@@ -47,4 +47,18 @@ describe("DesignElementPreview", () => {
     expect(wrapper.find(".design-preview__sample").exists()).toBe(false);
     expect(wrapper.get(".design-preview__hint").text()).toContain("can't be previewed");
   });
+
+  it("renders a swatch for a color from hex or rgb ints", () => {
+    const fromHex = mount(DesignElementPreview, { props: { domain: "color", config: { hex: "ff8800" } } });
+    expect(fromHex.get(".design-preview__color").attributes("style")).toContain("rgb(255, 136, 0)");
+
+    const fromRgb = mount(DesignElementPreview, {
+      props: { domain: "color", config: { red_int: 255, green_int: 0, blue_int: 128 } }
+    });
+    expect(fromRgb.get(".design-preview__color").attributes("style")).toContain("rgb(255, 0, 128)");
+
+    const empty = mount(DesignElementPreview, { props: { domain: "color", config: {} } });
+    expect(empty.find(".design-preview__color").exists()).toBe(false);
+    expect(empty.get(".design-preview__hint").exists()).toBe(true);
+  });
 });

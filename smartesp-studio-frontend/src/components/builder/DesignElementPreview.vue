@@ -9,6 +9,11 @@
       </p>
       <p v-else class="design-preview__hint">{{ fontHint }}</p>
     </template>
+
+    <template v-else-if="kind === 'color'">
+      <span v-if="colorCss" class="design-preview__color" :style="{ background: colorCss }"></span>
+      <p v-else class="design-preview__hint">{{ t("builder.preview.colorNone") }}</p>
+    </template>
   </div>
 </template>
 
@@ -25,7 +30,22 @@ const props = defineProps({
 
 const { t } = useI18n();
 
-const kind = computed(() => (props.domain === "image" || props.domain === "font" ? props.domain : ""));
+const kind = computed(() =>
+  ["image", "font", "color"].includes(props.domain) ? props.domain : ""
+);
+
+// --- color ---
+const clamp255 = (value) => Math.max(0, Math.min(255, Math.round(Number(value) || 0)));
+const colorCss = computed(() => {
+  const cfg = props.config || {};
+  const hex = String(cfg.hex || "").trim().replace(/^#/, "");
+  if (/^[0-9a-fA-F]{6}$/.test(hex)) return `#${hex}`;
+  const rgbInts = ["red_int", "green_int", "blue_int"].map((k) => cfg[k]);
+  if (rgbInts.some((v) => v !== undefined && v !== null && v !== "")) {
+    return `rgb(${rgbInts.map(clamp255).join(", ")})`;
+  }
+  return "";
+});
 
 // --- image ---
 const imageUrl = computed(() => {
@@ -100,5 +120,12 @@ onBeforeUnmount(() => {
   margin: 0;
   color: var(--muted, #64748b);
   font-size: 12px;
+}
+
+.design-preview__color {
+  width: 96px;
+  height: 40px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
 }
 </style>

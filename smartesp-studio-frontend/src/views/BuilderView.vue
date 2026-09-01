@@ -2570,7 +2570,7 @@ const activeComponentCommentKey = computed(() => {
 
 const activeComponentPreviewDomain = computed(() => {
   const domain = activeComponentSchema.value?.domain || "";
-  return domain === "image" || domain === "font" ? domain : "";
+  return ["image", "font", "color"].includes(domain) ? domain : "";
 });
 
 const activeComponentHasComment = computed(() =>
@@ -2586,7 +2586,7 @@ const openActiveComponentCommentEditor = () => {
 // "+ define a new one" flow behind creatable id_ref fields. IdRefField injects
 // requestIdDefinition; on confirm we append a real config.components[] entry (mirroring
 // selectComponent) so its id flows into idIndex and the dropdown next tick.
-const ID_DEFINITION_CATALOG = { image: "image/file", font: "font/font" };
+const ID_DEFINITION_CATALOG = { image: "image/file", font: "font/font", color: "color/color" };
 
 const idDefinitionRequest = ref(null); // { domain, item, resolve }
 
