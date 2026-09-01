@@ -123,7 +123,7 @@ const resolveComponentRenderAs = (schema) => {
   return "list";
 };
 
-const resolveSchemaDomain = (schema, config) => {
+export const resolveSchemaDomain = (schema, config) => {
   const fallbackDomain = typeof schema?.domain === "string" ? schema.domain.trim() : "";
   const domainBy = typeof schema?.domainBy === "string" ? schema.domainBy.trim() : "";
   const domainMap = isPlainObject(schema?.domainMap) ? schema.domainMap : null;

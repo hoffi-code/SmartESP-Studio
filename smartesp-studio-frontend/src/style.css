@@ -2321,6 +2321,36 @@ button.btn-add {
   opacity: 1;
 }
 
+.preview-header-comment {
+  position: absolute;
+  top: 10px;
+  left: 15px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: transparent;
+  border: none;
+  color: var(--border);
+  font-weight: 600;
+  font-size: 12px;
+  cursor: pointer;
+  opacity: 0.9;
+  z-index: 1;
+}
+
+.preview-header-comment img {
+  width: 16px;
+  height: 16px;
+  filter: brightness(0) invert(1);
+}
+
+.preview-header-comment:hover {
+  background: rgba(226, 232, 240, 0.08);
+  opacity: 1;
+}
+
 
 .preview-callout-link {
   color: inherit;
