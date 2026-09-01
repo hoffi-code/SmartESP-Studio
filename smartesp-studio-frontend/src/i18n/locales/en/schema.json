@@ -1,6 +1,7 @@
 {
   "idRef": {
-    "noMatch": "No matching identifiers available"
+    "noMatch": "No matching identifiers available",
+    "create": "Define a new one"
   },
   "fields": {
     "default_font": {

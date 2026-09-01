@@ -79,4 +79,24 @@ describe("IdRefField", () => {
     });
     expect(wrapper.find(".field-error").exists()).toBe(false);
   });
+
+  it("shows the + button only for creatable fields with an injected definer, and emits the new id", async () => {
+    const plain = mountField({ field: { key: "src", type: "id_ref", domain: "image" } });
+    expect(plain.find(".schema-id-ref__add").exists()).toBe(false);
+
+    const define = vi.fn().mockResolvedValue("new_logo");
+    const wrapper = mount(IdRefField, {
+      props: {
+        inputId: "r2",
+        field: { key: "src", type: "id_ref", domain: "image", creatable: true },
+        modelValue: "old",
+        idIndex: []
+      },
+      global: { provide: { requestIdDefinition: define } }
+    });
+    await wrapper.get(".schema-id-ref__add").trigger("click");
+    expect(define).toHaveBeenCalledWith("image", { initialName: "old" });
+    await wrapper.vm.$nextTick();
+    expect(wrapper.emitted("update:model-value").at(-1)).toEqual(["new_logo"]);
+  });
 });
