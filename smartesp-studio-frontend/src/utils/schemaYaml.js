@@ -1819,7 +1819,10 @@ const collectDisplayAssets = (components, componentSchemas, mdiSubstitutions) =>
   };
 };
 
-const buildFontSections = (displayData, textFontIdByKey) => {
+// Returns just the `  - ...` entry lines for the top-level `font:` derived from display
+// text elements (no `font:` header, no trailing blank) -- the caller folds these into the
+// same `font:` block as any standalone `font/font` components.
+const buildFontEntryLines = (displayData, textFontIdByKey) => {
   if (!displayData) return [];
   const { glyphsBySize, labelsByUnicode, textFontsByKey } = displayData;
   const hasIcons = glyphsBySize.size > 0;
@@ -1827,7 +1830,6 @@ const buildFontSections = (displayData, textFontIdByKey) => {
   if (!hasIcons && !hasTextFonts) return [];
   const lines = [];
 
-  lines.push("font:");
   [...glyphsBySize.entries()]
     .sort(([a], [b]) => a - b)
     .forEach(([size, glyphs]) => {
@@ -1864,17 +1866,15 @@ const buildFontSections = (displayData, textFontIdByKey) => {
       lines.push(`    size: ${font.size}`);
       lines.push("    bpp: 1");
     });
-  lines.push("");
 
   return lines;
 };
 
-const buildImageSections = (displayData, imageIdByKey) => {
+const buildImageEntryLines = (displayData, imageIdByKey) => {
   if (!displayData) return [];
   const { imagesByKey } = displayData;
   if (!imagesByKey.size) return [];
   const lines = [];
-  lines.push("image:");
   [...imagesByKey.entries()]
     .sort(([a], [b]) => a.localeCompare(b))
     .forEach(([key, image]) => {
@@ -1897,16 +1897,14 @@ const buildImageSections = (displayData, imageIdByKey) => {
         lines.push(`    byte_order: ${image.byteOrder}`);
       }
     });
-  lines.push("");
   return lines;
 };
 
-const buildAnimationSections = (displayData, animationIdByKey) => {
+const buildAnimationEntryLines = (displayData, animationIdByKey) => {
   if (!displayData) return [];
   const { animationsByKey } = displayData;
   if (!animationsByKey.size) return [];
   const lines = [];
-  lines.push("animation:");
   [...animationsByKey.entries()]
     .sort(([a], [b]) => a.localeCompare(b))
     .forEach(([key, animation]) => {
@@ -1941,7 +1939,6 @@ const buildAnimationSections = (displayData, animationIdByKey) => {
         }
       }
     });
-  lines.push("");
   return lines;
 };
 
@@ -2836,18 +2833,22 @@ const buildComponentsYamlInternal = (
   });
 
   const lines = [];
-  const fontLines = buildFontSections(displayData, textFontIdByKey);
-  if (fontLines.length) {
-    lines.push(...fontLines);
-  }
-  const imageLines = buildImageSections(displayData, imageIdByKey);
-  if (imageLines.length) {
-    lines.push(...imageLines);
-  }
-  const animationLines = buildAnimationSections(displayData, animationIdByKey);
-  if (animationLines.length) {
-    lines.push(...animationLines);
-  }
+
+  // Display-derived font:/image:/animation: entries share the top-level block with any
+  // standalone font/font, image/file, ... components -- fold them into `grouped` as raw
+  // list lines so only one `<domain>:` key is emitted.
+  const displayAssetEntries = {
+    font: buildFontEntryLines(displayData, textFontIdByKey),
+    image: buildImageEntryLines(displayData, imageIdByKey),
+    animation: buildAnimationEntryLines(displayData, animationIdByKey)
+  };
+  ["font", "image", "animation"].forEach((domain) => {
+    const rawLines = displayAssetEntries[domain];
+    if (!rawLines.length) return;
+    if (!grouped.has(domain)) grouped.set(domain, []);
+    grouped.get(domain).push({ type: "raw_lines", rawLines });
+  });
+
   const graphLines = buildGraphSections(displayData, graphIdByKey, textFontIdByKey);
   if (graphLines.length) {
     lines.push(...graphLines);
@@ -2930,6 +2931,11 @@ const buildComponentsYamlInternal = (
     }
 
     listItems.forEach((item, domainItemIndex) => {
+      if (item.type === "raw_lines") {
+        item.rawLines.forEach((line) => pushYamlLine(lines, line));
+        return;
+      }
+
       const itemPathPrefix = `${domain}[${domainItemIndex}]`;
       const itemComment = fieldComments[itemPathPrefix];
       if (itemComment) {
