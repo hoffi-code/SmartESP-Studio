@@ -47,6 +47,18 @@
       <div class="preview-card">
         <button
           type="button"
+          class="preview-header-comment"
+          :class="{ 'preview-copy--shift': hasPreviewScrollbar }"
+          @click="emit('edit-header-comment')"
+        >
+          <img
+            src="https://cdn.jsdelivr.net/npm/@mdi/svg/svg/comment-text-outline.svg"
+            alt=""
+          />
+          <span>{{ headerComment ? "Kopf-Kommentar" : "+ Kopf-Kommentar" }}</span>
+        </button>
+        <button
+          type="button"
           class="preview-copy"
           :class="{ 'preview-copy--shift': hasPreviewScrollbar }"
           @click="handleCopyPreview"
@@ -147,10 +159,14 @@ const props = defineProps({
   hubNoticeDomains: {
     type: Array,
     default: () => []
+  },
+  headerComment: {
+    type: String,
+    default: ""
   }
 });
 
-const emit = defineEmits(["yaml-line-click"]);
+const emit = defineEmits(["yaml-line-click", "edit-header-comment"]);
 
 const preview = useBuilderPreview({
   splitPreviewEnabled: toRef(props, "splitPreviewEnabled"),

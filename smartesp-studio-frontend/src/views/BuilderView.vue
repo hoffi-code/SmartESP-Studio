@@ -191,7 +191,9 @@
             :is-hydrating="isHydrating"
             :display-automation-has-interval="displayAutomationHasInterval"
             :hub-notice-domains="hubNoticeDomains"
+            :header-comment="config.headerComment || ''"
             @yaml-line-click="handleYamlLineClick"
+            @edit-header-comment="openCommentEditor({ scope: 'header', title: 'Datei-Kopf-Kommentar' })"
           />
         </div>
 
