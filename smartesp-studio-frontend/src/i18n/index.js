@@ -1,14 +1,12 @@
 import { createI18n } from "vue-i18n";
 
 import en from "./locales/en";
-import de from "./locales/de";
 
-// `en` is the source of truth and the fallback; every other locale only overrides.
+// `en` core catalogs are bundled; the large `schema` catalog and the whole `de`
+// locale are code-split and fetched on demand.
 export const DEFAULT_LOCALE = "en";
 export const SUPPORTED_LOCALES = ["en", "de"];
 const STORAGE_KEY = "ses.locale";
-
-const messages = { en, de };
 
 const readStoredLocale = () => {
   try {
@@ -23,21 +21,42 @@ const readStoredLocale = () => {
 export const i18n = createI18n({
   legacy: false,
   globalInjection: true,
-  locale: readStoredLocale(),
+  locale: DEFAULT_LOCALE,
   fallbackLocale: DEFAULT_LOCALE,
-  // Untranslated keys fall back to `en` silently; a bare key is never shown to the user
-  // because every string has an `en` entry.
+  // Untranslated keys fall back to `en`; a bare key is never shown because every
+  // string has an `en` entry (the `schema` catalog also has a runtime humanize fallback).
   missingWarn: false,
   fallbackWarn: false,
-  messages
+  messages: { en }
 });
 
-if (typeof document !== "undefined") {
-  document.documentElement.setAttribute("lang", i18n.global.locale.value);
-}
+const coreLoaded = new Set(["en"]);
+const schemaLoaded = new Set();
 
-export const setLocale = (locale) => {
+const loadCore = async (locale) => {
+  if (coreLoaded.has(locale)) return;
+  const mod = locale === "de" ? await import("./locales/de/index.js") : null;
+  if (mod) i18n.global.mergeLocaleMessage(locale, mod.default);
+  coreLoaded.add(locale);
+};
+
+const loadSchema = async (locale) => {
+  if (schemaLoaded.has(locale)) return;
+  const mod = locale === "de"
+    ? await import("./locales/de/schema.json")
+    : await import("./locales/en/schema.json");
+  i18n.global.mergeLocaleMessage(locale, { schema: mod.default });
+  schemaLoaded.add(locale);
+};
+
+export const loadLocale = async (locale) => {
+  if (!SUPPORTED_LOCALES.includes(locale)) return;
+  await Promise.all([loadCore(locale), loadSchema(locale)]);
+};
+
+export const setLocale = async (locale) => {
   if (!SUPPORTED_LOCALES.includes(locale) || locale === i18n.global.locale.value) return;
+  await loadLocale(locale);
   i18n.global.locale.value = locale;
   try {
     localStorage.setItem(STORAGE_KEY, locale);
@@ -50,3 +69,15 @@ export const setLocale = (locale) => {
 };
 
 export const currentLocale = () => i18n.global.locale.value;
+
+if (typeof document !== "undefined") {
+  document.documentElement.setAttribute("lang", i18n.global.locale.value);
+}
+
+// Pull the `en` field-hint/label catalog in the background (the UI works without it
+// thanks to the humanize fallback), then apply any stored non-default locale.
+loadSchema("en").catch(() => {});
+const startupLocale = readStoredLocale();
+if (startupLocale !== DEFAULT_LOCALE) {
+  setLocale(startupLocale).catch(() => {});
+}
