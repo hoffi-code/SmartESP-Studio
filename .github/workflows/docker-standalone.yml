@@ -8,6 +8,7 @@ on:
       - "v*.*.*"
     paths:
       - "smartesp-studio/**"
+      - "smartesp-studio-frontend/**"
       - ".github/workflows/docker-standalone.yml"
   workflow_dispatch:
 
