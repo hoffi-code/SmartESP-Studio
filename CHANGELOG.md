@@ -156,6 +156,10 @@ markiert.
 
 ### Fixed
 
+- YAML-Ausgabe: `font:` / `image:` / `animation:` erscheinen nur noch **einmal**,
+  auch wenn sowohl Display-Elemente als auch eigenständige
+  `font:`/`image:`-Komponenten Einträge beisteuern (vorher zwei gleichnamige
+  Top-Level-Keys).
 - Tabbed YAML Preview: `image:`/`font:`/`animation:`/`graph:` erscheinen jetzt in
   einem eigenen „Assets"-Tab statt zwangsweise unter „Display".
 - Tabbed YAML Preview: ein einleitender Kommentar über einer Sektion bleibt in
