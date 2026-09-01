@@ -157,6 +157,7 @@
     :is-id-field="isIdField"
     :field-error="fieldError"
     :is-id-ref-field="isIdRefField"
+    :is-asset-ref-field="isAssetRefField"
     :is-gpio-field="isGpioField"
     :is-color-field="isColorField"
     :field-path="fieldPath"
@@ -347,6 +348,7 @@ const isIdField = computed(() => props.field.type === "id");
 const isSlugField = computed(() => props.field.type === "slug");
 const isNameField = computed(() => props.field.key === "name");
 const isIdRefField = computed(() => props.field.type === "id_ref");
+const isAssetRefField = computed(() => props.field.type === "asset_ref");
 const isGpioField = computed(() => props.field.type === "gpio");
 const isColorField = computed(() => props.field.type === "color");
 const isAutoField = computed(() =>
