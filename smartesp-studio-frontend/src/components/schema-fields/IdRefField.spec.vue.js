@@ -80,6 +80,22 @@ describe("IdRefField", () => {
     expect(wrapper.find(".field-error").exists()).toBe(false);
   });
 
+  it("merges options from an injected idRefOptionProvider with the idIndex options", async () => {
+    const wrapper = mount(IdRefField, {
+      props: {
+        inputId: "r3",
+        field: { key: "default_font", type: "id_ref", domain: "font" },
+        modelValue: "",
+        idIndex: [idx("roboto", "font")]
+      },
+      global: {
+        provide: { idRefOptionProvider: (field) => (field.domain === "font" ? ["montserrat_14", "roboto"] : []) }
+      }
+    });
+    await wrapper.get("input").trigger("focus");
+    expect(wrapper.findAll(".id-ref-option").map((b) => b.text())).toEqual(["montserrat_14", "roboto"]);
+  });
+
   it("shows the + button only for creatable fields with an injected definer, and emits the new id", async () => {
     const plain = mountField({ field: { key: "src", type: "id_ref", domain: "image" } });
     expect(plain.find(".schema-id-ref__add").exists()).toBe(false);

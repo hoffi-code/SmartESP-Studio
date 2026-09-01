@@ -67,6 +67,13 @@ const canCreate = computed(
   () => Boolean(props.field?.creatable) && typeof requestIdDefinition === "function"
 );
 
+// Extra option source for ids that never enter the project idIndex (LVGL built-in
+// fonts, group names in use). Provided by LvglBuilder for its subtree only.
+const idRefOptionProvider = inject("idRefOptionProvider", null);
+const extraOptions = computed(() =>
+  typeof idRefOptionProvider === "function" ? idRefOptionProvider(props.field) || [] : []
+);
+
 const onCreate = async () => {
   const newId = await requestIdDefinition(props.field?.domain || "", { initialName: props.modelValue || "" });
   if (newId) emit("update:model-value", newId);
@@ -75,15 +82,17 @@ const onCreate = async () => {
 const open = ref(false);
 const query = ref("");
 
-const idOptions = computed(() =>
-  buildIdRefOptions({
+const idOptions = computed(() => {
+  const fromIndex = buildIdRefOptions({
     idIndex: props.idIndex,
     domain: props.field?.domain || "",
     contextComponentId: props.contextComponentId,
     contextScopeId: props.contextScopeId,
     allowSelfReference: Boolean(props.field?.allowSelfReference)
-  })
-);
+  });
+  if (!extraOptions.value.length) return fromIndex;
+  return [...new Set([...fromIndex, ...extraOptions.value])].sort((a, b) => a.localeCompare(b));
+});
 
 const filteredOptions = computed(() => {
   const term = query.value.trim().toLowerCase();
