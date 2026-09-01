@@ -10,6 +10,14 @@ markiert.
 
 ### Added
 
+- **LVGL `tabview.tabs` / `tileview.tiles` mit Kind-Widgets** (P4) – die in
+  Tabs/Tiles verschachtelten Widgets sind jetzt strukturiert (`node.tabs` /
+  `node.tiles` je `{ …meta, widgets }`) statt als opaker `extra`-Block. Import und
+  Export rekursieren in die Gruppen (verlustfreier Round-Trip), der Widget-Baum
+  zeigt die Tab-/Tile-Gruppen, die Canvas-Vorschau rendert die Tab-Leiste mit
+  echten Namen und das Layout des ersten Tabs. Widgets in Tabs sind aus-/abwählbar
+  und editierbar; Umsortieren innerhalb einer Gruppe und Tab-Verwaltung folgen
+  separat.
 - **LVGL Canvas-Politur** (P5) – `image.angle`/`zoom` werden als CSS
   `rotate()`/`scale()` auf das Bild-Glyph angewandt, `textarea.password_mode`
   rendert den Text als `••••`, `spinbox` zeigt den Wert gemäß `decimal_places`

@@ -120,6 +120,28 @@ describe("resolveLvglPageLayout", () => {
     expect(layout.find((e) => e.uiId === "rel").positionable).toBe(false);
   });
 
+  it("lays out the first tab's widgets of a tabview", () => {
+    const layout = resolveLvglPageLayout(
+      {
+        widgets: [
+          node({
+            uiId: "tv",
+            type: "tabview",
+            common: { x: 0, y: 0, width: 200, height: 200 },
+            tabs: [
+              { name: "One", widgets: [node({ uiId: "in-tab", common: { x: 5, y: 5, width: 30, height: 12 } })] },
+              { name: "Two", widgets: [node({ uiId: "hidden-tab" })] }
+            ]
+          })
+        ]
+      },
+      240,
+      320
+    );
+    expect(layout.find((e) => e.uiId === "in-tab")).toBeTruthy();
+    expect(layout.find((e) => e.uiId === "hidden-tab")).toBeUndefined();
+  });
+
   it("keeps unsupported and align_to widgets non-positionable", () => {
     const layout = resolveLvglPageLayout(
       {

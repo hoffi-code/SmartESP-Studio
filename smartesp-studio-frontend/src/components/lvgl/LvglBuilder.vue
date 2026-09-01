@@ -384,13 +384,28 @@ const emptyLvglConfig = () => ({
 const pages = computed(() => props.lvglConfig?.pages || []);
 const activePageWidgets = computed(() => pages.value[activePageIndex.value]?.widgets || []);
 
+// All child-widget arrays hanging off a node: its own `children` plus every
+// tabview `tabs[].widgets` / tileview `tiles[].widgets` group.
+const groupsOf = (node) => node?.tabs || node?.tiles || null;
+const childListsOf = (node) => [node?.children || [], ...(groupsOf(node) || []).map((g) => g.widgets || [])];
+
 const findWidgetById = (nodes, uiId) => {
   for (const node of nodes || []) {
     if (node.uiId === uiId) return node;
-    const found = findWidgetById(node.children, uiId);
-    if (found) return found;
+    for (const list of childListsOf(node)) {
+      const found = findWidgetById(list, uiId);
+      if (found) return found;
+    }
   }
   return null;
+};
+
+// Rebuild a node with each of its child-widget arrays passed through `mapList`.
+const withMappedChildLists = (node, mapList) => {
+  const next = { ...node, children: mapList(node.children || []) };
+  const key = node.tabs ? "tabs" : node.tiles ? "tiles" : null;
+  if (key) next[key] = node[key].map((g) => ({ ...g, widgets: mapList(g.widgets || []) }));
+  return next;
 };
 
 const selectedWidget = computed(() => findWidgetById(activePageWidgets.value, selectedWidgetId.value));
@@ -456,7 +471,7 @@ const addWidget = (type) => {
 const removeWidgetById = (nodes, uiId) =>
   (nodes || [])
     .filter((node) => node.uiId !== uiId)
-    .map((node) => ({ ...node, children: removeWidgetById(node.children, uiId) }));
+    .map((node) => withMappedChildLists(node, (list) => removeWidgetById(list, uiId)));
 
 const removeSelectedWidget = () => {
   const current = props.lvglConfig;
@@ -470,7 +485,9 @@ const removeSelectedWidget = () => {
 
 const replaceWidgetById = (nodes, uiId, nextNode) =>
   (nodes || []).map((node) =>
-    node.uiId === uiId ? nextNode : { ...node, children: replaceWidgetById(node.children, uiId, nextNode) }
+    node.uiId === uiId
+      ? nextNode
+      : withMappedChildLists(node, (list) => replaceWidgetById(list, uiId, nextNode))
   );
 
 // --- tree structure ops (all return a new top-level widgets array) ---

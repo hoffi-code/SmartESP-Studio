@@ -71,19 +71,46 @@ export const parseWidgetNode = async (rawWidget, schemaContext = {}) => {
   });
   const { common, props } = splitCommonAndProps(mapped.config);
 
+  // tabview/tileview hold their child widgets grouped under `tabs`/`tiles`, not a
+  // flat `widgets:`. Parse each group's `widgets` into real nodes so the tree,
+  // canvas and export can treat them like any other nesting axis.
+  const groups = await parseWidgetGroups(type, value, schemaContext);
+
   // Widget schemas are curated subsets. Keys present in the YAML but not in the
   // schema (e.g. a meter's `scales:`, a widget style block) would otherwise be
   // dropped -- keep them verbatim so an import -> export round-trip stays lossless.
   const schemaKeys = new Set(schema.fields.map((field) => field.key));
   const extra = {};
   Object.entries(value).forEach(([key, raw]) => {
-    if (key === "widgets" || schemaKeys.has(key)) return;
+    if (key === "widgets" || key === groups?.key || schemaKeys.has(key)) return;
     extra[key] = raw;
   });
 
   const node = { uiId: nextUiId(), type, common, props, children };
+  if (groups) node[groups.key] = groups.entries;
   if (Object.keys(extra).length) node.extra = extra;
   return node;
+};
+
+const GROUP_KEY_BY_TYPE = { tabview: "tabs", tileview: "tiles" };
+
+// Returns { key: "tabs"|"tiles", entries: [{ ...meta, widgets: WidgetNode[] }] }
+// for tabview/tileview, or null for every other widget type.
+const parseWidgetGroups = async (type, value, schemaContext) => {
+  const key = GROUP_KEY_BY_TYPE[type];
+  if (!key || !Array.isArray(value[key])) return null;
+  const entries = await Promise.all(
+    value[key].map(async (raw) => {
+      const meta = isPlainObject(raw) ? { ...raw } : {};
+      const widgetsRaw = Array.isArray(meta.widgets) ? meta.widgets : [];
+      delete meta.widgets;
+      const widgets = (
+        await Promise.all(widgetsRaw.map((w) => parseWidgetNode(w, schemaContext)))
+      ).filter(Boolean);
+      return { ...meta, widgets };
+    })
+  );
+  return { key, entries };
 };
 
 const parsePage = async (rawPage, schemaContext) => {

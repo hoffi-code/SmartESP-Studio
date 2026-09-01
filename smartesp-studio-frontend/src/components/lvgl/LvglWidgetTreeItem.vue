@@ -19,6 +19,20 @@
       :selected-id="selectedId"
       @select="$emit('select', $event)"
     />
+
+    <template v-for="(group, gi) in node.tabs || node.tiles || []" :key="gi">
+      <div class="lvgl-tree-node__group" :style="{ paddingLeft: `${8 + (depth + 1) * 16}px` }">
+        {{ node.tabs ? "tab" : "tile" }} {{ group.name || group.id || gi }}
+      </div>
+      <LvglWidgetTreeItem
+        v-for="child in group.widgets || []"
+        :key="child.uiId"
+        :node="child"
+        :depth="depth + 2"
+        :selected-id="selectedId"
+        @select="$emit('select', $event)"
+      />
+    </template>
   </div>
 </template>
 
@@ -75,5 +89,13 @@ defineEmits(["select"]);
 .lvgl-tree-node__id {
   font-size: 12px;
   opacity: 0.8;
+}
+
+.lvgl-tree-node__group {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.6;
+  padding: 3px 8px;
 }
 </style>

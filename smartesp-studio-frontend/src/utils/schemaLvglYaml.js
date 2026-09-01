@@ -46,6 +46,29 @@ const buildWidgetFieldValue = (node) => {
   return value;
 };
 
+const GROUP_KEY_BY_TYPE = { tabview: "tabs", tileview: "tiles" };
+
+// Emit a tabview `tabs:` / tileview `tiles:` block -- each entry's own metadata
+// (name / id / row / column / dir) as raw YAML plus its nested `widgets:`.
+const serializeWidgetGroups = (groupKey, entries, pageIndex, indent, lines, sectionOrigin, widgetSchemas) => {
+  pushYamlLine(lines, `${" ".repeat(indent)}${groupKey}:`, sectionOrigin);
+  entries.forEach((entry) => {
+    const meta = { ...entry };
+    delete meta.widgets;
+    const metaLines = Object.keys(meta).length ? dump(meta).trimEnd().split("\n") : [];
+    if (metaLines.length) {
+      pushYamlLine(lines, `${" ".repeat(indent + 2)}- ${metaLines[0]}`, sectionOrigin);
+      metaLines.slice(1).forEach((l) => pushYamlLine(lines, l ? `${" ".repeat(indent + 4)}${l}` : "", sectionOrigin));
+    } else {
+      pushYamlLine(lines, `${" ".repeat(indent + 2)}-`, sectionOrigin);
+    }
+    if ((entry.widgets || []).length) {
+      pushYamlLine(lines, `${" ".repeat(indent + 4)}widgets:`, sectionOrigin);
+      entry.widgets.forEach((w) => serializeWidgetNode(w, pageIndex, indent + 6, lines, widgetSchemas));
+    }
+  });
+};
+
 // `dashIndent` is the column of the `- ` marker for this widget's own list item.
 const serializeWidgetNode = (node, pageIndex, dashIndent, lines, widgetSchemas) => {
   if (!node) return;
@@ -84,7 +107,10 @@ const serializeWidgetNode = (node, pageIndex, dashIndent, lines, widgetSchemas) 
   });
   const extraLines = renderExtraLines(node.extra, dashIndent + 4);
 
-  if (!objectLines.length && !extraLines.length && !(node.children || []).length) {
+  const groupKey = GROUP_KEY_BY_TYPE[node.type];
+  const groups = groupKey && Array.isArray(node[groupKey]) && node[groupKey].length ? node[groupKey] : null;
+
+  if (!objectLines.length && !extraLines.length && !(node.children || []).length && !groups) {
     pushYamlLine(lines, `${" ".repeat(dashIndent)}- ${node.type}: {}`, sectionOrigin);
     return;
   }
@@ -96,6 +122,9 @@ const serializeWidgetNode = (node, pageIndex, dashIndent, lines, widgetSchemas) 
   if ((node.children || []).length) {
     pushYamlLine(lines, `${" ".repeat(dashIndent + 4)}widgets:`, sectionOrigin);
     node.children.forEach((child) => serializeWidgetNode(child, pageIndex, dashIndent + 6, lines, widgetSchemas));
+  }
+  if (groups) {
+    serializeWidgetGroups(groupKey, groups, pageIndex, dashIndent + 4, lines, sectionOrigin, widgetSchemas);
   }
 };
 

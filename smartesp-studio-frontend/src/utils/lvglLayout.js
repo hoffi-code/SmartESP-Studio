@@ -130,7 +130,10 @@ const layoutNode = (node, parentBox, depth, flexParent, out) => {
   };
   out.push(entry);
 
-  const children = node.children || [];
+  // Regular nesting plus the active tab/tile of a tabview/tileview (preview shows
+  // the first group; the canvas can switch which one via node._activeGroup).
+  const groupWidgets = (node.tabs || node.tiles || [])[node._activeGroup || 0]?.widgets || [];
+  const children = [...(node.children || []), ...groupWidgets];
   if (children.length) {
     const childBox = { x, y, w, h, _flexCursor: y + 4 };
     const childFlex = isLayoutContainer(node);
