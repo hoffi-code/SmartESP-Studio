@@ -1,11 +1,16 @@
 // @vitest-environment jsdom
 import { mount } from "@vue/test-utils";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, beforeAll, describe, expect, it } from "vitest";
 
 import SchemaField from "./SchemaField.vue";
-import { DEFAULT_LOCALE, setLocale } from "../i18n";
+import { DEFAULT_LOCALE, loadLocale, setLocale } from "../i18n";
 
 const mountField = (field) => mount(SchemaField, { props: { field, value: {} } });
+
+beforeAll(async () => {
+  await loadLocale("en");
+  await loadLocale("de");
+});
 
 afterEach(() => setLocale(DEFAULT_LOCALE));
 
@@ -34,7 +39,7 @@ describe("SchemaField labels and hints", () => {
   });
 
   it("translates label and hint when the locale changes", async () => {
-    setLocale("de");
+    await setLocale("de");
     const wrapper = mountField({ key: "default_font", type: "text" });
     expect(wrapper.get("label").text()).toContain("Standard-Schrift");
     await wrapper.get(".field-hint__toggle").trigger("click");

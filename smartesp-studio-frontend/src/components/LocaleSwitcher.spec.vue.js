@@ -2,6 +2,8 @@
 import { mount } from "@vue/test-utils";
 import { afterEach, describe, expect, it } from "vitest";
 
+import { flushPromises } from "@vue/test-utils";
+
 import LocaleSwitcher from "./LocaleSwitcher.vue";
 import { DEFAULT_LOCALE, i18n, setLocale } from "../i18n";
 
@@ -16,9 +18,14 @@ describe("LocaleSwitcher", () => {
     expect(wrapper.get("select").element.value).toBe("en");
   });
 
-  it("switches the locale on change", async () => {
+  it("switches the locale on change (loading the de catalog first)", async () => {
     const wrapper = mountSwitcher();
-    await wrapper.get("select").setValue("de");
+    wrapper.get("select").element.value = "de";
+    await wrapper.get("select").trigger("change");
+    // the handler kicks off an async locale load; await it and let the component re-render
+    await setLocale("de");
+    await flushPromises();
     expect(i18n.global.locale.value).toBe("de");
+    expect(wrapper.get("select").element.value).toBe("de");
   });
 });
