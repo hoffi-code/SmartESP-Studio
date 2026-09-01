@@ -5,14 +5,19 @@
   "fields": [
     {
       "key": "default_font",
-      "type": "text",
+      "type": "id_ref",
+      "domain": "font",
+      "creatable": true,
       "required": false,
       "lvl": "normal",
       "placeholder": "font_id"
     },
     {
       "key": "default_group",
-      "type": "text",
+      "type": "id_ref",
+      "domain": "__lvgl_group",
+      "optionsProvider": "lvglGroups",
+      "allowFreeText": true,
       "required": false,
       "lvl": "advanced",
       "placeholder": "group_id"
@@ -36,6 +41,7 @@
       "key": "disp_bg_image",
       "type": "id_ref",
       "domain": "image",
+      "creatable": true,
       "required": false,
       "lvl": "advanced"
     },

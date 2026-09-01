@@ -10,6 +10,10 @@ markiert.
 
 ### Added
 
+- **LVGL Font-/Gruppen-Felder als Auswahl** – `default_font` und Widget-`text_font`
+  sind jetzt Dropdowns (LVGL-Built-in-Fonts wie `montserrat_20` + definierte
+  `font:`-IDs) mit „+ neu anlegen". `default_group` zeigt die bereits an Widgets
+  vergebenen Gruppennamen (+ Freitext). `disp_bg_image` bekommt ebenfalls „+".
 - **`font:` als eigene Komponente** – im Komponenten-Katalog unter „Font
   Components". Schema `font/font.json` mit `file` als Typ-Auswahl
   (`gfonts`/`local`/`web`), `size`, `bpp`, `glyphs`/`glyphsets`, `extras`. Ihre
