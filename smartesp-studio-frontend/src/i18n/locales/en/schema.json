@@ -1,4 +1,7 @@
 {
+  "idRef": {
+    "noMatch": "No matching identifiers available"
+  },
   "fields": {
     "default_font": {
       "label": "Default font",
