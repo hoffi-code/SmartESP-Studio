@@ -36,6 +36,9 @@
       </div>
 
       <footer class="color-picker-actions">
+        <button type="button" class="secondary compact" @click="emit('clear')">
+          {{ t("modals.colorPicker.clear") }}
+        </button>
         <button type="button" class="secondary compact" @click="applyColor">
           {{ t("modals.colorPicker.apply") }}
         </button>
@@ -62,7 +65,7 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(["close", "select"]);
+const emit = defineEmits(["close", "select", "clear"]);
 
 const swatches = [
   "#FFFFFF",
@@ -227,7 +230,8 @@ watch(
 
 .color-picker-actions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  gap: 8px;
 }
 
 @media (max-width: 520px) {

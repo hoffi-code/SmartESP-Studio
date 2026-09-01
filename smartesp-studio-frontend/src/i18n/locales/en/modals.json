@@ -35,7 +35,8 @@
     "subtitle": "Select a color for the display element.",
     "hexLabel": "Hex color",
     "pickSwatch": "Pick {color}",
-    "apply": "Apply"
+    "apply": "Apply",
+    "clear": "Transparent / none"
   },
   "formErrors": {
     "message": "Please correct the errors below before proceeding with installation.",

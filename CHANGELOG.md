@@ -109,6 +109,10 @@ markiert.
 
 ### Changed
 
+- **Color-Feld aufgeräumt** – der farbige Swatch öffnet jetzt selbst den
+  Farbwähler, der separate „Pick"-Button entfällt. Im Farbwähler gibt es einen
+  „Transparent / keine"-Button, der den Wert leert (der Key verschwindet dann aus
+  dem YAML).
 - **LVGL Canvas: Arc-/Meter-Winkel** – die Vorschau leitet den Bogen jetzt aus
   `start_angle`/`end_angle`/`rotation` (Arc) bzw. `angle_range`/`rotation`
   (Meter-Scale) ab statt aus festen 150°/240°. Default entspricht dem echten
