@@ -19,16 +19,24 @@
       <details>
         <summary>Settings</summary>
         <p class="note">Top-level <code>lvgl:</code> options (fonts, theme, display background, style definitions).</p>
-        <SchemaField
-          v-for="field in topLevelSchema.fields"
-          :key="field.key"
-          :field="field"
-          :path="[]"
-          :value="lvglOptions"
-          :root-value="lvglOptions"
-          :id-index="idIndex"
-          @update="handleOptionUpdate"
-        />
+        <template v-for="field in topLevelSchema.fields" :key="field.key">
+          <LvglThemeEditor
+            v-if="field.key === 'theme'"
+            :model-value="lvglOptions.theme || {}"
+            :style-fields="styleFieldsSchema?.fields || []"
+            :id-index="idIndex"
+            @update="handleOptionUpdate"
+          />
+          <SchemaField
+            v-else
+            :field="field"
+            :path="[]"
+            :value="lvglOptions"
+            :root-value="lvglOptions"
+            :id-index="idIndex"
+            @update="handleOptionUpdate"
+          />
+        </template>
         <p v-if="unmodeledOptionKeys.length" class="note">
           Kept as-is (not editable here): {{ unmodeledOptionKeys.join(", ") }}
         </p>
@@ -252,6 +260,7 @@
 import { computed, onBeforeUnmount, onMounted, provide, ref, watch } from "vue";
 import LvglWidgetTreeItem from "./LvglWidgetTreeItem.vue";
 import LvglWidgetInspector from "./LvglWidgetInspector.vue";
+import LvglThemeEditor from "./LvglThemeEditor.vue";
 import LvglCanvas from "./LvglCanvas.vue";
 import SchemaField from "../SchemaField.vue";
 import { LVGL_WIDGETS, lvglWidgetDefaults } from "../../utils/lvglWidgets";
@@ -334,6 +343,7 @@ provide("idRefOptionProvider", (field) => {
 // Curated top-level lvgl: options for the Settings panel. Everything the schema
 // doesn't model still round-trips via lvglConfig.options (see parseLvglSection).
 const topLevelSchema = ref(null);
+const styleFieldsSchema = ref(null);
 const lvglOptions = computed(() => props.lvglConfig?.options || {});
 const modeledOptionKeys = computed(
   () => new Set((topLevelSchema.value?.fields || []).map((field) => field.key))
@@ -575,6 +585,11 @@ onMounted(async () => {
     topLevelSchema.value = await loadSchemaByPath("components/lvgl/lvgl_top_level.json");
   } catch {
     topLevelSchema.value = null;
+  }
+  try {
+    styleFieldsSchema.value = await loadSchemaByPath("components/base_component/lvgl_style_props.json");
+  } catch {
+    styleFieldsSchema.value = null;
   }
 });
 

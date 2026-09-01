@@ -1,0 +1,8 @@
+{
+  "theme": {
+    "intro": "Style defaults per widget type. Individual widgets can still override these.",
+    "addType": "Add widget type…",
+    "empty": "No widget types styled yet.",
+    "remove": "Remove"
+  }
+}

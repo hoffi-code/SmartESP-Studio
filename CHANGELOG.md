@@ -10,6 +10,10 @@ markiert.
 
 ### Added
 
+- **LVGL `theme:` strukturiert editierbar** – im LVGL-Settings-Panel statt eines
+  Textfelds ein Editor: Widget-Typ auswählen/entfernen, je Typ die Style-
+  Eigenschaften (`bg_color`, `text_color`, `radius`, …) über die normalen
+  Schema-Felder. Round-trip über `lvgl.options.theme`.
 - **Vorschau beim Anlegen von Design-Elementen** – der „+"-Dialog und die
   Komponentenform zeigen für `image`/`font` eine Vorschau: Bild-Thumbnail (Asset
   oder `mdi:`), bzw. Font-Sample real gerendert (Google-Font geladen) oder als
