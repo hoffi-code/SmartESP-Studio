@@ -54,6 +54,9 @@ markiert.
 - **Lesbare Feld-Labels** – ohne explizites `label` zeigt ein Feld jetzt
   `schema.fields.<key>.label` aus dem Katalog, sonst den humanisierten Key
   (`default_font` → „Default font", Akronyme bleiben groß) statt des rohen Keys.
+- **i18n Lazy-Loading** – der große `schema`-Feld-Katalog (~210 KB) und der
+  komplette `de`-Locale werden per Code-Splitting nachgeladen statt gebundelt; das
+  Haupt-Bundle schrumpft entsprechend.
 - **i18n-Fundament** – `vue-i18n` eingebunden (`en` Default/Fallback, `de`),
   Sprachumschalter im Header, Locale in `localStorage`. Message-Katalog nach
   Feature getrennt unter `src/i18n/locales/<locale>/`. Migriert: App-Topbar,
