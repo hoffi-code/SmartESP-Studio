@@ -14,3 +14,9 @@ scripts/
 .github/workflows/validate.yml
 R&D/
 LVGL_Docs/
+
+# Local Docker standalone runtime (compose.local.yaml is checked in as a template)
+docker/.env
+docker/config/
+docker/data/
+docker/build/
