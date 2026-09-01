@@ -14,7 +14,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "seed:hints": "node scripts/seed-hints.mjs"
   },
   "dependencies": {
     "@mdi/svg": "^7.4.47",

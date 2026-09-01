@@ -18,6 +18,10 @@ markiert.
   sind jetzt Dropdowns (LVGL-Built-in-Fonts wie `montserrat_20` + definierte
   `font:`-IDs) mit „+ neu anlegen". `default_group` zeigt die bereits an Widgets
   vergebenen Gruppennamen (+ Freitext). `disp_bg_image` bekommt ebenfalls „+".
+- **Feld-Hints flächendeckend** – die „?"-Erklärungen sind für ~2450 Felder aus der
+  ESPHome-Schema-Referenz + LVGL-Doku vorbefüllt (`npm run seed:hints`). Erste
+  Auto-Charge mit etwas Rest-Rauschen; Nacharbeit per `field.hint` bzw. direkt im
+  Katalog.
 - **Datei-Felder aus dem Asset-Store** – `image/file` `file` und die lokale
   `font:`-`path` sind jetzt `asset_ref`: Dropdown der hochgeladenen Bilder/Fonts
   (schreibt `esp_assets/images/…` bzw. `esp_assets/fonts/…`) + „…"-Button, der den

@@ -11,6 +11,8 @@ tests/
 smartesp-studio/tests/**/__pycache__/
 smartesp-studio/tests/**/*.pyc
 scripts/
+!smartesp-studio-frontend/scripts/
+!smartesp-studio-frontend/scripts/**
 .github/workflows/validate.yml
 R&D/
 LVGL_Docs/
