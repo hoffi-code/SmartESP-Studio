@@ -7,6 +7,61 @@
     "manage": "Assets verwalten"
   },
   "fields": {
+    "accuracy_decimals": {
+      "hint": "Anzahl der Nachkommastellen, die Verbraucher des Werts verwenden sollen."
+    },
+    "address": {
+      "hint": "I²C-Adresse des Geräts manuell angeben."
+    },
+    "align": {
+      "hint": "Ankerpunkt des Widgets relativ zum Eltern-Element (z. B. CENTER, TOP_LEFT)."
+    },
+    "ap": {
+      "hint": "Fallback-Access-Point, wenn keine Verbindung zustande kommt."
+    },
+    "assumed_state": {
+      "hint": "Der Zustand wird angenommen, nicht bestätigt – das Frontend zeigt getrennte An/Aus-Buttons."
+    },
+    "batch_delay": {
+      "hint": "Verzögerung, um mehrere Status-Updates zu einem Paket zu bündeln."
+    },
+    "baud_rate": {
+      "hint": "Baudrate der seriellen Schnittstelle."
+    },
+    "bg_color": {
+      "hint": "Hintergrund-Füllfarbe dieses Parts."
+    },
+    "bg_grad_color": {
+      "hint": "Zweite Farbe für einen Hintergrund-Verlauf, von bg_color entlang bg_grad_dir gemischt."
+    },
+    "bg_opa": {
+      "hint": "Hintergrund-Deckkraft, 0-255 oder Prozent. TRANSP blendet die Füllung aus."
+    },
+    "border_color": {
+      "hint": "Rahmenfarbe."
+    },
+    "border_width": {
+      "hint": "Rahmenstärke in Pixeln. 0 deaktiviert den Rahmen."
+    },
+    "brightness": {
+      "hint": "Helligkeit."
+    },
+    "clk_pin": {
+      "hint": "SPI-Taktleitung (CLK)."
+    },
+    "color_depth": {
+      "label": "Farbtiefe",
+      "hint": "Bit pro Pixel des LVGL-Zeichenpuffers. Muss zum angeschlossenen Display passen."
+    },
+    "color_order": {
+      "hint": "Reihenfolge der Farbkanäle des Displays/LED-Strips (z. B. RGB, GRB)."
+    },
+    "cs_pin": {
+      "hint": "SPI-Chip-Select-Pin."
+    },
+    "dc_pin": {
+      "hint": "Data/Command-Pin des Displays."
+    },
     "default_font": {
       "label": "Standard-Schrift",
       "hint": "ID einer font:-Komponente für Text und Symbole, wenn ein Widget kein eigenes text_font setzt. Standard ist LVGLs eingebautes montserrat_14."
@@ -15,9 +70,20 @@
       "label": "Standard-Gruppe",
       "hint": "Name der Eingabe-Gruppe, der neue Widgets automatisch beitreten, damit ein Encoder oder Tastenfeld sie ansteuern kann."
     },
-    "theme": {
-      "label": "Theme",
-      "hint": "Globale Style-Vorgaben pro Widget-Typ. Gekeyt nach Widget-Typ, optional verschachtelt nach Part und State."
+    "default_transition_length": {
+      "hint": "Standard-Dauer für Übergänge (Ein/Aus, Farbe, Helligkeit)."
+    },
+    "device_class": {
+      "hint": "Geräteklasse des Sensors (steuert Icon/Einheit im Frontend)."
+    },
+    "dimensions": {
+      "hint": "Abmessungen des Bildschirms (Breite × Höhe oder getrennte Keys)."
+    },
+    "disabled_by_default": {
+      "hint": "Wenn true, wird die Entität im Frontend zunächst nicht hinzugefügt (Nutzer muss sie manuell aktivieren)."
+    },
+    "discovery": {
+      "hint": "Home-Assistant-MQTT-Discovery aktivieren."
     },
     "disp_bg_color": {
       "label": "Display-Hintergrundfarbe",
@@ -31,37 +97,211 @@
       "label": "Display-Hintergrund-Deckkraft",
       "hint": "Deckkraft der Hintergrundfarbe/-bild, 0-255 oder Prozent."
     },
-    "transparency_key": {
-      "label": "Transparenz-Farbe",
-      "hint": "Farbe, die beim Compositing des Display-Puffers als vollständig transparent behandelt wird (Chroma-Key)."
+    "effects": {
+      "hint": "Liste der verfügbaren Lichteffekte."
     },
-    "color_depth": {
-      "label": "Farbtiefe",
-      "hint": "Bit pro Pixel des LVGL-Zeichenpuffers. Muss zum angeschlossenen Display passen."
+    "encryption": {
+      "hint": "Wenn gesetzt, wird die API-Verbindung verschlüsselt."
+    },
+    "entity_category": {
+      "hint": "Kategorie der Entität (config / diagnostic)."
+    },
+    "fast_connect": {
+      "hint": "Direkt mit dem gespeicherten Access Point verbinden, ohne Scan."
+    },
+    "filters": {
+      "hint": "Liste von Filtern, die auf die Werte angewendet werden (z. B. Glättung, Offset, Invertierung)."
+    },
+    "force_update": {
+      "hint": "Erzwingt ein State-Changed-Event im Frontend, auch wenn der Wert gleich bleibt."
+    },
+    "frequency": {
+      "hint": "Betriebsfrequenz."
     },
     "full_refresh": {
       "label": "Voll-Refresh",
       "hint": "Zeichnet jedes Bild den ganzen Schirm neu statt nur geänderter Bereiche. Für manche Displays nötig, kostet Performance."
     },
+    "gamma_correct": {
+      "hint": "Gamma-Korrekturfaktor für die Helligkeit."
+    },
+    "icon": {
+      "hint": "Icon für die Anzeige im Frontend manuell setzen."
+    },
+    "id": {
+      "hint": "Bezeichner, über den diese Komponente anderswo in der Konfiguration referenziert wird."
+    },
+    "initial_value": {
+      "hint": "Wert beim Start, wenn keiner wiederhergestellt wird."
+    },
+    "internal": {
+      "hint": "Komponente als intern markieren – sie wird nicht ans Frontend gemeldet."
+    },
+    "inverted": {
+      "hint": "Logikpegel des Pins invertieren."
+    },
+    "lambda": {
+      "hint": "C++-Lambda, das den Wert bzw. das Verhalten berechnet."
+    },
+    "long_mode": {
+      "hint": "Wie ein Label Text länger als seine Breite behandelt: WRAP, DOT, SCROLL, SCROLL_CIRCULAR oder CLIP."
+    },
+    "manual_ip": {
+      "hint": "Statische IP-Konfiguration statt DHCP."
+    },
+    "max_value": {
+      "hint": "Größter Wert, den dieses Steuerelement annimmt."
+    },
+    "min_value": {
+      "hint": "Kleinster Wert, den dieses Steuerelement annimmt."
+    },
+    "miso_pin": {
+      "hint": "SPI MISO-Leitung."
+    },
+    "mode": {
+      "hint": "Pin-Modus bzw. Betriebsmodus dieser Komponente."
+    },
+    "model": {
+      "hint": "Gerätemodell."
+    },
+    "mosi_pin": {
+      "hint": "SPI MOSI-Leitung."
+    },
+    "name": {
+      "hint": "Anzeigename im Frontend (z. B. Home Assistant)."
+    },
+    "number": {
+      "hint": "GPIO-Nummer."
+    },
+    "on_click": {
+      "hint": "Automation bei einem Klick."
+    },
+    "on_press": {
+      "hint": "Automation beim Drücken."
+    },
+    "on_release": {
+      "hint": "Automation beim Loslassen."
+    },
+    "on_state": {
+      "hint": "Automation bei jeder Zustandsänderung."
+    },
+    "on_turn_off": {
+      "hint": "Automation beim Ausschalten."
+    },
+    "on_turn_on": {
+      "hint": "Automation beim Einschalten."
+    },
+    "on_value": {
+      "hint": "Automation, die bei jedem neuen veröffentlichten Wert ausgeführt wird."
+    },
+    "opa": {
+      "hint": "Gesamt-Deckkraft des Widgets, 0-255 oder Prozent."
+    },
+    "optimistic": {
+      "hint": "Optimistischer Modus – ein Befehl aktualisiert den gemeldeten Zustand sofort ohne Rückmeldung."
+    },
+    "pad_all": {
+      "hint": "Innenabstand auf allen vier Seiten in Pixeln."
+    },
+    "parity": {
+      "hint": "Parität der seriellen Verbindung."
+    },
+    "password": {
+      "hint": "Passwort."
+    },
+    "pin": {
+      "hint": "GPIO-Pin für diese Funktion."
+    },
+    "port": {
+      "hint": "Port, auf dem der Server läuft."
+    },
+    "power_save_mode": {
+      "hint": "WLAN-Energiesparmodus."
+    },
+    "qos": {
+      "hint": "MQTT Quality-of-Service-Stufe."
+    },
+    "radius": {
+      "hint": "Eckenradius in Pixeln. Ein großer Wert auf einem quadratischen Widget macht es zum Kreis."
+    },
+    "reboot_timeout": {
+      "hint": "Wartezeit ohne Client-Verbindung, bevor neu gestartet wird (0s = nie)."
+    },
+    "reset_pin": {
+      "hint": "Reset-Pin des Geräts."
+    },
+    "restore_mode": {
+      "hint": "Wie der Zustand beim Neustart wiederhergestellt wird."
+    },
+    "restore_mode_light": {
+      "hint": "Wie der Lichtzustand beim Neustart wiederhergestellt wird."
+    },
+    "retain": {
+      "hint": "MQTT-Nachricht auf dem Broker mit Retain-Flag veröffentlichen."
+    },
+    "rotation": {
+      "hint": "Display-Inhalt um den angegebenen Winkel drehen."
+    },
+    "rx_pin": {
+      "hint": "Empfangs-Pin (RX)."
+    },
+    "scan": {
+      "hint": "Beim Start nach I²C-Geräten suchen und die Adressen loggen."
+    },
+    "scl": {
+      "hint": "I²C-Taktleitung (SCL)."
+    },
+    "sda": {
+      "hint": "I²C-Datenleitung (SDA)."
+    },
+    "shadow_width": {
+      "hint": "Weichzeichnungs-Radius des Schlagschattens in Pixeln. 0 deaktiviert den Schatten."
+    },
+    "ssid": {
+      "hint": "Name (SSID) des WLANs."
+    },
+    "step": {
+      "hint": "Schrittweite, in der der Wert gesetzt werden kann."
+    },
+    "stop_bits": {
+      "hint": "Anzahl der Stopp-Bits."
+    },
     "style_definitions": {
       "label": "Style-Definitionen",
       "hint": "Wiederverwendbare benannte Style-Blöcke, die Widgets per ID referenzieren, statt Eigenschaften zu wiederholen."
     },
-    "bg_color": { "hint": "Hintergrund-Füllfarbe dieses Parts." },
-    "bg_opa": { "hint": "Hintergrund-Deckkraft, 0-255 oder Prozent. TRANSP blendet die Füllung aus." },
-    "bg_grad_color": { "hint": "Zweite Farbe für einen Hintergrund-Verlauf, von bg_color entlang bg_grad_dir gemischt." },
-    "border_width": { "hint": "Rahmenstärke in Pixeln. 0 deaktiviert den Rahmen." },
-    "border_color": { "hint": "Rahmenfarbe." },
-    "radius": { "hint": "Eckenradius in Pixeln. Ein großer Wert auf einem quadratischen Widget macht es zum Kreis." },
-    "text_color": { "hint": "Farbe des Widget-Texts." },
+    "text_color": {
+      "hint": "Farbe des Widget-Texts."
+    },
     "text_font": {
       "label": "Text-Schrift",
       "hint": "ID der font:-Komponente für den Text dieses Widgets. Fällt auf das LVGL-default_font zurück."
     },
-    "pad_all": { "hint": "Innenabstand auf allen vier Seiten in Pixeln." },
-    "shadow_width": { "hint": "Weichzeichnungs-Radius des Schlagschattens in Pixeln. 0 deaktiviert den Schatten." },
-    "opa": { "hint": "Gesamt-Deckkraft des Widgets, 0-255 oder Prozent." },
-    "align": { "hint": "Ankerpunkt des Widgets relativ zum Eltern-Element (z. B. CENTER, TOP_LEFT)." },
-    "long_mode": { "hint": "Wie ein Label Text länger als seine Breite behandelt: WRAP, DOT, SCROLL, SCROLL_CIRCULAR oder CLIP." }
+    "theme": {
+      "label": "Theme",
+      "hint": "Globale Style-Vorgaben pro Widget-Typ. Gekeyt nach Widget-Typ, optional verschachtelt nach Part und State."
+    },
+    "timeout": {
+      "hint": "Zeitüberschreitung."
+    },
+    "topic": {
+      "hint": "MQTT-Topic."
+    },
+    "transparency_key": {
+      "label": "Transparenz-Farbe",
+      "hint": "Farbe, die beim Compositing des Display-Puffers als vollständig transparent behandelt wird (Chroma-Key)."
+    },
+    "tx_pin": {
+      "hint": "Sende-Pin (TX)."
+    },
+    "unit_of_measurement": {
+      "hint": "Einheit, die im Frontend neben dem Wert angezeigt wird."
+    },
+    "update_interval": {
+      "hint": "Wie oft der Sensor abgefragt wird."
+    },
+    "value": {
+      "hint": "Zu verwendender Wert."
+    }
   }
 }
