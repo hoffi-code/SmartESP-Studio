@@ -10,11 +10,19 @@ markiert.
 
 ### Added
 
+- **Feld-Hints** – jedes Schema-Feld kann einen „?"-Button vor dem Label bekommen,
+  der beim Klick eine Kurz-Erklärung als Popover zeigt (`FieldHint.vue`). Texte
+  kommen aus dem i18n-Katalog `schema.fields.<key>.hint` bzw. aus `field.hint` im
+  Schema-JSON. Erste Charge: LVGL-Top-Level (`default_font`/`theme`/`disp_*`/…) +
+  gängige Style-Props.
+- **Lesbare Feld-Labels** – ohne explizites `label` zeigt ein Feld jetzt
+  `schema.fields.<key>.label` aus dem Katalog, sonst den humanisierten Key
+  (`default_font` → „Default font", Akronyme bleiben groß) statt des rohen Keys.
 - **i18n-Fundament** – `vue-i18n` eingebunden (`en` Default/Fallback, `de`),
   Sprachumschalter im Header, Locale in `localStorage`. Message-Katalog nach
-  Feature getrennt unter `src/i18n/locales/<locale>/`. Erste migrierte Strings:
-  Kommentar-Modal. `humanizeFieldKey` als Label-Fallback vorbereitet. Übrige
-  UI-Texte folgen schrittweise.
+  Feature getrennt unter `src/i18n/locales/<locale>/`. Migriert: App-Topbar,
+  geteilte Modals, Builder-Tabs, Kommentar-Modal, Schema-Feld-Labels/Hints.
+  Übrige UI-Texte folgen schrittweise.
 - **Kommentar-Modal** – Sektions-/Komponenten-Kommentare lassen sich jetzt in der
   UI pflegen (bisher nur beim Import): „Kommentar"-Button neben „Remove" je
   Komponente (schreibt `fieldComments[<domain>]`), Button oben links im
