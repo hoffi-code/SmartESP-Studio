@@ -1,6 +1,12 @@
 <template>
   <div class="schema-input-action-row schema-color">
-    <span class="schema-color__swatch" :style="swatchStyle" aria-hidden="true"></span>
+    <button
+      type="button"
+      class="schema-color__swatch"
+      :style="swatchStyle"
+      :aria-label="t('modals.colorPicker.title')"
+      @click="pickerOpen = true"
+    ></button>
     <input
       :id="inputId"
       type="text"
@@ -8,17 +14,23 @@
       :placeholder="field.placeholder || placeholderForFormat"
       @input="onInput"
     />
-    <button type="button" class="secondary compact schema-color__btn" aria-label="Pick color" @click="pickerOpen = true">
-      Pick
-    </button>
-    <ColorPickerModal :open="pickerOpen" :selected="hexForModal" @close="pickerOpen = false" @select="handlePick" />
+    <ColorPickerModal
+      :open="pickerOpen"
+      :selected="hexForModal"
+      @close="pickerOpen = false"
+      @select="handlePick"
+      @clear="handleClear"
+    />
   </div>
 </template>
 
 <script setup>
 import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import ColorPickerModal from "../ColorPickerModal.vue";
 import { colorToCss, normalizeHexColor } from "../../utils/displayColor";
+
+const { t } = useI18n();
 
 const props = defineProps({
   modelValue: { type: String, default: "" },
@@ -70,6 +82,11 @@ const handlePick = (hex) => {
   pickerOpen.value = false;
   emit("update:model-value", toFieldFormat(hex));
 };
+
+const handleClear = () => {
+  pickerOpen.value = false;
+  emit("update:model-value", "");
+};
 </script>
 
 <style scoped>
@@ -77,8 +94,11 @@ const handlePick = (hex) => {
   width: 24px;
   height: 24px;
   flex: 0 0 auto;
+  padding: 0;
   border-radius: 6px;
   border: 1px solid var(--border);
+  cursor: pointer;
+  background-color: transparent;
   background-image:
     linear-gradient(45deg, #ddd 25%, transparent 25%),
     linear-gradient(-45deg, #ddd 25%, transparent 25%),
@@ -90,9 +110,5 @@ const handlePick = (hex) => {
 
 .schema-color {
   align-items: center;
-}
-
-.schema-color__btn {
-  flex: 0 0 auto;
 }
 </style>
