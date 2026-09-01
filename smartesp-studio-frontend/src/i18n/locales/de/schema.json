@@ -1,6 +1,7 @@
 {
   "idRef": {
-    "noMatch": "Keine passenden Bezeichner verfügbar"
+    "noMatch": "Keine passenden Bezeichner verfügbar",
+    "create": "Neu anlegen"
   },
   "fields": {
     "default_font": {

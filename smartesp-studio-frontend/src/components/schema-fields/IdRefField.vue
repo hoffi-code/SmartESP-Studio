@@ -11,6 +11,15 @@
       @input="onInput"
     />
     <span class="schema-id-ref-chevron" aria-hidden="true"></span>
+    <button
+      v-if="canCreate"
+      type="button"
+      class="secondary compact schema-id-ref__add"
+      :title="t('schema.idRef.create')"
+      @click="onCreate"
+    >
+      +
+    </button>
     <div v-if="open && menuOptions.length" class="id-ref-list">
       <button
         v-for="option in menuOptions"
@@ -28,7 +37,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { computed, inject, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 import {
@@ -50,6 +59,18 @@ const props = defineProps({
 const emit = defineEmits(["update:model-value"]);
 
 const { t } = useI18n();
+
+// Provided by BuilderView: async (domain, { initialName }) => Promise<newId | null>.
+// Absent in isolated specs / non-builder contexts -> no "+" button.
+const requestIdDefinition = inject("requestIdDefinition", null);
+const canCreate = computed(
+  () => Boolean(props.field?.creatable) && typeof requestIdDefinition === "function"
+);
+
+const onCreate = async () => {
+  const newId = await requestIdDefinition(props.field?.domain || "", { initialName: props.modelValue || "" });
+  if (newId) emit("update:model-value", newId);
+};
 
 const open = ref(false);
 const query = ref("");
