@@ -117,7 +117,11 @@
           <span v-else-if="entry.render.kind === 'led'" class="lvgl-canvas__led" :style="{ background: entry.render.color, boxShadow: `0 0 ${8 * zoom}px ${entry.render.color}` }" />
 
           <!-- image-like -->
-          <span v-else-if="entry.render.kind === 'image'" class="lvgl-canvas__image">
+          <span
+            v-else-if="entry.render.kind === 'image'"
+            class="lvgl-canvas__image"
+            :style="entry.render.transform ? { transform: entry.render.transform } : null"
+          >
             <svg v-if="!entry.render.qr" viewBox="0 0 24 24"><path d="M3 5h18v14H3z" fill="none" /><circle cx="8" cy="10" r="2" /><path d="M4 18l5-5 3 3 4-4 4 4v2H4z" /></svg>
             <span v-else class="lvgl-canvas__qr" />
           </span>
@@ -301,11 +305,28 @@ const render = (entry) => {
     };
   }
   if (t === "textarea" || t === "spinbox") {
-    return { kind: "field", text: String(p.text ?? p.value ?? (t === "spinbox" ? "0" : "")) };
+    let text;
+    if (t === "spinbox") {
+      const dp = Math.max(0, Math.min(6, Math.round(num(p.decimal_places, 0))));
+      text = (num(p.value, 0) / 10 ** dp).toFixed(dp);
+    } else if (isTruthy(p.password_mode)) {
+      text = "•".repeat(Math.min(Math.max(String(p.text ?? "").length, 4), 12));
+    } else {
+      text = String(p.text ?? p.placeholder_text ?? "");
+    }
+    return { kind: "field", text };
   }
   if (t === "led") return { kind: "led", color: colour(p, "color", colour(p, "bg_color", THEME.led)) };
   if (t === "qrcode") return { kind: "image", qr: true };
-  if (t === "image" || t === "animimg" || t === "canvas") return { kind: "image", qr: false };
+  if (t === "image" || t === "animimg" || t === "canvas") {
+    // ESPHome image angle = degrees; zoom = 256 -> 1x.
+    const angle = num(p.angle, 0);
+    const zoom = num(p.zoom, 256) / 256;
+    const parts = [];
+    if (angle) parts.push(`rotate(${angle}deg)`);
+    if (zoom && zoom !== 1) parts.push(`scale(${zoom})`);
+    return { kind: "image", qr: false, transform: parts.join(" ") };
+  }
   if (t === "meter") {
     const s = (Array.isArray(p.scales) ? p.scales : [])[0] || {};
     const from = num(s.range_from, 0);
