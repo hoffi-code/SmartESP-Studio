@@ -53,6 +53,40 @@ describe("LvglCanvas", () => {
     expect(wrapper.emitted("move")).toBeUndefined();
   });
 
+  it("renders a kind-specific look per widget type", () => {
+    const p = {
+      id: "mix",
+      widgets: [
+        { uiId: "btn", type: "button", common: { x: 0, y: 0, width: 60, height: 24 }, props: { text: "OK" }, children: [] },
+        { uiId: "sw", type: "switch", common: { x: 0, y: 30, width: 40, height: 20 }, props: { state: "on" }, children: [] },
+        { uiId: "sl", type: "slider", common: { x: 0, y: 60, width: 100, height: 12 }, props: { value: 50 }, children: [] },
+        { uiId: "cb", type: "checkbox", common: { x: 0, y: 80, width: 90, height: 18 }, props: { text: "A", state: true }, children: [] },
+        { uiId: "dd", type: "dropdown", common: { x: 0, y: 100, width: 90, height: 22 }, props: { options: ["One", "Two"], selected_index: 1 }, children: [] },
+        { uiId: "ar", type: "arc", common: { x: 0, y: 130, width: 50, height: 50 }, props: { value: 25 }, children: [] },
+        { uiId: "ld", type: "led", common: { x: 0, y: 190, width: 16, height: 16 }, props: {}, children: [] }
+      ]
+    };
+    const w = mount(LvglCanvas, { props: { page: p, canvasWidth: 240, canvasHeight: 320 } });
+
+    expect(w.get(".lvgl-w--button .lvgl-canvas__btn-label").text()).toBe("OK");
+    expect(w.get(".lvgl-w--switch .lvgl-canvas__switch").classes()).toContain("is-on");
+    expect(w.get(".lvgl-w--bar .lvgl-canvas__bar-fill").attributes("style")).toContain("width: 50%");
+    expect(w.get(".lvgl-w--bar .lvgl-canvas__bar-knob").exists()).toBe(true);
+    expect(w.get(".lvgl-w--checkbox .lvgl-canvas__check-box").classes()).toContain("is-checked");
+    expect(w.get(".lvgl-w--dropdown .lvgl-canvas__dropdown-text").text()).toBe("Two");
+    expect(w.find(".lvgl-w--arc svg.lvgl-canvas__arc").exists()).toBe(true);
+    expect(w.get(".lvgl-w--led .lvgl-canvas__led").attributes("style")).toContain("rgb(255, 0, 0)");
+  });
+
+  it("uses an explicit bg_color over the kind default", () => {
+    const p = {
+      id: "p",
+      widgets: [{ uiId: "b", type: "button", common: { x: 0, y: 0, width: 60, height: 24 }, props: { text: "X", bg_color: "0xFF0000" }, children: [] }]
+    };
+    const w = mount(LvglCanvas, { props: { page: p, canvasWidth: 200, canvasHeight: 200 } });
+    expect(w.get(".lvgl-w--button").attributes("style")).toContain("background: rgb(255, 0, 0)");
+  });
+
   it("flags a flex container's children as static (no drag)", () => {
     const flexPage = {
       id: "p",

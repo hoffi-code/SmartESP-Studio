@@ -10,6 +10,15 @@ markiert.
 
 ### Added
 
+- **LVGL Canvas rendert realistischer** – jeder Widget-Typ bekommt ein eigenes
+  Aussehen statt eines generischen Kästchens: Button (gefüllt, Theme-Primärfarbe),
+  Switch (Pill + gleitender Knopf, an/aus), Slider/Bar (Track + Indicator + Knopf),
+  Checkbox (Tickbox + Haken), Dropdown (Wert + Chevron), Roller (drei Zeilen,
+  Mitte hervorgehoben), Arc/Spinner/Meter (SVG-Ringe mit Indicator-Bogen),
+  LED (Kreis + Glow), Text-/Spinbox (Feld + Cursor), Bild/QR, Tabview,
+  Button-Matrix/Keyboard (Zellenraster). Farben kommen aus den Widget-Props
+  (`bg_color`, `indicator`/`knob`-Blöcke, `arc_color`, ...), sonst aus dem
+  LVGL-Default-Theme (Material, Primär `#2196f3`).
 - **LVGL Live-Editor umgebaut** – die Konfig-Ansicht zeigt unter Pages/Widgets
   jetzt eine statische *Canvas-Preview*; ein Klick darauf öffnet ein Modal mit
   dem interaktiven Canvas (Drag, W/H/Zoom) links und dem vollen Widget-Inspektor
