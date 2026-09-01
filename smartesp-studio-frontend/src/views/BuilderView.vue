@@ -69,6 +69,28 @@
       @delete="deleteComment"
       @close="closeCommentEditor"
     />
+    <IdDefinitionModal
+      :open="idDefinitionRequest !== null"
+      :title="idDefinitionRequest ? t('schema.idRef.create') : ''"
+      :component-id="idDefinitionRequest?.item?.id || ''"
+      :schema-path="idDefinitionRequest ? normalizeSchemaPath(idDefinitionRequest.item.schemaPath) : ''"
+      :initial-id="idDefinitionRequest?.initialName || ''"
+      :existing-ids="idDefinitionExistingIds"
+      :id-registry="idRegistry"
+      :name-registry="nameRegistry"
+      :id-index="idIndex"
+      :gpio-options="gpioOptions"
+      :gpio-usage="gpioUsageIndex"
+      :gpio-title="gpioTitle"
+      :global-store="globalStore"
+      :display-images="displayImages"
+      :display-fonts="displayFonts"
+      :display-google-fonts="displayGoogleFonts"
+      :assets-base="assetsBase"
+      @confirm="confirmIdDefinition"
+      @cancel="cancelIdDefinition"
+      @open-asset-manager="assetManagerOpen = true"
+    />
     <div class="builder-shell">
       <aside class="builder-sidebar">
         <div class="sidebar-top">
@@ -551,6 +573,7 @@ import {
 import BuilderAutomationTab from "../components/builder/BuilderAutomationTab.vue";
 import BuilderComponentForm from "../components/builder/BuilderComponentForm.vue";
 import CommentEditModal from "../components/builder/CommentEditModal.vue";
+import IdDefinitionModal from "../components/builder/IdDefinitionModal.vue";
 import BuilderComponentPicker from "../components/builder/BuilderComponentPicker.vue";
 import BuilderCoreTab from "../components/builder/BuilderCoreTab.vue";
 import LvglBuilder from "../components/lvgl/LvglBuilder.vue";
@@ -2553,6 +2576,60 @@ const openActiveComponentCommentEditor = () => {
   if (!key) return;
   openCommentEditor({ key, title: t("builder.comment.componentTitle", { domain: key }) });
 };
+
+// "+ define a new one" flow behind creatable id_ref fields. IdRefField injects
+// requestIdDefinition; on confirm we append a real config.components[] entry (mirroring
+// selectComponent) so its id flows into idIndex and the dropdown next tick.
+const ID_DEFINITION_CATALOG = { image: "image/file" };
+
+const idDefinitionRequest = ref(null); // { domain, item, resolve }
+
+const requestIdDefinition = (domain, { initialName = "" } = {}) =>
+  new Promise((resolve) => {
+    const catalogId = ID_DEFINITION_CATALOG[domain];
+    const item = catalogId ? componentCatalogItemsById.value.get(catalogId) : null;
+    if (!item) {
+      resolve(null);
+      return;
+    }
+    idDefinitionRequest.value = { domain, item, initialName, resolve };
+  });
+
+provide("requestIdDefinition", requestIdDefinition);
+
+const idDefinitionExistingIds = computed(() => {
+  const domain = idDefinitionRequest.value?.domain;
+  if (!domain) return [];
+  return (idIndex.value || []).filter((entry) => entry.domain === domain).map((entry) => entry.id);
+});
+
+const resolveIdDefinition = (result) => {
+  const request = idDefinitionRequest.value;
+  idDefinitionRequest.value = null;
+  if (request) request.resolve(result || null);
+};
+
+const confirmIdDefinition = async (draftConfig) => {
+  const request = idDefinitionRequest.value;
+  if (!request) return;
+  const { item } = request;
+  const resolution = await ensureComponentSchema(item.id, normalizeSchemaPath(item.schemaPath));
+  const newId = String(draftConfig?.id || "").trim();
+  if (resolution.status !== "ready" || !newId) {
+    resolveIdDefinition(null);
+    return;
+  }
+  config.value.components.push({
+    id: item.id,
+    catalogKey: String(item.catalogKey || item.path || item.id).trim(),
+    config: JSON.parse(JSON.stringify(draftConfig)),
+    customConfig: ""
+  });
+  markProjectDirty();
+  resolveIdDefinition(newId);
+};
+
+const cancelIdDefinition = () => resolveIdDefinition(null);
 
 const assetsBase = apiUrl("api/assets/");
 const localComponentCatalogUrl = new URL("components_list/components_list.json", window.location.href).toString();
