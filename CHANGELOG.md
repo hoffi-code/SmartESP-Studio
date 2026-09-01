@@ -18,6 +18,10 @@ markiert.
   sind jetzt Dropdowns (LVGL-Built-in-Fonts wie `montserrat_20` + definierte
   `font:`-IDs) mit „+ neu anlegen". `default_group` zeigt die bereits an Widgets
   vergebenen Gruppennamen (+ Freitext). `disp_bg_image` bekommt ebenfalls „+".
+- **Datei-Felder aus dem Asset-Store** – `image/file` `file` und die lokale
+  `font:`-`path` sind jetzt `asset_ref`: Dropdown der hochgeladenen Bilder/Fonts
+  (schreibt `esp_assets/images/…` bzw. `esp_assets/fonts/…`) + „…"-Button, der den
+  Asset Manager öffnet. Freitext (`mdi:`, `gfonts://`, eigene Pfade) bleibt möglich.
 - **`color:` als eigene Komponente** – Katalog-Kategorie „Color Components",
   Schema `color/color.json` (`hex` oder `red`/`green`/`blue`/`white` bzw. `*_int`).
   Als `id_ref`-Ziel mit „+" nutzbar; der Anlege-Dialog zeigt einen Farb-Swatch.

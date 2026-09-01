@@ -115,6 +115,14 @@
       @update:model-value="(idValue) => emit('update', { path: fieldPath, value: wrapInputValue(idValue) })"
     />
 
+    <AssetRefField
+      v-else-if="isAssetRefField"
+      :model-value="resolvedValue"
+      :field="field"
+      :input-id="inputId"
+      @update:model-value="(assetValue) => emit('update', { path: fieldPath, value: wrapInputValue(assetValue) })"
+    />
+
     <GpioField
       v-else-if="isGpioField"
       :input-id="inputId"
@@ -149,6 +157,7 @@ import GpioField from './GpioField.vue';
 import ColorField from './ColorField.vue';
 import FieldHint from './FieldHint.vue';
 import IdRefField from './IdRefField.vue';
+import AssetRefField from './AssetRefField.vue';
 import IconPicker from '../IconPicker.vue';
 import SchemaField from '../SchemaField.vue';
 
@@ -221,6 +230,7 @@ defineProps({
   isIdField: Boolean,
   fieldError: { type: String, default: '' },
   isIdRefField: Boolean,
+  isAssetRefField: Boolean,
   isGpioField: Boolean,
   isColorField: Boolean,
   fieldPath: { type: Array, default: () => [] },

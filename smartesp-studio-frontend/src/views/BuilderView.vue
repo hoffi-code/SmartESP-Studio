@@ -1538,6 +1538,12 @@ const mdiIcons = ref([]);
 
 provide("mdiIcons", mdiIcons);
 
+// asset_ref fields: list of uploaded filenames per kind + a way to open the manager.
+provide("assetRefProvider", (kind) =>
+  (kind === "fonts" ? displayFonts.value : displayImages.value).map((asset) => asset.file)
+);
+provide("openAssetManager", () => openAssetManager());
+
 const schemaEntries = computed(() => {
   const entries = [];
 

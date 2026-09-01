@@ -3,6 +3,9 @@
     "noMatch": "Keine passenden Bezeichner verfügbar",
     "create": "Neu anlegen"
   },
+  "assetRef": {
+    "manage": "Assets verwalten"
+  },
   "fields": {
     "default_font": {
       "label": "Standard-Schrift",

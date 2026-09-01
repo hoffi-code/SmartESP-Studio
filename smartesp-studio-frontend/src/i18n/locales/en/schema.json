@@ -3,6 +3,9 @@
     "noMatch": "No matching identifiers available",
     "create": "Define a new one"
   },
+  "assetRef": {
+    "manage": "Manage assets"
+  },
   "fields": {
     "default_font": {
       "label": "Default font",
