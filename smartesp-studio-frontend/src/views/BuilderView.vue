@@ -216,6 +216,7 @@
             :header-comment="config.headerComment || ''"
             @yaml-line-click="handleYamlLineClick"
             @edit-header-comment="openCommentEditor({ scope: 'header', title: t('builder.comment.headerTitle') })"
+            @edit-section-comment="openCommentEditor({ key: $event, title: t('builder.comment.sectionTitle', { section: $event }) })"
           />
         </div>
 
