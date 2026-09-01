@@ -13,6 +13,12 @@ const ACRONYMS = new Set([
   "css", "html", "json", "yaml", "svg", "png", "cs", "dc", "qr"
 ]);
 
+// Flat i18n namespace for schema field labels/hints, keyed by the field key alone
+// (no per-schema qualifier -- SchemaField never gets the resolved schema id). A `label`
+// or `hint` set directly in the schema JSON still wins over the catalog.
+export const fieldLabelI18nKey = (key) => `schema.fields.${String(key || "")}.label`;
+export const fieldHintI18nKey = (key) => `schema.fields.${String(key || "")}.hint`;
+
 export const humanizeFieldKey = (key) => {
   const raw = String(key || "").trim();
   if (!raw) return "";

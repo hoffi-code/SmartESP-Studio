@@ -1,0 +1,60 @@
+{
+  "fields": {
+    "default_font": {
+      "label": "Standard-Schrift",
+      "hint": "ID einer font:-Komponente für Text und Symbole, wenn ein Widget kein eigenes text_font setzt. Standard ist LVGLs eingebautes montserrat_14."
+    },
+    "default_group": {
+      "label": "Standard-Gruppe",
+      "hint": "Name der Eingabe-Gruppe, der neue Widgets automatisch beitreten, damit ein Encoder oder Tastenfeld sie ansteuern kann."
+    },
+    "theme": {
+      "label": "Theme",
+      "hint": "Globale Style-Vorgaben pro Widget-Typ. Gekeyt nach Widget-Typ, optional verschachtelt nach Part und State."
+    },
+    "disp_bg_color": {
+      "label": "Display-Hintergrundfarbe",
+      "hint": "Füllfarbe des gesamten Displays hinter allen Widgets."
+    },
+    "disp_bg_image": {
+      "label": "Display-Hintergrundbild",
+      "hint": "ID einer image:-Komponente, die als Display-Hintergrund gezeichnet wird."
+    },
+    "disp_bg_opa": {
+      "label": "Display-Hintergrund-Deckkraft",
+      "hint": "Deckkraft der Hintergrundfarbe/-bild, 0-255 oder Prozent."
+    },
+    "transparency_key": {
+      "label": "Transparenz-Farbe",
+      "hint": "Farbe, die beim Compositing des Display-Puffers als vollständig transparent behandelt wird (Chroma-Key)."
+    },
+    "color_depth": {
+      "label": "Farbtiefe",
+      "hint": "Bit pro Pixel des LVGL-Zeichenpuffers. Muss zum angeschlossenen Display passen."
+    },
+    "full_refresh": {
+      "label": "Voll-Refresh",
+      "hint": "Zeichnet jedes Bild den ganzen Schirm neu statt nur geänderter Bereiche. Für manche Displays nötig, kostet Performance."
+    },
+    "style_definitions": {
+      "label": "Style-Definitionen",
+      "hint": "Wiederverwendbare benannte Style-Blöcke, die Widgets per ID referenzieren, statt Eigenschaften zu wiederholen."
+    },
+    "bg_color": { "hint": "Hintergrund-Füllfarbe dieses Parts." },
+    "bg_opa": { "hint": "Hintergrund-Deckkraft, 0-255 oder Prozent. TRANSP blendet die Füllung aus." },
+    "bg_grad_color": { "hint": "Zweite Farbe für einen Hintergrund-Verlauf, von bg_color entlang bg_grad_dir gemischt." },
+    "border_width": { "hint": "Rahmenstärke in Pixeln. 0 deaktiviert den Rahmen." },
+    "border_color": { "hint": "Rahmenfarbe." },
+    "radius": { "hint": "Eckenradius in Pixeln. Ein großer Wert auf einem quadratischen Widget macht es zum Kreis." },
+    "text_color": { "hint": "Farbe des Widget-Texts." },
+    "text_font": {
+      "label": "Text-Schrift",
+      "hint": "ID der font:-Komponente für den Text dieses Widgets. Fällt auf das LVGL-default_font zurück."
+    },
+    "pad_all": { "hint": "Innenabstand auf allen vier Seiten in Pixeln." },
+    "shadow_width": { "hint": "Weichzeichnungs-Radius des Schlagschattens in Pixeln. 0 deaktiviert den Schatten." },
+    "opa": { "hint": "Gesamt-Deckkraft des Widgets, 0-255 oder Prozent." },
+    "align": { "hint": "Ankerpunkt des Widgets relativ zum Eltern-Element (z. B. CENTER, TOP_LEFT)." },
+    "long_mode": { "hint": "Wie ein Label Text länger als seine Breite behandelt: WRAP, DOT, SCROLL, SCROLL_CIRCULAR oder CLIP." }
+  }
+}

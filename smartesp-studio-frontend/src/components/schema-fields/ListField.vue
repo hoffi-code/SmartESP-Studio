@@ -7,6 +7,7 @@
   >
     <div class="schema-list-header">
       <div class="schema-list-title">
+        <FieldHint v-if="fieldHint" :text="fieldHint" />
         <span>{{ fieldLabel }}</span>
         <button type="button" class="secondary compact btn-add schema-list-add" @click="handleAddListItem">
           Add
@@ -170,6 +171,7 @@
 <script setup>
 import { computed, ref, watch } from 'vue';
 import GpioField from './GpioField.vue';
+import FieldHint from './FieldHint.vue';
 import SchemaField from '../SchemaField.vue';
 import PickerModal from '../PickerModal.vue';
 import { isFieldVisible } from '../../utils/schemaVisibility';
@@ -194,6 +196,7 @@ import { buildConditionSections } from '../../utils/conditionCatalogSections';
 const props = defineProps({
   field: { type: Object, required: true },
   fieldLabel: { type: String, required: true },
+  fieldHint: { type: String, default: '' },
   fieldPath: { type: Array, default: () => [] },
   fieldFocusPath: { type: Array, default: () => [] },
   value: { type: Object, default: () => ({}) },

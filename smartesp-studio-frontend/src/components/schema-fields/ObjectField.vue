@@ -5,6 +5,7 @@
     :data-schema-field-path="encodedFieldFocusPath"
   >
     <div class="schema-group-title">
+      <FieldHint v-if="fieldHint" :text="fieldHint" />
       <span>{{ fieldLabel }}</span>
     </div>
     <div class="schema-levels">
@@ -35,6 +36,7 @@
 
 <script setup>
 import SchemaField from '../SchemaField.vue';
+import FieldHint from './FieldHint.vue';
 
 // ObjectField renders nested schema groups recursively.
 // The parent SchemaField still decides visibility and passes the already filtered
@@ -42,6 +44,7 @@ import SchemaField from '../SchemaField.vue';
 
 defineProps({
   fieldLabel: { type: String, required: true },
+  fieldHint: { type: String, default: '' },
   fieldPath: { type: Array, default: () => [] },
   fieldFocusPath: { type: Array, default: () => [] },
   encodedFieldFocusPath: { type: String, default: '' },

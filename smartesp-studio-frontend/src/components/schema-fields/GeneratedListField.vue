@@ -6,6 +6,7 @@
   >
     <div class="schema-list-header">
       <div class="schema-list-title">
+        <FieldHint v-if="fieldHint" :text="fieldHint" />
         <span>{{ fieldLabel }}</span>
         <span v-if="field.required" class="schema-required">*</span>
       </div>
@@ -102,6 +103,7 @@
 <script setup>
 import { computed, watch } from 'vue';
 import SchemaField from '../SchemaField.vue';
+import FieldHint from './FieldHint.vue';
 import { isFieldVisible } from '../../utils/schemaVisibility';
 import { encodeFieldPath } from '../../utils/yamlDocumentModel';
 import { fieldModeLevel, isModeLevelVisible } from '../../utils/schemaModeLevel';
@@ -109,6 +111,7 @@ import { fieldModeLevel, isModeLevelVisible } from '../../utils/schemaModeLevel'
 const props = defineProps({
   field: { type: Object, required: true },
   fieldLabel: { type: String, required: true },
+  fieldHint: { type: String, default: '' },
   fieldPath: { type: Array, default: () => [] },
   fieldFocusPath: { type: Array, default: () => [] },
   generatedListValue: { type: Array, default: () => [] },
