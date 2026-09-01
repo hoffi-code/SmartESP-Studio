@@ -2580,7 +2580,7 @@ const openActiveComponentCommentEditor = () => {
 // "+ define a new one" flow behind creatable id_ref fields. IdRefField injects
 // requestIdDefinition; on confirm we append a real config.components[] entry (mirroring
 // selectComponent) so its id flows into idIndex and the dropdown next tick.
-const ID_DEFINITION_CATALOG = { image: "image/file" };
+const ID_DEFINITION_CATALOG = { image: "image/file", font: "font/font" };
 
 const idDefinitionRequest = ref(null); // { domain, item, resolve }
 

@@ -1,0 +1,127 @@
+{
+  "id": "font.font",
+  "domain": "font",
+  "helpUrl": "https://esphome.io/components/font/",
+  "fields": [
+    {
+      "key": "id",
+      "type": "id",
+      "required": true,
+      "lvl": "simple",
+      "placeholder": "font_id"
+    },
+    {
+      "key": "file",
+      "type": "object",
+      "required": true,
+      "lvl": "simple",
+      "fields": [
+        {
+          "key": "type",
+          "type": "select",
+          "required": true,
+          "lvl": "simple",
+          "default": "gfonts",
+          "options": ["gfonts", "local", "web"]
+        },
+        {
+          "key": "family",
+          "type": "text",
+          "lvl": "simple",
+          "placeholder": "Roboto",
+          "dependsOn": { "key": "type", "value": "gfonts" }
+        },
+        {
+          "key": "weight",
+          "type": "text",
+          "lvl": "normal",
+          "placeholder": "regular",
+          "dependsOn": { "key": "type", "value": "gfonts" }
+        },
+        {
+          "key": "italic",
+          "type": "boolean",
+          "lvl": "normal",
+          "default": false,
+          "dependsOn": { "key": "type", "value": "gfonts" }
+        },
+        {
+          "key": "path",
+          "type": "text",
+          "lvl": "simple",
+          "placeholder": "fonts/my_font.ttf",
+          "dependsOn": { "key": "type", "value": "local" }
+        },
+        {
+          "key": "url",
+          "type": "text",
+          "lvl": "simple",
+          "placeholder": "https://example.com/font.ttf",
+          "dependsOn": { "key": "type", "value": "web" }
+        },
+        {
+          "key": "refresh",
+          "type": "text",
+          "lvl": "normal",
+          "placeholder": "1d",
+          "dependsOn": { "key": "type", "value": "web" }
+        }
+      ]
+    },
+    {
+      "key": "size",
+      "type": "number",
+      "required": false,
+      "lvl": "simple",
+      "placeholder": "20"
+    },
+    {
+      "key": "bpp",
+      "type": "select",
+      "required": false,
+      "lvl": "normal",
+      "default": "1",
+      "options": ["1", "2", "4", "8"]
+    },
+    {
+      "key": "glyphs",
+      "type": "list",
+      "required": false,
+      "lvl": "advanced",
+      "item": { "type": "text" }
+    },
+    {
+      "key": "glyphsets",
+      "type": "list",
+      "required": false,
+      "lvl": "advanced",
+      "item": { "type": "text", "placeholder": "GF_Latin_Core" }
+    },
+    {
+      "key": "ignore_missing_glyphs",
+      "type": "boolean",
+      "required": false,
+      "lvl": "advanced",
+      "default": false
+    },
+    {
+      "key": "extras",
+      "type": "list",
+      "required": false,
+      "lvl": "advanced",
+      "item": {
+        "type": "object",
+        "fields": [
+          { "key": "file", "type": "text", "required": true },
+          { "key": "glyphs", "type": "list", "required": true, "item": { "type": "text" } }
+        ]
+      }
+    },
+    {
+      "key": "custom_config",
+      "type": "raw_yaml",
+      "required": false,
+      "lvl": "advanced"
+    }
+  ]
+}

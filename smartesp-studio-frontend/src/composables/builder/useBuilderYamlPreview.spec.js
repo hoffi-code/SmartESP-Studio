@@ -228,6 +228,50 @@ describe("useBuilderYamlPreview", () => {
     expect(byKey.display.content).not.toContain("image:");
   });
 
+  it("emits a standalone font/font component as a top-level font: list with a nested file mapping", () => {
+    const harness = buildHarness({
+      config: ref({
+        esphomeCore: { name: "kitchen_sensor" },
+        substitutions: {},
+        platformCore: {},
+        networkCore: {},
+        protocolsCore: {},
+        systemCore: {},
+        automationCore: {},
+        bussesCore: {},
+        components: [
+          {
+            id: "font/font",
+            catalogKey: "font/font",
+            config: { id: "roboto", file: { type: "gfonts", family: "Roboto", weight: "regular" }, size: 20 }
+          }
+        ]
+      }),
+      componentSchemas: ref({
+        "font/font": {
+          id: "font.font",
+          domain: "font",
+          fields: [
+            textField("id"),
+            {
+              key: "file",
+              type: "object",
+              fields: [textField("type"), textField("family"), textField("weight")]
+            },
+            { key: "size", type: "number" }
+          ]
+        }
+      }),
+      componentSchemaStatus: ref({ "font/font": "ready" })
+    });
+    const assets = harness.previewTabs.value.find((tab) => tab.key === "assets");
+    expect(assets).toBeTruthy();
+    expect(assets.content).toContain("font:");
+    expect(assets.content).toMatch(/-\s+id:\s+"?roboto"?/);
+    expect(assets.content).toMatch(/file:\s*\n\s+type:\s+"?gfonts"?\s*\n\s+family:\s+"?Roboto"?/);
+    expect(assets.content).toContain("size: 20");
+  });
+
   it("keeps a section's leading comment in that section's tab, not the previous one", () => {
     const harness = buildHarness({
       config: ref({
