@@ -35,7 +35,8 @@
     "subtitle": "Farbe für das Display-Element auswählen.",
     "hexLabel": "Hex-Farbe",
     "pickSwatch": "{color} wählen",
-    "apply": "Übernehmen"
+    "apply": "Übernehmen",
+    "clear": "Transparent / keine"
   },
   "formErrors": {
     "message": "Bitte die folgenden Fehler beheben, bevor die Installation fortgesetzt wird.",
