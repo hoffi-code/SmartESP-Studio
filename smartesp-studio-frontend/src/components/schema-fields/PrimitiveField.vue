@@ -9,6 +9,7 @@
     }"
   >
     <label v-if="!field.hideLabel" :for="inputId">
+      <FieldHint v-if="fieldHint" :text="fieldHint" />
       {{ fieldLabel }}<span v-if="field.required" class="schema-required">*</span>
       <a
         v-if="field.helpUrl"
@@ -146,6 +147,7 @@
 <script setup>
 import GpioField from './GpioField.vue';
 import ColorField from './ColorField.vue';
+import FieldHint from './FieldHint.vue';
 import IconPicker from '../IconPicker.vue';
 import SchemaField from '../SchemaField.vue';
 import { ID_REF_EMPTY_OPTION } from '../../utils/schemaIdRefs';
@@ -159,6 +161,7 @@ defineProps({
   fieldFocusPath: { type: Array, default: () => [] },
   encodedFieldFocusPath: { type: String, default: '' },
   fieldLabel: { type: String, required: true },
+  fieldHint: { type: String, default: '' },
   hasInlineNote: Boolean,
   inputId: { type: String, required: true },
   fieldNotice: { type: Object, default: null },

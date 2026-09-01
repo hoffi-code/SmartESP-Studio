@@ -2,6 +2,7 @@
   <ObjectField
     v-if="isObjectField"
     :field-label="fieldLabel"
+    :field-hint="fieldHint"
     :field-path="fieldPath"
     :field-focus-path="fieldFocusPath"
     :encoded-field-focus-path="encodedFieldFocusPath"
@@ -24,6 +25,7 @@
   <FixedListField
     v-else-if="isFixedListField"
     :field-label="fieldLabel"
+    :field-hint="fieldHint"
     :field-path="fieldPath"
     :field-focus-path="fieldFocusPath"
     :fixed-list-value="fixedListValue"
@@ -47,6 +49,7 @@
     v-else-if="isGeneratedListField"
     :field="field"
     :field-label="fieldLabel"
+    :field-hint="fieldHint"
     :field-path="fieldPath"
     :field-focus-path="fieldFocusPath"
     :generated-list-value="generatedListValue"
@@ -70,6 +73,7 @@
     v-else-if="isListField"
     :field="field"
     :field-label="fieldLabel"
+    :field-hint="fieldHint"
     :field-path="fieldPath"
     :field-focus-path="fieldFocusPath"
     :value="value"
@@ -91,6 +95,7 @@
     v-else
     :field="field"
     :field-label="fieldLabel"
+    :field-hint="fieldHint"
     :field-focus-path="fieldFocusPath"
     :encoded-field-focus-path="encodedFieldFocusPath"
     :has-inline-note="hasInlineNote"
@@ -200,6 +205,10 @@ import {
 import { buildIdRefMenuOptions, buildIdRefOptions, isIdRefEmptyOption } from "../utils/schemaIdRefs";
 import { encodeFieldPath } from "../utils/yamlDocumentModel";
 import { fieldModeLevel, isModeLevelVisible } from "../utils/schemaModeLevel";
+import { fieldHintI18nKey, fieldLabelI18nKey, humanizeFieldKey } from "../utils/schemaFieldLabel";
+import { useI18n } from "vue-i18n";
+
+const { t, te } = useI18n();
 
 defineOptions({ name: "SchemaField" });
 
@@ -396,7 +405,22 @@ const fixedListChildField = (index) => ({
   helpUrl: props.field?.item?.helpUrl || props.field?.helpUrl
 });
 
-const fieldLabel = computed(() => props.field.label || props.field.key);
+const fieldLabel = computed(() => {
+  if (props.field.label) return props.field.label;
+  const key = props.field.key;
+  if (!key) return "";
+  return t(fieldLabelI18nKey(key), humanizeFieldKey(key));
+});
+
+// Schema-authored `field.hint` wins; otherwise use a catalog entry if one exists
+// (a missing key must render nothing, not the raw key string).
+const fieldHint = computed(() => {
+  if (props.field.hint) return props.field.hint;
+  const key = props.field.key;
+  if (!key) return "";
+  const hintKey = fieldHintI18nKey(key);
+  return te(hintKey) ? t(hintKey) : "";
+});
 
 const filterVisibleFields = (fields = [], contextValue = null) =>
   fields.filter((field) => {

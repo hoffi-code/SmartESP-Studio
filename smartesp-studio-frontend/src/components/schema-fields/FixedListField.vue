@@ -6,6 +6,7 @@
   >
     <div class="schema-list-header">
       <div class="schema-list-title">
+        <FieldHint v-if="fieldHint" :text="fieldHint" />
         <span>{{ fieldLabel }}</span>
       </div>
     </div>
@@ -37,6 +38,7 @@
 
 <script setup>
 import SchemaField from '../SchemaField.vue';
+import FieldHint from './FieldHint.vue';
 import { computed } from 'vue';
 import { encodeFieldPath } from '../../utils/yamlDocumentModel';
 
@@ -46,6 +48,7 @@ import { encodeFieldPath } from '../../utils/yamlDocumentModel';
 
 const props = defineProps({
   fieldLabel: { type: String, required: true },
+  fieldHint: { type: String, default: '' },
   fieldPath: { type: Array, default: () => [] },
   fieldFocusPath: { type: Array, default: () => [] },
   fixedListValue: { type: Array, default: () => [] },
