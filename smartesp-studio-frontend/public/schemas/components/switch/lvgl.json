@@ -7,11 +7,13 @@
   "fields": [
     {
       "key": "widget",
-      "type": "text",
+      "type": "id_ref",
       "required": true,
       "lvl": "simple",
       "placeholder": "checkbox_id",
-      "note": "Supported LVGL widgets: checkable button, switch, checkbox."
+      "note": "Supported LVGL widgets: checkable button, switch, checkbox.",
+      "domain": "lvgl",
+      "allowFreeText": true
     }
   ]
 }

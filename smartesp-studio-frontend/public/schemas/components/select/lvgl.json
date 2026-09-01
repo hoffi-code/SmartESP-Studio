@@ -14,11 +14,13 @@
     },
     {
       "key": "widget",
-      "type": "text",
+      "type": "id_ref",
       "required": true,
       "lvl": "simple",
       "placeholder": "dropdown_id",
-      "note": "Supported LVGL widgets: dropdown, roller."
+      "note": "Supported LVGL widgets: dropdown, roller.",
+      "domain": "lvgl",
+      "allowFreeText": true
     },
     {
       "key": "restore_value",

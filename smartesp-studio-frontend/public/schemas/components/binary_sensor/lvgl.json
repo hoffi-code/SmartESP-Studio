@@ -7,10 +7,12 @@
   "fields": [
     {
       "key": "widget",
-      "type": "text",
+      "type": "id_ref",
       "required": true,
       "lvl": "simple",
-      "placeholder": "btn_id"
+      "placeholder": "btn_id",
+      "domain": "lvgl",
+      "allowFreeText": true
     }
   ]
 }

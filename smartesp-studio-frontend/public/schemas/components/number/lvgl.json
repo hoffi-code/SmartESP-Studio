@@ -7,11 +7,13 @@
   "fields": [
     {
       "key": "widget",
-      "type": "text",
+      "type": "id_ref",
       "required": true,
       "lvl": "simple",
       "placeholder": "slider_id",
-      "note": "Supported LVGL widgets: arc, bar, slider, spinbox."
+      "note": "Supported LVGL widgets: arc, bar, slider, spinbox.",
+      "domain": "lvgl",
+      "allowFreeText": true
     },
     {
       "key": "animated",
