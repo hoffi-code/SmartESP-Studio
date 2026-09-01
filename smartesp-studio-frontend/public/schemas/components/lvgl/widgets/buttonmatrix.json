@@ -20,6 +20,20 @@
       "required": false,
       "lvl": "normal",
       "default": false
+    },
+    {
+      "key": "pad_row",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "0"
+    },
+    {
+      "key": "pad_column",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "0"
     }
   ]
 }

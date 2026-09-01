@@ -27,6 +27,41 @@
       "lvl": "normal",
       "placeholder": "0xRRGGBB",
       "colorFormat": "hex0x"
+    },
+    {
+      "key": "long_mode",
+      "type": "select",
+      "required": false,
+      "lvl": "normal",
+      "options": [
+        "WRAP",
+        "DOT",
+        "SCROLL",
+        "SCROLL_CIRCULAR",
+        "CLIP"
+      ]
+    },
+    {
+      "key": "on_update",
+      "type": "list",
+      "required": false,
+      "lvl": "advanced",
+      "item": {
+        "type": "object",
+        "fields": [],
+        "extends": "base_actions.json"
+      }
+    },
+    {
+      "key": "on_value",
+      "type": "list",
+      "required": false,
+      "lvl": "advanced",
+      "item": {
+        "type": "object",
+        "fields": [],
+        "extends": "base_actions.json"
+      }
     }
   ]
 }
