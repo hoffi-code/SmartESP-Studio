@@ -10,6 +10,10 @@ markiert.
 
 ### Added
 
+- **LVGL Gruppen-Feinschliff** (P7) – Widgets in einem Tab/Tile lassen sich
+  jetzt umsortieren (↑/↓/⇥/⇤ greifen in Gruppen) und per „Move to…"-Auswahl in
+  einen anderen Tab/Tile oder zurück auf die Page verschieben. Bei ausgewähltem
+  Tile-Group: `row`/`column`/`dir` direkt editierbar.
 - **LVGL Tab-/Tile-Verwaltung** (P6) – Tab-/Tile-Gruppen sind im Widget-Baum
   auswählbar. Bei ausgewählter Gruppe: Widget hinzufügen (landet in der Gruppe),
   Tab umbenennen, Gruppe entfernen. „+ tab"/„+ tile" legt eine neue Gruppe an.

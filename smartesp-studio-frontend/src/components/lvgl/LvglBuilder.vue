@@ -100,6 +100,28 @@
             placeholder="Tab name"
             @input="renameSelectedGroup($event.target.value)"
           />
+          <template v-if="selectedGroup.key === 'tiles'">
+            <input
+              class="lvgl-tile-meta"
+              type="number"
+              :value="selectedGroupEntry?.row ?? 0"
+              title="row"
+              @input="patchSelectedGroup({ row: Number($event.target.value) })"
+            />
+            <input
+              class="lvgl-tile-meta"
+              type="number"
+              :value="selectedGroupEntry?.column ?? 0"
+              title="column"
+              @input="patchSelectedGroup({ column: Number($event.target.value) })"
+            />
+            <input
+              class="lvgl-tab-name"
+              :value="Array.isArray(selectedGroupEntry?.dir) ? selectedGroupEntry.dir.join(', ') : selectedGroupEntry?.dir || ''"
+              placeholder="dir (LEFT, RIGHT, …)"
+              @input="patchSelectedGroup({ dir: $event.target.value.split(',').map((s) => s.trim()).filter(Boolean) })"
+            />
+          </template>
           <button type="button" class="secondary compact" title="Add selected type into this tab/tile" @click="addWidget(widgetTypeToAdd)">+ widget</button>
           <button type="button" class="secondary compact" @click="removeSelectedWidget">Remove</button>
         </div>
@@ -109,6 +131,18 @@
           <button type="button" class="secondary compact" :disabled="!canIndent" title="Nest under previous sibling" @click="indentSelected">⇥</button>
           <button type="button" class="secondary compact" :disabled="!canOutdent" title="Move out of parent" @click="outdentSelected">⇤</button>
           <button type="button" class="secondary compact" title="Add selected type as a child" @click="addChildWidget(widgetTypeToAdd)">+ child</button>
+          <select
+            v-if="selectedWidgetOwnerGroups"
+            class="lvgl-move-group"
+            title="Move to another tab/tile"
+            @change="moveSelectedToGroup($event.target.value); $event.target.selectedIndex = 0"
+          >
+            <option value="">Move to…</option>
+            <option v-for="g in selectedWidgetOwnerGroups.groups" :key="g.uiId" :value="g.uiId">
+              {{ selectedWidgetOwnerGroups.key === "tabs" ? "Tab" : "Tile" }} {{ g.name || g.id || "" }}
+            </option>
+            <option value="__root">Page root</option>
+          </select>
           <button type="button" class="secondary compact" @click="removeSelectedWidget">Remove</button>
         </div>
       </section>
@@ -488,11 +522,35 @@ const handleAddGroup = (ownerUiId) => {
   });
 };
 
-const renameSelectedGroup = (name) => {
+const patchSelectedGroup = (patch) => {
   const ctx = selectedGroup.value;
   if (!ctx) return;
   const groupUiId = selectedWidgetId.value;
-  mapOwnerGroups(ctx.owner.uiId, (list) => list.map((g) => (g.uiId === groupUiId ? { ...g, name } : g)));
+  mapOwnerGroups(ctx.owner.uiId, (list) => list.map((g) => (g.uiId === groupUiId ? { ...g, ...patch } : g)));
+};
+const renameSelectedGroup = (name) => patchSelectedGroup({ name });
+
+// When the selected widget lives inside a tab/tile group: the owner + its groups,
+// so it can be moved to a sibling group or back to the page.
+const selectedWidgetOwnerGroups = computed(() => {
+  const owner = selectedContext.value?.parent;
+  const key = owner?.tabs ? "tabs" : owner?.tiles ? "tiles" : null;
+  return key ? { ownerUiId: owner.uiId, key, groups: owner[key] } : null;
+});
+
+const moveSelectedToGroup = (targetUiId) => {
+  const info = selectedWidgetOwnerGroups.value;
+  const widget = selectedWidget.value;
+  if (!targetUiId || !info || !widget) return;
+  const wUiId = selectedWidgetId.value;
+  mutateActivePageWidgets((widgets) => {
+    const without = removeWidgetById(widgets, wUiId);
+    if (targetUiId === "__root") return [...without, widget];
+    const owner = findWidgetById(without, info.ownerUiId);
+    return owner
+      ? replaceWidgetById(without, info.ownerUiId, mapGroupWidgets(owner, targetUiId, (list) => [...list, widget]))
+      : widgets;
+  });
 };
 
 // The config-frame panel is always mounted, so lazily seed an empty lvgl config
@@ -604,7 +662,8 @@ const addChildById = (nodes, parentUiId, child) =>
       : { ...node, children: addChildById(node.children, parentUiId, child) }
   );
 
-// Swap uiId with its sibling `delta` positions away, at whatever depth it sits.
+// Swap uiId with its sibling `delta` positions away, at whatever depth it sits
+// (own children or a tab/tile group's widgets).
 const reorderSibling = (nodes, uiId, delta) => {
   const list = nodes || [];
   const idx = list.findIndex((node) => node.uiId === uiId);
@@ -615,7 +674,7 @@ const reorderSibling = (nodes, uiId, delta) => {
     [next[idx], next[target]] = [next[target], next[idx]];
     return next;
   }
-  return list.map((node) => ({ ...node, children: reorderSibling(node.children, uiId, delta) }));
+  return list.map((node) => withMappedChildLists(node, (sub) => reorderSibling(sub, uiId, delta)));
 };
 
 // Move uiId to be the last child of its immediately-preceding sibling.
@@ -630,7 +689,7 @@ const indentNode = (nodes, uiId) => {
     return next;
   }
   if (idx === 0) return list;
-  return list.map((node) => ({ ...node, children: indentNode(node.children, uiId) }));
+  return list.map((node) => withMappedChildLists(node, (sub) => indentNode(sub, uiId)));
 };
 
 // Move uiId out of its parent, to sit right after the parent among its siblings.
@@ -638,15 +697,16 @@ const outdentNode = (nodes, uiId) => {
   const list = nodes || [];
   const next = [];
   for (const node of list) {
-    const childIdx = (node.children || []).findIndex((child) => child.uiId === uiId);
-    if (childIdx !== -1) {
-      const children = node.children.slice();
-      const [moved] = children.splice(childIdx, 1);
-      next.push({ ...node, children });
-      next.push(moved);
-    } else {
-      next.push({ ...node, children: outdentNode(node.children, uiId) });
-    }
+    let moved = null;
+    const stripped = withMappedChildLists(node, (sub) => {
+      const i = sub.findIndex((c) => c.uiId === uiId);
+      if (i === -1) return outdentNode(sub, uiId);
+      const copy = sub.slice();
+      [moved] = copy.splice(i, 1);
+      return copy;
+    });
+    next.push(stripped);
+    if (moved) next.push(moved);
   }
   return next;
 };
@@ -660,14 +720,17 @@ const mutateActivePageWidgets = (fn) => {
   emit("update", { ...current, pages: nextPages });
 };
 
-// Sibling list + position of the selected widget within the active page tree.
+// Sibling list + position of the selected widget within the active page tree
+// (own children or a tab/tile group's widgets).
 const findSiblingContext = (nodes, uiId, parent = null) => {
   const list = nodes || [];
   const idx = list.findIndex((node) => node.uiId === uiId);
   if (idx !== -1) return { siblings: list, index: idx, parent };
   for (const node of list) {
-    const found = findSiblingContext(node.children, uiId, node);
-    if (found) return found;
+    for (const sub of childListsOf(node)) {
+      const found = findSiblingContext(sub, uiId, node);
+      if (found) return found;
+    }
   }
   return null;
 };
@@ -963,6 +1026,19 @@ const handleCanvasResize = ({ dim, value }) => {
   padding: 3px 6px;
   border: 1px solid var(--border);
   border-radius: 6px;
+}
+
+.lvgl-tile-meta {
+  width: 48px;
+  font-size: 12px;
+  padding: 3px 4px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.lvgl-move-group {
+  font-size: 12px;
+  padding: 2px 4px;
 }
 
 @media (max-width: 900px) {
