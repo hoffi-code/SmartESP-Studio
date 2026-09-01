@@ -1,0 +1,26 @@
+# Lokales Setup für Docker Desktop (Windows) -- kein host-networking, keine Serial-Devices.
+# Nutzt :edge (Stand von main), damit jeder Merge automatisch im lokalen Container landet.
+# Start: docker compose -f compose.local.yaml up -d
+services:
+  smartesp-studio:
+    image: ghcr.io/hoffi-code/smartesp-studio:edge
+    container_name: smartesp-studio
+    restart: unless-stopped
+
+    ports:
+      - "${SES_PORT:-8099}:${SES_PORT:-8099}"
+
+    environment:
+      TZ: ${TZ:-Europe/Warsaw}
+      SES_MODE: standalone
+      SES_PORT: ${SES_PORT:-8099}
+      SES_USE_ESPHOME_SHARED_PATH: ${SES_USE_ESPHOME_SHARED_PATH:-false}
+      SES_STATUS_USE_PING: "true"
+      SES_AUTH_MODE: ${SES_AUTH_MODE:-basic}
+      SES_AUTH_USERNAME: ${SES_AUTH_USERNAME:-admin}
+      SES_AUTH_PASSWORD: ${SES_AUTH_PASSWORD:-change-me}
+
+    volumes:
+      - ./config:/config
+      - ./data:/data
+      - ./build:/build
