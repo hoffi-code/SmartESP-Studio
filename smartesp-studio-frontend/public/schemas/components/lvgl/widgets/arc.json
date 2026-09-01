@@ -75,6 +75,24 @@
         "fields": [],
         "extends": "base_actions.json"
       }
+    },
+    {
+      "key": "change_rate",
+      "type": "text",
+      "required": false,
+      "lvl": "normal",
+      "placeholder": "720"
+    },
+    {
+      "key": "on_update",
+      "type": "list",
+      "required": false,
+      "lvl": "advanced",
+      "item": {
+        "type": "object",
+        "fields": [],
+        "extends": "base_actions.json"
+      }
     }
   ]
 }

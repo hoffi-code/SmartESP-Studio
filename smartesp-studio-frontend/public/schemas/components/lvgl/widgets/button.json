@@ -26,6 +26,28 @@
       "lvl": "normal",
       "placeholder": "0xRRGGBB",
       "colorFormat": "hex0x"
+    },
+    {
+      "key": "on_value",
+      "type": "list",
+      "required": false,
+      "lvl": "advanced",
+      "item": {
+        "type": "object",
+        "fields": [],
+        "extends": "base_actions.json"
+      }
+    },
+    {
+      "key": "on_update",
+      "type": "list",
+      "required": false,
+      "lvl": "advanced",
+      "item": {
+        "type": "object",
+        "fields": [],
+        "extends": "base_actions.json"
+      }
     }
   ]
 }

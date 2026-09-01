@@ -10,6 +10,13 @@ markiert.
 
 ### Added
 
+- **LVGL Widget-Felder vervollständigt** (P1) – die kuratierten Widget-Schemas
+  decken jetzt alle flachen `config_vars` aus dem ESPHome-2026.8.2-Schema ab:
+  `image` Transform (`angle`, `zoom`, `pivot_x/y`, `offset_x/y`, `antialias`),
+  `label.long_mode`, `bar.start_value`, `arc.change_rate`, `checkbox.pad_column`,
+  `roller`/`dropdown.selected_text`, `spinbox.rollover`/`selected_digit`,
+  `buttonmatrix.pad_row/pad_column`, `on_update`-Trigger. Neuer
+  `lvglWidgetFields.spec.js` hält das gegen den Schema-Dump fest.
 - **LVGL Canvas rendert realistischer** – jeder Widget-Typ bekommt ein eigenes
   Aussehen statt eines generischen Kästchens: Button (gefüllt, Theme-Primärfarbe),
   Switch (Pill + gleitender Knopf, an/aus), Slider/Bar (Track + Indicator + Knopf),

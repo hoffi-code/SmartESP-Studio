@@ -50,6 +50,23 @@
         "fields": [],
         "extends": "base_actions.json"
       }
+    },
+    {
+      "key": "selected_text",
+      "type": "text",
+      "required": false,
+      "lvl": "normal"
+    },
+    {
+      "key": "on_update",
+      "type": "list",
+      "required": false,
+      "lvl": "advanced",
+      "item": {
+        "type": "object",
+        "fields": [],
+        "extends": "base_actions.json"
+      }
     }
   ]
 }

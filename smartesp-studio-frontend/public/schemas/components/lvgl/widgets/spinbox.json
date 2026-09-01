@@ -57,6 +57,31 @@
         "fields": [],
         "extends": "base_actions.json"
       }
+    },
+    {
+      "key": "rollover",
+      "type": "boolean",
+      "required": false,
+      "lvl": "normal",
+      "default": false
+    },
+    {
+      "key": "on_update",
+      "type": "list",
+      "required": false,
+      "lvl": "advanced",
+      "item": {
+        "type": "object",
+        "fields": [],
+        "extends": "base_actions.json"
+      }
+    },
+    {
+      "key": "selected_digit",
+      "type": "text",
+      "required": false,
+      "lvl": "advanced",
+      "placeholder": "0"
     }
   ]
 }
