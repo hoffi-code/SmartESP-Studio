@@ -92,7 +92,7 @@ const hasAlignTo = (node) => Boolean(node?.props?.align_to || node?.extra?.align
 
 let counter = 0;
 
-const layoutNode = (node, parentBox, depth, flexParent, out) => {
+const layoutNode = (node, parentBox, depth, flexParent, out, activeGroupOf) => {
   const common = node.common || {};
   const intrinsic = intrinsicSize(node);
   const w = Math.max(1, resolveDim(common.width, parentBox.w, intrinsic.w));
@@ -130,24 +130,27 @@ const layoutNode = (node, parentBox, depth, flexParent, out) => {
   };
   out.push(entry);
 
-  // Regular nesting plus the active tab/tile of a tabview/tileview (preview shows
-  // the first group; the canvas can switch which one via node._activeGroup).
-  const groupWidgets = (node.tabs || node.tiles || [])[node._activeGroup || 0]?.widgets || [];
+  // Regular nesting plus the active tab/tile of a tabview/tileview. Which group is
+  // active comes from the caller (canvas UI state); default to the first.
+  const groups = node.tabs || node.tiles || [];
+  const activeIndex = groups.length ? Math.min(groups.length - 1, Math.max(0, activeGroupOf?.(node) ?? 0)) : 0;
+  const groupWidgets = groups[activeIndex]?.widgets || [];
   const children = [...(node.children || []), ...groupWidgets];
   if (children.length) {
     const childBox = { x, y, w, h, _flexCursor: y + 4 };
     const childFlex = isLayoutContainer(node);
-    children.forEach((child) => layoutNode(child, childBox, depth + 1, childFlex, out));
+    children.forEach((child) => layoutNode(child, childBox, depth + 1, childFlex, out, activeGroupOf));
   }
   return entry;
 };
 
 // Returns a flat, paint-ordered list of { key, uiId, type, node, depth, box, positionable, layoutManaged }.
-export const resolveLvglPageLayout = (page, canvasWidth, canvasHeight) => {
+// `activeGroupOf(node)` optionally supplies the active tab/tile index for a tabview/tileview.
+export const resolveLvglPageLayout = (page, canvasWidth, canvasHeight, activeGroupOf = null) => {
   counter = 0;
   const out = [];
   const root = { x: 0, y: 0, w: canvasWidth, h: canvasHeight, _flexCursor: 4 };
-  (page?.widgets || []).forEach((widget) => layoutNode(widget, root, 0, false, out));
+  (page?.widgets || []).forEach((widget) => layoutNode(widget, root, 0, false, out, activeGroupOf));
   return out;
 };
 

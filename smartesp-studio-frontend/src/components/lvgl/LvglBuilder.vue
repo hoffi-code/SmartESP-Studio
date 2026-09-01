@@ -88,10 +88,22 @@
             :node="widget"
             :selected-id="selectedWidgetId"
             @select="selectedWidgetId = $event"
+            @add-group="handleAddGroup"
           />
           <div v-if="!activePageWidgets.length" class="note">No widgets on this page yet.</div>
         </div>
-        <div v-if="selectedWidget" class="lvgl-tree-actions">
+        <div v-if="selectedGroup" class="lvgl-tree-actions">
+          <input
+            v-if="selectedGroup.key === 'tabs'"
+            class="lvgl-tab-name"
+            :value="selectedGroupEntry?.name || ''"
+            placeholder="Tab name"
+            @input="renameSelectedGroup($event.target.value)"
+          />
+          <button type="button" class="secondary compact" title="Add selected type into this tab/tile" @click="addWidget(widgetTypeToAdd)">+ widget</button>
+          <button type="button" class="secondary compact" @click="removeSelectedWidget">Remove</button>
+        </div>
+        <div v-else-if="selectedWidget" class="lvgl-tree-actions">
           <button type="button" class="secondary compact" :disabled="!canMoveUp" title="Move up" @click="moveSelected(-1)">↑</button>
           <button type="button" class="secondary compact" :disabled="!canMoveDown" title="Move down" @click="moveSelected(1)">↓</button>
           <button type="button" class="secondary compact" :disabled="!canIndent" title="Nest under previous sibling" @click="indentSelected">⇥</button>
@@ -410,6 +422,79 @@ const withMappedChildLists = (node, mapList) => {
 
 const selectedWidget = computed(() => findWidgetById(activePageWidgets.value, selectedWidgetId.value));
 
+// Selecting a tab/tile group row: { owner, key, index } locating the group.
+const findGroup = (nodes, uiId) => {
+  for (const node of nodes || []) {
+    const key = node.tabs ? "tabs" : node.tiles ? "tiles" : null;
+    if (key) {
+      const index = node[key].findIndex((g) => g.uiId === uiId);
+      if (index !== -1) return { owner: node, key, index };
+    }
+    for (const list of childListsOf(node)) {
+      const found = findGroup(list, uiId);
+      if (found) return found;
+    }
+  }
+  return null;
+};
+const selectedGroup = computed(() =>
+  selectedWidgetId.value ? findGroup(activePageWidgets.value, selectedWidgetId.value) : null
+);
+
+// Return a shallow clone of `node` with one group's widgets transformed.
+const mapGroupWidgets = (node, groupUiId, fn) => {
+  const key = node.tabs ? "tabs" : node.tiles ? "tiles" : null;
+  if (!key) return node;
+  return { ...node, [key]: node[key].map((g) => (g.uiId === groupUiId ? { ...g, widgets: fn(g.widgets || []) } : g)) };
+};
+
+// Append a freshly built widget into the selected group's `widgets`.
+const addGroupWidget = (type) => {
+  const ctx = selectedGroup.value;
+  if (!ctx || !type) return;
+  const child = { uiId: nextUiId(), type, common: {}, props: lvglWidgetDefaults(type), children: [] };
+  const ownerUiId = ctx.owner.uiId;
+  const groupUiId = selectedWidgetId.value;
+  mutateActivePageWidgets((widgets) => {
+    const owner = findWidgetById(widgets, ownerUiId);
+    return owner
+      ? replaceWidgetById(widgets, ownerUiId, mapGroupWidgets(owner, groupUiId, (list) => [...list, child]))
+      : widgets;
+  });
+  selectedWidgetId.value = child.uiId;
+};
+
+const selectedGroupEntry = computed(() => {
+  const ctx = selectedGroup.value;
+  return ctx ? ctx.owner[ctx.key][ctx.index] : null;
+});
+
+const mapOwnerGroups = (ownerUiId, fn) => {
+  mutateActivePageWidgets((widgets) => {
+    const owner = findWidgetById(widgets, ownerUiId);
+    if (!owner) return widgets;
+    const key = owner.tabs ? "tabs" : "tiles";
+    return replaceWidgetById(widgets, ownerUiId, { ...owner, [key]: fn(owner[key] || [], key) });
+  });
+};
+
+const handleAddGroup = (ownerUiId) => {
+  mapOwnerGroups(ownerUiId, (list, key) => {
+    const entry =
+      key === "tabs"
+        ? { uiId: nextUiId(), name: `Tab ${list.length + 1}`, widgets: [] }
+        : { uiId: nextUiId(), row: list.length, column: 0, widgets: [] };
+    return [...list, entry];
+  });
+};
+
+const renameSelectedGroup = (name) => {
+  const ctx = selectedGroup.value;
+  if (!ctx) return;
+  const groupUiId = selectedWidgetId.value;
+  mapOwnerGroups(ctx.owner.uiId, (list) => list.map((g) => (g.uiId === groupUiId ? { ...g, name } : g)));
+};
+
 // The config-frame panel is always mounted, so lazily seed an empty lvgl config
 // on first render instead of on a modal open.
 onMounted(async () => {
@@ -461,6 +546,11 @@ const removeActivePage = () => {
 const addWidget = (type) => {
   const current = props.lvglConfig;
   if (!current || activePageIndex.value < 0 || !type) return;
+  // With a tab/tile group selected, the new widget goes into that group.
+  if (selectedGroup.value) {
+    addGroupWidget(type);
+    return;
+  }
   const newWidget = { uiId: nextUiId(), type, common: {}, props: lvglWidgetDefaults(type), children: [] };
   const nextPages = current.pages.map((page, index) =>
     index === activePageIndex.value ? { ...page, widgets: [...(page.widgets || []), newWidget] } : page
@@ -476,6 +566,21 @@ const removeWidgetById = (nodes, uiId) =>
 const removeSelectedWidget = () => {
   const current = props.lvglConfig;
   if (!current || !selectedWidgetId.value) return;
+  const ctx = selectedGroup.value;
+  if (ctx) {
+    const ownerUiId = ctx.owner.uiId;
+    mutateActivePageWidgets((widgets) => {
+      const owner = findWidgetById(widgets, ownerUiId);
+      if (!owner) return widgets;
+      const key = owner.tabs ? "tabs" : "tiles";
+      return replaceWidgetById(widgets, ownerUiId, {
+        ...owner,
+        [key]: owner[key].filter((g) => g.uiId !== selectedWidgetId.value)
+      });
+    });
+    selectedWidgetId.value = "";
+    return;
+  }
   const nextPages = current.pages.map((page, index) =>
     index === activePageIndex.value ? { ...page, widgets: removeWidgetById(page.widgets, selectedWidgetId.value) } : page
   );
@@ -847,7 +952,17 @@ const handleCanvasResize = ({ dim, value }) => {
 .lvgl-tree-actions {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 4px;
+}
+
+.lvgl-tab-name {
+  flex: 1 1 90px;
+  min-width: 0;
+  font-size: 12px;
+  padding: 3px 6px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
 }
 
 @media (max-width: 900px) {

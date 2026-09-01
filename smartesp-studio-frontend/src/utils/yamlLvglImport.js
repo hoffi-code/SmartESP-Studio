@@ -107,7 +107,9 @@ const parseWidgetGroups = async (type, value, schemaContext) => {
       const widgets = (
         await Promise.all(widgetsRaw.map((w) => parseWidgetNode(w, schemaContext)))
       ).filter(Boolean);
-      return { ...meta, widgets };
+      // uiId is a builder-only handle so the tree can select the group; it is
+      // stripped again on export (see serializeWidgetGroups).
+      return { uiId: nextUiId(), ...meta, widgets };
     })
   );
   return { key, entries };

@@ -168,7 +168,12 @@
           <!-- tabview / tileview -->
           <span v-else-if="entry.render.kind === 'tabview'" class="lvgl-canvas__tabview">
             <span class="lvgl-canvas__tabbar">
-              <i v-for="(name, ti) in entry.render.tabs" :key="ti" :class="{ 'is-active': ti === 0 }">{{ name }}</i>
+              <i
+                v-for="(name, ti) in entry.render.tabs"
+                :key="ti"
+                :class="{ 'is-active': ti === (activeGroup[entry.uiId] ?? 0) }"
+                @pointerdown.stop="setActiveGroup(entry.uiId, ti)"
+              >{{ name }}</i>
             </span>
           </span>
 
@@ -235,7 +240,16 @@ const THEME = {
   led: "#ff0000"
 };
 
-const layout = computed(() => resolveLvglPageLayout(props.page, props.canvasWidth, props.canvasHeight));
+// Which tab/tile is shown per tabview/tileview node (uiId -> index). Local UI
+// state only -- never written back to the config.
+const activeGroup = ref({});
+const setActiveGroup = (uiId, index) => {
+  activeGroup.value = { ...activeGroup.value, [uiId]: index };
+};
+
+const layout = computed(() =>
+  resolveLvglPageLayout(props.page, props.canvasWidth, props.canvasHeight, (node) => activeGroup.value[node.uiId] ?? 0)
+);
 
 const emitSize = (dim, event) => {
   const value = Math.max(16, Math.min(2000, Number(event.target.value) || 0));

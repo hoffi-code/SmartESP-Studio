@@ -10,6 +10,11 @@ markiert.
 
 ### Added
 
+- **LVGL Tab-/Tile-Verwaltung** (P6) – Tab-/Tile-Gruppen sind im Widget-Baum
+  auswählbar. Bei ausgewählter Gruppe: Widget hinzufügen (landet in der Gruppe),
+  Tab umbenennen, Gruppe entfernen. „+ tab"/„+ tile" legt eine neue Gruppe an.
+  Die Canvas-Tab-Leiste ist klickbar und schaltet um, welcher Tab gerendert wird
+  (nur Vorschau-Zustand, nicht in der Config).
 - **LVGL `tabview.tabs` / `tileview.tiles` mit Kind-Widgets** (P4) – die in
   Tabs/Tiles verschachtelten Widgets sind jetzt strukturiert (`node.tabs` /
   `node.tiles` je `{ …meta, widgets }`) statt als opaker `extra`-Block. Import und

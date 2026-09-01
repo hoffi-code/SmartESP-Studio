@@ -290,6 +290,70 @@ describe("LvglBuilder", () => {
     expect(advanced.find(".lvgl-config-panel--inspector textarea.lvgl-yaml-editor").exists()).toBe(true);
   });
 
+  const tabviewConfig = () => ({
+    displays: [],
+    touchscreens: [],
+    bufferSize: "",
+    bgColor: "",
+    options: {},
+    pages: [
+      {
+        id: "main_page",
+        widgets: [
+          {
+            uiId: "tv",
+            type: "tabview",
+            common: {},
+            props: {},
+            children: [],
+            tabs: [{ uiId: "g1", name: "One", widgets: [] }]
+          }
+        ]
+      }
+    ]
+  });
+
+  it("selects a tab group and adds a widget into it", async () => {
+    const wrapper = mount(LvglBuilder, { props: { lvglConfig: tabviewConfig(), widgetSchemas } });
+    // the tab-group row is a button reading "tab · One"
+    const groupRow = wrapper.findAll("button").find((b) => b.text().includes("One"));
+    await groupRow.trigger("click");
+
+    await wrapper.get("select.lvgl-widget-type-select").setValue("label");
+    await clickByText(wrapper, "+ widget");
+
+    const patch = wrapper.emitted("update").at(-1)[0];
+    expect(patch.pages[0].widgets[0].tabs[0].widgets).toHaveLength(1);
+    expect(patch.pages[0].widgets[0].tabs[0].widgets[0]).toMatchObject({ type: "label" });
+  });
+
+  it("adds and renames a tab", async () => {
+    const wrapper = mount(LvglBuilder, { props: { lvglConfig: tabviewConfig(), widgetSchemas } });
+    await clickByText(wrapper, "+ tab");
+    let patch = wrapper.emitted("update").at(-1)[0];
+    expect(patch.pages[0].widgets[0].tabs).toHaveLength(2);
+    expect(patch.pages[0].widgets[0].tabs[1].name).toBe("Tab 2");
+
+    await wrapper.setProps({ lvglConfig: patch });
+    const groupRow = wrapper.findAll("button").find((b) => b.text().includes("One"));
+    await groupRow.trigger("click");
+    await wrapper.get("input.lvgl-tab-name").setValue("Renamed");
+    patch = wrapper.emitted("update").at(-1)[0];
+    expect(patch.pages[0].widgets[0].tabs[0].name).toBe("Renamed");
+  });
+
+  it("removes the selected tab", async () => {
+    const cfg = tabviewConfig();
+    cfg.pages[0].widgets[0].tabs.push({ uiId: "g2", name: "Two", widgets: [] });
+    const wrapper = mount(LvglBuilder, { props: { lvglConfig: cfg, widgetSchemas } });
+    const groupRow = wrapper.findAll("button").find((b) => b.text().includes("Two"));
+    await groupRow.trigger("click");
+    await clickByText(wrapper, "Remove");
+
+    const patch = wrapper.emitted("update").at(-1)[0];
+    expect(patch.pages[0].widgets[0].tabs.map((t) => t.name)).toEqual(["One"]);
+  });
+
   it("edits an unsupported widget's raw YAML", async () => {
     const lvglConfig = {
       displays: [],

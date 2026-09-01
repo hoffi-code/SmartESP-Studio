@@ -158,6 +158,35 @@ describe("LvglCanvas", () => {
     expect(w.findAll(".lvgl-w--field .lvgl-canvas__field-text")[1].text()).toBe("12.34");
   });
 
+  it("switches which tab's widgets are laid out when a tab is clicked", async () => {
+    const p = {
+      id: "p",
+      widgets: [
+        {
+          uiId: "tv",
+          type: "tabview",
+          common: { x: 0, y: 0, width: 200, height: 200 },
+          props: {},
+          children: [],
+          tabs: [
+            { uiId: "g1", name: "One", widgets: [{ uiId: "w-a", type: "label", common: {}, props: { text: "A" }, children: [] }] },
+            { uiId: "g2", name: "Two", widgets: [{ uiId: "w-b", type: "label", common: {}, props: { text: "B" }, children: [] }] }
+          ]
+        }
+      ]
+    };
+    const w = mount(LvglCanvas, { props: { page: p, canvasWidth: 240, canvasHeight: 320 } });
+
+    // tab 0 active by default
+    expect(w.findAll(".lvgl-canvas__widget").some((el) => el.attributes("title") === "label")).toBe(true);
+    const tabs = w.findAll(".lvgl-canvas__tabbar i");
+    expect(tabs.map((t) => t.text())).toEqual(["One", "Two"]);
+    expect(tabs[0].classes()).toContain("is-active");
+
+    await tabs[1].trigger("pointerdown");
+    expect(w.findAll(".lvgl-canvas__tabbar i")[1].classes()).toContain("is-active");
+  });
+
   it("uses an explicit bg_color over the kind default", () => {
     const p = {
       id: "p",
