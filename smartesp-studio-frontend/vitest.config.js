@@ -7,6 +7,7 @@ export default defineConfig({
   plugins: [vue()],
   test: {
     environment: "node",
-    include: ["src/**/*.spec.js", "src/**/*.spec.dom.js", "src/**/*.spec.vue.js"]
+    include: ["src/**/*.spec.js", "src/**/*.spec.dom.js", "src/**/*.spec.vue.js"],
+    setupFiles: ["./vitest.setup.js"]
   }
 });

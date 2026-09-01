@@ -1,0 +1,79 @@
+{
+  "common": {
+    "saving": "Speichern …",
+    "ok": "OK",
+    "close": "Schließen",
+    "search": "Suchen",
+    "documentation": "Dokumentation"
+  },
+  "confirm": {
+    "title": "Bestätigen",
+    "message": "Bist du sicher?",
+    "yes": "Ja",
+    "cancel": "Abbrechen"
+  },
+  "unsaved": {
+    "title": "Ungespeicherte Änderungen",
+    "message": "Es gibt ungespeicherte Änderungen. Vor dem Verlassen speichern?",
+    "save": "Speichern",
+    "discard": "Verwerfen",
+    "cancel": "Abbrechen"
+  },
+  "picker": {
+    "title": "Auswählen",
+    "empty": "Keine Einträge vorhanden.",
+    "search": "Suchen"
+  },
+  "secrets": {
+    "title": "Secrets",
+    "invalidYaml": "Ungültige YAML-Syntax",
+    "placeholder": "# secrets.yaml\n# key: value",
+    "save": "Speichern"
+  },
+  "colorPicker": {
+    "title": "Farbwähler",
+    "subtitle": "Farbe für das Display-Element auswählen.",
+    "hexLabel": "Hex-Farbe",
+    "pickSwatch": "{color} wählen",
+    "apply": "Übernehmen"
+  },
+  "formErrors": {
+    "message": "Bitte die folgenden Fehler beheben, bevor die Installation fortgesetzt wird.",
+    "ariaInformation": "Information",
+    "ariaErrors": "Formularfehler"
+  },
+  "gpioGuide": {
+    "title": "GPIO-Übersicht",
+    "subtitle": "Kurzreferenz für den gewählten Mikrocontroller.",
+    "tabTable": "Tabelle",
+    "tabNotes": "Hinweise",
+    "empty": "Keine GPIO-Daten für diese Variante verfügbar.",
+    "colGpio": "GPIO",
+    "colInput": "Eingang",
+    "colOutput": "Ausgang",
+    "colNotes": "Hinweise"
+  },
+  "gpioPicker": {
+    "title": "GPIO-Auswahl",
+    "titleFallback": "GPIO auswählen",
+    "search": "GPIO oder Hinweis suchen",
+    "legendSafe": "Sicher",
+    "legendCaution": "Vorsicht",
+    "legendAvoid": "Meiden",
+    "legendUsed": "Belegt",
+    "empty": "Keine passenden GPIOs.",
+    "disabled": "Deaktiviert"
+  },
+  "iconPicker": {
+    "title": "Icon auswählen",
+    "subtitle": "Den Material-Design-Icons-Katalog durchsuchen.",
+    "search": "Icons suchen",
+    "loading": "Icons werden geladen …",
+    "results": "Treffer: {count}",
+    "typeToSearch": "Zum Suchen tippen",
+    "loadError": "Icons konnten nicht geladen werden"
+  },
+  "installConsole": {
+    "selectSerialDevice": "Serielles Gerät auswählen"
+  }
+}

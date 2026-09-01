@@ -1,0 +1,79 @@
+{
+  "common": {
+    "saving": "Saving...",
+    "ok": "OK",
+    "close": "Close",
+    "search": "Search",
+    "documentation": "Documentation"
+  },
+  "confirm": {
+    "title": "Confirm",
+    "message": "Are you sure?",
+    "yes": "Yes",
+    "cancel": "Cancel"
+  },
+  "unsaved": {
+    "title": "Unsaved changes",
+    "message": "You have unsaved changes. Save before leaving?",
+    "save": "Save",
+    "discard": "Discard",
+    "cancel": "Cancel"
+  },
+  "picker": {
+    "title": "Choose",
+    "empty": "No items to show.",
+    "search": "Search"
+  },
+  "secrets": {
+    "title": "Secrets",
+    "invalidYaml": "Invalid YAML syntax",
+    "placeholder": "# secrets.yaml\n# key: value",
+    "save": "Save"
+  },
+  "colorPicker": {
+    "title": "Color picker",
+    "subtitle": "Select a color for the display element.",
+    "hexLabel": "Hex color",
+    "pickSwatch": "Pick {color}",
+    "apply": "Apply"
+  },
+  "formErrors": {
+    "message": "Please correct the errors below before proceeding with installation.",
+    "ariaInformation": "Information",
+    "ariaErrors": "Form errors"
+  },
+  "gpioGuide": {
+    "title": "GPIO Guide",
+    "subtitle": "Quick reference for the selected microcontroller.",
+    "tabTable": "Table",
+    "tabNotes": "Notes",
+    "empty": "No GPIO data available for this variant.",
+    "colGpio": "GPIO",
+    "colInput": "Input",
+    "colOutput": "Output",
+    "colNotes": "Notes"
+  },
+  "gpioPicker": {
+    "title": "GPIO Picker",
+    "titleFallback": "Select GPIO",
+    "search": "Search GPIO or note",
+    "legendSafe": "Safe",
+    "legendCaution": "Caution",
+    "legendAvoid": "Avoid",
+    "legendUsed": "In use",
+    "empty": "No GPIO matches.",
+    "disabled": "Disabled"
+  },
+  "iconPicker": {
+    "title": "Choose icon",
+    "subtitle": "Search the Material Design Icons catalog.",
+    "search": "Search icons",
+    "loading": "Loading icons...",
+    "results": "Results: {count}",
+    "typeToSearch": "Type to search",
+    "loadError": "Failed to load icons"
+  },
+  "installConsole": {
+    "selectSerialDevice": "Select a serial device"
+  }
+}
