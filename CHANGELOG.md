@@ -102,6 +102,12 @@ markiert.
 
 ### Fixed
 
+- Tabbed YAML Preview: `image:`/`font:`/`animation:`/`graph:` erscheinen jetzt in
+  einem eigenen „Assets"-Tab statt zwangsweise unter „Display".
+- Tabbed YAML Preview: ein einleitender Kommentar über einer Sektion bleibt in
+  deren Tab, statt am Ende der vorherigen Sektion zu landen
+  (`parseYamlDocumentBlocks` hängt einen Kommentar-/Leerzeilen-Lauf jetzt an den
+  folgenden Block).
 - Kinder eines nicht unterstützten Widgets gingen beim Export verloren –
   `serializeWidgetNode` schreibt sie jetzt als `widgets:` unter den Roh-Block.
 

@@ -547,7 +547,7 @@ import { useBuilderDeployment } from "../composables/builder/useBuilderDeploymen
 import { useBuilderProjectPersistence } from "../composables/builder/useBuilderProjectPersistence";
 import { useBuilderSchemaCatalog } from "../composables/builder/useBuilderSchemaCatalog";
 import { useBuilderValidation } from "../composables/builder/useBuilderValidation";
-import { useBuilderYamlPreview } from "../composables/builder/useBuilderYamlPreview";
+import { useBuilderYamlPreview, ASSET_PREVIEW_BLOCK_KEYS } from "../composables/builder/useBuilderYamlPreview";
 import { useInstallConsoleFlow } from "../composables/useInstallConsoleFlow";
 import { loadGpioData, resolveGpioKey } from "../utils/gpioData";
 import { loadSchemaByPath } from "../utils/schemaLoader";
@@ -2258,7 +2258,9 @@ const resolvePreviewTabKeyFromMain = () => {
         : "";
     const domain = mappedDomain || fallbackDomain;
     if (!domain) return "";
-    return domain === "display" ? "display" : domain;
+    if (domain === "display") return "display";
+    if (ASSET_PREVIEW_BLOCK_KEYS.has(domain)) return "assets";
+    return domain;
   }
   return "core";
 };

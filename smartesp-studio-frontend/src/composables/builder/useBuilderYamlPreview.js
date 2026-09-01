@@ -13,7 +13,10 @@ import {
 import { createGeneratedYamlLine, createYamlDocument } from "../../utils/yamlDocumentModel";
 import { buildLvglYamlLines } from "../../utils/schemaLvglYaml";
 
-const substitutionsBlockKeys = new Set([
+// Design-asset sections that get their own "Assets" preview tab. These used to be
+// folded into the Display tab, which is wrong once the images/fonts feed LVGL rather
+// than a display.
+export const ASSET_PREVIEW_BLOCK_KEYS = new Set([
   "font",
   "image",
   "images",
@@ -126,6 +129,10 @@ const sectionOrigin = (scopeId, tabKey, path = [], options = {}) =>
 const parseYamlDocumentBlocks = (documentLines = []) => {
   const blocks = [];
   let current = null;
+  // Blank/comment run seen since the last content line. A comment run directly above a new
+  // top-level key is that section's *leading* comment and must travel with it, not stay with
+  // the block that happened to come before it in the document.
+  let pending = [];
 
   const isTopLevelKey = (line) => {
     const text = String(line?.text || "");
@@ -143,31 +150,61 @@ const parseYamlDocumentBlocks = (documentLines = []) => {
     return !trimmed.includes(":");
   };
 
+  const isBlankOrComment = (line) => {
+    const trimmed = String(line?.text || "").trim();
+    return trimmed === "" || trimmed.startsWith("#");
+  };
+
+  const appendLine = (target, line) => {
+    target.lines.push(String(line?.text || ""));
+    target.documentLines.push(line);
+  };
+
+  // Flush the pending run into `target`. `leadOfNewBlock` trims surrounding blank lines so the
+  // comment run leads the section cleanly (block separators are re-synthesised at render time).
+  const flushPending = (target, leadOfNewBlock) => {
+    let run = pending;
+    pending = [];
+    if (leadOfNewBlock) {
+      while (run.length && String(run[0]?.text || "").trim() === "") run.shift();
+      while (run.length && String(run[run.length - 1]?.text || "").trim() === "") run.pop();
+    }
+    run.forEach((line) => appendLine(target, line));
+  };
+
   (documentLines || []).forEach((line) => {
-    const text = String(line?.text || "");
     if (isTopLevelKey(line)) {
       if (current) blocks.push(current);
-      const key = text.split(":")[0].trim();
-      current = { key, lines: [text], documentLines: [line] };
+      current = { key: String(line?.text || "").split(":")[0].trim(), lines: [], documentLines: [] };
+      flushPending(current, true);
+      appendLine(current, line);
       return;
     }
     if (isTopLevelValueLine(line)) {
       if (!current || current.key !== "__root_misc__") {
         if (current) blocks.push(current);
-        current = { key: "__root_misc__", lines: [text], documentLines: [line] };
-        return;
+        current = { key: "__root_misc__", lines: [], documentLines: [] };
+        flushPending(current, true);
+      } else {
+        flushPending(current, false);
       }
-      current.lines.push(text);
-      current.documentLines.push(line);
+      appendLine(current, line);
+      return;
+    }
+    if (isBlankOrComment(line)) {
+      if (current) pending.push(line);
       return;
     }
     if (current) {
-      current.lines.push(text);
-      current.documentLines.push(line);
+      flushPending(current, false);
+      appendLine(current, line);
     }
   });
 
-  if (current) blocks.push(current);
+  if (current) {
+    flushPending(current, false);
+    blocks.push(current);
+  }
   return blocks;
 };
 
@@ -920,12 +957,16 @@ export const useBuilderYamlPreview = ({
       hubsBlocks.forEach((block) => used.add(block.key));
     }
 
-    const substitutionsBlocks = blocks.filter((block) => substitutionsBlockKeys.has(block.key));
+    const assetBlocks = blocks.filter((block) => ASSET_PREVIEW_BLOCK_KEYS.has(block.key));
+    if (assetBlocks.length) {
+      tabs.push({ key: "assets", label: "Assets", blocks: assetBlocks, lines: buildPreviewLines(assetBlocks), content: buildPreviewText(assetBlocks) });
+      assetBlocks.forEach((block) => used.add(block.key));
+    }
+
     const displayBlocks = blocks.filter((block) => block.key === "display");
-    const combinedDisplayBlocks = [...substitutionsBlocks, ...displayBlocks];
-    if (combinedDisplayBlocks.length) {
-      tabs.push({ key: "display", label: "Display", blocks: combinedDisplayBlocks, lines: buildPreviewLines(combinedDisplayBlocks), content: buildPreviewText(combinedDisplayBlocks) });
-      combinedDisplayBlocks.forEach((block) => used.add(block.key));
+    if (displayBlocks.length) {
+      tabs.push({ key: "display", label: "Display", blocks: displayBlocks, lines: buildPreviewLines(displayBlocks), content: buildPreviewText(displayBlocks) });
+      displayBlocks.forEach((block) => used.add(block.key));
     }
 
     const customBlocks = customPreviewBlocks.value;

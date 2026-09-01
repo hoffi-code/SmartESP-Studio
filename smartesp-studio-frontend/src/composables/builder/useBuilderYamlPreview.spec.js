@@ -197,6 +197,65 @@ describe("useBuilderYamlPreview", () => {
     expect(text).toContain('text: "Couch"');
   });
 
+  it("groups image/font blocks under an Assets tab, keeping Display for display: only", () => {
+    const harness = buildHarness({
+      config: ref({
+        esphomeCore: { name: "kitchen_sensor" },
+        substitutions: {},
+        platformCore: {},
+        networkCore: {},
+        protocolsCore: {},
+        systemCore: {},
+        automationCore: {},
+        bussesCore: {},
+        components: [
+          { id: "image/file", catalogKey: "image/file", config: { id: "logo", file: "logo.png", type: "BINARY" } },
+          { id: "display/ili9xxx", catalogKey: "display/ili9xxx", config: { id: "main_display", model: "ILI9341" } }
+        ]
+      }),
+      componentSchemas: ref({
+        "image/file": { id: "image.file", domain: "image", platform: "file", fields: [textField("id"), textField("file"), textField("type")] },
+        "display/ili9xxx": { id: "display.ili9xxx", domain: "display", platform: "ili9xxx", fields: [textField("id"), textField("model")] }
+      }),
+      componentSchemaStatus: ref({ "image/file": "ready", "display/ili9xxx": "ready" })
+    });
+    const byKey = Object.fromEntries(harness.previewTabs.value.map((tab) => [tab.key, tab]));
+    expect(byKey.assets).toBeTruthy();
+    expect(byKey.assets.content).toContain("image:");
+    expect(byKey.assets.content).not.toContain("display:");
+    expect(byKey.display).toBeTruthy();
+    expect(byKey.display.content).toContain("display:");
+    expect(byKey.display.content).not.toContain("image:");
+  });
+
+  it("keeps a section's leading comment in that section's tab, not the previous one", () => {
+    const harness = buildHarness({
+      config: ref({
+        esphomeCore: { name: "kitchen_sensor" },
+        substitutions: {},
+        platformCore: {},
+        networkCore: {},
+        protocolsCore: {},
+        systemCore: {},
+        automationCore: {},
+        bussesCore: {},
+        components: [{ id: "output/ledc", catalogKey: "output/ledc", config: { id: "backlight", pin: "GPIO5" } }],
+        fieldComments: { output: "# --- Backlight PWM output ---" }
+      }),
+      bussesSchemas: ref({ spi: { fields: [textField("clk_pin"), textField("id")] } }),
+      bussesDefinitions: [{ key: "spi" }],
+      resolveBusEnabled: (key) => key === "spi",
+      getBusInstances: (key) => (key === "spi" ? [{ clk_pin: "GPIO14", id: "tft_bus" }] : []),
+      componentSchemas: ref({
+        "output/ledc": { id: "output.ledc", domain: "output", platform: "ledc", fields: [textField("id"), textField("pin")] }
+      }),
+      componentSchemaStatus: ref({ "output/ledc": "ready" })
+    });
+    const byKey = Object.fromEntries(harness.previewTabs.value.map((tab) => [tab.key, tab]));
+    expect(byKey.busses.content).not.toContain("Backlight PWM output");
+    expect(byKey.output.content).toMatch(/# --- Backlight PWM output ---\noutput:/);
+  });
+
   it("prepends a field-level section comment before the matching component field", () => {
     const harness = buildHarness({
       config: ref({
