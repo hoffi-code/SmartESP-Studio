@@ -256,6 +256,40 @@ describe("LvglBuilder", () => {
     expect(patch.pages[0].widgets[0].children).toEqual([]);
   });
 
+  it("shows a static preview canvas (no toolbar) and opens the edit modal on click", async () => {
+    // schema with a style-grouped field so the inspector renders a <details> section
+    const styleSchema = { fields: [...LABEL_SCHEMA.fields, { key: "bg_color", type: "text", group: "style" }] };
+    const widget = { uiId: "w1", type: "label", common: {}, props: { text: "Hi" }, children: [] };
+    const lvglConfig = {
+      displays: [], touchscreens: [], bufferSize: "", bgColor: "", options: {},
+      pages: [{ id: "main_page", widgets: [widget] }]
+    };
+    const wrapper = mount(LvglBuilder, { props: { lvglConfig, widgetSchemas: { label: styleSchema } } });
+
+    expect(wrapper.find(".lvgl-canvas-preview .lvgl-canvas__toolbar").exists()).toBe(false);
+    expect(wrapper.find(".lvgl-editor-modal").exists()).toBe(false);
+
+    await wrapper.get(".lvgl-canvas-preview").trigger("click");
+    expect(wrapper.find(".lvgl-editor-modal").exists()).toBe(true);
+    // modal canvas is the interactive one -> toolbar present
+    expect(wrapper.find(".lvgl-editor-modal .lvgl-canvas__toolbar").exists()).toBe(true);
+    // modal inspector groups are expanded
+    await wrapper.get(".lvgl-editor-modal .lvgl-canvas__widget").trigger("pointerdown");
+    expect(wrapper.find(".lvgl-editor-modal details[open]").exists()).toBe(true);
+
+    await wrapper.get(".lvgl-editor-modal__backdrop").trigger("click");
+    expect(wrapper.find(".lvgl-editor-modal").exists()).toBe(false);
+  });
+
+  it("keeps the YAML editor inside the Form panel and Advanced-only", () => {
+    const lvglConfig = { displays: [], touchscreens: [], bufferSize: "", bgColor: "", options: {}, pages: [] };
+    const simple = mount(LvglBuilder, { props: { lvglConfig, widgetSchemas } });
+    expect(simple.find(".lvgl-config-panel--inspector textarea.lvgl-yaml-editor").exists()).toBe(false);
+
+    const advanced = mount(LvglBuilder, { props: { lvglConfig, widgetSchemas, activeModeLevel: "Advanced" } });
+    expect(advanced.find(".lvgl-config-panel--inspector textarea.lvgl-yaml-editor").exists()).toBe(true);
+  });
+
   it("edits an unsupported widget's raw YAML", async () => {
     const lvglConfig = {
       displays: [],

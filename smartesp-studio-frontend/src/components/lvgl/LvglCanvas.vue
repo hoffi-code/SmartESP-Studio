@@ -1,6 +1,6 @@
 <template>
-  <div class="lvgl-canvas__wrap">
-    <div class="lvgl-canvas__toolbar">
+  <div class="lvgl-canvas__wrap" :class="{ 'is-preview': !interactive }">
+    <div v-if="interactive" class="lvgl-canvas__toolbar">
       <label>W <input type="number" min="16" max="2000" :value="canvasWidth" @change="emitSize('width', $event)" /></label>
       <label>H <input type="number" min="16" max="2000" :value="canvasHeight" @change="emitSize('height', $event)" /></label>
       <label>Zoom
@@ -58,7 +58,10 @@ const props = defineProps({
   canvasWidth: { type: Number, default: 240 },
   canvasHeight: { type: Number, default: 320 },
   selectedId: { type: String, default: "" },
-  gridSize: { type: Number, default: 5 }
+  gridSize: { type: Number, default: 5 },
+  // Preview mode: no W/H/zoom toolbar, no drag. Clicks still select so the parent
+  // can open the edit modal on the right widget.
+  interactive: { type: Boolean, default: true }
 });
 
 const emit = defineEmits(["select", "move", "resize-canvas"]);
@@ -127,7 +130,7 @@ const snap = (value) => Math.round(value / props.gridSize) * props.gridSize;
 
 const onWidgetPointerDown = (event, entry) => {
   emit("select", entry.uiId || "");
-  if (!entry.positionable || !entry.uiId) return;
+  if (!props.interactive || !entry.positionable || !entry.uiId) return;
   const common = entry.node.common || {};
   dragState.value = {
     uiId: entry.uiId,
@@ -212,6 +215,14 @@ const onDragEnd = (event) => {
 
 .lvgl-canvas__widget.is-static {
   cursor: default;
+}
+
+.is-preview .lvgl-canvas__widget {
+  cursor: pointer;
+}
+
+.is-preview .lvgl-canvas__scroll {
+  max-height: 360px;
 }
 
 .lvgl-canvas__widget.is-managed {

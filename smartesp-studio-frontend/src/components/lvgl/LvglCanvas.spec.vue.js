@@ -40,6 +40,19 @@ describe("LvglCanvas", () => {
     expect(wrapper.emitted("resize-canvas").at(-1)).toEqual([{ dim: "width", value: 320 }]);
   });
 
+  it("hides the toolbar and does not drag in preview mode", async () => {
+    const wrapper = mount(LvglCanvas, {
+      props: { page, canvasWidth: 200, canvasHeight: 200, selectedId: "a", interactive: false }
+    });
+    expect(wrapper.find(".lvgl-canvas__toolbar").exists()).toBe(false);
+
+    // clicking a widget still selects it (so the parent can open the modal on it)
+    await wrapper.findAll(".lvgl-canvas__widget")[0].trigger("pointerdown");
+    expect(wrapper.emitted("select").at(-1)).toEqual(["a"]);
+    // ...but no drag is wired up
+    expect(wrapper.emitted("move")).toBeUndefined();
+  });
+
   it("flags a flex container's children as static (no drag)", () => {
     const flexPage = {
       id: "p",
