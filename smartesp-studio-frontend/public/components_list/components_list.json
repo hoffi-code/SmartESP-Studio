@@ -2569,6 +2569,19 @@
       "subcategories": []
     },
     {
+      "title": "Font Components",
+      "slug": "font-components",
+      "items": [
+        {
+          "name": "Font",
+          "path": "components/font/font",
+          "id": "font/font",
+          "schemaPath": "components/font/font.json"
+        }
+      ],
+      "subcategories": []
+    },
+    {
       "title": "Light Components",
       "slug": "light-components",
       "items": [
