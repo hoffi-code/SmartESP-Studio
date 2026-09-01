@@ -61,6 +61,14 @@
       @select-ha-serial-port="selectHaSerialPort"
       @close-compile-modal="closeCompileModal"
     />
+    <CommentEditModal
+      :open="commentEditRequest !== null"
+      :title="commentEditRequest?.title || 'Kommentar'"
+      :value="commentEditValue"
+      @save="saveComment"
+      @delete="deleteComment"
+      @close="closeCommentEditor"
+    />
     <div class="builder-shell">
       <aside class="builder-sidebar">
         <div class="sidebar-top">
@@ -431,6 +439,14 @@
                 {{ isComponentsImporting ? "Uploading..." : "Upload Components" }}
               </button>
               <button
+                v-if="!isComponentPickerOpen && activeComponentSlot !== null && activeComponentCommentKey"
+                type="button"
+                class="secondary compact btn-standard"
+                @click="openActiveComponentCommentEditor"
+              >
+                {{ activeComponentHasComment ? "Kommentar bearbeiten" : "Kommentar" }}
+              </button>
+              <button
                 v-if="!isComponentPickerOpen && activeComponentSlot !== null"
                 type="button"
                 class="secondary compact btn-standard"
@@ -532,6 +548,7 @@ import {
 } from "vue";
 import BuilderAutomationTab from "../components/builder/BuilderAutomationTab.vue";
 import BuilderComponentForm from "../components/builder/BuilderComponentForm.vue";
+import CommentEditModal from "../components/builder/CommentEditModal.vue";
 import BuilderComponentPicker from "../components/builder/BuilderComponentPicker.vue";
 import BuilderCoreTab from "../components/builder/BuilderCoreTab.vue";
 import LvglBuilder from "../components/lvgl/LvglBuilder.vue";
@@ -557,7 +574,7 @@ import {
   buildGpioUsageIndex,
   isObjectArrayLikeField
 } from "../utils/builderValidationRules";
-import { buildDisplayAnimationIntervals } from "../utils/schemaYaml";
+import { buildDisplayAnimationIntervals, resolveSchemaDomain } from "../utils/schemaYaml";
 import { encodeFieldPath } from "../utils/yamlDocumentModel";
 import { buildGlobalRegistry, isFieldVisible as isSchemaFieldVisible } from "../utils/schemaVisibility";
 import { MODE_LEVELS, modeLevelRank, normalizeModeLevel } from "../utils/schemaModeLevel";
@@ -2465,6 +2482,69 @@ const markProjectSavedFromCurrentState = () => {
   persistedConfigFingerprint.value = buildConfigFingerprint(config.value);
   config.value.isSaved = true;
   saveConfig();
+};
+
+// Section/component YAML comments -- edited through CommentEditModal, stored the same way
+// the importer captures them (config.fieldComments keyed by domain/path, config.headerComment).
+const commentEditRequest = ref(null); // { key, title, scope: "field" | "header" }
+
+const commentEditValue = computed(() => {
+  const request = commentEditRequest.value;
+  if (!request) return "";
+  if (request.scope === "header") return config.value.headerComment || "";
+  return config.value.fieldComments?.[request.key] || "";
+});
+
+const openCommentEditor = ({ key = "", title = "Kommentar", scope = "field" }) => {
+  if (scope === "field" && !key) return;
+  commentEditRequest.value = { key, title, scope };
+};
+
+const closeCommentEditor = () => {
+  commentEditRequest.value = null;
+};
+
+const saveComment = (text) => {
+  const request = commentEditRequest.value;
+  if (!request) return;
+  if (request.scope === "header") {
+    config.value.headerComment = text;
+  } else {
+    if (!config.value.fieldComments || typeof config.value.fieldComments !== "object") {
+      config.value.fieldComments = {};
+    }
+    config.value.fieldComments[request.key] = text;
+  }
+  markProjectDirty();
+  closeCommentEditor();
+};
+
+const deleteComment = () => {
+  const request = commentEditRequest.value;
+  if (!request) return;
+  if (request.scope === "header") {
+    config.value.headerComment = "";
+  } else if (config.value.fieldComments && request.key in config.value.fieldComments) {
+    delete config.value.fieldComments[request.key];
+  }
+  markProjectDirty();
+  closeCommentEditor();
+};
+
+const activeComponentCommentKey = computed(() => {
+  const schema = activeComponentSchema.value;
+  if (!schema) return "";
+  return resolveSchemaDomain(schema, activeComponentConfig.value || {});
+});
+
+const activeComponentHasComment = computed(() =>
+  Boolean(activeComponentCommentKey.value && config.value.fieldComments?.[activeComponentCommentKey.value])
+);
+
+const openActiveComponentCommentEditor = () => {
+  const key = activeComponentCommentKey.value;
+  if (!key) return;
+  openCommentEditor({ key, title: `Kommentar – ${key}:` });
 };
 
 const assetsBase = apiUrl("api/assets/");
