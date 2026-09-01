@@ -105,17 +105,27 @@
     <div class="lvgl-grid">
       <section class="lvgl-config-panel">
         <div class="lvgl-config-panel__header">
-          <h4>Canvas</h4>
+          <h4>Canvas-Preview</h4>
         </div>
-        <LvglCanvas
-          :page="pages[activePageIndex] || null"
-          :canvas-width="canvasW"
-          :canvas-height="canvasH"
-          :selected-id="selectedWidgetId"
-          @select="selectedWidgetId = $event"
-          @move="handleCanvasMove"
-          @resize-canvas="handleCanvasResize"
-        />
+        <div
+          class="lvgl-canvas-preview"
+          role="button"
+          tabindex="0"
+          title="Click to open the editor"
+          @click="openEditor"
+          @keydown.enter.prevent="openEditor"
+          @keydown.space.prevent="openEditor"
+        >
+          <LvglCanvas
+            :page="pages[activePageIndex] || null"
+            :canvas-width="canvasW"
+            :canvas-height="canvasH"
+            :selected-id="selectedWidgetId"
+            :interactive="false"
+            @select="selectedWidgetId = $event"
+          />
+          <span class="lvgl-canvas-preview__hint">Click to edit</span>
+        </div>
       </section>
 
       <section class="lvgl-config-panel lvgl-config-panel--inspector">
@@ -130,36 +140,70 @@
           @update="handleInspectorUpdate"
           @field-edit="emit('field-edit', $event)"
         />
+
+        <template v-if="showYaml">
+          <div class="lvgl-config-panel__header lvgl-form-yaml__header">
+            <h4>YAML</h4>
+            <button type="button" class="secondary compact" :disabled="!yamlDirty" @click="resetYaml">Reset</button>
+          </div>
+          <p class="note">
+            Edits the <code>lvgl:</code> block only. Applying re-parses it against the widget schemas --
+            keys outside a curated schema are kept verbatim, comments and formatting are not preserved.
+          </p>
+          <textarea
+            v-model="yamlDraft"
+            class="lvgl-yaml-editor"
+            spellcheck="false"
+            autocomplete="off"
+            autocapitalize="off"
+            @input="yamlDirty = true"
+          ></textarea>
+          <div class="lvgl-yaml-editor__bar">
+            <button type="button" class="secondary compact" :disabled="applying || !yamlDirty" @click="applyYaml">Apply</button>
+            <span v-if="yamlError" class="lvgl-yaml-editor__error">{{ yamlError }}</span>
+          </div>
+        </template>
       </section>
     </div>
 
-    <section v-if="showYaml" class="lvgl-config-panel lvgl-yaml-section">
-      <div class="lvgl-config-panel__header">
-        <h4>YAML</h4>
-        <button type="button" class="secondary compact" :disabled="!yamlDirty" @click="resetYaml">Reset</button>
+    <div v-if="editorOpen" class="lvgl-editor-modal">
+      <div class="lvgl-editor-modal__backdrop" @click="editorOpen = false" />
+      <div class="lvgl-editor-modal__dialog" role="dialog" aria-modal="true" aria-label="LVGL widget editor">
+        <div class="lvgl-editor-modal__head">
+          <h3>Edit &mdash; {{ pages[activePageIndex]?.id || `page_${activePageIndex}` }}</h3>
+          <button type="button" class="secondary compact" @click="editorOpen = false">Close</button>
+        </div>
+        <div class="lvgl-editor-modal__body">
+          <div class="lvgl-editor-modal__canvas">
+            <LvglCanvas
+              :page="pages[activePageIndex] || null"
+              :canvas-width="canvasW"
+              :canvas-height="canvasH"
+              :selected-id="selectedWidgetId"
+              @select="selectedWidgetId = $event"
+              @move="handleCanvasMove"
+              @resize-canvas="handleCanvasResize"
+            />
+          </div>
+          <div class="lvgl-editor-modal__form">
+            <LvglWidgetInspector
+              :node="selectedWidget"
+              :widget-schemas="widgetSchemas"
+              :id-index="idIndex"
+              :page-index="activePageIndex"
+              :expand-groups="true"
+              @update="handleInspectorUpdate"
+              @field-edit="emit('field-edit', $event)"
+            />
+          </div>
+        </div>
       </div>
-      <p class="note">
-        Edits the <code>lvgl:</code> block only. Applying re-parses it against the widget schemas --
-        keys outside a curated schema are kept verbatim, comments and formatting are not preserved.
-      </p>
-      <textarea
-        v-model="yamlDraft"
-        class="lvgl-yaml-editor"
-        spellcheck="false"
-        autocomplete="off"
-        autocapitalize="off"
-        @input="yamlDirty = true"
-      ></textarea>
-      <div class="lvgl-yaml-editor__bar">
-        <button type="button" class="secondary compact" :disabled="applying || !yamlDirty" @click="applyYaml">Apply</button>
-        <span v-if="yamlError" class="lvgl-yaml-editor__error">{{ yamlError }}</span>
-      </div>
-    </section>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import LvglWidgetTreeItem from "./LvglWidgetTreeItem.vue";
 import LvglWidgetInspector from "./LvglWidgetInspector.vue";
 import LvglCanvas from "./LvglCanvas.vue";
@@ -216,6 +260,18 @@ const yamlError = ref("");
 const applying = ref(false);
 const canvasW = ref(240);
 const canvasH = ref(320);
+
+// The interactive canvas + full parameter form live in a modal; the inline panel
+// is a static preview that opens it.
+const editorOpen = ref(false);
+const openEditor = () => {
+  editorOpen.value = true;
+};
+const onKeydown = (event) => {
+  if (event.key === "Escape") editorOpen.value = false;
+};
+onMounted(() => window.addEventListener("keydown", onKeydown));
+onBeforeUnmount(() => window.removeEventListener("keydown", onKeydown));
 
 // Curated top-level lvgl: options for the Settings panel. Everything the schema
 // doesn't model still round-trips via lvglConfig.options (see parseLvglSection).
@@ -568,9 +624,98 @@ const handleCanvasResize = ({ dim, value }) => {
   padding-top: 12px;
 }
 
-.lvgl-yaml-section {
+.lvgl-form-yaml__header {
   border-top: 1px solid var(--border);
   padding-top: 12px;
+  margin-top: 12px;
+}
+
+.lvgl-canvas-preview {
+  position: relative;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 4px;
+  cursor: pointer;
+}
+
+.lvgl-canvas-preview:hover,
+.lvgl-canvas-preview:focus-visible {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.lvgl-canvas-preview__hint {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+.lvgl-editor-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.lvgl-editor-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+}
+
+.lvgl-editor-modal__dialog {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: min(1100px, 100%);
+  max-height: 100%;
+  background: var(--card, #fff);
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+}
+
+.lvgl-editor-modal__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.lvgl-editor-modal__head h3 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.lvgl-editor-modal__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 360px);
+  gap: 16px;
+  padding: 16px;
+  overflow: auto;
+}
+
+.lvgl-editor-modal__form {
+  min-width: 0;
+  overflow: auto;
+}
+
+@media (max-width: 860px) {
+  .lvgl-editor-modal__body {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 .lvgl-settings-section {

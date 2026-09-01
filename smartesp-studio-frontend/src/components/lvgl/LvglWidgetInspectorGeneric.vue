@@ -23,7 +23,7 @@
     <p v-if="extraKeys.length" class="note">
       Kept as-is (not editable here): {{ extraKeys.join(", ") }}
     </p>
-    <details v-if="styleFields.length" class="lvgl-widget-inspector-panel__section">
+    <details v-if="styleFields.length" class="lvgl-widget-inspector-panel__section" :open="expandGroups">
       <summary>Style</summary>
       <SchemaField
         v-for="field in styleFields"
@@ -37,7 +37,7 @@
         @update="handlePropsUpdate"
       />
     </details>
-    <details v-if="layoutFields.length" class="lvgl-widget-inspector-panel__section">
+    <details v-if="layoutFields.length" class="lvgl-widget-inspector-panel__section" :open="expandGroups">
       <summary>Layout</summary>
       <p class="note">Flex/grid container setup, per-cell placement and <code>align_to</code>.</p>
       <SchemaField
@@ -52,7 +52,7 @@
         @update="handlePropsUpdate"
       />
     </details>
-    <details v-if="stateFields.length" class="lvgl-widget-inspector-panel__section">
+    <details v-if="stateFields.length" class="lvgl-widget-inspector-panel__section" :open="expandGroups">
       <summary>States</summary>
       <p class="note">Per-state style overrides (pressed, checked, ...).</p>
       <SchemaField
@@ -67,7 +67,7 @@
         @update="handlePropsUpdate"
       />
     </details>
-    <details v-if="partFields.length" class="lvgl-widget-inspector-panel__section">
+    <details v-if="partFields.length" class="lvgl-widget-inspector-panel__section" :open="expandGroups">
       <summary>Parts</summary>
       <p class="note">Style overrides for widget sub-parts (indicator, knob, ...).</p>
       <SchemaField
@@ -82,7 +82,7 @@
         @update="handlePropsUpdate"
       />
     </details>
-    <details v-if="triggerFields.length" class="lvgl-widget-inspector-panel__section">
+    <details v-if="triggerFields.length" class="lvgl-widget-inspector-panel__section" :open="expandGroups">
       <summary>Events</summary>
       <SchemaField
         v-for="field in triggerFields"
@@ -125,6 +125,11 @@ const props = defineProps({
   pageIndex: {
     type: Number,
     default: 0
+  },
+  // Render the Style/Layout/States/Parts/Events <details> open (edit modal).
+  expandGroups: {
+    type: Boolean,
+    default: false
   }
 });
 

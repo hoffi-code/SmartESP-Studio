@@ -12,6 +12,7 @@
       :schema="widgetSchema"
       :id-index="idIndex"
       :page-index="pageIndex"
+      :expand-groups="expandGroups"
       @update="$emit('update', $event)"
       @field-edit="$emit('field-edit', $event)"
     />
@@ -43,6 +44,12 @@ const props = defineProps({
   pageIndex: {
     type: Number,
     default: 0
+  },
+  // Open the Style/Layout/States/Parts/Events sections by default (used in the
+  // roomier edit modal).
+  expandGroups: {
+    type: Boolean,
+    default: false
   }
 });
 
