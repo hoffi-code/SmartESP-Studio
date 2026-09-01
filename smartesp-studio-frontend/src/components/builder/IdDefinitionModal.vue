@@ -2,6 +2,12 @@
   <div v-if="open" class="modal-backdrop" @click.self="emit('cancel')">
     <div class="modal-card id-def-card" role="dialog" aria-modal="true">
       <h3>{{ title }}</h3>
+      <DesignElementPreview
+        v-if="previewDomain"
+        :domain="previewDomain"
+        :config="draft"
+        :assets-base="assetsBase"
+      />
       <div class="id-def-body">
         <SchemaRenderer
           :key="componentId"
@@ -41,6 +47,7 @@ import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 import SchemaRenderer from "../SchemaRenderer.vue";
+import DesignElementPreview from "./DesignElementPreview.vue";
 
 const props = defineProps({
   open: { type: Boolean, default: false },
@@ -67,6 +74,9 @@ const emit = defineEmits(["confirm", "cancel", "open-asset-manager"]);
 const { t } = useI18n();
 
 const draft = ref({});
+
+const PREVIEW_DOMAINS = { "image/file": "image", "font/font": "font" };
+const previewDomain = computed(() => PREVIEW_DOMAINS[props.componentId] || "");
 
 const applyUpdate = ({ path, value }) => {
   if (!Array.isArray(path) || !path.length) return;

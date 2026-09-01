@@ -10,6 +10,10 @@ markiert.
 
 ### Added
 
+- **Vorschau beim Anlegen von Design-Elementen** – der „+"-Dialog und die
+  Komponentenform zeigen für `image`/`font` eine Vorschau: Bild-Thumbnail (Asset
+  oder `mdi:`), bzw. Font-Sample real gerendert (Google-Font geladen) oder als
+  Hinweis bei lokalen/Web-Fonts.
 - **LVGL Font-/Gruppen-Felder als Auswahl** – `default_font` und Widget-`text_font`
   sind jetzt Dropdowns (LVGL-Built-in-Fonts wie `montserrat_20` + definierte
   `font:`-IDs) mit „+ neu anlegen". `default_group` zeigt die bereits an Widgets

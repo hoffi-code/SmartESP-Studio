@@ -505,6 +505,7 @@
             />
             <BuilderComponentForm
               v-else
+              :preview-domain="activeComponentPreviewDomain"
               :active-component-bus-labels="activeComponentBusLabels"
               :active-component-protocol-labels="activeComponentProtocolLabels"
               :active-component-system-labels="activeComponentSystemLabels"
@@ -2565,6 +2566,11 @@ const activeComponentCommentKey = computed(() => {
   const schema = activeComponentSchema.value;
   if (!schema) return "";
   return resolveSchemaDomain(schema, activeComponentConfig.value || {});
+});
+
+const activeComponentPreviewDomain = computed(() => {
+  const domain = activeComponentSchema.value?.domain || "";
+  return domain === "image" || domain === "font" ? domain : "";
 });
 
 const activeComponentHasComment = computed(() =>
