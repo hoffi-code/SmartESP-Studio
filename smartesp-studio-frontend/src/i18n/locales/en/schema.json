@@ -1,0 +1,60 @@
+{
+  "fields": {
+    "default_font": {
+      "label": "Default font",
+      "hint": "ID of a font: component used to render text and symbols where a widget does not set its own text_font. Defaults to LVGL's built-in montserrat_14."
+    },
+    "default_group": {
+      "label": "Default group",
+      "hint": "Name of the input group that new widgets join automatically, so an encoder or keypad can navigate them."
+    },
+    "theme": {
+      "label": "Theme",
+      "hint": "Global style defaults per widget type. Keyed by widget type, optionally nested by part and state."
+    },
+    "disp_bg_color": {
+      "label": "Display background color",
+      "hint": "Fill color of the whole display behind all widgets."
+    },
+    "disp_bg_image": {
+      "label": "Display background image",
+      "hint": "ID of an image: component drawn as the display background."
+    },
+    "disp_bg_opa": {
+      "label": "Display background opacity",
+      "hint": "Opacity of the display background color/image, 0-255 or a percentage."
+    },
+    "transparency_key": {
+      "label": "Transparency key",
+      "hint": "Color treated as fully transparent when the display buffer is composited (chroma key)."
+    },
+    "color_depth": {
+      "label": "Color depth",
+      "hint": "Bits per pixel of the LVGL draw buffer. Must match the connected display."
+    },
+    "full_refresh": {
+      "label": "Full refresh",
+      "hint": "Redraw the entire screen every frame instead of only changed areas. Needed for some displays, costs performance."
+    },
+    "style_definitions": {
+      "label": "Style definitions",
+      "hint": "Reusable named style blocks that widgets can reference by ID instead of repeating properties."
+    },
+    "bg_color": { "hint": "Background fill color of this part." },
+    "bg_opa": { "hint": "Background opacity, 0-255 or a percentage. TRANSP hides the fill." },
+    "bg_grad_color": { "hint": "Second color for a background gradient, blended from bg_color along bg_grad_dir." },
+    "border_width": { "hint": "Border thickness in pixels. 0 disables the border." },
+    "border_color": { "hint": "Border color." },
+    "radius": { "hint": "Corner radius in pixels. A large value on a square widget makes it a circle." },
+    "text_color": { "hint": "Color of the widget's text." },
+    "text_font": {
+      "label": "Text font",
+      "hint": "ID of the font: component used for this widget's text. Falls back to the LVGL default_font."
+    },
+    "pad_all": { "hint": "Inner padding on all four sides in pixels." },
+    "shadow_width": { "hint": "Blur radius of the drop shadow in pixels. 0 disables the shadow." },
+    "opa": { "hint": "Overall opacity of the widget, 0-255 or a percentage." },
+    "align": { "hint": "Anchor point of the widget relative to its parent (e.g. CENTER, TOP_LEFT)." },
+    "long_mode": { "hint": "How a label handles text longer than its width: WRAP, DOT, SCROLL, SCROLL_CIRCULAR or CLIP." }
+  }
+}
