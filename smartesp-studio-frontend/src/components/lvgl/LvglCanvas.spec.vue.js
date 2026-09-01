@@ -105,6 +105,41 @@ describe("LvglCanvas", () => {
     expect(w.get(".lvgl-w--line polyline").attributes("points").split(" ")).toHaveLength(3);
   });
 
+  it("draws a meter's ticks, needle and arc from scales[0]", () => {
+    const p = {
+      id: "p",
+      widgets: [
+        {
+          uiId: "m",
+          type: "meter",
+          common: { x: 0, y: 0, width: 60, height: 60 },
+          props: {
+            scales: [
+              {
+                range_from: 0,
+                range_to: 100,
+                ticks: { count: 6 },
+                indicators: [
+                  { line: { value: 40, color: "0xFF0000" } },
+                  { arc: { start_value: 60, end_value: 100, color: "0x00FF00" } }
+                ]
+              }
+            ]
+          },
+          children: []
+        }
+      ]
+    };
+    const w = mount(LvglCanvas, { props: { page: p, canvasWidth: 200, canvasHeight: 200 } });
+    const svg = w.get(".lvgl-w--meter svg");
+    // 6 scale ticks
+    expect(svg.findAll("g line")).toHaveLength(6);
+    // one needle for the line indicator (red)
+    expect(svg.findAll("line").some((l) => /#ff0000/i.test(l.attributes("stroke") || ""))).toBe(true);
+    // one coloured arc for the arc indicator (green)
+    expect(svg.findAll("path").some((pth) => /#00ff00/i.test(pth.attributes("stroke") || ""))).toBe(true);
+  });
+
   it("uses an explicit bg_color over the kind default", () => {
     const p = {
       id: "p",

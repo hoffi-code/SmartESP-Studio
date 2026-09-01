@@ -4,5 +4,111 @@
   "widgetType": "meter",
   "extends": "lvgl_widget_common.json",
   "helpUrl": "https://esphome.io/components/lvgl/widgets/meter/",
-  "fields": []
+  "fields": [
+    {
+      "key": "scales",
+      "type": "list",
+      "required": false,
+      "lvl": "simple",
+      "item": {
+        "type": "object",
+        "fields": [
+          { "key": "range_from", "type": "text", "required": false, "lvl": "normal", "placeholder": "0" },
+          { "key": "range_to", "type": "text", "required": false, "lvl": "normal", "placeholder": "100" },
+          { "key": "angle_range", "type": "text", "required": false, "lvl": "normal", "placeholder": "270" },
+          { "key": "rotation", "type": "text", "required": false, "lvl": "advanced" },
+          { "key": "draw_ticks_on_top", "type": "boolean", "required": false, "lvl": "advanced", "default": true },
+          {
+            "key": "ticks",
+            "type": "object",
+            "required": false,
+            "lvl": "normal",
+            "fields": [
+              { "key": "count", "type": "text", "required": false, "placeholder": "12" },
+              { "key": "width", "type": "text", "required": false, "placeholder": "2" },
+              { "key": "length", "type": "text", "required": false, "placeholder": "10" },
+              { "key": "color", "type": "color", "required": false, "colorFormat": "hex0x", "placeholder": "0x808080" },
+              { "key": "radial_offset", "type": "text", "required": false },
+              {
+                "key": "major",
+                "type": "object",
+                "required": false,
+                "fields": [
+                  { "key": "stride", "type": "text", "required": false, "placeholder": "3" },
+                  { "key": "width", "type": "text", "required": false, "placeholder": "5" },
+                  { "key": "length", "type": "text", "required": false, "placeholder": "12" },
+                  { "key": "color", "type": "color", "required": false, "colorFormat": "hex0x", "placeholder": "0x000000" },
+                  { "key": "label_gap", "type": "text", "required": false, "placeholder": "4" },
+                  { "key": "radial_offset", "type": "text", "required": false }
+                ]
+              }
+            ]
+          },
+          {
+            "key": "indicators",
+            "type": "list",
+            "required": false,
+            "lvl": "normal",
+            "item": {
+              "type": "object",
+              "fields": [
+                {
+                  "key": "line",
+                  "type": "object",
+                  "required": false,
+                  "fields": [
+                    { "key": "id", "type": "id", "required": false },
+                    { "key": "value", "type": "text", "required": false, "placeholder": "0" },
+                    { "key": "width", "type": "text", "required": false, "placeholder": "4" },
+                    { "key": "color", "type": "color", "required": false, "colorFormat": "hex0x", "placeholder": "0x000000" },
+                    { "key": "r_mod", "type": "text", "required": false }
+                  ]
+                },
+                {
+                  "key": "arc",
+                  "type": "object",
+                  "required": false,
+                  "fields": [
+                    { "key": "id", "type": "id", "required": false },
+                    { "key": "start_value", "type": "text", "required": false },
+                    { "key": "end_value", "type": "text", "required": false },
+                    { "key": "value", "type": "text", "required": false },
+                    { "key": "width", "type": "text", "required": false, "placeholder": "4" },
+                    { "key": "color", "type": "color", "required": false, "colorFormat": "hex0x", "placeholder": "0x000000" },
+                    { "key": "r_mod", "type": "text", "required": false }
+                  ]
+                },
+                {
+                  "key": "tick_style",
+                  "type": "object",
+                  "required": false,
+                  "fields": [
+                    { "key": "id", "type": "id", "required": false },
+                    { "key": "start_value", "type": "text", "required": false },
+                    { "key": "end_value", "type": "text", "required": false },
+                    { "key": "color_start", "type": "color", "required": false, "colorFormat": "hex0x", "placeholder": "0x000000" },
+                    { "key": "color_end", "type": "color", "required": false, "colorFormat": "hex0x", "placeholder": "0x000000" },
+                    { "key": "width", "type": "text", "required": false, "placeholder": "4" },
+                    { "key": "local", "type": "boolean", "required": false, "default": false }
+                  ]
+                },
+                {
+                  "key": "image",
+                  "type": "object",
+                  "required": false,
+                  "fields": [
+                    { "key": "id", "type": "id", "required": false },
+                    { "key": "src", "type": "id_ref", "required": false, "domain": "image" },
+                    { "key": "value", "type": "text", "required": false },
+                    { "key": "pivot_x", "type": "text", "required": false },
+                    { "key": "pivot_y", "type": "text", "required": false }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
 }

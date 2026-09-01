@@ -121,7 +121,35 @@ const qrcodeSchema = {
 };
 
 // A widget with no flat fields at all -- only common + a nested block (scales).
-const meterSchema = { fields: [{ key: "id", type: "id", required: false }] };
+// Mirrors meter.json's scales -> ticks/indicators nesting (trimmed).
+const meterSchema = {
+  fields: [
+    { key: "id", type: "id", required: false },
+    {
+      key: "scales",
+      type: "list",
+      item: {
+        type: "object",
+        fields: [
+          { key: "range_from", type: "text" },
+          { key: "range_to", type: "text" },
+          { key: "ticks", type: "object", fields: [{ key: "count", type: "text" }, { key: "color", type: "color" }] },
+          {
+            key: "indicators",
+            type: "list",
+            item: {
+              type: "object",
+              fields: [
+                { key: "line", type: "object", fields: [{ key: "value", type: "text" }, { key: "color", type: "color" }] },
+                { key: "arc", type: "object", fields: [{ key: "start_value", type: "text" }, { key: "end_value", type: "text" }] }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+};
 
 // Mirrors buttonmatrix.json's nested rows -> buttons -> control shape.
 const buttonmatrixSchema = {
@@ -352,14 +380,28 @@ describe("parseWidgetNode", () => {
     expect(node.props).toEqual({ text: "https://x.y", size: 120 });
   });
 
-  it("keeps a meter's nested scales block in node.extra rather than treating it as unsupported", async () => {
+  it("maps a meter's scales / ticks / indicators into props", async () => {
     const node = await parseWidgetNode(
-      { meter: { id: "m", scales: [{ range_from: 0, range_to: 100, ticks: { count: 11 } }] } },
+      {
+        meter: {
+          id: "m",
+          scales: [
+            {
+              range_from: 0,
+              range_to: 100,
+              ticks: { count: 11 },
+              indicators: [{ line: { value: 40 } }, { arc: { start_value: 60, end_value: 100 } }]
+            }
+          ]
+        }
+      },
       schemaContext
     );
     expect(node.type).toBe("meter");
-    expect(node.common).toMatchObject({ id: "m" });
-    expect(node.extra).toEqual({ scales: [{ range_from: 0, range_to: 100, ticks: { count: 11 } }] });
+    expect(node.props.scales[0].ticks).toEqual({ count: 11 });
+    expect(node.props.scales[0].indicators[0]).toEqual({ line: { value: 40 } });
+    expect(node.props.scales[0].indicators[1]).toEqual({ arc: { start_value: 60, end_value: 100 } });
+    expect(node.extra).toBeUndefined();
   });
 
   it("keeps a widget type outside the registry as an opaque raw-YAML node", async () => {

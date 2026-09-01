@@ -122,13 +122,42 @@
             <span v-else class="lvgl-canvas__qr" />
           </span>
 
-          <!-- meter: gauge -->
+          <!-- meter: gauge driven by scales[0] -->
           <svg v-else-if="entry.render.kind === 'meter'" class="lvgl-canvas__meter" viewBox="0 0 48 48">
             <path :d="ARC_TRACK_PATH" stroke="#c8c8cf" stroke-width="3" fill="none" />
-            <g stroke="#9a9aa5" stroke-width="1.4">
-              <line v-for="t in METER_TICKS" :key="t.i" :x1="t.x1" :y1="t.y1" :x2="t.x2" :y2="t.y2" />
+            <path
+              v-for="(a, ai) in entry.render.arcs"
+              :key="`a${ai}`"
+              :d="ARC_TRACK_PATH"
+              :stroke="a.color"
+              stroke-width="3"
+              fill="none"
+              stroke-linecap="butt"
+              :stroke-dasharray="ARC_LEN"
+              :stroke-dashoffset="ARC_LEN * (1 - (a.to - a.from))"
+              :style="{ transform: `rotate(${ARC_SWEEP * a.from}deg)`, transformOrigin: '24px 24px' }"
+            />
+            <g stroke="#9a9aa5" stroke-width="1.2">
+              <line
+                v-for="t in meterTicks(entry.render.tickCount)"
+                :key="t.i"
+                :x1="t.x1"
+                :y1="t.y1"
+                :x2="t.x2"
+                :y2="t.y2"
+              />
             </g>
-            <line x1="24" y1="24" :x2="meterNeedle.x" :y2="meterNeedle.y" :stroke="THEME.primary" stroke-width="2" stroke-linecap="round" />
+            <line
+              v-for="(n, ni) in entry.render.needles"
+              :key="`n${ni}`"
+              x1="24"
+              y1="24"
+              :x2="needleTip(n.pct).x"
+              :y2="needleTip(n.pct).y"
+              :stroke="n.color"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
             <circle cx="24" cy="24" r="2.5" :fill="THEME.primary" />
           </svg>
 
@@ -277,7 +306,26 @@ const render = (entry) => {
   if (t === "led") return { kind: "led", color: colour(p, "color", colour(p, "bg_color", THEME.led)) };
   if (t === "qrcode") return { kind: "image", qr: true };
   if (t === "image" || t === "animimg" || t === "canvas") return { kind: "image", qr: false };
-  if (t === "meter") return { kind: "meter" };
+  if (t === "meter") {
+    const s = (Array.isArray(p.scales) ? p.scales : [])[0] || {};
+    const from = num(s.range_from, 0);
+    const to = num(s.range_to, 100);
+    const span = to - from || 1;
+    const clamp = (v) => Math.max(0, Math.min(1, v));
+    const needles = [];
+    const arcs = [];
+    for (const ind of Array.isArray(s.indicators) ? s.indicators : []) {
+      if (ind?.line && ind.line.value !== undefined) {
+        needles.push({ pct: clamp((num(ind.line.value, from) - from) / span), color: colour(ind.line, "color", THEME.primary) });
+      } else if (ind?.arc) {
+        const sv = num(ind.arc.start_value, from);
+        const ev = num(ind.arc.end_value ?? ind.arc.value, to);
+        arcs.push({ from: clamp((sv - from) / span), to: clamp((ev - from) / span), color: colour(ind.arc, "color", THEME.primary) });
+      }
+    }
+    if (!needles.length && !arcs.length) needles.push({ pct: 0.62, color: THEME.primary });
+    return { kind: "meter", tickCount: Math.max(2, Math.min(40, Math.round(num(s.ticks?.count, 12)))), needles, arcs };
+  }
   if (t === "tabview" || t === "tileview") return { kind: "tabview" };
   if (t === "buttonmatrix") {
     const rows = (Array.isArray(p.rows) ? p.rows : [])
@@ -356,14 +404,14 @@ const ARC_TRACK_PATH = (() => {
 const ARC_LEN = (2 * Math.PI * ARC_R * ARC_SWEEP) / 360;
 const arcKnob = (fillPct) => polar(ARC_START + (ARC_SWEEP * fillPct) / 100);
 
-const METER_TICKS = Array.from({ length: 9 }, (_, i) => {
-  const deg = ARC_START + (ARC_SWEEP * i) / 8;
-  const inner = 24 + (ARC_R - 3) * Math.cos((deg * Math.PI) / 180);
-  const innerY = 24 + (ARC_R - 3) * Math.sin((deg * Math.PI) / 180);
-  const outer = polar(deg);
-  return { i, x1: inner, y1: innerY, x2: outer.x, y2: outer.y };
-});
-const meterNeedle = polar(ARC_START + ARC_SWEEP * 0.62);
+const meterTicks = (count) =>
+  Array.from({ length: Math.max(2, count) }, (_, i) => {
+    const deg = ARC_START + (ARC_SWEEP * i) / (count - 1);
+    const rad = (deg * Math.PI) / 180;
+    const outer = polar(deg);
+    return { i, x1: 24 + (ARC_R - 3) * Math.cos(rad), y1: 24 + (ARC_R - 3) * Math.sin(rad), x2: outer.x, y2: outer.y };
+  });
+const needleTip = (pct) => polar(ARC_START + ARC_SWEEP * pct);
 
 const dragState = ref(null);
 

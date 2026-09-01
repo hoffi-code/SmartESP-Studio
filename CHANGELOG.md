@@ -10,6 +10,11 @@ markiert.
 
 ### Added
 
+- **LVGL `meter.scales` editierbar** (P3) – die Meter-Skalen sind jetzt voll
+  modelliert (`scales` → `range_from/to`, `angle_range`, `ticks` inkl. `major`,
+  `indicators` mit `line`/`arc`/`tick_style`/`image`) statt als opaker Block. Der
+  Canvas zeichnet die Skala aus `scales[0]`: Tick-Anzahl, Nadeln aus
+  `line`-Indikatoren, farbige Bögen aus `arc`-Indikatoren.
 - **LVGL `buttonmatrix.rows` editierbar** (P2) – die Button-Matrix-Zeilen sind
   jetzt strukturiert modelliert (`rows` → `buttons` → `text`/`width`/`key_code`/
   `control`) statt als opaker `extra`-Block. Der Canvas zeichnet die echten
