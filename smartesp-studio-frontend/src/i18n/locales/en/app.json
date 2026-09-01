@@ -1,0 +1,31 @@
+{
+  "links": {
+    "github": "Open GitHub repository",
+    "buyMeACoffee": "Buy me a coffee"
+  },
+  "actions": {
+    "import": "Import",
+    "importEsphomeBuilder": "ESPHome Builder",
+    "importYamlFile": "YAML file",
+    "edit": "Edit",
+    "save": "Save",
+    "install": "Install",
+    "installSerial": "Serial (this computer)",
+    "installSerialHa": "Serial (HA server)",
+    "installOta": "Wireless (OTA)",
+    "installDownload": "Download Binary",
+    "validate": "Validate",
+    "logs": "Logs"
+  },
+  "unsavedModal": {
+    "title": "Unsaved project",
+    "message": "Current Builder project has unsaved changes. Save before opening Dashboard?",
+    "save": "Save",
+    "discard": "Discard",
+    "cancel": "Cancel"
+  },
+  "errors": {
+    "saveTimeout": "Builder save request timed out.",
+    "saveFailed": "Project save failed."
+  }
+}
