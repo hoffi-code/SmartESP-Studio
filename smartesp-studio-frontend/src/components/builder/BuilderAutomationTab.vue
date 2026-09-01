@@ -2,7 +2,7 @@
   <div class="module-card">
     <div class="components-header">
       <div class="components-title">
-        <h2>Automation</h2>
+        <h2>{{ t("builder.tabs.automation") }}</h2>
         <a
           v-if="activeTabHelpUrl"
           class="filter-help"
@@ -84,7 +84,10 @@
 
 <script setup>
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 import SchemaRenderer from "../SchemaRenderer.vue";
+
+const { t } = useI18n();
 
 const props = defineProps({
   activeTabHelpUrl: { type: String, default: "" },

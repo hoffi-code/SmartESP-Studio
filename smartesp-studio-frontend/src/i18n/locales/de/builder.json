@@ -1,4 +1,14 @@
 {
+  "tabs": {
+    "core": "Core",
+    "platform": "Plattform",
+    "network": "Netzwerk",
+    "protocols": "Protokolle",
+    "busses": "Busse",
+    "system": "System",
+    "automation": "Automation",
+    "lvgl": "LVGL"
+  },
   "comment": {
     "modalTitleDefault": "Kommentar",
     "componentTitle": "Kommentar – {domain}:",
@@ -9,5 +19,19 @@
     "buttonEdit": "Kommentar bearbeiten",
     "headerAdd": "+ Kopf-Kommentar",
     "headerEdit": "Kopf-Kommentar"
+  },
+  "componentPicker": {
+    "search": "Komponenten suchen",
+    "catalogUnavailable": "Komponentenkatalog nicht verfügbar",
+    "alreadyInProject": "Diese Komponente ist bereits im Projekt",
+    "deleteSaved": "Gespeicherte Komponente löschen"
+  },
+  "requirements": {
+    "configure": "Stelle sicher, dass {labels} korrekt konfiguriert ist.",
+    "configureComponents": "Stelle sicher, dass {labels}-Komponenten korrekt konfiguriert sind.",
+    "linkBusses": "BUSSE",
+    "linkProtocols": "PROTOKOLLE",
+    "linkSystem": "SYSTEM",
+    "linkNetwork": "NETZWERK"
   }
 }

@@ -2,7 +2,7 @@
   <div class="module-card">
     <div class="components-header">
       <div class="components-title">
-        <h2>Platform</h2>
+        <h2>{{ t("builder.tabs.platform") }}</h2>
         <a
           v-if="activeTabHelpUrl"
           class="filter-help"
@@ -70,7 +70,10 @@
 </template>
 
 <script setup>
+import { useI18n } from "vue-i18n";
 import SchemaRenderer from "../SchemaRenderer.vue";
+
+const { t } = useI18n();
 
 defineProps({
   activeTabHelpUrl: { type: String, default: "" },

@@ -1,4 +1,14 @@
 {
+  "tabs": {
+    "core": "Core",
+    "platform": "Platform",
+    "network": "Network",
+    "protocols": "Protocols",
+    "busses": "Busses",
+    "system": "System",
+    "automation": "Automation",
+    "lvgl": "LVGL"
+  },
   "comment": {
     "modalTitleDefault": "Comment",
     "componentTitle": "Comment – {domain}:",
@@ -9,5 +19,19 @@
     "buttonEdit": "Edit comment",
     "headerAdd": "+ Header comment",
     "headerEdit": "Header comment"
+  },
+  "componentPicker": {
+    "search": "Search components",
+    "catalogUnavailable": "Component catalog not available",
+    "alreadyInProject": "This component is already in the project",
+    "deleteSaved": "Delete saved component"
+  },
+  "requirements": {
+    "configure": "Make sure {labels} is configured correctly.",
+    "configureComponents": "Make sure {labels} components are configured correctly.",
+    "linkBusses": "BUSSES",
+    "linkProtocols": "PROTOCOLS",
+    "linkSystem": "SYSTEM",
+    "linkNetwork": "NETWORK"
   }
 }
