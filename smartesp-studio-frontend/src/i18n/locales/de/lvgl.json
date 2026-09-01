@@ -1,0 +1,8 @@
+{
+  "theme": {
+    "intro": "Style-Vorgaben pro Widget-Typ. Einzelne Widgets können sie weiterhin überschreiben.",
+    "addType": "Widget-Typ hinzufügen…",
+    "empty": "Noch keine Widget-Typen gestylt.",
+    "remove": "Entfernen"
+  }
+}
