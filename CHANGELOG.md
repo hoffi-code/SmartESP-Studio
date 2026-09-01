@@ -10,6 +10,10 @@ markiert.
 
 ### Added
 
+- **LVGL Canvas-Politur** (P5) – `image.angle`/`zoom` werden als CSS
+  `rotate()`/`scale()` auf das Bild-Glyph angewandt, `textarea.password_mode`
+  rendert den Text als `••••`, `spinbox` zeigt den Wert gemäß `decimal_places`
+  formatiert.
 - **LVGL `meter.scales` editierbar** (P3) – die Meter-Skalen sind jetzt voll
   modelliert (`scales` → `range_from/to`, `angle_range`, `ticks` inkl. `major`,
   `indicators` mit `line`/`arc`/`tick_style`/`image`) statt als opaker Block. Der

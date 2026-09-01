@@ -140,6 +140,24 @@ describe("LvglCanvas", () => {
     expect(svg.findAll("path").some((pth) => /#00ff00/i.test(pth.attributes("stroke") || ""))).toBe(true);
   });
 
+  it("reflects image transform, password mode and spinbox format", () => {
+    const p = {
+      id: "p",
+      widgets: [
+        { uiId: "im", type: "image", common: { x: 0, y: 0, width: 40, height: 40 }, props: { angle: 90, zoom: 512 }, children: [] },
+        { uiId: "ta", type: "textarea", common: { x: 0, y: 50, width: 90, height: 20 }, props: { text: "secret", password_mode: true }, children: [] },
+        { uiId: "sb", type: "spinbox", common: { x: 0, y: 80, width: 60, height: 20 }, props: { value: 1234, decimal_places: 2 }, children: [] }
+      ]
+    };
+    const w = mount(LvglCanvas, { props: { page: p, canvasWidth: 200, canvasHeight: 200 } });
+
+    const imgStyle = w.get(".lvgl-w--image .lvgl-canvas__image").attributes("style");
+    expect(imgStyle).toContain("rotate(90deg)");
+    expect(imgStyle).toContain("scale(2)");
+    expect(w.get(".lvgl-w--field .lvgl-canvas__field-text").text()).toBe("••••••");
+    expect(w.findAll(".lvgl-w--field .lvgl-canvas__field-text")[1].text()).toBe("12.34");
+  });
+
   it("uses an explicit bg_color over the kind default", () => {
     const p = {
       id: "p",
