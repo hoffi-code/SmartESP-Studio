@@ -1,5 +1,11 @@
 <template>
   <div class="component-form">
+    <DesignElementPreview
+      v-if="previewDomain"
+      :domain="previewDomain"
+      :config="activeComponentConfig"
+      :assets-base="assetsBase"
+    />
     <BuilderComponentRequirementsNotice
       :active-component-bus-labels="activeComponentBusLabels"
       :active-component-protocol-labels="activeComponentProtocolLabels"
@@ -66,9 +72,11 @@
 
 <script setup>
 import BuilderComponentRequirementsNotice from "./BuilderComponentRequirementsNotice.vue";
+import DesignElementPreview from "./DesignElementPreview.vue";
 import SchemaRenderer from "../SchemaRenderer.vue";
 
 defineProps({
+  previewDomain: { type: String, default: "" },
   activeComponentBusLabels: { type: String, default: "" },
   activeComponentProtocolLabels: { type: String, default: "" },
   activeComponentSystemLabels: { type: String, default: "" },
