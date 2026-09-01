@@ -121,7 +121,9 @@
     },
     {
       "key": "text_font",
-      "type": "text",
+      "type": "id_ref",
+      "domain": "font",
+      "creatable": true,
       "required": false,
       "lvl": "advanced",
       "group": "style",
