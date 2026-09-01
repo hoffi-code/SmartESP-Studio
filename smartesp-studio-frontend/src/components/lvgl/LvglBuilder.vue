@@ -7,7 +7,7 @@
         href="https://esphome.io/components/lvgl/"
         target="_blank"
         rel="noopener noreferrer"
-        aria-label="Documentation"
+        :aria-label="t('lvgl.builder.docs')"
       >
         ?
       </a>
@@ -17,8 +17,8 @@
   <div class="module-card__body lvgl-builder">
     <section v-if="topLevelSchema" class="lvgl-config-panel lvgl-settings-section">
       <details>
-        <summary>Settings</summary>
-        <p class="note">Top-level <code>lvgl:</code> options (fonts, theme, display background, style definitions).</p>
+        <summary>{{ t("lvgl.builder.settings") }}</summary>
+        <p class="note">{{ t("lvgl.builder.settingsNote") }}</p>
         <template v-for="field in topLevelSchema.fields" :key="field.key">
           <LvglThemeEditor
             v-if="field.key === 'theme'"
@@ -38,7 +38,7 @@
           />
         </template>
         <p v-if="unmodeledOptionKeys.length" class="note">
-          Kept as-is (not editable here): {{ unmodeledOptionKeys.join(", ") }}
+          {{ t("lvgl.builder.unmodeledOptions", { keys: unmodeledOptionKeys.join(", ") }) }}
         </p>
       </details>
     </section>
@@ -46,8 +46,8 @@
     <div class="lvgl-grid">
       <section class="lvgl-config-panel">
         <div class="lvgl-config-panel__header">
-          <h4>Pages</h4>
-          <button type="button" class="secondary compact" @click="addPage">Add page</button>
+          <h4>{{ t("lvgl.builder.pages") }}</h4>
+          <button type="button" class="secondary compact" @click="addPage">{{ t("lvgl.builder.addPage") }}</button>
         </div>
         <div class="lvgl-page-list">
           <button
@@ -60,7 +60,7 @@
           >
             {{ page.id || `page_${index}` }}
           </button>
-          <span v-if="!pages.length" class="note">No pages yet.</span>
+          <span v-if="!pages.length" class="note">{{ t("lvgl.builder.noPages") }}</span>
         </div>
         <button
           v-if="activePageIndex >= 0 && pages.length"
@@ -68,13 +68,13 @@
           class="secondary compact"
           @click="removeActivePage"
         >
-          Remove page
+          {{ t("lvgl.builder.removePage") }}
         </button>
       </section>
 
       <section class="lvgl-config-panel">
         <div class="lvgl-config-panel__header">
-          <h4>Widgets</h4>
+          <h4>{{ t("lvgl.builder.widgets") }}</h4>
           <div class="lvgl-config-panel__actions">
             <select v-model="widgetTypeToAdd" class="lvgl-widget-type-select" :disabled="activePageIndex < 0">
               <option v-for="widget in LVGL_WIDGETS" :key="widget.type" :value="widget.type">{{ widget.label }}</option>
@@ -85,7 +85,7 @@
               :disabled="activePageIndex < 0"
               @click="addWidget(widgetTypeToAdd)"
             >
-              Add
+              {{ t("lvgl.builder.add") }}
             </button>
           </div>
         </div>
@@ -98,14 +98,14 @@
             @select="selectedWidgetId = $event"
             @add-group="handleAddGroup"
           />
-          <div v-if="!activePageWidgets.length" class="note">No widgets on this page yet.</div>
+          <div v-if="!activePageWidgets.length" class="note">{{ t("lvgl.builder.noWidgets") }}</div>
         </div>
         <div v-if="selectedGroup" class="lvgl-tree-actions">
           <input
             v-if="selectedGroup.key === 'tabs'"
             class="lvgl-tab-name"
             :value="selectedGroupEntry?.name || ''"
-            placeholder="Tab name"
+            :placeholder="t('lvgl.builder.tabNamePlaceholder')"
             @input="renameSelectedGroup($event.target.value)"
           />
           <template v-if="selectedGroup.key === 'tiles'">
@@ -113,45 +113,45 @@
               class="lvgl-tile-meta"
               type="number"
               :value="selectedGroupEntry?.row ?? 0"
-              title="row"
+              :title="t('lvgl.builder.tileRow')"
               @input="patchSelectedGroup({ row: Number($event.target.value) })"
             />
             <input
               class="lvgl-tile-meta"
               type="number"
               :value="selectedGroupEntry?.column ?? 0"
-              title="column"
+              :title="t('lvgl.builder.tileColumn')"
               @input="patchSelectedGroup({ column: Number($event.target.value) })"
             />
             <input
               class="lvgl-tab-name"
               :value="Array.isArray(selectedGroupEntry?.dir) ? selectedGroupEntry.dir.join(', ') : selectedGroupEntry?.dir || ''"
-              placeholder="dir (LEFT, RIGHT, …)"
+              :placeholder="t('lvgl.builder.tileDirPlaceholder')"
               @input="patchSelectedGroup({ dir: $event.target.value.split(',').map((s) => s.trim()).filter(Boolean) })"
             />
           </template>
-          <button type="button" class="secondary compact" title="Add selected type into this tab/tile" @click="addWidget(widgetTypeToAdd)">+ widget</button>
-          <button type="button" class="secondary compact" @click="removeSelectedWidget">Remove</button>
+          <button type="button" class="secondary compact" :title="t('lvgl.builder.addWidgetToGroup')" @click="addWidget(widgetTypeToAdd)">{{ t("lvgl.builder.addWidgetShort") }}</button>
+          <button type="button" class="secondary compact" @click="removeSelectedWidget">{{ t("lvgl.builder.remove") }}</button>
         </div>
         <div v-else-if="selectedWidget" class="lvgl-tree-actions">
-          <button type="button" class="secondary compact" :disabled="!canMoveUp" title="Move up" @click="moveSelected(-1)">↑</button>
-          <button type="button" class="secondary compact" :disabled="!canMoveDown" title="Move down" @click="moveSelected(1)">↓</button>
-          <button type="button" class="secondary compact" :disabled="!canIndent" title="Nest under previous sibling" @click="indentSelected">⇥</button>
-          <button type="button" class="secondary compact" :disabled="!canOutdent" title="Move out of parent" @click="outdentSelected">⇤</button>
-          <button type="button" class="secondary compact" title="Add selected type as a child" @click="addChildWidget(widgetTypeToAdd)">+ child</button>
+          <button type="button" class="secondary compact" :disabled="!canMoveUp" :title="t('lvgl.builder.moveUp')" @click="moveSelected(-1)">↑</button>
+          <button type="button" class="secondary compact" :disabled="!canMoveDown" :title="t('lvgl.builder.moveDown')" @click="moveSelected(1)">↓</button>
+          <button type="button" class="secondary compact" :disabled="!canIndent" :title="t('lvgl.builder.nest')" @click="indentSelected">⇥</button>
+          <button type="button" class="secondary compact" :disabled="!canOutdent" :title="t('lvgl.builder.outdent')" @click="outdentSelected">⇤</button>
+          <button type="button" class="secondary compact" :title="t('lvgl.builder.addChild')" @click="addChildWidget(widgetTypeToAdd)">{{ t("lvgl.builder.addChildShort") }}</button>
           <select
             v-if="selectedWidgetOwnerGroups"
             class="lvgl-move-group"
-            title="Move to another tab/tile"
+            :title="t('lvgl.builder.moveToGroup')"
             @change="moveSelectedToGroup($event.target.value); $event.target.selectedIndex = 0"
           >
-            <option value="">Move to…</option>
+            <option value="">{{ t("lvgl.builder.moveToGroupPlaceholder") }}</option>
             <option v-for="g in selectedWidgetOwnerGroups.groups" :key="g.uiId" :value="g.uiId">
-              {{ selectedWidgetOwnerGroups.key === "tabs" ? "Tab" : "Tile" }} {{ g.name || g.id || "" }}
+              {{ selectedWidgetOwnerGroups.key === "tabs" ? t("lvgl.tree.groupTab") : t("lvgl.tree.groupTile") }} {{ g.name || g.id || "" }}
             </option>
-            <option value="__root">Page root</option>
+            <option value="__root">{{ t("lvgl.builder.pageRoot") }}</option>
           </select>
-          <button type="button" class="secondary compact" @click="removeSelectedWidget">Remove</button>
+          <button type="button" class="secondary compact" @click="removeSelectedWidget">{{ t("lvgl.builder.remove") }}</button>
         </div>
       </section>
     </div>
@@ -159,13 +159,13 @@
     <div class="lvgl-grid">
       <section class="lvgl-config-panel">
         <div class="lvgl-config-panel__header">
-          <h4>Canvas-Preview</h4>
+          <h4>{{ t("lvgl.builder.canvasPreview") }}</h4>
         </div>
         <div
           class="lvgl-canvas-preview"
           role="button"
           tabindex="0"
-          title="Click to open the editor"
+          :title="t('lvgl.builder.openEditor')"
           @click="openEditor"
           @keydown.enter.prevent="openEditor"
           @keydown.space.prevent="openEditor"
@@ -178,13 +178,13 @@
             :interactive="false"
             @select="selectedWidgetId = $event"
           />
-          <span class="lvgl-canvas-preview__hint">Click to edit</span>
+          <span class="lvgl-canvas-preview__hint">{{ t("lvgl.builder.clickToEdit") }}</span>
         </div>
       </section>
 
       <section class="lvgl-config-panel lvgl-config-panel--inspector">
         <div class="lvgl-config-panel__header">
-          <h4>Form</h4>
+          <h4>{{ t("lvgl.builder.form") }}</h4>
         </div>
         <LvglWidgetInspector
           :node="selectedWidget"
@@ -197,13 +197,10 @@
 
         <template v-if="showYaml">
           <div class="lvgl-config-panel__header lvgl-form-yaml__header">
-            <h4>YAML</h4>
-            <button type="button" class="secondary compact" :disabled="!yamlDirty" @click="resetYaml">Reset</button>
+            <h4>{{ t("lvgl.builder.yaml") }}</h4>
+            <button type="button" class="secondary compact" :disabled="!yamlDirty" @click="resetYaml">{{ t("lvgl.builder.reset") }}</button>
           </div>
-          <p class="note">
-            Edits the <code>lvgl:</code> block only. Applying re-parses it against the widget schemas --
-            keys outside a curated schema are kept verbatim, comments and formatting are not preserved.
-          </p>
+          <p class="note">{{ t("lvgl.builder.yamlNote") }}</p>
           <textarea
             v-model="yamlDraft"
             class="lvgl-yaml-editor"
@@ -213,7 +210,7 @@
             @input="yamlDirty = true"
           ></textarea>
           <div class="lvgl-yaml-editor__bar">
-            <button type="button" class="secondary compact" :disabled="applying || !yamlDirty" @click="applyYaml">Apply</button>
+            <button type="button" class="secondary compact" :disabled="applying || !yamlDirty" @click="applyYaml">{{ t("lvgl.builder.apply") }}</button>
             <span v-if="yamlError" class="lvgl-yaml-editor__error">{{ yamlError }}</span>
           </div>
         </template>
@@ -222,10 +219,10 @@
 
     <div v-if="editorOpen" class="lvgl-editor-modal">
       <div class="lvgl-editor-modal__backdrop" @click="editorOpen = false" />
-      <div class="lvgl-editor-modal__dialog" role="dialog" aria-modal="true" aria-label="LVGL widget editor">
+      <div class="lvgl-editor-modal__dialog" role="dialog" aria-modal="true" :aria-label="t('lvgl.builder.editorTitle')">
         <div class="lvgl-editor-modal__head">
-          <h3>Edit &mdash; {{ pages[activePageIndex]?.id || `page_${activePageIndex}` }}</h3>
-          <button type="button" class="secondary compact" @click="editorOpen = false">Close</button>
+          <h3>{{ t("lvgl.builder.editorHeading", { page: pages[activePageIndex]?.id || `page_${activePageIndex}` }) }}</h3>
+          <button type="button" class="secondary compact" @click="editorOpen = false">{{ t("lvgl.builder.close") }}</button>
         </div>
         <div class="lvgl-editor-modal__body">
           <div class="lvgl-editor-modal__canvas">
@@ -258,6 +255,7 @@
 
 <script setup>
 import { computed, onBeforeUnmount, onMounted, provide, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import LvglWidgetTreeItem from "./LvglWidgetTreeItem.vue";
 import LvglWidgetInspector from "./LvglWidgetInspector.vue";
 import LvglThemeEditor from "./LvglThemeEditor.vue";
@@ -276,6 +274,8 @@ import {
   loadConditionDefinition,
   loadSchemaByPath
 } from "../../utils/schemaLoader";
+
+const { t } = useI18n();
 
 const props = defineProps({
   lvglConfig: {

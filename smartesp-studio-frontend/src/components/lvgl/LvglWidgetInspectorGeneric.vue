@@ -18,13 +18,13 @@
       @update="handlePropsUpdate"
     />
     <p v-if="!settingFields.length && !triggerFields.length" class="note">
-      No type-specific settings for this widget.
+      {{ t("lvgl.inspector.noTypeSettings") }}
     </p>
     <p v-if="extraKeys.length" class="note">
-      Kept as-is (not editable here): {{ extraKeys.join(", ") }}
+      {{ t("lvgl.inspector.keptAsIs", { keys: extraKeys.join(", ") }) }}
     </p>
     <details v-if="styleFields.length" class="lvgl-widget-inspector-panel__section" :open="expandGroups">
-      <summary>Style</summary>
+      <summary>{{ t("lvgl.inspector.style") }}</summary>
       <SchemaField
         v-for="field in styleFields"
         :key="field.key"
@@ -38,8 +38,8 @@
       />
     </details>
     <details v-if="layoutFields.length" class="lvgl-widget-inspector-panel__section" :open="expandGroups">
-      <summary>Layout</summary>
-      <p class="note">Flex/grid container setup, per-cell placement and <code>align_to</code>.</p>
+      <summary>{{ t("lvgl.inspector.layout") }}</summary>
+      <p class="note">{{ t("lvgl.inspector.layoutNote") }}</p>
       <SchemaField
         v-for="field in layoutFields"
         :key="field.key"
@@ -53,8 +53,8 @@
       />
     </details>
     <details v-if="stateFields.length" class="lvgl-widget-inspector-panel__section" :open="expandGroups">
-      <summary>States</summary>
-      <p class="note">Per-state style overrides (pressed, checked, ...).</p>
+      <summary>{{ t("lvgl.inspector.states") }}</summary>
+      <p class="note">{{ t("lvgl.inspector.statesNote") }}</p>
       <SchemaField
         v-for="field in stateFields"
         :key="field.key"
@@ -68,8 +68,8 @@
       />
     </details>
     <details v-if="partFields.length" class="lvgl-widget-inspector-panel__section" :open="expandGroups">
-      <summary>Parts</summary>
-      <p class="note">Style overrides for widget sub-parts (indicator, knob, ...).</p>
+      <summary>{{ t("lvgl.inspector.parts") }}</summary>
+      <p class="note">{{ t("lvgl.inspector.partsNote") }}</p>
       <SchemaField
         v-for="field in partFields"
         :key="field.key"
@@ -83,7 +83,7 @@
       />
     </details>
     <details v-if="triggerFields.length" class="lvgl-widget-inspector-panel__section" :open="expandGroups">
-      <summary>Events</summary>
+      <summary>{{ t("lvgl.inspector.events") }}</summary>
       <SchemaField
         v-for="field in triggerFields"
         :key="field.key"
@@ -101,9 +101,12 @@
 
 <script setup>
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 import SchemaField from "../SchemaField.vue";
 import LvglWidgetInspectorCommon from "./LvglWidgetInspectorCommon.vue";
 import { COMMON_FIELD_KEYS, lvglWidgetParts } from "../../utils/lvglWidgets";
+
+const { t } = useI18n();
 
 const props = defineProps({
   node: {

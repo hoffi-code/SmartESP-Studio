@@ -1,6 +1,6 @@
 <template>
   <div class="lvgl-widget-inspector">
-    <div v-if="!node" class="note">Select a widget to edit it.</div>
+    <div v-if="!node" class="note">{{ t("lvgl.inspector.selectWidget") }}</div>
     <LvglRawYamlEditor
       v-else-if="node.type === 'unsupported'"
       :node="node"
@@ -16,15 +16,18 @@
       @update="$emit('update', $event)"
       @field-edit="$emit('field-edit', $event)"
     />
-    <div v-else class="note">Loading widget schema...</div>
+    <div v-else class="note">{{ t("lvgl.inspector.loadingSchema") }}</div>
   </div>
 </template>
 
 <script setup>
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 import LvglWidgetInspectorGeneric from "./LvglWidgetInspectorGeneric.vue";
 import LvglRawYamlEditor from "./LvglRawYamlEditor.vue";
 import { lvglWidgetByType } from "../../utils/lvglWidgets";
+
+const { t } = useI18n();
 
 const props = defineProps({
   node: {

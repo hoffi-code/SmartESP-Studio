@@ -30,7 +30,7 @@
           :style="{ paddingLeft: `${8 + (depth + 1) * 16}px` }"
           @click="$emit('select', group.uiId)"
         >
-          {{ node.tabs ? "tab" : "tile" }} · {{ group.name || group.id || gi }}
+          {{ node.tabs ? t("lvgl.tree.tab") : t("lvgl.tree.tile") }} · {{ group.name || group.id || gi }}
         </button>
         <LvglWidgetTreeItem
           v-for="child in group.widgets || []"
@@ -48,13 +48,17 @@
         :style="{ paddingLeft: `${8 + (depth + 1) * 16}px` }"
         @click="$emit('add-group', node.uiId)"
       >
-        + {{ node.tabs ? "tab" : "tile" }}
+        {{ node.tabs ? t("lvgl.tree.addTab") : t("lvgl.tree.addTile") }}
       </button>
     </template>
   </div>
 </template>
 
 <script setup>
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
+
 defineProps({
   node: {
     type: Object,
