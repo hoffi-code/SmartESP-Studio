@@ -2,6 +2,7 @@
   "id": "protocols.api",
   "domain": "api",
   "platform": "core",
+  "helpUrl": "https://esphome.io/components/api/",
   "fields": [
     {
       "key": "enabled",
@@ -19,6 +20,8 @@
       "required": false,
       "lvl": "simple",
       "emitYAML": "dependsOn",
+      "helpUrl": "https://esphome.io/components/api/#encryption",
+      "note": "Store the key as a secret (`key: !secret api_encryption_key`) and use the same value in Home Assistant.",
       "dependsOn": {
         "key": "enabled",
         "value": true
@@ -35,7 +38,7 @@
         {
           "key": "key",
           "type": "password",
-          "required": true,
+          "required": false,
           "lvl": "simple",
           "emitYAML": "dependsOn",
           "placeholder": "SUy+LOZ1UM4OnR9/Y4fzhDgunMTG+VZWBklKsHLS9Pc=",
@@ -92,12 +95,13 @@
       "key": "reboot_timeout",
       "type": "duration",
       "required": false,
-      "lvl": "advanced",
+      "lvl": "normal",
       "dependsOn": {
         "key": "enabled",
         "value": true
       },
-      "placeholder": "15min"
+      "placeholder": "15min",
+      "note": "Set to `0s` to never reboot when no client is connected."
     },
     {
       "key": "batch_delay",
@@ -119,7 +123,7 @@
         "key": "enabled",
         "value": true
       },
-      "placeholder": "4"
+      "placeholder": "1"
     },
     {
       "key": "max_connections",
@@ -130,7 +134,7 @@
         "key": "enabled",
         "value": true
       },
-      "placeholder": "8"
+      "placeholder": "4"
     },
     {
       "key": "max_send_queue",
@@ -141,7 +145,7 @@
         "key": "enabled",
         "value": true
       },
-      "placeholder": "8"
+      "placeholder": "4"
     },
     {
       "key": "custom_services",
@@ -156,6 +160,7 @@
     },
     {
       "key": "homeassistant_services",
+      "label": "Home Assistant services",
       "type": "boolean",
       "required": false,
       "lvl": "advanced",
@@ -167,6 +172,7 @@
     },
     {
       "key": "homeassistant_states",
+      "label": "Home Assistant states",
       "type": "boolean",
       "required": false,
       "lvl": "advanced",
