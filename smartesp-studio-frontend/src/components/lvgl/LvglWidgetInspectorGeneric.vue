@@ -103,7 +103,7 @@
 import { computed } from "vue";
 import SchemaField from "../SchemaField.vue";
 import LvglWidgetInspectorCommon from "./LvglWidgetInspectorCommon.vue";
-import { COMMON_FIELD_KEYS } from "../../utils/lvglWidgets";
+import { COMMON_FIELD_KEYS, lvglWidgetParts } from "../../utils/lvglWidgets";
 
 const props = defineProps({
   node: {
@@ -163,7 +163,12 @@ const settingFields = computed(() =>
 const styleFields = computed(() => typeSpecificFields.value.filter(isStyleField));
 const layoutFields = computed(() => typeSpecificFields.value.filter(isLayoutField));
 const stateFields = computed(() => typeSpecificFields.value.filter(isStateField));
-const partFields = computed(() => typeSpecificFields.value.filter(isPartField));
+// Only the parts the selected widget type actually has -- the shared schema
+// resolves a style block for every part, which would otherwise all show here.
+const allowedParts = computed(() => new Set(lvglWidgetParts(props.node?.type)));
+const partFields = computed(() =>
+  typeSpecificFields.value.filter((field) => isPartField(field) && allowedParts.value.has(field.key))
+);
 const triggerFields = computed(() => typeSpecificFields.value.filter(isTriggerField));
 const extraKeys = computed(() => Object.keys(props.node?.extra || {}));
 

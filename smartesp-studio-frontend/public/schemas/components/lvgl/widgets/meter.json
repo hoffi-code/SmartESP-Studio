@@ -13,6 +13,7 @@
       "item": {
         "type": "object",
         "fields": [
+          { "key": "id", "type": "id", "required": false, "lvl": "advanced" },
           { "key": "range_from", "type": "text", "required": false, "lvl": "normal", "placeholder": "0" },
           { "key": "range_to", "type": "text", "required": false, "lvl": "normal", "placeholder": "100" },
           { "key": "angle_range", "type": "text", "required": false, "lvl": "normal", "placeholder": "270" },

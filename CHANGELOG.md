@@ -10,6 +10,14 @@ markiert.
 
 ### Added
 
+- **LVGL Widget-Initialzustand** – neues gemeinsames Feld `state`
+  (`checked`/`disabled`/`focused`/`pressed`/`edited`) für alle Widgets, das den
+  ESPHome-Startzustand abbildet. Die Canvas-Vorschau liest `state.checked` und
+  zeigt Switch/Checkbox jetzt korrekt als eingeschaltet.
+- **LVGL `tabview` Style-Blöcke** – `tab_style` und `content_style` sind im
+  Inspector unter „Style" editierbar (vorher nur als `extra` round-getrippt).
+- **LVGL `meter.scales[].id`** – Scale-ID editierbar (für `lvgl.meter.*`-Actions
+  auf einzelne Skalen).
 - **LVGL Gruppen-Feinschliff** (P7) – Widgets in einem Tab/Tile lassen sich
   jetzt umsortieren (↑/↓/⇥/⇤ greifen in Gruppen) und per „Move to…"-Auswahl in
   einen anderen Tab/Tile oder zurück auf die Page verschieben. Bei ausgewähltem
@@ -67,6 +75,30 @@ markiert.
   unterstützte Widgets haben jetzt einen editierbaren Roh-YAML-Editor mit
   Validierung statt nur einem Hinweis; Kind-Widgets darunter bleiben im Baum
   bearbeitbar.
+
+### Changed
+
+- **LVGL Canvas: Arc-/Meter-Winkel** – die Vorschau leitet den Bogen jetzt aus
+  `start_angle`/`end_angle`/`rotation` (Arc) bzw. `angle_range`/`rotation`
+  (Meter-Scale) ab statt aus festen 150°/240°. Default entspricht dem echten
+  LVGL-Look (135°→45°, 270° Sweep, Lücke unten). Spinner rendert als Vollkreis
+  mit `arc_length`-Segment.
+- **LVGL Canvas: weitere Widget-Details** – Bar/Slider berücksichtigen `mode`
+  (`RANGE`/`SYMMETRICAL`) und `start_value`, der Indikator beginnt am richtigen
+  Punkt statt immer bei 0. Switch kippt bei `height > width` in die vertikale
+  Orientierung. `image_recolor` färbt das Bild-Glyph ein. `state.disabled`
+  blendet das Widget in der Vorschau aus.
+- **LVGL Canvas: Verläufe, Schatten, `label.long_mode`** – `bg_grad_color` /
+  `bg_grad_dir` rendern als CSS-Verlauf, `shadow_width` (+ Offset/Spread/Farbe)
+  als `box-shadow`. Label mit `long_mode: WRAP` bricht mehrzeilig um,
+  `CLIP`/`SCROLL` schneiden ohne „…" ab.
+- **LVGL Inspector: Parts pro Widget-Typ** – die „Parts"-Sektion zeigt nur noch
+  die Parts, die der gewählte Widget-Typ tatsächlich hat (Slider: indicator/knob,
+  Roller: selected, …) statt aller sieben. Import/Export bleibt unverändert –
+  jeder `part:`-Block round-trippt weiterhin über das Shared-Schema.
+- **LVGL Schema-Konsistenz-Test** – prüft zusätzlich verschachtelte Blöcke
+  (`scales`/`rows`/`points`/`tabs`/…) und die Gegenrichtung (kein kuratiertes
+  Feld ohne Dump-Entsprechung).
 
 ### Fixed
 

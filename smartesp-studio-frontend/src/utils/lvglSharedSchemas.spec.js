@@ -2,6 +2,7 @@ import { readFileSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
 import { describe, expect, it } from "vitest";
+import { LVGL_WIDGET_PARTS, LVGL_WIDGET_TYPES } from "./lvglWidgets";
 
 // Structure guards for the shared LVGL schema chain every widget extends:
 // widget -> lvgl_widget_common -> lvgl_widget_style -> lvgl_widget_layout ->
@@ -62,10 +63,15 @@ describe("lvgl widget common base", () => {
   const COMMON_KEYS = ["id", "x", "y", "width", "height", "align"];
   const STD_TRIGGERS = ["on_click", "on_press", "on_release", "on_long_press", "on_focus", "on_defocus"];
 
-  it("carries the position/size fields and the shared trigger blocks", () => {
+  it("carries the position/size fields, the initial state block and the shared trigger blocks", () => {
     expect(widgetCommon.extends).toBe("lvgl_widget_style.json");
     const keys = widgetCommon.fields.map((f) => f.key);
-    expect(keys).toEqual([...COMMON_KEYS, ...STD_TRIGGERS]);
+    expect(keys).toEqual([...COMMON_KEYS, "state", ...STD_TRIGGERS]);
+    const state = widgetCommon.fields.find((f) => f.key === "state");
+    expect(state.type).toBe("object");
+    expect(state.fields.map((f) => f.key)).toEqual(
+      expect.arrayContaining(["checked", "disabled"])
+    );
   });
 
   it("no widget schema re-declares a common field or a standard trigger", () => {
@@ -75,6 +81,21 @@ describe("lvgl widget common base", () => {
       const keys = schema.fields.map((f) => f.key);
       for (const dup of [...COMMON_KEYS, ...STD_TRIGGERS]) {
         expect(keys, `${file} still declares ${dup}`).not.toContain(dup);
+      }
+    }
+  });
+});
+
+describe("lvgl per-widget part map", () => {
+  const definedParts = new Set(
+    widgetStyle.fields.filter((f) => f.group === "parts").map((f) => f.key)
+  );
+
+  it("only references parts the shared style schema defines", () => {
+    for (const [type, parts] of Object.entries(LVGL_WIDGET_PARTS)) {
+      expect(LVGL_WIDGET_TYPES.has(type) || type === "obj", `${type} is a real widget type`).toBe(true);
+      for (const part of parts) {
+        expect(definedParts.has(part), `${type} references unknown part ${part}`).toBe(true);
       }
     }
   });

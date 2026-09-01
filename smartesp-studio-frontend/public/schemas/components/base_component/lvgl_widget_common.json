@@ -57,6 +57,19 @@
       ]
     },
     {
+      "key": "state",
+      "type": "object",
+      "required": false,
+      "lvl": "normal",
+      "fields": [
+        { "key": "checked", "type": "boolean", "required": false },
+        { "key": "disabled", "type": "boolean", "required": false },
+        { "key": "focused", "type": "boolean", "required": false },
+        { "key": "pressed", "type": "boolean", "required": false },
+        { "key": "edited", "type": "boolean", "required": false }
+      ]
+    },
+    {
       "key": "on_click",
       "type": "list",
       "required": false,

@@ -43,6 +43,31 @@ export const LVGL_WIDGETS = [
 
 export const LVGL_WIDGET_TYPES = new Set(LVGL_WIDGETS.map((widget) => widget.type));
 
+// Which LVGL parts each widget type actually draws. The shared style schema
+// resolves style blocks for every part on every widget (so any part: block in
+// imported YAML still round-trips), but the inspector only offers the parts that
+// make sense for the selected type. Types not listed here have only LV_PART_MAIN.
+export const LVGL_WIDGET_PARTS = {
+  obj: ["scrollbar"],
+  label: ["selected", "scrollbar"],
+  arc: ["indicator", "knob"],
+  bar: ["indicator"],
+  slider: ["indicator", "knob"],
+  switch: ["indicator", "knob"],
+  checkbox: ["indicator"],
+  dropdown: ["indicator", "selected", "scrollbar"],
+  roller: ["selected"],
+  spinbox: ["cursor", "selected", "scrollbar"],
+  textarea: ["cursor", "selected", "scrollbar"],
+  buttonmatrix: ["items"],
+  keyboard: ["items"],
+  meter: ["indicator", "ticks", "items"],
+  spinner: ["indicator"],
+  tileview: ["scrollbar"]
+};
+
+export const lvglWidgetParts = (type) => LVGL_WIDGET_PARTS[type] || [];
+
 export const lvglWidgetByType = (type) => LVGL_WIDGETS.find((widget) => widget.type === type) || null;
 
 export const lvglWidgetDefaults = (type) => ({ ...(lvglWidgetByType(type)?.defaults || {}) });
