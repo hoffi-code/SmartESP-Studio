@@ -34,6 +34,7 @@
             <img :src="link.icon" alt="" aria-hidden="true" />
           </a>
         </nav>
+        <LocaleSwitcher />
       </div>
 
       <div class="app-topbar-actions">
@@ -123,6 +124,7 @@
 import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { RouterView, useRoute, useRouter } from "vue-router";
 import UnsavedChangesModal from "./components/UnsavedChangesModal.vue";
+import LocaleSwitcher from "./components/LocaleSwitcher.vue";
 
 const appVersion = __APP_VERSION__;
 const socialLinks = [
