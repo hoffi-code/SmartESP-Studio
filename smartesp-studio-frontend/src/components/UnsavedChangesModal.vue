@@ -1,18 +1,18 @@
 <template>
   <div class="modal-backdrop" v-if="open" @click="$emit('cancel')">
     <div class="modal-card" role="dialog" aria-modal="true" @click.stop>
-      <h3>{{ title }}</h3>
-      <p>{{ message }}</p>
+      <h3>{{ title || t("modals.unsaved.title") }}</h3>
+      <p>{{ message || t("modals.unsaved.message") }}</p>
       <div v-if="errorMessage" class="unsaved-modal-error">{{ errorMessage }}</div>
       <div class="modal-actions">
         <button class="secondary" type="button" :disabled="busy" @click="$emit('cancel')">
-          {{ cancelText }}
+          {{ cancelText || t("modals.unsaved.cancel") }}
         </button>
         <button class="secondary" type="button" :disabled="busy" @click="$emit('discard')">
-          {{ discardText }}
+          {{ discardText || t("modals.unsaved.discard") }}
         </button>
         <button type="button" :disabled="busy" @click="$emit('save')">
-          {{ busy ? "Saving..." : saveText }}
+          {{ busy ? t("modals.common.saving") : saveText || t("modals.unsaved.save") }}
         </button>
       </div>
     </div>
@@ -21,34 +21,19 @@
 
 <script setup>
 import { onBeforeUnmount, onMounted, watch } from "vue";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const props = defineProps({
   open: Boolean,
   busy: Boolean,
-  title: {
-    type: String,
-    default: "Unsaved changes"
-  },
-  message: {
-    type: String,
-    default: "You have unsaved changes. Save before leaving?"
-  },
-  saveText: {
-    type: String,
-    default: "Save"
-  },
-  discardText: {
-    type: String,
-    default: "Discard"
-  },
-  cancelText: {
-    type: String,
-    default: "Cancel"
-  },
-  errorMessage: {
-    type: String,
-    default: ""
-  }
+  title: { type: String, default: "" },
+  message: { type: String, default: "" },
+  saveText: { type: String, default: "" },
+  discardText: { type: String, default: "" },
+  cancelText: { type: String, default: "" },
+  errorMessage: { type: String, default: "" }
 });
 
 const emit = defineEmits(["save", "discard", "cancel"]);

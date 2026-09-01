@@ -4,24 +4,31 @@
       <header class="icon-picker-header">
         <div>
           <div class="filter-header-title">
-            <h3>{{ title }}</h3>
+            <h3>{{ title || t("modals.picker.title") }}</h3>
             <a
               v-if="helpUrl"
               class="filter-help"
               :href="helpUrl"
               target="_blank"
               rel="noopener noreferrer"
-              :aria-label="helpLabel"
+              :aria-label="helpLabel || t('modals.common.documentation')"
             >
               ?
             </a>
           </div>
         </div>
-        <button type="button" class="secondary compact" @click="handleClose">Close</button>
+        <button type="button" class="secondary compact" @click="handleClose">
+          {{ t("modals.common.close") }}
+        </button>
       </header>
 
       <div class="icon-picker-search">
-        <input ref="searchInput" v-model="query" type="text" :placeholder="searchPlaceholder" />
+        <input
+          ref="searchInput"
+          v-model="query"
+          type="text"
+          :placeholder="searchPlaceholder || t('modals.picker.search')"
+        />
       </div>
 
       <div v-if="useSections && filteredSections.length" class="picker-sections">
@@ -53,13 +60,16 @@
           <span class="filter-title">{{ item.label || item.id }}</span>
         </button>
       </div>
-      <div v-else class="icon-empty">{{ emptyLabel }}</div>
+      <div v-else class="icon-empty">{{ emptyLabel || t("modals.picker.empty") }}</div>
     </div>
   </div>
 </template>
 
 <script setup>
 import { computed, nextTick, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const props = defineProps({
   open: {
@@ -80,7 +90,7 @@ const props = defineProps({
   },
   title: {
     type: String,
-    default: "Choose"
+    default: ""
   },
   helpUrl: {
     type: String,
@@ -88,15 +98,15 @@ const props = defineProps({
   },
   helpLabel: {
     type: String,
-    default: "Documentation"
+    default: ""
   },
   searchPlaceholder: {
     type: String,
-    default: "Search"
+    default: ""
   },
   emptyLabel: {
     type: String,
-    default: "No items to show."
+    default: ""
   }
 });
 

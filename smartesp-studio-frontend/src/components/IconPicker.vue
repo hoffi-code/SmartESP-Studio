@@ -8,10 +8,12 @@
     <div class="icon-picker-card">
       <header class="icon-picker-header">
         <div>
-          <h3>Choose icon</h3>
-          <p class="icon-picker-sub">Search the Material Design Icons catalog.</p>
+          <h3>{{ t("modals.iconPicker.title") }}</h3>
+          <p class="icon-picker-sub">{{ t("modals.iconPicker.subtitle") }}</p>
         </div>
-        <button type="button" class="secondary compact" @click="handleClose">Close</button>
+        <button type="button" class="secondary compact" @click="handleClose">
+          {{ t("modals.common.close") }}
+        </button>
       </header>
 
       <div class="icon-picker-search">
@@ -19,14 +21,14 @@
           ref="searchInput"
           v-model="query"
           type="text"
-          placeholder="Search icons"
+          :placeholder="t('modals.iconPicker.search')"
           :disabled="isLoading"
         />
         <div class="icon-picker-meta">
-          <span v-if="isLoading">Loading icons...</span>
+          <span v-if="isLoading">{{ t("modals.iconPicker.loading") }}</span>
           <span v-else-if="loadError">{{ loadError }}</span>
-          <span v-else-if="resultCount">Results: {{ resultCount }}</span>
-          <span v-else>Type to search</span>
+          <span v-else-if="resultCount">{{ t("modals.iconPicker.results", { count: resultCount }) }}</span>
+          <span v-else>{{ t("modals.iconPicker.typeToSearch") }}</span>
         </div>
       </div>
 
@@ -50,6 +52,9 @@
 
 <script setup>
 import { computed, nextTick, onBeforeUnmount, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const props = defineProps({
   open: {
@@ -141,7 +146,7 @@ const loadMeta = async () => {
     allIcons.value = Array.isArray(data) ? data.filter((icon) => !icon.deprecated) : [];
     hasLoaded.value = true;
   } catch (error) {
-    loadError.value = "Failed to load icons";
+    loadError.value = t("modals.iconPicker.loadError");
   } finally {
     isLoading.value = false;
   }

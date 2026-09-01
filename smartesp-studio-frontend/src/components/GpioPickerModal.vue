@@ -8,24 +8,26 @@
     <div class="gpio-picker-card">
       <header class="gpio-picker-header">
         <div>
-          <h3>GPIO Picker</h3>
+          <h3>{{ t("modals.gpioPicker.title") }}</h3>
           <p class="gpio-picker-sub">{{ titleText }}</p>
         </div>
-        <button type="button" class="secondary compact" @click="handleClose">Close</button>
+        <button type="button" class="secondary compact" @click="handleClose">
+          {{ t("modals.common.close") }}
+        </button>
       </header>
 
       <div class="gpio-picker-search">
-        <input v-model="query" type="text" placeholder="Search GPIO or note" />
+        <input v-model="query" type="text" :placeholder="t('modals.gpioPicker.search')" />
         <div class="gpio-picker-legend">
-          <span class="legend-item safe">Safe</span>
-          <span class="legend-item caution">Caution</span>
-          <span class="legend-item avoid">Avoid</span>
-          <span class="legend-item used">In use</span>
+          <span class="legend-item safe">{{ t("modals.gpioPicker.legendSafe") }}</span>
+          <span class="legend-item caution">{{ t("modals.gpioPicker.legendCaution") }}</span>
+          <span class="legend-item avoid">{{ t("modals.gpioPicker.legendAvoid") }}</span>
+          <span class="legend-item used">{{ t("modals.gpioPicker.legendUsed") }}</span>
         </div>
       </div>
 
       <div class="gpio-picker-body">
-        <div v-if="!orderedOptions.length" class="gpio-empty">No GPIO matches.</div>
+        <div v-if="!orderedOptions.length" class="gpio-empty">{{ t("modals.gpioPicker.empty") }}</div>
         <div v-for="pin in orderedOptions" :key="pin.key" class="gpio-row">
           <button
             type="button"
@@ -35,7 +37,9 @@
             @click="selectPin(pin)"
           >
             <span class="gpio-id">{{ pin.id }}</span>
-            <span class="gpio-tag" v-if="pin.selectable === false && pin.status !== 'used'">Disabled</span>
+            <span class="gpio-tag" v-if="pin.selectable === false && pin.status !== 'used'">
+              {{ t("modals.gpioPicker.disabled") }}
+            </span>
           </button>
           <div class="gpio-row-note">
             {{ getPinNote(pin) }}
@@ -48,6 +52,9 @@
 
 <script setup>
 import { computed, onBeforeUnmount, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const props = defineProps({
   open: {
@@ -80,7 +87,7 @@ const emit = defineEmits(["close", "select"]);
 
 const query = ref("");
 
-const titleText = computed(() => props.title || "Select GPIO");
+const titleText = computed(() => props.title || t("modals.gpioPicker.titleFallback"));
 
 const normalizeKey = (value) => String(value || "").toLowerCase().replace(/\s+/g, "");
 

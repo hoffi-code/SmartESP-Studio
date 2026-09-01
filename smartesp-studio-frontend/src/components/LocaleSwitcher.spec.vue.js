@@ -5,7 +5,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import LocaleSwitcher from "./LocaleSwitcher.vue";
 import { DEFAULT_LOCALE, i18n, setLocale } from "../i18n";
 
-const mountSwitcher = () => mount(LocaleSwitcher, { global: { plugins: [i18n] } });
+const mountSwitcher = () => mount(LocaleSwitcher);
 
 afterEach(() => setLocale(DEFAULT_LOCALE));
 

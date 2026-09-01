@@ -1,8 +1,8 @@
 <template>
   <div v-if="open" class="secrets-modal-overlay" @click.self="emit('close')">
-    <section class="secrets-modal" role="dialog" aria-modal="true" aria-label="Secrets">
+    <section class="secrets-modal" role="dialog" aria-modal="true" :aria-label="t('modals.secrets.title')">
       <header class="secrets-modal-header">
-        <h3>Secrets</h3>
+        <h3>{{ t("modals.secrets.title") }}</h3>
       </header>
 
       <div class="secrets-modal-body">
@@ -15,7 +15,7 @@
             spellcheck="false"
             autocomplete="off"
             autocapitalize="off"
-            placeholder="# secrets.yaml\n# key: value"
+            :placeholder="t('modals.secrets.placeholder')"
             :disabled="loading || saving"
             @scroll="syncHighlightScroll"
           ></textarea>
@@ -26,10 +26,10 @@
 
       <footer class="secrets-modal-footer">
         <button type="button" class="btn-standard" :disabled="!canSave" @click="emit('save', draft)">
-          Save
+          {{ t("modals.secrets.save") }}
         </button>
         <button type="button" class="btn-standard secondary" :disabled="saving" @click="emit('close')">
-          Close
+          {{ t("modals.common.close") }}
         </button>
       </footer>
     </section>
@@ -38,7 +38,10 @@
 
 <script setup>
 import { computed, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import { load as parseYaml } from "js-yaml";
+
+const { t } = useI18n();
 
 const props = defineProps({
   open: { type: Boolean, default: false },
@@ -91,7 +94,7 @@ const highlightedContent = computed(() => {
 });
 
 const formatYamlError = (error) => {
-  const message = error?.message || "Invalid YAML syntax";
+  const message = error?.message || t("modals.secrets.invalidYaml");
   const mark = error?.mark;
   if (!mark || !Number.isFinite(mark.line) || !Number.isFinite(mark.column)) {
     return message;

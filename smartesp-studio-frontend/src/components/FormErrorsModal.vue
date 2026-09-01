@@ -7,7 +7,7 @@
       aria-modal="true"
       :aria-label="ariaLabel"
     >
-      <p class="form-errors-modal-message">{{ message }}</p>
+      <p class="form-errors-modal-message">{{ message || t("modals.formErrors.message") }}</p>
       <ul class="form-errors-modal-list">
         <li v-for="(error, index) in errors" :key="`${error.path}-${index}`">
           <span class="form-errors-modal-line" :class="lineClass">
@@ -16,7 +16,7 @@
         </li>
       </ul>
       <div class="modal-actions">
-        <button type="button" @click="emit('close')">OK</button>
+        <button type="button" @click="emit('close')">{{ t("modals.common.ok") }}</button>
       </div>
     </section>
   </div>
@@ -24,6 +24,9 @@
 
 <script setup>
 import { computed, onBeforeUnmount, onMounted, watch } from "vue";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const props = defineProps({
   open: {
@@ -36,7 +39,7 @@ const props = defineProps({
   },
   message: {
     type: String,
-    default: "Please correct the errors below before proceeding with installation."
+    default: ""
   },
   tone: {
     type: String,
@@ -55,7 +58,7 @@ const modalClass = computed(() =>
 );
 
 const ariaLabel = computed(() =>
-  props.tone === "neutral" ? "Information" : "Form errors"
+  props.tone === "neutral" ? t("modals.formErrors.ariaInformation") : t("modals.formErrors.ariaErrors")
 );
 
 const handleKeydown = (event) => {

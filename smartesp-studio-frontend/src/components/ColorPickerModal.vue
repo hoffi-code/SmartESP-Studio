@@ -3,8 +3,8 @@
     <div class="color-picker-card" role="dialog" aria-modal="true">
       <header class="color-picker-header">
         <div>
-          <h3>Color picker</h3>
-          <p class="color-picker-sub">Select a color for the display element.</p>
+          <h3>{{ t("modals.colorPicker.title") }}</h3>
+          <p class="color-picker-sub">{{ t("modals.colorPicker.subtitle") }}</p>
         </div>
       </header>
 
@@ -13,13 +13,13 @@
           <input
             type="color"
             v-model="pickerValue"
-            aria-label="Color picker"
+            :aria-label="t('modals.colorPicker.title')"
           />
           <input
             type="text"
             v-model="hexValue"
             placeholder="#RRGGBB"
-            aria-label="Hex color"
+            :aria-label="t('modals.colorPicker.hexLabel')"
           />
         </div>
         <div class="color-picker-swatches">
@@ -30,21 +30,26 @@
             class="color-swatch"
             :style="{ backgroundColor: swatch }"
             @click="selectSwatch(swatch)"
-            :aria-label="`Pick ${swatch}`"
+            :aria-label="t('modals.colorPicker.pickSwatch', { color: swatch })"
           ></button>
         </div>
       </div>
 
       <footer class="color-picker-actions">
-        <button type="button" class="secondary compact" @click="applyColor">Apply</button>
+        <button type="button" class="secondary compact" @click="applyColor">
+          {{ t("modals.colorPicker.apply") }}
+        </button>
       </footer>
     </div>
   </div>
 </template>
 
 <script setup>
-import { computed, onBeforeUnmount, ref, watch } from "vue";
+import { onBeforeUnmount, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import { normalizeHexColor } from "../utils/displayColor";
+
+const { t } = useI18n();
 
 const props = defineProps({
   open: {

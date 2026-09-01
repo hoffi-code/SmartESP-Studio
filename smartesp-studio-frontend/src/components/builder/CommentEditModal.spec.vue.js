@@ -3,16 +3,15 @@ import { mount } from "@vue/test-utils";
 import { afterEach, describe, expect, it } from "vitest";
 
 import CommentEditModal from "./CommentEditModal.vue";
-import { DEFAULT_LOCALE, i18n, setLocale } from "../../i18n";
+import { DEFAULT_LOCALE, setLocale } from "../../i18n";
 
-const openWith = (value = "") =>
-  mount(CommentEditModal, { props: { open: true, value }, global: { plugins: [i18n] } });
+const openWith = (value = "") => mount(CommentEditModal, { props: { open: true, value } });
 
 afterEach(() => setLocale(DEFAULT_LOCALE));
 
 describe("CommentEditModal", () => {
   it("renders nothing while closed", () => {
-    const wrapper = mount(CommentEditModal, { props: { open: false }, global: { plugins: [i18n] } });
+    const wrapper = mount(CommentEditModal, { props: { open: false } });
     expect(wrapper.find(".modal-backdrop").exists()).toBe(false);
   });
 
