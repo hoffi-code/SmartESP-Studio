@@ -25,6 +25,24 @@
       "placeholder": "10%"
     },
     {
+      "key": "tab_style",
+      "type": "object",
+      "required": false,
+      "lvl": "advanced",
+      "group": "style",
+      "extends": "lvgl_style_props.json",
+      "fields": []
+    },
+    {
+      "key": "content_style",
+      "type": "object",
+      "required": false,
+      "lvl": "advanced",
+      "group": "style",
+      "extends": "lvgl_style_props.json",
+      "fields": []
+    },
+    {
       "key": "on_value",
       "type": "list",
       "required": false,

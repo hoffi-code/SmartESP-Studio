@@ -24,7 +24,8 @@
             {
               'is-selected': entry.uiId && entry.uiId === selectedId,
               'is-managed': entry.layoutManaged,
-              'is-static': !entry.positionable
+              'is-static': !entry.positionable,
+              'is-disabled': entry.disabled
             }
           ]"
           :style="entry.boxStyle"
@@ -32,7 +33,12 @@
           @pointerdown.stop="onWidgetPointerDown($event, entry)"
         >
           <!-- text-only: label -->
-          <span v-if="entry.render.kind === 'label'" class="lvgl-canvas__label" :style="entry.render.textStyle">
+          <span
+            v-if="entry.render.kind === 'label'"
+            class="lvgl-canvas__label"
+            :class="entry.render.longClass"
+            :style="entry.render.textStyle"
+          >
             {{ entry.render.text }}
           </span>
 
@@ -40,7 +46,11 @@
           <span v-else-if="entry.render.kind === 'button'" class="lvgl-canvas__btn-label">{{ entry.render.text }}</span>
 
           <!-- switch: pill track + knob -->
-          <span v-else-if="entry.render.kind === 'switch'" class="lvgl-canvas__switch" :class="{ 'is-on': entry.render.on }">
+          <span
+            v-else-if="entry.render.kind === 'switch'"
+            class="lvgl-canvas__switch"
+            :class="{ 'is-on': entry.render.on, 'is-vertical': entry.render.vertical }"
+          >
             <i class="lvgl-canvas__switch-knob" />
           </span>
 
@@ -61,8 +71,8 @@
             <i
               class="lvgl-canvas__bar-fill"
               :style="entry.render.vertical
-                ? { height: `${entry.render.fill}%`, background: entry.render.indicator }
-                : { width: `${entry.render.fill}%`, background: entry.render.indicator }"
+                ? { bottom: `${entry.render.fillStart}%`, height: `${entry.render.fillEnd - entry.render.fillStart}%`, background: entry.render.indicator }
+                : { left: `${entry.render.fillStart}%`, width: `${entry.render.fillEnd - entry.render.fillStart}%`, background: entry.render.indicator }"
             />
             <i
               v-if="entry.render.knob"
@@ -75,20 +85,20 @@
 
           <!-- arc / spinner: background ring + indicator arc -->
           <svg v-else-if="entry.render.kind === 'arc'" class="lvgl-canvas__arc" viewBox="0 0 48 48">
-            <path :d="ARC_TRACK_PATH" :stroke="entry.render.track" :stroke-width="entry.render.arcWidth" fill="none" stroke-linecap="round" />
+            <path :d="entry.render.path" :stroke="entry.render.track" :stroke-width="entry.render.arcWidth" fill="none" stroke-linecap="round" />
             <path
-              :d="ARC_TRACK_PATH"
+              :d="entry.render.path"
               :stroke="entry.render.indicator"
               :stroke-width="entry.render.arcWidth"
               fill="none"
               stroke-linecap="round"
-              :stroke-dasharray="ARC_LEN"
-              :stroke-dashoffset="ARC_LEN * (1 - entry.render.fill / 100)"
+              :stroke-dasharray="entry.render.len"
+              :stroke-dashoffset="entry.render.len * (1 - entry.render.fill / 100)"
             />
             <circle
               v-if="entry.render.knob"
-              :cx="arcKnob(entry.render.fill).x"
-              :cy="arcKnob(entry.render.fill).y"
+              :cx="entry.render.knobPt.x"
+              :cy="entry.render.knobPt.y"
               :r="entry.render.arcWidth * 0.9"
               :fill="entry.render.indicator"
             />
@@ -120,7 +130,10 @@
           <span
             v-else-if="entry.render.kind === 'image'"
             class="lvgl-canvas__image"
-            :style="entry.render.transform ? { transform: entry.render.transform } : null"
+            :style="[
+              entry.render.transform ? { transform: entry.render.transform } : null,
+              entry.render.recolor ? { color: entry.render.recolor } : null
+            ]"
           >
             <svg v-if="!entry.render.qr" viewBox="0 0 24 24"><path d="M3 5h18v14H3z" fill="none" /><circle cx="8" cy="10" r="2" /><path d="M4 18l5-5 3 3 4-4 4 4v2H4z" /></svg>
             <span v-else class="lvgl-canvas__qr" />
@@ -128,22 +141,22 @@
 
           <!-- meter: gauge driven by scales[0] -->
           <svg v-else-if="entry.render.kind === 'meter'" class="lvgl-canvas__meter" viewBox="0 0 48 48">
-            <path :d="ARC_TRACK_PATH" stroke="#c8c8cf" stroke-width="3" fill="none" />
+            <path :d="entry.render.path" stroke="#c8c8cf" stroke-width="3" fill="none" />
             <path
               v-for="(a, ai) in entry.render.arcs"
               :key="`a${ai}`"
-              :d="ARC_TRACK_PATH"
+              :d="entry.render.path"
               :stroke="a.color"
               stroke-width="3"
               fill="none"
               stroke-linecap="butt"
-              :stroke-dasharray="ARC_LEN"
-              :stroke-dashoffset="ARC_LEN * (1 - (a.to - a.from))"
-              :style="{ transform: `rotate(${ARC_SWEEP * a.from}deg)`, transformOrigin: '24px 24px' }"
+              :stroke-dasharray="entry.render.len"
+              :stroke-dashoffset="entry.render.len * (1 - (a.to - a.from))"
+              :style="{ transform: `rotate(${entry.render.sweep * a.from}deg)`, transformOrigin: '24px 24px' }"
             />
             <g stroke="#9a9aa5" stroke-width="1.2">
               <line
-                v-for="t in meterTicks(entry.render.tickCount)"
+                v-for="t in entry.render.ticks"
                 :key="t.i"
                 :x1="t.x1"
                 :y1="t.y1"
@@ -156,8 +169,8 @@
               :key="`n${ni}`"
               x1="24"
               y1="24"
-              :x2="needleTip(n.pct).x"
-              :y2="needleTip(n.pct).y"
+              :x2="n.tip.x"
+              :y2="n.tip.y"
               :stroke="n.color"
               stroke-width="2"
               stroke-linecap="round"
@@ -264,13 +277,15 @@ const num = (value, fallback = 0) => {
 // widget prop colour, else the theme default for that role
 const colour = (props_, key, fallback) => lvglColorToCss(props_[key]) || fallback;
 
-const fillRatio = (p) => {
+// Position of `value` inside [min_value, max_value] as a 0..100 percentage.
+const pctOf = (p, value) => {
   const min = num(p.min_value, 0);
   const max = num(p.max_value, 100);
-  const val = num(p.value, min);
   const span = max - min || 1;
-  return Math.max(0, Math.min(100, ((val - min) / span) * 100));
+  return Math.max(0, Math.min(100, ((value - min) / span) * 100));
 };
+
+const fillRatio = (p) => pctOf(p, num(p.value, num(p.min_value, 0)));
 
 // Descriptor per widget: kind + the pieces the template needs.
 const render = (entry) => {
@@ -278,21 +293,44 @@ const render = (entry) => {
   const t = entry.type;
 
   if (t === "label") {
+    // long_mode: WRAP breaks to multiple lines, CLIP/SCROLL cut without an
+    // ellipsis, DOT (and the unset default here) truncate with "...".
+    const lm = String(p.long_mode || "").toUpperCase();
+    const longClass =
+      lm === "WRAP"
+        ? "is-wrap"
+        : lm === "CLIP" || lm === "SCROLL" || lm === "SCROLL_CIRCULAR"
+          ? "is-clip"
+          : "";
     return {
       kind: "label",
       text: String(p.text ?? "Label"),
+      longClass,
       textStyle: { color: colour(p, "text_color", THEME.text) }
     };
   }
   if (t === "button") return { kind: "button", text: String(p.text ?? "") };
-  if (t === "switch") return { kind: "switch", on: isTruthy(p.state ?? p.checked) };
+  if (t === "switch") {
+    return { kind: "switch", on: initialChecked(p), vertical: entry.box.h > entry.box.w };
+  }
   if (t === "checkbox") {
-    return { kind: "checkbox", text: String(p.text ?? "Checkbox"), checked: isTruthy(p.state ?? p.checked) };
+    return { kind: "checkbox", text: String(p.text ?? "Checkbox"), checked: initialChecked(p) };
   }
   if (t === "slider" || t === "bar") {
+    const mode = String(p.mode || "NORMAL").toUpperCase();
+    const end = fillRatio(p);
+    let start = 0;
+    if (mode === "RANGE") {
+      start = pctOf(p, num(p.start_value, num(p.min_value, 0)));
+    } else if (mode === "SYMMETRICAL") {
+      // Fill grows from the range's zero crossing (clamped into range) to value.
+      start = pctOf(p, Math.max(num(p.min_value, 0), Math.min(num(p.max_value, 100), 0)));
+    }
     return {
       kind: "bar",
-      fill: fillRatio(p),
+      fill: end,
+      fillStart: Math.min(start, end),
+      fillEnd: Math.max(start, end),
       vertical: entry.box.h > entry.box.w * 1.4,
       knob: t === "slider",
       indicator: colour(p.indicator || {}, "bg_color", colour(p, "bg_color", THEME.primary)),
@@ -300,11 +338,24 @@ const render = (entry) => {
     };
   }
   if (t === "arc" || t === "spinner") {
+    const isSpinner = t === "spinner";
+    let start = num(p.start_angle, DEFAULT_ARC.start) + num(p.rotation, 0);
+    let sweep = (((num(p.end_angle, 45) - num(p.start_angle, DEFAULT_ARC.start)) % 360) + 360) % 360 || 360;
+    let fill = fillRatio(p);
+    if (isSpinner) {
+      start = 0;
+      sweep = 360;
+      fill = Math.max(5, Math.min(95, (num(p.arc_length, 60) / 360) * 100));
+    }
     return {
       kind: "arc",
-      fill: t === "spinner" ? 28 : fillRatio(p),
+      fill,
       knob: t === "arc",
       arcWidth: 4,
+      sweep,
+      path: arcPath(start, sweep),
+      len: arcLen(sweep),
+      knobPt: arcPointAt(start, sweep, fill / 100),
       track: colour(p, "arc_color", "#d4d4dc"),
       indicator: colour(p.indicator || {}, "arc_color", THEME.primary)
     };
@@ -341,27 +392,42 @@ const render = (entry) => {
     const parts = [];
     if (angle) parts.push(`rotate(${angle}deg)`);
     if (zoom && zoom !== 1) parts.push(`scale(${zoom})`);
-    return { kind: "image", qr: false, transform: parts.join(" ") };
+    return { kind: "image", qr: false, transform: parts.join(" "), recolor: lvglColorToCss(p.image_recolor) };
   }
   if (t === "meter") {
     const s = (Array.isArray(p.scales) ? p.scales : [])[0] || {};
     const from = num(s.range_from, 0);
     const to = num(s.range_to, 100);
     const span = to - from || 1;
+    const sweep = num(s.angle_range, 270);
+    // LVGL centres a partial range on the bottom gap unless rotation is given.
+    const start = s.rotation !== undefined && s.rotation !== ""
+      ? num(s.rotation, 0)
+      : 90 + (360 - sweep) / 2;
     const clamp = (v) => Math.max(0, Math.min(1, v));
     const needles = [];
     const arcs = [];
     for (const ind of Array.isArray(s.indicators) ? s.indicators : []) {
       if (ind?.line && ind.line.value !== undefined) {
-        needles.push({ pct: clamp((num(ind.line.value, from) - from) / span), color: colour(ind.line, "color", THEME.primary) });
+        const frac = clamp((num(ind.line.value, from) - from) / span);
+        needles.push({ tip: arcPointAt(start, sweep, frac), color: colour(ind.line, "color", THEME.primary) });
       } else if (ind?.arc) {
         const sv = num(ind.arc.start_value, from);
         const ev = num(ind.arc.end_value ?? ind.arc.value, to);
         arcs.push({ from: clamp((sv - from) / span), to: clamp((ev - from) / span), color: colour(ind.arc, "color", THEME.primary) });
       }
     }
-    if (!needles.length && !arcs.length) needles.push({ pct: 0.62, color: THEME.primary });
-    return { kind: "meter", tickCount: Math.max(2, Math.min(40, Math.round(num(s.ticks?.count, 12)))), needles, arcs };
+    if (!needles.length && !arcs.length) needles.push({ tip: arcPointAt(start, sweep, 0.62), color: THEME.primary });
+    const tickCount = Math.max(2, Math.min(40, Math.round(num(s.ticks?.count, 12))));
+    return {
+      kind: "meter",
+      sweep,
+      path: arcPath(start, sweep),
+      len: arcLen(sweep),
+      ticks: meterTicks(tickCount, start, sweep),
+      needles,
+      arcs
+    };
   }
   if (t === "tabview" || t === "tileview") {
     const groups = entry.node.tabs || entry.node.tiles || [];
@@ -400,6 +466,14 @@ const linePolyline = (points) => {
 
 const isTruthy = (v) => v === true || v === "true" || v === "on" || v === 1 || v === "1";
 
+// ESPHome sets a widget's initial on/off through `state: { checked: true }`;
+// tolerate a scalar `state`/`checked` from older builder data too.
+const initialChecked = (p) => {
+  const s = p.state;
+  if (s && typeof s === "object") return isTruthy(s.checked);
+  return isTruthy(s ?? p.checked);
+};
+
 const boxStyle = (entry) => {
   const p = entry.node.props || {};
   const style = {
@@ -410,7 +484,13 @@ const boxStyle = (entry) => {
   };
   // Explicit widget styling always wins over the kind's default look.
   const bg = lvglColorToCss(p.bg_color);
-  if (bg) style.background = bg;
+  const grad = lvglColorToCss(p.bg_grad_color);
+  if (grad) {
+    const dir = String(p.bg_grad_dir || "VER").toUpperCase() === "HOR" ? "to right" : "to bottom";
+    style.background = `linear-gradient(${dir}, ${bg || "#fff"}, ${grad})`;
+  } else if (bg) {
+    style.background = bg;
+  }
   const fg = lvglColorToCss(p.text_color);
   if (fg) style.color = fg;
   const radius = Number(p.radius);
@@ -419,6 +499,14 @@ const boxStyle = (entry) => {
   if (border) style.borderColor = border;
   const borderW = Number(p.border_width);
   if (Number.isFinite(borderW)) style.borderWidth = `${borderW}px`;
+  // shadow_width is the blur radius; offsets/colour optional.
+  const shadowW = Number(p.shadow_width);
+  if (Number.isFinite(shadowW) && shadowW > 0) {
+    const ox = num(p.shadow_offset_x, 0) * zoom.value;
+    const oy = num(p.shadow_offset_y, 0) * zoom.value;
+    const spread = num(p.shadow_spread, 0) * zoom.value;
+    style.boxShadow = `${ox}px ${oy}px ${shadowW * zoom.value}px ${spread}px ${lvglColorToCss(p.shadow_color) || "rgba(0,0,0,0.4)"}`;
+  }
   return style;
 };
 
@@ -427,34 +515,40 @@ const decorated = computed(() =>
     ...entry,
     render: render(entry),
     boxStyle: boxStyle(entry),
+    disabled: isTruthy(entry.node?.props?.state?.disabled),
     layoutBadge: entry.node?.props?.layout?.type === "GRID" ? "grid" : "flex"
   }))
 );
 
-// --- arc / meter geometry (240deg sweep, like LVGL's default arc) ---
-const ARC_START = 150; // degrees
-const ARC_SWEEP = 240;
+// --- arc / meter geometry, drawn in a 48x48 viewBox around centre (24,24) ---
+// LVGL's default arc background runs 135deg -> 45deg clockwise (a 270deg sweep
+// with the gap at the bottom); meter scales default to a 270deg angle_range.
 const ARC_R = 18;
+const DEFAULT_ARC = { start: 135, sweep: 270 };
 const polar = (deg) => ({
   x: 24 + ARC_R * Math.cos((deg * Math.PI) / 180),
   y: 24 + ARC_R * Math.sin((deg * Math.PI) / 180)
 });
-const ARC_TRACK_PATH = (() => {
-  const a = polar(ARC_START);
-  const b = polar(ARC_START + ARC_SWEEP);
-  return `M ${a.x.toFixed(2)} ${a.y.toFixed(2)} A ${ARC_R} ${ARC_R} 0 1 1 ${b.x.toFixed(2)} ${b.y.toFixed(2)}`;
-})();
-const ARC_LEN = (2 * Math.PI * ARC_R * ARC_SWEEP) / 360;
-const arcKnob = (fillPct) => polar(ARC_START + (ARC_SWEEP * fillPct) / 100);
+// A near-full turn is clamped so the SVG arc's start and end points differ.
+const clampSweep = (sweep) => Math.max(1, Math.min(359.9, sweep));
+const arcPath = (start, sweep) => {
+  const s = clampSweep(sweep);
+  const a = polar(start);
+  const b = polar(start + s);
+  return `M ${a.x.toFixed(2)} ${a.y.toFixed(2)} A ${ARC_R} ${ARC_R} 0 ${s > 180 ? 1 : 0} 1 ${b.x.toFixed(2)} ${b.y.toFixed(2)}`;
+};
+const arcLen = (sweep) => (2 * Math.PI * ARC_R * clampSweep(sweep)) / 360;
+const arcPointAt = (start, sweep, frac) => polar(start + sweep * frac);
 
-const meterTicks = (count) =>
-  Array.from({ length: Math.max(2, count) }, (_, i) => {
-    const deg = ARC_START + (ARC_SWEEP * i) / (count - 1);
+const meterTicks = (count, start, sweep) => {
+  const n = Math.max(2, count);
+  return Array.from({ length: n }, (_, i) => {
+    const deg = start + (sweep * i) / (n - 1);
     const rad = (deg * Math.PI) / 180;
     const outer = polar(deg);
     return { i, x1: 24 + (ARC_R - 3) * Math.cos(rad), y1: 24 + (ARC_R - 3) * Math.sin(rad), x2: outer.x, y2: outer.y };
   });
-const needleTip = (pct) => polar(ARC_START + ARC_SWEEP * pct);
+};
 
 const dragState = ref(null);
 
@@ -561,6 +655,11 @@ const onDragEnd = (event) => {
   z-index: 3;
 }
 
+/* state: { disabled: true } */
+.lvgl-canvas__widget.is-disabled {
+  opacity: 0.4;
+}
+
 /* ---- kinds ---- */
 
 .lvgl-w--box,
@@ -591,6 +690,15 @@ const onDragEnd = (event) => {
   overflow: hidden;
   text-overflow: ellipsis;
   line-height: 1.1;
+}
+
+.lvgl-canvas__label.is-wrap {
+  white-space: normal;
+  text-overflow: clip;
+}
+
+.lvgl-canvas__label.is-clip {
+  text-overflow: clip;
 }
 
 .lvgl-canvas__tag {
@@ -645,6 +753,22 @@ const onDragEnd = (event) => {
 .lvgl-canvas__switch.is-on .lvgl-canvas__switch-knob {
   left: calc(100% - 2px);
   transform: translate(-100%, -50%);
+}
+
+/* vertical switch: LVGL flips orientation when height > width; knob "on" = top */
+.lvgl-canvas__switch.is-vertical .lvgl-canvas__switch-knob {
+  top: auto;
+  bottom: 2px;
+  left: 50%;
+  width: calc(100% - 4px);
+  height: auto;
+  transform: translate(-50%, 0);
+  transition: bottom 0.15s;
+}
+
+.lvgl-canvas__switch.is-vertical.is-on .lvgl-canvas__switch-knob {
+  bottom: calc(100% - 2px);
+  transform: translate(-50%, 100%);
 }
 
 /* checkbox */
