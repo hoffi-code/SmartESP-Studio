@@ -47,7 +47,9 @@
         },
         {
           "key": "path",
-          "type": "text",
+          "type": "asset_ref",
+          "assetKind": "fonts",
+          "assetPathPrefix": "esp_assets/fonts/",
           "lvl": "simple",
           "placeholder": "fonts/my_font.ttf",
           "dependsOn": { "key": "type", "value": "local" }

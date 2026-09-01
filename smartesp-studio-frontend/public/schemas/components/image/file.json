@@ -13,7 +13,9 @@
     },
     {
       "key": "file",
-      "type": "text",
+      "type": "asset_ref",
+      "assetKind": "images",
+      "assetPathPrefix": "esp_assets/images/",
       "required": true,
       "lvl": "simple",
       "placeholder": "mdi:home / path/to/file.png"
