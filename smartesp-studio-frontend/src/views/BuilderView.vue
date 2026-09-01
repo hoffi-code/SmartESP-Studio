@@ -63,7 +63,7 @@
     />
     <CommentEditModal
       :open="commentEditRequest !== null"
-      :title="commentEditRequest?.title || 'Kommentar'"
+      :title="commentEditRequest?.title || t('builder.comment.modalTitleDefault')"
       :value="commentEditValue"
       @save="saveComment"
       @delete="deleteComment"
@@ -193,7 +193,7 @@
             :hub-notice-domains="hubNoticeDomains"
             :header-comment="config.headerComment || ''"
             @yaml-line-click="handleYamlLineClick"
-            @edit-header-comment="openCommentEditor({ scope: 'header', title: 'Datei-Kopf-Kommentar' })"
+            @edit-header-comment="openCommentEditor({ scope: 'header', title: t('builder.comment.headerTitle') })"
           />
         </div>
 
@@ -446,7 +446,7 @@
                 class="secondary compact btn-standard"
                 @click="openActiveComponentCommentEditor"
               >
-                {{ activeComponentHasComment ? "Kommentar bearbeiten" : "Kommentar" }}
+                {{ activeComponentHasComment ? t("builder.comment.buttonEdit") : t("builder.comment.buttonAdd") }}
               </button>
               <button
                 v-if="!isComponentPickerOpen && activeComponentSlot !== null"
@@ -613,10 +613,13 @@ import {
 import { deriveGoogleFontStyle as deriveVariantStyle } from "../utils/displayFonts";
 import { isDevOffline } from "../utils/devFlags";
 import { apiFetch, apiUrl } from "../utils/api";
+import { useI18n } from "vue-i18n";
 
 // BuilderView is now mainly the orchestration shell for the schema-driven editor.
 // UI-heavy sections, preview logic, catalog flow, schema loading, and validation are
 // delegated to focused components/composables so the view can coordinate them.
+
+const { t } = useI18n();
 
 const tabs = ["Core", "Platform", "Network", "Protocols", "Busses", "System", "Automation", "LVGL"];
 const activeTab = ref(tabs[0]);
@@ -2548,7 +2551,7 @@ const activeComponentHasComment = computed(() =>
 const openActiveComponentCommentEditor = () => {
   const key = activeComponentCommentKey.value;
   if (!key) return;
-  openCommentEditor({ key, title: `Kommentar – ${key}:` });
+  openCommentEditor({ key, title: t("builder.comment.componentTitle", { domain: key }) });
 };
 
 const assetsBase = apiUrl("api/assets/");

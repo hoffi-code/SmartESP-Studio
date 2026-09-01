@@ -1,16 +1,18 @@
 <template>
   <div class="modal-backdrop" v-if="open" @click="emit('close')">
     <div class="modal-card comment-edit-card" role="dialog" aria-modal="true" @click.stop>
-      <h3>{{ title }}</h3>
+      <h3>{{ title || t("builder.comment.modalTitleDefault") }}</h3>
       <p class="comment-edit-hint">
-        Erscheint als YAML-Kommentar direkt über der Sektion. Das <code>#</code> wird automatisch gesetzt.
+        <i18n-t keypath="builder.comment.hint">
+          <template #hash><code>#</code></template>
+        </i18n-t>
       </p>
       <textarea
         ref="input"
         v-model="draft"
         class="comment-edit-input"
         rows="4"
-        placeholder="z. B. I2C-Bus für das Display"
+        :placeholder="t('builder.comment.placeholder')"
       ></textarea>
       <div class="modal-actions">
         <button
@@ -19,10 +21,10 @@
           type="button"
           @click="emit('delete')"
         >
-          Löschen
+          {{ t("common.delete") }}
         </button>
-        <button class="secondary" type="button" @click="emit('close')">Abbrechen</button>
-        <button type="button" :disabled="!trimmed" @click="save">Speichern</button>
+        <button class="secondary" type="button" @click="emit('close')">{{ t("common.cancel") }}</button>
+        <button type="button" :disabled="!trimmed" @click="save">{{ t("common.save") }}</button>
       </div>
     </div>
   </div>
@@ -30,10 +32,13 @@
 
 <script setup>
 import { computed, nextTick, onBeforeUnmount, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const props = defineProps({
   open: { type: Boolean, default: false },
-  title: { type: String, default: "Kommentar" },
+  title: { type: String, default: "" },
   value: { type: String, default: "" }
 });
 

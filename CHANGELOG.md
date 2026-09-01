@@ -10,6 +10,11 @@ markiert.
 
 ### Added
 
+- **i18n-Fundament** – `vue-i18n` eingebunden (`en` Default/Fallback, `de`),
+  Sprachumschalter im Header, Locale in `localStorage`. Message-Katalog nach
+  Feature getrennt unter `src/i18n/locales/<locale>/`. Erste migrierte Strings:
+  Kommentar-Modal. `humanizeFieldKey` als Label-Fallback vorbereitet. Übrige
+  UI-Texte folgen schrittweise.
 - **Kommentar-Modal** – Sektions-/Komponenten-Kommentare lassen sich jetzt in der
   UI pflegen (bisher nur beim Import): „Kommentar"-Button neben „Remove" je
   Komponente (schreibt `fieldComments[<domain>]`), Button oben links im

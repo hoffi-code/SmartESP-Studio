@@ -1,14 +1,18 @@
 // @vitest-environment jsdom
 import { mount } from "@vue/test-utils";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
 
 import CommentEditModal from "./CommentEditModal.vue";
+import { DEFAULT_LOCALE, i18n, setLocale } from "../../i18n";
 
-const openWith = (value = "") => mount(CommentEditModal, { props: { open: true, value } });
+const openWith = (value = "") =>
+  mount(CommentEditModal, { props: { open: true, value }, global: { plugins: [i18n] } });
+
+afterEach(() => setLocale(DEFAULT_LOCALE));
 
 describe("CommentEditModal", () => {
   it("renders nothing while closed", () => {
-    const wrapper = mount(CommentEditModal, { props: { open: false } });
+    const wrapper = mount(CommentEditModal, { props: { open: false }, global: { plugins: [i18n] } });
     expect(wrapper.find(".modal-backdrop").exists()).toBe(false);
   });
 
@@ -38,8 +42,8 @@ describe("CommentEditModal", () => {
   });
 
   it("only offers Delete when a comment already exists", () => {
-    expect(openWith("# note").text()).toContain("Löschen");
-    expect(openWith("").text()).not.toContain("Löschen");
+    expect(openWith("# note").text()).toContain("Delete");
+    expect(openWith("").text()).not.toContain("Delete");
   });
 
   it("emits delete and close", async () => {
@@ -49,5 +53,10 @@ describe("CommentEditModal", () => {
 
     await wrapper.get(".modal-backdrop").trigger("click");
     expect(wrapper.emitted("close")).toHaveLength(1);
+  });
+
+  it("shows German labels once the locale switches", async () => {
+    setLocale("de");
+    expect(openWith("# note").text()).toContain("Löschen");
   });
 });
