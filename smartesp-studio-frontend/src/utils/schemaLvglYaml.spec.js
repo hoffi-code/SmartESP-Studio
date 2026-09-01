@@ -373,8 +373,8 @@ describe("buildLvglYamlLines", () => {
               props: { position: "top" },
               children: [],
               tabs: [
-                { name: "One", widgets: [{ uiId: "l1", type: "label", common: { id: "l1" }, props: { text: "A" }, children: [] }] },
-                { name: "Two", widgets: [] }
+                { uiId: "g1", name: "One", widgets: [{ uiId: "l1", type: "label", common: { id: "l1" }, props: { text: "A" }, children: [] }] },
+                { uiId: "g2", name: "Two", widgets: [] }
               ]
             }
           ]
@@ -390,6 +390,8 @@ describe("buildLvglYamlLines", () => {
     expect(text).toMatch(/- name: One\n\s+widgets:\n\s+- label:/);
     expect(text).toContain('text: "A"');
     expect(text).toContain("- name: Two");
+    // the builder-only group handle is not exported
+    expect(text).not.toContain("uiId");
   });
 
   it("skips a widget whose schema has not been loaded rather than emitting it wrong", () => {

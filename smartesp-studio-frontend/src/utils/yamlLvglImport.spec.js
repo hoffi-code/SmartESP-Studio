@@ -358,6 +358,8 @@ describe("parseWidgetNode", () => {
     expect(node.type).toBe("tabview");
     expect(node.props.position).toBe("top");
     expect(node.tabs).toHaveLength(2);
+    expect(typeof node.tabs[0].uiId).toBe("string");
+    expect(node.tabs[0].uiId).not.toBe(node.tabs[1].uiId);
     expect(node.tabs[0].name).toBe("One");
     expect(node.tabs[0].widgets[0]).toMatchObject({ type: "label", common: { id: "l1" }, props: { text: "A" } });
     expect(node.tabs[1].widgets.map((w) => w.props.text)).toEqual(["B", "C"]);

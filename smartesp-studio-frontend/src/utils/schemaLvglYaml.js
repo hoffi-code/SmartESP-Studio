@@ -55,6 +55,7 @@ const serializeWidgetGroups = (groupKey, entries, pageIndex, indent, lines, sect
   entries.forEach((entry) => {
     const meta = { ...entry };
     delete meta.widgets;
+    delete meta.uiId;
     const metaLines = Object.keys(meta).length ? dump(meta).trimEnd().split("\n") : [];
     if (metaLines.length) {
       pushYamlLine(lines, `${" ".repeat(indent + 2)}- ${metaLines[0]}`, sectionOrigin);
