@@ -1,0 +1,31 @@
+{
+  "links": {
+    "github": "GitHub-Repository öffnen",
+    "buyMeACoffee": "Buy me a coffee"
+  },
+  "actions": {
+    "import": "Import",
+    "importEsphomeBuilder": "ESPHome Builder",
+    "importYamlFile": "YAML-Datei",
+    "edit": "Bearbeiten",
+    "save": "Speichern",
+    "install": "Installieren",
+    "installSerial": "Seriell (dieser Rechner)",
+    "installSerialHa": "Seriell (HA-Server)",
+    "installOta": "Drahtlos (OTA)",
+    "installDownload": "Binary herunterladen",
+    "validate": "Prüfen",
+    "logs": "Logs"
+  },
+  "unsavedModal": {
+    "title": "Nicht gespeichertes Projekt",
+    "message": "Das aktuelle Builder-Projekt hat ungespeicherte Änderungen. Vor dem Öffnen des Dashboards speichern?",
+    "save": "Speichern",
+    "discard": "Verwerfen",
+    "cancel": "Abbrechen"
+  },
+  "errors": {
+    "saveTimeout": "Zeitüberschreitung beim Speichern des Builder-Projekts.",
+    "saveFailed": "Projekt konnte nicht gespeichert werden."
+  }
+}

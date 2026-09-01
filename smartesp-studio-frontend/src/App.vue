@@ -4,11 +4,11 @@
       :open="leaveModalOpen"
       :busy="leaveModalBusy"
       :error-message="leaveModalError"
-      title="Unsaved project"
-      message="Current Builder project has unsaved changes. Save before opening Dashboard?"
-      save-text="Save"
-      discard-text="Discard"
-      cancel-text="Cancel"
+      :title="t('app.unsavedModal.title')"
+      :message="t('app.unsavedModal.message')"
+      :save-text="t('app.unsavedModal.save')"
+      :discard-text="t('app.unsavedModal.discard')"
+      :cancel-text="t('app.unsavedModal.cancel')"
       @save="handleLeaveModalSave"
       @discard="handleLeaveModalDiscard"
       @cancel="handleLeaveModalCancel"
@@ -23,13 +23,13 @@
         <nav class="app-social-links" aria-label="External links">
           <a
             v-for="link in socialLinks"
-            :key="link.label"
+            :key="link.href"
             class="app-social-link"
             :href="link.href"
             target="_blank"
             rel="noopener noreferrer"
-            :aria-label="link.label"
-            :title="link.label"
+            :aria-label="t(link.labelKey)"
+            :title="t(link.labelKey)"
           >
             <img :src="link.icon" alt="" aria-hidden="true" />
           </a>
@@ -44,13 +44,15 @@
             :disabled="topbarBusy"
             @click="toggleImportMenu"
           >
-            Import
+            {{ t("app.actions.import") }}
           </button>
           <div v-if="importMenuOpen" class="topbar-action-dropdown" role="menu" aria-label="Import options">
             <button type="button" role="menuitem" @click="selectImportOption('esphome-builder')">
-              ESPHome Builder
+              {{ t("app.actions.importEsphomeBuilder") }}
             </button>
-            <button type="button" role="menuitem" @click="selectImportOption('yaml-file')">YAML file</button>
+            <button type="button" role="menuitem" @click="selectImportOption('yaml-file')">
+              {{ t("app.actions.importYamlFile") }}
+            </button>
           </div>
         </div>
         <button
@@ -59,7 +61,7 @@
           :disabled="!topbarCanEdit || topbarBusy"
           @click="triggerDashboardEdit"
         >
-          Edit
+          {{ t("app.actions.edit") }}
         </button>
         <button
           v-if="isBuilderRoute"
@@ -67,7 +69,7 @@
           :disabled="!canTopbarSave"
           @click="triggerBuilderSave"
         >
-          Save
+          {{ t("app.actions.save") }}
         </button>
         <div v-if="showActionButtons" ref="installMenuRef" class="topbar-action-menu">
           <button
@@ -75,14 +77,14 @@
             :disabled="!topbarCanInstall || topbarBusy"
             @click="toggleInstallMenu"
           >
-            Install
+            {{ t("app.actions.install") }}
           </button>
           <div v-if="installMenuOpen" class="topbar-action-dropdown" role="menu" aria-label="Install options">
             <button type="button" role="menuitem" @click="selectInstallOption('serial')">
-              Serial (this computer)
+              {{ t("app.actions.installSerial") }}
             </button>
             <button type="button" role="menuitem" @click="selectInstallOption('serial-ha')">
-              Serial (HA server)
+              {{ t("app.actions.installSerialHa") }}
             </button>
             <button
               type="button"
@@ -90,9 +92,11 @@
               :disabled="!topbarCanUseOta"
               @click="selectInstallOption('ota')"
             >
-              Wireless (OTA)
+              {{ t("app.actions.installOta") }}
             </button>
-            <button type="button" role="menuitem" @click="selectInstallOption('download')">Download Binary</button>
+            <button type="button" role="menuitem" @click="selectInstallOption('download')">
+              {{ t("app.actions.installDownload") }}
+            </button>
           </div>
         </div>
         <button
@@ -101,7 +105,7 @@
           :disabled="!topbarCanValidate || topbarBusy"
           @click="triggerValidate"
         >
-          Validate
+          {{ t("app.actions.validate") }}
         </button>
         <button
           v-if="showActionButtons"
@@ -109,7 +113,7 @@
           :disabled="!topbarCanLogs || topbarBusy"
           @click="triggerBuilderLogs"
         >
-          Logs
+          {{ t("app.actions.logs") }}
         </button>
       </div>
     </header>
@@ -123,18 +127,21 @@
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { RouterView, useRoute, useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 import UnsavedChangesModal from "./components/UnsavedChangesModal.vue";
 import LocaleSwitcher from "./components/LocaleSwitcher.vue";
+
+const { t } = useI18n();
 
 const appVersion = __APP_VERSION__;
 const socialLinks = [
   {
-    label: "Open GitHub repository",
+    labelKey: "app.links.github",
     href: "https://github.com/hoffi-code/SmartESP-Studio",
     icon: "https://cdn.jsdelivr.net/npm/@mdi/svg/svg/github.svg"
   },
   {
-    label: "Buy me a coffee",
+    labelKey: "app.links.buyMeACoffee",
     href: "https://buymeacoffee.com/smartcodestudio",
     icon: "https://cdn.jsdelivr.net/npm/@mdi/svg/svg/coffee.svg"
   }
@@ -296,7 +303,7 @@ const triggerBuilderSave = async () => {
   try {
     const result = await requestBuilderSave();
     if (!result.success) {
-      console.error(result.message || "Project save failed.");
+      console.error(result.message || t("app.errors.saveFailed"));
     }
   } finally {
     builderSaveRunning.value = false;
@@ -322,7 +329,7 @@ const requestBuilderSave = () => {
   return new Promise((resolve) => {
     const timeoutId = window.setTimeout(() => {
       window.removeEventListener("app:builder-save-response", onResponse);
-      resolve({ success: false, message: "Builder save request timed out." });
+      resolve({ success: false, message: t("app.errors.saveTimeout") });
     }, 30000);
 
     const onResponse = (event) => {
@@ -361,7 +368,7 @@ const handleLeaveModalSave = async () => {
   const result = await requestBuilderSave();
   if (!result.success) {
     leaveModalBusy.value = false;
-    leaveModalError.value = result.message || "Project save failed.";
+    leaveModalError.value = result.message || t("app.errors.saveFailed");
     return;
   }
   leaveModalOpen.value = false;
