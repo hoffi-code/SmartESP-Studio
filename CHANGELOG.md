@@ -128,6 +128,10 @@ markiert.
 
 ### Changed
 
+- **API-Section überarbeitet** – `listen_backlog`/`max_connections`/`max_send_queue`
+  zeigen jetzt die echten ESPHome-Defaults (1/4/4). `encryption.key` nicht mehr
+  hart „required", Hinweis auf `!secret`. `reboot_timeout` sichtbarer (Mode-Level
+  „normal") mit „0s"-Hinweis. „Home Assistant services/states" korrekt beschriftet.
 - **Color-Feld aufgeräumt** – der farbige Swatch öffnet jetzt selbst den
   Farbwähler, der separate „Pick"-Button entfällt. Im Farbwähler gibt es einen
   „Transparent / keine"-Button, der den Wert leert (der Key verschwindet dann aus
