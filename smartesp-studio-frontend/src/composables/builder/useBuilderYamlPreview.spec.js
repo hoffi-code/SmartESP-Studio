@@ -272,6 +272,36 @@ describe("useBuilderYamlPreview", () => {
     expect(assets.content).toContain("size: 20");
   });
 
+  it("emits a single top-level font:/image: key even with several standalone components", () => {
+    const harness = buildHarness({
+      config: ref({
+        esphomeCore: { name: "kitchen_sensor" },
+        substitutions: {},
+        platformCore: {},
+        networkCore: {},
+        protocolsCore: {},
+        systemCore: {},
+        automationCore: {},
+        bussesCore: {},
+        components: [
+          { id: "font/font", catalogKey: "font/font", config: { id: "a", size: 12 } },
+          { id: "font/font", catalogKey: "font/font", config: { id: "b", size: 16 } },
+          { id: "image/file", catalogKey: "image/file", config: { id: "logo", file: "logo.png", type: "BINARY" } }
+        ]
+      }),
+      componentSchemas: ref({
+        "font/font": { id: "font.font", domain: "font", fields: [textField("id"), { key: "size", type: "number" }] },
+        "image/file": { id: "image.file", domain: "image", fields: [textField("id"), textField("file"), textField("type")] }
+      }),
+      componentSchemaStatus: ref({ "font/font": "ready", "image/file": "ready" })
+    });
+    const assets = harness.previewTabs.value.find((tab) => tab.key === "assets");
+    expect((assets.content.match(/^font:/gm) || []).length).toBe(1);
+    expect((assets.content.match(/^image:/gm) || []).length).toBe(1);
+    expect(assets.content).toMatch(/-\s+id:\s+"?a"?/);
+    expect(assets.content).toMatch(/-\s+id:\s+"?b"?/);
+  });
+
   it("keeps a section's leading comment in that section's tab, not the previous one", () => {
     const harness = buildHarness({
       config: ref({
