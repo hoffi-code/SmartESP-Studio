@@ -65,8 +65,9 @@ markiert.
 - **Kommentar-Modal** – Sektions-/Komponenten-Kommentare lassen sich jetzt in der
   UI pflegen (bisher nur beim Import): „Kommentar"-Button neben „Remove" je
   Komponente (schreibt `fieldComments[<domain>]`), Button oben links im
-  YAML-Preview für den Datei-Kopf-Kommentar (`headerComment`). Bearbeiten mit
-  Klartext, gespeichert wird mit `#`-Präfix.
+  YAML-Preview für den Datei-Kopf-Kommentar (`headerComment`), und eine
+  Sektions-Auswahl im Preview für einen Kommentar an einem beliebigen Top-Level-
+  Block. Bearbeiten mit Klartext, gespeichert wird mit `#`-Präfix.
 - **LVGL Widget-Initialzustand** – neues gemeinsames Feld `state`
   (`checked`/`disabled`/`focused`/`pressed`/`edited`) für alle Widgets, das den
   ESPHome-Startzustand abbildet. Die Canvas-Vorschau liest `state.checked` und
