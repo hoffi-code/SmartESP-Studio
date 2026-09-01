@@ -54,6 +54,9 @@ markiert.
 - **Lesbare Feld-Labels** – ohne explizites `label` zeigt ein Feld jetzt
   `schema.fields.<key>.label` aus dem Katalog, sonst den humanisierten Key
   (`default_font` → „Default font", Akronyme bleiben groß) statt des rohen Keys.
+- **i18n: LVGL-Builder** – die restlichen fest verdrahteten Texte im LVGL-Builder
+  (Seiten-/Widget-Panel, Widget-Inspektor, Roh-YAML-Editor, Baum, Canvas-Tooltip)
+  laufen jetzt über den Message-Katalog (`lvgl.builder.*` u. a., `en` + `de`).
 - **Deutsche Feld-Hints** – für die häufigsten ESPHome-/LVGL-Feld-Keys (`id`,
   `name`, `update_interval`, `device_class`, Pin-Varianten, `restore_mode`,
   MQTT-/WLAN-/API-Keys, Style-Props, …) gibt es jetzt kuratierte deutsche Hints;
