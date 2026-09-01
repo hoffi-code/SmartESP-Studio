@@ -38,6 +38,7 @@
     "fontSample": "Aa Bb Cc 0123 — The quick brown fox",
     "imageNone": "No preview for this source.",
     "fontNone": "Pick a font source to preview it.",
-    "fontUnrenderable": "Local / web fonts can't be previewed in the browser."
+    "fontUnrenderable": "Local / web fonts can't be previewed in the browser.",
+    "colorNone": "Enter a hex value or RGB components."
   }
 }

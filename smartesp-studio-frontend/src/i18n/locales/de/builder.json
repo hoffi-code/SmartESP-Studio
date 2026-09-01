@@ -38,6 +38,7 @@
     "fontSample": "Aa Bb Cc 0123 — Franz jagt im Taxi quer",
     "imageNone": "Keine Vorschau für diese Quelle.",
     "fontNone": "Zum Vorschauen eine Font-Quelle wählen.",
-    "fontUnrenderable": "Lokale / Web-Fonts lassen sich im Browser nicht vorschauen."
+    "fontUnrenderable": "Lokale / Web-Fonts lassen sich im Browser nicht vorschauen.",
+    "colorNone": "Hex-Wert oder RGB-Komponenten eingeben."
   }
 }
