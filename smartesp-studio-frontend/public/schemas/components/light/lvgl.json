@@ -10,7 +10,7 @@
       "type": "text",
       "required": false,
       "lvl": "simple",
-	  "placeholder": "Light Name"
+      "placeholder": "Light Name"
     },
     {
       "key": "gamma_correct",
@@ -21,11 +21,13 @@
     },
     {
       "key": "widget",
-      "type": "text",
+      "type": "id_ref",
       "required": true,
       "lvl": "simple",
       "placeholder": "widget_id",
-      "note": "Reference an LVGL led widget ID."
+      "note": "Reference an LVGL led widget ID.",
+      "domain": "lvgl",
+      "allowFreeText": true
     }
   ]
 }

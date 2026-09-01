@@ -18,6 +18,10 @@ markiert.
   sind jetzt Dropdowns (LVGL-Built-in-Fonts wie `montserrat_20` + definierte
   `font:`-IDs) mit „+ neu anlegen". `default_group` zeigt die bereits an Widgets
   vergebenen Gruppennamen (+ Freitext). `disp_bg_image` bekommt ebenfalls „+".
+- **LVGL-Widget-Referenzen als Auswahl** – das `widget:`-Feld der
+  `binary_sensor`/`light`/`number`/`select`/`switch`/`text`/`text_sensor`-LVGL-
+  Plattformen und `align_to.id` im Widget-Inspektor bieten jetzt die im Projekt
+  vergebenen LVGL-Widget-IDs zur Auswahl (Freitext bleibt erlaubt).
 - **Feld-Hints flächendeckend** – die „?"-Erklärungen sind für ~2450 Felder aus der
   ESPHome-Schema-Referenz + LVGL-Doku vorbefüllt (`npm run seed:hints`). Erste
   Auto-Charge mit etwas Rest-Rauschen; Nacharbeit per `field.hint` bzw. direkt im

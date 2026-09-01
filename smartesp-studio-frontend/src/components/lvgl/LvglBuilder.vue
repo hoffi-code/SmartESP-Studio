@@ -255,7 +255,7 @@ import LvglWidgetInspector from "./LvglWidgetInspector.vue";
 import LvglCanvas from "./LvglCanvas.vue";
 import SchemaField from "../SchemaField.vue";
 import { LVGL_WIDGETS, lvglWidgetDefaults } from "../../utils/lvglWidgets";
-import { LVGL_BUILTIN_FONTS, collectLvglGroupNames } from "../../utils/lvglIds";
+import { LVGL_BUILTIN_FONTS, collectLvglGroupNames, collectLvglWidgetIds } from "../../utils/lvglIds";
 import { buildLvglYamlLines } from "../../utils/schemaLvglYaml";
 import { parseLvglSection } from "../../utils/yamlLvglImport";
 import { parseYamlText } from "../../utils/yamlProjectImport";
@@ -323,9 +323,11 @@ onBeforeUnmount(() => window.removeEventListener("keydown", onKeydown));
 // Extra id_ref options for the LVGL subtree: built-in fonts (never a font: component)
 // and group names already in use. Covers the Settings panel and the widget-inspector modal.
 const lvglGroupNames = computed(() => collectLvglGroupNames(props.lvglConfig));
+const lvglWidgetIds = computed(() => collectLvglWidgetIds(props.lvglConfig));
 provide("idRefOptionProvider", (field) => {
   if (field?.optionsProvider === "lvglGroups") return lvglGroupNames.value;
   if (field?.domain === "font") return LVGL_BUILTIN_FONTS;
+  if (field?.domain === "lvgl") return lvglWidgetIds.value;
   return [];
 });
 

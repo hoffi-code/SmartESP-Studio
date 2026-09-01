@@ -601,6 +601,7 @@ import {
   isObjectArrayLikeField
 } from "../utils/builderValidationRules";
 import { buildDisplayAnimationIntervals, resolveSchemaDomain } from "../utils/schemaYaml";
+import { collectLvglWidgetIds } from "../utils/lvglIds";
 import { encodeFieldPath } from "../utils/yamlDocumentModel";
 import { buildGlobalRegistry, isFieldVisible as isSchemaFieldVisible } from "../utils/schemaVisibility";
 import { MODE_LEVELS, modeLevelRank, normalizeModeLevel } from "../utils/schemaModeLevel";
@@ -1543,6 +1544,12 @@ provide("assetRefProvider", (kind) =>
   (kind === "fonts" ? displayFonts.value : displayImages.value).map((asset) => asset.file)
 );
 provide("openAssetManager", () => openAssetManager());
+
+// id_ref option provider for the component-tab schemas (LvglBuilder provides its own,
+// nearer one for the LVGL editor subtree). Only LVGL widget ids are non-idIndex here.
+provide("idRefOptionProvider", (field) =>
+  field?.domain === "lvgl" ? collectLvglWidgetIds(config.value.lvgl) : []
+);
 
 const schemaEntries = computed(() => {
   const entries = [];
