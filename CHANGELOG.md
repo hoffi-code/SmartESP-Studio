@@ -10,6 +10,11 @@ markiert.
 
 ### Added
 
+- **LVGL Live-Editor umgebaut** – die Konfig-Ansicht zeigt unter Pages/Widgets
+  jetzt eine statische *Canvas-Preview*; ein Klick darauf öffnet ein Modal mit
+  dem interaktiven Canvas (Drag, W/H/Zoom) links und dem vollen Widget-Inspektor
+  (alle Gruppen aufgeklappt) rechts. Der YAML-Block sitzt jetzt im Form-Panel
+  statt in einer eigenen Sektion (weiterhin nur ab Mode-Level *Advanced*).
 - **LVGL-Baum-UX** – bei ausgewähltem Widget: Umsortieren (↑/↓), Einrücken
   (unter das vorige Geschwister hängen), Ausrücken (aus dem Eltern-Widget
   herausziehen) und „+ child" (gewählten Typ als Kind anlegen). Nicht
