@@ -4,42 +4,46 @@
     class="notice notice--warning component-bus-note"
   >
     <template v-if="activeComponentBusLabels">
-      Make sure {{ activeComponentBusLabels }} is configured correctly.
+      {{ t("builder.requirements.configure", { labels: activeComponentBusLabels }) }}
       <a href="#" class="preview-callout-link" @click.prevent="emit('focus-bus')">
-        BUSSES
+        {{ t("builder.requirements.linkBusses") }}
       </a>
     </template>
     <template v-if="activeComponentProtocolLabels">
       <br v-if="activeComponentBusLabels" />
-      Make sure {{ activeComponentProtocolLabels }} is configured correctly.
+      {{ t("builder.requirements.configure", { labels: activeComponentProtocolLabels }) }}
       <a href="#" class="preview-callout-link" @click.prevent="emit('focus-protocol')">
-        PROTOCOLS
+        {{ t("builder.requirements.linkProtocols") }}
       </a>
     </template>
     <template v-if="activeComponentSystemLabels">
       <br v-if="activeComponentBusLabels || activeComponentProtocolLabels" />
-      Make sure {{ activeComponentSystemLabels }} is configured correctly.
+      {{ t("builder.requirements.configure", { labels: activeComponentSystemLabels }) }}
       <a href="#" class="preview-callout-link" @click.prevent="emit('focus-system')">
-        SYSTEM
+        {{ t("builder.requirements.linkSystem") }}
       </a>
     </template>
     <template v-if="activeComponentNetworkLabels">
       <br v-if="activeComponentBusLabels || activeComponentProtocolLabels || activeComponentSystemLabels" />
-      Make sure {{ activeComponentNetworkLabels }} is configured correctly.
+      {{ t("builder.requirements.configure", { labels: activeComponentNetworkLabels }) }}
       <a href="#" class="preview-callout-link" @click.prevent="emit('focus-network')">
-        NETWORK
+        {{ t("builder.requirements.linkNetwork") }}
       </a>
     </template>
     <template v-if="activeComponentComponentLabels">
       <br
         v-if="activeComponentBusLabels || activeComponentProtocolLabels || activeComponentSystemLabels || activeComponentNetworkLabels"
       />
-      Make sure {{ activeComponentComponentLabels }} components are configured correctly.
+      {{ t("builder.requirements.configureComponents", { labels: activeComponentComponentLabels }) }}
     </template>
   </div>
 </template>
 
 <script setup>
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
+
 defineProps({
   activeComponentBusLabels: { type: String, default: "" },
   activeComponentProtocolLabels: { type: String, default: "" },
