@@ -137,7 +137,24 @@
             <span class="lvgl-canvas__tabbar"><i class="is-active" /><i /><i /></span>
           </span>
 
-          <!-- cell grid: buttonmatrix / keyboard -->
+          <!-- button matrix: real rows + labels -->
+          <span v-else-if="entry.render.kind === 'btnmatrix'" class="lvgl-canvas__btnmatrix">
+            <span v-for="(row, ri) in entry.render.rows" :key="ri" class="lvgl-canvas__btnrow">
+              <i v-for="(label, bi) in row" :key="bi">{{ label }}</i>
+            </span>
+          </span>
+
+          <!-- line: polyline of the widget's own points -->
+          <svg
+            v-else-if="entry.render.kind === 'line'"
+            class="lvgl-canvas__line"
+            viewBox="0 0 100 100"
+            preserveAspectRatio="none"
+          >
+            <polyline :points="linePolyline(entry.render.points)" fill="none" :stroke="THEME.primary" stroke-width="2" vector-effect="non-scaling-stroke" />
+          </svg>
+
+          <!-- cell grid: keyboard / empty buttonmatrix -->
           <span v-else-if="entry.render.kind === 'grid'" class="lvgl-canvas__cells">
             <i v-for="n in 8" :key="n" />
           </span>
@@ -262,8 +279,32 @@ const render = (entry) => {
   if (t === "image" || t === "animimg" || t === "canvas") return { kind: "image", qr: false };
   if (t === "meter") return { kind: "meter" };
   if (t === "tabview" || t === "tileview") return { kind: "tabview" };
-  if (t === "buttonmatrix" || t === "keyboard") return { kind: "grid" };
+  if (t === "buttonmatrix") {
+    const rows = (Array.isArray(p.rows) ? p.rows : [])
+      .map((r) => (Array.isArray(r?.buttons) ? r.buttons.map((b) => String(b?.text ?? "")) : []))
+      .filter((r) => r.length);
+    return rows.length ? { kind: "btnmatrix", rows } : { kind: "grid" };
+  }
+  if (t === "keyboard") return { kind: "grid" };
+  if (t === "line") {
+    const pts = (Array.isArray(p.points) ? p.points : [])
+      .map((pt) => ({ x: num(pt?.x, NaN), y: num(pt?.y, NaN) }))
+      .filter((pt) => Number.isFinite(pt.x) && Number.isFinite(pt.y));
+    return pts.length >= 2 ? { kind: "line", points: pts } : { kind: "box" };
+  }
   return { kind: "box" };
+};
+
+// Fit the line's own point coords into its box (LVGL draws line points relative
+// to the widget's top-left; we just want a recognisable shape in the preview).
+const linePolyline = (points) => {
+  const xs = points.map((p) => p.x);
+  const ys = points.map((p) => p.y);
+  const minX = Math.min(...xs, 0);
+  const minY = Math.min(...ys, 0);
+  const w = Math.max(...xs) - minX || 1;
+  const h = Math.max(...ys) - minY || 1;
+  return points.map((p) => `${(((p.x - minX) / w) * 100).toFixed(1)},${(((p.y - minY) / h) * 100).toFixed(1)}`).join(" ");
 };
 
 const isTruthy = (v) => v === true || v === "true" || v === "on" || v === 1 || v === "1";
@@ -434,6 +475,7 @@ const onDragEnd = (event) => {
 .lvgl-w--box,
 .lvgl-w--tabview,
 .lvgl-w--grid,
+.lvgl-w--btnmatrix,
 .lvgl-w--image,
 .lvgl-w--dropdown,
 .lvgl-w--roller,
@@ -755,6 +797,43 @@ const onDragEnd = (event) => {
 .lvgl-canvas__cells i {
   background: #e4e4ea;
   border-radius: 2px;
+}
+
+/* button matrix */
+.lvgl-canvas__btnmatrix {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  height: 100%;
+  padding: 2px;
+}
+
+.lvgl-canvas__btnrow {
+  display: flex;
+  flex: 1;
+  gap: 2px;
+}
+
+.lvgl-canvas__btnrow i {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  background: #e9e9ef;
+  border-radius: 2px;
+  font-size: 9px;
+  font-style: normal;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* line */
+.lvgl-canvas__line {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
 }
 
 .lvgl-canvas__badge {

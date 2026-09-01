@@ -10,6 +10,10 @@ markiert.
 
 ### Added
 
+- **LVGL `buttonmatrix.rows` editierbar** (P2) – die Button-Matrix-Zeilen sind
+  jetzt strukturiert modelliert (`rows` → `buttons` → `text`/`width`/`key_code`/
+  `control`) statt als opaker `extra`-Block. Der Canvas zeichnet die echten
+  Zeilen mit Beschriftung; `line` wird als Polyline seiner Punkte gerendert.
 - **LVGL Widget-Felder vervollständigt** (P1) – die kuratierten Widget-Schemas
   decken jetzt alle flachen `config_vars` aus dem ESPHome-2026.8.2-Schema ab:
   `image` Transform (`angle`, `zoom`, `pivot_x/y`, `offset_x/y`, `antialias`),

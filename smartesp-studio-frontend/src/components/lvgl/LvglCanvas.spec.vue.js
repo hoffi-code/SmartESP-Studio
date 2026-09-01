@@ -78,6 +78,33 @@ describe("LvglCanvas", () => {
     expect(w.get(".lvgl-w--led .lvgl-canvas__led").attributes("style")).toContain("rgb(255, 0, 0)");
   });
 
+  it("renders a button matrix from its rows and a line from its points", () => {
+    const p = {
+      id: "p",
+      widgets: [
+        {
+          uiId: "bm",
+          type: "buttonmatrix",
+          common: { x: 0, y: 0, width: 120, height: 60 },
+          props: { rows: [{ buttons: [{ text: "A" }, { text: "B" }] }, { buttons: [{ text: "C" }] }] },
+          children: []
+        },
+        {
+          uiId: "ln",
+          type: "line",
+          common: { x: 0, y: 70, width: 100, height: 40 },
+          props: { points: [{ x: 0, y: 0 }, { x: 50, y: 20 }, { x: 100, y: 0 }] },
+          children: []
+        }
+      ]
+    };
+    const w = mount(LvglCanvas, { props: { page: p, canvasWidth: 240, canvasHeight: 320 } });
+
+    const cells = w.findAll(".lvgl-w--btnmatrix .lvgl-canvas__btnrow i");
+    expect(cells.map((c) => c.text())).toEqual(["A", "B", "C"]);
+    expect(w.get(".lvgl-w--line polyline").attributes("points").split(" ")).toHaveLength(3);
+  });
+
   it("uses an explicit bg_color over the kind default", () => {
     const p = {
       id: "p",

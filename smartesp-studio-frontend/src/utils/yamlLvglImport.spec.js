@@ -123,6 +123,42 @@ const qrcodeSchema = {
 // A widget with no flat fields at all -- only common + a nested block (scales).
 const meterSchema = { fields: [{ key: "id", type: "id", required: false }] };
 
+// Mirrors buttonmatrix.json's nested rows -> buttons -> control shape.
+const buttonmatrixSchema = {
+  fields: [
+    { key: "id", type: "id", required: false },
+    {
+      key: "rows",
+      type: "list",
+      required: false,
+      item: {
+        type: "object",
+        fields: [
+          {
+            key: "buttons",
+            type: "list",
+            item: {
+              type: "object",
+              fields: [
+                { key: "text", type: "text" },
+                { key: "width", type: "text" },
+                { key: "control", type: "object", fields: [{ key: "checkable", type: "boolean" }, { key: "disabled", type: "boolean" }] }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+};
+
+const lineSchema = {
+  fields: [
+    { key: "id", type: "id", required: false },
+    { key: "points", type: "list", item: { type: "object", fields: [{ key: "x", type: "text" }, { key: "y", type: "text" }] } }
+  ]
+};
+
 const schemaContext = {
   loadWidgetSchema: async (type) => {
     if (type === "label") return labelSchema;
@@ -134,6 +170,8 @@ const schemaContext = {
     if (type === "qrcode") return qrcodeSchema;
     if (type === "meter") return meterSchema;
     if (type === "obj") return objSchema;
+    if (type === "buttonmatrix") return buttonmatrixSchema;
+    if (type === "line") return lineSchema;
     return null;
   },
   loadActionCatalog: async () => [{ id: "homeassistant.action", schemaUrl: "actions/homeassistant/action.json" }],
@@ -235,6 +273,37 @@ describe("parseWidgetNode", () => {
     expect(node.props.pressed).toEqual({ bg_color: "0xFF0000" });
     expect(node.props.indicator).toEqual({ bg_color: "0x00FF00" });
     expect(node.props.knob).toEqual({ bg_color: "0x0000FF", text_color: "0xFFFFFF" });
+    expect(node.extra).toBeUndefined();
+  });
+
+  it("maps a button matrix's nested rows/buttons/control into props", async () => {
+    const node = await parseWidgetNode(
+      {
+        buttonmatrix: {
+          id: "bm",
+          rows: [
+            { buttons: [{ text: "A", control: { checkable: true } }, { text: "B", width: 2 }] },
+            { buttons: [{ text: "C" }] }
+          ]
+        }
+      },
+      schemaContext
+    );
+
+    expect(node.type).toBe("buttonmatrix");
+    expect(node.props.rows).toHaveLength(2);
+    expect(node.props.rows[0].buttons[0]).toEqual({ text: "A", control: { checkable: true } });
+    expect(node.props.rows[0].buttons[1]).toEqual({ text: "B", width: 2 });
+    expect(node.props.rows[1].buttons).toEqual([{ text: "C" }]);
+    expect(node.extra).toBeUndefined();
+  });
+
+  it("maps a line's points into props", async () => {
+    const node = await parseWidgetNode(
+      { line: { id: "ln", points: [{ x: 0, y: 0 }, { x: 40, y: 20 }] } },
+      schemaContext
+    );
+    expect(node.props.points).toEqual([{ x: 0, y: 0 }, { x: 40, y: 20 }]);
     expect(node.extra).toBeUndefined();
   });
 

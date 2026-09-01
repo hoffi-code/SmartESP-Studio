@@ -11,7 +11,41 @@
       "required": false,
       "lvl": "simple",
       "item": {
-        "type": "text"
+        "type": "object",
+        "fields": [
+          {
+            "key": "buttons",
+            "type": "list",
+            "required": false,
+            "lvl": "simple",
+            "item": {
+              "type": "object",
+              "fields": [
+                { "key": "text", "type": "text", "required": false, "lvl": "simple", "placeholder": "A" },
+                { "key": "width", "type": "text", "required": false, "lvl": "normal", "placeholder": "1" },
+                { "key": "key_code", "type": "text", "required": false, "lvl": "advanced" },
+                {
+                  "key": "control",
+                  "type": "object",
+                  "required": false,
+                  "lvl": "advanced",
+                  "fields": [
+                    { "key": "hidden", "type": "boolean", "required": false },
+                    { "key": "no_repeat", "type": "boolean", "required": false },
+                    { "key": "disabled", "type": "boolean", "required": false },
+                    { "key": "checkable", "type": "boolean", "required": false },
+                    { "key": "checked", "type": "boolean", "required": false },
+                    { "key": "click_trig", "type": "boolean", "required": false },
+                    { "key": "popover", "type": "boolean", "required": false },
+                    { "key": "recolor", "type": "boolean", "required": false },
+                    { "key": "custom_1", "type": "boolean", "required": false },
+                    { "key": "custom_2", "type": "boolean", "required": false }
+                  ]
+                }
+              ]
+            }
+          }
+        ]
       }
     },
     {
