@@ -16,7 +16,7 @@
 defineProps({
   modelValue: { type: String, default: "" },
   inputId: { type: String, default: "dashboardSearch" },
-  placeholder: { type: String, default: "Search files, folders" },
+  placeholder: { type: String, default: "" },
   searchIconUrl: {
     type: String,
     default: "https://cdn.jsdelivr.net/npm/@mdi/svg/svg/magnify.svg"

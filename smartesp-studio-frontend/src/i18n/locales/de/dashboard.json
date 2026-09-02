@@ -1,0 +1,56 @@
+{
+  "toolbar": {
+    "allDevices": "Alle Geräte",
+    "folderView": "Ordneransicht",
+    "folderPath": "Ordnerpfad",
+    "goUp": "Zum übergeordneten Ordner",
+    "searchPlaceholder": "Dateien, Ordner durchsuchen"
+  },
+  "entries": {
+    "loading": "Projekte werden geladen…",
+    "newDevice": "Neues Gerät",
+    "folders": "Ordner",
+    "projects": "Projekte",
+    "allDevices": "Alle Geräte",
+    "folderTileHint": "{folders} Ordner - {projects} Projekte",
+    "empty": "Keine Ordner oder Projekte passen zur Suche."
+  },
+  "tile": {
+    "actions": "Projekt-Aktionen",
+    "online": "Online"
+  },
+  "tree": {
+    "toggleFolder": "Ordner auf-/zuklappen",
+    "folderMenu": "Ordner-Menü",
+    "addFolder": "Ordner hinzufügen",
+    "deleteFolder": "Ordner löschen",
+    "newFolderPlaceholder": "Neuer Ordner"
+  },
+  "modal": {
+    "confirmTitle": "Bestätigen",
+    "deleteFolderMessage": "Diesen Ordner und alle verschachtelten Ordner löschen?",
+    "deleteProjectMessage": "Dieses Projekt und alle zugehörigen Dateien löschen?",
+    "yes": "Ja"
+  },
+  "projectMenu": {
+    "edit": "Bearbeiten",
+    "validate": "Prüfen",
+    "logs": "Logs",
+    "downloadYaml": "YAML herunterladen",
+    "cleanBuild": "Clean Build",
+    "customize": "Anpassen",
+    "deleteProject": "Projekt löschen"
+  },
+  "customize": {
+    "title": "Kachel anpassen",
+    "icon": "Icon",
+    "pickIcon": "Icon wählen",
+    "iconColor": "Icon-Farbe",
+    "pickColor": "Farbe wählen",
+    "tileBackground": "Kachel-Hintergrund",
+    "titleColor": "Titelfarbe",
+    "metaColor": "Metadaten-Farbe",
+    "reset": "Auf Standard zurücksetzen",
+    "apply": "Übernehmen"
+  }
+}

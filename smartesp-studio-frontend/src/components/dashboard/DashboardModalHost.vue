@@ -1,19 +1,19 @@
 <template>
   <ConfirmModal
     :open="confirmDeleteFolderOpen"
-    title="Confirm"
-    message="Delete this folder and all nested folders?"
-    confirm-text="Yes"
-    cancel-text="Cancel"
+    :title="t('dashboard.modal.confirmTitle')"
+    :message="t('dashboard.modal.deleteFolderMessage')"
+    :confirm-text="t('dashboard.modal.yes')"
+    :cancel-text="t('common.cancel')"
     @confirm="emit('confirm-remove-folder')"
     @cancel="emit('cancel-remove-folder')"
   />
   <ConfirmModal
     :open="confirmDeleteProjectOpen"
-    title="Confirm"
-    message="Delete this project and all related files?"
-    confirm-text="Yes"
-    cancel-text="Cancel"
+    :title="t('dashboard.modal.confirmTitle')"
+    :message="t('dashboard.modal.deleteProjectMessage')"
+    :confirm-text="t('dashboard.modal.yes')"
+    :cancel-text="t('common.cancel')"
     @confirm="emit('confirm-remove-project')"
     @cancel="emit('cancel-remove-project')"
   />
@@ -81,21 +81,21 @@
       class="project-menu project-menu--floating"
       :style="projectMenuStyle"
     >
-      <button type="button" @click.stop="emit('edit-project-from-menu')">Edit</button>
-      <button type="button" @click.stop="emit('validate-project-from-menu')">Validate</button>
-      <button type="button" :disabled="!canOpenProjectMenuLogs" @click.stop="emit('logs-project-from-menu')">Logs</button>
-      <button type="button" @click.stop="emit('export-project-from-menu')">Download YAML</button>
-      <button type="button" @click.stop="emit('clean-build-from-menu')">Clean Build</button>
-      <button type="button" @click.stop="emit('customize-project-from-menu')">Customize</button>
-      <button type="button" @click.stop="emit('delete-project-from-menu')">Delete Project</button>
+      <button type="button" @click.stop="emit('edit-project-from-menu')">{{ t('dashboard.projectMenu.edit') }}</button>
+      <button type="button" @click.stop="emit('validate-project-from-menu')">{{ t('dashboard.projectMenu.validate') }}</button>
+      <button type="button" :disabled="!canOpenProjectMenuLogs" @click.stop="emit('logs-project-from-menu')">{{ t('dashboard.projectMenu.logs') }}</button>
+      <button type="button" @click.stop="emit('export-project-from-menu')">{{ t('dashboard.projectMenu.downloadYaml') }}</button>
+      <button type="button" @click.stop="emit('clean-build-from-menu')">{{ t('dashboard.projectMenu.cleanBuild') }}</button>
+      <button type="button" @click.stop="emit('customize-project-from-menu')">{{ t('dashboard.projectMenu.customize') }}</button>
+      <button type="button" @click.stop="emit('delete-project-from-menu')">{{ t('dashboard.projectMenu.deleteProject') }}</button>
     </div>
   </Teleport>
 
   <div v-if="customizeModalOpen" class="customize-modal-overlay" @click.self="emit('close-customize-modal')">
-    <div class="customize-modal" role="dialog" aria-modal="true" aria-label="Customize tile">
+    <div class="customize-modal" role="dialog" aria-modal="true" :aria-label="t('dashboard.customize.title')">
       <div class="customize-modal-header">
         <div>
-          <h3>Customize tile</h3>
+          <h3>{{ t('dashboard.customize.title') }}</h3>
           <p>{{ customizeProjectTitle }}</p>
         </div>
       </div>
@@ -113,42 +113,42 @@
 
       <div class="customize-modal-body">
         <div class="customize-field-row">
-          <label for="tileIconInput">Icon</label>
+          <label for="tileIconInput">{{ t('dashboard.customize.icon') }}</label>
           <div class="customize-field-inputs">
             <input id="tileIconInput" type="text" :value="customizeIconValue" placeholder="mdi:memory" @input="emit('update:customizeIconValue', $event.target.value)" />
-            <button type="button" class="btn-standard compact" @click="emit('open-customize-icon-picker')">Pick icon</button>
+            <button type="button" class="btn-standard compact" @click="emit('open-customize-icon-picker')">{{ t('dashboard.customize.pickIcon') }}</button>
           </div>
         </div>
 
         <div class="customize-field-row">
-          <label for="tileIconColorInput">Icon color</label>
+          <label for="tileIconColorInput">{{ t('dashboard.customize.iconColor') }}</label>
           <div class="customize-field-inputs">
             <input id="tileIconColorInput" type="text" :value="customizeDraft.iconColor" placeholder="#0F2E4C" @input="emit('update-customize-draft', 'iconColor', $event.target.value)" />
-            <button type="button" class="btn-standard compact" @click="emit('open-customize-color-picker', 'icon')">Pick color</button>
+            <button type="button" class="btn-standard compact" @click="emit('open-customize-color-picker', 'icon')">{{ t('dashboard.customize.pickColor') }}</button>
           </div>
         </div>
 
         <div class="customize-field-row">
-          <label for="tileBackgroundInput">Tile background</label>
+          <label for="tileBackgroundInput">{{ t('dashboard.customize.tileBackground') }}</label>
           <div class="customize-field-inputs">
             <input id="tileBackgroundInput" type="text" :value="customizeDraft.backgroundColor" placeholder="#FFFFFF" @input="emit('update-customize-draft', 'backgroundColor', $event.target.value)" />
-            <button type="button" class="btn-standard compact" @click="emit('open-customize-color-picker', 'background')">Pick color</button>
+            <button type="button" class="btn-standard compact" @click="emit('open-customize-color-picker', 'background')">{{ t('dashboard.customize.pickColor') }}</button>
           </div>
         </div>
 
         <div class="customize-field-row">
-          <label for="tileTitleColorInput">Title color</label>
+          <label for="tileTitleColorInput">{{ t('dashboard.customize.titleColor') }}</label>
           <div class="customize-field-inputs">
             <input id="tileTitleColorInput" type="text" :value="customizeDraft.titleColor" placeholder="#1F3F6D" @input="emit('update-customize-draft', 'titleColor', $event.target.value)" />
-            <button type="button" class="btn-standard compact" @click="emit('open-customize-color-picker', 'title')">Pick color</button>
+            <button type="button" class="btn-standard compact" @click="emit('open-customize-color-picker', 'title')">{{ t('dashboard.customize.pickColor') }}</button>
           </div>
         </div>
 
         <div class="customize-field-row">
-          <label for="tileMetaColorInput">Metadata color</label>
+          <label for="tileMetaColorInput">{{ t('dashboard.customize.metaColor') }}</label>
           <div class="customize-field-inputs">
             <input id="tileMetaColorInput" type="text" :value="customizeDraft.metaColor" placeholder="#7190B8" @input="emit('update-customize-draft', 'metaColor', $event.target.value)" />
-            <button type="button" class="btn-standard compact" @click="emit('open-customize-color-picker', 'meta')">Pick color</button>
+            <button type="button" class="btn-standard compact" @click="emit('open-customize-color-picker', 'meta')">{{ t('dashboard.customize.pickColor') }}</button>
           </div>
         </div>
       </div>
@@ -156,9 +156,9 @@
       <div v-if="customizeError" class="customize-modal-error">{{ customizeError }}</div>
 
       <div class="customize-modal-actions">
-        <button type="button" class="btn-standard secondary" :disabled="customizeBusy" @click="emit('close-customize-modal')">Cancel</button>
-        <button type="button" class="btn-standard secondary" :disabled="customizeBusy" @click="emit('reset-project-customization')">Reset to default</button>
-        <button type="button" class="btn-standard" :disabled="customizeBusy" @click="emit('apply-project-customization')">Apply</button>
+        <button type="button" class="btn-standard secondary" :disabled="customizeBusy" @click="emit('close-customize-modal')">{{ t('common.cancel') }}</button>
+        <button type="button" class="btn-standard secondary" :disabled="customizeBusy" @click="emit('reset-project-customization')">{{ t('dashboard.customize.reset') }}</button>
+        <button type="button" class="btn-standard" :disabled="customizeBusy" @click="emit('apply-project-customization')">{{ t('dashboard.customize.apply') }}</button>
       </div>
     </div>
   </div>
@@ -180,6 +180,7 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n';
 import ColorPickerModal from '../ColorPickerModal.vue';
 import ConfirmModal from '../ConfirmModal.vue';
 import IconPicker from '../IconPicker.vue';
@@ -191,6 +192,8 @@ import ProjectTileCard from './ProjectTileCard.vue';
 // DashboardModalHost keeps the view-level modal/menu layer in one place.
 // DashboardView owns the state and actions, while this component owns the portal/
 // dialog markup so the main dashboard template can stay focused on navigation UI.
+
+const { t } = useI18n();
 
 defineProps({
   confirmDeleteFolderOpen: Boolean,

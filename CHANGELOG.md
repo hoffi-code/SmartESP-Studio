@@ -54,6 +54,9 @@ markiert.
 - **Lesbare Feld-Labels** – ohne explizites `label` zeigt ein Feld jetzt
   `schema.fields.<key>.label` aus dem Katalog, sonst den humanisierten Key
   (`default_font` → „Default font", Akronyme bleiben groß) statt des rohen Keys.
+- **i18n: Dashboard** – Explorer-Toolbar, Ordnerbaum-Menüs, Projekt-Kontextmenü,
+  Kachel-Anpassen-Dialog und die Projektkachel laufen jetzt über den
+  Message-Katalog (`dashboard.*`, `en` + `de`).
 - **i18n: LVGL-Builder** – die restlichen fest verdrahteten Texte im LVGL-Builder
   (Seiten-/Widget-Panel, Widget-Inspektor, Roh-YAML-Editor, Baum, Canvas-Tooltip)
   laufen jetzt über den Message-Katalog (`lvgl.builder.*` u. a., `en` + `de`).

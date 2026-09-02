@@ -3,12 +3,12 @@
     <div class="dashboard-toolbar-wrap">
       <div class="dashboard-toolbar">
         <button type="button" class="toolbar-mode-toggle" @click="emit('toggle-view-mode')">
-          {{ viewMode === 'folder' ? 'All devices' : 'Folder view' }}
+          {{ viewMode === 'folder' ? t('dashboard.toolbar.allDevices') : t('dashboard.toolbar.folderView') }}
         </button>
-        <button type="button" class="toolbar-up-button" :disabled="isRootFolderSelected" @click="emit('go-parent-folder')">
+        <button type="button" class="toolbar-up-button" :disabled="isRootFolderSelected" :aria-label="t('dashboard.toolbar.goUp')" @click="emit('go-parent-folder')">
           <img :src="arrowUpIconUrl" alt="" aria-hidden="true" />
         </button>
-        <div class="toolbar-breadcrumb" role="navigation" aria-label="Folder path">
+        <div class="toolbar-breadcrumb" role="navigation" :aria-label="t('dashboard.toolbar.folderPath')">
           <button
             v-for="(crumb, index) in folderPath"
             :key="crumb.id"
@@ -22,7 +22,7 @@
         </div>
         <DashboardSearchField
           input-id="dashboardSearch"
-          placeholder="Search files, folders"
+          :placeholder="t('dashboard.toolbar.searchPlaceholder')"
           :model-value="searchText"
           :search-icon-url="searchIconUrl"
           @update:model-value="emit('update:searchText', $event)"
@@ -30,16 +30,16 @@
       </div>
     </div>
 
-    <div v-if="loading" class="dashboard-state">Loading projects...</div>
+    <div v-if="loading" class="dashboard-state">{{ t('dashboard.entries.loading') }}</div>
     <div v-else-if="errorMessage" class="dashboard-state dashboard-state--error">{{ errorMessage }}</div>
     <template v-else>
       <div v-if="saveMessage" class="dashboard-state dashboard-state--warning">{{ saveMessage }}</div>
       <div class="dashboard-content-actions">
-        <button type="button" class="btn-standard dashboard-new-device" @click="emit('open-blank-builder')">New device</button>
+        <button type="button" class="btn-standard dashboard-new-device" @click="emit('open-blank-builder')">{{ t('dashboard.entries.newDevice') }}</button>
       </div>
       <section :ref="entriesPaneRef" class="entries-pane">
         <section v-if="viewMode === 'folder' && visibleFolderEntries.length" class="entries-section">
-          <h3 class="entries-title">Folders</h3>
+          <h3 class="entries-title">{{ t('dashboard.entries.folders') }}</h3>
           <div class="folders-grid">
             <article
               v-for="entry in visibleFolderEntries"
@@ -55,13 +55,13 @@
                 <span class="project-icon project-icon--folder"><img :src="entry.icon" alt="" aria-hidden="true" /></span>
                 <h4>{{ entry.title }}</h4>
               </div>
-              <p class="folder-tile-hint">{{ entry.folderCount }} folders - {{ entry.projectCount }} projects</p>
+              <p class="folder-tile-hint">{{ t('dashboard.entries.folderTileHint', { folders: entry.folderCount, projects: entry.projectCount }) }}</p>
             </article>
           </div>
         </section>
 
         <section v-if="visibleProjectEntries.length" class="entries-section">
-          <h3 class="entries-title">{{ viewMode === 'all' ? 'All devices' : 'Projects' }}</h3>
+          <h3 class="entries-title">{{ viewMode === 'all' ? t('dashboard.entries.allDevices') : t('dashboard.entries.projects') }}</h3>
           <div class="projects-grid">
             <ProjectTileCard
               v-for="entry in visibleProjectEntries"
@@ -87,7 +87,7 @@
         </section>
 
         <article v-if="visibleFolderEntries.length === 0 && visibleProjectEntries.length === 0" class="project-empty">
-          No folders or projects match your search.
+          {{ t('dashboard.entries.empty') }}
         </article>
       </section>
     </template>
@@ -95,8 +95,11 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n';
 import DashboardSearchField from './DashboardSearchField.vue';
 import ProjectTileCard from './ProjectTileCard.vue';
+
+const { t } = useI18n();
 
 // DashboardEntriesPane renders the right-hand explorer surface: toolbar, breadcrumbs,
 // folder tiles, and project cards. It does not own selection logic; it only emits

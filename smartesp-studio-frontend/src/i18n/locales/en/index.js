@@ -3,7 +3,8 @@
 import app from "./app.json";
 import common from "./common.json";
 import builder from "./builder.json";
+import dashboard from "./dashboard.json";
 import modals from "./modals.json";
 import lvgl from "./lvgl.json";
 
-export default { app, common, builder, modals, lvgl };
+export default { app, common, builder, dashboard, modals, lvgl };
