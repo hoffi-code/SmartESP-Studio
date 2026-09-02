@@ -196,6 +196,76 @@ describe("LvglCanvas", () => {
     expect(w.get(".lvgl-w--button").attributes("style")).toContain("background: rgb(255, 0, 0)");
   });
 
+  it("paints the screen background from the display palette", () => {
+    const w = mount(LvglCanvas, {
+      props: {
+        page,
+        canvasWidth: 200,
+        canvasHeight: 200,
+        displayPalette: { background: "#102030" }
+      }
+    });
+    expect(w.get(".lvgl-canvas").attributes("style")).toContain("background: rgb(16, 32, 48)");
+  });
+
+  it("renders strictly two-colour for a monochrome display", () => {
+    const p = {
+      id: "p",
+      widgets: [{ uiId: "b", type: "button", common: { x: 0, y: 0, width: 60, height: 24 }, props: { text: "X", bg_color: "0xFF0000" }, children: [] }]
+    };
+    const w = mount(LvglCanvas, {
+      props: {
+        page: p,
+        canvasWidth: 200,
+        canvasHeight: 200,
+        displayPalette: { monochrome: true, background: "#000000", foreground: "#e8f6ff" }
+      }
+    });
+    expect(w.get(".lvgl-canvas").classes()).toContain("is-mono");
+    // the explicit red bg_color does not reach the widget box in mono mode
+    expect(w.get(".lvgl-w--button").attributes("style") || "").not.toContain("rgb(255, 0, 0)");
+  });
+
+  it("renders the real bitmap when lvglImageResolver resolves the src", () => {
+    const p = {
+      id: "p",
+      widgets: [{ uiId: "im", type: "image", common: { x: 0, y: 0, width: 40, height: 40 }, props: { src: "logo" }, children: [] }]
+    };
+    const w = mount(LvglCanvas, {
+      props: { page: p, canvasWidth: 200, canvasHeight: 200 },
+      global: { provide: { lvglImageResolver: (id) => (id === "logo" ? "/api/assets/images/logo.png" : null) } }
+    });
+    expect(w.get(".lvgl-w--image img.lvgl-canvas__image-real").attributes("src")).toBe("/api/assets/images/logo.png");
+
+    // no resolver -> placeholder icon
+    const w2 = mount(LvglCanvas, { props: { page: p, canvasWidth: 200, canvasHeight: 200 } });
+    expect(w2.find(".lvgl-w--image img").exists()).toBe(false);
+    expect(w2.find(".lvgl-w--image svg").exists()).toBe(true);
+  });
+
+  it("drops hidden widgets and honours opa / text_align / line and arc widths", () => {
+    const p = {
+      id: "p",
+      widgets: [
+        { uiId: "gone", type: "label", common: { x: 0, y: 0 }, props: { text: "nope", hidden: true }, children: [] },
+        { uiId: "lbl", type: "label", common: { x: 0, y: 20, width: 80, height: 14 }, props: { text: "R", text_align: "RIGHT", opa: "50%" }, children: [] },
+        { uiId: "ln", type: "line", common: { x: 0, y: 40, width: 100, height: 30 }, props: { points: [{ x: 0, y: 0 }, { x: 100, y: 10 }], line_color: "0x00FF00", line_width: 5 }, children: [] },
+        { uiId: "ar", type: "arc", common: { x: 0, y: 80, width: 50, height: 50 }, props: { value: 30, arc_width: 9 }, children: [] }
+      ]
+    };
+    const w = mount(LvglCanvas, { props: { page: p, canvasWidth: 200, canvasHeight: 200 } });
+
+    const widgets = w.findAll(".lvgl-canvas__widget");
+    expect(widgets).toHaveLength(3); // hidden label removed
+    const lbl = w.get(".lvgl-w--label");
+    expect(lbl.attributes("style")).toContain("opacity: 0.5");
+    expect(lbl.get(".lvgl-canvas__label").attributes("style")).toContain("text-align: right");
+    const poly = w.get(".lvgl-w--line polyline");
+    expect(poly.attributes("stroke")).toBe("#00FF00");
+    expect(poly.attributes("stroke-width")).toBe("5");
+    expect(w.get(".lvgl-w--arc path").attributes("stroke-width")).toBe("9");
+  });
+
   it("flags a flex container's children as static (no drag)", () => {
     const flexPage = {
       id: "p",
