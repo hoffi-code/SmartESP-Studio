@@ -82,20 +82,104 @@ const resolveDim = (value, parentDim, intrinsic) => {
   return intrinsic;
 };
 
-// A parent using flex/grid ignores its children's x/y. Layout lives in
-// node.props.layout since the flex/grid schema landed; older opaque nodes may
-// still carry the flat keys in node.extra.
-const isLayoutContainer = (node) => {
-  const layout = node?.props?.layout;
-  if (layout && typeof layout === "object") {
-    const type = String(layout.type || "").toUpperCase();
-    return type === "FLEX" || type === "GRID" || Boolean(layout.flex_flow || layout.grid_columns || layout.grid_rows);
-  }
+const n0 = (value) => {
+  const num = toNumber(value);
+  return num === null ? 0 : num;
+};
+
+// The layout block moved into node.props.layout with the flex/grid schema; older
+// opaque nodes still carry it (or the flat keys) in node.extra.
+const readLayout = (node) => {
+  const fromProps = node?.props?.layout;
+  if (fromProps && typeof fromProps === "object") return fromProps;
   const extra = node?.extra || {};
-  return Boolean(
-    extra.flex_flow || extra.grid_rows || extra.grid_columns ||
-    (extra.layout && typeof extra.layout === "object")
-  );
+  if (extra.layout && typeof extra.layout === "object") return extra.layout;
+  if (extra.flex_flow || extra.grid_columns || extra.grid_rows) return extra;
+  return null;
+};
+
+const layoutMode = (layout) => {
+  if (!layout) return null;
+  const type = String(layout.type || "").toUpperCase();
+  if (type === "GRID" || layout.grid_columns || layout.grid_rows) return "grid";
+  if (type === "FLEX" || layout.flex_flow) return "flex";
+  return null;
+};
+
+// LVGL pads a container per side (pad_all is the shared fallback); flex/grid gaps
+// are pad_row (between rows) and pad_column (between columns). An unspecified gap
+// falls back to a few px so preview widgets don't touch; an explicit 0 collapses.
+const padSide = (layout, side) => n0(layout[`pad_${side}`] ?? layout.pad_all);
+
+// Returns a stateful positioner(w, h) -> { x, y } for a container's managed
+// children, or null when the container isn't a layout container.
+const managedPositioner = (node, box) => {
+  const layout = readLayout(node);
+  const mode = layoutMode(layout);
+  if (!mode) return null;
+
+  const padL = padSide(layout, "left");
+  const padT = padSide(layout, "top");
+  const padR = padSide(layout, "right");
+  const padB = padSide(layout, "bottom");
+  const innerX = box.x + padL;
+  const innerY = box.y + padT;
+  const innerW = Math.max(1, box.w - padL - padR);
+  const innerH = Math.max(1, box.h - padT - padB);
+
+  if (mode === "grid") {
+    const cols = Array.isArray(layout.grid_columns)
+      ? layout.grid_columns.length
+      : Math.max(1, n0(layout.grid_columns) || 2);
+    const gapX = layout.pad_column === undefined ? 4 : n0(layout.pad_column);
+    const gapY = layout.pad_row === undefined ? 4 : n0(layout.pad_row);
+    const cellW = (innerW - gapX * (cols - 1)) / cols;
+    let index = 0;
+    let rowY = innerY;
+    let rowH = 0;
+    return (_w, h) => {
+      const col = index % cols;
+      if (col === 0 && index > 0) {
+        rowY += rowH + gapY;
+        rowH = 0;
+      }
+      rowH = Math.max(rowH, h);
+      index += 1;
+      return { x: innerX + col * (cellW + gapX), y: rowY };
+    };
+  }
+
+  const flow = String(layout.flex_flow || "COLUMN").toUpperCase();
+  const row = flow.startsWith("ROW");
+  const wrap = flow.includes("WRAP");
+  const gap = row
+    ? layout.pad_column === undefined ? 4 : n0(layout.pad_column)
+    : layout.pad_row === undefined ? 4 : n0(layout.pad_row);
+  let cx = innerX;
+  let cy = innerY;
+  let lineExtent = 0;
+  return (w, h) => {
+    if (row) {
+      if (wrap && cx > innerX && cx + w > innerX + innerW) {
+        cx = innerX;
+        cy += lineExtent + gap;
+        lineExtent = 0;
+      }
+      const pos = { x: cx, y: cy };
+      cx += w + gap;
+      lineExtent = Math.max(lineExtent, h);
+      return pos;
+    }
+    if (wrap && cy > innerY && cy + h > innerY + innerH) {
+      cy = innerY;
+      cx += lineExtent + gap;
+      lineExtent = 0;
+    }
+    const pos = { x: cx, y: cy };
+    cy += h + gap;
+    lineExtent = Math.max(lineExtent, w);
+    return pos;
+  };
 };
 
 const hasAlignTo = (node) => Boolean(node?.props?.align_to || node?.extra?.align_to);
@@ -108,7 +192,7 @@ const isHidden = (node) => {
 
 let counter = 0;
 
-const layoutNode = (node, parentBox, depth, flexParent, out, activeGroupOf) => {
+const layoutNode = (node, parentBox, depth, placeManaged, out, activeGroupOf) => {
   if (isHidden(node)) return null;
   const common = node.common || {};
   const intrinsic = intrinsicSize(node);
@@ -119,12 +203,10 @@ const layoutNode = (node, parentBox, depth, flexParent, out, activeGroupOf) => {
   let y;
   let positionable = !hasAlignTo(node) && node.type !== "unsupported";
 
-  if (flexParent) {
-    // Stack managed children top-down inside the parent; their real position is
-    // decided by LVGL, this is only so they don't all pile on the origin.
-    x = parentBox.x + 4;
-    y = parentBox._flexCursor;
-    parentBox._flexCursor += h + 4;
+  if (placeManaged) {
+    // Flex/grid decides the real position; this only approximates it (direction,
+    // per-side padding, row/column gap) so the children don't pile on the origin.
+    ({ x, y } = placeManaged(w, h));
     positionable = false;
   } else {
     const offX = toNumber(common.x) ?? 0;
@@ -143,7 +225,7 @@ const layoutNode = (node, parentBox, depth, flexParent, out, activeGroupOf) => {
     depth,
     box: { x, y, w, h },
     positionable,
-    layoutManaged: Boolean(flexParent)
+    layoutManaged: Boolean(placeManaged)
   };
   out.push(entry);
 
@@ -154,9 +236,9 @@ const layoutNode = (node, parentBox, depth, flexParent, out, activeGroupOf) => {
   const groupWidgets = groups[activeIndex]?.widgets || [];
   const children = [...(node.children || []), ...groupWidgets];
   if (children.length) {
-    const childBox = { x, y, w, h, _flexCursor: y + 4 };
-    const childFlex = isLayoutContainer(node);
-    children.forEach((child) => layoutNode(child, childBox, depth + 1, childFlex, out, activeGroupOf));
+    const childBox = { x, y, w, h };
+    const placeChild = managedPositioner(node, childBox);
+    children.forEach((child) => layoutNode(child, childBox, depth + 1, placeChild, out, activeGroupOf));
   }
   return entry;
 };
@@ -166,8 +248,8 @@ const layoutNode = (node, parentBox, depth, flexParent, out, activeGroupOf) => {
 export const resolveLvglPageLayout = (page, canvasWidth, canvasHeight, activeGroupOf = null) => {
   counter = 0;
   const out = [];
-  const root = { x: 0, y: 0, w: canvasWidth, h: canvasHeight, _flexCursor: 4 };
-  (page?.widgets || []).forEach((widget) => layoutNode(widget, root, 0, false, out, activeGroupOf));
+  const root = { x: 0, y: 0, w: canvasWidth, h: canvasHeight };
+  (page?.widgets || []).forEach((widget) => layoutNode(widget, root, 0, null, out, activeGroupOf));
   return out;
 };
 

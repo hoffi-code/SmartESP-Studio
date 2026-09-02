@@ -88,7 +88,67 @@ describe("resolveLvglPageLayout", () => {
     const c2 = layout.find((e) => e.uiId === "c2");
     expect(c1.layoutManaged).toBe(true);
     expect(c1.positionable).toBe(false);
-    expect(c2.box.y).toBeGreaterThan(c1.box.y); // stacked, not piled on the origin
+    // ROW flow -> children run left to right, not piled on the origin
+    expect(c2.box.x).toBeGreaterThan(c1.box.x);
+    expect(c2.box.y).toBe(c1.box.y);
+  });
+
+  it("honours flex direction, per-side padding and the row/column gap", () => {
+    const layout = resolveLvglPageLayout(
+      {
+        widgets: [
+          node({
+            uiId: "col",
+            type: "obj",
+            common: { x: 0, y: 0, width: 200, height: 200 },
+            props: { layout: { type: "FLEX", flex_flow: "COLUMN", pad_left: 10, pad_top: 6, pad_row: 8 } },
+            children: [
+              node({ uiId: "c1", common: { height: 20 } }),
+              node({ uiId: "c2", common: { height: 20 } })
+            ]
+          })
+        ]
+      },
+      240,
+      320
+    );
+    const c1 = layout.find((e) => e.uiId === "c1");
+    const c2 = layout.find((e) => e.uiId === "c2");
+    expect(c1.box.x).toBe(10);
+    expect(c1.box.y).toBe(6);
+    // second child sits one child height + the pad_row gap below the first
+    expect(c2.box.y).toBe(6 + 20 + 8);
+    expect(c2.box.x).toBe(10);
+  });
+
+  it("lays a grid container out row-major by grid_columns", () => {
+    const layout = resolveLvglPageLayout(
+      {
+        widgets: [
+          node({
+            uiId: "grid",
+            type: "obj",
+            common: { x: 0, y: 0, width: 200, height: 200 },
+            props: { layout: { type: "GRID", grid_columns: ["FR(1)", "FR(1)"], pad_column: 0, pad_row: 0 } },
+            children: [
+              node({ uiId: "a", common: { height: 30 } }),
+              node({ uiId: "b", common: { height: 30 } }),
+              node({ uiId: "c", common: { height: 30 } })
+            ]
+          })
+        ]
+      },
+      240,
+      320
+    );
+    const a = layout.find((e) => e.uiId === "a");
+    const b = layout.find((e) => e.uiId === "b");
+    const c = layout.find((e) => e.uiId === "c");
+    expect(a.box.x).toBe(0);
+    expect(b.box.x).toBe(100); // second column
+    expect(b.box.y).toBe(a.box.y);
+    expect(c.box.x).toBe(0); // wraps to the next row
+    expect(c.box.y).toBeGreaterThan(a.box.y);
   });
 
   it("treats a props.layout flex/grid container the same as the legacy extra form", () => {

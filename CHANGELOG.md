@@ -209,6 +209,12 @@ markiert.
   (`ticks.major.stride`) mit eigener Länge/Breite/Farbe und beschriftet die
   Major-Ticks mit dem Skalenwert. `ticks.color`/`length` und die
   Indikator-Linienbreite fließen ein.
+- **LVGL Canvas: Flex/Grid näher an LVGL** – der Layout-Fallback für
+  Flex/Grid-Container stapelte Kinder immer vertikal mit festem Abstand. Jetzt
+  wirken `flex_flow` (Richtung `ROW`/`COLUMN`, `*_WRAP` bricht um), die
+  Innenabstände (`pad_left`/`pad_top`/… bzw. `pad_all`) und der Zeilen-/
+  Spaltenabstand (`pad_row`/`pad_column`); Grid-Container ordnen ihre Kinder
+  zeilenweise nach `grid_columns` an.
 - **LVGL Canvas: Verläufe, Schatten, `label.long_mode`** – `bg_grad_color` /
   `bg_grad_dir` rendern als CSS-Verlauf, `shadow_width` (+ Offset/Spread/Farbe)
   als `box-shadow`. Label mit `long_mode: WRAP` bricht mehrzeilig um,
