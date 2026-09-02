@@ -5,7 +5,7 @@ import { afterEach, beforeAll, describe, expect, it } from "vitest";
 import SchemaField from "./SchemaField.vue";
 import { DEFAULT_LOCALE, loadLocale, setLocale } from "../i18n";
 
-const mountField = (field) => mount(SchemaField, { props: { field, value: {} } });
+const mountField = (field, extra = {}) => mount(SchemaField, { props: { field, value: {}, ...extra } });
 
 beforeAll(async () => {
   await loadLocale("en");
@@ -15,14 +15,20 @@ beforeAll(async () => {
 afterEach(() => setLocale(DEFAULT_LOCALE));
 
 describe("SchemaField labels and hints", () => {
-  it("prefers an explicit schema label", () => {
+  it("uses a catalog label over an explicit schema label", () => {
+    // default_font has a catalog entry -> that wins so the name stays translatable
     const wrapper = mountField({ key: "default_font", type: "text", label: "My Font" });
-    expect(wrapper.get("label").text()).toContain("My Font");
+    expect(wrapper.get("label").text()).toContain("Default font");
   });
 
-  it("uses the schema.fields catalog label when there is no explicit label", () => {
+  it("uses the catalog label when there is no explicit label", () => {
     const wrapper = mountField({ key: "default_font", type: "text" });
     expect(wrapper.get("label").text()).toContain("Default font");
+  });
+
+  it("falls back to field.label when nothing is in the catalog", () => {
+    const wrapper = mountField({ key: "some_unmapped_key", type: "text", label: "Curated Name" });
+    expect(wrapper.get("label").text()).toContain("Curated Name");
   });
 
   it("falls back to a humanized key when nothing is translated", () => {

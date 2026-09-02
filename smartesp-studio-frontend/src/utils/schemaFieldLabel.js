@@ -13,11 +13,20 @@ const ACRONYMS = new Set([
   "css", "html", "json", "yaml", "svg", "png", "cs", "dc", "qr"
 ]);
 
-// Flat i18n namespace for schema field labels/hints, keyed by the field key alone
-// (no per-schema qualifier -- SchemaField never gets the resolved schema id). A `label`
-// or `hint` set directly in the schema JSON still wins over the catalog.
-export const fieldLabelI18nKey = (key) => `schema.fields.${String(key || "")}.label`;
-export const fieldHintI18nKey = (key) => `schema.fields.${String(key || "")}.hint`;
+// i18n namespace for schema field labels/hints. The catalog is keyed by the owning
+// schema's id (`schema.ns.<normId>.<key>.{label,hint}`) so the same field key can mean
+// different things in different schemas (`mode` under spi vs. a switch vs. an LVGL widget).
+// `schemaId` is the resolved schema's `id` ("sensor.template", "busses.spi", "lvgl.widget.bar").
+export const normSchemaNs = (id) => String(id || "").trim().replace(/[./]+/g, "_");
+
+export const fieldLabelI18nKey = (key, schemaId = "") =>
+  `schema.ns.${normSchemaNs(schemaId)}.${String(key || "")}.label`;
+export const fieldHintI18nKey = (key, schemaId = "") =>
+  `schema.ns.${normSchemaNs(schemaId)}.${String(key || "")}.hint`;
+
+// Legacy flat keys -- kept as a fallback tier while the catalog migrates to `ns.*`.
+export const fieldLabelI18nKeyFlat = (key) => `schema.fields.${String(key || "")}.label`;
+export const fieldHintI18nKeyFlat = (key) => `schema.fields.${String(key || "")}.hint`;
 
 export const humanizeFieldKey = (key) => {
   const raw = String(key || "").trim();

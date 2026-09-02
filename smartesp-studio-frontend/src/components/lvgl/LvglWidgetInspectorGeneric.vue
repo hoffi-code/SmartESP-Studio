@@ -14,6 +14,7 @@
       :value="node.props || {}"
       :root-value="node.props || {}"
       :id-index="idIndex"
+      :schema-id="schema?.id || ''"
       :context-scope-id="widgetScopeId"
       @update="handlePropsUpdate"
     />
@@ -33,6 +34,7 @@
         :value="node.props || {}"
         :root-value="node.props || {}"
         :id-index="idIndex"
+        :schema-id="schema?.id || ''"
         :context-scope-id="widgetScopeId"
         @update="handlePropsUpdate"
       />
@@ -48,6 +50,7 @@
         :value="node.props || {}"
         :root-value="node.props || {}"
         :id-index="idIndex"
+        :schema-id="schema?.id || ''"
         :context-scope-id="widgetScopeId"
         @update="handlePropsUpdate"
       />
@@ -63,6 +66,7 @@
         :value="node.props || {}"
         :root-value="node.props || {}"
         :id-index="idIndex"
+        :schema-id="schema?.id || ''"
         :context-scope-id="widgetScopeId"
         @update="handlePropsUpdate"
       />
@@ -78,6 +82,7 @@
         :value="node.props || {}"
         :root-value="node.props || {}"
         :id-index="idIndex"
+        :schema-id="schema?.id || ''"
         :context-scope-id="widgetScopeId"
         @update="handlePropsUpdate"
       />
@@ -92,6 +97,7 @@
         :value="node.props || {}"
         :root-value="node.props || {}"
         :id-index="idIndex"
+        :schema-id="schema?.id || ''"
         :context-scope-id="widgetScopeId"
         @update="handlePropsUpdate"
       />

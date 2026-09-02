@@ -1,6 +1,28 @@
 import { describe, expect, it } from "vitest";
 
-import { humanizeFieldKey } from "./schemaFieldLabel";
+import {
+  fieldHintI18nKey,
+  fieldLabelI18nKey,
+  fieldLabelI18nKeyFlat,
+  humanizeFieldKey,
+  normSchemaNs
+} from "./schemaFieldLabel";
+
+describe("schema-namespaced i18n keys", () => {
+  it("normalises a schema id into a key segment", () => {
+    expect(normSchemaNs("sensor.template")).toBe("sensor_template");
+    expect(normSchemaNs("lvgl.widget.bar")).toBe("lvgl_widget_bar");
+    expect(normSchemaNs("general/protocols/api")).toBe("general_protocols_api");
+    expect(normSchemaNs("")).toBe("");
+    expect(normSchemaNs(null)).toBe("");
+  });
+
+  it("builds namespaced label/hint keys per schema", () => {
+    expect(fieldLabelI18nKey("mode", "busses.spi")).toBe("schema.ns.busses_spi.mode.label");
+    expect(fieldHintI18nKey("mode", "switch.template")).toBe("schema.ns.switch_template.mode.hint");
+    expect(fieldLabelI18nKeyFlat("mode")).toBe("schema.fields.mode.label");
+  });
+});
 
 describe("humanizeFieldKey", () => {
   it("capitalises the first word and lowercases the rest", () => {
