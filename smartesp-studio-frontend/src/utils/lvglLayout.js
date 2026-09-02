@@ -28,13 +28,23 @@ const anchorOffset = (align, pw, ph, w, h) => {
   }
 };
 
+// Pixel size of a widget's text_font. LVGL's built-ins encode the size in the name
+// (montserrat_14, unscii_8); a referenced font: id has an unknown size -> 14.
+export const lvglFontPx = (node) => {
+  const font = String(node?.props?.text_font ?? "").trim();
+  const m = font.match(/_(\d{1,2})$/);
+  const n = m ? Number(m[1]) : NaN;
+  return Number.isFinite(n) && n >= 6 && n <= 64 ? n : 14;
+};
+
 // Rough content size per widget type, used when width/height is SIZE_CONTENT or absent.
 const intrinsicSize = (node) => {
   const text = String(node?.props?.text ?? node?.props?.options?.[0] ?? "");
+  const fp = lvglFontPx(node);
   switch (node?.type) {
-    case "label": return { w: Math.max(24, text.length * 7 + 6), h: 18 };
-    case "button": return { w: Math.max(48, text.length * 8 + 20), h: 30 };
-    case "checkbox": return { w: Math.max(40, text.length * 7 + 26), h: 20 };
+    case "label": return { w: Math.max(24, Math.round(text.length * fp * 0.6) + 6), h: fp + 6 };
+    case "button": return { w: Math.max(48, Math.round(text.length * fp * 0.6) + 20), h: fp + 16 };
+    case "checkbox": return { w: Math.max(40, Math.round(text.length * fp * 0.6) + 26), h: Math.max(20, fp + 6) };
     case "dropdown":
     case "roller":
     case "textarea": return { w: 120, h: node.type === "roller" ? 60 : 28 };
@@ -90,9 +100,16 @@ const isLayoutContainer = (node) => {
 
 const hasAlignTo = (node) => Boolean(node?.props?.align_to || node?.extra?.align_to);
 
+// `hidden: true` isn't a curated builder field, so it rides props/extra/common.
+const isHidden = (node) => {
+  const v = node?.props?.hidden ?? node?.extra?.hidden ?? node?.common?.hidden;
+  return v === true || v === "true";
+};
+
 let counter = 0;
 
 const layoutNode = (node, parentBox, depth, flexParent, out, activeGroupOf) => {
+  if (isHidden(node)) return null;
   const common = node.common || {};
   const intrinsic = intrinsicSize(node);
   const w = Math.max(1, resolveDim(common.width, parentBox.w, intrinsic.w));

@@ -144,7 +144,11 @@
               draggable="false"
             />
             <svg v-else-if="!entry.render.qr" viewBox="0 0 24 24"><path d="M3 5h18v14H3z" fill="none" /><circle cx="8" cy="10" r="2" /><path d="M4 18l5-5 3 3 4-4 4 4v2H4z" /></svg>
-            <span v-else class="lvgl-canvas__qr" />
+            <span
+              v-else
+              class="lvgl-canvas__qr"
+              :style="{ '--qr-dark': entry.render.qrDark, '--qr-light': entry.render.qrLight }"
+            />
           </span>
 
           <!-- meter: gauge driven by scales[0] -->
@@ -212,7 +216,7 @@
             viewBox="0 0 100 100"
             preserveAspectRatio="none"
           >
-            <polyline :points="linePolyline(entry.render.points)" fill="none" :stroke="THEME.primary" stroke-width="2" vector-effect="non-scaling-stroke" />
+            <polyline :points="linePolyline(entry.render.points)" fill="none" :stroke="entry.render.stroke" :stroke-width="entry.render.strokeWidth" vector-effect="non-scaling-stroke" />
           </svg>
 
           <!-- cell grid: keyboard / empty buttonmatrix -->
@@ -233,7 +237,7 @@
 <script setup>
 import { ref, computed, inject } from "vue";
 import { useI18n } from "vue-i18n";
-import { resolveLvglPageLayout, lvglColorToCss } from "../../utils/lvglLayout";
+import { resolveLvglPageLayout, lvglColorToCss, lvglFontPx } from "../../utils/lvglLayout";
 
 const { t } = useI18n();
 
@@ -319,6 +323,28 @@ const num = (value, fallback = 0) => {
   return Number.isFinite(n) ? n : fallback;
 };
 
+// LVGL opacity: "NN%", 0-255, or already 0..1 -> CSS 0..1. undefined stays undefined.
+const opa01 = (value) => {
+  if (value === undefined || value === null || value === "") return undefined;
+  const pct = String(value).trim().match(/^(-?\d+(?:\.\d+)?)%$/);
+  if (pct) return Math.max(0, Math.min(1, Number(pct[1]) / 100));
+  const n = Number(value);
+  if (!Number.isFinite(n)) return undefined;
+  return n > 1 ? Math.max(0, Math.min(1, n / 255)) : Math.max(0, Math.min(1, n));
+};
+
+const rgbaWithAlpha = (css, alpha) => {
+  if (alpha === undefined || alpha >= 1) return css;
+  const hex = String(css).trim().replace(/^#/, "");
+  if (/^[0-9a-fA-F]{6}$/.test(hex)) {
+    const r = parseInt(hex.slice(0, 2), 16);
+    const g = parseInt(hex.slice(2, 4), 16);
+    const b = parseInt(hex.slice(4, 6), 16);
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  }
+  return css;
+};
+
 // widget prop colour, else the theme default for that role. A monochrome display
 // can't show widget colours, so every colour collapses to the foreground.
 const colour = (props_, key, fallback) => {
@@ -352,11 +378,18 @@ const render = (entry) => {
         : lm === "CLIP" || lm === "SCROLL" || lm === "SCROLL_CIRCULAR"
           ? "is-clip"
           : "";
+    const textStyle = { color: colour(p, "text_color", theme.text) };
+    const align = String(p.text_align || "").toUpperCase();
+    if (align === "CENTER") textStyle.textAlign = "center";
+    else if (align === "RIGHT") textStyle.textAlign = "right";
+    else if (align === "LEFT") textStyle.textAlign = "left";
+    const textOpa = opa01(p.text_opa);
+    if (textOpa !== undefined && textOpa < 1) textStyle.opacity = String(textOpa);
     return {
       kind: "label",
       text: String(p.text ?? "Label"),
       longClass,
-      textStyle: { color: colour(p, "text_color", theme.text) }
+      textStyle
     };
   }
   if (t === "button") return { kind: "button", text: String(p.text ?? "") };
@@ -401,7 +434,7 @@ const render = (entry) => {
       kind: "arc",
       fill,
       knob: t === "arc",
-      arcWidth: 4,
+      arcWidth: Math.max(1, num(p.arc_width ?? (p.indicator || {}).arc_width, 4)),
       sweep,
       path: arcPath(start, sweep),
       len: arcLen(sweep),
@@ -434,7 +467,14 @@ const render = (entry) => {
     return { kind: "field", text };
   }
   if (t === "led") return { kind: "led", color: colour(p, "color", colour(p, "bg_color", theme.led)) };
-  if (t === "qrcode") return { kind: "image", qr: true };
+  if (t === "qrcode") {
+    return {
+      kind: "image",
+      qr: true,
+      qrDark: mono.value ? theme.primary : lvglColorToCss(p.dark_color) || "#1e293b",
+      qrLight: mono.value ? "transparent" : lvglColorToCss(p.light_color) || "#ffffff"
+    };
+  }
   if (t === "image" || t === "animimg" || t === "canvas") {
     // ESPHome image angle = degrees; zoom = 256 -> 1x.
     const angle = num(p.angle, 0);
@@ -508,7 +548,14 @@ const render = (entry) => {
     const pts = (Array.isArray(p.points) ? p.points : [])
       .map((pt) => ({ x: num(pt?.x, NaN), y: num(pt?.y, NaN) }))
       .filter((pt) => Number.isFinite(pt.x) && Number.isFinite(pt.y));
-    return pts.length >= 2 ? { kind: "line", points: pts } : { kind: "box" };
+    return pts.length >= 2
+      ? {
+          kind: "line",
+          points: pts,
+          stroke: colour(p, "line_color", theme.primary),
+          strokeWidth: num(p.line_width, 2)
+        }
+      : { kind: "box" };
   }
   return { kind: "box" };
 };
@@ -552,7 +599,7 @@ const boxStyle = (entry) => {
     const dir = String(p.bg_grad_dir || "VER").toUpperCase() === "HOR" ? "to right" : "to bottom";
     style.background = `linear-gradient(${dir}, ${bg || "#fff"}, ${grad})`;
   } else if (bg) {
-    style.background = bg;
+    style.background = rgbaWithAlpha(bg, opa01(p.bg_opa));
   }
   const textFg = isMono ? (lvglColorToCss(p.text_color) ? fg.value : "") : lvglColorToCss(p.text_color);
   if (textFg) style.color = textFg;
@@ -564,6 +611,16 @@ const boxStyle = (entry) => {
   if (border) style.borderColor = border;
   const borderW = Number(p.border_width);
   if (Number.isFinite(borderW)) style.borderWidth = `${borderW}px`;
+  // outline sits outside the border; LVGL defaults its pad to ~0.
+  const outlineW = Number(p.outline_width);
+  const outlineC = isMono
+    ? (lvglColorToCss(p.outline_color) ? fg.value : "")
+    : lvglColorToCss(p.outline_color);
+  if (Number.isFinite(outlineW) && outlineW > 0 && (outlineC || isMono)) {
+    style.outline = `${outlineW}px solid ${outlineC || fg.value}`;
+    const pad = num(p.outline_pad, 0) * zoom.value;
+    if (pad) style.outlineOffset = `${pad}px`;
+  }
   // shadow_width is the blur radius; offsets/colour optional.
   const shadowW = Number(p.shadow_width);
   if (!isMono && Number.isFinite(shadowW) && shadowW > 0) {
@@ -572,6 +629,10 @@ const boxStyle = (entry) => {
     const spread = num(p.shadow_spread, 0) * zoom.value;
     style.boxShadow = `${ox}px ${oy}px ${shadowW * zoom.value}px ${spread}px ${lvglColorToCss(p.shadow_color) || "rgba(0,0,0,0.4)"}`;
   }
+  const widgetOpa = opa01(p.opa);
+  if (widgetOpa !== undefined && widgetOpa < 1) style.opacity = String(widgetOpa);
+  const fontPx = lvglFontPx(entry.node);
+  if (fontPx !== 14 || p.text_font) style.fontSize = `${fontPx * zoom.value}px`;
   return style;
 };
 
@@ -836,6 +897,7 @@ const onDragEnd = (event) => {
 }
 
 .lvgl-canvas__label {
+  width: 100%;
   padding: 0 2px;
   white-space: nowrap;
   overflow: hidden;
@@ -1129,7 +1191,13 @@ const onDragEnd = (event) => {
   width: 70%;
   height: 70%;
   background:
-    conic-gradient(#1e293b 0 25%, #fff 0 50%, #1e293b 0 75%, #fff 0) 0 0 / 33.34% 33.34%;
+    conic-gradient(
+        var(--qr-dark, #1e293b) 0 25%,
+        var(--qr-light, #fff) 0 50%,
+        var(--qr-dark, #1e293b) 0 75%,
+        var(--qr-light, #fff) 0
+      )
+      0 0 / 33.34% 33.34%;
 }
 
 /* tabview */
