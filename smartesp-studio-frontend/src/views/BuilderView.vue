@@ -1611,6 +1611,22 @@ provide("idRefOptionProvider", (field) =>
   field?.domain === "lvgl" ? collectLvglWidgetIds(config.value.lvgl) : []
 );
 
+// Resolve an LVGL image widget's `src` (an id_ref to an image: component) to a
+// browser URL so the canvas can render the real bitmap. Mirrors DesignElementPreview.
+provide("lvglImageResolver", (srcId) => {
+  const id = String(srcId || "").trim();
+  if (!id) return null;
+  const entry = (config.value.components || []).find(
+    (e) => String(e?.id || "").split("/")[0] === "image" && e?.config?.id === id
+  );
+  const file = String(entry?.config?.file || "").trim();
+  if (!file) return null;
+  if (file.startsWith("mdi:")) return `https://cdn.jsdelivr.net/npm/@mdi/svg/svg/${file.slice(4)}.svg`;
+  if (/^https?:\/\//.test(file)) return file;
+  if (/[\\/]/.test(file)) return null; // build-host path, not resolvable in the browser
+  return `${assetsBase}images/${encodeURIComponent(file)}`;
+});
+
 const schemaEntries = computed(() => {
   const entries = [];
 

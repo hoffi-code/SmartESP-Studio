@@ -136,7 +136,14 @@
               entry.render.recolor ? { color: entry.render.recolor } : null
             ]"
           >
-            <svg v-if="!entry.render.qr" viewBox="0 0 24 24"><path d="M3 5h18v14H3z" fill="none" /><circle cx="8" cy="10" r="2" /><path d="M4 18l5-5 3 3 4-4 4 4v2H4z" /></svg>
+            <img
+              v-if="entry.render.url"
+              class="lvgl-canvas__image-real"
+              :src="entry.render.url"
+              alt=""
+              draggable="false"
+            />
+            <svg v-else-if="!entry.render.qr" viewBox="0 0 24 24"><path d="M3 5h18v14H3z" fill="none" /><circle cx="8" cy="10" r="2" /><path d="M4 18l5-5 3 3 4-4 4 4v2H4z" /></svg>
             <span v-else class="lvgl-canvas__qr" />
           </span>
 
@@ -224,11 +231,14 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, inject } from "vue";
 import { useI18n } from "vue-i18n";
 import { resolveLvglPageLayout, lvglColorToCss } from "../../utils/lvglLayout";
 
 const { t } = useI18n();
+
+// BuilderView resolves an image widget's `src` id to a browser URL; null in isolation.
+const imageResolver = inject("lvglImageResolver", null);
 
 const props = defineProps({
   page: { type: Object, default: null },
@@ -432,7 +442,16 @@ const render = (entry) => {
     const parts = [];
     if (angle) parts.push(`rotate(${angle}deg)`);
     if (zoom && zoom !== 1) parts.push(`scale(${zoom})`);
-    return { kind: "image", qr: false, transform: parts.join(" "), recolor: lvglColorToCss(p.image_recolor) };
+    // Render the real bitmap for image/animimg when their src resolves; canvas has
+    // no static content, so it stays a placeholder.
+    const url = t !== "canvas" && typeof imageResolver === "function" ? imageResolver(p.src) : "";
+    return {
+      kind: "image",
+      qr: false,
+      url: url || "",
+      transform: parts.join(" "),
+      recolor: lvglColorToCss(p.image_recolor)
+    };
   }
   if (t === "meter") {
     const s = (Array.isArray(p.scales) ? p.scales : [])[0] || {};
@@ -1098,6 +1117,12 @@ const onDragEnd = (event) => {
   width: 62%;
   height: 62%;
   fill: currentColor;
+}
+
+.lvgl-canvas__image-real {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .lvgl-canvas__qr {
