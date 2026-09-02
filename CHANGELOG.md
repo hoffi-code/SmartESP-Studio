@@ -155,6 +155,11 @@ markiert.
 
 ### Changed
 
+- **Kommentar-Steuerung in die Configuration-Spalte** – die Buttons für Datei-Kopf-
+  und Sektions-Kommentar sitzen nicht mehr in der YAML-Vorschau (wo sie den Code
+  überlagerten), sondern als eigene Zeile unter der Modus-Auswahl im
+  Configuration-Panel. Die Vorschau zeigt nur noch „Copy code". Sektions-Auswahl
+  jetzt über alle Top-Level-Keys des ganzen Dokuments.
 - **API-Section überarbeitet** – `listen_backlog`/`max_connections`/`max_send_queue`
   zeigen jetzt die echten ESPHome-Defaults (1/4/4). `encryption.key` nicht mehr
   hart „required", Hinweis auf `!secret`. `reboot_timeout` sichtbarer (Mode-Level
