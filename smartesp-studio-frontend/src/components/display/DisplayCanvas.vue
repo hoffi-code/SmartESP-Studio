@@ -173,13 +173,13 @@
           v-else-if="element.type === 'animation' && element.animationUrl"
           class="display-element__image"
           :src="animationDisplayUrl(element)"
-          :alt="element.animationFile || 'animation'"
+          :alt="element.animationFile || t('display.element.animation')"
         />
         <img
           v-else-if="element.type === 'image' && element.imageUrl"
           class="display-element__image"
           :src="imageDisplayUrl(element)"
-          :alt="element.image || 'image'"
+          :alt="element.image || t('display.element.image')"
         />
         <div
           v-else
@@ -199,7 +199,10 @@
 
 <script setup>
 import { computed, onBeforeUnmount, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import { colorToCss } from "../../utils/displayColor";
+
+const { t } = useI18n();
 
 const props = defineProps({
   screenW: {

@@ -2,26 +2,26 @@
   <div>
     <div class="display-inspector__row display-inspector__row--quad">
       <div class="display-inspector__field">
-        <label for="posX">X</label>
+        <label for="posX">{{ t('display.field.x') }}</label>
         <input id="posX" type="number" :value="selectedElement.x" @input="updateNumber('x', $event)" />
       </div>
       <div class="display-inspector__field">
-        <label for="posY">Y</label>
+        <label for="posY">{{ t('display.field.y') }}</label>
         <input id="posY" type="number" :value="selectedElement.y" @input="updateNumber('y', $event)" />
       </div>
       <span class="display-inspector__group-divider"></span>
       <div class="display-inspector__field">
-        <label for="sizeW">W</label>
+        <label for="sizeW">{{ t('display.field.w') }}</label>
         <input id="sizeW" type="number" :value="selectedElement.w" @input="updateNumber('w', $event)" />
       </div>
       <div class="display-inspector__field">
-        <label for="sizeH">H</label>
+        <label for="sizeH">{{ t('display.field.h') }}</label>
         <input id="sizeH" type="number" :value="selectedElement.h" @input="updateNumber('h', $event)" />
       </div>
     </div>
 
     <div>
-      <label for="textMode">Mode</label>
+      <label for="textMode">{{ t('display.text.mode') }}</label>
       <select
         id="textMode"
         :value="selectedElement.textMode || 'static'"
@@ -34,7 +34,7 @@
     </div>
 
     <div v-if="(selectedElement.textMode || 'static') === 'static'">
-      <label for="textValue">Text</label>
+      <label for="textValue">{{ t('display.text.text') }}</label>
       <input
         id="textValue"
         type="text"
@@ -44,14 +44,14 @@
     </div>
 
     <div v-if="(selectedElement.textMode || 'static') === 'dynamic'">
-      <label for="dynamicId">Source ID</label>
+      <label for="dynamicId">{{ t('display.text.sourceId') }}</label>
       <select
         id="dynamicId"
         :value="selectedElement.dynamicId"
         :class="{ 'field-error': dynamicIdRequiredError }"
         @change="updateText('dynamicId', $event)"
       >
-        <option value="">Select ID</option>
+        <option value="">{{ t('display.option.selectId') }}</option>
         <option v-for="entry in dynamicIdOptions" :key="entry.id" :value="entry.id">
           {{ entry.label }}
         </option>
@@ -63,18 +63,18 @@
 
     <div v-if="(selectedElement.textMode || 'static') === 'dynamic'" class="display-inspector__row">
       <div>
-        <label for="prefix">Prefix</label>
+        <label for="prefix">{{ t('display.text.prefix') }}</label>
         <input id="prefix" type="text" :value="selectedElement.prefix" @input="updateText('prefix', $event)" />
       </div>
       <div>
-        <label for="suffix">Suffix</label>
+        <label for="suffix">{{ t('display.text.suffix') }}</label>
         <input id="suffix" type="text" :value="selectedElement.suffix" @input="updateText('suffix', $event)" />
       </div>
     </div>
 
     <div v-if="(selectedElement.textMode || 'static') === 'dynamic'" class="display-inspector__row">
       <div v-if="isNumericDomain(selectedElement.dynamicDomain)">
-        <label for="format">Format</label>
+        <label for="format">{{ t('display.text.format') }}</label>
         <input id="format" type="text" :value="selectedElement.format" @input="updateText('format', $event)" />
       </div>
     </div>
@@ -84,17 +84,17 @@
       class="display-inspector__row"
     >
       <div>
-        <label for="onLabel">On label</label>
+        <label for="onLabel">{{ t('display.text.onLabel') }}</label>
         <input id="onLabel" type="text" :value="selectedElement.onLabel" @input="updateText('onLabel', $event)" />
       </div>
       <div>
-        <label for="offLabel">Off label</label>
+        <label for="offLabel">{{ t('display.text.offLabel') }}</label>
         <input id="offLabel" type="text" :value="selectedElement.offLabel" @input="updateText('offLabel', $event)" />
       </div>
     </div>
 
     <div>
-      <label for="wrap">Wrap text</label>
+      <label for="wrap">{{ t('display.text.wrap') }}</label>
       <select
         id="wrap"
         :value="(selectedElement.wrap !== false).toString()"
@@ -106,7 +106,7 @@
     </div>
 
     <div v-if="!isMonochrome" class="display-icon-picker">
-      <label for="elementColor">Color</label>
+      <label for="elementColor">{{ t('display.field.color') }}</label>
       <div class="schema-icon-row">
         <input
           id="elementColor"
@@ -128,15 +128,15 @@
     </div>
 
     <div>
-      <label for="fontSource">Font source</label>
+      <label for="fontSource">{{ t('display.text.fontSource') }}</label>
       <select id="fontSource" :value="selectedElement.fontSource || 'local'" @change="handleFontSourceChange">
-        <option value="local">Local</option>
-        <option value="google">Google Fonts</option>
+        <option value="local">{{ t('display.option.local') }}</option>
+        <option value="google">{{ t('display.option.googleFonts') }}</option>
       </select>
     </div>
 
     <div v-if="(selectedElement.fontSource || 'local') === 'local'">
-      <label for="fontLocal">Font</label>
+      <label for="fontLocal">{{ t('display.text.font') }}</label>
       <select id="fontLocal" :value="selectedElement.fontFile" @change="handleLocalFontChange">
         <option v-for="font in visibleLocalFonts" :key="font.file" :value="font.file" :title="font.file">
           {{ formatFileOptionLabel(font.file) }}
@@ -146,7 +146,7 @@
 
     <div v-if="selectedElement.fontSource === 'google'" class="display-inspector__row">
       <div>
-        <label for="fontFamily">Font family</label>
+        <label for="fontFamily">{{ t('display.text.fontFamily') }}</label>
         <select id="fontFamily" :value="selectedElement.fontFamily" @change="handleGoogleFamilyChange">
           <option v-for="font in googleFonts" :key="font.family" :value="font.family">
             {{ font.family }}
@@ -154,7 +154,7 @@
         </select>
       </div>
       <div>
-        <label for="fontVariant">Variant</label>
+        <label for="fontVariant">{{ t('display.field.variant') }}</label>
         <select id="fontVariant" :value="selectedElement.fontVariant" @change="handleGoogleVariantChange">
           <option
             v-for="variant in googleFonts.find((item) => item.family === selectedElement.fontFamily)?.variants || []"
@@ -171,10 +171,13 @@
 
 <script setup>
 import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import ColorPickerModal from "../ColorPickerModal.vue";
 import { colorToCss } from "../../utils/displayColor";
 import { useDisplayFontControls } from "../../composables/display/useDisplayFontControls";
 import { useElementPatch } from "../../composables/display/useElementPatch";
+
+const { t } = useI18n();
 
 const props = defineProps({
   selectedElement: {
@@ -224,10 +227,10 @@ const {
 
 const colorPickerOpen = ref(false);
 
-const dynamicModeOptions = [
-  { value: "static", label: "Static text" },
-  { value: "dynamic", label: "Dynamic value" }
-];
+const dynamicModeOptions = computed(() => [
+  { value: "static", label: t("display.text.modeStatic") },
+  { value: "dynamic", label: t("display.text.modeDynamic") }
+]);
 
 const isNumericDomain = (domain) => ["sensor", "number"].includes(domain);
 const isBinaryDomain = (domain) => ["binary_sensor", "switch"].includes(domain);
@@ -248,8 +251,8 @@ const dynamicIdRequiredError = computed(() => {
 });
 
 const dynamicIdErrorText = computed(() => {
-  if (!dynamicIdOptions.value.length) return "No source IDs available.";
-  return "Please select a source ID.";
+  if (!dynamicIdOptions.value.length) return t("display.text.noSourceIds");
+  return t("display.text.selectSourceId");
 });
 
 const colorInputValue = computed(() => props.selectedElement?.color || "");

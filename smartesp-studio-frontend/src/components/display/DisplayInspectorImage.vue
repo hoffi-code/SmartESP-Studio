@@ -2,33 +2,33 @@
   <div>
     <div class="display-inspector__row display-inspector__row--quad">
       <div class="display-inspector__field">
-        <label for="posX">X</label>
+        <label for="posX">{{ t('display.field.x') }}</label>
         <input id="posX" type="number" :value="selectedElement.x" @input="updateNumber('x', $event)" />
       </div>
       <div class="display-inspector__field">
-        <label for="posY">Y</label>
+        <label for="posY">{{ t('display.field.y') }}</label>
         <input id="posY" type="number" :value="selectedElement.y" @input="updateNumber('y', $event)" />
       </div>
       <span class="display-inspector__group-divider"></span>
       <div class="display-inspector__field">
-        <label for="sizeW">W</label>
+        <label for="sizeW">{{ t('display.field.w') }}</label>
         <input id="sizeW" type="number" :value="selectedElement.w" @input="updateNumber('w', $event)" />
       </div>
       <div class="display-inspector__field">
-        <label for="sizeH">H</label>
+        <label for="sizeH">{{ t('display.field.h') }}</label>
         <input id="sizeH" type="number" :value="selectedElement.h" @input="updateNumber('h', $event)" />
       </div>
     </div>
 
     <div>
-      <label for="imageValue">Image</label>
+      <label for="imageValue">{{ t('display.image.label') }}</label>
       <select
         id="imageValue"
         :value="selectedElement.image"
         :class="{ 'field-error': imageFileRequiredError }"
         @change="handleImageChange"
       >
-        <option value="">Select image</option>
+        <option value="">{{ t('display.option.selectImage') }}</option>
         <option v-for="image in images" :key="image.file" :value="image.file" :title="image.file">
           {{ formatFileOptionLabel(image.file) }}
         </option>
@@ -39,14 +39,14 @@
     </div>
 
     <div>
-      <label for="imageType">Image type</label>
+      <label for="imageType">{{ t('display.image.type') }}</label>
       <select id="imageType" :value="selectedImageType" @change="handleImageTypeChange">
         <option v-for="type in imageTypes" :key="`image-type-${type}`" :value="type">{{ type }}</option>
       </select>
     </div>
 
     <div>
-      <label for="imageTransparency">Transparency</label>
+      <label for="imageTransparency">{{ t('display.image.transparency') }}</label>
       <select
         id="imageTransparency"
         :value="selectedElement.imageTransparency || 'opaque'"
@@ -71,7 +71,7 @@
     </div>
 
     <div v-if="supportsDither">
-      <label for="imageDither">Dither</label>
+      <label for="imageDither">{{ t('display.image.dither') }}</label>
       <select
         id="imageDither"
         :value="selectedElement.imageDither || 'NONE'"
@@ -96,6 +96,7 @@
 
 <script setup>
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 import {
   DISPLAY_DITHER_VALUES,
   DISPLAY_IMAGE_TYPES,
@@ -104,6 +105,8 @@ import {
 } from "../../utils/displayImageEncoding";
 import { useDisplayImageField } from "../../composables/display/useDisplayImageField";
 import { useElementPatch } from "../../composables/display/useElementPatch";
+
+const { t } = useI18n();
 
 const props = defineProps({
   selectedElement: {
@@ -176,8 +179,8 @@ const imageFileRequiredError = computed(() => {
 });
 
 const imageFileErrorText = computed(() => {
-  if (!imageFiles.value.length) return "No image files available.";
-  return "Please select an image file.";
+  if (!imageFiles.value.length) return t("display.image.noFiles");
+  return t("display.image.selectFile");
 });
 
 const handleImageTypeChange = (event) => {

@@ -2,26 +2,26 @@
   <div>
     <div class="display-inspector__row display-inspector__row--quad">
       <div class="display-inspector__field">
-        <label for="posX">X</label>
+        <label for="posX">{{ t('display.field.x') }}</label>
         <input id="posX" type="number" :value="selectedElement.x" @input="updateNumber('x', $event)" />
       </div>
       <div class="display-inspector__field">
-        <label for="posY">Y</label>
+        <label for="posY">{{ t('display.field.y') }}</label>
         <input id="posY" type="number" :value="selectedElement.y" @input="updateNumber('y', $event)" />
       </div>
       <span class="display-inspector__group-divider"></span>
       <div class="display-inspector__field">
-        <label for="sizeW">W</label>
+        <label for="sizeW">{{ t('display.field.w') }}</label>
         <input id="sizeW" type="number" :value="selectedElement.w" @input="updateNumber('w', $event)" />
       </div>
       <div class="display-inspector__field">
-        <label for="sizeH">H</label>
+        <label for="sizeH">{{ t('display.field.h') }}</label>
         <input id="sizeH" type="number" :value="selectedElement.h" @input="updateNumber('h', $event)" />
       </div>
     </div>
 
     <div>
-      <label for="animationId">Animation ID *</label>
+      <label for="animationId">{{ t('display.animation.idLabel') }}</label>
       <input
         id="animationId"
         type="text"
@@ -31,19 +31,19 @@
         @input="updateText('animationId', $event)"
       />
       <div v-if="animationIdRequiredError" class="field-error-text">
-        Please provide an animation ID.
+        {{ t('display.animation.idRequired') }}
       </div>
     </div>
 
     <div>
-      <label for="animationFile">Animation file *</label>
+      <label for="animationFile">{{ t('display.animation.fileLabel') }}</label>
       <select
         id="animationFile"
         :value="selectedElement.animationFile"
         :class="{ 'field-error': animationFileRequiredError }"
         @change="handleAnimationFileChange"
       >
-        <option value="">Select animation</option>
+        <option value="">{{ t('display.option.selectAnimation') }}</option>
         <option v-for="file in animationFiles" :key="file" :value="file" :title="file">
           {{ formatFileOptionLabel(file) }}
         </option>
@@ -54,14 +54,14 @@
     </div>
 
     <div>
-      <label for="animationType">Type</label>
+      <label for="animationType">{{ t('display.animation.type') }}</label>
       <select id="animationType" :value="selectedAnimationType" @change="handleAnimationTypeChange">
         <option v-for="type in imageTypes" :key="`animation-type-${type}`" :value="type">{{ type }}</option>
       </select>
     </div>
 
     <div>
-      <label for="animationTransparency">Transparency</label>
+      <label for="animationTransparency">{{ t('display.animation.transparency') }}</label>
       <select
         id="animationTransparency"
         :value="selectedElement.animationTransparency || 'opaque'"
@@ -86,7 +86,7 @@
     </div>
 
     <div v-if="supportsDither">
-      <label for="animationDither">Dither</label>
+      <label for="animationDither">{{ t('display.animation.dither') }}</label>
       <select
         id="animationDither"
         :value="selectedElement.animationDither || 'NONE'"
@@ -109,7 +109,7 @@
 
     <div class="display-inspector__row">
       <div>
-        <label for="animationLoop">Loop</label>
+        <label for="animationLoop">{{ t('display.animation.loop') }}</label>
         <select
           id="animationLoop"
           :value="Boolean(selectedElement.loopEnabled).toString()"
@@ -120,7 +120,7 @@
         </select>
       </div>
       <div>
-        <label for="animationAuto">Auto animate</label>
+        <label for="animationAuto">{{ t('display.animation.autoAnimate') }}</label>
         <select
           id="animationAuto"
           :value="Boolean(selectedElement.autoAnimate).toString()"
@@ -133,7 +133,7 @@
     </div>
 
     <div v-if="selectedElement.autoAnimate">
-      <label for="animationInterval">Interval (ms)</label>
+      <label for="animationInterval">{{ t('display.animation.interval') }}</label>
       <input
         id="animationInterval"
         type="number"
@@ -145,7 +145,7 @@
 
     <div v-if="selectedElement.loopEnabled" class="display-inspector__row">
       <div>
-        <label for="animationLoopStart">Start frame</label>
+        <label for="animationLoopStart">{{ t('display.animation.startFrame') }}</label>
         <input
           id="animationLoopStart"
           type="number"
@@ -155,7 +155,7 @@
         />
       </div>
       <div>
-        <label for="animationLoopEnd">End frame</label>
+        <label for="animationLoopEnd">{{ t('display.animation.endFrame') }}</label>
         <input
           id="animationLoopEnd"
           type="number"
@@ -167,7 +167,7 @@
     </div>
 
     <div v-if="selectedElement.loopEnabled">
-      <label for="animationLoopRepeat">Repeat</label>
+      <label for="animationLoopRepeat">{{ t('display.animation.repeat') }}</label>
       <input
         id="animationLoopRepeat"
         type="number"
@@ -181,6 +181,7 @@
 
 <script setup>
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 import {
   DISPLAY_DITHER_VALUES,
   DISPLAY_IMAGE_TYPES,
@@ -189,6 +190,8 @@ import {
 } from "../../utils/displayImageEncoding";
 import { useDisplayImageField } from "../../composables/display/useDisplayImageField";
 import { useElementPatch } from "../../composables/display/useElementPatch";
+
+const { t } = useI18n();
 
 const props = defineProps({
   selectedElement: {
@@ -263,8 +266,8 @@ const animationFileRequiredError = computed(() => {
 });
 
 const animationFileErrorText = computed(() => {
-  if (!animationFiles.value.length) return "No GIF animations available.";
-  return "Please select an animation file.";
+  if (!animationFiles.value.length) return t("display.animation.noFiles");
+  return t("display.animation.selectFile");
 });
 
 const handleAnimationTypeChange = (event) => {

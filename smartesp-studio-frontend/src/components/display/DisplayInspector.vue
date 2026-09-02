@@ -1,11 +1,11 @@
 <template>
   <aside class="display-inspector" :class="{ 'display-inspector--flat': variant === 'flat' }">
     <div v-if="showHeader" class="display-inspector__header">
-      <h4>Inspector</h4>
+      <h4>{{ t('display.inspector.title') }}</h4>
       <span v-if="selectedElement" class="display-inspector__type">{{ selectedElement.type }}</span>
     </div>
 
-    <div v-if="!selectedElement" class="note">Select an element on the canvas.</div>
+    <div v-if="!selectedElement" class="note">{{ t('display.inspector.selectElement') }}</div>
 
     <div v-else class="display-inspector__form">
       <DisplayInspectorShape
@@ -69,12 +69,15 @@
 </template>
 
 <script setup>
+import { useI18n } from "vue-i18n";
 import DisplayInspectorShape from "./DisplayInspectorShape.vue";
 import DisplayInspectorIcon from "./DisplayInspectorIcon.vue";
 import DisplayInspectorText from "./DisplayInspectorText.vue";
 import DisplayInspectorImage from "./DisplayInspectorImage.vue";
 import DisplayInspectorAnimation from "./DisplayInspectorAnimation.vue";
 import DisplayInspectorGraph from "./DisplayInspectorGraph.vue";
+
+const { t } = useI18n();
 
 defineProps({
   selectedElement: {

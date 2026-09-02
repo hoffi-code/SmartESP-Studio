@@ -1,28 +1,28 @@
 <template>
   <div>
     <div>
-      <label for="shapeType">Shape</label>
+      <label for="shapeType">{{ t('display.shape.label') }}</label>
       <select id="shapeType" :value="selectedElement.shapeType" @change="updateText('shapeType', $event)">
-        <option value="line">Line</option>
-        <option value="rect">Rectangle</option>
-        <option value="circle">Circle</option>
-        <option value="triangle">Triangle</option>
-        <option value="polygon5">Pentagon</option>
-        <option value="polygon6">Hexagon</option>
-        <option value="polygon7">Heptagon</option>
-        <option value="polygon8">Octagon</option>
+        <option value="line">{{ t('display.shape.line') }}</option>
+        <option value="rect">{{ t('display.shape.rectangle') }}</option>
+        <option value="circle">{{ t('display.shape.circle') }}</option>
+        <option value="triangle">{{ t('display.shape.triangle') }}</option>
+        <option value="polygon5">{{ t('display.shape.pentagon') }}</option>
+        <option value="polygon6">{{ t('display.shape.hexagon') }}</option>
+        <option value="polygon7">{{ t('display.shape.heptagon') }}</option>
+        <option value="polygon8">{{ t('display.shape.octagon') }}</option>
       </select>
     </div>
 
     <div>
-      <label for="rotation">Rotation</label>
+      <label for="rotation">{{ t('display.shape.rotation') }}</label>
       <select id="rotation" :value="selectedElement.rotation" @change="updateNumber('rotation', $event)">
         <option v-for="option in rotationOptions" :key="option" :value="option">{{ option }}</option>
       </select>
     </div>
 
     <div v-if="selectedElement.shapeType !== 'line'">
-      <label for="filled">Filled</label>
+      <label for="filled">{{ t('display.shape.filled') }}</label>
       <input
         id="filled"
         type="checkbox"
@@ -34,26 +34,26 @@
 
     <div class="display-inspector__row display-inspector__row--quad">
       <div class="display-inspector__field">
-        <label for="posX">X</label>
+        <label for="posX">{{ t('display.field.x') }}</label>
         <input id="posX" type="number" :value="selectedElement.x" @input="updateNumber('x', $event)" />
       </div>
       <div class="display-inspector__field">
-        <label for="posY">Y</label>
+        <label for="posY">{{ t('display.field.y') }}</label>
         <input id="posY" type="number" :value="selectedElement.y" @input="updateNumber('y', $event)" />
       </div>
       <span class="display-inspector__group-divider"></span>
       <div class="display-inspector__field">
-        <label for="sizeW">W</label>
+        <label for="sizeW">{{ t('display.field.w') }}</label>
         <input id="sizeW" type="number" :value="selectedElement.w" @input="updateNumber('w', $event)" />
       </div>
       <div class="display-inspector__field">
-        <label for="sizeH">H</label>
+        <label for="sizeH">{{ t('display.field.h') }}</label>
         <input id="sizeH" type="number" :value="selectedElement.h" @input="updateNumber('h', $event)" />
       </div>
     </div>
 
     <div v-if="showColorPicker" class="display-icon-picker">
-      <label for="shapeColor">Color</label>
+      <label for="shapeColor">{{ t('display.field.color') }}</label>
       <div class="schema-icon-row">
         <input
           id="shapeColor"
@@ -80,8 +80,11 @@
 
 <script setup>
 import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import ColorPickerModal from "../ColorPickerModal.vue";
 import { colorToCss } from "../../utils/displayColor";
+
+const { t } = useI18n();
 
 const props = defineProps({
   selectedElement: {
@@ -103,11 +106,11 @@ const showColorPicker = computed(() => !props.isMonochrome);
 
 const shapeHint = computed(() => {
   const shape = props.selectedElement?.shapeType;
-  if (shape === "line") return "Line uses X/Y and W/H as end point.";
-  if (shape === "rect") return "Rectangle uses X/Y and W/H.";
-  if (shape === "circle") return "Circle uses X/Y and W/H as bounds.";
-  if (shape === "triangle") return "Triangle uses X/Y and W/H as bounds.";
-  if (shape?.startsWith("polygon")) return "Polygon uses X/Y and W/H as bounds.";
+  if (shape === "line") return t("display.shape.hintLine");
+  if (shape === "rect") return t("display.shape.hintRect");
+  if (shape === "circle") return t("display.shape.hintCircle");
+  if (shape === "triangle") return t("display.shape.hintTriangle");
+  if (shape?.startsWith("polygon")) return t("display.shape.hintPolygon");
   return "";
 });
 

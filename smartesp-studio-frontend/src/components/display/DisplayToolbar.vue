@@ -23,6 +23,11 @@
 </template>
 
 <script setup>
+import { computed } from "vue";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
+
 defineProps({
   orientation: {
     type: String,
@@ -36,38 +41,38 @@ defineProps({
 
 defineEmits(["add"]);
 
-const actions = [
+const actions = computed(() => [
   {
     type: "text",
-    label: "Add Text",
+    label: t("display.toolbar.addText"),
     icon: "https://cdn.jsdelivr.net/npm/@mdi/svg/svg/alpha-a-box-outline.svg"
   },
   {
     type: "image",
-    label: "Add Image",
+    label: t("display.toolbar.addImage"),
     icon: "https://cdn.jsdelivr.net/npm/@mdi/svg/svg/image.svg"
   },
   {
     type: "icon",
-    label: "Add Icon",
+    label: t("display.toolbar.addIcon"),
     icon: "https://cdn.jsdelivr.net/npm/@mdi/svg/svg/emoticon-excited-outline.svg"
   },
   {
     type: "graph",
-    label: "Add Graph",
+    label: t("display.toolbar.addGraph"),
     icon: "https://cdn.jsdelivr.net/npm/@mdi/svg/svg/chart-bell-curve-cumulative.svg"
   },
   {
     type: "animation",
-    label: "Add Animation",
+    label: t("display.toolbar.addAnimation"),
     icon: "https://cdn.jsdelivr.net/npm/@mdi/svg/svg/animation-play.svg"
   },
   {
     type: "shape",
-    label: "Add Shape",
+    label: t("display.toolbar.addShape"),
     icon: "https://cdn.jsdelivr.net/npm/@mdi/svg/svg/pentagon-outline.svg"
   }
-];
+]);
 </script>
 
 <style scoped>

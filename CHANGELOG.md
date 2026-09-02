@@ -54,6 +54,10 @@ markiert.
 - **Lesbare Feld-Labels** – ohne explizites `label` zeigt ein Feld jetzt
   `schema.fields.<key>.label` aus dem Katalog, sonst den humanisierten Key
   (`default_font` → „Default font", Akronyme bleiben groß) statt des rohen Keys.
+- **i18n: Display-Konfigurator** – Builder-Chrome, Werkzeugleiste und alle
+  Inspektor-Panels (Text, Bild, Icon, Form, Animation, Diagramm, Legende) laufen
+  jetzt über den Message-Katalog (`display.*`, `en` + `de`); technische Enum-Werte
+  bleiben unverändert.
 - **i18n: Dashboard** – Explorer-Toolbar, Ordnerbaum-Menüs, Projekt-Kontextmenü,
   Kachel-Anpassen-Dialog und die Projektkachel laufen jetzt über den
   Message-Katalog (`dashboard.*`, `en` + `de`).

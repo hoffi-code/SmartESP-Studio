@@ -20,23 +20,23 @@
       <div class="display-config-card" role="dialog" aria-modal="true">
         <header class="display-config-header">
           <div>
-            <h3>Display configurator</h3>
+            <h3>{{ t('display.builder.title') }}</h3>
             <p class="display-config-meta">
-              Model: <strong>{{ displayModelName }}</strong>
-              <span v-if="screen"> | Resolution: {{ screen.w }}x{{ screen.h }} px</span>
+              {{ t('display.builder.modelLabel') }} <strong>{{ displayModelName }}</strong>
+              <span v-if="screen"> | {{ t('display.builder.resolutionLabel') }} {{ screen.w }}x{{ screen.h }} px</span>
             </p>
           </div>
           <div class="display-config-actions">
-            <button type="button" class="secondary compact" @click="openAssetManager">Assets</button>
-            <button type="button" class="secondary compact" @click="confirmResetOpen = true">Reset</button>
+            <button type="button" class="secondary compact" @click="openAssetManager">{{ t('display.builder.assets') }}</button>
+            <button type="button" class="secondary compact" @click="confirmResetOpen = true">{{ t('display.builder.reset') }}</button>
           </div>
         </header>
         <ConfirmModal
           :open="confirmResetOpen"
-          title="Confirm"
-          message="Reset all display elements?"
-          confirm-text="Yes"
-          cancel-text="Cancel"
+          :title="t('display.builder.confirmTitle')"
+          :message="t('display.builder.resetMessage')"
+          :confirm-text="t('display.builder.yes')"
+          :cancel-text="t('common.cancel')"
           @confirm="confirmReset"
           @cancel="confirmResetOpen = false"
         />
@@ -45,7 +45,7 @@
           <div class="display-config-column">
             <section class="display-config-panel display-config-panel--toolbox">
               <div class="display-config-panel__header">
-                <h4>Toolbox</h4>
+                <h4>{{ t('display.builder.toolbox') }}</h4>
               </div>
               <DisplayToolbar
                 orientation="vertical"
@@ -56,7 +56,7 @@
 
             <section class="display-config-panel display-config-panel--layers">
               <div class="display-config-panel__header">
-                <h4>Elements</h4>
+                <h4>{{ t('display.builder.elements') }}</h4>
               </div>
               <div class="display-element-list">
                 <button
@@ -79,21 +79,21 @@
                   <span class="display-element-type">{{ elementTypeLabel(element) }}</span>
                   <span class="display-element-name">{{ elementListLabel(element) }}</span>
                 </button>
-                <div v-if="!elements.length" class="note">No elements added yet.</div>
+                <div v-if="!elements.length" class="note">{{ t('display.builder.noElements') }}</div>
               </div>
             </section>
           </div>
 
           <section class="display-config-panel display-config-panel--canvas">
             <div class="display-config-panel__header">
-              <h4>Screen</h4>
+              <h4>{{ t('display.builder.screen') }}</h4>
               <div class="display-zoom">
                 <button
                   type="button"
                   class="secondary compact display-zoom__btn"
                   :disabled="!canZoomOut"
                   @click="zoomOut"
-                  aria-label="Zoom out"
+                  :aria-label="t('display.builder.zoomOut')"
                 >
                   -
                 </button>
@@ -101,7 +101,7 @@
                   type="button"
                   class="secondary compact display-zoom__btn"
                   @click="restoreView"
-                  aria-label="Restore view"
+                  :aria-label="t('display.builder.restoreView')"
                 >
                   <img
                     src="https://cdn.jsdelivr.net/npm/@mdi/svg/svg/arrow-collapse-all.svg"
@@ -113,7 +113,7 @@
                   class="secondary compact display-zoom__btn"
                   :disabled="!canZoomIn"
                   @click="zoomIn"
-                  aria-label="Zoom in"
+                  :aria-label="t('display.builder.zoomIn')"
                 >
                   +
                 </button>
@@ -139,7 +139,7 @@
                   @select="handleSelect"
                   @update-element="handleElementUpdate"
                 />
-                <p v-else class="note">Select a display model in the form to enable the configurator.</p>
+                <p v-else class="note">{{ t('display.builder.noModel') }}</p>
               </div>
             </div>
           </section>
@@ -147,14 +147,14 @@
           <div class="display-config-inspector-column">
             <section class="display-config-panel display-config-panel--inspector">
               <div class="display-config-panel__header">
-                <h4>Inspector</h4>
+                <h4>{{ t('display.builder.inspector') }}</h4>
                 <button
                   v-if="selectedElement"
                   type="button"
                   class="secondary compact display-inspector-delete"
                   @click="handleDelete"
                 >
-                  Delete {{ deleteElementLabel(selectedElement) }}
+                  {{ t('display.builder.delete', { label: deleteElementLabel(selectedElement) }) }}
                 </button>
               </div>
               <div class="display-inspector-body">
@@ -176,7 +176,7 @@
               </div>
             </section>
             <div class="display-inspector-footer">
-              <button type="button" class="secondary compact" @click="handleClose">Close</button>
+              <button type="button" class="secondary compact" @click="handleClose">{{ t('display.builder.close') }}</button>
             </div>
           </div>
         </div>
@@ -187,6 +187,7 @@
 
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import ConfirmModal from "../ConfirmModal.vue";
 import DisplayCanvas from "./DisplayCanvas.vue";
 import DisplayToolbar from "./DisplayToolbar.vue";
@@ -197,6 +198,8 @@ import {
 } from "../../utils/displayImageEncoding";
 import { deriveGoogleFontStyle } from "../../utils/displayFonts";
 import { resolveDisplayViewport } from "../../utils/displayViewport";
+
+const { t } = useI18n();
 
 const props = defineProps({
   schema: {
@@ -737,36 +740,36 @@ const confirmReset = () => {
 
 const elementListLabel = (element) => {
   if (element.type === "text" && element.textMode === "dynamic") {
-    return element.dynamicId || "Value";
+    return element.dynamicId || t("display.element.value");
   }
-  if (element.type === "text") return element.text || "Text";
-  if (element.type === "image") return element.image || "Image";
-  if (element.type === "icon") return !element.icon || element.icon === "placeholder" ? "Icon" : element.icon;
-  if (element.type === "graph") return element.graphId || "Graph";
-  if (element.type === "animation") return element.animationId || "Animation";
+  if (element.type === "text") return element.text || t("display.element.text");
+  if (element.type === "image") return element.image || t("display.element.image");
+  if (element.type === "icon") return !element.icon || element.icon === "placeholder" ? t("display.element.icon") : element.icon;
+  if (element.type === "graph") return element.graphId || t("display.element.graph");
+  if (element.type === "animation") return element.animationId || t("display.element.animation");
   if (element.type === "shape") {
-    if (element.shapeType === "line") return "Line";
-    if (element.shapeType === "rect") return element.filled ? "Filled rectangle" : "Rectangle";
-    if (element.shapeType === "circle") return element.filled ? "Filled circle" : "Circle";
-    if (element.shapeType === "triangle") return "Triangle";
-    if (element.shapeType === "polygon5") return "Pentagon";
-    if (element.shapeType === "polygon6") return "Hexagon";
-    if (element.shapeType === "polygon7") return "Heptagon";
-    if (element.shapeType === "polygon8") return "Octagon";
-    return "Shape";
+    if (element.shapeType === "line") return t("display.element.line");
+    if (element.shapeType === "rect") return element.filled ? t("display.element.filledRectangle") : t("display.element.rectangle");
+    if (element.shapeType === "circle") return element.filled ? t("display.element.filledCircle") : t("display.element.circle");
+    if (element.shapeType === "triangle") return t("display.element.triangle");
+    if (element.shapeType === "polygon5") return t("display.element.pentagon");
+    if (element.shapeType === "polygon6") return t("display.element.hexagon");
+    if (element.shapeType === "polygon7") return t("display.element.heptagon");
+    if (element.shapeType === "polygon8") return t("display.element.octagon");
+    return t("display.element.shape");
   }
   return element.id;
 };
 
 const deleteElementLabel = (element) => {
-  if (!element?.type) return "Element";
-  if (element.type === "text") return "Text";
-  if (element.type === "image") return "Image";
-  if (element.type === "icon") return "Icon";
-  if (element.type === "graph") return "Graph";
-  if (element.type === "animation") return "Animation";
-  if (element.type === "shape") return "Shape";
-  return "Element";
+  if (!element?.type) return t("display.element.generic");
+  if (element.type === "text") return t("display.element.text");
+  if (element.type === "image") return t("display.element.image");
+  if (element.type === "icon") return t("display.element.icon");
+  if (element.type === "graph") return t("display.element.graph");
+  if (element.type === "animation") return t("display.element.animation");
+  if (element.type === "shape") return t("display.element.shape");
+  return t("display.element.generic");
 };
 
 const elementTypeLabel = (element) => {
