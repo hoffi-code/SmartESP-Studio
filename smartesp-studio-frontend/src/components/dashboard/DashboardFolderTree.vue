@@ -19,7 +19,7 @@
               class="folder-inline-toggle"
               role="button"
               tabindex="0"
-              aria-label="Toggle folder"
+              :aria-label="t('dashboard.tree.toggleFolder')"
               @click.stop="emit('toggle-folder-expanded', row.id)"
               @keydown.enter.stop.prevent="emit('toggle-folder-expanded', row.id)"
               @keydown.space.stop.prevent="emit('toggle-folder-expanded', row.id)"
@@ -34,7 +34,7 @@
             class="folder-menu-toggle"
             role="button"
             tabindex="0"
-            aria-label="Folder menu"
+            :aria-label="t('dashboard.tree.folderMenu')"
             @click.stop="emit('toggle-folder-menu', row.id)"
             @keydown.enter.stop.prevent="emit('toggle-folder-menu', row.id)"
             @keydown.space.stop.prevent="emit('toggle-folder-menu', row.id)"
@@ -44,8 +44,8 @@
         </button>
 
         <div v-if="openFolderMenuId === row.id" class="folder-menu">
-          <button type="button" @click.stop="emit('begin-add-folder', row.id)">Add folder</button>
-          <button type="button" v-if="!row.isRoot" @click.stop="emit('remove-folder', row.id)">Delete folder</button>
+          <button type="button" @click.stop="emit('begin-add-folder', row.id)">{{ t('dashboard.tree.addFolder') }}</button>
+          <button type="button" v-if="!row.isRoot" @click.stop="emit('remove-folder', row.id)">{{ t('dashboard.tree.deleteFolder') }}</button>
         </div>
       </template>
 
@@ -69,7 +69,7 @@
             :value="pendingFolderName"
             type="text"
             class="folder-draft-input"
-            placeholder="New folder"
+            :placeholder="t('dashboard.tree.newFolderPlaceholder')"
             @input="emit('update:pendingFolderName', $event.target.value)"
             @keydown.enter.prevent="emit('commit-pending-folder')"
             @keydown.esc.prevent="emit('cancel-pending-folder')"
@@ -82,9 +82,14 @@
 </template>
 
 <script setup>
+import { useI18n } from "vue-i18n";
+
 // DashboardFolderTree renders the sidebar tree as a pure view component.
 // Expansion, selection, drag/drop, and inline-folder-creation state all come from
 // DashboardView/useDashboardTree so the tree stays declarative.
+
+const { t } = useI18n();
+
 defineProps({
   folderRows: { type: Array, default: () => [] },
   isFolderActive: { type: Function, required: true },

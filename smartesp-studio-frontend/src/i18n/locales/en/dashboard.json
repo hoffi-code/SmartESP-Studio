@@ -1,0 +1,56 @@
+{
+  "toolbar": {
+    "allDevices": "All devices",
+    "folderView": "Folder view",
+    "folderPath": "Folder path",
+    "goUp": "Go to parent folder",
+    "searchPlaceholder": "Search files, folders"
+  },
+  "entries": {
+    "loading": "Loading projects…",
+    "newDevice": "New device",
+    "folders": "Folders",
+    "projects": "Projects",
+    "allDevices": "All devices",
+    "folderTileHint": "{folders} folders - {projects} projects",
+    "empty": "No folders or projects match your search."
+  },
+  "tile": {
+    "actions": "Project actions",
+    "online": "Online"
+  },
+  "tree": {
+    "toggleFolder": "Toggle folder",
+    "folderMenu": "Folder menu",
+    "addFolder": "Add folder",
+    "deleteFolder": "Delete folder",
+    "newFolderPlaceholder": "New folder"
+  },
+  "modal": {
+    "confirmTitle": "Confirm",
+    "deleteFolderMessage": "Delete this folder and all nested folders?",
+    "deleteProjectMessage": "Delete this project and all related files?",
+    "yes": "Yes"
+  },
+  "projectMenu": {
+    "edit": "Edit",
+    "validate": "Validate",
+    "logs": "Logs",
+    "downloadYaml": "Download YAML",
+    "cleanBuild": "Clean Build",
+    "customize": "Customize",
+    "deleteProject": "Delete Project"
+  },
+  "customize": {
+    "title": "Customize tile",
+    "icon": "Icon",
+    "pickIcon": "Pick icon",
+    "iconColor": "Icon color",
+    "pickColor": "Pick color",
+    "tileBackground": "Tile background",
+    "titleColor": "Title color",
+    "metaColor": "Metadata color",
+    "reset": "Reset to default",
+    "apply": "Apply"
+  }
+}
