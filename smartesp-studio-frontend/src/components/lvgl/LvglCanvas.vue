@@ -12,7 +12,8 @@
     <div class="lvgl-canvas__scroll">
       <div
         class="lvgl-canvas"
-        :style="{ width: `${canvasWidth * zoom}px`, height: `${canvasHeight * zoom}px` }"
+        :class="{ 'is-mono': mono }"
+        :style="screenStyle"
         @pointerdown.self="emit('select', '')"
       >
         <div
@@ -135,13 +136,24 @@
               entry.render.recolor ? { color: entry.render.recolor } : null
             ]"
           >
-            <svg v-if="!entry.render.qr" viewBox="0 0 24 24"><path d="M3 5h18v14H3z" fill="none" /><circle cx="8" cy="10" r="2" /><path d="M4 18l5-5 3 3 4-4 4 4v2H4z" /></svg>
-            <span v-else class="lvgl-canvas__qr" />
+            <img
+              v-if="entry.render.url"
+              class="lvgl-canvas__image-real"
+              :src="entry.render.url"
+              alt=""
+              draggable="false"
+            />
+            <svg v-else-if="!entry.render.qr" viewBox="0 0 24 24"><path d="M3 5h18v14H3z" fill="none" /><circle cx="8" cy="10" r="2" /><path d="M4 18l5-5 3 3 4-4 4 4v2H4z" /></svg>
+            <span
+              v-else
+              class="lvgl-canvas__qr"
+              :style="{ '--qr-dark': entry.render.qrDark, '--qr-light': entry.render.qrLight }"
+            />
           </span>
 
           <!-- meter: gauge driven by scales[0] -->
           <svg v-else-if="entry.render.kind === 'meter'" class="lvgl-canvas__meter" viewBox="0 0 48 48">
-            <path :d="entry.render.path" stroke="#c8c8cf" stroke-width="3" fill="none" />
+            <path :d="entry.render.path" :stroke="entry.render.trackColor" stroke-width="3" fill="none" />
             <path
               v-for="(a, ai) in entry.render.arcs"
               :key="`a${ai}`"
@@ -154,7 +166,7 @@
               :stroke-dashoffset="entry.render.len * (1 - (a.to - a.from))"
               :style="{ transform: `rotate(${entry.render.sweep * a.from}deg)`, transformOrigin: '24px 24px' }"
             />
-            <g stroke="#9a9aa5" stroke-width="1.2">
+            <g :stroke="entry.render.tickColor" stroke-width="1.2">
               <line
                 v-for="t in entry.render.ticks"
                 :key="t.i"
@@ -204,7 +216,7 @@
             viewBox="0 0 100 100"
             preserveAspectRatio="none"
           >
-            <polyline :points="linePolyline(entry.render.points)" fill="none" :stroke="THEME.primary" stroke-width="2" vector-effect="non-scaling-stroke" />
+            <polyline :points="linePolyline(entry.render.points)" fill="none" :stroke="entry.render.stroke" :stroke-width="entry.render.strokeWidth" vector-effect="non-scaling-stroke" />
           </svg>
 
           <!-- cell grid: keyboard / empty buttonmatrix -->
@@ -223,11 +235,14 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, inject } from "vue";
 import { useI18n } from "vue-i18n";
-import { resolveLvglPageLayout, lvglColorToCss } from "../../utils/lvglLayout";
+import { resolveLvglPageLayout, lvglColorToCss, lvglFontPx } from "../../utils/lvglLayout";
 
 const { t } = useI18n();
+
+// BuilderView resolves an image widget's `src` id to a browser URL; null in isolation.
+const imageResolver = inject("lvglImageResolver", null);
 
 const props = defineProps({
   page: { type: Object, default: null },
@@ -237,24 +252,55 @@ const props = defineProps({
   gridSize: { type: Number, default: 5 },
   // Preview mode: no W/H/zoom toolbar, no drag. Clicks still select so the parent
   // can open the edit modal on the right widget.
-  interactive: { type: Boolean, default: true }
+  interactive: { type: Boolean, default: true },
+  // { monochrome, background, backgroundOpacity, foreground } -- the screen the
+  // widgets are drawn on. A 1-bit display renders strictly two-colour.
+  displayPalette: { type: Object, default: () => ({}) }
 });
 
 const emit = defineEmits(["select", "move", "resize-canvas"]);
 
 const zoom = ref(1.5);
 
+const mono = computed(() => Boolean(props.displayPalette?.monochrome));
+const fg = computed(() => props.displayPalette?.foreground || "#e8f6ff");
+const screenBg = computed(() => props.displayPalette?.background || "#ffffff");
+const screenStyle = computed(() => {
+  const style = {
+    width: `${props.canvasWidth * zoom.value}px`,
+    height: `${props.canvasHeight * zoom.value}px`,
+    background: screenBg.value
+  };
+  const opa = Number(props.displayPalette?.backgroundOpacity);
+  if (Number.isFinite(opa) && opa < 1) style.opacity = String(Math.max(0, opa));
+  if (mono.value) style["--lvgl-fg"] = fg.value;
+  return style;
+});
+
 // LVGL default theme (Material design, light). Used when a widget doesn't set its
-// own colour -- so the preview matches roughly what the device renders.
-const THEME = {
-  primary: "#2196f3",
-  track: "#d4d4dc",
-  knob: "#ffffff",
-  surface: "#ffffff",
-  border: "#c8c8cf",
-  text: "#3b3b3b",
-  led: "#ff0000"
-};
+// own colour -- so the preview matches roughly what the device renders. On a
+// monochrome display every role collapses to the single foreground colour.
+const THEME = computed(() =>
+  mono.value
+    ? {
+        primary: fg.value,
+        track: fg.value,
+        knob: fg.value,
+        surface: screenBg.value,
+        border: fg.value,
+        text: fg.value,
+        led: fg.value
+      }
+    : {
+        primary: "#2196f3",
+        track: "#d4d4dc",
+        knob: "#ffffff",
+        surface: "#ffffff",
+        border: "#c8c8cf",
+        text: "#3b3b3b",
+        led: "#ff0000"
+      }
+);
 
 // Which tab/tile is shown per tabview/tileview node (uiId -> index). Local UI
 // state only -- never written back to the config.
@@ -277,8 +323,34 @@ const num = (value, fallback = 0) => {
   return Number.isFinite(n) ? n : fallback;
 };
 
-// widget prop colour, else the theme default for that role
-const colour = (props_, key, fallback) => lvglColorToCss(props_[key]) || fallback;
+// LVGL opacity: "NN%", 0-255, or already 0..1 -> CSS 0..1. undefined stays undefined.
+const opa01 = (value) => {
+  if (value === undefined || value === null || value === "") return undefined;
+  const pct = String(value).trim().match(/^(-?\d+(?:\.\d+)?)%$/);
+  if (pct) return Math.max(0, Math.min(1, Number(pct[1]) / 100));
+  const n = Number(value);
+  if (!Number.isFinite(n)) return undefined;
+  return n > 1 ? Math.max(0, Math.min(1, n / 255)) : Math.max(0, Math.min(1, n));
+};
+
+const rgbaWithAlpha = (css, alpha) => {
+  if (alpha === undefined || alpha >= 1) return css;
+  const hex = String(css).trim().replace(/^#/, "");
+  if (/^[0-9a-fA-F]{6}$/.test(hex)) {
+    const r = parseInt(hex.slice(0, 2), 16);
+    const g = parseInt(hex.slice(2, 4), 16);
+    const b = parseInt(hex.slice(4, 6), 16);
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  }
+  return css;
+};
+
+// widget prop colour, else the theme default for that role. A monochrome display
+// can't show widget colours, so every colour collapses to the foreground.
+const colour = (props_, key, fallback) => {
+  if (mono.value) return fg.value;
+  return lvglColorToCss(props_[key]) || fallback;
+};
 
 // Position of `value` inside [min_value, max_value] as a 0..100 percentage.
 const pctOf = (p, value) => {
@@ -294,6 +366,7 @@ const fillRatio = (p) => pctOf(p, num(p.value, num(p.min_value, 0)));
 const render = (entry) => {
   const p = entry.node.props || {};
   const t = entry.type;
+  const theme = THEME.value;
 
   if (t === "label") {
     // long_mode: WRAP breaks to multiple lines, CLIP/SCROLL cut without an
@@ -305,11 +378,18 @@ const render = (entry) => {
         : lm === "CLIP" || lm === "SCROLL" || lm === "SCROLL_CIRCULAR"
           ? "is-clip"
           : "";
+    const textStyle = { color: colour(p, "text_color", theme.text) };
+    const align = String(p.text_align || "").toUpperCase();
+    if (align === "CENTER") textStyle.textAlign = "center";
+    else if (align === "RIGHT") textStyle.textAlign = "right";
+    else if (align === "LEFT") textStyle.textAlign = "left";
+    const textOpa = opa01(p.text_opa);
+    if (textOpa !== undefined && textOpa < 1) textStyle.opacity = String(textOpa);
     return {
       kind: "label",
       text: String(p.text ?? "Label"),
       longClass,
-      textStyle: { color: colour(p, "text_color", THEME.text) }
+      textStyle
     };
   }
   if (t === "button") return { kind: "button", text: String(p.text ?? "") };
@@ -336,8 +416,8 @@ const render = (entry) => {
       fillEnd: Math.max(start, end),
       vertical: entry.box.h > entry.box.w * 1.4,
       knob: t === "slider",
-      indicator: colour(p.indicator || {}, "bg_color", colour(p, "bg_color", THEME.primary)),
-      knobColor: colour(p.knob || {}, "bg_color", THEME.primary)
+      indicator: colour(p.indicator || {}, "bg_color", colour(p, "bg_color", theme.primary)),
+      knobColor: colour(p.knob || {}, "bg_color", theme.primary)
     };
   }
   if (t === "arc" || t === "spinner") {
@@ -354,13 +434,13 @@ const render = (entry) => {
       kind: "arc",
       fill,
       knob: t === "arc",
-      arcWidth: 4,
+      arcWidth: Math.max(1, num(p.arc_width ?? (p.indicator || {}).arc_width, 4)),
       sweep,
       path: arcPath(start, sweep),
       len: arcLen(sweep),
       knobPt: arcPointAt(start, sweep, fill / 100),
-      track: colour(p, "arc_color", "#d4d4dc"),
-      indicator: colour(p.indicator || {}, "arc_color", THEME.primary)
+      track: mono.value ? theme.track : colour(p, "arc_color", "#d4d4dc"),
+      indicator: colour(p.indicator || {}, "arc_color", theme.primary)
     };
   }
   if (t === "dropdown") {
@@ -386,8 +466,15 @@ const render = (entry) => {
     }
     return { kind: "field", text };
   }
-  if (t === "led") return { kind: "led", color: colour(p, "color", colour(p, "bg_color", THEME.led)) };
-  if (t === "qrcode") return { kind: "image", qr: true };
+  if (t === "led") return { kind: "led", color: colour(p, "color", colour(p, "bg_color", theme.led)) };
+  if (t === "qrcode") {
+    return {
+      kind: "image",
+      qr: true,
+      qrDark: mono.value ? theme.primary : lvglColorToCss(p.dark_color) || "#1e293b",
+      qrLight: mono.value ? "transparent" : lvglColorToCss(p.light_color) || "#ffffff"
+    };
+  }
   if (t === "image" || t === "animimg" || t === "canvas") {
     // ESPHome image angle = degrees; zoom = 256 -> 1x.
     const angle = num(p.angle, 0);
@@ -395,7 +482,16 @@ const render = (entry) => {
     const parts = [];
     if (angle) parts.push(`rotate(${angle}deg)`);
     if (zoom && zoom !== 1) parts.push(`scale(${zoom})`);
-    return { kind: "image", qr: false, transform: parts.join(" "), recolor: lvglColorToCss(p.image_recolor) };
+    // Render the real bitmap for image/animimg when their src resolves; canvas has
+    // no static content, so it stays a placeholder.
+    const url = t !== "canvas" && typeof imageResolver === "function" ? imageResolver(p.src) : "";
+    return {
+      kind: "image",
+      qr: false,
+      url: url || "",
+      transform: parts.join(" "),
+      recolor: lvglColorToCss(p.image_recolor)
+    };
   }
   if (t === "meter") {
     const s = (Array.isArray(p.scales) ? p.scales : [])[0] || {};
@@ -413,14 +509,14 @@ const render = (entry) => {
     for (const ind of Array.isArray(s.indicators) ? s.indicators : []) {
       if (ind?.line && ind.line.value !== undefined) {
         const frac = clamp((num(ind.line.value, from) - from) / span);
-        needles.push({ tip: arcPointAt(start, sweep, frac), color: colour(ind.line, "color", THEME.primary) });
+        needles.push({ tip: arcPointAt(start, sweep, frac), color: colour(ind.line, "color", theme.primary) });
       } else if (ind?.arc) {
         const sv = num(ind.arc.start_value, from);
         const ev = num(ind.arc.end_value ?? ind.arc.value, to);
-        arcs.push({ from: clamp((sv - from) / span), to: clamp((ev - from) / span), color: colour(ind.arc, "color", THEME.primary) });
+        arcs.push({ from: clamp((sv - from) / span), to: clamp((ev - from) / span), color: colour(ind.arc, "color", theme.primary) });
       }
     }
-    if (!needles.length && !arcs.length) needles.push({ tip: arcPointAt(start, sweep, 0.62), color: THEME.primary });
+    if (!needles.length && !arcs.length) needles.push({ tip: arcPointAt(start, sweep, 0.62), color: theme.primary });
     const tickCount = Math.max(2, Math.min(40, Math.round(num(s.ticks?.count, 12))));
     return {
       kind: "meter",
@@ -429,7 +525,9 @@ const render = (entry) => {
       len: arcLen(sweep),
       ticks: meterTicks(tickCount, start, sweep),
       needles,
-      arcs
+      arcs,
+      trackColor: mono.value ? theme.border : "#c8c8cf",
+      tickColor: mono.value ? theme.border : "#9a9aa5"
     };
   }
   if (t === "tabview" || t === "tileview") {
@@ -450,7 +548,14 @@ const render = (entry) => {
     const pts = (Array.isArray(p.points) ? p.points : [])
       .map((pt) => ({ x: num(pt?.x, NaN), y: num(pt?.y, NaN) }))
       .filter((pt) => Number.isFinite(pt.x) && Number.isFinite(pt.y));
-    return pts.length >= 2 ? { kind: "line", points: pts } : { kind: "box" };
+    return pts.length >= 2
+      ? {
+          kind: "line",
+          points: pts,
+          stroke: colour(p, "line_color", theme.primary),
+          strokeWidth: num(p.line_width, 2)
+        }
+      : { kind: "box" };
   }
   return { kind: "box" };
 };
@@ -479,37 +584,55 @@ const initialChecked = (p) => {
 
 const boxStyle = (entry) => {
   const p = entry.node.props || {};
+  const isMono = mono.value;
   const style = {
     left: `${entry.box.x * zoom.value}px`,
     top: `${entry.box.y * zoom.value}px`,
     width: `${entry.box.w * zoom.value}px`,
     height: `${entry.box.h * zoom.value}px`
   };
-  // Explicit widget styling always wins over the kind's default look.
-  const bg = lvglColorToCss(p.bg_color);
-  const grad = lvglColorToCss(p.bg_grad_color);
+  // Explicit widget styling always wins over the kind's default look. A monochrome
+  // display shows no fills/shadows -- just the foreground outline + text.
+  const bg = isMono ? "" : lvglColorToCss(p.bg_color);
+  const grad = isMono ? "" : lvglColorToCss(p.bg_grad_color);
   if (grad) {
     const dir = String(p.bg_grad_dir || "VER").toUpperCase() === "HOR" ? "to right" : "to bottom";
     style.background = `linear-gradient(${dir}, ${bg || "#fff"}, ${grad})`;
   } else if (bg) {
-    style.background = bg;
+    style.background = rgbaWithAlpha(bg, opa01(p.bg_opa));
   }
-  const fg = lvglColorToCss(p.text_color);
-  if (fg) style.color = fg;
+  const textFg = isMono ? (lvglColorToCss(p.text_color) ? fg.value : "") : lvglColorToCss(p.text_color);
+  if (textFg) style.color = textFg;
   const radius = Number(p.radius);
   if (Number.isFinite(radius)) style.borderRadius = `${radius * zoom.value}px`;
-  const border = lvglColorToCss(p.border_color);
+  const border = isMono
+    ? (lvglColorToCss(p.border_color) ? fg.value : "")
+    : lvglColorToCss(p.border_color);
   if (border) style.borderColor = border;
   const borderW = Number(p.border_width);
   if (Number.isFinite(borderW)) style.borderWidth = `${borderW}px`;
+  // outline sits outside the border; LVGL defaults its pad to ~0.
+  const outlineW = Number(p.outline_width);
+  const outlineC = isMono
+    ? (lvglColorToCss(p.outline_color) ? fg.value : "")
+    : lvglColorToCss(p.outline_color);
+  if (Number.isFinite(outlineW) && outlineW > 0 && (outlineC || isMono)) {
+    style.outline = `${outlineW}px solid ${outlineC || fg.value}`;
+    const pad = num(p.outline_pad, 0) * zoom.value;
+    if (pad) style.outlineOffset = `${pad}px`;
+  }
   // shadow_width is the blur radius; offsets/colour optional.
   const shadowW = Number(p.shadow_width);
-  if (Number.isFinite(shadowW) && shadowW > 0) {
+  if (!isMono && Number.isFinite(shadowW) && shadowW > 0) {
     const ox = num(p.shadow_offset_x, 0) * zoom.value;
     const oy = num(p.shadow_offset_y, 0) * zoom.value;
     const spread = num(p.shadow_spread, 0) * zoom.value;
     style.boxShadow = `${ox}px ${oy}px ${shadowW * zoom.value}px ${spread}px ${lvglColorToCss(p.shadow_color) || "rgba(0,0,0,0.4)"}`;
   }
+  const widgetOpa = opa01(p.opa);
+  if (widgetOpa !== undefined && widgetOpa < 1) style.opacity = String(widgetOpa);
+  const fontPx = lvglFontPx(entry.node);
+  if (fontPx !== 14 || p.text_font) style.fontSize = `${fontPx * zoom.value}px`;
   return style;
 };
 
@@ -627,6 +750,92 @@ const onDragEnd = (event) => {
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.15);
 }
 
+/* Monochrome display: strictly two-colour. Widgets draw in the foreground
+   (currentColor, set from --lvgl-fg), fills come from the screen background. */
+.lvgl-canvas.is-mono {
+  color: var(--lvgl-fg);
+}
+
+.lvgl-canvas.is-mono .lvgl-canvas__widget,
+.lvgl-canvas.is-mono .lvgl-canvas__tag {
+  color: var(--lvgl-fg);
+}
+
+.lvgl-canvas.is-mono .lvgl-w--box,
+.lvgl-canvas.is-mono .lvgl-w--tabview,
+.lvgl-canvas.is-mono .lvgl-w--grid,
+.lvgl-canvas.is-mono .lvgl-w--btnmatrix,
+.lvgl-canvas.is-mono .lvgl-w--image,
+.lvgl-canvas.is-mono .lvgl-w--dropdown,
+.lvgl-canvas.is-mono .lvgl-w--roller,
+.lvgl-canvas.is-mono .lvgl-w--field,
+.lvgl-canvas.is-mono .lvgl-w--button {
+  background: transparent;
+  border-color: currentColor;
+}
+
+.lvgl-canvas.is-mono .lvgl-w--button {
+  color: var(--lvgl-fg);
+  box-shadow: inset 0 0 0 1px currentColor;
+}
+
+.lvgl-canvas.is-mono .lvgl-canvas__switch,
+.lvgl-canvas.is-mono .lvgl-canvas__bar {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px currentColor;
+}
+
+.lvgl-canvas.is-mono .lvgl-canvas__switch.is-on,
+.lvgl-canvas.is-mono .lvgl-canvas__bar-fill,
+.lvgl-canvas.is-mono .lvgl-canvas__switch-knob,
+.lvgl-canvas.is-mono .lvgl-canvas__bar-knob,
+.lvgl-canvas.is-mono .lvgl-canvas__check-box.is-checked {
+  background: currentColor;
+}
+
+.lvgl-canvas.is-mono .lvgl-canvas__switch-knob,
+.lvgl-canvas.is-mono .lvgl-canvas__bar-knob {
+  box-shadow: none;
+  border-color: var(--lvgl-fg);
+}
+
+.lvgl-canvas.is-mono .lvgl-canvas__check-box {
+  background: transparent;
+  border-color: currentColor;
+}
+
+.lvgl-canvas.is-mono .lvgl-canvas__check-box.is-checked svg {
+  stroke: var(--lvgl-fg);
+  filter: invert(1);
+}
+
+.lvgl-canvas.is-mono .lvgl-canvas__chevron,
+.lvgl-canvas.is-mono .lvgl-canvas__caret {
+  stroke: currentColor;
+  background: currentColor;
+}
+
+.lvgl-canvas.is-mono .lvgl-canvas__roller-item.is-sel {
+  border-color: currentColor;
+}
+
+.lvgl-canvas.is-mono .lvgl-canvas__qr {
+  background:
+    conic-gradient(currentColor 0 25%, transparent 0 50%, currentColor 0 75%, transparent 0) 0 0 / 33.34% 33.34%;
+}
+
+.lvgl-canvas.is-mono .lvgl-canvas__image {
+  color: var(--lvgl-fg);
+}
+
+.lvgl-canvas.is-mono .lvgl-canvas__cells i,
+.lvgl-canvas.is-mono .lvgl-canvas__btnmatrix i,
+.lvgl-canvas.is-mono .lvgl-canvas__tabbar i {
+  background: transparent;
+  border-color: currentColor;
+  color: currentColor;
+}
+
 .lvgl-canvas__widget {
   position: absolute;
   box-sizing: border-box;
@@ -688,6 +897,7 @@ const onDragEnd = (event) => {
 }
 
 .lvgl-canvas__label {
+  width: 100%;
   padding: 0 2px;
   white-space: nowrap;
   overflow: hidden;
@@ -971,11 +1181,23 @@ const onDragEnd = (event) => {
   fill: currentColor;
 }
 
+.lvgl-canvas__image-real {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
 .lvgl-canvas__qr {
   width: 70%;
   height: 70%;
   background:
-    conic-gradient(#1e293b 0 25%, #fff 0 50%, #1e293b 0 75%, #fff 0) 0 0 / 33.34% 33.34%;
+    conic-gradient(
+        var(--qr-dark, #1e293b) 0 25%,
+        var(--qr-light, #fff) 0 50%,
+        var(--qr-dark, #1e293b) 0 75%,
+        var(--qr-light, #fff) 0
+      )
+      0 0 / 33.34% 33.34%;
 }
 
 /* tabview */

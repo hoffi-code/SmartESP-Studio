@@ -156,29 +156,22 @@
       </section>
     </div>
 
-    <div class="lvgl-grid">
+    <div class="lvgl-grid lvgl-grid--stacked">
       <section class="lvgl-config-panel">
         <div class="lvgl-config-panel__header">
           <h4>{{ t("lvgl.builder.canvasPreview") }}</h4>
+          <button type="button" class="secondary compact" @click="openEditor">{{ t("lvgl.builder.edit") }}</button>
         </div>
-        <div
-          class="lvgl-canvas-preview"
-          role="button"
-          tabindex="0"
-          :title="t('lvgl.builder.openEditor')"
-          @click="openEditor"
-          @keydown.enter.prevent="openEditor"
-          @keydown.space.prevent="openEditor"
-        >
+        <div class="lvgl-canvas-preview">
           <LvglCanvas
             :page="pages[activePageIndex] || null"
             :canvas-width="canvasW"
             :canvas-height="canvasH"
             :selected-id="selectedWidgetId"
             :interactive="false"
+            :display-palette="displayPalette"
             @select="selectedWidgetId = $event"
           />
-          <span class="lvgl-canvas-preview__hint">{{ t("lvgl.builder.clickToEdit") }}</span>
         </div>
       </section>
 
@@ -231,6 +224,7 @@
               :canvas-width="canvasW"
               :canvas-height="canvasH"
               :selected-id="selectedWidgetId"
+              :display-palette="displayPalette"
               @select="selectedWidgetId = $event"
               @move="handleCanvasMove"
               @resize-canvas="handleCanvasResize"
@@ -301,6 +295,12 @@ const props = defineProps({
   activeModeLevel: {
     type: String,
     default: "Simple"
+  },
+  // { monochrome, background, backgroundOpacity, foreground } from BuilderView --
+  // forwarded to both LvglCanvas instances so the preview reflects the display.
+  displayPalette: {
+    type: Object,
+    default: () => ({})
   }
 });
 
@@ -836,6 +836,11 @@ const handleCanvasResize = ({ dim, value }) => {
   padding-top: 12px;
 }
 
+/* row 2: preview on top, form below */
+.lvgl-grid--stacked {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .lvgl-form-yaml__header {
   border-top: 1px solid var(--border);
   padding-top: 12px;
@@ -843,30 +848,9 @@ const handleCanvasResize = ({ dim, value }) => {
 }
 
 .lvgl-canvas-preview {
-  position: relative;
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 4px;
-  cursor: pointer;
-}
-
-.lvgl-canvas-preview:hover,
-.lvgl-canvas-preview:focus-visible {
-  border-color: var(--accent);
-  outline: none;
-}
-
-.lvgl-canvas-preview__hint {
-  position: absolute;
-  right: 8px;
-  bottom: 8px;
-  font-size: 11px;
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: var(--accent);
-  color: #fff;
-  pointer-events: none;
-  opacity: 0.85;
 }
 
 .lvgl-editor-modal {

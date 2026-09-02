@@ -457,6 +457,7 @@
             :id-index="idIndex"
             :external-select="lvglExternalSelect"
             :active-mode-level="activeModeLevel"
+            :display-palette="lvglDisplayPalette"
             @update="handleLvglUpdate"
             @field-edit="handleLvglFieldEdit"
           />
@@ -627,6 +628,7 @@ import {
 } from "../utils/builderValidationRules";
 import { buildDisplayAnimationIntervals, resolveSchemaDomain } from "../utils/schemaYaml";
 import { collectLvglWidgetIds } from "../utils/lvglIds";
+import { lvglColorToCss } from "../utils/lvglLayout";
 import { encodeFieldPath } from "../utils/yamlDocumentModel";
 import { buildGlobalRegistry, isFieldVisible as isSchemaFieldVisible } from "../utils/schemaVisibility";
 import { MODE_LEVELS, modeLevelRank, normalizeModeLevel } from "../utils/schemaModeLevel";
@@ -814,6 +816,34 @@ const { componentSchemas, componentSchemaStatus, ensureComponentSchema } = useBu
   catalogSchemaPathForEntry,
   isComponentCatalogReady,
   componentCatalogItemsById
+});
+
+// 0..1 opacity from ESPHome's "NN%" / 0-255 / bare number forms.
+const parseOpa01 = (value) => {
+  if (value === undefined || value === null || value === "") return 1;
+  const pct = String(value).trim().match(/^(-?\d+(?:\.\d+)?)%$/);
+  if (pct) return Math.max(0, Math.min(1, Number(pct[1]) / 100));
+  const n = Number(value);
+  if (!Number.isFinite(n)) return 1;
+  return n > 1 ? Math.max(0, Math.min(1, n / 255)) : Math.max(0, Math.min(1, n));
+};
+
+// Palette the LVGL canvas should render against: the display background from
+// lvgl.options.disp_bg_*, and whether the target is a 1-bit (monochrome) display.
+const lvglDisplayPalette = computed(() => {
+  const opts = config.value.lvgl?.options || {};
+  const displayEntry = (config.value.components || []).find(
+    (e) => String(e?.id || "").split("/")[0] === "display"
+  );
+  const schemaType = displayEntry && componentSchemas.value?.[displayEntry.id]?.displayType;
+  const monochrome = String(opts.color_depth) === "1" || schemaType === "monochrome";
+  const background = lvglColorToCss(opts.disp_bg_color) || (monochrome ? "#000000" : "#ffffff");
+  return {
+    monochrome,
+    background,
+    backgroundOpacity: parseOpa01(opts.disp_bg_opa),
+    foreground: monochrome ? "#e8f6ff" : ""
+  };
 });
 
 const componentEntryLabel = (entry) => {
@@ -1580,6 +1610,22 @@ provide("openAssetManager", () => openAssetManager());
 provide("idRefOptionProvider", (field) =>
   field?.domain === "lvgl" ? collectLvglWidgetIds(config.value.lvgl) : []
 );
+
+// Resolve an LVGL image widget's `src` (an id_ref to an image: component) to a
+// browser URL so the canvas can render the real bitmap. Mirrors DesignElementPreview.
+provide("lvglImageResolver", (srcId) => {
+  const id = String(srcId || "").trim();
+  if (!id) return null;
+  const entry = (config.value.components || []).find(
+    (e) => String(e?.id || "").split("/")[0] === "image" && e?.config?.id === id
+  );
+  const file = String(entry?.config?.file || "").trim();
+  if (!file) return null;
+  if (file.startsWith("mdi:")) return `https://cdn.jsdelivr.net/npm/@mdi/svg/svg/${file.slice(4)}.svg`;
+  if (/^https?:\/\//.test(file)) return file;
+  if (/[\\/]/.test(file)) return null; // build-host path, not resolvable in the browser
+  return `${assetsBase}images/${encodeURIComponent(file)}`;
+});
 
 const schemaEntries = computed(() => {
   const entries = [];

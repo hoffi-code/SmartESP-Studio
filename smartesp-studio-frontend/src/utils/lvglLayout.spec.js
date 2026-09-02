@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { resolveLvglPageLayout, lvglColorToCss } from "./lvglLayout";
+import { resolveLvglPageLayout, lvglColorToCss, lvglFontPx } from "./lvglLayout";
 
 const node = (over = {}) => ({
   uiId: "w",
@@ -142,6 +142,40 @@ describe("resolveLvglPageLayout", () => {
     expect(layout.find((e) => e.uiId === "hidden-tab")).toBeUndefined();
   });
 
+  it("drops hidden widgets (and their children) from the layout", () => {
+    const layout = resolveLvglPageLayout(
+      {
+        widgets: [
+          node({ uiId: "shown" }),
+          node({
+            uiId: "gone",
+            type: "obj",
+            props: { hidden: true },
+            children: [node({ uiId: "child" })]
+          })
+        ]
+      },
+      240,
+      320
+    );
+    expect(layout.map((e) => e.uiId)).toEqual(["shown"]);
+  });
+
+  it("scales a SIZE_CONTENT label with its text_font", () => {
+    const small = resolveLvglPageLayout(
+      { widgets: [node({ type: "label", props: { text: "Hello" }, common: { width: "SIZE_CONTENT" } })] },
+      200,
+      200
+    )[0];
+    const big = resolveLvglPageLayout(
+      { widgets: [node({ type: "label", props: { text: "Hello", text_font: "montserrat_28" }, common: { width: "SIZE_CONTENT" } })] },
+      200,
+      200
+    )[0];
+    expect(big.box.w).toBeGreaterThan(small.box.w);
+    expect(big.box.h).toBeGreaterThan(small.box.h);
+  });
+
   it("keeps unsupported and align_to widgets non-positionable", () => {
     const layout = resolveLvglPageLayout(
       {
@@ -165,5 +199,17 @@ describe("lvglColorToCss", () => {
   it("returns the fallback for empty input", () => {
     expect(lvglColorToCss("", "#000")).toBe("#000");
     expect(lvglColorToCss(undefined)).toBe("");
+  });
+});
+
+describe("lvglFontPx", () => {
+  it("reads the size from an LVGL built-in font name", () => {
+    expect(lvglFontPx({ props: { text_font: "montserrat_28" } })).toBe(28);
+    expect(lvglFontPx({ props: { text_font: "unscii_8" } })).toBe(8);
+  });
+  it("falls back to 14 for a referenced font id or nothing", () => {
+    expect(lvglFontPx({ props: { text_font: "my_roboto" } })).toBe(14);
+    expect(lvglFontPx({ props: {} })).toBe(14);
+    expect(lvglFontPx(null)).toBe(14);
   });
 });
