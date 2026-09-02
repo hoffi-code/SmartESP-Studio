@@ -72,8 +72,14 @@
       />
     </div>
 
-    <textarea v-else-if="isYamlField" :id="inputId" :value="resolvedValue" :rows="textAreaRows" wrap="off" class="lambda-textarea" @input="onInput"></textarea>
-    <textarea v-else-if="isLambdaField" :id="inputId" :value="resolvedValue" :rows="textAreaRows" wrap="off" class="lambda-textarea" @input="onInput"></textarea>
+    <LambdaField
+      v-else-if="isYamlField || isLambdaField"
+      :model-value="String(resolvedValue ?? '')"
+      :input-id="inputId"
+      :rows="textAreaRows"
+      :language="isYamlField ? 'yaml' : 'cpp'"
+      @update:model-value="(lambdaValue) => emit('update', { path: fieldPath, value: wrapInputValue(lambdaValue) })"
+    />
 
     <div v-else-if="isSearchableSelect" class="schema-search-select">
       <input
@@ -159,6 +165,7 @@ import ColorField from './ColorField.vue';
 import FieldHint from './FieldHint.vue';
 import IdRefField from './IdRefField.vue';
 import AssetRefField from './AssetRefField.vue';
+import LambdaField from './LambdaField.vue';
 import IconPicker from '../IconPicker.vue';
 import SchemaField from '../SchemaField.vue';
 
