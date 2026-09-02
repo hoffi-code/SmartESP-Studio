@@ -143,11 +143,24 @@
               alt=""
               draggable="false"
             />
-            <svg v-else-if="!entry.render.qr" viewBox="0 0 24 24"><path d="M3 5h18v14H3z" fill="none" /><circle cx="8" cy="10" r="2" /><path d="M4 18l5-5 3 3 4-4 4 4v2H4z" /></svg>
+            <svg v-else viewBox="0 0 24 24"><path d="M3 5h18v14H3z" fill="none" /><circle cx="8" cy="10" r="2" /><path d="M4 18l5-5 3 3 4-4 4 4v2H4z" /></svg>
+          </span>
+
+          <!-- QR code: real matrix from the widget text, else a neutral placeholder -->
+          <span v-else-if="entry.render.kind === 'qr'" class="lvgl-canvas__image">
+            <svg
+              v-if="entry.render.count"
+              class="lvgl-canvas__qr-svg"
+              :viewBox="`0 0 ${entry.render.count} ${entry.render.count}`"
+              shape-rendering="crispEdges"
+            >
+              <rect width="100%" height="100%" :fill="entry.render.light" />
+              <path :d="entry.render.path" :fill="entry.render.dark" />
+            </svg>
             <span
               v-else
               class="lvgl-canvas__qr"
-              :style="{ '--qr-dark': entry.render.qrDark, '--qr-light': entry.render.qrLight }"
+              :style="{ '--qr-dark': entry.render.dark, '--qr-light': entry.render.light }"
             />
           </span>
 
@@ -252,6 +265,7 @@
 <script setup>
 import { ref, computed, inject } from "vue";
 import { useI18n } from "vue-i18n";
+import qrcode from "qrcode-generator";
 import { resolveLvglPageLayout, lvglColorToCss, lvglFontPx } from "../../utils/lvglLayout";
 
 const { t } = useI18n();
@@ -483,11 +497,13 @@ const render = (entry) => {
   }
   if (t === "led") return { kind: "led", color: colour(p, "color", colour(p, "bg_color", theme.led)) };
   if (t === "qrcode") {
+    const { count, path } = qrMatrix(String(p.text ?? "").trim());
     return {
-      kind: "image",
-      qr: true,
-      qrDark: mono.value ? theme.primary : lvglColorToCss(p.dark_color) || "#1e293b",
-      qrLight: mono.value ? "transparent" : lvglColorToCss(p.light_color) || "#ffffff"
+      kind: "qr",
+      count,
+      path,
+      dark: mono.value ? theme.primary : lvglColorToCss(p.dark_color) || "#1e293b",
+      light: mono.value ? "transparent" : lvglColorToCss(p.light_color) || "#ffffff"
     };
   }
   if (t === "canvas") {
@@ -508,7 +524,6 @@ const render = (entry) => {
     const url = typeof imageResolver === "function" ? imageResolver(p.src) : "";
     return {
       kind: "image",
-      qr: false,
       url: url || "",
       transform: parts.join(" "),
       recolor: lvglColorToCss(p.image_recolor)
@@ -614,6 +629,32 @@ const linePolyline = (points) => {
   const w = Math.max(...xs) - minX || 1;
   const h = Math.max(...ys) - minY || 1;
   return points.map((p) => `${(((p.x - minX) / w) * 100).toFixed(1)},${(((p.y - minY) / h) * 100).toFixed(1)}`).join(" ");
+};
+
+// Real QR matrix for the qrcode widget's text. Cached because render() runs per
+// widget on every layout change and the text set in a preview is tiny.
+const qrCache = new Map();
+const qrMatrix = (text) => {
+  if (!text) return { count: 0, path: "" };
+  if (qrCache.has(text)) return qrCache.get(text);
+  let result = { count: 0, path: "" };
+  try {
+    const qr = qrcode(0, "M");
+    qr.addData(text);
+    qr.make();
+    const count = qr.getModuleCount();
+    let path = "";
+    for (let r = 0; r < count; r += 1) {
+      for (let c = 0; c < count; c += 1) {
+        if (qr.isDark(r, c)) path += `M${c} ${r}h1v1h-1z`;
+      }
+    }
+    result = { count, path };
+  } catch {
+    // qrcode-generator throws when the data exceeds the largest QR version
+  }
+  qrCache.set(text, result);
+  return result;
 };
 
 const isTruthy = (v) => v === true || v === "true" || v === "on" || v === 1 || v === "1";
@@ -865,6 +906,7 @@ const onDragEnd = (event) => {
 .lvgl-canvas.is-mono .lvgl-w--grid,
 .lvgl-canvas.is-mono .lvgl-w--btnmatrix,
 .lvgl-canvas.is-mono .lvgl-w--image,
+.lvgl-canvas.is-mono .lvgl-w--qr,
 .lvgl-canvas.is-mono .lvgl-w--canvas,
 .lvgl-canvas.is-mono .lvgl-w--dropdown,
 .lvgl-canvas.is-mono .lvgl-w--roller,
@@ -979,6 +1021,7 @@ const onDragEnd = (event) => {
 .lvgl-w--grid,
 .lvgl-w--btnmatrix,
 .lvgl-w--image,
+.lvgl-w--qr,
 .lvgl-w--canvas,
 .lvgl-w--dropdown,
 .lvgl-w--roller,
@@ -1311,6 +1354,11 @@ const onDragEnd = (event) => {
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+
+.lvgl-canvas__qr-svg {
+  width: 82%;
+  height: 82%;
 }
 
 .lvgl-canvas__qr {

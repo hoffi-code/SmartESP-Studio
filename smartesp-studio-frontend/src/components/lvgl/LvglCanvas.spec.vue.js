@@ -251,6 +251,27 @@ describe("LvglCanvas", () => {
     expect(w2.find(".lvgl-w--image svg").exists()).toBe(true);
   });
 
+  it("renders a real QR matrix from the widget text and falls back without text", () => {
+    const p = {
+      id: "p",
+      widgets: [
+        { uiId: "q1", type: "qrcode", common: { x: 0, y: 0, width: 60, height: 60 }, props: { text: "https://esphome.io", dark_color: "0x112233" }, children: [] },
+        { uiId: "q2", type: "qrcode", common: { x: 0, y: 70, width: 60, height: 60 }, props: {}, children: [] }
+      ]
+    };
+    const w = mount(LvglCanvas, { props: { page: p, canvasWidth: 200, canvasHeight: 200 } });
+    const widgets = w.findAll(".lvgl-w--qr");
+    const svg = widgets[0].get("svg.lvgl-canvas__qr-svg");
+    // a QR grid has at least 21x21 modules
+    const vb = (svg.element.getAttribute("viewBox") || "").split(" ").map(Number);
+    expect(vb[2]).toBeGreaterThanOrEqual(21);
+    expect(svg.get("path").attributes("fill")).toBe("#112233");
+    expect(svg.get("path").attributes("d").length).toBeGreaterThan(0);
+    // no text -> neutral placeholder, no matrix svg
+    expect(widgets[1].find("svg.lvgl-canvas__qr-svg").exists()).toBe(false);
+    expect(widgets[1].find(".lvgl-canvas__qr").exists()).toBe(true);
+  });
+
   it("renders a canvas widget as a sized placeholder, not an image glyph", () => {
     const p = {
       id: "p",

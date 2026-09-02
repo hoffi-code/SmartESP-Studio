@@ -219,6 +219,10 @@ markiert.
   zur Laufzeit per Lambda bemalt und hat keinen statischen Inhalt; die Vorschau
   zeigt jetzt eine schraffierte Fläche mit der Puffergröße statt des
   Bild-Platzhalters.
+- **LVGL Canvas: echter QR-Code** – das `qrcode`-Widget zeigt in der Vorschau
+  die echte QR-Matrix aus seinem `text` (neue Abhängigkeit `qrcode-generator`),
+  eingefärbt nach `dark_color`/`light_color`. Ohne Text bleibt ein neutraler
+  Platzhalter.
 - **LVGL Canvas: Verläufe, Schatten, `label.long_mode`** – `bg_grad_color` /
   `bg_grad_dir` rendern als CSS-Verlauf, `shadow_width` (+ Offset/Spread/Farbe)
   als `box-shadow`. Label mit `long_mode: WRAP` bricht mehrzeilig um,
