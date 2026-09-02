@@ -155,6 +155,18 @@ markiert.
 
 ### Changed
 
+- **LVGL-Vorschau berücksichtigt das Display** – der Canvas (inline **und** im
+  Editor-Modal) zeichnet den Bildschirm-Hintergrund aus `disp_bg_color`
+  (+ `disp_bg_opa`); bei einem 1-Bit-Display (`color_depth: 1` bzw.
+  Display-Schema `monochrome`) wird strikt zweifarbig gerendert. `image`/`animimg`-
+  Widgets zeigen jetzt das echte Bild (aufgelöst über die `image:`-Komponente).
+  Weitere anzeige-relevante Props wirken sich aus: Deckkraft (`opa`/`bg_opa`/
+  `text_opa`), Schriftgröße (`text_font`), `text_align`, `outline_*`,
+  `line_color`/`line_width`, `arc_width`, QR-`dark_color`/`light_color`,
+  `hidden` (Widget wird ausgeblendet).
+- **LVGL-Konfiguration: Vorschau über dem Formular** – in der LVGL-Config stehen
+  Vorschau und Formular jetzt gestapelt statt nebeneinander. Die Vorschau ist
+  reine Anzeige mit einem „Bearbeiten"-Button, der den Editor öffnet.
 - **Kommentar-Steuerung in die Configuration-Spalte** – die Buttons für Datei-Kopf-
   und Sektions-Kommentar sitzen nicht mehr in der YAML-Vorschau (wo sie den Code
   überlagerten), sondern als eigene Zeile unter der Modus-Auswahl im
