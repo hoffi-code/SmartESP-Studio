@@ -1508,6 +1508,37 @@ button:disabled {
   padding-left: 8px;
 }
 
+.config-comment-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 8px 0;
+}
+
+.config-comment-bar__label {
+  color: var(--muted, #64748b);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.config-comment-bar button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.config-comment-bar button img {
+  width: 16px;
+  height: 16px;
+}
+
+.config-comment-bar select {
+  height: 28px;
+  font-size: 12px;
+  padding: 0 6px;
+}
+
 .config-title-select {
   display: inline-block;
   width: auto;
@@ -2320,37 +2351,6 @@ button.btn-add {
   background: rgba(226, 232, 240, 0.08);
   opacity: 1;
 }
-
-.preview-header-comment {
-  position: absolute;
-  top: 10px;
-  left: 15px;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 8px;
-  border-radius: 8px;
-  background: transparent;
-  border: none;
-  color: var(--border);
-  font-weight: 600;
-  font-size: 12px;
-  cursor: pointer;
-  opacity: 0.9;
-  z-index: 1;
-}
-
-.preview-header-comment img {
-  width: 16px;
-  height: 16px;
-  filter: brightness(0) invert(1);
-}
-
-.preview-header-comment:hover {
-  background: rgba(226, 232, 240, 0.08);
-  opacity: 1;
-}
-
 
 .preview-callout-link {
   color: inherit;

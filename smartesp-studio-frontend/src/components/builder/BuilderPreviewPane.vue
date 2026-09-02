@@ -47,18 +47,6 @@
       <div class="preview-card">
         <button
           type="button"
-          class="preview-header-comment"
-          :class="{ 'preview-copy--shift': hasPreviewScrollbar }"
-          @click="emit('edit-header-comment')"
-        >
-          <img
-            src="https://cdn.jsdelivr.net/npm/@mdi/svg/svg/comment-text-outline.svg"
-            alt=""
-          />
-          <span>{{ headerComment ? t("builder.comment.headerEdit") : t("builder.comment.headerAdd") }}</span>
-        </button>
-        <button
-          type="button"
           class="preview-copy"
           :class="{ 'preview-copy--shift': hasPreviewScrollbar }"
           @click="handleCopyPreview"
@@ -69,20 +57,6 @@
           />
           <span>{{ copyLabel }}</span>
         </button>
-        <div v-if="sectionKeys.length" class="preview-section-comment">
-          <select v-model="sectionKey" :aria-label="t('builder.comment.sectionPick')">
-            <option value="">{{ t("builder.comment.sectionPick") }}</option>
-            <option v-for="key in sectionKeys" :key="key" :value="key">{{ key }}</option>
-          </select>
-          <button
-            type="button"
-            class="secondary compact"
-            :disabled="!sectionKey"
-            @click="emit('edit-section-comment', sectionKey)"
-          >
-            {{ t("builder.comment.buttonAdd") }}
-          </button>
-        </div>
         <div v-if="showDisplayAutomationNotice" class="preview-callout hljs">
           <span class="hljs-comment">
             # Interval section live in the Automation tab -
@@ -126,11 +100,8 @@
 </template>
 
 <script setup>
-import { computed, ref, toRef } from "vue";
-import { useI18n } from "vue-i18n";
+import { computed, toRef } from "vue";
 import { useBuilderPreview } from "../../composables/builder/useBuilderPreview";
-
-const { t } = useI18n();
 
 // BuilderPreviewPane is the presentation layer for YAML preview only.
 // All preview state (active tab, highlighting, copy state, scroll math) lives in
@@ -176,14 +147,10 @@ const props = defineProps({
   hubNoticeDomains: {
     type: Array,
     default: () => []
-  },
-  headerComment: {
-    type: String,
-    default: ""
   }
 });
 
-const emit = defineEmits(["yaml-line-click", "edit-header-comment", "edit-section-comment"]);
+const emit = defineEmits(["yaml-line-click"]);
 
 const preview = useBuilderPreview({
   splitPreviewEnabled: toRef(props, "splitPreviewEnabled"),
@@ -221,15 +188,4 @@ const handleYamlLineClick = (line) => {
   if (!line?.origin) return;
   emit("yaml-line-click", line);
 };
-
-// Top-level `key:` lines in the active tab -- what a section comment can attach to.
-const sectionKey = ref("");
-const sectionKeys = computed(() => {
-  const keys = new Set();
-  (highlightedYamlLines.value || []).forEach((line) => {
-    const match = String(line?.text || "").match(/^([a-z0-9_]+):\s*(#.*)?$/);
-    if (match) keys.add(match[1]);
-  });
-  return [...keys];
-});
 </script>
