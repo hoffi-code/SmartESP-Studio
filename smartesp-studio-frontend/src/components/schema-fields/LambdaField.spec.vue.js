@@ -39,6 +39,34 @@ describe("LambdaField", () => {
     expect(overlay.text()).toBe("key: value");
   });
 
+  it("stays quiet on clean code", () => {
+    const wrapper = mountField({
+      modelValue: "return id(temp).state;",
+      idIndex: [{ id: "temp", idLower: "temp", domain: "sensor" }]
+    });
+    expect(wrapper.find(".lambda-field__warnings").exists()).toBe(false);
+  });
+
+  it("warns about an unknown id and an unbalanced bracket without blocking input", async () => {
+    const wrapper = mountField({
+      modelValue: "return id(ghost).state;",
+      idIndex: [{ id: "temp", idLower: "temp", domain: "sensor" }]
+    });
+    let items = wrapper.findAll(".lambda-field__warnings li");
+    expect(items).toHaveLength(1);
+    expect(items[0].text()).toContain("ghost");
+
+    await wrapper.setProps({ modelValue: "return (id(ghost).state;" });
+    items = wrapper.findAll(".lambda-field__warnings li");
+    expect(items).toHaveLength(2);
+    expect(wrapper.get("textarea").attributes("disabled")).toBeUndefined();
+  });
+
+  it("does not lint yaml fields", () => {
+    const wrapper = mountField({ modelValue: "key: (value", language: "yaml" });
+    expect(wrapper.find(".lambda-field__warnings").exists()).toBe(false);
+  });
+
   it("keeps the overlay scroll in sync with the textarea", async () => {
     const wrapper = mountField({ modelValue: "a\nb\nc" });
     const textarea = wrapper.get("textarea");

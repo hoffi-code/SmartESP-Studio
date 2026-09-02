@@ -78,6 +78,7 @@
       :input-id="inputId"
       :rows="textAreaRows"
       :language="isYamlField ? 'yaml' : 'cpp'"
+      :id-index="idIndex"
       @update:model-value="(lambdaValue) => emit('update', { path: fieldPath, value: wrapInputValue(lambdaValue) })"
     />
 

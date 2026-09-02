@@ -16,23 +16,33 @@
         @scroll="syncScroll"
       ></textarea>
     </div>
+    <ul v-if="warnings.length" class="notice notice--warning lambda-field__warnings">
+      <li v-for="(warning, warningIndex) in warnings" :key="warningIndex">
+        {{ warningText(warning) }}
+      </li>
+    </ul>
   </div>
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 
 import { highlightCppToHtml } from "../../utils/cppSyntaxHighlight";
+import { lintLambda } from "../../utils/lambdaLint";
 import { escapeHtml, highlightYamlToHtml } from "../../utils/yamlSyntaxHighlight";
 
 const props = defineProps({
   modelValue: { type: String, default: "" },
   inputId: { type: String, required: true },
   rows: { type: Number, default: 1 },
-  language: { type: String, default: "cpp" }
+  language: { type: String, default: "cpp" },
+  idIndex: { type: Array, default: () => [] }
 });
 
 const emit = defineEmits(["update:model-value"]);
+
+const { t } = useI18n();
 
 const textareaRef = ref(null);
 const highlightRef = ref(null);
@@ -66,6 +76,19 @@ const onInput = (event) => {
 
 watch(() => [props.modelValue, props.language], () => render(props.modelValue));
 onMounted(() => render(props.modelValue));
+
+// Nur fuer Lambdas -- YAML-Felder haben ihre eigene Pruefung beim Speichern.
+const warnings = computed(() =>
+  props.language === "yaml" ? [] : lintLambda(props.modelValue, props.idIndex)
+);
+
+const warningText = (warning) =>
+  t(`builder.lambda.warn.${warning.code}`, {
+    token: warning.token || "",
+    id: warning.id || "",
+    line: warning.line,
+    column: warning.column
+  });
 </script>
 
 <style scoped>
@@ -115,6 +138,11 @@ onMounted(() => render(props.modelValue));
   color: transparent;
   caret-color: var(--navy);
   overflow: auto;
+}
+
+.lambda-field__warnings {
+  margin: 6px 0 0;
+  padding-left: 18px;
 }
 
 :deep(.lambda-field__highlight *) {
