@@ -364,7 +364,7 @@ const fillRatio = (p) => pctOf(p, num(p.value, num(p.min_value, 0)));
 
 // Descriptor per widget: kind + the pieces the template needs.
 const render = (entry) => {
-  const p = entry.node.props || {};
+  const p = effectiveProps(entry.node);
   const t = entry.type;
   const theme = THEME.value;
 
@@ -582,8 +582,28 @@ const initialChecked = (p) => {
   return isTruthy(s ?? p.checked);
 };
 
+const initialDisabled = (p) => {
+  const s = p.state;
+  if (s && typeof s === "object") return isTruthy(s.disabled);
+  // a scalar `disabled: true` counts; an object `disabled:` is a style block, not a state
+  return p.disabled === true || p.disabled === "true";
+};
+
+// D #10 gives each widget optional per-state style blocks (checked/pressed/
+// focused/disabled/edited/hovered/scrolled). A static preview can only reflect
+// the non-transient ones: `checked` (has an initial value via state:) and
+// `disabled`. The rest are interaction feedback and stay unrendered. Returns the
+// flat props with the active state block(s) merged on top.
+const effectiveProps = (node) => {
+  const p = node?.props || {};
+  const layers = [];
+  if (initialChecked(p) && p.checked && typeof p.checked === "object") layers.push(p.checked);
+  if (initialDisabled(p) && p.disabled && typeof p.disabled === "object") layers.push(p.disabled);
+  return layers.length ? Object.assign({}, p, ...layers) : p;
+};
+
 const boxStyle = (entry) => {
-  const p = entry.node.props || {};
+  const p = effectiveProps(entry.node);
   const isMono = mono.value;
   const style = {
     left: `${entry.box.x * zoom.value}px`,
@@ -641,7 +661,7 @@ const decorated = computed(() =>
     ...entry,
     render: render(entry),
     boxStyle: boxStyle(entry),
-    disabled: isTruthy(entry.node?.props?.state?.disabled),
+    disabled: initialDisabled(entry.node?.props || {}),
     layoutBadge: entry.node?.props?.layout?.type === "GRID" ? "grid" : "flex"
   }))
 );

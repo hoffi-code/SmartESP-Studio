@@ -199,6 +199,11 @@ markiert.
   Punkt statt immer bei 0. Switch kippt bei `height > width` in die vertikale
   Orientierung. `image_recolor` färbt das Bild-Glyph ein. `state.disabled`
   blendet das Widget in der Vorschau aus.
+- **LVGL Canvas: State-Style-Blöcke** – ein `checked:`- bzw. `disabled:`-
+  Style-Block (Hintergrund, Rahmen, Radius, Textfarbe …) wird in der Vorschau
+  über die flachen Props gelegt, sobald das Widget im entsprechenden Zustand ist
+  (`state.checked`/`state.disabled`). Die reinen Interaktionszustände
+  (`pressed`/`focused`/`hovered`/`edited`/`scrolled`) bleiben unberücksichtigt.
 - **LVGL Canvas: Verläufe, Schatten, `label.long_mode`** – `bg_grad_color` /
   `bg_grad_dir` rendern als CSS-Verlauf, `shadow_width` (+ Offset/Spread/Farbe)
   als `box-shadow`. Label mit `long_mode: WRAP` bricht mehrzeilig um,

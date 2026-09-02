@@ -266,6 +266,37 @@ describe("LvglCanvas", () => {
     expect(w.get(".lvgl-w--arc path").attributes("stroke-width")).toBe("9");
   });
 
+  it("merges the checked/disabled state style block over the flat props", () => {
+    const p = {
+      id: "p",
+      widgets: [
+        {
+          uiId: "sw",
+          type: "switch",
+          common: { x: 0, y: 0, width: 40, height: 24 },
+          props: { state: { checked: true }, bg_color: "0x111111", checked: { bg_color: "0x00FF00" } },
+          children: []
+        },
+        {
+          uiId: "btn",
+          type: "button",
+          common: { x: 0, y: 40, width: 60, height: 24 },
+          props: { text: "X", bg_color: "0x111111", disabled: { bg_color: "0x0000FF" } },
+          children: []
+        }
+      ]
+    };
+    const w = mount(LvglCanvas, { props: { page: p, canvasWidth: 200, canvasHeight: 200 } });
+    // checked block wins over the flat bg_color
+    expect(w.get(".lvgl-w--switch").attributes("style")).toContain("background: rgb(0, 255, 0)");
+    // the disabled block only applies once the widget is actually disabled
+    expect(w.get(".lvgl-w--button").attributes("style")).toContain("background: rgb(17, 17, 17)");
+
+    p.widgets[1].props.state = { disabled: true };
+    const w2 = mount(LvglCanvas, { props: { page: p, canvasWidth: 200, canvasHeight: 200 } });
+    expect(w2.get(".lvgl-w--button").attributes("style")).toContain("background: rgb(0, 0, 255)");
+  });
+
   it("flags a flex container's children as static (no drag)", () => {
     const flexPage = {
       id: "p",
