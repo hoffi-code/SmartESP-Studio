@@ -155,6 +155,15 @@ markiert.
 
 ### Changed
 
+- **Feld-Hints/-Labels pro Schema (i18n)** – die „?"-Erklärungen und Feld-Namen
+  werden jetzt über einen schema-spezifischen Namespace aufgelöst
+  (`schema.ns.<schemaId>.<key>`), damit gleichlautende Keys je Bereich die richtige
+  Bedeutung bekommen (`mode` unter einem SPI-Bus ≠ unter einem `number` ≠ unter
+  einem LVGL-Widget). Wo keine kontext-genaue Beschreibung ableitbar ist, zeigt ein
+  polysemer Key (`mode`, `type`, `value` …) lieber gar keinen Hint als einen
+  falschen. Die ~175 kuratierten `field.label` aus den Schema-JSONs liegen jetzt im
+  übersetzbaren Katalog. Der bisherige flache Hint-Katalog bleibt als Fallback für
+  Keys, die kein Namespace abdeckt. `npm run seed:hints` regeneriert alles.
 - **LVGL-Vorschau berücksichtigt das Display** – der Canvas (inline **und** im
   Editor-Modal) zeichnet den Bildschirm-Hintergrund aus `disp_bg_color`
   (+ `disp_bg_opa`); bei einem 1-Bit-Display (`color_depth: 1` bzw.

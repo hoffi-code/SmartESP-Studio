@@ -7,11 +7,14 @@
 //   node scripts/seed-hints.mjs --all --dry-run       # report, write nothing
 //   node scripts/seed-hints.mjs --all --force         # overwrite derivable hints too
 //
-// Per key, the hint prose is picked in this order:
-//   1. ESPHome ref docs scoped to this component id (sensor.template / template.sensor / sensor / template)
+// Per key, the hint prose is picked in this order, then reduced to one sentence:
+//   1. ESPHome ref docs scoped to this component id (sensor.template / template.sensor / sensor / ...)
 //   2. LVGL doc-bullet prose (for lvgl.* schemas)
-//   3. the pre-existing flat catalog hint (schema.fields.<key>.hint) -- so nothing is lost
-// then reduced to one sentence. Labels come from real `field.label` values in the schema JSON.
+//   3. a curated generic hint for genuinely universal keys (id / name / update_interval / ...)
+// Polysemous keys (mode / type / value / ...) with none of the above get an explicit ""
+// so the flat schema.fields.<key> fallback is suppressed. Labels come from real
+// `field.label` values in the schema JSON. The flat `fields` tier is kept as a
+// context-agnostic fallback for keys no namespace covers.
 
 import fs from "node:fs";
 import path from "node:path";
