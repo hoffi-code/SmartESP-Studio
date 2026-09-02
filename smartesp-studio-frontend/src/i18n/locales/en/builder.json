@@ -36,6 +36,58 @@
     "linkSystem": "SYSTEM",
     "linkNetwork": "NETWORK"
   },
+  "sidebar": {
+    "backToDashboard": "Back to Dashboard",
+    "currentProject": "Current project",
+    "project": "Project",
+    "summaryName": "name:",
+    "summaryFile": "file:",
+    "summaryPlatform": "platform:",
+    "summaryComment": "comment:",
+    "platformUnknown": "Unknown",
+    "components": "Components",
+    "assets": "Assets",
+    "userComponents": "User components",
+    "addComponent": "Add component",
+    "add": "Add"
+  },
+  "previewMode": {
+    "single": "Single YAML Preview",
+    "tabs": "Tabbed YAML Preview"
+  },
+  "modeLevel": {
+    "simple": "Simple configuration",
+    "normal": "Normal configuration",
+    "advanced": "Advanced configuration"
+  },
+  "modeUpgrade": {
+    "showNormal": "Show Normal configuration",
+    "showAdvanced": "Show Advanced configuration"
+  },
+  "components": {
+    "docs": "Documentation",
+    "remove": "Remove",
+    "uploadComponents": "Upload Components",
+    "uploading": "Uploading…"
+  },
+  "gpio": {
+    "title": "GPIO Guide"
+  },
+  "confirm": {
+    "title": "Confirm",
+    "deleteSavedTitle": "Delete saved component",
+    "areYouSure": "Are you sure?",
+    "deleteMessage": "Are you sure you want to delete \"{name}\"?",
+    "thisComponent": "this component",
+    "delete": "Delete",
+    "yes": "Yes",
+    "cancel": "Cancel"
+  },
+  "customComponent": {
+    "save": "Save Component",
+    "update": "Update Component",
+    "nameExists": "Component name already exists"
+  },
   "preview": {
     "fontSample": "Aa Bb Cc 0123 — The quick brown fox",
     "imageNone": "No preview for this source.",

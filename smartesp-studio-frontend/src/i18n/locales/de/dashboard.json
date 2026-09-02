@@ -41,6 +41,11 @@
     "customize": "Anpassen",
     "deleteProject": "Projekt löschen"
   },
+  "view": {
+    "resizeSidebar": "Seitenleiste anpassen",
+    "untitledProject": "Unbenanntes Projekt",
+    "noSaveTimestamp": "Kein Speicher-Zeitstempel"
+  },
   "customize": {
     "title": "Kachel anpassen",
     "icon": "Icon",

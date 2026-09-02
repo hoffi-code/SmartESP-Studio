@@ -96,12 +96,12 @@
         <div class="sidebar-top">
           <button type="button" class="btn-standard secondary sidebar-back-button" @click="handleBackToDashboard">
             <span class="sidebar-back-button-icon" aria-hidden="true"></span>
-            <span>Back to Dashboard</span>
+            <span>{{ t('builder.sidebar.backToDashboard') }}</span>
           </button>
 
-          <section class="sidebar-panel sidebar-panel--project" aria-label="Current project">
+          <section class="sidebar-panel sidebar-panel--project" :aria-label="t('builder.sidebar.currentProject')">
             <div class="sidebar-panel__header">
-              <h4>Project</h4>
+              <h4>{{ t('builder.sidebar.project') }}</h4>
               <span class="project-status-badge" :class="builderDeviceStatusClass">
                 {{ builderDeviceStatusLabel }}
               </span>
@@ -109,21 +109,21 @@
             <div class="sidebar-panel__body project-summary-body">
               <dl class="project-summary-list">
                 <div class="project-summary-item">
-                  <dt>name:</dt>
+                  <dt>{{ t('builder.sidebar.summaryName') }}</dt>
                   <dd>{{ projectSummaryName }}</dd>
                 </div>
                 <div class="project-summary-item">
-                  <dt>file:</dt>
+                  <dt>{{ t('builder.sidebar.summaryFile') }}</dt>
                   <dd class="project-summary-file" :class="{ 'is-unsaved': !isProjectSaved }">
                     {{ projectFilenameLabel }}
                   </dd>
                 </div>
                 <div class="project-summary-item">
-                  <dt>platform:</dt>
+                  <dt>{{ t('builder.sidebar.summaryPlatform') }}</dt>
                   <dd>{{ projectSummaryPlatform }}</dd>
                 </div>
                 <div v-if="projectSummaryComment" class="project-summary-item">
-                  <dt>comment:</dt>
+                  <dt>{{ t('builder.sidebar.summaryComment') }}</dt>
                   <dd>{{ projectSummaryComment }}</dd>
                 </div>
               </dl>
@@ -133,7 +133,7 @@
         <div class="sidebar-middle">
           <div class="sidebar-panel sidebar-panel--components">
             <div class="sidebar-panel__header">
-              <h4>Components</h4>
+              <h4>{{ t('builder.sidebar.components') }}</h4>
             </div>
             <div class="sidebar-panel__body">
               <div class="sidebar-components">
@@ -149,22 +149,22 @@
                     }"
                     @click="activeTab = tab"
                   >
-                    <span>{{ tab }}</span>
+                    <span>{{ t('builder.tabs.' + tab.toLowerCase()) }}</span>
                   </button>
                   <button class="component-chip" type="button" @click="openAssetManagerFromSidebar">
-                    <span>Assets</span>
+                    <span>{{ t('builder.sidebar.assets') }}</span>
                   </button>
                   <div class="component-separator-line"></div>
                   <div class="component-separator">
                     <div class="component-separator__row">
-                      <span>User components</span>
+                      <span>{{ t('builder.sidebar.userComponents') }}</span>
                       <button
                         class="secondary compact btn-add sidebar-components-add"
                         type="button"
-                        aria-label="Add component"
+                        :aria-label="t('builder.sidebar.addComponent')"
                         @click="addComponentSlot"
                       >
-                        Add
+                        {{ t('builder.sidebar.add') }}
                       </button>
                     </div>
                   </div>
@@ -198,8 +198,8 @@
               v-model="previewMode"
               @change="handleSelectBlur"
             >
-              <option value="single">Single YAML Preview</option>
-              <option value="tabs">Tabbed YAML Preview</option>
+              <option value="single">{{ t('builder.previewMode.single') }}</option>
+              <option value="tabs">{{ t('builder.previewMode.tabs') }}</option>
             </select>
           </div>
           <BuilderPreviewPane
@@ -228,9 +228,9 @@
               v-model="activeModeLevel"
               @change="handleSelectBlur"
             >
-              <option value="Simple">Simple configuration</option>
-              <option value="Normal">Normal configuration</option>
-              <option value="Advanced">Advanced configuration</option>
+              <option value="Simple">{{ t('builder.modeLevel.simple') }}</option>
+              <option value="Normal">{{ t('builder.modeLevel.normal') }}</option>
+              <option value="Advanced">{{ t('builder.modeLevel.advanced') }}</option>
             </select>
           </div>
           <div class="config-scroll">
@@ -448,7 +448,7 @@
                 :href="activeTabHelpUrl"
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="Documentation"
+                :aria-label="t('builder.components.docs')"
               >
                 ?
               </a>
@@ -461,7 +461,7 @@
                 :disabled="isComponentsImporting"
                 @click="openComponentsZipPicker"
               >
-                {{ isComponentsImporting ? "Uploading..." : "Upload Components" }}
+                {{ isComponentsImporting ? t('builder.components.uploading') : t('builder.components.uploadComponents') }}
               </button>
               <button
                 v-if="!isComponentPickerOpen && activeComponentSlot !== null && activeComponentCommentKey"
@@ -477,7 +477,7 @@
                 class="secondary compact btn-standard"
                 @click="requestRemoveComponent(activeComponentSlot)"
               >
-                Remove
+                {{ t('builder.components.remove') }}
               </button>
               <input
                 ref="componentsZipInput"
@@ -665,9 +665,9 @@ const nextModeLevelByMode = {
   Normal: "Advanced",
   Advanced: "Advanced"
 };
-const modeUpgradeButtonLabelByMode = {
-  Simple: "Show Normal configuration",
-  Normal: "Show Advanced configuration"
+const modeUpgradeButtonLabelKeyByMode = {
+  Simple: "builder.modeUpgrade.showNormal",
+  Normal: "builder.modeUpgrade.showAdvanced"
 };
 const modeUpgradeAvailability = ref({});
 const isProjectSaving = ref(false);
@@ -686,9 +686,10 @@ const sourceProjectFilename = ref("");
 
 const activeModeLevel = ref(modeLevels[0]);
 const resolveModeLevel = (value) => normalizeModeLevel(value);
-const modeUpgradeButtonLabel = computed(
-  () => modeUpgradeButtonLabelByMode[resolveModeLevel(activeModeLevel.value)] || ""
-);
+const modeUpgradeButtonLabel = computed(() => {
+  const key = modeUpgradeButtonLabelKeyByMode[resolveModeLevel(activeModeLevel.value)];
+  return key ? t(key) : "";
+});
 const handleModeUpgradeAvailability = ({ section, key, available }) => {
   if (!section || !key) return;
   const next = {
@@ -834,9 +835,9 @@ const isComponentAvailable = (item) => {
 };
 
 const componentsHeader = computed(() => {
-  if (activeComponentSlot.value === null) return "Components";
+  if (activeComponentSlot.value === null) return t("builder.sidebar.components");
   const entry = config.value.components[activeComponentSlot.value];
-  return entry ? componentEntryLabel(entry) : "Add";
+  return entry ? componentEntryLabel(entry) : t("builder.sidebar.add");
 });
 
 const projectFilename = computed(() => {
@@ -867,7 +868,7 @@ const projectSummaryComment = computed(() => {
 const projectSummaryPlatform = computed(() => {
   const platform = String(platformCoreConfig.value?.platform || "").trim().toUpperCase();
   const variant = String(platformCoreConfig.value?.variant || "").trim().toUpperCase();
-  if (!platform) return "Unknown";
+  if (!platform) return t("builder.sidebar.platformUnknown");
   if (!variant || variant === platform) return platform;
   return `${platform} (${variant})`;
 });
@@ -890,19 +891,21 @@ const parseComponentId = (componentId) => {
 };
 
 const confirmTitle = computed(() =>
-  confirmAction.value === "delete-custom" ? "Delete saved component" : "Confirm"
+  confirmAction.value === "delete-custom"
+    ? t("builder.confirm.deleteSavedTitle")
+    : t("builder.confirm.title")
 );
 const confirmMessage = computed(() => {
   if (confirmAction.value === "delete-custom") {
-    const name = pendingDeleteCustomItem.value?.name || "this component";
-    return `Are you sure you want to delete \"${name}\"?`;
+    const name = pendingDeleteCustomItem.value?.name || t("builder.confirm.thisComponent");
+    return t("builder.confirm.deleteMessage", { name });
   }
-  return "Are you sure?";
+  return t("builder.confirm.areYouSure");
 });
 const confirmConfirmText = computed(() =>
-  confirmAction.value === "delete-custom" ? "Delete" : "Yes"
+  confirmAction.value === "delete-custom" ? t("builder.confirm.delete") : t("builder.confirm.yes")
 );
-const confirmCancelText = computed(() => "Cancel");
+const confirmCancelText = computed(() => t("builder.confirm.cancel"));
 
 const schemaHelpUrl = (schema) => {
   const url = schema?.helpUrl;
@@ -986,7 +989,9 @@ const showSaveCustomComponentAction = computed(
     activeComponentSchema.value?.renderStrategy === "verbatim_root"
 );
 const customComponentActionLabel = computed(() =>
-  isSavedCustomComponentActive.value ? "Update Component" : "Save Component"
+  isSavedCustomComponentActive.value
+    ? t("builder.customComponent.update")
+    : t("builder.customComponent.save")
 );
 const activeCustomComponentName = computed(() => {
   const value = activeComponentConfig.value?.name;
@@ -1016,7 +1021,7 @@ const isActiveCustomNameDuplicate = computed(() => {
 const activeComponentFieldErrors = computed(() => {
   if (!showSaveCustomComponentAction.value) return {};
   if (!isActiveCustomNameDuplicate.value) return {};
-  return { name: "Component name already exists" };
+  return { name: t("builder.customComponent.nameExists") };
 });
 const canSaveCustomComponent = computed(() => {
   if (!showSaveCustomComponentAction.value) return false;
@@ -1529,7 +1534,7 @@ const gpioGuide = computed(() =>
 
 const gpioOptions = computed(() => gpioGuide.value?.rows || []);
 
-const gpioTitle = computed(() => gpioGuide.value?.title || "GPIO Guide");
+const gpioTitle = computed(() => gpioGuide.value?.title || t("builder.gpio.title"));
 
 const mdiSubstitutions = ref({});
 const displayImages = ref([]);
@@ -2540,9 +2545,9 @@ const commentEditValue = computed(() => {
   return config.value.fieldComments?.[request.key] || "";
 });
 
-const openCommentEditor = ({ key = "", title = "Kommentar", scope = "field" }) => {
+const openCommentEditor = ({ key = "", title = "", scope = "field" }) => {
   if (scope === "field" && !key) return;
-  commentEditRequest.value = { key, title, scope };
+  commentEditRequest.value = { key, title: title || t("builder.comment.modalTitleDefault"), scope };
 };
 
 const closeCommentEditor = () => {
