@@ -256,7 +256,7 @@ describe("LvglBuilder", () => {
     expect(patch.pages[0].widgets[0].children).toEqual([]);
   });
 
-  it("shows a static preview canvas (no toolbar) and opens the edit modal on click", async () => {
+  it("shows a static preview canvas (no toolbar) and opens the edit modal via the Edit button", async () => {
     // schema with a style-grouped field so the inspector renders a <details> section
     const styleSchema = { fields: [...LABEL_SCHEMA.fields, { key: "bg_color", type: "text", group: "style" }] };
     const widget = { uiId: "w1", type: "label", common: {}, props: { text: "Hi" }, children: [] };
@@ -268,8 +268,13 @@ describe("LvglBuilder", () => {
 
     expect(wrapper.find(".lvgl-canvas-preview .lvgl-canvas__toolbar").exists()).toBe(false);
     expect(wrapper.find(".lvgl-editor-modal").exists()).toBe(false);
+    // the preview panel is no longer a click target -- only the Edit button opens the modal
+    expect(wrapper.find(".lvgl-canvas-preview[role='button']").exists()).toBe(false);
 
-    await wrapper.get(".lvgl-canvas-preview").trigger("click");
+    const editButton = wrapper
+      .findAll(".lvgl-config-panel__header button")
+      .find((b) => b.text() === "Edit");
+    await editButton.trigger("click");
     expect(wrapper.find(".lvgl-editor-modal").exists()).toBe(true);
     // modal canvas is the interactive one -> toolbar present
     expect(wrapper.find(".lvgl-editor-modal .lvgl-canvas__toolbar").exists()).toBe(true);
