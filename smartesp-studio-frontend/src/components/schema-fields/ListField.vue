@@ -57,6 +57,7 @@
             :gpio-title="gpioTitle"
             :context-component-id="contextComponentId"
             :context-scope-id="contextScopeId"
+            :schema-id="schemaId"
             :global-store="globalStore"
             @update="(payload) => updateCatalogEntryConfig(index, payload)"
           />
@@ -93,6 +94,7 @@
             :gpio-title="gpioTitle"
             :context-component-id="contextComponentId"
             :context-scope-id="contextScopeId"
+            :schema-id="schemaId"
             :global-store="globalStore"
             @update="(payload) => updateListObjectItem(index, payload)"
             @open-secrets="emit('open-secrets')"
@@ -210,6 +212,7 @@ const props = defineProps({
   gpioTitle: { type: String, default: '' },
   contextComponentId: { type: String, default: '' },
   contextScopeId: { type: String, default: '' },
+  schemaId: { type: String, default: '' },
   globalStore: { type: Object, default: () => ({}) }
 });
 

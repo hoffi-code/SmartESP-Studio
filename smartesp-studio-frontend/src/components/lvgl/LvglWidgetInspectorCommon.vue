@@ -7,6 +7,7 @@
       :path="[]"
       :value="common"
       :context-scope-id="scopeId"
+      schema-id="base.lvgl_widget_common"
       @update="handleFieldUpdate"
     />
   </div>

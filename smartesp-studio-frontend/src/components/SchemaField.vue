@@ -18,6 +18,7 @@
     :gpio-title="gpioTitle"
     :context-component-id="contextComponentId"
     :context-scope-id="contextScopeId"
+    :schema-id="schemaId"
     :global-store="globalStore"
     @update="emitUpdate"
     @open-secrets="emitOpenSecrets"
@@ -41,6 +42,7 @@
     :gpio-title="gpioTitle"
     :context-component-id="contextComponentId"
     :context-scope-id="contextScopeId"
+    :schema-id="schemaId"
     :global-store="globalStore"
     @update="emitUpdate"
     @open-secrets="emitOpenSecrets"
@@ -65,6 +67,7 @@
     :gpio-title="gpioTitle"
     :context-component-id="contextComponentId"
     :context-scope-id="contextScopeId"
+    :schema-id="schemaId"
     :global-store="globalStore"
     @update="emitUpdate"
     @open-secrets="emitOpenSecrets"
@@ -87,6 +90,7 @@
     :gpio-title="gpioTitle"
     :context-component-id="contextComponentId"
     :context-scope-id="contextScopeId"
+    :schema-id="schemaId"
     :global-store="globalStore"
     @update="emitUpdate"
     @open-secrets="emitOpenSecrets"
@@ -133,6 +137,7 @@
     :gpio-title="gpioTitle"
     :context-component-id="contextComponentId"
     :context-scope-id="contextScopeId"
+    :schema-id="schemaId"
     :global-store="globalStore"
     :is-yaml-field="isYamlField"
     :is-lambda-field="isLambdaField"
@@ -198,7 +203,13 @@ import {
 } from "../utils/schemaTemplatable";
 import { encodeFieldPath } from "../utils/yamlDocumentModel";
 import { fieldModeLevel, isModeLevelVisible } from "../utils/schemaModeLevel";
-import { fieldHintI18nKey, fieldLabelI18nKey, humanizeFieldKey } from "../utils/schemaFieldLabel";
+import {
+  fieldHintI18nKey,
+  fieldHintI18nKeyFlat,
+  fieldLabelI18nKey,
+  fieldLabelI18nKeyFlat,
+  humanizeFieldKey
+} from "../utils/schemaFieldLabel";
 import { useI18n } from "vue-i18n";
 
 const { t, te } = useI18n();
@@ -271,6 +282,12 @@ const props = defineProps({
     default: () => ({})
   },
   externalError: {
+    type: String,
+    default: ""
+  },
+  // Resolved schema id ("sensor.template", "lvgl.widget.bar"). Constant for the whole
+  // field tree -- forwarded verbatim by every wrapper so labels/hints resolve per schema.
+  schemaId: {
     type: String,
     default: ""
   }
@@ -399,21 +416,33 @@ const fixedListChildField = (index) => ({
   helpUrl: props.field?.item?.helpUrl || props.field?.helpUrl
 });
 
+// Resolution order: schema-namespaced catalog entry -> legacy flat catalog entry
+// -> schema-authored `field.label`/`field.hint` -> humanized key (label only).
+const catalogText = (nsKey, flatKey) => {
+  if (props.schemaId && te(nsKey)) return t(nsKey);
+  if (te(flatKey)) return t(flatKey);
+  return "";
+};
+
 const fieldLabel = computed(() => {
-  if (props.field.label) return props.field.label;
   const key = props.field.key;
-  if (!key) return "";
-  return t(fieldLabelI18nKey(key), humanizeFieldKey(key));
+  if (!key) return props.field.label || "";
+  return (
+    catalogText(fieldLabelI18nKey(key, props.schemaId), fieldLabelI18nKeyFlat(key)) ||
+    props.field.label ||
+    humanizeFieldKey(key)
+  );
 });
 
-// Schema-authored `field.hint` wins; otherwise use a catalog entry if one exists
-// (a missing key must render nothing, not the raw key string).
+// A missing hint must render nothing, not the raw key string.
 const fieldHint = computed(() => {
-  if (props.field.hint) return props.field.hint;
   const key = props.field.key;
-  if (!key) return "";
-  const hintKey = fieldHintI18nKey(key);
-  return te(hintKey) ? t(hintKey) : "";
+  if (!key) return props.field.hint || "";
+  return (
+    catalogText(fieldHintI18nKey(key, props.schemaId), fieldHintI18nKeyFlat(key)) ||
+    props.field.hint ||
+    ""
+  );
 });
 
 const filterVisibleFields = (fields = [], contextValue = null) =>

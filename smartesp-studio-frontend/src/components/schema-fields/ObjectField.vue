@@ -26,6 +26,7 @@
         :gpio-title="gpioTitle"
         :context-component-id="contextComponentId"
         :context-scope-id="contextScopeId"
+        :schema-id="schemaId"
         :global-store="globalStore"
         @update="emit('update', $event)"
         @open-secrets="emit('open-secrets')"
@@ -60,6 +61,7 @@ defineProps({
   gpioTitle: { type: String, default: '' },
   contextComponentId: { type: String, default: '' },
   contextScopeId: { type: String, default: '' },
+  schemaId: { type: String, default: '' },
   globalStore: { type: Object, default: () => ({}) }
 });
 
