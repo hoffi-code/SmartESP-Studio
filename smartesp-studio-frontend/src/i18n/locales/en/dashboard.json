@@ -41,6 +41,11 @@
     "customize": "Customize",
     "deleteProject": "Delete Project"
   },
+  "view": {
+    "resizeSidebar": "Resize sidebar",
+    "untitledProject": "Untitled project",
+    "noSaveTimestamp": "No save timestamp"
+  },
   "customize": {
     "title": "Customize tile",
     "icon": "Icon",

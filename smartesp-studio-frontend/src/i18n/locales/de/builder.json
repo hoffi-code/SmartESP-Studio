@@ -36,6 +36,58 @@
     "linkSystem": "SYSTEM",
     "linkNetwork": "NETZWERK"
   },
+  "sidebar": {
+    "backToDashboard": "Zurück zum Dashboard",
+    "currentProject": "Aktuelles Projekt",
+    "project": "Projekt",
+    "summaryName": "name:",
+    "summaryFile": "file:",
+    "summaryPlatform": "platform:",
+    "summaryComment": "comment:",
+    "platformUnknown": "Unbekannt",
+    "components": "Komponenten",
+    "assets": "Assets",
+    "userComponents": "Eigene Komponenten",
+    "addComponent": "Komponente hinzufügen",
+    "add": "Hinzufügen"
+  },
+  "previewMode": {
+    "single": "Einzelne YAML-Vorschau",
+    "tabs": "YAML-Vorschau mit Tabs"
+  },
+  "modeLevel": {
+    "simple": "Einfache Konfiguration",
+    "normal": "Normale Konfiguration",
+    "advanced": "Erweiterte Konfiguration"
+  },
+  "modeUpgrade": {
+    "showNormal": "Normale Konfiguration anzeigen",
+    "showAdvanced": "Erweiterte Konfiguration anzeigen"
+  },
+  "components": {
+    "docs": "Dokumentation",
+    "remove": "Entfernen",
+    "uploadComponents": "Komponenten hochladen",
+    "uploading": "Wird hochgeladen…"
+  },
+  "gpio": {
+    "title": "GPIO-Leitfaden"
+  },
+  "confirm": {
+    "title": "Bestätigen",
+    "deleteSavedTitle": "Gespeicherte Komponente löschen",
+    "areYouSure": "Bist du sicher?",
+    "deleteMessage": "Möchtest du \"{name}\" wirklich löschen?",
+    "thisComponent": "diese Komponente",
+    "delete": "Löschen",
+    "yes": "Ja",
+    "cancel": "Abbrechen"
+  },
+  "customComponent": {
+    "save": "Komponente speichern",
+    "update": "Komponente aktualisieren",
+    "nameExists": "Komponentenname existiert bereits"
+  },
   "preview": {
     "fontSample": "Aa Bb Cc 0123 — Franz jagt im Taxi quer",
     "imageNone": "Keine Vorschau für diese Quelle.",

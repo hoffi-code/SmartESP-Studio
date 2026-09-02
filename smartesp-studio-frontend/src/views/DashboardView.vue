@@ -134,7 +134,7 @@
     <div
       class="dashboard-resizer"
       role="separator"
-      aria-label="Resize sidebar"
+      :aria-label="t('dashboard.view.resizeSidebar')"
       aria-orientation="vertical"
       @mousedown.prevent="startSidebarResize"
     ></div>
@@ -177,6 +177,7 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 import DashboardEntriesPane from "../components/dashboard/DashboardEntriesPane.vue";
 import DashboardFolderTree from "../components/dashboard/DashboardFolderTree.vue";
 import DashboardModalHost from "../components/dashboard/DashboardModalHost.vue";
@@ -203,6 +204,8 @@ import {
   writeProjectDeploymentState
 } from "../utils/projectDeploymentState";
 import { normalizeHexColor } from "../utils/displayColor";
+
+const { t } = useI18n();
 
 // DashboardView coordinates explorer state, shared top-bar actions, and modal flows.
 // Rendering details, tree logic, and device status polling are delegated to focused
@@ -340,7 +343,7 @@ const projectKeyFromName = (value) => {
 
 const fallbackProjectTitle = (projectName) => {
   const title = String(projectName || "").replace(/\.json$/i, "").trim();
-  return title || "Untitled project";
+  return title || t("dashboard.view.untitledProject");
 };
 
 const sanitizeIconName = (value) => {
@@ -671,7 +674,7 @@ const sanitizeLastEditedAt = (value) => {
 
 const formatLastEditedAt = (value) => {
   const normalized = sanitizeLastEditedAt(value);
-  if (!normalized) return "No save timestamp";
+  if (!normalized) return t("dashboard.view.noSaveTimestamp");
   const date = new Date(normalized);
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
