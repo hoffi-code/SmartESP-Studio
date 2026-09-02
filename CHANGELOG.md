@@ -54,6 +54,11 @@ markiert.
 - **Lesbare Feld-Labels** – ohne explizites `label` zeigt ein Feld jetzt
   `schema.fields.<key>.label` aus dem Katalog, sonst den humanisierten Key
   (`default_font` → „Default font", Akronyme bleiben groß) statt des rohen Keys.
+- **i18n: Builder-/Dashboard-View** – die verbliebenen fest verdrahteten Texte in
+  `src/views/` (Builder-Sidebar, Preview-/Modus-Auswahl, Bestätigungsdialoge,
+  Custom-Component-Labels; Dashboard-Resizer und Fallback-Titel) laufen jetzt über
+  den Message-Katalog. Damit ist der i18n-Sweep über `components/` und `views/`
+  abgeschlossen.
 - **i18n: Display-Konfigurator** – Builder-Chrome, Werkzeugleiste und alle
   Inspektor-Panels (Text, Bild, Icon, Form, Animation, Diagramm, Legende) laufen
   jetzt über den Message-Katalog (`display.*`, `en` + `de`); technische Enum-Werte
