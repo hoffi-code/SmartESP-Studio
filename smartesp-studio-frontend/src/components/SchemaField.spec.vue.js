@@ -44,6 +44,17 @@ describe("SchemaField labels and hints", () => {
     expect(wrapper.get(".field-hint__popover").text()).toContain("font: component");
   });
 
+  it("uses the schema-namespaced hint when a schemaId is given", async () => {
+    // `mode` means different things per schema -- number/template has its own hint
+    const generic = mountField({ key: "mode", type: "text" });
+    const scoped = mountField({ key: "mode", type: "text" }, { schemaId: "number.template" });
+    if (generic.find(".field-hint__toggle").exists()) {
+      await generic.get(".field-hint__toggle").trigger("click");
+    }
+    await scoped.get(".field-hint__toggle").trigger("click");
+    expect(scoped.get(".field-hint__popover").text()).toContain("displayed in the frontend");
+  });
+
   it("translates label and hint when the locale changes", async () => {
     await setLocale("de");
     const wrapper = mountField({ key: "default_font", type: "text" });

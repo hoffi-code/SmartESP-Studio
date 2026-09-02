@@ -1,6 +1,69 @@
 import { describe, expect, it } from "vitest";
 
-import { extractEsphomeDocs, firstSentence, mergeHints, parseLvglMdBullets } from "./seedHints";
+import {
+  collectFieldKeys,
+  collectFieldLabels,
+  extractEsphomeDocs,
+  extractScopedDocs,
+  firstSentence,
+  mergeHints,
+  mergeNs,
+  normSchemaNs,
+  parseLvglMdBullets
+} from "./seedHints";
+
+describe("normSchemaNs", () => {
+  it("turns a schema id into a key segment", () => {
+    expect(normSchemaNs("sensor.template")).toBe("sensor_template");
+    expect(normSchemaNs("general/protocols/api")).toBe("general_protocols_api");
+    expect(normSchemaNs("")).toBe("");
+  });
+});
+
+describe("extractScopedDocs", () => {
+  it("scopes config_vars docs by dotted component id and top-level key", () => {
+    const ref = {
+      sensor: {
+        schemas: { CONFIG_SCHEMA: { schema: { config_vars: { update_interval: { docs: "How often." } } } } }
+      },
+      "sensor.template": {
+        schemas: { CONFIG_SCHEMA: { schema: { config_vars: { lambda: { docs: "Return the value." } } } } }
+      }
+    };
+    const { scoped } = extractScopedDocs(ref);
+    expect(scoped.sensor.update_interval).toBe("How often.");
+    expect(scoped["sensor.template"].lambda).toBe("Return the value.");
+    // structural keys are never component ids
+    expect(scoped.schemas).toBeUndefined();
+  });
+});
+
+describe("collectFieldKeys / collectFieldLabels", () => {
+  const schema = {
+    fields: [
+      { key: "id", type: "id", label: "The ID" },
+      { key: "file", type: "object", fields: [{ key: "type" }, { key: "path" }] },
+      { key: "rows", type: "list", item: { fields: [{ key: "text" }] } }
+    ]
+  };
+  it("walks nested object and list-item fields", () => {
+    expect([...collectFieldKeys(schema)].sort()).toEqual(["file", "id", "path", "rows", "text", "type"]);
+  });
+  it("collects only real field labels", () => {
+    expect(collectFieldLabels(schema)).toEqual({ id: "The ID" });
+  });
+});
+
+describe("mergeNs", () => {
+  it("merges by <ns>.<key>, keeps existing hints, records blank suppressions", () => {
+    const existing = { spi: { mode: { hint: "hand" } } };
+    const incoming = { spi: { mode: { hint: "seeded" }, type: { hint: "" } }, lvgl: { x: { label: "X" } } };
+    const { ns } = mergeNs(existing, incoming);
+    expect(ns.spi.mode.hint).toBe("hand");
+    expect(ns.spi.type).toEqual({ hint: "" });
+    expect(ns.lvgl.x).toEqual({ label: "X" });
+  });
+});
 
 describe("firstSentence", () => {
   it("strips markdown links, bold and a leading type annotation, keeps one sentence", () => {
