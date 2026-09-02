@@ -105,7 +105,7 @@ describe("LvglCanvas", () => {
     expect(w.get(".lvgl-w--line polyline").attributes("points").split(" ")).toHaveLength(3);
   });
 
-  it("draws a meter's ticks, needle and arc from scales[0]", () => {
+  it("draws each meter scale with ticks, major-tick labels, needle and arc", () => {
     const p = {
       id: "p",
       widgets: [
@@ -118,11 +118,16 @@ describe("LvglCanvas", () => {
               {
                 range_from: 0,
                 range_to: 100,
-                ticks: { count: 6 },
+                ticks: { count: 6, major: { stride: 5 } },
                 indicators: [
                   { line: { value: 40, color: "0xFF0000" } },
                   { arc: { start_value: 60, end_value: 100, color: "0x00FF00" } }
                 ]
+              },
+              {
+                range_from: 0,
+                range_to: 10,
+                ticks: { count: 3 }
               }
             ]
           },
@@ -132,8 +137,11 @@ describe("LvglCanvas", () => {
     };
     const w = mount(LvglCanvas, { props: { page: p, canvasWidth: 200, canvasHeight: 200 } });
     const svg = w.get(".lvgl-w--meter svg");
-    // 6 scale ticks
-    expect(svg.findAll("g line")).toHaveLength(6);
+    // 6 + 3 scale ticks across the two scales
+    expect(svg.findAll("line[stroke-width]")).toHaveLength(6 + 3 + 1); // + the needle
+    // major ticks at i=0 and i=5 -> labels "0" and "100"
+    const labels = svg.findAll("text.lvgl-canvas__meter-label").map((n) => n.text());
+    expect(labels).toEqual(["0", "100"]);
     // one needle for the line indicator (red)
     expect(svg.findAll("line").some((l) => /#ff0000/i.test(l.attributes("stroke") || ""))).toBe(true);
     // one coloured arc for the arc indicator (green)

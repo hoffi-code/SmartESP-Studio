@@ -204,6 +204,11 @@ markiert.
   über die flachen Props gelegt, sobald das Widget im entsprechenden Zustand ist
   (`state.checked`/`state.disabled`). Die reinen Interaktionszustände
   (`pressed`/`focused`/`hovered`/`edited`/`scrolled`) bleiben unberücksichtigt.
+- **LVGL Canvas: Meter-Ticks im Detail** – die Vorschau zeichnet jetzt jede
+  `scale` (nicht nur die erste), unterscheidet normale und Major-Ticks
+  (`ticks.major.stride`) mit eigener Länge/Breite/Farbe und beschriftet die
+  Major-Ticks mit dem Skalenwert. `ticks.color`/`length` und die
+  Indikator-Linienbreite fließen ein.
 - **LVGL Canvas: Verläufe, Schatten, `label.long_mode`** – `bg_grad_color` /
   `bg_grad_dir` rendern als CSS-Verlauf, `shadow_width` (+ Offset/Spread/Farbe)
   als `box-shadow`. Label mit `long_mode: WRAP` bricht mehrzeilig um,
