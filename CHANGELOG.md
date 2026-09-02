@@ -8,6 +8,14 @@ markiert.
 
 ## [Unreleased]
 
+### Added
+
+- **Lambda-Felder mit Syntax-Highlight und Kurz-Check** – C++-Lambdas (und die
+  YAML-Textfelder) laufen nicht mehr als nackte Textarea, sondern über ein
+  `hljs`-Overlay mit synchronisiertem Scroll. Darunter listet ein
+  nicht-blockierender Check unbalancierte Klammern/Anführungszeichen und
+  `id(...)`-Referenzen, für die es in der Konfiguration keine Komponente gibt.
+
 ## [0.3.0] – 2026-09-02
 
 ### Added
