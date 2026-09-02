@@ -10,6 +10,7 @@
     "lvgl": "LVGL"
   },
   "comment": {
+    "barLabel": "Comment:",
     "modalTitleDefault": "Comment",
     "componentTitle": "Comment – {domain}:",
     "headerTitle": "File header comment",
