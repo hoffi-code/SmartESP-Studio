@@ -151,6 +151,11 @@
             />
           </span>
 
+          <!-- canvas: runtime-drawn, show a hatched placeholder + buffer size -->
+          <span v-else-if="entry.render.kind === 'canvas'" class="lvgl-canvas__canvas">
+            <span class="lvgl-canvas__canvas-dims">{{ entry.render.dims }}</span>
+          </span>
+
           <!-- meter: one gauge per scale, ticks/needles/arcs from the schema -->
           <svg v-else-if="entry.render.kind === 'meter'" class="lvgl-canvas__meter" viewBox="0 0 48 48">
             <g v-for="(sc, si) in entry.render.scales" :key="si">
@@ -485,16 +490,22 @@ const render = (entry) => {
       qrLight: mono.value ? "transparent" : lvglColorToCss(p.light_color) || "#ffffff"
     };
   }
-  if (t === "image" || t === "animimg" || t === "canvas") {
+  if (t === "canvas") {
+    // A canvas is drawn at runtime via lambda -- nothing to render statically.
+    // Show its buffer size so the placeholder is still informative.
+    return {
+      kind: "canvas",
+      dims: `${Math.round(entry.box.w)}×${Math.round(entry.box.h)}`
+    };
+  }
+  if (t === "image" || t === "animimg") {
     // ESPHome image angle = degrees; zoom = 256 -> 1x.
     const angle = num(p.angle, 0);
     const zoom = num(p.zoom, 256) / 256;
     const parts = [];
     if (angle) parts.push(`rotate(${angle}deg)`);
     if (zoom && zoom !== 1) parts.push(`scale(${zoom})`);
-    // Render the real bitmap for image/animimg when their src resolves; canvas has
-    // no static content, so it stays a placeholder.
-    const url = t !== "canvas" && typeof imageResolver === "function" ? imageResolver(p.src) : "";
+    const url = typeof imageResolver === "function" ? imageResolver(p.src) : "";
     return {
       kind: "image",
       qr: false,
@@ -854,6 +865,7 @@ const onDragEnd = (event) => {
 .lvgl-canvas.is-mono .lvgl-w--grid,
 .lvgl-canvas.is-mono .lvgl-w--btnmatrix,
 .lvgl-canvas.is-mono .lvgl-w--image,
+.lvgl-canvas.is-mono .lvgl-w--canvas,
 .lvgl-canvas.is-mono .lvgl-w--dropdown,
 .lvgl-canvas.is-mono .lvgl-w--roller,
 .lvgl-canvas.is-mono .lvgl-w--field,
@@ -967,6 +979,7 @@ const onDragEnd = (event) => {
 .lvgl-w--grid,
 .lvgl-w--btnmatrix,
 .lvgl-w--image,
+.lvgl-w--canvas,
 .lvgl-w--dropdown,
 .lvgl-w--roller,
 .lvgl-w--field {
@@ -974,6 +987,25 @@ const onDragEnd = (event) => {
   border-radius: 4px;
   background: #fff;
   overflow: hidden;
+}
+
+/* canvas: runtime-drawn buffer -> diagonal hatch + size label */
+.lvgl-canvas__canvas {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background:
+    repeating-linear-gradient(45deg, transparent 0 5px, rgba(0, 0, 0, 0.06) 5px 6px);
+}
+
+.lvgl-canvas__canvas-dims {
+  font-size: 9px;
+  color: #6b6b74;
+  background: rgba(255, 255, 255, 0.75);
+  padding: 0 3px;
+  border-radius: 2px;
 }
 
 .lvgl-canvas__widget.is-managed.lvgl-w--box {

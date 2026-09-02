@@ -215,6 +215,10 @@ markiert.
   Innenabstände (`pad_left`/`pad_top`/… bzw. `pad_all`) und der Zeilen-/
   Spaltenabstand (`pad_row`/`pad_column`); Grid-Container ordnen ihre Kinder
   zeilenweise nach `grid_columns` an.
+- **LVGL Canvas: `canvas`-Widget als Platzhalter** – das `canvas`-Widget wird
+  zur Laufzeit per Lambda bemalt und hat keinen statischen Inhalt; die Vorschau
+  zeigt jetzt eine schraffierte Fläche mit der Puffergröße statt des
+  Bild-Platzhalters.
 - **LVGL Canvas: Verläufe, Schatten, `label.long_mode`** – `bg_grad_color` /
   `bg_grad_dir` rendern als CSS-Verlauf, `shadow_width` (+ Offset/Spread/Farbe)
   als `box-shadow`. Label mit `long_mode: WRAP` bricht mehrzeilig um,

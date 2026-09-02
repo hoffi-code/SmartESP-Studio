@@ -251,6 +251,16 @@ describe("LvglCanvas", () => {
     expect(w2.find(".lvgl-w--image svg").exists()).toBe(true);
   });
 
+  it("renders a canvas widget as a sized placeholder, not an image glyph", () => {
+    const p = {
+      id: "p",
+      widgets: [{ uiId: "cv", type: "canvas", common: { x: 0, y: 0, width: 80, height: 40 }, props: {}, children: [] }]
+    };
+    const w = mount(LvglCanvas, { props: { page: p, canvasWidth: 200, canvasHeight: 200 } });
+    expect(w.find(".lvgl-w--image").exists()).toBe(false);
+    expect(w.get(".lvgl-w--canvas .lvgl-canvas__canvas-dims").text()).toBe("80×40");
+  });
+
   it("drops hidden widgets and honours opa / text_align / line and arc widths", () => {
     const p = {
       id: "p",
