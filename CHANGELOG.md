@@ -8,6 +8,8 @@ markiert.
 
 ## [Unreleased]
 
+## [0.3.0] – 2026-09-02
+
 ### Added
 
 - **LVGL `theme:` strukturiert editierbar** – im LVGL-Settings-Panel statt eines

@@ -1,4 +1,4 @@
-# SmartESP Studio v0.2.0
+# SmartESP Studio v0.3.0
 <a href="https://buymeacoffee.com/smartcodestudio" target="_blank">
 <img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee">
 </a>
