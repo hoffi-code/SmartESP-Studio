@@ -199,6 +199,30 @@ markiert.
   Punkt statt immer bei 0. Switch kippt bei `height > width` in die vertikale
   Orientierung. `image_recolor` färbt das Bild-Glyph ein. `state.disabled`
   blendet das Widget in der Vorschau aus.
+- **LVGL Canvas: State-Style-Blöcke** – ein `checked:`- bzw. `disabled:`-
+  Style-Block (Hintergrund, Rahmen, Radius, Textfarbe …) wird in der Vorschau
+  über die flachen Props gelegt, sobald das Widget im entsprechenden Zustand ist
+  (`state.checked`/`state.disabled`). Die reinen Interaktionszustände
+  (`pressed`/`focused`/`hovered`/`edited`/`scrolled`) bleiben unberücksichtigt.
+- **LVGL Canvas: Meter-Ticks im Detail** – die Vorschau zeichnet jetzt jede
+  `scale` (nicht nur die erste), unterscheidet normale und Major-Ticks
+  (`ticks.major.stride`) mit eigener Länge/Breite/Farbe und beschriftet die
+  Major-Ticks mit dem Skalenwert. `ticks.color`/`length` und die
+  Indikator-Linienbreite fließen ein.
+- **LVGL Canvas: Flex/Grid näher an LVGL** – der Layout-Fallback für
+  Flex/Grid-Container stapelte Kinder immer vertikal mit festem Abstand. Jetzt
+  wirken `flex_flow` (Richtung `ROW`/`COLUMN`, `*_WRAP` bricht um), die
+  Innenabstände (`pad_left`/`pad_top`/… bzw. `pad_all`) und der Zeilen-/
+  Spaltenabstand (`pad_row`/`pad_column`); Grid-Container ordnen ihre Kinder
+  zeilenweise nach `grid_columns` an.
+- **LVGL Canvas: `canvas`-Widget als Platzhalter** – das `canvas`-Widget wird
+  zur Laufzeit per Lambda bemalt und hat keinen statischen Inhalt; die Vorschau
+  zeigt jetzt eine schraffierte Fläche mit der Puffergröße statt des
+  Bild-Platzhalters.
+- **LVGL Canvas: echter QR-Code** – das `qrcode`-Widget zeigt in der Vorschau
+  die echte QR-Matrix aus seinem `text` (neue Abhängigkeit `qrcode-generator`),
+  eingefärbt nach `dark_color`/`light_color`. Ohne Text bleibt ein neutraler
+  Platzhalter.
 - **LVGL Canvas: Verläufe, Schatten, `label.long_mode`** – `bg_grad_color` /
   `bg_grad_dir` rendern als CSS-Verlauf, `shadow_width` (+ Offset/Spread/Farbe)
   als `box-shadow`. Label mit `long_mode: WRAP` bricht mehrzeilig um,

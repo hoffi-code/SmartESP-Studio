@@ -143,50 +143,78 @@
               alt=""
               draggable="false"
             />
-            <svg v-else-if="!entry.render.qr" viewBox="0 0 24 24"><path d="M3 5h18v14H3z" fill="none" /><circle cx="8" cy="10" r="2" /><path d="M4 18l5-5 3 3 4-4 4 4v2H4z" /></svg>
+            <svg v-else viewBox="0 0 24 24"><path d="M3 5h18v14H3z" fill="none" /><circle cx="8" cy="10" r="2" /><path d="M4 18l5-5 3 3 4-4 4 4v2H4z" /></svg>
+          </span>
+
+          <!-- QR code: real matrix from the widget text, else a neutral placeholder -->
+          <span v-else-if="entry.render.kind === 'qr'" class="lvgl-canvas__image">
+            <svg
+              v-if="entry.render.count"
+              class="lvgl-canvas__qr-svg"
+              :viewBox="`0 0 ${entry.render.count} ${entry.render.count}`"
+              shape-rendering="crispEdges"
+            >
+              <rect width="100%" height="100%" :fill="entry.render.light" />
+              <path :d="entry.render.path" :fill="entry.render.dark" />
+            </svg>
             <span
               v-else
               class="lvgl-canvas__qr"
-              :style="{ '--qr-dark': entry.render.qrDark, '--qr-light': entry.render.qrLight }"
+              :style="{ '--qr-dark': entry.render.dark, '--qr-light': entry.render.light }"
             />
           </span>
 
-          <!-- meter: gauge driven by scales[0] -->
+          <!-- canvas: runtime-drawn, show a hatched placeholder + buffer size -->
+          <span v-else-if="entry.render.kind === 'canvas'" class="lvgl-canvas__canvas">
+            <span class="lvgl-canvas__canvas-dims">{{ entry.render.dims }}</span>
+          </span>
+
+          <!-- meter: one gauge per scale, ticks/needles/arcs from the schema -->
           <svg v-else-if="entry.render.kind === 'meter'" class="lvgl-canvas__meter" viewBox="0 0 48 48">
-            <path :d="entry.render.path" :stroke="entry.render.trackColor" stroke-width="3" fill="none" />
-            <path
-              v-for="(a, ai) in entry.render.arcs"
-              :key="`a${ai}`"
-              :d="entry.render.path"
-              :stroke="a.color"
-              stroke-width="3"
-              fill="none"
-              stroke-linecap="butt"
-              :stroke-dasharray="entry.render.len"
-              :stroke-dashoffset="entry.render.len * (1 - (a.to - a.from))"
-              :style="{ transform: `rotate(${entry.render.sweep * a.from}deg)`, transformOrigin: '24px 24px' }"
-            />
-            <g :stroke="entry.render.tickColor" stroke-width="1.2">
+            <g v-for="(sc, si) in entry.render.scales" :key="si">
+              <path :d="sc.path" :stroke="entry.render.trackColor" stroke-width="3" fill="none" />
+              <path
+                v-for="(a, ai) in sc.arcs"
+                :key="`a${ai}`"
+                :d="sc.path"
+                :stroke="a.color"
+                stroke-width="3"
+                fill="none"
+                stroke-linecap="butt"
+                :stroke-dasharray="sc.len"
+                :stroke-dashoffset="sc.len * (1 - (a.to - a.from))"
+                :style="{ transform: `rotate(${sc.sweep * a.from}deg)`, transformOrigin: '24px 24px' }"
+              />
               <line
-                v-for="t in entry.render.ticks"
-                :key="t.i"
-                :x1="t.x1"
-                :y1="t.y1"
-                :x2="t.x2"
-                :y2="t.y2"
+                v-for="tk in sc.ticks"
+                :key="`t${tk.i}`"
+                :x1="tk.x1"
+                :y1="tk.y1"
+                :x2="tk.x2"
+                :y2="tk.y2"
+                :stroke="tk.color"
+                :stroke-width="tk.width"
+              />
+              <text
+                v-for="tk in sc.ticks.filter((x) => x.label)"
+                :key="`l${tk.i}`"
+                :x="tk.lx"
+                :y="tk.ly"
+                class="lvgl-canvas__meter-label"
+                :fill="entry.render.labelColor"
+              >{{ tk.label }}</text>
+              <line
+                v-for="(n, ni) in sc.needles"
+                :key="`n${ni}`"
+                x1="24"
+                y1="24"
+                :x2="n.tip.x"
+                :y2="n.tip.y"
+                :stroke="n.color"
+                :stroke-width="n.width"
+                stroke-linecap="round"
               />
             </g>
-            <line
-              v-for="(n, ni) in entry.render.needles"
-              :key="`n${ni}`"
-              x1="24"
-              y1="24"
-              :x2="n.tip.x"
-              :y2="n.tip.y"
-              :stroke="n.color"
-              stroke-width="2"
-              stroke-linecap="round"
-            />
             <circle cx="24" cy="24" r="2.5" :fill="THEME.primary" />
           </svg>
 
@@ -237,6 +265,7 @@
 <script setup>
 import { ref, computed, inject } from "vue";
 import { useI18n } from "vue-i18n";
+import qrcode from "qrcode-generator";
 import { resolveLvglPageLayout, lvglColorToCss, lvglFontPx } from "../../utils/lvglLayout";
 
 const { t } = useI18n();
@@ -364,7 +393,7 @@ const fillRatio = (p) => pctOf(p, num(p.value, num(p.min_value, 0)));
 
 // Descriptor per widget: kind + the pieces the template needs.
 const render = (entry) => {
-  const p = entry.node.props || {};
+  const p = effectiveProps(entry.node);
   const t = entry.type;
   const theme = THEME.value;
 
@@ -468,66 +497,96 @@ const render = (entry) => {
   }
   if (t === "led") return { kind: "led", color: colour(p, "color", colour(p, "bg_color", theme.led)) };
   if (t === "qrcode") {
+    const { count, path } = qrMatrix(String(p.text ?? "").trim());
     return {
-      kind: "image",
-      qr: true,
-      qrDark: mono.value ? theme.primary : lvglColorToCss(p.dark_color) || "#1e293b",
-      qrLight: mono.value ? "transparent" : lvglColorToCss(p.light_color) || "#ffffff"
+      kind: "qr",
+      count,
+      path,
+      dark: mono.value ? theme.primary : lvglColorToCss(p.dark_color) || "#1e293b",
+      light: mono.value ? "transparent" : lvglColorToCss(p.light_color) || "#ffffff"
     };
   }
-  if (t === "image" || t === "animimg" || t === "canvas") {
+  if (t === "canvas") {
+    // A canvas is drawn at runtime via lambda -- nothing to render statically.
+    // Show its buffer size so the placeholder is still informative.
+    return {
+      kind: "canvas",
+      dims: `${Math.round(entry.box.w)}×${Math.round(entry.box.h)}`
+    };
+  }
+  if (t === "image" || t === "animimg") {
     // ESPHome image angle = degrees; zoom = 256 -> 1x.
     const angle = num(p.angle, 0);
     const zoom = num(p.zoom, 256) / 256;
     const parts = [];
     if (angle) parts.push(`rotate(${angle}deg)`);
     if (zoom && zoom !== 1) parts.push(`scale(${zoom})`);
-    // Render the real bitmap for image/animimg when their src resolves; canvas has
-    // no static content, so it stays a placeholder.
-    const url = t !== "canvas" && typeof imageResolver === "function" ? imageResolver(p.src) : "";
+    const url = typeof imageResolver === "function" ? imageResolver(p.src) : "";
     return {
       kind: "image",
-      qr: false,
       url: url || "",
       transform: parts.join(" "),
       recolor: lvglColorToCss(p.image_recolor)
     };
   }
   if (t === "meter") {
-    const s = (Array.isArray(p.scales) ? p.scales : [])[0] || {};
-    const from = num(s.range_from, 0);
-    const to = num(s.range_to, 100);
-    const span = to - from || 1;
-    const sweep = num(s.angle_range, 270);
-    // LVGL centres a partial range on the bottom gap unless rotation is given.
-    const start = s.rotation !== undefined && s.rotation !== ""
-      ? num(s.rotation, 0)
-      : 90 + (360 - sweep) / 2;
     const clamp = (v) => Math.max(0, Math.min(1, v));
-    const needles = [];
-    const arcs = [];
-    for (const ind of Array.isArray(s.indicators) ? s.indicators : []) {
-      if (ind?.line && ind.line.value !== undefined) {
-        const frac = clamp((num(ind.line.value, from) - from) / span);
-        needles.push({ tip: arcPointAt(start, sweep, frac), color: colour(ind.line, "color", theme.primary) });
-      } else if (ind?.arc) {
-        const sv = num(ind.arc.start_value, from);
-        const ev = num(ind.arc.end_value ?? ind.arc.value, to);
-        arcs.push({ from: clamp((sv - from) / span), to: clamp((ev - from) / span), color: colour(ind.arc, "color", theme.primary) });
+    const scaleList = Array.isArray(p.scales) && p.scales.length ? p.scales : [{}];
+    const scales = scaleList.map((s) => {
+      const from = num(s.range_from, 0);
+      const to = num(s.range_to, 100);
+      const span = to - from || 1;
+      const sweep = num(s.angle_range, 270);
+      // LVGL centres a partial range on the bottom gap unless rotation is given.
+      const start = s.rotation !== undefined && s.rotation !== ""
+        ? num(s.rotation, 0)
+        : 90 + (360 - sweep) / 2;
+      const needles = [];
+      const arcs = [];
+      for (const ind of Array.isArray(s.indicators) ? s.indicators : []) {
+        if (ind?.line && ind.line.value !== undefined) {
+          const frac = clamp((num(ind.line.value, from) - from) / span);
+          needles.push({
+            tip: arcPointAt(start, sweep, frac),
+            color: colour(ind.line, "color", theme.primary),
+            width: Math.max(1, num(ind.line.width, 4) / 2)
+          });
+        } else if (ind?.arc) {
+          const sv = num(ind.arc.start_value, from);
+          const ev = num(ind.arc.end_value ?? ind.arc.value, to);
+          arcs.push({ from: clamp((sv - from) / span), to: clamp((ev - from) / span), color: colour(ind.arc, "color", theme.primary) });
+        }
       }
+      const tk = s.ticks || {};
+      const count = Math.max(2, Math.min(40, Math.round(num(tk.count, 12))));
+      return {
+        start,
+        sweep,
+        path: arcPath(start, sweep),
+        len: arcLen(sweep),
+        needles,
+        arcs,
+        ticks: meterTicks(count, start, sweep, {
+          from,
+          span,
+          stride: Math.max(0, Math.round(num(tk.major?.stride, 0))),
+          color: mono.value ? theme.border : lvglColorToCss(tk.color) || "#9a9aa5",
+          majorColor: mono.value ? theme.border : lvglColorToCss(tk.major?.color) || "#5b5b66",
+          length: num(tk.length, 10),
+          majorLength: num(tk.major?.length, 14),
+          labelGap: num(tk.major?.label_gap, 4)
+        })
+      };
+    });
+    if (!scales.some((sc) => sc.needles.length || sc.arcs.length)) {
+      const sc = scales[0];
+      sc.needles.push({ tip: arcPointAt(sc.start, sc.sweep, 0.62), color: theme.primary, width: 2 });
     }
-    if (!needles.length && !arcs.length) needles.push({ tip: arcPointAt(start, sweep, 0.62), color: theme.primary });
-    const tickCount = Math.max(2, Math.min(40, Math.round(num(s.ticks?.count, 12))));
     return {
       kind: "meter",
-      sweep,
-      path: arcPath(start, sweep),
-      len: arcLen(sweep),
-      ticks: meterTicks(tickCount, start, sweep),
-      needles,
-      arcs,
+      scales,
       trackColor: mono.value ? theme.border : "#c8c8cf",
-      tickColor: mono.value ? theme.border : "#9a9aa5"
+      labelColor: mono.value ? theme.border : "#5b5b66"
     };
   }
   if (t === "tabview" || t === "tileview") {
@@ -572,6 +631,32 @@ const linePolyline = (points) => {
   return points.map((p) => `${(((p.x - minX) / w) * 100).toFixed(1)},${(((p.y - minY) / h) * 100).toFixed(1)}`).join(" ");
 };
 
+// Real QR matrix for the qrcode widget's text. Cached because render() runs per
+// widget on every layout change and the text set in a preview is tiny.
+const qrCache = new Map();
+const qrMatrix = (text) => {
+  if (!text) return { count: 0, path: "" };
+  if (qrCache.has(text)) return qrCache.get(text);
+  let result = { count: 0, path: "" };
+  try {
+    const qr = qrcode(0, "M");
+    qr.addData(text);
+    qr.make();
+    const count = qr.getModuleCount();
+    let path = "";
+    for (let r = 0; r < count; r += 1) {
+      for (let c = 0; c < count; c += 1) {
+        if (qr.isDark(r, c)) path += `M${c} ${r}h1v1h-1z`;
+      }
+    }
+    result = { count, path };
+  } catch {
+    // qrcode-generator throws when the data exceeds the largest QR version
+  }
+  qrCache.set(text, result);
+  return result;
+};
+
 const isTruthy = (v) => v === true || v === "true" || v === "on" || v === 1 || v === "1";
 
 // ESPHome sets a widget's initial on/off through `state: { checked: true }`;
@@ -582,8 +667,28 @@ const initialChecked = (p) => {
   return isTruthy(s ?? p.checked);
 };
 
+const initialDisabled = (p) => {
+  const s = p.state;
+  if (s && typeof s === "object") return isTruthy(s.disabled);
+  // a scalar `disabled: true` counts; an object `disabled:` is a style block, not a state
+  return p.disabled === true || p.disabled === "true";
+};
+
+// D #10 gives each widget optional per-state style blocks (checked/pressed/
+// focused/disabled/edited/hovered/scrolled). A static preview can only reflect
+// the non-transient ones: `checked` (has an initial value via state:) and
+// `disabled`. The rest are interaction feedback and stay unrendered. Returns the
+// flat props with the active state block(s) merged on top.
+const effectiveProps = (node) => {
+  const p = node?.props || {};
+  const layers = [];
+  if (initialChecked(p) && p.checked && typeof p.checked === "object") layers.push(p.checked);
+  if (initialDisabled(p) && p.disabled && typeof p.disabled === "object") layers.push(p.disabled);
+  return layers.length ? Object.assign({}, p, ...layers) : p;
+};
+
 const boxStyle = (entry) => {
-  const p = entry.node.props || {};
+  const p = effectiveProps(entry.node);
   const isMono = mono.value;
   const style = {
     left: `${entry.box.x * zoom.value}px`,
@@ -641,7 +746,7 @@ const decorated = computed(() =>
     ...entry,
     render: render(entry),
     boxStyle: boxStyle(entry),
-    disabled: isTruthy(entry.node?.props?.state?.disabled),
+    disabled: initialDisabled(entry.node?.props || {}),
     layoutBadge: entry.node?.props?.layout?.type === "GRID" ? "grid" : "flex"
   }))
 );
@@ -666,13 +771,48 @@ const arcPath = (start, sweep) => {
 const arcLen = (sweep) => (2 * Math.PI * ARC_R * clampSweep(sweep)) / 360;
 const arcPointAt = (start, sweep, frac) => polar(start + sweep * frac);
 
-const meterTicks = (count, start, sweep) => {
+// Ticks around the meter's arc. `stride > 0` marks every Nth tick as major:
+// longer, thicker, its own colour, and labelled with the scale value there.
+// Tick lengths in the schema are device px; the 48-unit viewBox needs them
+// scaled well down.
+const meterTicks = (count, start, sweep, opts = {}) => {
   const n = Math.max(2, count);
+  const {
+    from = 0,
+    span = 100,
+    stride = 0,
+    color = "#9a9aa5",
+    majorColor = "#5b5b66",
+    length = 10,
+    majorLength = 14,
+    labelGap = 4
+  } = opts;
+  const vb = (px) => Math.max(2, Math.min(10, px / 2));
   return Array.from({ length: n }, (_, i) => {
+    const isMajor = stride > 0 && i % stride === 0;
     const deg = start + (sweep * i) / (n - 1);
     const rad = (deg * Math.PI) / 180;
-    const outer = polar(deg);
-    return { i, x1: 24 + (ARC_R - 3) * Math.cos(rad), y1: 24 + (ARC_R - 3) * Math.sin(rad), x2: outer.x, y2: outer.y };
+    const cos = Math.cos(rad);
+    const sin = Math.sin(rad);
+    const inner = ARC_R - vb(isMajor ? majorLength : length);
+    const tick = {
+      i,
+      x1: 24 + inner * cos,
+      y1: 24 + inner * sin,
+      x2: 24 + ARC_R * cos,
+      y2: 24 + ARC_R * sin,
+      major: isMajor,
+      width: isMajor ? 1.6 : 1,
+      color: isMajor ? majorColor : color,
+      label: ""
+    };
+    if (isMajor) {
+      const lr = inner - Math.max(2, vb(labelGap));
+      tick.lx = 24 + lr * cos;
+      tick.ly = 24 + lr * sin + 1;
+      tick.label = String(Math.round(from + (span * i) / (n - 1)));
+    }
+    return tick;
   });
 };
 
@@ -766,6 +906,8 @@ const onDragEnd = (event) => {
 .lvgl-canvas.is-mono .lvgl-w--grid,
 .lvgl-canvas.is-mono .lvgl-w--btnmatrix,
 .lvgl-canvas.is-mono .lvgl-w--image,
+.lvgl-canvas.is-mono .lvgl-w--qr,
+.lvgl-canvas.is-mono .lvgl-w--canvas,
 .lvgl-canvas.is-mono .lvgl-w--dropdown,
 .lvgl-canvas.is-mono .lvgl-w--roller,
 .lvgl-canvas.is-mono .lvgl-w--field,
@@ -879,6 +1021,8 @@ const onDragEnd = (event) => {
 .lvgl-w--grid,
 .lvgl-w--btnmatrix,
 .lvgl-w--image,
+.lvgl-w--qr,
+.lvgl-w--canvas,
 .lvgl-w--dropdown,
 .lvgl-w--roller,
 .lvgl-w--field {
@@ -886,6 +1030,25 @@ const onDragEnd = (event) => {
   border-radius: 4px;
   background: #fff;
   overflow: hidden;
+}
+
+/* canvas: runtime-drawn buffer -> diagonal hatch + size label */
+.lvgl-canvas__canvas {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background:
+    repeating-linear-gradient(45deg, transparent 0 5px, rgba(0, 0, 0, 0.06) 5px 6px);
+}
+
+.lvgl-canvas__canvas-dims {
+  font-size: 9px;
+  color: #6b6b74;
+  background: rgba(255, 255, 255, 0.75);
+  padding: 0 3px;
+  border-radius: 2px;
 }
 
 .lvgl-canvas__widget.is-managed.lvgl-w--box {
@@ -1083,6 +1246,12 @@ const onDragEnd = (event) => {
   height: 100%;
 }
 
+.lvgl-canvas__meter-label {
+  font-size: 3px;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
 /* dropdown */
 .lvgl-canvas__dropdown {
   display: flex;
@@ -1185,6 +1354,11 @@ const onDragEnd = (event) => {
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+
+.lvgl-canvas__qr-svg {
+  width: 82%;
+  height: 82%;
 }
 
 .lvgl-canvas__qr {

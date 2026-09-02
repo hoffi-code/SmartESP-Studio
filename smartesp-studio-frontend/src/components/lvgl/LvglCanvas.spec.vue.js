@@ -105,7 +105,7 @@ describe("LvglCanvas", () => {
     expect(w.get(".lvgl-w--line polyline").attributes("points").split(" ")).toHaveLength(3);
   });
 
-  it("draws a meter's ticks, needle and arc from scales[0]", () => {
+  it("draws each meter scale with ticks, major-tick labels, needle and arc", () => {
     const p = {
       id: "p",
       widgets: [
@@ -118,11 +118,16 @@ describe("LvglCanvas", () => {
               {
                 range_from: 0,
                 range_to: 100,
-                ticks: { count: 6 },
+                ticks: { count: 6, major: { stride: 5 } },
                 indicators: [
                   { line: { value: 40, color: "0xFF0000" } },
                   { arc: { start_value: 60, end_value: 100, color: "0x00FF00" } }
                 ]
+              },
+              {
+                range_from: 0,
+                range_to: 10,
+                ticks: { count: 3 }
               }
             ]
           },
@@ -132,8 +137,11 @@ describe("LvglCanvas", () => {
     };
     const w = mount(LvglCanvas, { props: { page: p, canvasWidth: 200, canvasHeight: 200 } });
     const svg = w.get(".lvgl-w--meter svg");
-    // 6 scale ticks
-    expect(svg.findAll("g line")).toHaveLength(6);
+    // 6 + 3 scale ticks across the two scales
+    expect(svg.findAll("line[stroke-width]")).toHaveLength(6 + 3 + 1); // + the needle
+    // major ticks at i=0 and i=5 -> labels "0" and "100"
+    const labels = svg.findAll("text.lvgl-canvas__meter-label").map((n) => n.text());
+    expect(labels).toEqual(["0", "100"]);
     // one needle for the line indicator (red)
     expect(svg.findAll("line").some((l) => /#ff0000/i.test(l.attributes("stroke") || ""))).toBe(true);
     // one coloured arc for the arc indicator (green)
@@ -243,6 +251,37 @@ describe("LvglCanvas", () => {
     expect(w2.find(".lvgl-w--image svg").exists()).toBe(true);
   });
 
+  it("renders a real QR matrix from the widget text and falls back without text", () => {
+    const p = {
+      id: "p",
+      widgets: [
+        { uiId: "q1", type: "qrcode", common: { x: 0, y: 0, width: 60, height: 60 }, props: { text: "https://esphome.io", dark_color: "0x112233" }, children: [] },
+        { uiId: "q2", type: "qrcode", common: { x: 0, y: 70, width: 60, height: 60 }, props: {}, children: [] }
+      ]
+    };
+    const w = mount(LvglCanvas, { props: { page: p, canvasWidth: 200, canvasHeight: 200 } });
+    const widgets = w.findAll(".lvgl-w--qr");
+    const svg = widgets[0].get("svg.lvgl-canvas__qr-svg");
+    // a QR grid has at least 21x21 modules
+    const vb = (svg.element.getAttribute("viewBox") || "").split(" ").map(Number);
+    expect(vb[2]).toBeGreaterThanOrEqual(21);
+    expect(svg.get("path").attributes("fill")).toBe("#112233");
+    expect(svg.get("path").attributes("d").length).toBeGreaterThan(0);
+    // no text -> neutral placeholder, no matrix svg
+    expect(widgets[1].find("svg.lvgl-canvas__qr-svg").exists()).toBe(false);
+    expect(widgets[1].find(".lvgl-canvas__qr").exists()).toBe(true);
+  });
+
+  it("renders a canvas widget as a sized placeholder, not an image glyph", () => {
+    const p = {
+      id: "p",
+      widgets: [{ uiId: "cv", type: "canvas", common: { x: 0, y: 0, width: 80, height: 40 }, props: {}, children: [] }]
+    };
+    const w = mount(LvglCanvas, { props: { page: p, canvasWidth: 200, canvasHeight: 200 } });
+    expect(w.find(".lvgl-w--image").exists()).toBe(false);
+    expect(w.get(".lvgl-w--canvas .lvgl-canvas__canvas-dims").text()).toBe("80×40");
+  });
+
   it("drops hidden widgets and honours opa / text_align / line and arc widths", () => {
     const p = {
       id: "p",
@@ -264,6 +303,37 @@ describe("LvglCanvas", () => {
     expect(poly.attributes("stroke")).toBe("#00FF00");
     expect(poly.attributes("stroke-width")).toBe("5");
     expect(w.get(".lvgl-w--arc path").attributes("stroke-width")).toBe("9");
+  });
+
+  it("merges the checked/disabled state style block over the flat props", () => {
+    const p = {
+      id: "p",
+      widgets: [
+        {
+          uiId: "sw",
+          type: "switch",
+          common: { x: 0, y: 0, width: 40, height: 24 },
+          props: { state: { checked: true }, bg_color: "0x111111", checked: { bg_color: "0x00FF00" } },
+          children: []
+        },
+        {
+          uiId: "btn",
+          type: "button",
+          common: { x: 0, y: 40, width: 60, height: 24 },
+          props: { text: "X", bg_color: "0x111111", disabled: { bg_color: "0x0000FF" } },
+          children: []
+        }
+      ]
+    };
+    const w = mount(LvglCanvas, { props: { page: p, canvasWidth: 200, canvasHeight: 200 } });
+    // checked block wins over the flat bg_color
+    expect(w.get(".lvgl-w--switch").attributes("style")).toContain("background: rgb(0, 255, 0)");
+    // the disabled block only applies once the widget is actually disabled
+    expect(w.get(".lvgl-w--button").attributes("style")).toContain("background: rgb(17, 17, 17)");
+
+    p.widgets[1].props.state = { disabled: true };
+    const w2 = mount(LvglCanvas, { props: { page: p, canvasWidth: 200, canvasHeight: 200 } });
+    expect(w2.get(".lvgl-w--button").attributes("style")).toContain("background: rgb(0, 0, 255)");
   });
 
   it("flags a flex container's children as static (no drag)", () => {
