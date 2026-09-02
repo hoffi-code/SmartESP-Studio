@@ -2,41 +2,41 @@
   <div class="display-legend">
     <div class="display-inspector__row">
       <div>
-        <label for="legendNameFontSource">Name font source</label>
+        <label for="legendNameFontSource">{{ t('display.legend.nameFontSource') }}</label>
         <select
           id="legendNameFontSource"
           :value="selectedElement.legendNameFontSource || 'local'"
           @change="handleLegendNameFontSourceChange"
         >
-          <option value="local">Local</option>
-          <option value="google">Google Fonts</option>
+          <option value="local">{{ t('display.option.local') }}</option>
+          <option value="google">{{ t('display.option.googleFonts') }}</option>
         </select>
       </div>
       <div>
-        <label for="legendValueFontSource">Value font source</label>
+        <label for="legendValueFontSource">{{ t('display.legend.valueFontSource') }}</label>
         <select
           id="legendValueFontSource"
           :value="selectedElement.legendValueFontSource || 'local'"
           @change="handleLegendValueFontSourceChange"
         >
-          <option value="local">Local</option>
-          <option value="google">Google Fonts</option>
+          <option value="local">{{ t('display.option.local') }}</option>
+          <option value="google">{{ t('display.option.googleFonts') }}</option>
         </select>
       </div>
     </div>
 
     <div v-if="(selectedElement.legendNameFontSource || 'local') === 'local'" class="display-inspector__row">
       <div>
-        <label for="legendNameFontFile">Name font</label>
+        <label for="legendNameFontFile">{{ t('display.legend.nameFont') }}</label>
         <select id="legendNameFontFile" :value="selectedElement.legendNameFontFile" @change="handleLegendNameFontFileChange">
-          <option value="">Select font</option>
+          <option value="">{{ t('display.option.selectFont') }}</option>
           <option v-for="font in visibleLocalFonts" :key="font.file" :value="font.file" :title="font.file">
             {{ formatFileOptionLabel(font.file) }}
           </option>
         </select>
       </div>
       <div>
-        <label for="legendNameFontSize">Name size</label>
+        <label for="legendNameFontSize">{{ t('display.legend.nameSize') }}</label>
         <input
           id="legendNameFontSize"
           type="number"
@@ -48,16 +48,16 @@
 
     <div v-else class="display-inspector__row">
       <div>
-        <label for="legendNameFontFamily">Name family</label>
+        <label for="legendNameFontFamily">{{ t('display.legend.nameFamily') }}</label>
         <select id="legendNameFontFamily" :value="selectedElement.legendNameFontFamily" @change="handleLegendNameFontFamilyChange">
-          <option value="">Select family</option>
+          <option value="">{{ t('display.option.selectFamily') }}</option>
           <option v-for="font in googleFonts" :key="font.family" :value="font.family">
             {{ font.family }}
           </option>
         </select>
       </div>
       <div>
-        <label for="legendNameFontVariant">Variant</label>
+        <label for="legendNameFontVariant">{{ t('display.field.variant') }}</label>
         <select id="legendNameFontVariant" :value="selectedElement.legendNameFontVariant || 'regular'" @change="handleLegendNameFontVariantChange">
           <option
             v-for="variant in googleFonts.find((item) => item.family === selectedElement.legendNameFontFamily)?.variants || []"
@@ -69,7 +69,7 @@
         </select>
       </div>
       <div>
-        <label for="legendNameFontSizeGoogle">Name size</label>
+        <label for="legendNameFontSizeGoogle">{{ t('display.legend.nameSize') }}</label>
         <input
           id="legendNameFontSizeGoogle"
           type="number"
@@ -81,16 +81,16 @@
 
     <div v-if="(selectedElement.legendValueFontSource || 'local') === 'local'" class="display-inspector__row">
       <div>
-        <label for="legendValueFontFile">Value font</label>
+        <label for="legendValueFontFile">{{ t('display.legend.valueFont') }}</label>
         <select id="legendValueFontFile" :value="selectedElement.legendValueFontFile" @change="handleLegendValueFontFileChange">
-          <option value="">Select font</option>
+          <option value="">{{ t('display.option.selectFont') }}</option>
           <option v-for="font in visibleLocalFonts" :key="font.file" :value="font.file" :title="font.file">
             {{ formatFileOptionLabel(font.file) }}
           </option>
         </select>
       </div>
       <div>
-        <label for="legendValueFontSize">Value size</label>
+        <label for="legendValueFontSize">{{ t('display.legend.valueSize') }}</label>
         <input
           id="legendValueFontSize"
           type="number"
@@ -102,16 +102,16 @@
 
     <div v-else class="display-inspector__row">
       <div>
-        <label for="legendValueFontFamily">Value family</label>
+        <label for="legendValueFontFamily">{{ t('display.legend.valueFamily') }}</label>
         <select id="legendValueFontFamily" :value="selectedElement.legendValueFontFamily" @change="handleLegendValueFontFamilyChange">
-          <option value="">Select family</option>
+          <option value="">{{ t('display.option.selectFamily') }}</option>
           <option v-for="font in googleFonts" :key="font.family" :value="font.family">
             {{ font.family }}
           </option>
         </select>
       </div>
       <div>
-        <label for="legendValueFontVariant">Variant</label>
+        <label for="legendValueFontVariant">{{ t('display.field.variant') }}</label>
         <select id="legendValueFontVariant" :value="selectedElement.legendValueFontVariant || 'regular'" @change="handleLegendValueFontVariantChange">
           <option
             v-for="variant in googleFonts.find((item) => item.family === selectedElement.legendValueFontFamily)?.variants || []"
@@ -123,7 +123,7 @@
         </select>
       </div>
       <div>
-        <label for="legendValueFontSizeGoogle">Value size</label>
+        <label for="legendValueFontSizeGoogle">{{ t('display.legend.valueSize') }}</label>
         <input
           id="legendValueFontSizeGoogle"
           type="number"
@@ -135,7 +135,7 @@
 
     <div class="display-inspector__row">
       <div>
-        <label for="legendWidth">Legend width</label>
+        <label for="legendWidth">{{ t('display.legend.width') }}</label>
         <input
           id="legendWidth"
           type="number"
@@ -145,7 +145,7 @@
         />
       </div>
       <div>
-        <label for="legendHeight">Legend height</label>
+        <label for="legendHeight">{{ t('display.legend.height') }}</label>
         <input
           id="legendHeight"
           type="number"
@@ -158,7 +158,7 @@
 
     <div class="display-inspector__row">
       <div>
-        <label for="legendBorder">Legend border</label>
+        <label for="legendBorder">{{ t('display.legend.border') }}</label>
         <input
           id="legendBorder"
           type="checkbox"
@@ -168,7 +168,7 @@
         />
       </div>
       <div>
-        <label for="legendShowLines">Show lines</label>
+        <label for="legendShowLines">{{ t('display.legend.showLines') }}</label>
         <input
           id="legendShowLines"
           type="checkbox"
@@ -181,7 +181,7 @@
 
     <div class="display-inspector__row">
       <div>
-        <label for="legendShowValues">Show values</label>
+        <label for="legendShowValues">{{ t('display.legend.showValues') }}</label>
         <select id="legendShowValues" :value="selectedElement.legendShowValues || 'AUTO'" @change="updateText('legendShowValues', $event)">
           <option value="NONE">NONE</option>
           <option value="AUTO">AUTO</option>
@@ -190,7 +190,7 @@
         </select>
       </div>
       <div>
-        <label for="legendDirection">Direction</label>
+        <label for="legendDirection">{{ t('display.legend.direction') }}</label>
         <select id="legendDirection" :value="selectedElement.legendDirection || 'AUTO'" @change="updateText('legendDirection', $event)">
           <option value="AUTO">AUTO</option>
           <option value="HORIZONTAL">HORIZONTAL</option>
@@ -200,7 +200,7 @@
     </div>
 
     <div>
-      <label for="legendShowUnits">Show units</label>
+      <label for="legendShowUnits">{{ t('display.legend.showUnits') }}</label>
       <input
         id="legendShowUnits"
         type="checkbox"
@@ -214,8 +214,11 @@
 
 <script setup>
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 import { useDisplayFontControls } from "../../composables/display/useDisplayFontControls";
 import { useElementPatch } from "../../composables/display/useElementPatch";
+
+const { t } = useI18n();
 
 const props = defineProps({
   selectedElement: {

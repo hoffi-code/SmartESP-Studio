@@ -2,26 +2,26 @@
   <div>
     <div class="display-inspector__row display-inspector__row--quad">
       <div class="display-inspector__field">
-        <label for="posX">X</label>
+        <label for="posX">{{ t('display.field.x') }}</label>
         <input id="posX" type="number" :value="selectedElement.x" @input="updateNumber('x', $event)" />
       </div>
       <div class="display-inspector__field">
-        <label for="posY">Y</label>
+        <label for="posY">{{ t('display.field.y') }}</label>
         <input id="posY" type="number" :value="selectedElement.y" @input="updateNumber('y', $event)" />
       </div>
       <span class="display-inspector__group-divider"></span>
       <div class="display-inspector__field">
-        <label for="sizeW">W</label>
+        <label for="sizeW">{{ t('display.field.w') }}</label>
         <input id="sizeW" type="number" :value="selectedElement.w" @input="updateNumber('w', $event)" />
       </div>
       <div class="display-inspector__field">
-        <label for="sizeH">H</label>
+        <label for="sizeH">{{ t('display.field.h') }}</label>
         <input id="sizeH" type="number" :value="selectedElement.h" @input="updateNumber('h', $event)" />
       </div>
     </div>
 
     <div class="display-icon-picker">
-      <label for="iconValue">Icon</label>
+      <label for="iconValue">{{ t('display.icon.label') }}</label>
       <div class="schema-icon-row">
         <input
           id="iconValue"
@@ -34,7 +34,7 @@
         <button type="button" class="secondary compact schema-icon-btn" @click="openIconPicker">
           <img
             :src="iconButtonUrl"
-            alt="Add icon"
+            :alt="t('display.icon.addIcon')"
           />
         </button>
       </div>
@@ -50,7 +50,7 @@
       />
     </div>
     <div v-if="!isMonochrome" class="display-icon-picker">
-      <label for="iconColor">Color</label>
+      <label for="iconColor">{{ t('display.field.color') }}</label>
       <div class="schema-icon-row">
         <input
           id="iconColor"
@@ -75,9 +75,12 @@
 
 <script setup>
 import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import IconPicker from "../IconPicker.vue";
 import ColorPickerModal from "../ColorPickerModal.vue";
 import { colorToCss } from "../../utils/displayColor";
+
+const { t } = useI18n();
 
 const props = defineProps({
   selectedElement: {
@@ -152,9 +155,9 @@ const iconRequiredError = computed(() => {
 });
 
 const iconErrorText = computed(() => {
-  if (!props.mdiIcons?.length) return "No MDI icons available.";
-  if (!iconName.value) return "Please select an icon.";
-  return "Invalid MDI icon name.";
+  if (!props.mdiIcons?.length) return t("display.icon.noIcons");
+  if (!iconName.value) return t("display.icon.selectIcon");
+  return t("display.icon.invalidIcon");
 });
 
 const colorInputValue = computed(() => props.selectedElement?.color || "");
