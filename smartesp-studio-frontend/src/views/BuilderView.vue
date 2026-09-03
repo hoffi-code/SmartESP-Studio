@@ -469,6 +469,10 @@
           />
         </div>
 
+        <div class="module-card" v-if="activeTab === 'Simulation'">
+          <SimulationPanel :simulation="simulation" />
+        </div>
+
         <div class="module-card" v-if="activeTab === 'Components'">
           <div class="components-header">
             <div class="components-title">
@@ -612,6 +616,7 @@ import PaneResizer from "../components/PaneResizer.vue";
 import BuilderCoreTab from "../components/builder/BuilderCoreTab.vue";
 import { collectAutomationEntries } from "../utils/automationOverview";
 import LvglBuilder from "../components/lvgl/LvglBuilder.vue";
+import SimulationPanel from "../components/simulation/SimulationPanel.vue";
 import BuilderBussesTab from "../components/builder/BuilderBussesTab.vue";
 import BuilderModalHost from "../components/builder/BuilderModalHost.vue";
 import BuilderNetworkTab from "../components/builder/BuilderNetworkTab.vue";
@@ -624,6 +629,7 @@ import { useBuilderDeployment } from "../composables/builder/useBuilderDeploymen
 import { useBuilderProjectPersistence } from "../composables/builder/useBuilderProjectPersistence";
 import { useBuilderSchemaCatalog } from "../composables/builder/useBuilderSchemaCatalog";
 import { useBuilderValidation } from "../composables/builder/useBuilderValidation";
+import { useSimulation } from "../composables/builder/useSimulation";
 import { useBuilderYamlPreview, ASSET_PREVIEW_BLOCK_KEYS } from "../composables/builder/useBuilderYamlPreview";
 import { useInstallConsoleFlow } from "../composables/useInstallConsoleFlow";
 import { loadGpioData, resolveGpioKey } from "../utils/gpioData";
@@ -682,7 +688,7 @@ import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 
-const tabs = ["Core", "Platform", "Network", "Protocols", "Busses", "System", "Automation", "LVGL"];
+const tabs = ["Core", "Platform", "Network", "Protocols", "Busses", "System", "Automation", "LVGL", "Simulation"];
 const activeTab = ref(tabs[0]);
 const splitPreviewEnabled = ref(false);
 const pulsingTabs = ref(new Set());
@@ -1910,6 +1916,11 @@ const {
   displayImages,
   mdiIcons
 });
+
+// Simulation (Teil 1, kein Geraet) -- einmalig instanziiert, damit der Zustand beim
+// Tab-Wechsel erhalten bleibt. idIndex/automationSources sind dieselben, die auch die
+// Entity-/Automations-Uebersicht speisen.
+const simulation = useSimulation({ idIndex, config, automationSources });
 
 const hasComponentErrors = (index) => formErrorScopeIds.value.has(`component:${index}`);
 
