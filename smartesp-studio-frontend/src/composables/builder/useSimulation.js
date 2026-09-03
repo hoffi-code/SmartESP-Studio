@@ -134,7 +134,12 @@ export const useSimulation = ({ idIndex, config, automationSources }) => {
     if (run.status === "waiting") {
       clock.scheduleAt(run.untilTick, "action-resume", { runId: run.id });
     } else if (run.status === "manual") {
-      pushLog({ ...run.meta, kind: "manual", text: run.manualReason === "lambda" ? "lambda" : "condition" });
+      pushLog({
+        ...run.meta,
+        kind: "manual",
+        text: run.manualReason === "lambda" ? "lambda" : "condition",
+        runId: run.id
+      });
     }
   };
 
@@ -209,8 +214,9 @@ export const useSimulation = ({ idIndex, config, automationSources }) => {
       return;
     }
     if (result === FILTER_MANUAL) {
-      manualFilters.value.push({ id: nextManualFilterId++, entityId: entity.id });
-      pushLog({ sourceLabel: entity.id, kind: "manual", text: "lambda-filter" });
+      const manualId = nextManualFilterId++;
+      manualFilters.value.push({ id: manualId, entityId: entity.id });
+      pushLog({ sourceLabel: entity.id, kind: "manual", text: "lambda-filter", manualFilterId: manualId });
       return;
     }
     if (result === FILTER_PENDING) return; // selbst ueber die Uhr eingeplant, siehe oben
