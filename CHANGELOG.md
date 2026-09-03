@@ -63,6 +63,18 @@ markiert.
   den beiden Spalten sitzt ein Griff; die Aufteilung ist auf 25–75 % geklemmt,
   ein Doppelklick setzt sie zurück, und sie bleibt über einen Reload hinweg
   gespeichert. Unter 960 px stapeln die Bereiche weiterhin ohne Griff.
+- **Automations-Übersicht** – der Automation-Tab hat einen neuen ersten Sub-Tab
+  „Übersicht", der alle im Projekt definierten Trigger nach Quelle gruppiert
+  zeigt (Komponenten und Top-Level-Sektionen) samt Kurzfassung der Action-Kette.
+  „Bearbeiten" springt ins zuständige Feld – über denselben Weg wie ein Klick in
+  der YAML-Vorschau.
+- **Actions an bisher fehlenden Stellen** – `wifi:` (`on_connect`,
+  `on_disconnect`, `on_error`), `mqtt:` (`on_connect`, `on_disconnect`,
+  `on_message`, `on_json_message`), `logger:` (`on_message`) und `deep_sleep:`
+  (`on_wake`) lassen sich jetzt automatisieren. Dazu auf Komponentenseite
+  `on_page_change` für alle 32 Display-Plattformen, `on_open` für Cover,
+  `on_finished_write` für die NFC-Hubs und die restlichen 32
+  `remote_receiver`-Protokoll-Trigger (`on_sony`, `on_samsung`, `on_rc5`, …).
 
 ### Changed
 
