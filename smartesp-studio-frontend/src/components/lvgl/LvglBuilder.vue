@@ -170,6 +170,7 @@
             :selected-id="selectedWidgetId"
             :interactive="false"
             :display-palette="displayPalette"
+            :simulated-state="simulatedState"
             @select="selectedWidgetId = $event"
           />
         </div>
@@ -225,6 +226,7 @@
               :canvas-height="canvasH"
               :selected-id="selectedWidgetId"
               :display-palette="displayPalette"
+              :simulated-state="simulatedState"
               @select="selectedWidgetId = $event"
               @move="handleCanvasMove"
               @resize-canvas="handleCanvasResize"
@@ -301,6 +303,12 @@ const props = defineProps({
   displayPalette: {
     type: Object,
     default: () => ({})
+  },
+  // P8 live binding: simulationEntityState.js entityState map, forwarded to both
+  // LvglCanvas instances. Absent outside the Simulation tab.
+  simulatedState: {
+    type: Object,
+    default: null
   }
 });
 

@@ -7,7 +7,8 @@
     "busses": "Busses",
     "system": "System",
     "automation": "Automation",
-    "lvgl": "LVGL"
+    "lvgl": "LVGL",
+    "simulation": "Simulation"
   },
   "automationOverview": {
     "tab": "Overview",
@@ -436,6 +437,51 @@
         "label": "Iteration index",
         "hint": "Implicit 0-based counter inside a repeat: action's lambda."
       }
+    }
+  },
+  "simulation": {
+    "clock": {
+      "play": "Start",
+      "pause": "Pause",
+      "reset": "Reset",
+      "speed": "Speed",
+      "running": "running",
+      "paused": "paused"
+    },
+    "entities": {
+      "title": "Entities",
+      "empty": "No simulatable entities in this project.",
+      "unsupported": "not simulated",
+      "filtersBadge": "{count} filters",
+      "on": "ON",
+      "off": "OFF",
+      "current": "current",
+      "target": "target"
+    },
+    "triggers": {
+      "title": "Triggers",
+      "empty": "No automations found in this project.",
+      "fire": "Fire now",
+      "manualOnly": "no auto-trigger (e.g. on_time)",
+      "active": "Active chains",
+      "waitingUntil": "waiting until tick {tick}",
+      "waitingManual": "waiting for input"
+    },
+    "log": {
+      "title": "Activity log",
+      "empty": "No events yet. Change a value or fire a trigger.",
+      "trigger": "Trigger",
+      "executed": "executed",
+      "skipped": "not simulated",
+      "manual": "waiting for input",
+      "filterDrop": "dropped",
+      "value": "new value",
+      "resolveCondition": "Resolve condition",
+      "resolveLambda": "Provide lambda result",
+      "resolveFilter": "Provide sensor value",
+      "true": "True",
+      "false": "False",
+      "submit": "Apply"
     }
   }
 }

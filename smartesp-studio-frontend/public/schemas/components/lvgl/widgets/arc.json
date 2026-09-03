@@ -66,6 +66,18 @@
       ]
     },
     {
+      "key": "bind_id",
+      "type": "id_ref",
+      "required": false,
+      "lvl": "simple",
+      "domain": [
+        "sensor",
+        "number"
+      ],
+      "placeholder": "sensor_id",
+      "emitYAML": "never"
+    },
+    {
       "key": "on_value",
       "type": "list",
       "required": false,

@@ -44,6 +44,15 @@ const NESTED_ALLOW = {
 // Curated fields with no matching dump config_var, with the reason.
 const EXTRA_ALLOW = {
   spinbox: ["step"], // real ESPHome option, absent from the 2026.8.2 config_vars
+  // Simulation P8: Studio-only preview binding, never emitted to YAML (emitYAML: "never"
+  // in the schema, verified by schemaLvglYaml.spec.js) -- no ESPHome config_var exists.
+  label: ["bind_id"],
+  bar: ["bind_id"],
+  slider: ["bind_id"],
+  switch: ["bind_id"],
+  checkbox: ["bind_id"],
+  arc: ["bind_id"],
+  meter: ["bind_id"],
 };
 
 const widgetFile = (type) => {

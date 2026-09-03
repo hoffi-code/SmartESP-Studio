@@ -355,4 +355,85 @@ describe("LvglCanvas", () => {
     expect(managed).toBeTruthy();
     expect(managed.classes()).toContain("is-static");
   });
+
+  describe("simulatedState (P8 live binding)", () => {
+    it("overrides a label's text with the bound entity's value", () => {
+      const p = {
+        id: "p",
+        widgets: [{ uiId: "l", type: "label", common: { width: 80, height: 16 }, props: { text: "Hi", bind_id: "temp" }, children: [] }]
+      };
+      const simulatedState = { temp: { kind: "numeric", value: 21.5 } };
+      const w = mount(LvglCanvas, { props: { page: p, canvasWidth: 200, canvasHeight: 200, simulatedState } });
+      expect(w.get(".lvgl-canvas__label").text()).toBe("21.5");
+    });
+
+    it("overrides a bar's/slider's/arc's fill from the bound entity's value", () => {
+      const p = {
+        id: "p",
+        widgets: [
+          { uiId: "b", type: "bar", common: { width: 100, height: 12 }, props: { value: 0, min_value: 0, max_value: 100, bind_id: "temp" }, children: [] }
+        ]
+      };
+      const simulatedState = { temp: { kind: "numeric", value: 75 } };
+      const w = mount(LvglCanvas, { props: { page: p, canvasWidth: 200, canvasHeight: 200, simulatedState } });
+      expect(w.get(".lvgl-canvas__bar-fill").attributes("style")).toContain("width: 75%");
+    });
+
+    it("overrides a switch's on-state from a bound boolean entity", () => {
+      const p = {
+        id: "p",
+        widgets: [{ uiId: "s", type: "switch", common: { width: 40, height: 20 }, props: { bind_id: "relay" }, children: [] }]
+      };
+      const simulatedState = { relay: { kind: "boolean", value: true } };
+      const w = mount(LvglCanvas, { props: { page: p, canvasWidth: 200, canvasHeight: 200, simulatedState } });
+      expect(w.get(".lvgl-canvas__switch").classes()).toContain("is-on");
+    });
+
+    it("overrides a checkbox's checked-state from a bound struct entity's on field", () => {
+      const p = {
+        id: "p",
+        widgets: [{ uiId: "c", type: "checkbox", common: { width: 90, height: 18 }, props: { text: "Lampe", bind_id: "lamp" }, children: [] }]
+      };
+      const simulatedState = { lamp: { kind: "struct", fields: { on: true } } };
+      const w = mount(LvglCanvas, { props: { page: p, canvasWidth: 200, canvasHeight: 200, simulatedState } });
+      expect(w.get(".lvgl-canvas__check-box").classes()).toContain("is-checked");
+    });
+
+    it("without a matching entity, the widget renders as if simulatedState were absent", () => {
+      const p = {
+        id: "p",
+        widgets: [{ uiId: "l", type: "label", common: { width: 80, height: 16 }, props: { text: "Hi", bind_id: "missing" }, children: [] }]
+      };
+      const w = mount(LvglCanvas, { props: { page: p, canvasWidth: 200, canvasHeight: 200, simulatedState: {} } });
+      expect(w.get(".lvgl-canvas__label").text()).toBe("Hi");
+    });
+
+    it("overrides the main scale's needle value on a meter", () => {
+      const p = {
+        id: "p",
+        widgets: [
+          {
+            uiId: "m",
+            type: "meter",
+            common: { width: 100, height: 100 },
+            props: {
+              bind_id: "temp",
+              scales: [{ range_from: 0, range_to: 100, indicators: [{ line: { value: 10, width: 4 } }] }]
+            },
+            children: []
+          }
+        ]
+      };
+      const withoutBinding = mount(LvglCanvas, { props: { page: p, canvasWidth: 200, canvasHeight: 200 } });
+      const withBinding = mount(LvglCanvas, {
+        props: { page: p, canvasWidth: 200, canvasHeight: 200, simulatedState: { temp: { kind: "numeric", value: 90 } } }
+      });
+      // Der Nadel-Endpunkt (needle tip) unterscheidet sich sichtbar, sobald der
+      // simulierte Wert (90 statt 10) in die Winkelberechnung einfliesst. Ticks und
+      // Nadel sind beides <line>-Elemente ohne eigene Klasse -- die Nadel ist die
+      // letzte <line> in der Gruppe (Ticks werden zuerst gerendert).
+      const tipOf = (wrapper) => wrapper.findAll(".lvgl-canvas__meter line").at(-1).attributes("x2");
+      expect(tipOf(withBinding)).not.toBe(tipOf(withoutBinding));
+    });
+  });
 });

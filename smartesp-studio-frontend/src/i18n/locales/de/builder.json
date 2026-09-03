@@ -7,7 +7,8 @@
     "busses": "Busse",
     "system": "System",
     "automation": "Automation",
-    "lvgl": "LVGL"
+    "lvgl": "LVGL",
+    "simulation": "Simulation"
   },
   "automationOverview": {
     "tab": "Übersicht",
@@ -121,6 +122,51 @@
       "log": "Log-Zeile",
       "return": "Wert zurückgeben",
       "lvglLabel": "Text eines LVGL-Labels setzen"
+    }
+  },
+  "simulation": {
+    "clock": {
+      "play": "Start",
+      "pause": "Pause",
+      "reset": "Zurücksetzen",
+      "speed": "Geschwindigkeit",
+      "running": "läuft",
+      "paused": "pausiert"
+    },
+    "entities": {
+      "title": "Entities",
+      "empty": "Keine simulierbaren Entities in diesem Projekt.",
+      "unsupported": "nicht simuliert",
+      "filtersBadge": "{count} Filter",
+      "on": "EIN",
+      "off": "AUS",
+      "current": "aktuell",
+      "target": "Ziel"
+    },
+    "triggers": {
+      "title": "Trigger",
+      "empty": "Keine Automationen im Projekt gefunden.",
+      "fire": "Jetzt auslösen",
+      "manualOnly": "kein Auto-Trigger (z. B. on_time)",
+      "active": "Aktive Ketten",
+      "waitingUntil": "wartet bis Tick {tick}",
+      "waitingManual": "wartet auf Eingabe"
+    },
+    "log": {
+      "title": "Ablauf-Log",
+      "empty": "Noch keine Ereignisse. Ändere einen Wert oder löse einen Trigger aus.",
+      "trigger": "Trigger",
+      "executed": "ausgeführt",
+      "skipped": "nicht simuliert",
+      "manual": "wartet auf Eingabe",
+      "filterDrop": "verworfen",
+      "value": "neuer Wert",
+      "resolveCondition": "Bedingung auflösen",
+      "resolveLambda": "Lambda-Ergebnis eingeben",
+      "resolveFilter": "Sensorwert eingeben",
+      "true": "Wahr",
+      "false": "Falsch",
+      "submit": "Übernehmen"
     }
   }
 }

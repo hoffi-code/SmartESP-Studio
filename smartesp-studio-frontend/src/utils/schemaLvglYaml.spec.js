@@ -402,4 +402,22 @@ describe("buildLvglYamlLines", () => {
     const lines = buildLvglYamlLines(lvgl, {});
     expect(asText(lines)).toBe(["lvgl:", "  pages:", "    - id: main_page", "      widgets:"].join("\n"));
   });
+
+  it("never emits bind_id -- P8 live binding is a Studio-only preview aid, not an ESPHome property", () => {
+    const schemaWithBindId = {
+      fields: [...labelSchema.fields, { key: "bind_id", type: "id_ref", required: false, domain: ["sensor"], emitYAML: "never" }]
+    };
+    const lvgl = {
+      pages: [
+        {
+          id: "main_page",
+          widgets: [{ uiId: "w1", type: "label", common: {}, props: { text: "Couch", bind_id: "temp" }, children: [] }]
+        }
+      ]
+    };
+
+    const lines = buildLvglYamlLines(lvgl, { label: schemaWithBindId });
+    expect(asText(lines)).not.toContain("bind_id");
+    expect(asText(lines)).toContain('text: "Couch"');
+  });
 });

@@ -6,6 +6,18 @@
   "helpUrl": "https://esphome.io/components/lvgl/widgets/switch/",
   "fields": [
     {
+      "key": "bind_id",
+      "type": "id_ref",
+      "required": false,
+      "lvl": "simple",
+      "domain": [
+        "binary_sensor",
+        "switch"
+      ],
+      "placeholder": "switch_id",
+      "emitYAML": "never"
+    },
+    {
       "key": "on_value",
       "type": "list",
       "required": false,

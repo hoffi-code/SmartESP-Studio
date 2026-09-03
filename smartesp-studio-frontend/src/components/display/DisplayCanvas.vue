@@ -232,6 +232,13 @@ const props = defineProps({
   selectedId: {
     type: String,
     default: null
+  },
+  // P9 live binding: simulationEntityState.js entityState map ({[id]: entity}), keyed by
+  // the same ids element.dynamicId resolves against. Absent outside the Simulation tab --
+  // a dynamic text element then falls back to the static {{val}} placeholder as before.
+  simulatedState: {
+    type: Object,
+    default: null
   }
 });
 
@@ -299,13 +306,29 @@ const labelStyle = (element) => {
   return style;
 };
 
+// P9 live binding: resolves element.dynamicId against simulatedState. Boolean domains
+// (binary_sensor/switch) render ON/OFF -- ESPHome text sensors typically template that
+// via a lambda, "true"/"false" would be misleading on a device screen. Numeric values
+// keep at most 2 decimals so a float sensor doesn't blow out the layout.
+const boundValueText = (element) => {
+  const entity = props.simulatedState?.[element.dynamicId];
+  if (!entity) return null;
+  if (entity.kind === "boolean") return entity.value ? "ON" : "OFF";
+  if (entity.kind === "numeric") {
+    const n = Number(entity.value);
+    return Number.isInteger(n) ? String(n) : n.toFixed(2);
+  }
+  return String(entity.value ?? "");
+};
+
 const elementLabel = (element) => {
   if (element.type === "text") {
     const mode = element.textMode || "static";
     if (mode === "dynamic") {
       const prefix = element.prefix || "";
       const suffix = element.suffix || "";
-      return `${prefix}{{val}}${suffix}`;
+      const bound = boundValueText(element);
+      return `${prefix}${bound ?? "{{val}}"}${suffix}`;
     }
     return element.text ?? "";
   }
