@@ -1,4 +1,8 @@
 <template>
+  <BuilderHeaderCommentCard
+    :header-comment="headerComment"
+    @update:header-comment="emit('update:header-comment', $event)"
+  />
   <div class="module-card">
     <div class="components-header">
       <div class="components-title">
@@ -13,6 +17,13 @@
         >
           ?
         </a>
+      </div>
+      <div class="components-actions">
+        <SectionCommentButton
+          :comment-key="sectionCommentKey"
+          :has-comment="sectionCommentHasComment"
+          @open="emit('open-section-comment', $event)"
+        />
       </div>
     </div>
     <div class="module-card__body">
@@ -71,10 +82,24 @@
 <script setup>
 import { useI18n } from "vue-i18n";
 import SchemaRenderer from "../SchemaRenderer.vue";
+import BuilderHeaderCommentCard from "./BuilderHeaderCommentCard.vue";
+import SectionCommentButton from "./SectionCommentButton.vue";
 
 const { t } = useI18n();
 
 defineProps({
+  headerComment: {
+    type: String,
+    default: ""
+  },
+  sectionCommentKey: {
+    type: String,
+    default: ""
+  },
+  sectionCommentHasComment: {
+    type: Boolean,
+    default: false
+  },
   activeTabHelpUrl: {
     type: String,
     default: ""
@@ -152,8 +177,10 @@ defineProps({
 const emit = defineEmits([
   "mode-upgrade-availability",
   "open-secrets",
+  "open-section-comment",
   "promote-mode-level",
   "update-core-schema",
+  "update-header-comment",
   "update-substitutions-schema"
 ]);
 </script>

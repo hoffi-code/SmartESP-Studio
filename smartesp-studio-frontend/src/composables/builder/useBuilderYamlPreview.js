@@ -605,6 +605,7 @@ export const useBuilderYamlPreview = ({
       );
       if (!protocolLines.length && !shouldEmitEmptyBlock(fields)) return;
       pushPreviewLine(lines, "", entry.key, null);
+      pushBlockHeaderComment(lines, entry.key);
       pushPreviewLine(lines, `${entry.key}:`, entry.key, sectionOrigin(scopeId, "automation", [], { suppressFocus: true }));
       if (protocolLines.length) {
         appendPreviewLines(lines, protocolLines, entry.key);
@@ -639,6 +640,7 @@ export const useBuilderYamlPreview = ({
       );
       if (!sectionLines.length && !shouldEmitEmptyBlock(fields)) return;
       pushPreviewLine(lines, "", entry.label, null);
+      pushBlockHeaderComment(lines, entry.label);
       pushPreviewLine(lines, `${entry.label}:`, entry.label, sectionOrigin(scopeId, "core", [], { suppressFocus: true }));
       appendPreviewLines(lines, sectionLines, entry.label);
     });
@@ -706,6 +708,7 @@ export const useBuilderYamlPreview = ({
       if (!generatedItems.length && !manualItems.length) return;
       const scopeId = `tab:Automation:${entry.key}`;
       pushPreviewLine(lines, "", entry.key, null);
+      pushBlockHeaderComment(lines, entry.key);
       pushPreviewLine(lines, `${entry.key}:`, entry.key, sectionOrigin(scopeId, "automation", [], { suppressFocus: true }));
       if (generatedItems.length) {
         pushPreviewLine(lines, "  # Auto-generated", entry.key, sectionOrigin(scopeId, "automation"));

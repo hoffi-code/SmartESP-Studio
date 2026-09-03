@@ -14,6 +14,13 @@
           ?
         </a>
       </div>
+      <div class="components-actions">
+        <SectionCommentButton
+          :comment-key="sectionCommentKey"
+          :has-comment="sectionCommentHasComment"
+          @open="emit('open-section-comment', $event)"
+        />
+      </div>
     </div>
     <div class="module-card__body">
       <div class="module-tabs">
@@ -63,10 +70,19 @@
 <script setup>
 import { useI18n } from "vue-i18n";
 import SchemaRenderer from "../SchemaRenderer.vue";
+import SectionCommentButton from "./SectionCommentButton.vue";
 
 const { t } = useI18n();
 
 defineProps({
+  sectionCommentKey: {
+    type: String,
+    default: ""
+  },
+  sectionCommentHasComment: {
+    type: Boolean,
+    default: false
+  },
   activeTabHelpUrl: { type: String, default: "" },
   protocolTabs: { type: Array, default: () => [] },
   activeProtocolKey: { type: String, default: "" },
@@ -89,6 +105,7 @@ defineProps({
 const emit = defineEmits([
   "mode-upgrade-availability",
   "open-secrets",
+  "open-section-comment",
   "promote-mode-level",
   "update-protocol-detail",
   "update:activeProtocolKey"
