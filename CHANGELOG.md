@@ -29,6 +29,11 @@ markiert.
   `.position`, `make_call().set_position(...)`; …). Deckt die 17
   Kern-Entity-Domains ab, bedient sich derselben Pfeiltasten-/Enter-/Tab-/
   Esc-Bedienung wie die `id(`-Vorschlagsliste.
+- **Lambda-Palette: durchsuchbar und kategorisiert** – die „+"-Palette am
+  Lambda-Feld ist jetzt eine Funktionsliste statt einer flachen 7er-Liste:
+  Suchfeld oben, darunter „Suggested" (Domain-Member der zuletzt referenzierten
+  ID, falls vorhanden), die bestehenden Snippets und die Globalfunktionen
+  (Logging/Strings/Zeit/Core) nach Kategorie gruppiert.
 
 ## [0.3.0] – 2026-09-02
 
