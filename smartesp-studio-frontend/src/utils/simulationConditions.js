@@ -58,6 +58,10 @@ export const evaluateCondition = (entry, entityState, ctx = {}) => {
   return handler ? handler(config, entityState) : CONDITION_MANUAL;
 };
 
+// Exportiert fuer simulationExecutor.js: if/while/for tragen ihre Bedingung(en) als eine
+// Liste unter "condition:" -- implizites AND, wie "and:"/"or:" die Bedingung selbst.
+export const evaluateConditionList = (list, entityState, ctx) => evaluateAll(list, entityState, ctx);
+
 const evaluateAll = (list, entityState, ctx) => {
   let sawManual = false;
   for (const child of asArray(list)) {
