@@ -226,7 +226,7 @@ describe("LambdaField", () => {
     expect(wrapper.find(".lambda-field__completion").exists()).toBe(false);
   });
 
-  it("inserts a snippet at the caret", async () => {
+  it("opens the palette and inserts the first legacy snippet at the caret", async () => {
     const { wrapper, text } = mountBound({ initial: "return ;" });
     const textarea = wrapper.get("textarea");
     textarea.element.setSelectionRange(7, 7);
@@ -237,12 +237,53 @@ describe("LambdaField", () => {
 
     await entries[0].trigger("mousedown");
     expect(text.value).toBe("return id(x).state;");
-    expect(wrapper.find(".lambda-field__snippets").exists()).toBe(false);
+    expect(wrapper.find(".lambda-field__palette").exists()).toBe(false);
   });
 
-  it("offers no snippets on yaml fields", () => {
+  it("offers no palette on yaml fields", () => {
     const { wrapper } = mountBound({ language: "yaml" });
     expect(wrapper.find(".lambda-field__toolbar").exists()).toBe(false);
+  });
+
+  it("shows the palette grouped by category without a suggested section", async () => {
+    const { wrapper } = mountBound();
+    await wrapper.get(".lambda-field__toolbar button").trigger("click");
+    expect(wrapper.findAll(".lambda-field__palette-section-title").map((title) => title.text())).toEqual([
+      "Snippets",
+      "Logging",
+      "Strings",
+      "Time",
+      "Core"
+    ]);
+  });
+
+  it("puts a Suggested section with the referenced entity's members first", async () => {
+    const { wrapper } = mountBound({
+      idIndex: [{ id: "temp", idLower: "temp", domain: "sensor" }]
+    });
+    const text = "return id(temp).state;";
+    await typeAt(wrapper, text, text.length);
+    await wrapper.get(".lambda-field__toolbar button").trigger("click");
+
+    const titles = wrapper.findAll(".lambda-field__palette-section-title").map((title) => title.text());
+    expect(titles[0]).toBe("Suggested");
+
+    const firstItem = wrapper.findAll(".lambda-field__snippet")[0];
+    expect(firstItem.find("code").text()).toBe("state");
+    expect(firstItem.find("span").text()).toBe("Current value");
+  });
+
+  it("filters the palette to matching items and drops empty sections", async () => {
+    const { wrapper } = mountBound();
+    await wrapper.get(".lambda-field__toolbar button").trigger("click");
+    await wrapper.get(".lambda-field__palette-search").setValue("millis");
+
+    expect(wrapper.findAll(".lambda-field__palette-section-title").map((title) => title.text())).toEqual([
+      "Time"
+    ]);
+    const items = wrapper.findAll(".lambda-field__snippet");
+    expect(items).toHaveLength(1);
+    expect(items[0].find("code").text()).toBe("millis()");
   });
 
   it("keeps the overlay scroll in sync with the textarea", async () => {

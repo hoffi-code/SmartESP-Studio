@@ -104,7 +104,6 @@
       "unknownId": "Line {line}: no component with id “{id}” in this configuration."
     },
     "snippets": {
-      "title": "Insert a snippet",
       "idState": "State of a component",
       "idPosition": "Position of a cover or valve",
       "toString": "Number as text",
@@ -112,6 +111,277 @@
       "log": "Log line",
       "return": "Return a value",
       "lvglLabel": "Set the text of an LVGL label"
+    },
+    "palette": {
+      "title": "Insert code",
+      "snippetsTitle": "Snippets",
+      "suggested": "Suggested",
+      "searchPlaceholder": "Search functions",
+      "empty": "No matches."
+    },
+    "categories": {
+      "logging": "Logging",
+      "strings": "Strings",
+      "time": "Time",
+      "core": "Core"
+    },
+    "globals": {
+      "log_d": {
+        "label": "Debug log line",
+        "hint": "ESP_LOGD -- verbose, only shown at debug log level."
+      },
+      "log_i": {
+        "label": "Info log line",
+        "hint": "ESP_LOGI -- normal informational logging."
+      },
+      "log_w": {
+        "label": "Warning log line",
+        "hint": "ESP_LOGW -- something unexpected but not fatal."
+      },
+      "log_e": {
+        "label": "Error log line",
+        "hint": "ESP_LOGE -- always logged, use for real problems."
+      },
+      "to_string": {
+        "label": "Number to text",
+        "hint": "Converts a number to a std::string."
+      },
+      "sprintf": {
+        "label": "Formatted text",
+        "hint": "Builds a formatted string, printf-style."
+      },
+      "millis": {
+        "label": "Milliseconds since boot",
+        "hint": "Monotonic uptime counter."
+      },
+      "micros": {
+        "label": "Microseconds since boot",
+        "hint": "Higher-resolution uptime counter."
+      },
+      "delay": {
+        "label": "Delay",
+        "hint": "Blocks for the given number of milliseconds -- use sparingly."
+      },
+      "return": {
+        "label": "Return a value",
+        "hint": "Ends the lambda and returns this value."
+      },
+      "lvgl_label": {
+        "label": "Set LVGL label text",
+        "hint": "Updates the text of an LVGL label widget."
+      }
+    },
+    "members": {
+      "sensor": {
+        "state": {
+          "label": "Current value",
+          "hint": "Last published state (NAN before the first update)."
+        },
+        "has_state": {
+          "label": "Has a value yet",
+          "hint": "True once the sensor has published at least one reading."
+        },
+        "publish_state": {
+          "label": "Publish a value",
+          "hint": "Pushes a new reading into the sensor's state machine."
+        }
+      },
+      "binary_sensor": {
+        "state": {
+          "label": "Current value",
+          "hint": "True/false state, as last published."
+        },
+        "has_state": {
+          "label": "Has a value yet",
+          "hint": "True once the sensor has published at least once."
+        },
+        "publish_state": {
+          "label": "Publish a value",
+          "hint": "Pushes a new true/false reading."
+        }
+      },
+      "text_sensor": {
+        "state": {
+          "label": "Current value",
+          "hint": "Last published text (empty before the first update)."
+        },
+        "has_state": {
+          "label": "Has a value yet",
+          "hint": "True once the sensor has published at least once."
+        },
+        "publish_state": {
+          "label": "Publish a value",
+          "hint": "Pushes a new text reading."
+        }
+      },
+      "switch": {
+        "state": {
+          "label": "Current state",
+          "hint": "True while the switch is on."
+        },
+        "turn_on": {
+          "label": "Turn on",
+          "hint": "Switches it on."
+        },
+        "turn_off": {
+          "label": "Turn off",
+          "hint": "Switches it off."
+        },
+        "toggle": {
+          "label": "Toggle",
+          "hint": "Flips the current state."
+        }
+      },
+      "light": {
+        "is_on": {
+          "label": "Is on",
+          "hint": "True while the light is switched on."
+        },
+        "get_brightness": {
+          "label": "Get brightness",
+          "hint": "Current brightness, 0.0-1.0."
+        },
+        "turn_on": {
+          "label": "Turn on",
+          "hint": "Turns the light on with its current settings."
+        },
+        "turn_off": {
+          "label": "Turn off",
+          "hint": "Turns the light off."
+        },
+        "make_call": {
+          "label": "Set brightness",
+          "hint": "Builds and performs a light call with a new brightness."
+        }
+      },
+      "cover": {
+        "position": {
+          "label": "Position",
+          "hint": "0.0 (closed) to 1.0 (open)."
+        },
+        "current_operation": {
+          "label": "Current operation",
+          "hint": "Idle, opening or closing."
+        },
+        "open": {
+          "label": "Open",
+          "hint": "Sends the open command."
+        },
+        "set_position": {
+          "label": "Set position",
+          "hint": "Moves the cover to a given position."
+        }
+      },
+      "climate": {
+        "current_temperature": {
+          "label": "Current temperature",
+          "hint": "The measured temperature."
+        },
+        "target_temperature": {
+          "label": "Target temperature",
+          "hint": "The set-point temperature."
+        },
+        "mode": {
+          "label": "Mode",
+          "hint": "Current climate mode (heat, cool, ...)."
+        },
+        "set_mode": {
+          "label": "Set mode and target",
+          "hint": "Builds and performs a climate call."
+        }
+      },
+      "fan": {
+        "state": {
+          "label": "Current state",
+          "hint": "True while the fan is on."
+        },
+        "turn_on": {
+          "label": "Turn on",
+          "hint": "Turns the fan on."
+        },
+        "turn_off": {
+          "label": "Turn off",
+          "hint": "Turns the fan off."
+        },
+        "set_speed": {
+          "label": "Set speed",
+          "hint": "Builds and performs a fan call with a new speed."
+        }
+      },
+      "number": {
+        "state": {
+          "label": "Current value",
+          "hint": "Last set number."
+        },
+        "set_value": {
+          "label": "Set value",
+          "hint": "Builds and performs a number call."
+        }
+      },
+      "select": {
+        "state": {
+          "label": "Current option",
+          "hint": "Currently selected option text."
+        },
+        "set_option": {
+          "label": "Set option",
+          "hint": "Builds and performs a select call."
+        }
+      },
+      "text": {
+        "state": {
+          "label": "Current value",
+          "hint": "Last set text."
+        },
+        "set_value": {
+          "label": "Set value",
+          "hint": "Builds and performs a text call."
+        }
+      },
+      "lock": {
+        "state": {
+          "label": "Current state",
+          "hint": "Locked, unlocked, or in between."
+        }
+      },
+      "valve": {
+        "position": {
+          "label": "Position",
+          "hint": "0.0 (closed) to 1.0 (open)."
+        },
+        "current_operation": {
+          "label": "Current operation",
+          "hint": "Idle, opening or closing."
+        },
+        "set_position": {
+          "label": "Set position",
+          "hint": "Builds and performs a valve call."
+        }
+      },
+      "datetime": {
+        "state": {
+          "label": "Current value",
+          "hint": "The entity's current date/time value."
+        }
+      },
+      "button": {
+        "press": {
+          "label": "Press",
+          "hint": "Simulates a press."
+        }
+      },
+      "alarm_control_panel": {
+        "state": {
+          "label": "Current state",
+          "hint": "Armed/disarmed/triggered, as last published."
+        }
+      },
+      "event": {
+        "trigger": {
+          "label": "Trigger",
+          "hint": "Fires the event with the given event type."
+        }
+      }
     }
   }
 }

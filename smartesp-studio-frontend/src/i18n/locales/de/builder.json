@@ -104,7 +104,6 @@
       "unknownId": "Zeile {line}: keine Komponente mit der ID „{id}“ in dieser Konfiguration."
     },
     "snippets": {
-      "title": "Baustein einfügen",
       "idState": "Zustand einer Komponente",
       "idPosition": "Position eines Covers oder Ventils",
       "toString": "Zahl als Text",
