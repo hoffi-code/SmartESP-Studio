@@ -22,6 +22,18 @@ markiert.
 - **Snippet-Palette am Lambda-Feld** – ein „+"-Button über dem Editor fügt
   gängige Bausteine (`id(x).state`, `str_sprintf(...)`, `ESP_LOGD(...)`,
   `lv_label_set_text(...)`, …) an der Cursorposition ein.
+- **Domain-passende Vorschläge nach `id(x).`** – ist der `id(...)`-Aufruf
+  abgeschlossen, schlägt das Lambda-Feld die zur Domain der referenzierten
+  Komponente passenden Accessoren/Methoden vor (`sensor` → `.state`,
+  `.has_state()`; `switch` → `.turn_on()`/`.turn_off()`/`.toggle()`; `cover` →
+  `.position`, `make_call().set_position(...)`; …). Deckt die 17
+  Kern-Entity-Domains ab, bedient sich derselben Pfeiltasten-/Enter-/Tab-/
+  Esc-Bedienung wie die `id(`-Vorschlagsliste.
+- **Lambda-Palette: durchsuchbar und kategorisiert** – die „+"-Palette am
+  Lambda-Feld ist jetzt eine Funktionsliste statt einer flachen 7er-Liste:
+  Suchfeld oben, darunter „Suggested" (Domain-Member der zuletzt referenzierten
+  ID, falls vorhanden), die bestehenden Snippets und die Globalfunktionen
+  (Logging/Strings/Zeit/Core) nach Kategorie gruppiert.
 
 ## [0.3.0] – 2026-09-02
 

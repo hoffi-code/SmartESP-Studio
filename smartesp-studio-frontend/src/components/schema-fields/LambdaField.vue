@@ -1,26 +1,40 @@
 <template>
   <div class="lambda-field">
-    <div v-if="showSnippets" class="lambda-field__toolbar">
+    <div v-if="showPalette" class="lambda-field__toolbar">
       <button
         type="button"
         class="secondary compact"
-        :title="t('builder.lambda.snippets.title')"
+        :title="t('builder.lambda.palette.title')"
         @mousedown.prevent
-        @click="snippetsOpen = !snippetsOpen"
+        @click="togglePalette"
       >
         +
       </button>
-      <div v-if="snippetsOpen" class="id-ref-list lambda-field__snippets">
-        <button
-          v-for="snippet in snippets"
-          :key="snippet.id"
-          type="button"
-          class="id-ref-option lambda-field__snippet"
-          @mousedown.prevent="pickSnippet(snippet)"
-        >
-          <span>{{ t(`builder.lambda.snippets.${snippet.id}`) }}</span>
-          <code>{{ snippet.insert }}</code>
-        </button>
+      <div v-if="paletteOpen" class="id-ref-list lambda-field__palette">
+        <input
+          v-model="paletteQuery"
+          type="text"
+          class="lambda-field__palette-search"
+          :placeholder="t('builder.lambda.palette.searchPlaceholder')"
+          @keydown.stop
+        />
+        <template v-for="section in filteredPaletteSections" :key="section.id">
+          <div class="lambda-field__palette-section-title">{{ paletteSectionTitle(section.id) }}</div>
+          <button
+            v-for="item in section.items"
+            :key="`${section.id}:${item.id}`"
+            type="button"
+            class="id-ref-option lambda-field__snippet"
+            :title="paletteItemHint(section.id, item.id)"
+            @mousedown.prevent="pickSnippet(item)"
+          >
+            <span>{{ paletteItemLabel(section.id, item.id) }}</span>
+            <code>{{ item.insert }}</code>
+          </button>
+        </template>
+        <div v-if="!filteredPaletteSections.length" class="lambda-field__palette-empty">
+          {{ t("builder.lambda.palette.empty") }}
+        </div>
       </div>
     </div>
     <div class="lambda-field__editor">
@@ -51,8 +65,8 @@
           :class="{ 'is-active': optionIndex === activeOption }"
           @mousedown.prevent="pickCompletion(option)"
         >
-          <span>{{ option.id }}</span>
-          <span v-if="option.domain" class="lambda-field__completion-domain">{{ option.domain }}</span>
+          <span>{{ option.insert }}</span>
+          <span v-if="option.secondary" class="lambda-field__completion-domain">{{ option.secondary }}</span>
         </button>
       </div>
     </div>
@@ -75,7 +89,14 @@ import {
   findIdCompletionContext
 } from "../../utils/lambdaCompletion";
 import { lintLambda } from "../../utils/lambdaLint";
-import { LAMBDA_SNIPPETS, insertSnippet } from "../../utils/lambdaSnippets";
+import {
+  applyMemberCompletion,
+  buildMemberCompletionOptions,
+  findMemberCompletionContext,
+  findNearestIdReference
+} from "../../utils/lambdaMemberCompletion";
+import { buildLambdaPaletteSections, filterLambdaPaletteSections } from "../../utils/lambdaPaletteSections";
+import { insertSnippet } from "../../utils/lambdaSnippets";
 import { escapeHtml, highlightYamlToHtml } from "../../utils/yamlSyntaxHighlight";
 
 const props = defineProps({
@@ -121,12 +142,27 @@ const onInput = (event) => {
   refreshCompletion();
 };
 
+// completion holds either { kind: "id", ...idContext } (still-open id( call) or
+// { kind: "member", domain, ...memberContext } (id(x). already closed). Both are
+// handled by the same dropdown/keyboard/mouse plumbing below.
 const completion = ref(null);
 const activeOption = ref(0);
 
-const completionOptions = computed(() =>
-  completion.value ? buildIdCompletionOptions(props.idIndex, completion.value.query) : []
-);
+const completionOptions = computed(() => {
+  if (!completion.value) return [];
+  if (completion.value.kind === "id") {
+    return buildIdCompletionOptions(props.idIndex, completion.value.query).map((entry) => ({
+      id: entry.id,
+      insert: entry.id,
+      secondary: entry.domain || ""
+    }));
+  }
+  return buildMemberCompletionOptions(completion.value.domain, completion.value.query).map((entry) => ({
+    id: entry.id,
+    insert: entry.insert,
+    secondary: ""
+  }));
+});
 const completionOpen = computed(() => Boolean(completion.value) && completionOptions.value.length > 0);
 
 function refreshCompletion() {
@@ -135,8 +171,23 @@ function refreshCompletion() {
     completion.value = null;
     return;
   }
-  completion.value = findIdCompletionContext(editor.value, editor.selectionStart ?? 0);
-  activeOption.value = 0;
+  const caret = editor.selectionStart ?? 0;
+  const idContext = findIdCompletionContext(editor.value, caret);
+  if (idContext) {
+    completion.value = { kind: "id", ...idContext };
+    activeOption.value = 0;
+    paletteOpen.value = false;
+    return;
+  }
+  const memberContext = findMemberCompletionContext(editor.value, caret);
+  if (memberContext) {
+    const domain = props.idIndex.find((entry) => entry.id === memberContext.entityId)?.domain || "";
+    completion.value = { kind: "member", domain, ...memberContext };
+    paletteOpen.value = false;
+    activeOption.value = 0;
+    return;
+  }
+  completion.value = null;
 }
 
 const scheduleCompletionClose = () => {
@@ -148,7 +199,10 @@ const scheduleCompletionClose = () => {
 const pickCompletion = async (option) => {
   const editor = textareaRef.value;
   if (!editor || !completion.value) return;
-  const { text, caret } = applyIdCompletion(editor.value, completion.value, option.id);
+  const { text, caret } =
+    completion.value.kind === "id"
+      ? applyIdCompletion(editor.value, completion.value, option.id)
+      : applyMemberCompletion(editor.value, completion.value, option);
   completion.value = null;
   emit("update:model-value", text);
   await nextTick();
@@ -158,9 +212,65 @@ const pickCompletion = async (option) => {
   current.setSelectionRange(caret, caret);
 };
 
-const snippets = LAMBDA_SNIPPETS;
-const snippetsOpen = ref(false);
-const showSnippets = computed(() => props.language !== "yaml");
+const paletteOpen = ref(false);
+const paletteQuery = ref("");
+const paletteSuggestedDomain = ref("");
+const showPalette = computed(() => props.language !== "yaml");
+
+// Snapshot beim Oeffnen, nicht reaktiv waehrend des Tippens -- ein unter der
+// Maus wegspringender Vorschlag waere schlechter als ein fester Stand.
+const togglePalette = () => {
+  if (paletteOpen.value) {
+    paletteOpen.value = false;
+    return;
+  }
+  // "+" nutzt @mousedown.prevent, damit der Klick die Textarea nicht blurt --
+  // dadurch feuert scheduleCompletionClose nie. Ohne dies wuerde eine noch
+  // offene id(/Member-Vervollstaendigung stehen bleiben und mit der Palette
+  // ueberlappen.
+  completion.value = null;
+  const editor = textareaRef.value;
+  const reference = editor
+    ? findNearestIdReference(editor.value, editor.selectionStart ?? editor.value.length)
+    : null;
+  paletteSuggestedDomain.value = reference
+    ? props.idIndex.find((entry) => entry.id === reference.entityId)?.domain || ""
+    : "";
+  paletteQuery.value = "";
+  paletteOpen.value = true;
+};
+
+const paletteSections = computed(() =>
+  buildLambdaPaletteSections({ suggestedDomain: paletteSuggestedDomain.value })
+);
+
+const paletteSectionTitle = (sectionId) => {
+  if (sectionId === "suggested") return t("builder.lambda.palette.suggested");
+  if (sectionId === "snippets") return t("builder.lambda.palette.snippetsTitle");
+  return t(`builder.lambda.categories.${sectionId.replace("category:", "")}`);
+};
+
+const paletteItemLabel = (sectionId, itemId) => {
+  if (sectionId === "snippets") return t(`builder.lambda.snippets.${itemId}`);
+  if (sectionId === "suggested") {
+    return t(`builder.lambda.members.${paletteSuggestedDomain.value}.${itemId}.label`);
+  }
+  return t(`builder.lambda.globals.${itemId}.label`);
+};
+
+const paletteItemHint = (sectionId, itemId) => {
+  if (sectionId === "snippets") return "";
+  if (sectionId === "suggested") {
+    return t(`builder.lambda.members.${paletteSuggestedDomain.value}.${itemId}.hint`);
+  }
+  return t(`builder.lambda.globals.${itemId}.hint`);
+};
+
+const filteredPaletteSections = computed(() =>
+  filterLambdaPaletteSections(paletteSections.value, paletteQuery.value, {
+    labelFor: (sectionId, item) => paletteItemLabel(sectionId, item.id)
+  })
+);
 
 const pickSnippet = async (snippet) => {
   const editor = textareaRef.value;
@@ -171,7 +281,7 @@ const pickSnippet = async (snippet) => {
     editor.selectionEnd ?? editor.value.length,
     snippet.insert
   );
-  snippetsOpen.value = false;
+  paletteOpen.value = false;
   emit("update:model-value", text);
   await nextTick();
   const current = textareaRef.value;
@@ -273,10 +383,30 @@ const warningText = (warning) =>
   margin-bottom: 4px;
 }
 
-.lambda-field__snippets {
+.lambda-field__palette {
   left: auto;
-  min-width: 260px;
-  max-height: 220px;
+  min-width: 320px;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.lambda-field__palette-search {
+  width: 100%;
+  margin-bottom: 6px;
+}
+
+.lambda-field__palette-section-title {
+  margin: 8px 0 4px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #334155;
+}
+
+.lambda-field__palette-empty {
+  color: #64748b;
+  font-size: 12px;
+  padding: 8px 4px;
 }
 
 .lambda-field__snippet {
