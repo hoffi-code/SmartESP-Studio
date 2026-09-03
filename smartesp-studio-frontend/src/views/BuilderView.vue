@@ -464,6 +464,7 @@
             :external-select="lvglExternalSelect"
             :active-mode-level="activeModeLevel"
             :display-palette="lvglDisplayPalette"
+            :simulated-state="simulation.entityState.value"
             @update="handleLvglUpdate"
             @field-edit="handleLvglFieldEdit"
           />

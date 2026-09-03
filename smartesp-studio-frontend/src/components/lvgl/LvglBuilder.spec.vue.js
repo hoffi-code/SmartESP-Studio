@@ -460,4 +460,12 @@ describe("LvglBuilder", () => {
     expect(patch.pages[0].widgets[0].rawYaml).toContain("width: 120");
     expect(patch.pages[0].widgets[0].originalType).toBe("chart");
   });
+
+  it("forwards simulatedState to the canvas preview (P8 live binding)", () => {
+    const widget = { uiId: "w1", type: "label", common: {}, props: { text: "Old", bind_id: "temp" }, children: [] };
+    const lvglConfig = { displays: [], touchscreens: [], bufferSize: "", bgColor: "", pages: [{ id: "main_page", widgets: [widget] }] };
+    const simulatedState = { temp: { kind: "numeric", value: 21 } };
+    const wrapper = mount(LvglBuilder, { props: { lvglConfig, widgetSchemas, simulatedState } });
+    expect(wrapper.get(".lvgl-canvas__label").text()).toBe("21");
+  });
 });
