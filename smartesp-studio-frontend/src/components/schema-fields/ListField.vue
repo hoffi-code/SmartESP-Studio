@@ -76,30 +76,32 @@
         </div>
       </template>
       <template v-else-if="isObjectListItem">
-        <div class="schema-levels">
-          <SchemaField
-            v-for="child in visibleListItemFields(item)"
-            :key="`${index}-${child.key}`"
-            :field="child"
-            :path="[]"
-            :focus-path="listItemFocusPath(index)"
-            :value="item || {}"
-            :root-value="rootValue || value"
-            :mode-level="modeLevel"
-            :id-registry="idRegistry"
-            :name-registry="nameRegistry"
-            :id-index="idIndex"
-            :gpio-options="gpioOptions"
-            :gpio-usage="gpioUsage"
-            :gpio-title="gpioTitle"
-            :context-component-id="contextComponentId"
-            :context-scope-id="contextScopeId"
-            :schema-id="schemaId"
-            :global-store="globalStore"
-            @update="(payload) => updateListObjectItem(index, payload)"
-            @open-secrets="emit('open-secrets')"
-          />
-        </div>
+        <LambdaScopeVariablesScope :names="itemLambdaScopeNames(item)">
+          <div class="schema-levels">
+            <SchemaField
+              v-for="child in visibleListItemFields(item)"
+              :key="`${index}-${child.key}`"
+              :field="child"
+              :path="[]"
+              :focus-path="listItemFocusPath(index)"
+              :value="item || {}"
+              :root-value="rootValue || value"
+              :mode-level="modeLevel"
+              :id-registry="idRegistry"
+              :name-registry="nameRegistry"
+              :id-index="idIndex"
+              :gpio-options="gpioOptions"
+              :gpio-usage="gpioUsage"
+              :gpio-title="gpioTitle"
+              :context-component-id="contextComponentId"
+              :context-scope-id="contextScopeId"
+              :schema-id="schemaId"
+              :global-store="globalStore"
+              @update="(payload) => updateListObjectItem(index, payload)"
+              @open-secrets="emit('open-secrets')"
+            />
+          </div>
+        </LambdaScopeVariablesScope>
       </template>
       <select
         v-else-if="isBooleanListItem"
@@ -174,6 +176,7 @@
 import { computed, ref, watch } from 'vue';
 import GpioField from './GpioField.vue';
 import FieldHint from './FieldHint.vue';
+import LambdaScopeVariablesScope from './LambdaScopeVariablesScope.vue';
 import SchemaField from '../SchemaField.vue';
 import PickerModal from '../PickerModal.vue';
 import { isFieldVisible } from '../../utils/schemaVisibility';
@@ -232,6 +235,17 @@ const listValue = computed(() => {
 const filterVisibleFields = (fields = [], contextValue = null) =>
   fields.filter((field) => isFieldVisible(field, contextValue, fields, props.globalStore) && isModeLevelVisible(fieldModeLevel(field), props.modeLevel));
 const visibleListItemFields = (itemValue = {}) => filterVisibleFields(props.field.item?.fields || [], itemValue || {});
+
+// Deklarierte Namen einer variable_map im selben Item (z.B. api.actions[].variables) --
+// stehen im then:-Lambda desselben Eintrags als implizite Scope-Variablen zur Verfuegung,
+// genau wie ESPHome sie dort als rohe C++-Parameter bereitstellt.
+const itemLambdaScopeNames = (item) => {
+  const variableMapField = (props.field.item?.fields || []).find((entry) => entry?.type === 'variable_map');
+  if (!variableMapField) return [];
+  const entries = item?.[variableMapField.key];
+  if (!Array.isArray(entries)) return [];
+  return entries.map((entry) => String(entry?.name || '').trim()).filter(Boolean);
+};
 
 const listItemType = computed(() => props.field.item?.type || 'text');
 const isObjectListItem = computed(() => listItemType.value === 'object');

@@ -5,14 +5,17 @@ import { LAMBDA_SNIPPETS } from "./lambdaSnippets";
 
 const CATEGORY_ORDER = ["logging", "strings", "math", "time", "core"];
 
-// buildLambdaPaletteSections({ suggestedDomain }) -> [{ id, items: [{ id, insert }] }]
+// buildLambdaPaletteSections({ suggestedDomain, dynamicScopeVariables }) ->
+// [{ id, items: [{ id, insert }] }]
 // "suggested" only when suggestedDomain resolves to a non-empty member catalog entry;
-// "snippets" wraps LAMBDA_SNIPPETS verbatim, always present; "scope" wraps
-// LAMBDA_SCOPE_VARIABLES verbatim, always present (not yet bound to the field's
-// actual lambda context -- see lambdaScopeVariables.js); category sections group
-// LAMBDA_GLOBAL_FUNCTIONS in a fixed reading order rather than alpha-sorted keys --
-// few known categories, fixed reads better than alpha for a list this short.
-export const buildLambdaPaletteSections = ({ suggestedDomain = "" } = {}) => {
+// "snippets" wraps LAMBDA_SNIPPETS verbatim, always present; "scope" merges
+// LAMBDA_SCOPE_VARIABLES (ESPHomes eingebaute Kontext-Variablen wie x/address/iteration)
+// mit dynamicScopeVariables -- Namen, die fuer genau dieses Lambda gelten, z.B. aus einer
+// variable_map im selben Action-Eintrag (siehe LambdaScopeVariablesScope.vue). Duplikate
+// (gleicher Name in beiden Quellen) werden zusammengefuehrt; category sections gruppieren
+// LAMBDA_GLOBAL_FUNCTIONS in fixer Lesereihenfolge statt alpha-sortierter Keys -- wenige
+// bekannte Kategorien, fix liest sich besser als alpha bei einer so kurzen Liste.
+export const buildLambdaPaletteSections = ({ suggestedDomain = "", dynamicScopeVariables = [] } = {}) => {
   const sections = [];
 
   const suggestedItems = LAMBDA_MEMBER_CATALOG[suggestedDomain];
@@ -21,7 +24,13 @@ export const buildLambdaPaletteSections = ({ suggestedDomain = "" } = {}) => {
   }
 
   sections.push({ id: "snippets", items: LAMBDA_SNIPPETS });
-  sections.push({ id: "scope", items: LAMBDA_SCOPE_VARIABLES });
+
+  const seenScopeIds = new Set();
+  const scopeItems = [
+    ...dynamicScopeVariables.map((name) => ({ id: name, insert: name })),
+    ...LAMBDA_SCOPE_VARIABLES
+  ].filter((entry) => entry?.id && !seenScopeIds.has(entry.id) && seenScopeIds.add(entry.id));
+  sections.push({ id: "scope", items: scopeItems });
 
   CATEGORY_ORDER.forEach((category) => {
     const items = LAMBDA_GLOBAL_FUNCTIONS.filter((entry) => entry.category === category);

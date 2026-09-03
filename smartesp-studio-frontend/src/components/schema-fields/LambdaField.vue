@@ -133,7 +133,7 @@ const props = defineProps({
 
 const emit = defineEmits(["update:model-value"]);
 
-const { t } = useI18n();
+const { t, te } = useI18n();
 
 const textareaRef = ref(null);
 const highlightRef = ref(null);
@@ -294,8 +294,15 @@ const togglePalette = () => {
   paletteOpen.value = true;
 };
 
+// Aus LambdaScopeVariablesScope.vue -- Namen einer variable_map im selben Action-Eintrag
+// (z.B. api.actions[].variables), leer ausserhalb eines solchen Kontexts.
+const injectedScopeVariableNames = inject("lambdaScopeVariableNames", computed(() => []));
+
 const paletteSections = computed(() =>
-  buildLambdaPaletteSections({ suggestedDomain: paletteSuggestedDomain.value })
+  buildLambdaPaletteSections({
+    suggestedDomain: paletteSuggestedDomain.value,
+    dynamicScopeVariables: injectedScopeVariableNames.value
+  })
 );
 
 const paletteSectionTitle = (sectionId) => {
@@ -307,7 +314,13 @@ const paletteSectionTitle = (sectionId) => {
 
 const paletteItemLabel = (sectionId, itemId) => {
   if (sectionId === "snippets") return t(`builder.lambda.snippets.${itemId}`);
-  if (sectionId === "scope") return t(`builder.lambda.scope.${itemId}.label`);
+  if (sectionId === "scope") {
+    // Dynamische Namen (variable_map, z.B. api.actions[].variables) haben keinen
+    // kuratierten Eintrag -- der Name selbst ist die beste Beschriftung, statt des
+    // rohen i18n-Key-Strings bei einer fehlgeschlagenen Aufloesung.
+    const key = `builder.lambda.scope.${itemId}.label`;
+    return te(key) ? t(key) : itemId;
+  }
   if (sectionId === "suggested") {
     return t(`builder.lambda.members.${paletteSuggestedDomain.value}.${itemId}.label`);
   }
@@ -316,7 +329,10 @@ const paletteItemLabel = (sectionId, itemId) => {
 
 const paletteItemHint = (sectionId, itemId) => {
   if (sectionId === "snippets") return "";
-  if (sectionId === "scope") return t(`builder.lambda.scope.${itemId}.hint`);
+  if (sectionId === "scope") {
+    const key = `builder.lambda.scope.${itemId}.hint`;
+    return te(key) ? t(key) : "";
+  }
   if (sectionId === "suggested") {
     return t(`builder.lambda.members.${paletteSuggestedDomain.value}.${itemId}.hint`);
   }
