@@ -108,6 +108,56 @@ class SerialHostTests(unittest.TestCase):
             config.JOB_DIR = original_job_dir
             config.TARGET_DIR = original_target_dir
 
+    def test_validate_job_also_compiles_to_catch_lambda_cpp_errors(self):
+        original_job_dir = config.JOB_DIR
+        original_target_dir = config.TARGET_DIR
+        try:
+            with tempfile.TemporaryDirectory() as temp_dir:
+                config.JOB_DIR = temp_dir
+                config.TARGET_DIR = temp_dir
+                manager = object.__new__(JobManager)
+                job = Job("validate-test", "device.yaml", "validate", "")
+                commands = []
+                manager._run_esphome = lambda current_job, args: commands.append(args) or 0
+                manager._run_job(job)
+                self.assertEqual(
+                    [
+                        ["config", str(pathlib.Path(temp_dir) / "device.yaml")],
+                        ["compile", str(pathlib.Path(temp_dir) / "device.yaml")],
+                    ],
+                    commands,
+                )
+                self.assertEqual("success", job.state)
+        finally:
+            config.JOB_DIR = original_job_dir
+            config.TARGET_DIR = original_target_dir
+
+    def test_validate_job_skips_compile_when_config_fails(self):
+        original_job_dir = config.JOB_DIR
+        original_target_dir = config.TARGET_DIR
+        try:
+            with tempfile.TemporaryDirectory() as temp_dir:
+                config.JOB_DIR = temp_dir
+                config.TARGET_DIR = temp_dir
+                manager = object.__new__(JobManager)
+                job = Job("validate-fail-test", "device.yaml", "validate", "")
+                commands = []
+
+                def fake_run(current_job, args):
+                    commands.append(args)
+                    return 1
+
+                manager._run_esphome = fake_run
+                manager._run_job(job)
+                self.assertEqual(
+                    [["config", str(pathlib.Path(temp_dir) / "device.yaml")]],
+                    commands,
+                )
+                self.assertEqual("failed", job.state)
+        finally:
+            config.JOB_DIR = original_job_dir
+            config.TARGET_DIR = original_target_dir
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -240,7 +240,13 @@ class JobManager:
         if job.action == "logs":
             exit_code = self._run_esphome(job, ["logs", yaml_path, "--device", job.device])
         elif job.action == "validate":
+            # "Pruefen" deckt seit hier auch echte C++-Fehler in lambda:-Bloecken ab --
+            # esphome config validiert nur YAML/Schema, C++ wird erst bei compile
+            # gegen die reale PlatformIO-Toolchain geprueft (spiegelt den else-Zweig
+            # unten und den serial-Zweig oben, nur ohne Upload danach).
             exit_code = self._run_esphome(job, ["config", yaml_path])
+            if exit_code == 0 and not job.cancel_requested:
+                exit_code = self._run_esphome(job, ["compile", yaml_path])
         elif job.action == "clean":
             exit_code = self._run_esphome(job, ["clean", yaml_path])
         elif job.action == "serial":
