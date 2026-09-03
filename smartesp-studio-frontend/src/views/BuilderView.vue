@@ -261,6 +261,8 @@
         <BuilderCoreTab
           v-if="activeTab === 'Core'"
           :active-tab-help-url="activeTabHelpUrl"
+          :section-comment-key="sectionCommentKeyFor('Core')"
+          :section-comment-has-comment="sectionHasComment('Core')"
           :header-comment="config.headerComment || ''"
           :esphome-core-id="esphomeCoreId"
           :esphome-core-config="esphomeCoreConfig"
@@ -282,6 +284,7 @@
           @update-core-schema="handleCoreSchemaUpdate"
           @update-header-comment="handleHeaderCommentUpdate"
           @update-substitutions-schema="handleSubstitutionsSchemaUpdate"
+          @open-section-comment="openSectionCommentEditor"
           @open-secrets="openSecretsModal"
           @mode-upgrade-availability="handleModeUpgradeAvailability"
           @promote-mode-level="promoteModeLevel"
@@ -290,6 +293,8 @@
         <BuilderPlatformTab
           v-if="activeTab === 'Platform'"
           :active-tab-help-url="activeTabHelpUrl"
+          :section-comment-key="sectionCommentKeyFor('Platform')"
+          :section-comment-has-comment="sectionHasComment('Platform')"
           :platform-core-id="platformCoreId"
           :platform-core-config="platformCoreConfig"
           :platform-detail-id="platformDetailId"
@@ -307,6 +312,7 @@
           :should-show-mode-upgrade="shouldShowModeUpgrade('platform')"
           :mode-upgrade-button-label="modeUpgradeButtonLabel"
           @update-platform-schema="handlePlatformSchemaUpdate"
+          @open-section-comment="openSectionCommentEditor"
           @open-secrets="openSecretsModal"
           @mode-upgrade-availability="handleModeUpgradeAvailability"
           @promote-mode-level="promoteModeLevel"
@@ -315,6 +321,8 @@
         <BuilderNetworkTab
           v-if="activeTab === 'Network'"
           :active-tab-help-url="activeTabHelpUrl"
+          :section-comment-key="sectionCommentKeyFor('Network')"
+          :section-comment-has-comment="sectionHasComment('Network')"
           :network-core-id="networkCoreId"
           :network-core-config="networkCoreConfig"
           :network-detail-id="networkDetailId"
@@ -334,6 +342,7 @@
           :should-show-mode-upgrade="shouldShowModeUpgrade('network')"
           :mode-upgrade-button-label="modeUpgradeButtonLabel"
           @update-network-schema="handleNetworkSchemaUpdate"
+          @open-section-comment="openSectionCommentEditor"
           @open-secrets="openSecretsModal"
           @mode-upgrade-availability="handleModeUpgradeAvailability"
           @promote-mode-level="promoteModeLevel"
@@ -342,6 +351,8 @@
         <BuilderProtocolsTab
           v-if="activeTab === 'Protocols'"
           :active-tab-help-url="activeTabHelpUrl"
+          :section-comment-key="sectionCommentKeyFor('Protocols')"
+          :section-comment-has-comment="sectionHasComment('Protocols')"
           :protocol-tabs="protocolTabs"
           :active-protocol-key="activeProtocolKey"
           :protocol-detail-id="protocolDetailId"
@@ -360,6 +371,7 @@
           :mode-upgrade-button-label="modeUpgradeButtonLabel"
           @update:active-protocol-key="activeProtocolKey = $event"
           @update-protocol-detail="handleProtocolDetailUpdate"
+          @open-section-comment="openSectionCommentEditor"
           @open-secrets="openSecretsModal"
           @mode-upgrade-availability="handleModeUpgradeAvailability"
           @promote-mode-level="promoteModeLevel"
@@ -368,6 +380,8 @@
         <BuilderBussesTab
           v-if="activeTab === 'Busses'"
           :active-tab-help-url="activeTabHelpUrl"
+          :section-comment-key="sectionCommentKeyFor('Busses')"
+          :section-comment-has-comment="sectionHasComment('Busses')"
           :busses-tabs="bussesTabs"
           :active-busses-key="activeBussesKey"
           :active-bus-label="activeBusLabel"
@@ -393,6 +407,7 @@
           @update-busses-detail="handleBussesDetailUpdate"
           @update-bus-instance="handleBusInstanceUpdate"
           @remove-bus-instance="removeActiveBusInstance"
+          @open-section-comment="openSectionCommentEditor"
           @open-secrets="openSecretsModal"
           @mode-upgrade-availability="handleModeUpgradeAvailability"
           @promote-mode-level="promoteModeLevel"
@@ -401,6 +416,8 @@
         <BuilderSystemTab
           v-if="activeTab === 'System'"
           :active-tab-help-url="activeTabHelpUrl"
+          :section-comment-key="sectionCommentKeyFor('System')"
+          :section-comment-has-comment="sectionHasComment('System')"
           :other-tabs="otherTabs"
           :active-other-key="activeOtherKey"
           :other-detail-id="otherDetailId"
@@ -419,6 +436,7 @@
           :mode-upgrade-button-label="modeUpgradeButtonLabel"
           @update:active-other-key="activeOtherKey = $event"
           @update-other-detail="handleOtherDetailUpdate"
+          @open-section-comment="openSectionCommentEditor"
           @open-secrets="openSecretsModal"
           @mode-upgrade-availability="handleModeUpgradeAvailability"
           @promote-mode-level="promoteModeLevel"
@@ -427,6 +445,8 @@
         <BuilderAutomationTab
           v-if="activeTab === 'Automation'"
           :active-tab-help-url="activeTabHelpUrl"
+          :section-comment-key="sectionCommentKeyFor('Automation')"
+          :section-comment-has-comment="sectionHasComment('Automation')"
           :automation-tabs="automationTabs"
           :active-automation-key="activeAutomationKey"
           :automation-detail-id="automationDetailId"
@@ -447,6 +467,7 @@
           :mode-upgrade-button-label="modeUpgradeButtonLabel"
           @update:active-automation-key="activeAutomationKey = $event"
           @update-automation-detail="handleAutomationDetailUpdate"
+          @open-section-comment="openSectionCommentEditor"
           @open-secrets="openSecretsModal"
           @mode-upgrade-availability="handleModeUpgradeAvailability"
           @promote-mode-level="promoteModeLevel"
@@ -2630,6 +2651,30 @@ const sectionCommentKeys = computed(() => {
 const sectionCommentHasComment = computed(() =>
   Boolean(sectionCommentKey.value && config.value.fieldComments?.[sectionCommentKey.value])
 );
+
+// Jede Sektionskarte traegt ihren eigenen Kommentar-Button. Der Key ist der
+// Top-Level-YAML-Key, den useBuilderYamlPreview fuer die Sektion emittiert.
+const sectionCommentKeyByTab = computed(() => ({
+  Core: "esphome",
+  Platform: platformCoreConfig.value?.platform || "",
+  Network: networkCoreConfig.value?.transport || "",
+  Protocols: activeProtocolKey.value,
+  Busses: activeBussesKey.value,
+  System: activeOtherKey.value,
+  Automation: activeAutomationKey.value
+}));
+
+const sectionCommentKeyFor = (tab) => sectionCommentKeyByTab.value[tab] || "";
+
+const sectionHasComment = (tab) => {
+  const key = sectionCommentKeyFor(tab);
+  return Boolean(key && config.value.fieldComments?.[key]);
+};
+
+const openSectionCommentEditor = (key) => {
+  if (!key) return;
+  openCommentEditor({ key, title: t("builder.comment.sectionTitle", { section: key }) });
+};
 
 // Kopf-Kommentar laeuft nicht ueber das Modal, sondern ueber die Karte im Core-Tab.
 const handleHeaderCommentUpdate = (text) => {

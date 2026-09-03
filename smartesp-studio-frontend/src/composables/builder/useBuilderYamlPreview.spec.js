@@ -163,6 +163,46 @@ describe("useBuilderYamlPreview", () => {
     );
   });
 
+  // Protokolle, System und Automation hatten bisher keinen pushBlockHeaderComment-Aufruf --
+  // die Kommentare wurden gespeichert, aber nie gerendert.
+  it("prepends section comments for protocol, system and automation blocks", () => {
+    const baseConfig = {
+      esphomeCore: { name: "kitchen_sensor" },
+      substitutions: {},
+      platformCore: {},
+      networkCore: {},
+      protocolsCore: { api: { password: "geheim" } },
+      systemCore: {},
+      automationCore: {},
+      bussesCore: {},
+      components: [],
+      system: { logger: { enabled: true, level: "DEBUG" } },
+      automation: { interval: [{ interval: "5s" }] },
+      fieldComments: {
+        api: "# --- API ---",
+        logger: "# --- Logger ---",
+        interval: "# --- Interval ---"
+      }
+    };
+    const harness = buildHarness({
+      config: ref(baseConfig),
+      protocolsCoreConfig: ref(baseConfig.protocolsCore),
+      protocolsSchemas: ref({ api: { fields: [textField("password")] } }),
+      protocolDefinitions: [{ key: "api" }],
+      enabledProtocolKeys: ref(["api"]),
+      otherSchemas: ref({ logger: { fields: [textField("level")] } }),
+      systemConfig: ref(baseConfig.system),
+      automationSchemas: ref({ interval: { fields: [{ key: "interval", type: "list", item: { type: "object", fields: [textField("interval")] } }] } }),
+      automationCoreConfig: ref(baseConfig.automation),
+      automationDefinitions: [{ key: "interval" }]
+    });
+
+    const yaml = harness.yamlPreview.value;
+    expect(yaml).toContain("# --- API ---\napi:");
+    expect(yaml).toContain("# --- Logger ---\nlogger:");
+    expect(yaml).toContain("# --- Interval ---\ninterval:");
+  });
+
   it("emits an lvgl block with a label widget once its schema is loaded", () => {
     const harness = buildHarness({
       config: ref({
