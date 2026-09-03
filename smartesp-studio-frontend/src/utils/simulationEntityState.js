@@ -24,14 +24,18 @@ const DOMAIN_KIND = {
   light: "struct",
   cover: "struct",
   fan: "struct",
-  climate: "struct"
+  climate: "struct",
+  // Nachgetragen fuer P6 (simulationExecutor.js): valve.open/close brauchen ein Ziel wie
+  // cover, dessen struct-Form (position/state) es 1:1 teilt.
+  valve: "struct"
 };
 
 const STRUCT_DEFAULTS = {
   light: { on: false, brightness: 1 },
   cover: { position: 1, state: "open" },
   fan: { on: false, speed: 0 },
-  climate: { mode: "off", target_temperature: 20, current_temperature: 20 }
+  climate: { mode: "off", target_temperature: 20, current_temperature: 20 },
+  valve: { position: 1, state: "open" }
 };
 
 const COMPONENT_SCOPE_RE = /^component:(\d+)$/;
