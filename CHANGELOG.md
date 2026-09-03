@@ -60,6 +60,14 @@ markiert.
   bei ungespeicherten Änderungen seit dem Prüfen-Start unterbleibt die
   Zuordnung bewusst.
 
+### Changed
+
+- **Lint sauber** – die 106 verbliebenen ESLint-Warnungen sind weg: 91
+  überflüssige `\"`-Escapes in den YAML-Generatoren (`no-useless-escape` steht
+  damit wieder auf `error`) und 15 ungenutzte Bindungen, darunter zwei tote
+  Helfer und ein toter `computed`. Neue Tests decken die generierten
+  `font:`/`image:`-Blöcke ab.
+
 ## [0.3.0] – 2026-09-02
 
 ### Added
