@@ -284,7 +284,11 @@ const props = defineProps({
   interactive: { type: Boolean, default: true },
   // { monochrome, background, backgroundOpacity, foreground } -- the screen the
   // widgets are drawn on. A 1-bit display renders strictly two-colour.
-  displayPalette: { type: Object, default: () => ({}) }
+  displayPalette: { type: Object, default: () => ({}) },
+  // P8 live binding: simulationEntityState.js entityState map ({[id]: entity}), keyed by
+  // the same ids id_ref fields (bind_id) resolve against. Only read, never written --
+  // absent outside the Simulation tab, so the static preview stays unchanged.
+  simulatedState: { type: Object, default: null }
 });
 
 const emit = defineEmits(["select", "move", "resize-canvas"]);
@@ -391,9 +395,38 @@ const pctOf = (p, value) => {
 
 const fillRatio = (p) => pctOf(p, num(p.value, num(p.min_value, 0)));
 
+// P8 live binding: overrides only the ONE field the widget type actually reads for its
+// value (text/value/state) -- rein lesend, das gleiche Muster wie activeGroup oben. Ohne
+// bind_id oder ohne passenden simulierten Wert bleibt p unveraendert (auch fuer Widget-
+// Typen, die keine Bindung unterstuetzen -- bind_id existiert dort im Schema gar nicht).
+const applySimulatedBinding = (type, p, simulatedState) => {
+  const boundId = p.bind_id;
+  if (!boundId || !simulatedState) return p;
+  const bound = simulatedState[boundId];
+  if (!bound) return p;
+  const value = bound.kind === "struct" ? bound.fields?.on : bound.value;
+
+  if (type === "label") return { ...p, text: String(value ?? "") };
+  if (type === "bar" || type === "slider" || type === "arc") return { ...p, value: Number(value) || 0 };
+  if (type === "switch" || type === "checkbox") return { ...p, state: Boolean(value) };
+  // meter: nur die Hauptskala (erster Scale, erster Nadel-Indikator) -- ein Meter hat
+  // sonst kein einzelnes "Wert"-Feld, sondern beliebig viele Skalen/Indikatoren.
+  if (type === "meter" && Array.isArray(p.scales) && p.scales[0]?.indicators?.[0]?.line) {
+    const scales = p.scales.map((scale, index) => {
+      if (index !== 0) return scale;
+      const indicators = scale.indicators.map((indicator, i) =>
+        i === 0 && indicator.line ? { ...indicator, line: { ...indicator.line, value: Number(value) || 0 } } : indicator
+      );
+      return { ...scale, indicators };
+    });
+    return { ...p, scales };
+  }
+  return p;
+};
+
 // Descriptor per widget: kind + the pieces the template needs.
 const render = (entry) => {
-  const p = effectiveProps(entry.node);
+  const p = applySimulatedBinding(entry.type, effectiveProps(entry.node), props.simulatedState);
   const t = entry.type;
   const theme = THEME.value;
 
