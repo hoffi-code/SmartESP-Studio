@@ -1942,27 +1942,6 @@ const buildAnimationEntryLines = (displayData, animationIdByKey) => {
   return lines;
 };
 
-const buildAnimationIntervals = (displayData, animationIdByKey) => {
-  if (!displayData) return [];
-  const { animationsByKey } = displayData;
-  if (!animationsByKey.size) return [];
-  const lines = [];
-  [...animationsByKey.entries()]
-    .sort(([a], [b]) => a.localeCompare(b))
-    .forEach(([key, animation]) => {
-      if (!animation.autoAnimate) return;
-      const id = animationIdByKey?.get(key);
-      if (!id) return;
-      const interval = Number(animation.intervalMs || 0) || 200;
-      lines.push("interval:");
-      lines.push(`  - interval: ${interval}ms`);
-      lines.push("    then:");
-      lines.push(`      - animation.next_frame: ${id}`);
-      lines.push("");
-    });
-  return lines;
-};
-
 export const buildDisplayAnimationIntervals = (
   components,
   componentSchemas = {},

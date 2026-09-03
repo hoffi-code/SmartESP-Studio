@@ -783,7 +783,6 @@ const {
   importSummaryModalMessage,
   importSummaryModalOpen,
   importSummaryModalRows,
-  isComponentCatalogLoading,
   isComponentCatalogReady,
   isComponentPickerOpen,
   isComponentsImporting,
@@ -2322,8 +2321,6 @@ const safeStringify = (value) => {
   );
 };
 
-const jsonPreview = computed(() => safeStringify(config.value));
-
 const { yamlPreviewDocument, yamlPreview, previewTabs } = useBuilderYamlPreview({
   config,
   substitutionsCoreSchema,
@@ -2437,7 +2434,7 @@ const activateYamlOriginScope = (origin) => {
   }
   if (scopeId.startsWith("tab:Busses:")) {
     activeTab.value = "Busses";
-    const [, , key, index] = scopeId.split(":");
+    const [, , key] = scopeId.split(":");
     if (key) activeBussesKey.value = key;
     return;
   }
@@ -3515,7 +3512,7 @@ const loadConfig = () => {
     config.value.ui.modeLevel = activeModeLevel.value;
     persistedConfigFingerprint.value = isProjectSaved.value ? buildConfigFingerprint(config.value) : "";
     isHydrating.value = false;
-  } catch (error) {
+  } catch {
     sourceProjectFilename.value = "";
     persistedConfigFingerprint.value = "";
     isHydrating.value = false;

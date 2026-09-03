@@ -760,7 +760,7 @@ const processImage = async (element) => {
   img.src = url;
   try {
     await img.decode();
-  } catch (error) {
+  } catch {
     return;
   }
 
@@ -788,7 +788,7 @@ const processAnimation = async (element) => {
   img.src = url;
   try {
     await img.decode();
-  } catch (error) {
+  } catch {
     return;
   }
   const canvas = document.createElement("canvas");
@@ -827,7 +827,7 @@ const ensureFontLoaded = async (element) => {
     const loaded = await face.load();
     document.fonts.add(loaded);
     loadedFonts.set(key, true);
-  } catch (error) {
+  } catch {
     loadedFonts.set(key, false);
   }
 };
