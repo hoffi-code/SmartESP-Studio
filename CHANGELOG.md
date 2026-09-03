@@ -8,6 +8,14 @@ markiert.
 
 ## [Unreleased]
 
+### Fixed
+
+- **Deklarierte Action-Variablen fehlten in der Lambda-Palette** – Variablen aus
+  `variables:` (z. B. bei `api.actions`) tauchten im `then:`-Lambda desselben
+  Eintrags nicht als Vorschlag auf; der Scope-Abschnitt der Palette war fest auf
+  `x`/`address`/`iteration` verdrahtet. Erscheinen jetzt vor den eingebauten
+  Namen.
+
 ### Added
 
 - **API-Actions vollständig im Builder definierbar** – `api: actions:`

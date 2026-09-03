@@ -28,10 +28,28 @@ describe("buildLambdaPaletteSections", () => {
     expect(snippets.items).toEqual(LAMBDA_SNIPPETS);
   });
 
-  it("always includes the scope variables section unchanged", () => {
+  it("always includes the scope variables section unchanged without dynamic names", () => {
     const sections = buildLambdaPaletteSections();
     const scope = sections.find((section) => section.id === "scope");
     expect(scope.items).toEqual(LAMBDA_SCOPE_VARIABLES);
+  });
+
+  // Regression: variable_map-Namen (z.B. api.actions[].variables) waren im Scope-Abschnitt
+  // der Palette immer fest x/address/iteration -- nie an das jeweilige Lambda gebunden.
+  it("puts dynamic scope variables ahead of the built-in ones", () => {
+    const sections = buildLambdaPaletteSections({ dynamicScopeVariables: ["plug1_on", "plug2_on"] });
+    const scope = sections.find((section) => section.id === "scope");
+    expect(scope.items).toEqual([
+      { id: "plug1_on", insert: "plug1_on" },
+      { id: "plug2_on", insert: "plug2_on" },
+      ...LAMBDA_SCOPE_VARIABLES
+    ]);
+  });
+
+  it("dedupes a dynamic name that collides with a built-in scope variable", () => {
+    const sections = buildLambdaPaletteSections({ dynamicScopeVariables: ["x"] });
+    const scope = sections.find((section) => section.id === "scope");
+    expect(scope.items.filter((item) => item.id === "x")).toHaveLength(1);
   });
 
   it("groups global functions by category in the fixed reading order", () => {

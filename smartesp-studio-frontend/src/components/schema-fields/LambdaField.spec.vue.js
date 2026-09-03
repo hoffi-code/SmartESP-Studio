@@ -351,6 +351,40 @@ describe("LambdaField", () => {
     expect(text.value).toBe("return iteration;");
   });
 
+  // Regression: Variablen aus einer variable_map im selben Action-Eintrag (z.B.
+  // api.actions[].variables) tauchten in der Palette nie auf -- der Scope-Abschnitt
+  // war fest auf x/address/iteration verdrahtet. LambdaScopeVariablesScope.vue
+  // provides "lambdaScopeVariableNames", genau wie BuilderView.vue "lambdaBuildErrors"
+  // fuers Feld bereitstellt.
+  it("lists an injected scope variable ahead of the built-in ones and inserts it", async () => {
+    const text = ref("return ;");
+    const wrapper = mount(LambdaField, {
+      props: {
+        inputId: "l1",
+        modelValue: text.value,
+        "onUpdate:model-value": (value) => {
+          text.value = value;
+        }
+      },
+      global: { provide: { lambdaScopeVariableNames: ref(["plug1_on"]) } }
+    });
+    const textarea = wrapper.get("textarea");
+    textarea.element.setSelectionRange(7, 7);
+
+    await wrapper.get(".lambda-field__toolbar button").trigger("click");
+    await wrapper.get(".lambda-field__palette-search").setValue("plug1_on");
+
+    const items = wrapper.findAll(".lambda-field__snippet");
+    expect(items).toHaveLength(1);
+    // Ohne kuratierten i18n-Eintrag ist der Variablenname selbst die Beschriftung,
+    // nicht der rohe Uebersetzungs-Key.
+    expect(items[0].text()).toBe("plug1_onplug1_on");
+    expect(items[0].text()).not.toContain("builder.lambda.scope");
+
+    await items[0].trigger("mousedown");
+    expect(text.value).toBe("return plug1_on;");
+  });
+
   it("puts a Suggested section with the referenced entity's members first", async () => {
     const { wrapper } = mountBound({
       idIndex: [{ id: "temp", idLower: "temp", domain: "sensor" }]
