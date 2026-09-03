@@ -317,4 +317,47 @@ describe("LambdaField", () => {
     expect(overlay.scrollTop).toBe(24);
     expect(overlay.scrollLeft).toBe(12);
   });
+
+  it("shows one gutter line per source line", () => {
+    const wrapper = mountField({ modelValue: "a\nb\nc" });
+    expect(wrapper.findAll(".lambda-field__gutter-lines span").map((s) => s.text())).toEqual([
+      "1",
+      "2",
+      "3"
+    ]);
+  });
+
+  it("shows a single gutter line for empty content", () => {
+    const wrapper = mountField({ modelValue: "" });
+    expect(wrapper.findAll(".lambda-field__gutter-lines span").map((s) => s.text())).toEqual(["1"]);
+  });
+
+  it("marks the gutter line and draws an error marker for the first warning", () => {
+    const wrapper = mountField({
+      modelValue: "auto a = 1;\nreturn (id(temp).state;",
+      idIndex: [{ id: "temp", idLower: "temp", domain: "sensor" }]
+    });
+    const errorLine = wrapper.find(".lambda-field__gutter-line--error");
+    expect(errorLine.exists()).toBe(true);
+    expect(errorLine.text()).toBe("2");
+    expect(wrapper.find(".lambda-field__error-line").exists()).toBe(true);
+  });
+
+  it("has no error marker on clean code", () => {
+    const wrapper = mountField({
+      modelValue: "return id(temp).state;",
+      idIndex: [{ id: "temp", idLower: "temp", domain: "sensor" }]
+    });
+    expect(wrapper.find(".lambda-field__gutter-line--error").exists()).toBe(false);
+    expect(wrapper.find(".lambda-field__error-line").exists()).toBe(false);
+  });
+
+  it("keeps the gutter scroll in sync with the textarea", async () => {
+    const wrapper = mountField({ modelValue: "a\nb\nc" });
+    const textarea = wrapper.get("textarea");
+    textarea.element.scrollTop = 24;
+    await textarea.trigger("scroll");
+    const gutterLines = wrapper.get(".lambda-field__gutter-lines").element;
+    expect(gutterLines.style.transform).toBe("translateY(-24px)");
+  });
 });
