@@ -131,13 +131,10 @@
       @cancel-pending-folder="cancelPendingFolder"
     />
 
-    <div
-      class="dashboard-resizer"
-      role="separator"
+    <PaneResizer
       :aria-label="t('dashboard.view.resizeSidebar')"
-      aria-orientation="vertical"
-      @mousedown.prevent="startSidebarResize"
-    ></div>
+      @resize-move="handleSidebarResizeMove"
+    />
 
     <DashboardEntriesPane
       :loading="loading"
@@ -179,6 +176,7 @@ import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue"
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import DashboardEntriesPane from "../components/dashboard/DashboardEntriesPane.vue";
+import PaneResizer from "../components/PaneResizer.vue";
 import DashboardFolderTree from "../components/dashboard/DashboardFolderTree.vue";
 import DashboardModalHost from "../components/dashboard/DashboardModalHost.vue";
 import { useDashboardDeviceStatus } from "../composables/dashboard/useDashboardDeviceStatus";
@@ -245,7 +243,6 @@ const sidebarWidth = ref(250);
 const setEntriesPaneRef = (element) => {
   entriesPaneRef.value = element;
 };
-const isSidebarResizing = ref(false);
 const pendingFolderParentId = ref("");
 const pendingFolderName = ref("");
 const pendingFolderInputRef = ref(null);
@@ -1639,25 +1636,12 @@ const clampSidebarWidth = (value) => {
   return Math.max(SIDEBAR_MIN_WIDTH, Math.min(SIDEBAR_MAX_WIDTH, value));
 };
 
-const handleSidebarResizeMove = (event) => {
+const handleSidebarResizeMove = (clientX) => {
   // Sidebar width is clamped to keep both panels usable.
-  if (!isSidebarResizing.value) return;
   const root = dashboardViewRef.value;
   if (!root) return;
   const rect = root.getBoundingClientRect();
-  const nextWidth = clampSidebarWidth(event.clientX - rect.left);
-  sidebarWidth.value = nextWidth;
-};
-
-const stopSidebarResize = () => {
-  if (!isSidebarResizing.value) return;
-  isSidebarResizing.value = false;
-  document.body.classList.remove("is-sidebar-resizing");
-};
-
-const startSidebarResize = () => {
-  isSidebarResizing.value = true;
-  document.body.classList.add("is-sidebar-resizing");
+  sidebarWidth.value = clampSidebarWidth(clientX - rect.left);
 };
 
 const exportYaml = async () => {
@@ -1843,8 +1827,6 @@ onMounted(() => {
   window.addEventListener("click", handleGlobalClick);
   window.addEventListener("keydown", handleDashboardKeydown);
   window.addEventListener("resize", handleDashboardResize);
-  window.addEventListener("mousemove", handleSidebarResizeMove);
-  window.addEventListener("mouseup", stopSidebarResize);
   window.addEventListener("app:install-option", handleTopbarInstallOption);
   window.addEventListener("app:import-option", handleTopbarImportOption);
   window.addEventListener("app:builder-logs", handleTopbarLogs);
@@ -1860,8 +1842,6 @@ onBeforeUnmount(() => {
   window.removeEventListener("click", handleGlobalClick);
   window.removeEventListener("keydown", handleDashboardKeydown);
   window.removeEventListener("resize", handleDashboardResize);
-  window.removeEventListener("mousemove", handleSidebarResizeMove);
-  window.removeEventListener("mouseup", stopSidebarResize);
   window.removeEventListener("app:install-option", handleTopbarInstallOption);
   window.removeEventListener("app:import-option", handleTopbarImportOption);
   window.removeEventListener("app:builder-logs", handleTopbarLogs);
@@ -1875,7 +1855,6 @@ onBeforeUnmount(() => {
   stopProjectMenuResizeObserver();
   disposeInstallFlow();
   stopDevicesStatusPolling();
-  stopSidebarResize();
   window.dispatchEvent(
     new CustomEvent("app:dashboard-actions-state", {
       detail: {
@@ -2185,33 +2164,6 @@ onBeforeUnmount(() => {
   right: 42px;
   bottom: 32px;
   z-index: 6;
-}
-
-.dashboard-resizer {
-  width: 8px;
-  cursor: col-resize;
-  background: #ffffff;
-  position: relative;
-}
-
-.dashboard-resizer::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 3px;
-  width: 2px;
-  background: var(--border);
-  transition: background-color 0.15s ease;
-}
-
-.dashboard-resizer:hover::before {
-  background: #c5d2e6;
-}
-
-:global(body.is-sidebar-resizing) {
-  cursor: col-resize;
-  user-select: none;
 }
 
 .dashboard-toolbar-wrap {
