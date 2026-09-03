@@ -3,6 +3,13 @@
     "noMatch": "Keine passenden Bezeichner verfügbar",
     "create": "Neu anlegen"
   },
+  "variableMap": {
+    "empty": "Noch keine Variablen.",
+    "nameLabel": "Variablenname",
+    "namePlaceholder": "plug1_on",
+    "typeLabel": "Typ",
+    "add": "+ Variable"
+  },
   "assetRef": {
     "manage": "Assets verwalten"
   },

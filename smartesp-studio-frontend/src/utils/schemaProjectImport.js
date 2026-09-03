@@ -360,6 +360,32 @@ const mapFieldValue = ({ yamlValue, field, path, skipPlatform, filterCatalogs, a
     return { value: text, report };
   }
 
+  // Dynamische Name-Typ-Zuordnung (z.B. api.actions[].variables). Kommt als geparste
+  // YAML-Map an ({ plug1_on: "bool", ... }) und wird fuer die Editor-Zeilen in eine
+  // geordnete Liste umgewandelt -- exportiert wird sie in schemaYaml.js genauso zurueck.
+  if (field?.type === "variable_map") {
+    if (!isPlainObject(yamlValue)) {
+      report.unmappedKeys.push(path);
+      if (yamlValue !== undefined && yamlValue !== null) {
+        report.warnings.push({
+          path,
+          code: "type_mismatch",
+          message: `Expected a mapping for '${path}'`
+        });
+      }
+      return { value: undefined, report };
+    }
+    const entries = Object.entries(yamlValue)
+      .filter(([name]) => normalizeKey(name))
+      .map(([name, type]) => ({ name, type: typeof type === "string" ? type : String(type ?? "") }));
+    if (!entries.length) {
+      report.unmappedKeys.push(path);
+      return { value: undefined, report };
+    }
+    report.mappedKeys.push(path);
+    return { value: entries, report };
+  }
+
   // ESPHome accepts a plain YAML map here as sugar for the untemplated case (e.g.
   // `homeassistant.action.data: { entity_id: ... }`) alongside the templated lambda string --
   // keep it as-is rather than dropping it, the generic object renderer emits it back unchanged.

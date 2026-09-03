@@ -45,6 +45,13 @@
       @update:model-value="(colorValue) => emit('update', { path: fieldPath, value: wrapInputValue(colorValue) })"
     />
 
+    <VariableMapField
+      v-else-if="isVariableMapField"
+      :model-value="Array.isArray(resolvedValue) ? resolvedValue : []"
+      :input-id="inputId"
+      @update:model-value="(mapValue) => emit('update', { path: fieldPath, value: wrapInputValue(mapValue) })"
+    />
+
     <div v-else-if="isTemplatableField" class="schema-templatable">
       <div class="schema-templatable-toolbar">
         <button type="button" class="secondary compact btn-standard" :class="{ 'is-active': templatableMode === 'literal' }" @click="setTemplatableMode('literal')">Value</button>
@@ -165,6 +172,7 @@
 <script setup>
 import GpioField from './GpioField.vue';
 import ColorField from './ColorField.vue';
+import VariableMapField from './VariableMapField.vue';
 import FieldHint from './FieldHint.vue';
 import IdRefField from './IdRefField.vue';
 import AssetRefField from './AssetRefField.vue';
@@ -245,6 +253,7 @@ defineProps({
   isAssetRefField: Boolean,
   isGpioField: Boolean,
   isColorField: Boolean,
+  isVariableMapField: Boolean,
   fieldPath: { type: Array, default: () => [] },
   wrapInputValue: { type: Function, required: true },
   showInlineAction: Boolean,

@@ -63,3 +63,28 @@ describe("action list emission", () => {
     expect(render([actionList("then", { required: true })], { then: [] })).toBe("then:");
   });
 });
+
+describe("variable_map emission", () => {
+  const variableMapField = { key: "variables", type: "variable_map", required: false };
+
+  // Die Typ-Tokens sind ESPHome-Enum-Werte (bool/int/...) -- unquotiert, damit die
+  // erzeugte YAML wie handgeschriebene ESPHome-Configs aussieht.
+  it("emits each entry as an unquoted name: type line", () => {
+    const yaml = render([variableMapField], {
+      variables: [{ name: "plug1_on", type: "bool" }, { name: "plug2_on", type: "bool" }]
+    });
+    expect(yaml).toBe(["variables:", "  plug1_on: bool", "  plug2_on: bool"].join("\n"));
+  });
+
+  it("omits the key entirely without entries", () => {
+    expect(render([variableMapField], { variables: [] })).toBe("");
+    expect(render([variableMapField], {})).toBe("");
+  });
+
+  it("skips a row whose name is still blank", () => {
+    const yaml = render([variableMapField], {
+      variables: [{ name: "", type: "bool" }, { name: "level", type: "int" }]
+    });
+    expect(yaml).toBe(["variables:", "  level: int"].join("\n"));
+  });
+});
