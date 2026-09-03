@@ -1459,7 +1459,7 @@ const normalizeMdiKey = (value) => {
 const escapeCppString = (value) =>
   String(value ?? "")
     .replace(/\\/g, "\\\\")
-    .replace(/\"/g, "\\\"");
+    .replace(/"/g, "\\\"");
 
 const escapePrintfText = (value) => escapeCppString(value).replace(/%/g, "%%");
 
@@ -1841,7 +1841,7 @@ const buildFontEntryLines = (displayData, textFontIdByKey) => {
       [...glyphs].sort().forEach((unicode) => {
         const label = labelsByUnicode?.get(unicode);
         const comment = label ? ` #${label}` : "";
-        lines.push(`      - \"${unicode}\"${comment}`);
+        lines.push(`      - "${unicode}"${comment}`);
       });
     });
 
@@ -1854,13 +1854,13 @@ const buildFontEntryLines = (displayData, textFontIdByKey) => {
         const { weight, italic } = parseGoogleFontVariant(font.variant);
         lines.push("  - file:");
         lines.push("      type: gfonts");
-        lines.push(`      family: \"${String(font.family || "").replace(/\"/g, "\\\"")}\"`);
+        lines.push(`      family: "${String(font.family || "").replace(/"/g, "\\\"")}"`);
         lines.push(`      weight: ${weight}`);
         if (italic) {
           lines.push("      italic: true");
         }
       } else {
-        lines.push(`  - file: \"esp_assets/fonts/${font.file}\"`);
+        lines.push(`  - file: "esp_assets/fonts/${font.file}"`);
       }
       lines.push(`    id: ${id}`);
       lines.push(`    size: ${font.size}`);
@@ -1880,7 +1880,7 @@ const buildImageEntryLines = (displayData, imageIdByKey) => {
     .forEach(([key, image]) => {
       const id = imageIdByKey?.get(key);
       if (!id) return;
-      lines.push(`  - file: \"esp_assets/images/${image.file}\"`);
+      lines.push(`  - file: "esp_assets/images/${image.file}"`);
       lines.push(`    id: ${id}`);
       lines.push(`    resize: ${image.w}x${image.h}`);
       lines.push(`    type: ${image.type || "BINARY"}`);
@@ -1910,7 +1910,7 @@ const buildAnimationEntryLines = (displayData, animationIdByKey) => {
     .forEach(([key, animation]) => {
       const id = animationIdByKey?.get(key);
       if (!id) return;
-      lines.push(`  - file: \"esp_assets/images/${animation.file}\"`);
+      lines.push(`  - file: "esp_assets/images/${animation.file}"`);
       lines.push(`    id: ${id}`);
       lines.push(`    resize: ${animation.resizeW}x${animation.resizeH}`);
       lines.push(`    type: ${animation.type || "BINARY"}`);
@@ -2011,10 +2011,10 @@ const buildIconLambda = (elements, mdiSubstitutions, displayType) => {
       const unicode = mdiSubstitutions[key];
       const color = resolveElementColor(element.color, displayType);
       if (color) {
-        lines.push(`it.printf(${x}, ${y}, id(mdi_font_${size}), ${color}, \"%s\", \"${unicode}\");`);
+        lines.push(`it.printf(${x}, ${y}, id(mdi_font_${size}), ${color}, "%s", "${unicode}");`);
         return;
       }
-      lines.push(`it.printf(${x}, ${y}, id(mdi_font_${size}), \"%s\", \"${unicode}\");`);
+      lines.push(`it.printf(${x}, ${y}, id(mdi_font_${size}), "%s", "${unicode}");`);
     });
   return lines;
 };
@@ -2035,10 +2035,10 @@ const buildTextLambda = (elements, textFontIdByKey, displayType) => {
       if (mode !== "dynamic") {
         const value = escapeCppString(element.text ?? "");
         if (color) {
-          lines.push(`it.print(${x}, ${y}, id(${fontId}), ${color}, \"${value}\");`);
+          lines.push(`it.print(${x}, ${y}, id(${fontId}), ${color}, "${value}");`);
           return;
         }
-        lines.push(`it.print(${x}, ${y}, id(${fontId}), \"${value}\");`);
+        lines.push(`it.print(${x}, ${y}, id(${fontId}), "${value}");`);
         return;
       }
 
@@ -2053,11 +2053,11 @@ const buildTextLambda = (elements, textFontIdByKey, displayType) => {
         const fmt = `${prefix}${format}${suffix}`;
         if (color) {
           lines.push(
-            `it.printf(${x}, ${y}, id(${fontId}), ${color}, \"${fmt}\", id(${dynamicId}).state);`
+            `it.printf(${x}, ${y}, id(${fontId}), ${color}, "${fmt}", id(${dynamicId}).state);`
           );
           return;
         }
-        lines.push(`it.printf(${x}, ${y}, id(${fontId}), \"${fmt}\", id(${dynamicId}).state);`);
+        lines.push(`it.printf(${x}, ${y}, id(${fontId}), "${fmt}", id(${dynamicId}).state);`);
         return;
       }
 
@@ -2066,12 +2066,12 @@ const buildTextLambda = (elements, textFontIdByKey, displayType) => {
         const offLabel = escapePrintfText(element.offLabel || "OFF");
         if (color) {
           lines.push(
-            `it.printf(${x}, ${y}, id(${fontId}), ${color}, \"%s%s%s\", \"${prefix}\", id(${dynamicId}).state ? \"${onLabel}\" : \"${offLabel}\", \"${suffix}\");`
+            `it.printf(${x}, ${y}, id(${fontId}), ${color}, "%s%s%s", "${prefix}", id(${dynamicId}).state ? "${onLabel}" : "${offLabel}", "${suffix}");`
           );
           return;
         }
         lines.push(
-          `it.printf(${x}, ${y}, id(${fontId}), \"%s%s%s\", \"${prefix}\", id(${dynamicId}).state ? \"${onLabel}\" : \"${offLabel}\", \"${suffix}\");`
+          `it.printf(${x}, ${y}, id(${fontId}), "%s%s%s", "${prefix}", id(${dynamicId}).state ? "${onLabel}" : "${offLabel}", "${suffix}");`
         );
         return;
       }
@@ -2079,12 +2079,12 @@ const buildTextLambda = (elements, textFontIdByKey, displayType) => {
       if (["text_sensor", "select"].includes(domain)) {
         if (color) {
           lines.push(
-            `it.printf(${x}, ${y}, id(${fontId}), ${color}, \"%s%s%s\", \"${prefix}\", id(${dynamicId}).state.c_str(), \"${suffix}\");`
+            `it.printf(${x}, ${y}, id(${fontId}), ${color}, "%s%s%s", "${prefix}", id(${dynamicId}).state.c_str(), "${suffix}");`
           );
           return;
         }
         lines.push(
-          `it.printf(${x}, ${y}, id(${fontId}), \"%s%s%s\", \"${prefix}\", id(${dynamicId}).state.c_str(), \"${suffix}\");`
+          `it.printf(${x}, ${y}, id(${fontId}), "%s%s%s", "${prefix}", id(${dynamicId}).state.c_str(), "${suffix}");`
         );
         return;
       }
@@ -2093,24 +2093,24 @@ const buildTextLambda = (elements, textFontIdByKey, displayType) => {
         const timeFormat = domain === "time" ? "%H:%M" : "%d-%m-%Y %H:%M";
         if (color) {
           lines.push(
-            `it.printf(${x}, ${y}, id(${fontId}), ${color}, \"%s%s%s\", \"${prefix}\", id(${dynamicId}).now().strftime(\"${timeFormat}\").c_str(), \"${suffix}\");`
+            `it.printf(${x}, ${y}, id(${fontId}), ${color}, "%s%s%s", "${prefix}", id(${dynamicId}).now().strftime("${timeFormat}").c_str(), "${suffix}");`
           );
           return;
         }
         lines.push(
-          `it.printf(${x}, ${y}, id(${fontId}), \"%s%s%s\", \"${prefix}\", id(${dynamicId}).now().strftime(\"${timeFormat}\").c_str(), \"${suffix}\");`
+          `it.printf(${x}, ${y}, id(${fontId}), "%s%s%s", "${prefix}", id(${dynamicId}).now().strftime("${timeFormat}").c_str(), "${suffix}");`
         );
         return;
       }
 
       if (color) {
         lines.push(
-          `it.printf(${x}, ${y}, id(${fontId}), ${color}, \"%s%s%s\", \"${prefix}\", id(${dynamicId}).state.c_str(), \"${suffix}\");`
+          `it.printf(${x}, ${y}, id(${fontId}), ${color}, "%s%s%s", "${prefix}", id(${dynamicId}).state.c_str(), "${suffix}");`
         );
         return;
       }
       lines.push(
-        `it.printf(${x}, ${y}, id(${fontId}), \"%s%s%s\", \"${prefix}\", id(${dynamicId}).state.c_str(), \"${suffix}\");`
+        `it.printf(${x}, ${y}, id(${fontId}), "%s%s%s", "${prefix}", id(${dynamicId}).state.c_str(), "${suffix}");`
       );
     });
   return lines;
@@ -2347,7 +2347,7 @@ const buildGraphSections = (displayData, graphIdByKey, textFontIdByKey) => {
           const sensor = String(trace?.sensor || "").trim();
           if (!sensor) return;
           lines.push(`      - sensor: ${sensor}`);
-          if (trace.name) lines.push(`        name: \"${escapeCppString(trace.name)}\"`);
+          if (trace.name) lines.push(`        name: "${escapeCppString(trace.name)}"`);
           if (trace.lineType) lines.push(`        line_type: ${trace.lineType}`);
           if (trace.lineThickness !== "" && trace.lineThickness !== null && trace.lineThickness !== undefined) {
             lines.push(`        line_thickness: ${trace.lineThickness}`);
