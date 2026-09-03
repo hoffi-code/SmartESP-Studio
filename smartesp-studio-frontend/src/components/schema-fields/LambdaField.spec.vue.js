@@ -153,6 +153,79 @@ describe("LambdaField", () => {
     expect(yaml.wrapper.find(".lambda-field__completion").exists()).toBe(false);
   });
 
+  it("suggests domain members right after id(x). and inserts the pick", async () => {
+    const { wrapper, text } = mountBound({
+      idIndex: [{ id: "temp", idLower: "temp", domain: "sensor" }],
+      initial: "id(temp)."
+    });
+    await typeAt(wrapper, "id(temp).", "id(temp).".length);
+
+    const options = wrapper.findAll(".lambda-field__completion-option");
+    expect(options.map((option) => option.text())).toEqual(["has_state()", "publish_state(x)", "state"]);
+    // Member options carry no domain badge -- the domain is already implied by context.
+    expect(wrapper.find(".lambda-field__completion-domain").exists()).toBe(false);
+
+    await options[2].trigger("mousedown");
+    expect(text.value).toBe("id(temp).state");
+    expect(wrapper.find(".lambda-field__completion").exists()).toBe(false);
+  });
+
+  it("filters domain members by the typed prefix", async () => {
+    const { wrapper } = mountBound({
+      idIndex: [{ id: "temp", idLower: "temp", domain: "sensor" }],
+      initial: "id(temp).st"
+    });
+    await typeAt(wrapper, "id(temp).st", "id(temp).st".length);
+    const options = wrapper.findAll(".lambda-field__completion-option");
+    expect(options.map((option) => option.text())).toEqual(["state"]);
+  });
+
+  it("swaps from id-context to member-context cleanly as the call closes", async () => {
+    const { wrapper } = mountBound({
+      idIndex: [{ id: "temp", idLower: "temp", domain: "sensor" }]
+    });
+    await typeAt(wrapper, "id(te", 5);
+    expect(wrapper.findAll(".lambda-field__completion-option").map((o) => o.text())).toEqual(["tempsensor"]);
+
+    await typeAt(wrapper, "id(temp).", "id(temp).".length);
+    expect(wrapper.findAll(".lambda-field__completion-option").map((o) => o.text())).toEqual([
+      "has_state()",
+      "publish_state(x)",
+      "state"
+    ]);
+  });
+
+  it("offers no member dropdown for an unknown id or an out-of-scope domain", async () => {
+    const idIndex = [
+      { id: "temp", idLower: "temp", domain: "sensor" },
+      { id: "bus1", idLower: "bus1", domain: "i2c" }
+    ];
+    const unknown = mountBound({ idIndex });
+    await typeAt(unknown.wrapper, "id(ghost).", "id(ghost).".length);
+    expect(unknown.wrapper.find(".lambda-field__completion").exists()).toBe(false);
+
+    const outOfScope = mountBound({ idIndex });
+    await typeAt(outOfScope.wrapper, "id(bus1).", "id(bus1).".length);
+    expect(outOfScope.wrapper.find(".lambda-field__completion").exists()).toBe(false);
+  });
+
+  it("selects a domain member with Tab and closes it with Escape", async () => {
+    const { wrapper, text } = mountBound({
+      idIndex: [{ id: "sw", idLower: "sw", domain: "switch" }]
+    });
+    const textarea = await typeAt(wrapper, "id(sw).", "id(sw).".length);
+    // switch members sorted: state, toggle, turn_off, turn_on -- ArrowDown twice lands on turn_off.
+    await textarea.trigger("keydown", { key: "ArrowDown" });
+    await textarea.trigger("keydown", { key: "ArrowDown" });
+    await textarea.trigger("keydown", { key: "Tab" });
+    expect(text.value).toBe("id(sw).turn_off()");
+
+    await typeAt(wrapper, "id(sw).t", "id(sw).t".length);
+    expect(wrapper.find(".lambda-field__completion").exists()).toBe(true);
+    await textarea.trigger("keydown", { key: "Escape" });
+    expect(wrapper.find(".lambda-field__completion").exists()).toBe(false);
+  });
+
   it("inserts a snippet at the caret", async () => {
     const { wrapper, text } = mountBound({ initial: "return ;" });
     const textarea = wrapper.get("textarea");

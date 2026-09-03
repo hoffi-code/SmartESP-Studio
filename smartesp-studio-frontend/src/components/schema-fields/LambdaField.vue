@@ -51,8 +51,8 @@
           :class="{ 'is-active': optionIndex === activeOption }"
           @mousedown.prevent="pickCompletion(option)"
         >
-          <span>{{ option.id }}</span>
-          <span v-if="option.domain" class="lambda-field__completion-domain">{{ option.domain }}</span>
+          <span>{{ option.insert }}</span>
+          <span v-if="option.secondary" class="lambda-field__completion-domain">{{ option.secondary }}</span>
         </button>
       </div>
     </div>
@@ -75,6 +75,11 @@ import {
   findIdCompletionContext
 } from "../../utils/lambdaCompletion";
 import { lintLambda } from "../../utils/lambdaLint";
+import {
+  applyMemberCompletion,
+  buildMemberCompletionOptions,
+  findMemberCompletionContext
+} from "../../utils/lambdaMemberCompletion";
 import { LAMBDA_SNIPPETS, insertSnippet } from "../../utils/lambdaSnippets";
 import { escapeHtml, highlightYamlToHtml } from "../../utils/yamlSyntaxHighlight";
 
@@ -121,12 +126,27 @@ const onInput = (event) => {
   refreshCompletion();
 };
 
+// completion holds either { kind: "id", ...idContext } (still-open id( call) or
+// { kind: "member", domain, ...memberContext } (id(x). already closed). Both are
+// handled by the same dropdown/keyboard/mouse plumbing below.
 const completion = ref(null);
 const activeOption = ref(0);
 
-const completionOptions = computed(() =>
-  completion.value ? buildIdCompletionOptions(props.idIndex, completion.value.query) : []
-);
+const completionOptions = computed(() => {
+  if (!completion.value) return [];
+  if (completion.value.kind === "id") {
+    return buildIdCompletionOptions(props.idIndex, completion.value.query).map((entry) => ({
+      id: entry.id,
+      insert: entry.id,
+      secondary: entry.domain || ""
+    }));
+  }
+  return buildMemberCompletionOptions(completion.value.domain, completion.value.query).map((entry) => ({
+    id: entry.id,
+    insert: entry.insert,
+    secondary: ""
+  }));
+});
 const completionOpen = computed(() => Boolean(completion.value) && completionOptions.value.length > 0);
 
 function refreshCompletion() {
@@ -135,8 +155,21 @@ function refreshCompletion() {
     completion.value = null;
     return;
   }
-  completion.value = findIdCompletionContext(editor.value, editor.selectionStart ?? 0);
-  activeOption.value = 0;
+  const caret = editor.selectionStart ?? 0;
+  const idContext = findIdCompletionContext(editor.value, caret);
+  if (idContext) {
+    completion.value = { kind: "id", ...idContext };
+    activeOption.value = 0;
+    return;
+  }
+  const memberContext = findMemberCompletionContext(editor.value, caret);
+  if (memberContext) {
+    const domain = props.idIndex.find((entry) => entry.id === memberContext.entityId)?.domain || "";
+    completion.value = { kind: "member", domain, ...memberContext };
+    activeOption.value = 0;
+    return;
+  }
+  completion.value = null;
 }
 
 const scheduleCompletionClose = () => {
@@ -148,7 +181,10 @@ const scheduleCompletionClose = () => {
 const pickCompletion = async (option) => {
   const editor = textareaRef.value;
   if (!editor || !completion.value) return;
-  const { text, caret } = applyIdCompletion(editor.value, completion.value, option.id);
+  const { text, caret } =
+    completion.value.kind === "id"
+      ? applyIdCompletion(editor.value, completion.value, option.id)
+      : applyMemberCompletion(editor.value, completion.value, option);
   completion.value = null;
   emit("update:model-value", text);
   await nextTick();
