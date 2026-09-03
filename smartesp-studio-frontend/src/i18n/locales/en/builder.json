@@ -14,6 +14,7 @@
     "modalTitleDefault": "Comment",
     "componentTitle": "Comment – {domain}:",
     "headerTitle": "File header comment",
+    "headerCardHint": "Placed at the very top of the generated YAML file. The {hash} is added automatically.",
     "hint": "Shown as a YAML comment right above the section. The {hash} is added automatically.",
     "placeholder": "e.g. I2C bus for the display",
     "buttonAdd": "Comment",

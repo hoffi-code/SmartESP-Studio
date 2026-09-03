@@ -261,6 +261,7 @@
         <BuilderCoreTab
           v-if="activeTab === 'Core'"
           :active-tab-help-url="activeTabHelpUrl"
+          :header-comment="config.headerComment || ''"
           :esphome-core-id="esphomeCoreId"
           :esphome-core-config="esphomeCoreConfig"
           :substitutions-core-id="substitutionsCoreId"
@@ -279,6 +280,7 @@
           :should-show-mode-upgrade="shouldShowModeUpgrade('core')"
           :mode-upgrade-button-label="modeUpgradeButtonLabel"
           @update-core-schema="handleCoreSchemaUpdate"
+          @update-header-comment="handleHeaderCommentUpdate"
           @update-substitutions-schema="handleSubstitutionsSchemaUpdate"
           @open-secrets="openSecretsModal"
           @mode-upgrade-availability="handleModeUpgradeAvailability"
@@ -2628,6 +2630,12 @@ const sectionCommentKeys = computed(() => {
 const sectionCommentHasComment = computed(() =>
   Boolean(sectionCommentKey.value && config.value.fieldComments?.[sectionCommentKey.value])
 );
+
+// Kopf-Kommentar laeuft nicht ueber das Modal, sondern ueber die Karte im Core-Tab.
+const handleHeaderCommentUpdate = (text) => {
+  config.value.headerComment = text;
+  markProjectDirty();
+};
 
 const commentEditValue = computed(() => {
   const request = commentEditRequest.value;

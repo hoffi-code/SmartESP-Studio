@@ -14,6 +14,7 @@
     "modalTitleDefault": "Kommentar",
     "componentTitle": "Kommentar – {domain}:",
     "headerTitle": "Datei-Kopf-Kommentar",
+    "headerCardHint": "Steht ganz oben in der erzeugten YAML-Datei. Das {hash} wird automatisch gesetzt.",
     "hint": "Erscheint als YAML-Kommentar direkt über der Sektion. Das {hash} wird automatisch gesetzt.",
     "placeholder": "z. B. I2C-Bus für das Display",
     "buttonAdd": "Kommentar",

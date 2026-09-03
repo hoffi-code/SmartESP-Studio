@@ -1,4 +1,8 @@
 <template>
+  <BuilderHeaderCommentCard
+    :header-comment="headerComment"
+    @update:header-comment="emit('update:header-comment', $event)"
+  />
   <div class="module-card">
     <div class="components-header">
       <div class="components-title">
@@ -71,10 +75,15 @@
 <script setup>
 import { useI18n } from "vue-i18n";
 import SchemaRenderer from "../SchemaRenderer.vue";
+import BuilderHeaderCommentCard from "./BuilderHeaderCommentCard.vue";
 
 const { t } = useI18n();
 
 defineProps({
+  headerComment: {
+    type: String,
+    default: ""
+  },
   activeTabHelpUrl: {
     type: String,
     default: ""
@@ -154,6 +163,7 @@ const emit = defineEmits([
   "open-secrets",
   "promote-mode-level",
   "update-core-schema",
+  "update-header-comment",
   "update-substitutions-schema"
 ]);
 </script>

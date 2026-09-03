@@ -34,6 +34,8 @@
 import { computed, nextTick, onBeforeUnmount, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
+import { addHashes, stripHashes } from "../../utils/yamlComments";
+
 const { t } = useI18n();
 
 const props = defineProps({
@@ -46,20 +48,6 @@ const emit = defineEmits(["save", "delete", "close"]);
 
 const input = ref(null);
 const draft = ref("");
-
-// Stored comments keep their `#` prefix (that is what the importer writes); strip it for
-// editing and put it back on save so the textarea shows plain prose.
-const stripHashes = (text) =>
-  String(text || "")
-    .split("\n")
-    .map((line) => line.replace(/^\s*#\s?/, ""))
-    .join("\n");
-
-const addHashes = (text) =>
-  String(text || "")
-    .split("\n")
-    .map((line) => (line.trim() ? `# ${line.trim()}` : "#"))
-    .join("\n");
 
 const hasExisting = computed(() => String(props.value || "").trim() !== "");
 const trimmed = computed(() => draft.value.trim() !== "");
