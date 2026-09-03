@@ -120,7 +120,6 @@ import {
   buildSeededObjectFromFields,
   buildSharedHubManagedKeys,
   collectSharedHubBindings,
-  hasConfiguredData,
   isSharedHubSelectionMissing,
   resolveSharedHubSelection
 } from "../utils/schemaSharedHubs";

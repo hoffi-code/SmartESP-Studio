@@ -145,7 +145,7 @@ const loadMeta = async () => {
     const data = await response.json();
     allIcons.value = Array.isArray(data) ? data.filter((icon) => !icon.deprecated) : [];
     hasLoaded.value = true;
-  } catch (error) {
+  } catch {
     loadError.value = t("modals.iconPicker.loadError");
   } finally {
     isLoading.value = false;
