@@ -16,7 +16,7 @@
       "type": "gpio",
       "required": true,
       "lvl": "simple",
-	  "placeholder": "GPIOXX",
+      "placeholder": "GPIOXX",
       "globalDependsOn": {
         "key": "pn7160_bus",
         "value": "spi"
@@ -27,13 +27,13 @@
       "type": "gpio",
       "required": true,
       "lvl": "simple",
-	  "placeholder": "GPIOXX"
+      "placeholder": "GPIOXX"
     },
     {
       "key": "ven_pin",
       "type": "gpio",
       "required": true,
-	  "placeholder": "GPIOXX",
+      "placeholder": "GPIOXX",
       "lvl": "simple"
     },
     {
@@ -41,14 +41,14 @@
       "type": "gpio",
       "required": false,
       "lvl": "simple",
-	  "placeholder": "GPIOXX"
+      "placeholder": "GPIOXX"
     },
     {
       "key": "wkup_req_pin",
       "type": "gpio",
       "required": false,
       "lvl": "simple",
-	  "placeholder": "GPIOXX"
+      "placeholder": "GPIOXX"
     },
     {
       "key": "emulation_message",
@@ -114,6 +114,19 @@
       "type": "list",
       "required": false,
       "lvl": "advanced",
+      "item": {
+        "type": "object",
+        "fields": [],
+        "extends": "base_actions.json"
+      },
+      "wrapThen": true
+    },
+    {
+      "key": "on_finished_write",
+      "type": "list",
+      "required": false,
+      "lvl": "advanced",
+      "helpUrl": "https://esphome.io/components/binary_sensor/pn532/",
       "item": {
         "type": "object",
         "fields": [],

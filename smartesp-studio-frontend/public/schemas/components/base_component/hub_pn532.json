@@ -17,7 +17,7 @@
       "type": "gpio",
       "required": true,
       "lvl": "simple",
-	  "placeholder": "GPIOXX",
+      "placeholder": "GPIOXX",
       "globalDependsOn": {
         "key": "pn532_bus",
         "value": "spi"
@@ -69,6 +69,19 @@
       "type": "list",
       "required": false,
       "lvl": "advanced",
+      "item": {
+        "type": "object",
+        "fields": [],
+        "extends": "base_actions.json"
+      },
+      "wrapThen": true
+    },
+    {
+      "key": "on_finished_write",
+      "type": "list",
+      "required": false,
+      "lvl": "advanced",
+      "helpUrl": "https://esphome.io/components/binary_sensor/pn532/",
       "item": {
         "type": "object",
         "fields": [],

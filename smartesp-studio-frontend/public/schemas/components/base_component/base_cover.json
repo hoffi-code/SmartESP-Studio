@@ -82,6 +82,19 @@
       "lvl": "advanced"
     },
     {
+      "key": "on_open",
+      "type": "list",
+      "required": false,
+      "lvl": "advanced",
+      "helpUrl": "https://esphome.io/components/cover/",
+      "item": {
+        "type": "object",
+        "fields": [],
+        "extends": "base_actions.json"
+      },
+      "wrapThen": true
+    },
+    {
       "key": "on_opened",
       "type": "list",
       "required": false,
