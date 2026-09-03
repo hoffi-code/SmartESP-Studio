@@ -97,6 +97,8 @@
     "colorNone": "Hex-Wert oder RGB-Komponenten eingeben."
   },
   "lambda": {
+    "buildError": "Build-Fehler in Zeile {line}: {message}",
+    "buildErrorGeneric": "Konfigurationsfehler in Zeile {line} — Details in der Prüfen-Konsole.",
     "warn": {
       "unclosed": "Zeile {line}: „{token}“ wird nie geschlossen.",
       "unexpected": "Zeile {line}: „{token}“ ohne passende öffnende Klammer.",

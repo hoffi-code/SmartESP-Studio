@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { parseConfigErrors, parseCppCompileErrors } from "./lambdaBuildErrors";
+import { parseConfigErrors, parseCppCompileErrors, resolveLambdaBuildErrorTargets } from "./lambdaBuildErrors";
 
 describe("parseCppCompileErrors", () => {
   // Verbatim (ANSI-stripped) shape of a real `esphome compile` failure against a
@@ -76,5 +76,64 @@ describe("parseConfigErrors", () => {
 
   it("returns an empty list without a source marker", () => {
     expect(parseConfigErrors("INFO Configuration is valid!")).toEqual([]);
+  });
+});
+
+describe("resolveLambdaBuildErrorTargets", () => {
+  // Mirrors the shape of useBuilderYamlPreview's yamlPreviewDocument.lines: a flat,
+  // 1-indexed array of { text, origin } where origin carries {scopeId, path} -- the
+  // same identity findYamlFocusTarget resolves DOM elements against.
+  const lines = [
+    { text: "sensor:", origin: null },
+    { text: "  - platform: template", origin: { scopeId: "component:sensor1", path: [] } },
+    {
+      text: "    lambda: |-",
+      origin: { scopeId: "component:sensor1", path: ["lambda"] }
+    },
+    {
+      text: "      return id(temp).turn__on_typo();",
+      origin: { scopeId: "component:sensor1", path: ["lambda"] }
+    }
+  ];
+
+  it("resolves a compile error to the field owning that line, with its message", () => {
+    const log = "device.yaml:4:14: error: has no member named 'turn__on_typo'";
+    expect(
+      resolveLambdaBuildErrorTargets(log, { yamlName: "device.yaml", lines })
+    ).toEqual([
+      {
+        scopeId: "component:sensor1",
+        encodedPath: "lambda",
+        message: "has no member named 'turn__on_typo'",
+        line: 4
+      }
+    ]);
+  });
+
+  it("resolves a config error to the same identity, without a message", () => {
+    const log = "sensor.template: [source device.yaml:2]";
+    expect(
+      resolveLambdaBuildErrorTargets(log, { yamlName: "device.yaml", lines })
+    ).toEqual([{ scopeId: "component:sensor1", encodedPath: "", message: "", line: 2 }]);
+  });
+
+  it("drops errors for a different file", () => {
+    const log = "other-device.yaml:4:14: error: boom";
+    expect(resolveLambdaBuildErrorTargets(log, { yamlName: "device.yaml", lines })).toEqual([]);
+  });
+
+  it("drops a match on a line with no origin (blank line, generated separator, ...)", () => {
+    const log = "device.yaml:1:1: error: boom";
+    expect(resolveLambdaBuildErrorTargets(log, { yamlName: "device.yaml", lines })).toEqual([]);
+  });
+
+  it("drops a line number past the end of the document", () => {
+    const log = "device.yaml:99:1: error: boom";
+    expect(resolveLambdaBuildErrorTargets(log, { yamlName: "device.yaml", lines })).toEqual([]);
+  });
+
+  it("matches by basename when the log reports a path", () => {
+    const log = "/config/esphome/device.yaml:4:14: error: boom";
+    expect(resolveLambdaBuildErrorTargets(log, { yamlName: "device.yaml", lines })).toHaveLength(1);
   });
 });

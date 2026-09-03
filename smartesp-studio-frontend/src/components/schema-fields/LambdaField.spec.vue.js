@@ -376,6 +376,58 @@ describe("LambdaField", () => {
     expect(wrapper.find(".lambda-field__error-line").exists()).toBe(false);
   });
 
+  // Teil B des Lambda-Plans: BuilderView.vue provides "lambdaBuildErrors" (a ref of
+  // resolveLambdaBuildErrorTargets() entries); LambdaField matches by its own
+  // contextScopeId/encodedFieldPath props, mirroring how the YAML-preview click-through
+  // resolves the same identity.
+  const mountWithBuildErrors = (entries, props = {}) =>
+    mount(LambdaField, {
+      props: {
+        inputId: "l1",
+        modelValue: "return id(temp).turn__on_typo();",
+        contextScopeId: "component:sensor1",
+        encodedFieldPath: "lambda",
+        ...props
+      },
+      global: { provide: { lambdaBuildErrors: ref(entries) } }
+    });
+
+  it("shows a blocking notice for a matching compile error", () => {
+    const wrapper = mountWithBuildErrors([
+      { scopeId: "component:sensor1", encodedPath: "lambda", message: "no member named 'turn__on_typo'", line: 1 }
+    ]);
+    const notice = wrapper.find(".lambda-field__build-error");
+    expect(notice.exists()).toBe(true);
+    expect(notice.text()).toBe("Build error at line 1: no member named 'turn__on_typo'");
+    const errorLine = wrapper.find(".lambda-field__gutter-line--error");
+    expect(errorLine.exists()).toBe(true);
+    expect(errorLine.text()).toBe("1");
+  });
+
+  it("falls back to a generic message for a message-less config error", () => {
+    const wrapper = mountWithBuildErrors([
+      { scopeId: "component:sensor1", encodedPath: "lambda", message: "", line: 1 }
+    ]);
+    expect(wrapper.get(".lambda-field__build-error").text()).toBe(
+      "Configuration error at line 1 — see the validation console for details."
+    );
+  });
+
+  it("ignores a build error targeting a different field", () => {
+    const wrapper = mountWithBuildErrors([
+      { scopeId: "component:sensor1", encodedPath: "other_lambda", message: "boom", line: 1 }
+    ]);
+    expect(wrapper.find(".lambda-field__build-error").exists()).toBe(false);
+  });
+
+  it("prefers the backend error's line over a lint warning's when both are present", () => {
+    const wrapper = mountWithBuildErrors(
+      [{ scopeId: "component:sensor1", encodedPath: "lambda", message: "boom", line: 1 }],
+      { modelValue: "auto a = 1;\nreturn (id(temp).state;" }
+    );
+    expect(wrapper.get(".lambda-field__gutter-line--error").text()).toBe("1");
+  });
+
   it("keeps the gutter scroll in sync with the textarea", async () => {
     const wrapper = mountField({ modelValue: "a\nb\nc" });
     const textarea = wrapper.get("textarea");

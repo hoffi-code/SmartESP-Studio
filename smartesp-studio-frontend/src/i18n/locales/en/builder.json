@@ -97,6 +97,8 @@
     "colorNone": "Enter a hex value or RGB components."
   },
   "lambda": {
+    "buildError": "Build error at line {line}: {message}",
+    "buildErrorGeneric": "Configuration error at line {line} — see the validation console for details.",
     "warn": {
       "unclosed": "Line {line}: “{token}” is never closed.",
       "unexpected": "Line {line}: “{token}” without a matching opening bracket.",

@@ -1,3 +1,5 @@
+import { encodeFieldPath } from "./yamlDocumentModel";
+
 // Parst C++-Compile-Fehler aus dem rohen Job-Log eines "Pruefen"-Laufs (esphome
 // compile -> PlatformIO -> gcc/xtensa-Toolchain). Gegen einen echten kaputten
 // Lambda-Aufruf verifiziertes Format (docker exec ... esphome compile):
@@ -61,4 +63,49 @@ export const parseConfigErrors = (logText) => {
     match = CONFIG_ERROR.exec(text);
   }
   return results;
+};
+
+const baseFileName = (file) => String(file || "").split(/[\\/]/).pop();
+
+// resolveLambdaBuildErrorTargets(logText, { yamlName, lines }) -> [{ scopeId, encodedPath, message, line }]
+//
+// Bridges a failed "validate" job's raw log to the same {scopeId, path} identity
+// the YAML-preview click-through (findYamlFocusTarget, BuilderView.vue) already
+// uses, so a schema field can recognize "this backend error is about me" without
+// a DOM lookup. `lines` is the flat yamlPreviewDocument.lines array (1-based
+// line N -> lines[N - 1]); a line whose origin has no scopeId (blank line,
+// generated separator, ...) is dropped, as is any error for a different file.
+//
+// Config errors (parseConfigErrors) carry no message -- ESPHome's "Failed config"
+// block is too free-form to condense into one line, and the target line points at
+// the start of the failing component block, not the individual field (see
+// parseConfigErrors above). Callers that only want the reliable half (compile
+// errors, which DO land exactly on the offending lambda field thanks to
+// #line-directives) can filter on `message` being non-empty.
+export const resolveLambdaBuildErrorTargets = (logText, { yamlName = "", lines = [] } = {}) => {
+  const expectedName = baseFileName(yamlName);
+  const matchesFile = (file) => !expectedName || baseFileName(file) === expectedName;
+  const targetFor = (lineNumber) => {
+    const origin = lines[lineNumber - 1]?.origin;
+    if (!origin?.scopeId) return null;
+    return { scopeId: origin.scopeId, encodedPath: encodeFieldPath(origin.path || []) };
+  };
+
+  const cppTargets = parseCppCompileErrors(logText)
+    .filter((error) => matchesFile(error.file))
+    .map((error) => {
+      const target = targetFor(error.line);
+      return target && { ...target, message: error.message, line: error.line };
+    })
+    .filter(Boolean);
+
+  const configTargets = parseConfigErrors(logText)
+    .filter((error) => matchesFile(error.file))
+    .map((error) => {
+      const target = targetFor(error.line);
+      return target && { ...target, message: "", line: error.line };
+    })
+    .filter(Boolean);
+
+  return [...cppTargets, ...configTargets];
 };

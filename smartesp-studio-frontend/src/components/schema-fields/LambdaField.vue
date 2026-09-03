@@ -82,6 +82,9 @@
         </div>
       </div>
     </div>
+    <div v-if="buildError" class="notice notice--block notice--error lambda-field__build-error">
+      {{ buildErrorText }}
+    </div>
     <ul v-if="warnings.length" class="notice notice--warning lambda-field__warnings">
       <li v-for="(warning, warningIndex) in warnings" :key="warningIndex">
         {{ warningText(warning) }}
@@ -91,7 +94,7 @@
 </template>
 
 <script setup>
-import { computed, nextTick, onMounted, ref, watch } from "vue";
+import { computed, inject, nextTick, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 import { highlightCppToHtml } from "../../utils/cppSyntaxHighlight";
@@ -116,7 +119,9 @@ const props = defineProps({
   inputId: { type: String, required: true },
   rows: { type: Number, default: 1 },
   language: { type: String, default: "cpp" },
-  idIndex: { type: Array, default: () => [] }
+  idIndex: { type: Array, default: () => [] },
+  contextScopeId: { type: String, default: "" },
+  encodedFieldPath: { type: String, default: "" }
 });
 
 const emit = defineEmits(["update:model-value"]);
@@ -349,10 +354,32 @@ const warnings = computed(() =>
   props.language === "yaml" ? [] : lintLambda(props.modelValue, props.idIndex)
 );
 
-// Erste Warnung wird im Gutter/als Fehlerzeile hervorgehoben. Speist sich heute
-// aus dem lokalen Heuristik-Lint; ein spaeterer Compile-Fehler vom Backend
-// (Teil B des Lambda-Plans) kann hier ueber denselben Mechanismus andocken.
-const firstWarningLine = computed(() => warnings.value[0]?.line || 0);
+// Vom "Pruefen"-Job durchgereichte Backend-Fehler (Teil B des Lambda-Plans,
+// resolveLambdaBuildErrorTargets in lambdaBuildErrors.js), bereitgestellt von
+// BuilderView.vue als provide("lambdaBuildErrors", ref<Array>). Kein Match, wenn
+// niemand provided (z. B. isolierte Tests) -- injizierter Default ist dann leer.
+const lambdaBuildErrors = inject("lambdaBuildErrors", ref([]));
+
+const buildError = computed(() => {
+  if (!props.contextScopeId || !props.encodedFieldPath) return null;
+  return (
+    lambdaBuildErrors.value.find(
+      (entry) => entry.scopeId === props.contextScopeId && entry.encodedPath === props.encodedFieldPath
+    ) || null
+  );
+});
+
+const buildErrorText = computed(() => {
+  const error = buildError.value;
+  if (!error) return "";
+  return error.message
+    ? t("builder.lambda.buildError", { line: error.line, message: error.message })
+    : t("builder.lambda.buildErrorGeneric", { line: error.line });
+});
+
+// Erste Warnung wird im Gutter/als Fehlerzeile hervorgehoben -- ein Backend-Fehler
+// ist die verlaesslichere Quelle und gewinnt, wenn beide vorliegen.
+const firstWarningLine = computed(() => buildError.value?.line || warnings.value[0]?.line || 0);
 
 const errorLineStyle = computed(() => {
   const line = firstWarningLine.value;
