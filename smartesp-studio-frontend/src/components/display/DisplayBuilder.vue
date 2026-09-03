@@ -136,6 +136,7 @@
                   :elements="canvasElements"
                   :is-monochrome="isMonochrome"
                   :selected-id="selectedId"
+                  :simulated-state="simulatedState"
                   @select="handleSelect"
                   @update-element="handleElementUpdate"
                 />
@@ -237,6 +238,11 @@ const props = defineProps({
   globalStore: {
     type: Object,
     default: () => ({})
+  },
+  // P9 live binding: simulationEntityState.js entityState map, forwarded to DisplayCanvas.
+  simulatedState: {
+    type: Object,
+    default: null
   }
 });
 

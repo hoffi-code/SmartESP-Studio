@@ -566,6 +566,7 @@
               :display-fonts="displayFonts"
               :display-google-fonts="displayGoogleFonts"
               :assets-base="assetsBase"
+              :simulated-state="simulation.entityState.value"
               :should-show-mode-upgrade="shouldShowModeUpgrade('components')"
               :mode-upgrade-button-label="modeUpgradeButtonLabel"
               :show-save-custom-component-action="showSaveCustomComponentAction"

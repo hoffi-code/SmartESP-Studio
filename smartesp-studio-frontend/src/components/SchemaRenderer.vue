@@ -90,6 +90,7 @@
         :google-fonts="displayGoogleFonts"
         :assets-base="assetsBase"
         :global-store="globalStore"
+        :simulated-state="simulatedState"
         @open-asset-manager="emit('open-asset-manager')"
       />
     </div>
@@ -222,6 +223,11 @@ const props = defineProps({
   modeUpgradeKey: {
     type: String,
     default: ""
+  },
+  // P9 live binding: simulationEntityState.js entityState map, forwarded to DisplayBuilder.
+  simulatedState: {
+    type: Object,
+    default: null
   }
 });
 

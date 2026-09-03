@@ -38,6 +38,7 @@
       :display-fonts="displayFonts"
       :display-google-fonts="displayGoogleFonts"
       :assets-base="assetsBase"
+      :simulated-state="simulatedState"
       :mode-upgrade-section="'components'"
       :mode-upgrade-key="'main'"
       @update="emit('update-schema', $event)"
@@ -106,7 +107,10 @@ defineProps({
   canSaveCustomComponent: { type: Boolean, default: false },
   isSavingCustomComponent: { type: Boolean, default: false },
   customComponentActionLabel: { type: String, default: "" },
-  customComponentSaveError: { type: String, default: "" }
+  customComponentSaveError: { type: String, default: "" },
+  // P9 live binding: simulationEntityState.js entityState map, forwarded to SchemaRenderer
+  // (only display_builder schemas read it, via DisplayBuilder/DisplayCanvas).
+  simulatedState: { type: Object, default: null }
 });
 
 const emit = defineEmits([
