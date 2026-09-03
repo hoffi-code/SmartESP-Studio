@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { mount } from "@vue/test-utils";
 import { describe, expect, it, vi } from "vitest";
+import { defineComponent, h, ref } from "vue";
 
 import LambdaField from "./LambdaField.vue";
 
@@ -8,6 +9,33 @@ const mountField = (props = {}) =>
   mount(LambdaField, {
     props: { inputId: "l1", modelValue: "", ...props }
   });
+
+// Das Feld ist controlled: ohne Parent, der den Wert zurueckschreibt, setzt Vue
+// die Textarea beim naechsten Patch wieder auf den alten Prop-Wert.
+const mountBound = ({ idIndex = [], language = "cpp", initial = "" } = {}) => {
+  const text = ref(initial);
+  const Host = defineComponent({
+    setup: () => () =>
+      h(LambdaField, {
+        inputId: "l1",
+        modelValue: text.value,
+        idIndex,
+        language,
+        "onUpdate:model-value": (value) => {
+          text.value = value;
+        }
+      })
+  });
+  return { wrapper: mount(Host), text };
+};
+
+const typeAt = async (wrapper, value, caret) => {
+  const textarea = wrapper.get("textarea");
+  textarea.element.value = value;
+  textarea.element.setSelectionRange(caret, caret);
+  await textarea.trigger("input");
+  return textarea;
+};
 
 describe("LambdaField", () => {
   it("emits the raw text on input", async () => {
@@ -65,6 +93,64 @@ describe("LambdaField", () => {
   it("does not lint yaml fields", () => {
     const wrapper = mountField({ modelValue: "key: (value", language: "yaml" });
     expect(wrapper.find(".lambda-field__warnings").exists()).toBe(false);
+  });
+
+  it("suggests ids while an id( call is open and inserts the pick", async () => {
+    const { wrapper, text } = mountBound({
+      idIndex: [
+        { id: "temp", idLower: "temp", domain: "sensor" },
+        { id: "term", idLower: "term", domain: "sensor" },
+        { id: "relay", idLower: "relay", domain: "switch" }
+      ]
+    });
+    await typeAt(wrapper, "return id(te", 12);
+
+    const options = wrapper.findAll(".lambda-field__completion-option");
+    expect(options.map((option) => option.text())).toEqual(["tempsensor", "termsensor"]);
+
+    await options[1].trigger("mousedown");
+    expect(text.value).toBe("return id(term)");
+    expect(wrapper.find(".lambda-field__completion").exists()).toBe(false);
+  });
+
+  it("takes the highlighted entry on Enter and closes on Escape", async () => {
+    const { wrapper, text } = mountBound({
+      idIndex: [
+        { id: "temp", idLower: "temp", domain: "sensor" },
+        { id: "term", idLower: "term", domain: "sensor" }
+      ]
+    });
+    const textarea = await typeAt(wrapper, "id(", 3);
+
+    await textarea.trigger("keydown", { key: "ArrowDown" });
+    await textarea.trigger("keydown", { key: "Enter" });
+    expect(text.value).toBe("id(term)");
+
+    await typeAt(wrapper, "id(te", 5);
+    expect(wrapper.find(".lambda-field__completion").exists()).toBe(true);
+    await textarea.trigger("keydown", { key: "Escape" });
+    expect(wrapper.find(".lambda-field__completion").exists()).toBe(false);
+  });
+
+  it("reuses an existing closing parenthesis", async () => {
+    const { wrapper, text } = mountBound({
+      idIndex: [{ id: "temp", idLower: "temp", domain: "sensor" }],
+      initial: "return id().state;"
+    });
+    await typeAt(wrapper, "return id(te).state;", 12);
+    await wrapper.get(".lambda-field__completion-option").trigger("mousedown");
+    expect(text.value).toBe("return id(temp).state;");
+  });
+
+  it("stays closed for a finished call and for yaml fields", async () => {
+    const idIndex = [{ id: "temp", idLower: "temp", domain: "sensor" }];
+    const cpp = mountBound({ idIndex });
+    await typeAt(cpp.wrapper, "return id(temp).state;", 22);
+    expect(cpp.wrapper.find(".lambda-field__completion").exists()).toBe(false);
+
+    const yaml = mountBound({ idIndex, language: "yaml" });
+    await typeAt(yaml.wrapper, "id(te", 5);
+    expect(yaml.wrapper.find(".lambda-field__completion").exists()).toBe(false);
   });
 
   it("keeps the overlay scroll in sync with the textarea", async () => {

@@ -14,7 +14,24 @@
         autocapitalize="off"
         @input="onInput"
         @scroll="syncScroll"
+        @keydown="onKeydown"
+        @keyup="refreshCompletion"
+        @click="refreshCompletion"
+        @blur="scheduleCompletionClose"
       ></textarea>
+      <div v-if="completionOpen" class="id-ref-list lambda-field__completion">
+        <button
+          v-for="(option, optionIndex) in completionOptions"
+          :key="option.id"
+          type="button"
+          class="id-ref-option lambda-field__completion-option"
+          :class="{ 'is-active': optionIndex === activeOption }"
+          @mousedown.prevent="pickCompletion(option)"
+        >
+          <span>{{ option.id }}</span>
+          <span v-if="option.domain" class="lambda-field__completion-domain">{{ option.domain }}</span>
+        </button>
+      </div>
     </div>
     <ul v-if="warnings.length" class="notice notice--warning lambda-field__warnings">
       <li v-for="(warning, warningIndex) in warnings" :key="warningIndex">
@@ -25,10 +42,15 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, nextTick, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 import { highlightCppToHtml } from "../../utils/cppSyntaxHighlight";
+import {
+  applyIdCompletion,
+  buildIdCompletionOptions,
+  findIdCompletionContext
+} from "../../utils/lambdaCompletion";
 import { lintLambda } from "../../utils/lambdaLint";
 import { escapeHtml, highlightYamlToHtml } from "../../utils/yamlSyntaxHighlight";
 
@@ -72,6 +94,64 @@ const syncScroll = () => {
 const onInput = (event) => {
   emit("update:model-value", event.target.value);
   syncScroll();
+  refreshCompletion();
+};
+
+const completion = ref(null);
+const activeOption = ref(0);
+
+const completionOptions = computed(() =>
+  completion.value ? buildIdCompletionOptions(props.idIndex, completion.value.query) : []
+);
+const completionOpen = computed(() => Boolean(completion.value) && completionOptions.value.length > 0);
+
+function refreshCompletion() {
+  const editor = textareaRef.value;
+  if (!editor || props.language === "yaml") {
+    completion.value = null;
+    return;
+  }
+  completion.value = findIdCompletionContext(editor.value, editor.selectionStart ?? 0);
+  activeOption.value = 0;
+}
+
+const scheduleCompletionClose = () => {
+  window.setTimeout(() => {
+    completion.value = null;
+  }, 150);
+};
+
+const pickCompletion = async (option) => {
+  const editor = textareaRef.value;
+  if (!editor || !completion.value) return;
+  const { text, caret } = applyIdCompletion(editor.value, completion.value, option.id);
+  completion.value = null;
+  emit("update:model-value", text);
+  await nextTick();
+  const current = textareaRef.value;
+  if (!current) return;
+  current.focus();
+  current.setSelectionRange(caret, caret);
+};
+
+const onKeydown = (event) => {
+  if (!completionOpen.value) return;
+  const options = completionOptions.value;
+  if (event.key === "ArrowDown") {
+    event.preventDefault();
+    activeOption.value = (activeOption.value + 1) % options.length;
+  } else if (event.key === "ArrowUp") {
+    event.preventDefault();
+    activeOption.value = (activeOption.value - 1 + options.length) % options.length;
+  } else if (event.key === "Enter" || event.key === "Tab") {
+    event.preventDefault();
+    pickCompletion(options[activeOption.value]);
+  } else if (event.key === "Escape") {
+    // Sonst schliesst Esc das umgebende Modal statt der Vorschlagsliste.
+    event.preventDefault();
+    event.stopPropagation();
+    completion.value = null;
+  }
 };
 
 watch(() => [props.modelValue, props.language], () => render(props.modelValue));
@@ -138,6 +218,21 @@ const warningText = (warning) =>
   color: transparent;
   caret-color: var(--navy);
   overflow: auto;
+}
+
+.lambda-field__completion-option {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.lambda-field__completion-option.is-active {
+  background: var(--accent-line);
+}
+
+.lambda-field__completion-domain {
+  color: #64748b;
+  font-size: 11px;
 }
 
 .lambda-field__warnings {
