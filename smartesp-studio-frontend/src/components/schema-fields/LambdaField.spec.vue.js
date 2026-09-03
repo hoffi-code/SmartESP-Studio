@@ -256,12 +256,29 @@ describe("LambdaField", () => {
     await wrapper.get(".lambda-field__toolbar button").trigger("click");
     expect(wrapper.findAll(".lambda-field__palette-section-title").map((title) => title.text())).toEqual([
       "Snippets",
+      "Scope variables",
       "Logging",
       "Strings",
       "Math",
       "Time",
       "Core"
     ]);
+  });
+
+  it("inserts a scope variable from the palette", async () => {
+    const { wrapper, text } = mountBound({ initial: "return ;" });
+    const textarea = wrapper.get("textarea");
+    textarea.element.setSelectionRange(7, 7);
+
+    await wrapper.get(".lambda-field__toolbar button").trigger("click");
+    await wrapper.get(".lambda-field__palette-search").setValue("iteration");
+
+    const items = wrapper.findAll(".lambda-field__snippet");
+    expect(items).toHaveLength(1);
+    expect(items[0].text()).toContain("Iteration index");
+
+    await items[0].trigger("mousedown");
+    expect(text.value).toBe("return iteration;");
   });
 
   it("puts a Suggested section with the referenced entity's members first", async () => {

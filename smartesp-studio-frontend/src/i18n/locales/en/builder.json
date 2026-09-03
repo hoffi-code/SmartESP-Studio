@@ -118,7 +118,8 @@
       "snippetsTitle": "Snippets",
       "suggested": "Suggested",
       "searchPlaceholder": "Search functions",
-      "empty": "No matches."
+      "empty": "No matches.",
+      "scopeTitle": "Scope variables"
     },
     "categories": {
       "logging": "Logging",
@@ -411,6 +412,20 @@
           "label": "Trigger",
           "hint": "Fires the event with the given event type."
         }
+      }
+    },
+    "scope": {
+      "x": {
+        "label": "Filter/write value (x)",
+        "hint": "Implicit input value in sensor/binary_sensor filter lambdas and Modbus write lambdas."
+      },
+      "address": {
+        "label": "Register address",
+        "hint": "Implicit address variable in a Modbus server write lambda."
+      },
+      "iteration": {
+        "label": "Iteration index",
+        "hint": "Implicit 0-based counter inside a repeat: action's lambda."
       }
     }
   }

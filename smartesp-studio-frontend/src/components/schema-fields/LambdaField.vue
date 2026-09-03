@@ -275,11 +275,13 @@ const paletteSections = computed(() =>
 const paletteSectionTitle = (sectionId) => {
   if (sectionId === "suggested") return t("builder.lambda.palette.suggested");
   if (sectionId === "snippets") return t("builder.lambda.palette.snippetsTitle");
+  if (sectionId === "scope") return t("builder.lambda.palette.scopeTitle");
   return t(`builder.lambda.categories.${sectionId.replace("category:", "")}`);
 };
 
 const paletteItemLabel = (sectionId, itemId) => {
   if (sectionId === "snippets") return t(`builder.lambda.snippets.${itemId}`);
+  if (sectionId === "scope") return t(`builder.lambda.scope.${itemId}.label`);
   if (sectionId === "suggested") {
     return t(`builder.lambda.members.${paletteSuggestedDomain.value}.${itemId}.label`);
   }
@@ -288,6 +290,7 @@ const paletteItemLabel = (sectionId, itemId) => {
 
 const paletteItemHint = (sectionId, itemId) => {
   if (sectionId === "snippets") return "";
+  if (sectionId === "scope") return t(`builder.lambda.scope.${itemId}.hint`);
   if (sectionId === "suggested") {
     return t(`builder.lambda.members.${paletteSuggestedDomain.value}.${itemId}.hint`);
   }
