@@ -176,12 +176,14 @@ function refreshCompletion() {
   if (idContext) {
     completion.value = { kind: "id", ...idContext };
     activeOption.value = 0;
+    paletteOpen.value = false;
     return;
   }
   const memberContext = findMemberCompletionContext(editor.value, caret);
   if (memberContext) {
     const domain = props.idIndex.find((entry) => entry.id === memberContext.entityId)?.domain || "";
     completion.value = { kind: "member", domain, ...memberContext };
+    paletteOpen.value = false;
     activeOption.value = 0;
     return;
   }
@@ -222,6 +224,11 @@ const togglePalette = () => {
     paletteOpen.value = false;
     return;
   }
+  // "+" nutzt @mousedown.prevent, damit der Klick die Textarea nicht blurt --
+  // dadurch feuert scheduleCompletionClose nie. Ohne dies wuerde eine noch
+  // offene id(/Member-Vervollstaendigung stehen bleiben und mit der Palette
+  // ueberlappen.
+  completion.value = null;
   const editor = textareaRef.value;
   const reference = editor
     ? findNearestIdReference(editor.value, editor.selectionStart ?? editor.value.length)

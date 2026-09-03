@@ -286,6 +286,27 @@ describe("LambdaField", () => {
     expect(items[0].find("code").text()).toBe("millis()");
   });
 
+  it("never shows the completion dropdown and the palette at the same time", async () => {
+    const { wrapper } = mountBound({
+      idIndex: [{ id: "temp", idLower: "temp", domain: "sensor" }]
+    });
+
+    // A completion dropdown open, then opening the palette must close it --
+    // the "+" button uses @mousedown.prevent so the textarea never blurs.
+    await typeAt(wrapper, "id(temp).st", "id(temp).st".length);
+    expect(wrapper.find(".lambda-field__completion").exists()).toBe(true);
+    await wrapper.get(".lambda-field__toolbar button").trigger("click");
+    expect(wrapper.find(".lambda-field__completion").exists()).toBe(false);
+    expect(wrapper.find(".lambda-field__palette").exists()).toBe(true);
+
+    // And the other way round: typing into the textarea while the palette is
+    // still open (from the toggle above) must close the palette once a
+    // completion match opens.
+    await typeAt(wrapper, "id(temp).st", "id(temp).st".length);
+    expect(wrapper.find(".lambda-field__palette").exists()).toBe(false);
+    expect(wrapper.find(".lambda-field__completion").exists()).toBe(true);
+  });
+
   it("keeps the overlay scroll in sync with the textarea", async () => {
     const wrapper = mountField({ modelValue: "a\nb\nc" });
     const textarea = wrapper.get("textarea");
