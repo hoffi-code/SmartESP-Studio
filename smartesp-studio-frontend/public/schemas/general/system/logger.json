@@ -94,6 +94,54 @@
       }
     },
     {
+      "key": "on_message",
+      "type": "list",
+      "required": false,
+      "lvl": "advanced",
+      "helpUrl": "https://esphome.io/components/logger/#on-message",
+      "dependsOn": {
+        "key": "enabled",
+        "value": true
+      },
+      "item": {
+        "type": "object",
+        "fields": [
+          {
+            "key": "level",
+            "type": "select",
+            "required": false,
+            "options": [
+              "NONE",
+              "ERROR",
+              "WARN",
+              "INFO",
+              "CONFIG",
+              "DEBUG",
+              "VERBOSE",
+              "VERY_VERBOSE"
+            ]
+          },
+          {
+            "key": "logger",
+            "type": "text",
+            "required": false,
+            "placeholder": "sensor"
+          },
+          {
+            "key": "then",
+            "type": "list",
+            "required": true,
+            "listStyle": "compact",
+            "item": {
+              "type": "object",
+              "fields": [],
+              "extends": "base_actions.json"
+            }
+          }
+        ]
+      }
+    },
+    {
       "key": "custom_config",
       "type": "raw_yaml",
       "required": false,

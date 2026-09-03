@@ -442,6 +442,102 @@
       "default": false
     },
     {
+      "key": "on_connect",
+      "type": "list",
+      "required": false,
+      "lvl": "advanced",
+      "helpUrl": "https://esphome.io/components/mqtt/#mqtt-automation",
+      "dependsOn": {
+        "key": "enabled",
+        "value": true
+      },
+      "item": {
+        "type": "object",
+        "fields": [],
+        "extends": "base_actions.json"
+      },
+      "wrapThen": true
+    },
+    {
+      "key": "on_disconnect",
+      "type": "list",
+      "required": false,
+      "lvl": "advanced",
+      "helpUrl": "https://esphome.io/components/mqtt/#mqtt-automation",
+      "dependsOn": {
+        "key": "enabled",
+        "value": true
+      },
+      "item": {
+        "type": "object",
+        "fields": [],
+        "extends": "base_actions.json"
+      },
+      "wrapThen": true
+    },
+    {
+      "key": "on_message",
+      "type": "list",
+      "required": false,
+      "lvl": "advanced",
+      "helpUrl": "https://esphome.io/components/mqtt/#mqtt-automation",
+      "dependsOn": {
+        "key": "enabled",
+        "value": true
+      },
+      "item": {
+        "type": "object",
+        "fields": [
+          {
+            "key": "topic",
+            "type": "text",
+            "required": true,
+            "placeholder": "livingroom/ota_mode"
+          },
+          {
+            "key": "qos",
+            "type": "number",
+            "required": false,
+            "placeholder": "0"
+          },
+          {
+            "key": "payload",
+            "type": "text",
+            "required": false,
+            "placeholder": "ON"
+          },
+          {
+            "key": "then",
+            "type": "list",
+            "required": true,
+            "listStyle": "compact",
+            "item": {
+              "type": "object",
+              "fields": [],
+              "extends": "base_actions.json"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "key": "on_json_message",
+      "type": "list",
+      "required": false,
+      "lvl": "advanced",
+      "helpUrl": "https://esphome.io/components/mqtt/#mqtt-automation",
+      "dependsOn": {
+        "key": "enabled",
+        "value": true
+      },
+      "item": {
+        "type": "object",
+        "fields": [],
+        "extends": "base_actions.json"
+      },
+      "wrapThen": true
+    },
+    {
       "key": "custom_config",
       "type": "raw_yaml",
       "required": false,
