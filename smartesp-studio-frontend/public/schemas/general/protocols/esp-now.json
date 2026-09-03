@@ -62,36 +62,86 @@
     },
     {
       "key": "on_receive",
-      "type": "yaml",
+      "type": "list",
       "required": false,
       "lvl": "normal",
       "dependsOn": {
         "key": "enabled",
         "value": true
       },
-      "placeholder": "- logger.log: \"ESP-NOW received\""
+      "helpUrl": "https://esphome.io/components/espnow/#on-receive",
+      "item": {
+        "type": "object",
+        "fields": [
+          {
+            "key": "address",
+            "type": "text",
+            "required": false,
+            "placeholder": "11:22:33:44:55:66"
+          },
+          {
+            "key": "then",
+            "type": "list",
+            "required": true,
+            "listStyle": "compact",
+            "item": {
+              "type": "object",
+              "fields": [],
+              "extends": "base_actions.json"
+            }
+          }
+        ]
+      }
     },
     {
       "key": "on_unknown_peer",
-      "type": "yaml",
+      "type": "list",
       "required": false,
       "lvl": "normal",
       "dependsOn": {
         "key": "enabled",
         "value": true
       },
-      "placeholder": "- logger.log: \"Unknown peer\""
+      "helpUrl": "https://esphome.io/components/espnow/#on-unknown-peer",
+      "item": {
+        "type": "object",
+        "fields": [],
+        "extends": "base_actions.json"
+      },
+      "wrapThen": true
     },
     {
       "key": "on_broadcast",
-      "type": "yaml",
+      "type": "list",
       "required": false,
       "lvl": "normal",
       "dependsOn": {
         "key": "enabled",
         "value": true
       },
-      "placeholder": "- logger.log: \"Broadcast received\""
+      "helpUrl": "https://esphome.io/components/espnow/#on-broadcast",
+      "item": {
+        "type": "object",
+        "fields": [
+          {
+            "key": "address",
+            "type": "text",
+            "required": false,
+            "placeholder": "11:22:33:44:55:66"
+          },
+          {
+            "key": "then",
+            "type": "list",
+            "required": true,
+            "listStyle": "compact",
+            "item": {
+              "type": "object",
+              "fields": [],
+              "extends": "base_actions.json"
+            }
+          }
+        ]
+      }
     },
     {
       "key": "custom_config",

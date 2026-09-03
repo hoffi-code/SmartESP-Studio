@@ -86,4 +86,11 @@ describe("action trigger coverage", () => {
     expect(itemFields.find((field) => field.key === "variables").type).toBe("variable_map");
     expectActionList(itemFields.find((field) => field.key === "then"), "api.actions.then");
   });
+
+  it("wires esp-now triggers as action lists instead of raw yaml", () => {
+    const espNow = readJson("schemas/general/protocols/esp-now.json");
+    expectWrappedTrigger(byKey(espNow, "on_receive"), "espnow.on_receive", ["address"]);
+    expectWrappedTrigger(byKey(espNow, "on_broadcast"), "espnow.on_broadcast", ["address"]);
+    expectActionList(byKey(espNow, "on_unknown_peer"), "espnow.on_unknown_peer");
+  });
 });

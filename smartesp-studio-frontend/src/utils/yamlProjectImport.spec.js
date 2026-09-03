@@ -465,3 +465,74 @@ describe("importYamlToProjectConfig - structured api.actions", () => {
     );
   });
 });
+
+// Mirrors the real general/protocols/esp-now.json trigger shape (address + then / plain).
+describe("importYamlToProjectConfig - structured espnow triggers", () => {
+  const actionListField = (key) => ({
+    key,
+    type: "list",
+    item: { type: "object", fields: [], extends: "base_actions.json" },
+    wrapThen: true
+  });
+  const wrappedWithAddress = (key) => ({
+    key,
+    type: "list",
+    item: {
+      type: "object",
+      fields: [
+        { key: "address", type: "text", required: false },
+        { key: "then", type: "list", required: true, item: { type: "object", fields: [], extends: "base_actions.json" } }
+      ]
+    }
+  });
+  const espnowSchema = {
+    fields: [
+      { key: "enabled", type: "boolean" },
+      wrappedWithAddress("on_receive"),
+      actionListField("on_unknown_peer"),
+      wrappedWithAddress("on_broadcast")
+    ]
+  };
+  const loadGeneralSchema = async (path) => (path === "general/protocols/esp-now.json" ? espnowSchema : null);
+  const loadActionCatalog = async () => [{ id: "logger.log", schemaUrl: "actions/logger/log.json" }];
+  const loadActionDefinition = async () => ({ fields: [{ key: "format", type: "text", required: true }] });
+
+  // Vorher rohe yaml-Textfelder (Placeholder "- logger.log: ..."); jetzt echte Action-Listen
+  // wie jeder andere Trigger im Projekt.
+  it("imports on_receive with its address filter and on_unknown_peer as a plain trigger", async () => {
+    const yamlText = [
+      "esphome:",
+      "  name: test",
+      "",
+      "espnow:",
+      "  on_receive:",
+      "    - address: 11:22:33:44:55:66",
+      "      then:",
+      '        - logger.log: "ESP-NOW received"',
+      "  on_unknown_peer:",
+      '    - logger.log: "Unknown peer"'
+    ].join("\n");
+
+    const result = await importYamlToProjectConfig({ yamlText, loadGeneralSchema, loadActionCatalog, loadActionDefinition });
+
+    const espnow = result.projectData.protocolsCore.espnow;
+    expect(espnow.on_receive).toHaveLength(1);
+    expect(espnow.on_receive[0].address).toBe("11:22:33:44:55:66");
+    expect(espnow.on_receive[0].then[0]).toMatchObject({ type: "logger.log" });
+    expect(espnow.on_unknown_peer[0]).toMatchObject({ type: "logger.log" });
+
+    const emitted = buildSchemaYaml(espnow, espnowSchema.fields, 0).join("\n");
+    expect(emitted).toBe(
+      [
+        "enabled: true",
+        "on_receive:",
+        '  - address: "11:22:33:44:55:66"',
+        "    then:",
+        '      - logger.log: "ESP-NOW received"',
+        "on_unknown_peer:",
+        "  - then:",
+        '      - logger.log: "Unknown peer"'
+      ].join("\n")
+    );
+  });
+});
