@@ -34,8 +34,9 @@ describe("findIdCompletionContext", () => {
     expect(findIdCompletionContext("myid(te", 7)).toBeNull();
   });
 
-  it("does not reach across a line break", () => {
-    expect(findIdCompletionContext("id(\nte", 6)).toBeNull();
+  it("tolerates a line break after the opening parenthesis", () => {
+    const text = "id(\n  te";
+    expect(findIdCompletionContext(text, text.length)).toEqual({ start: 6, end: 8, query: "te" });
   });
 
   it("works mid-text at the caret, not at the end", () => {

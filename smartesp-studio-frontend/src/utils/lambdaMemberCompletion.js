@@ -5,14 +5,15 @@ import { LAMBDA_MEMBER_CATALOG } from "./lambdaMemberCatalog";
 // (das den noch offenen id(-Aufruf behandelt) um den Fall danach.
 
 const IDENT = /[A-Za-z0-9_]/;
+const SPACE = /[ \t\n]/;
 
 // findMemberCompletionContext(source, caret) -> { start, end, query, entityId } | null
-// Scannt rueckwaerts: Identifier (Member-Query) -> direkt davor muss "." stehen
-// (kein Whitespace toleriert) -> direkt davor ")" -> ein einzelner nackter
-// Identifier zwischen den Klammern (kein verschachtelter Aufruf, keine
-// Leerzeichen darin) -> davor ein alleinstehendes "id" wie bei
-// findIdCompletionContext. Jeder Zeilenumbruch dazwischen bricht die exakten
-// Zeichenpruefungen automatisch ab.
+// Scannt rueckwaerts: Identifier (Member-Query) -> davor Whitespace (inkl.
+// Zeilenumbruch) toleriert, dann muss "." stehen -> wieder Whitespace toleriert,
+// dann ")" -> ein einzelner nackter Identifier zwischen den Klammern (kein
+// verschachtelter Aufruf, keine Leerzeichen darin -- das bleibt bewusst strikt,
+// tippt niemand so) -> davor ein alleinstehendes "id" wie bei
+// findIdCompletionContext.
 export const findMemberCompletionContext = (source, caret) => {
   const text = String(source ?? "");
   const position = Math.max(0, Math.min(Number(caret) || 0, text.length));
@@ -22,8 +23,10 @@ export const findMemberCompletionContext = (source, caret) => {
   const start = index + 1;
   const query = text.slice(start, position);
 
+  while (index >= 0 && SPACE.test(text[index])) index -= 1;
   if (text[index] !== ".") return null;
   index -= 1;
+  while (index >= 0 && SPACE.test(text[index])) index -= 1;
   if (text[index] !== ")") return null;
   index -= 1;
 

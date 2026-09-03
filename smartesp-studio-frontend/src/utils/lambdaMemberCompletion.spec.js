@@ -33,9 +33,21 @@ describe("findMemberCompletionContext", () => {
     expect(findMemberCompletionContext(text, text.length)).toBeNull();
   });
 
-  it("does not tolerate whitespace around the dot", () => {
-    expect(findMemberCompletionContext("id(temp) .state", "id(temp) .state".length)).toBeNull();
-    expect(findMemberCompletionContext("id(temp). state", "id(temp). state".length)).toBeNull();
+  it("tolerates plain whitespace around the dot", () => {
+    const spaceBefore = "id(temp) .state";
+    expect(findMemberCompletionContext(spaceBefore, spaceBefore.length)).toEqual({
+      start: 10,
+      end: 15,
+      query: "state",
+      entityId: "temp"
+    });
+    const spaceAfter = "id(temp). state";
+    expect(findMemberCompletionContext(spaceAfter, spaceAfter.length)).toEqual({
+      start: 10,
+      end: 15,
+      query: "state",
+      entityId: "temp"
+    });
   });
 
   it("rejects a nested call inside the parens", () => {
@@ -53,9 +65,24 @@ describe("findMemberCompletionContext", () => {
     expect(findMemberCompletionContext("myid(temp).", "myid(temp).".length)).toBeNull();
   });
 
-  it("does not reach across a line break", () => {
+  it("tolerates a line break between the call and the dot", () => {
     const text = "id(temp)\n.state";
-    expect(findMemberCompletionContext(text, text.length)).toBeNull();
+    expect(findMemberCompletionContext(text, text.length)).toEqual({
+      start: 10,
+      end: 15,
+      query: "state",
+      entityId: "temp"
+    });
+  });
+
+  it("tolerates a line break between the dot and the member", () => {
+    const text = "id(temp).\nstate";
+    expect(findMemberCompletionContext(text, text.length)).toEqual({
+      start: 10,
+      end: 15,
+      query: "state",
+      entityId: "temp"
+    });
   });
 
   it("works mid-text at the caret, not just at the end", () => {
