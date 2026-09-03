@@ -67,6 +67,27 @@ markiert.
   damit wieder auf `error`) und 15 ungenutzte Bindungen, darunter zwei tote
   Helfer und ein toter `computed`. Neue Tests decken die generierten
   `font:`/`image:`-Blöcke ab.
+- **Lambda-Palette rechts neben dem Editor** – der „+"-Button steht nicht mehr in
+  einer eigenen Zeile über dem Feld, sondern rechts neben Zeilennummern-Gutter
+  und Editor. Die Palette klappt nach links auf und bleibt in der Karte.
+- **Kommentare werden dort bearbeitet, wo sie hingehören** – die Kommentarleiste
+  über dem Konfigurationsbereich (Kopf-Kommentar-Button + Sektions-Dropdown) ist
+  entfallen. Der Datei-Kopf-Kommentar hat jetzt eine eigene, immer sichtbare
+  Karte im Core-Tab mit direkt beschreibbarem Textfeld; jede Sektionskarte
+  (Core, Plattform, Netzwerk, Protokolle, Busse, System, Automation) trägt
+  denselben „Kommentar"-Button im Kartenkopf wie die Komponentenansicht. Für
+  Protokolle, System und Automation rendert der YAML-Generator den
+  Blockkommentar jetzt ebenfalls – bisher wurde er dort still verschluckt.
+
+### Fixed
+
+- **Lambda-Vorschlagsliste: Navigation und Scrollen repariert** – die Auswahl
+  sprang nach jedem Pfeiltastendruck zurück auf den ersten Eintrag (das `keyup`
+  hinter dem `keydown` hat den Kontext neu berechnet), scrollte nie in den
+  sichtbaren Bereich, und die Liste schloss sich, sobald man ihre Scrollbar
+  anfasste. Der Kontext wird jetzt nur bei echtem Wechsel zurückgesetzt, die
+  aktive Zeile scrollt mit, und ein Mausklick in die Liste behält den Fokus im
+  Editor.
 
 ## [0.3.0] – 2026-09-02
 
