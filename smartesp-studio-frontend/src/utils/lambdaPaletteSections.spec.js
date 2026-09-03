@@ -33,6 +33,7 @@ describe("buildLambdaPaletteSections", () => {
     expect(categorySections.map((section) => section.id)).toEqual([
       "category:logging",
       "category:strings",
+      "category:math",
       "category:time",
       "category:core"
     ]);

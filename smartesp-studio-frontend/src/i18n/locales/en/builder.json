@@ -124,7 +124,8 @@
       "logging": "Logging",
       "strings": "Strings",
       "time": "Time",
-      "core": "Core"
+      "core": "Core",
+      "math": "Math"
     },
     "globals": {
       "log_d": {
@@ -170,6 +171,18 @@
       "lvgl_label": {
         "label": "Set LVGL label text",
         "hint": "Updates the text of an LVGL label widget."
+      },
+      "round": {
+        "label": "Round to nearest integer",
+        "hint": "std::round-style rounding, from <cmath>."
+      },
+      "std_min": {
+        "label": "Smaller of two values",
+        "hint": "std::min from <algorithm> -- works under both frameworks."
+      },
+      "std_max": {
+        "label": "Larger of two values",
+        "hint": "std::max from <algorithm> -- works under both frameworks."
       }
     },
     "members": {
@@ -185,6 +198,10 @@
         "publish_state": {
           "label": "Publish a value",
           "hint": "Pushes a new reading into the sensor's state machine."
+        },
+        "get_state_class": {
+          "label": "Get state class",
+          "hint": "Returns the configured state class (measurement, total, ...)."
         }
       },
       "binary_sensor": {
@@ -253,6 +270,14 @@
         "make_call": {
           "label": "Set brightness",
           "hint": "Builds and performs a light call with a new brightness."
+        },
+        "set_effect": {
+          "label": "Set effect",
+          "hint": "Builds and performs a light call that switches to a named effect."
+        },
+        "set_color_temperature": {
+          "label": "Set color temperature",
+          "hint": "Builds and performs a light call with a new color temperature."
         }
       },
       "cover": {
@@ -289,6 +314,10 @@
         "set_mode": {
           "label": "Set mode and target",
           "hint": "Builds and performs a climate call."
+        },
+        "set_fan_mode": {
+          "label": "Set fan mode",
+          "hint": "Builds and performs a climate call with a new fan mode."
         }
       },
       "fan": {

@@ -161,11 +161,16 @@ describe("LambdaField", () => {
     await typeAt(wrapper, "id(temp).", "id(temp).".length);
 
     const options = wrapper.findAll(".lambda-field__completion-option");
-    expect(options.map((option) => option.text())).toEqual(["has_state()", "publish_state(x)", "state"]);
+    expect(options.map((option) => option.text())).toEqual([
+      "get_state_class()",
+      "has_state()",
+      "publish_state(x)",
+      "state"
+    ]);
     // Member options carry no domain badge -- the domain is already implied by context.
     expect(wrapper.find(".lambda-field__completion-domain").exists()).toBe(false);
 
-    await options[2].trigger("mousedown");
+    await options[3].trigger("mousedown");
     expect(text.value).toBe("id(temp).state");
     expect(wrapper.find(".lambda-field__completion").exists()).toBe(false);
   });
@@ -189,6 +194,7 @@ describe("LambdaField", () => {
 
     await typeAt(wrapper, "id(temp).", "id(temp).".length);
     expect(wrapper.findAll(".lambda-field__completion-option").map((o) => o.text())).toEqual([
+      "get_state_class()",
       "has_state()",
       "publish_state(x)",
       "state"
@@ -252,6 +258,7 @@ describe("LambdaField", () => {
       "Snippets",
       "Logging",
       "Strings",
+      "Math",
       "Time",
       "Core"
     ]);

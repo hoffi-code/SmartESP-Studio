@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { LAMBDA_GLOBAL_FUNCTIONS } from "./lambdaGlobalFunctions";
 
-const KNOWN_CATEGORIES = ["logging", "strings", "time", "core"];
+const KNOWN_CATEGORIES = ["logging", "strings", "math", "time", "core"];
 
 describe("LAMBDA_GLOBAL_FUNCTIONS", () => {
   it("uses only known categories", () => {
@@ -23,7 +23,7 @@ describe("LAMBDA_GLOBAL_FUNCTIONS", () => {
     });
   });
 
-  it("covers all four categories", () => {
+  it("covers every known category", () => {
     const categories = new Set(LAMBDA_GLOBAL_FUNCTIONS.map((entry) => entry.category));
     KNOWN_CATEGORIES.forEach((category) => expect(categories.has(category)).toBe(true));
   });

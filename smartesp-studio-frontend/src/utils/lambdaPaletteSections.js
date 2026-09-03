@@ -2,7 +2,7 @@ import { LAMBDA_GLOBAL_FUNCTIONS } from "./lambdaGlobalFunctions";
 import { LAMBDA_MEMBER_CATALOG } from "./lambdaMemberCatalog";
 import { LAMBDA_SNIPPETS } from "./lambdaSnippets";
 
-const CATEGORY_ORDER = ["logging", "strings", "time", "core"];
+const CATEGORY_ORDER = ["logging", "strings", "math", "time", "core"];
 
 // buildLambdaPaletteSections({ suggestedDomain }) -> [{ id, items: [{ id, insert }] }]
 // "suggested" only when suggestedDomain resolves to a non-empty member catalog entry;
