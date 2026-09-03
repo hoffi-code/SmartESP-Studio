@@ -221,6 +221,7 @@
           v-if="isBuilderSplitEnabled"
           :aria-label="t('builder.split.resize')"
           @resize-move="handleBuilderSplitMove"
+          @resize-end="persistBuilderSplit"
           @reset="resetBuilderSplit"
         />
 
@@ -2562,6 +2563,7 @@ const handleYamlLineClick = async (line) => {
 
 onMounted(() => {
   initializeDeployment();
+  restoreBuilderSplit();
   builderStackQuery = window.matchMedia?.(BUILDER_STACK_QUERY) || null;
   if (builderStackQuery) {
     isBuilderSplitEnabled.value = !builderStackQuery.matches;
@@ -2625,6 +2627,7 @@ const commentEditRequest = ref(null); // { key, title, scope: "field" | "header"
 // Aufteilung Konfiguration/Vorschau. Der Wert ist die Breite der Konfigurationsspalte
 // in Prozent; unter dem Mobile-Breakpoint stapelt das Grid ohnehin, dort darf kein
 // Inline-Style stehen (der wuerde die Media-Query schlagen).
+const BUILDER_SPLIT_STORAGE_KEY = "vebBuilderSplitRatio";
 const BUILDER_SPLIT_DEFAULT = 45;
 const BUILDER_SPLIT_MIN = 25;
 const BUILDER_SPLIT_MAX = 75;
@@ -2651,8 +2654,26 @@ const handleBuilderSplitMove = (clientX) => {
   builderSplit.value = clampBuilderSplit(((clientX - rect.left) / rect.width) * 100);
 };
 
+const persistBuilderSplit = () => {
+  try {
+    localStorage.setItem(BUILDER_SPLIT_STORAGE_KEY, String(Math.round(builderSplit.value)));
+  } catch (error) {
+    console.error("Failed to store builder split", error);
+  }
+};
+
 const resetBuilderSplit = () => {
   builderSplit.value = BUILDER_SPLIT_DEFAULT;
+  persistBuilderSplit();
+};
+
+const restoreBuilderSplit = () => {
+  try {
+    const stored = Number(localStorage.getItem(BUILDER_SPLIT_STORAGE_KEY));
+    if (Number.isFinite(stored) && stored > 0) builderSplit.value = clampBuilderSplit(stored);
+  } catch {
+    // localStorage gesperrt (privates Fenster) -- Default bleibt stehen.
+  }
 };
 let builderStackQuery = null;
 const handleBuilderStackChange = (event) => {
