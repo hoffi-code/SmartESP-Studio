@@ -9,6 +9,9 @@
     "automation": "Automation",
     "lvgl": "LVGL"
   },
+  "split": {
+    "resize": "Resize configuration and preview"
+  },
   "comment": {
     "modalTitleDefault": "Comment",
     "componentTitle": "Comment – {domain}:",

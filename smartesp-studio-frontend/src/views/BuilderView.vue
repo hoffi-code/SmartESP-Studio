@@ -189,7 +189,7 @@
       </aside>
 
       <div class="builder-content">
-        <section class="builder-grid">
+        <section class="builder-grid" ref="builderGridRef" :style="builderGridStyle">
         <div class="builder-panel">
           <div class="config-title">
             <select
@@ -216,6 +216,14 @@
             @yaml-line-click="handleYamlLineClick"
           />
         </div>
+
+        <PaneResizer
+          v-if="isBuilderSplitEnabled"
+          :aria-label="t('builder.split.resize')"
+          @resize-move="handleBuilderSplitMove"
+          @resize-end="persistBuilderSplit"
+          @reset="resetBuilderSplit"
+        />
 
         <div class="builder-panel">
           <div class="config-title">
@@ -598,6 +606,7 @@ import BuilderComponentForm from "../components/builder/BuilderComponentForm.vue
 import CommentEditModal from "../components/builder/CommentEditModal.vue";
 import IdDefinitionModal from "../components/builder/IdDefinitionModal.vue";
 import BuilderComponentPicker from "../components/builder/BuilderComponentPicker.vue";
+import PaneResizer from "../components/PaneResizer.vue";
 import BuilderCoreTab from "../components/builder/BuilderCoreTab.vue";
 import LvglBuilder from "../components/lvgl/LvglBuilder.vue";
 import BuilderBussesTab from "../components/builder/BuilderBussesTab.vue";
@@ -2554,6 +2563,12 @@ const handleYamlLineClick = async (line) => {
 
 onMounted(() => {
   initializeDeployment();
+  restoreBuilderSplit();
+  builderStackQuery = window.matchMedia?.(BUILDER_STACK_QUERY) || null;
+  if (builderStackQuery) {
+    isBuilderSplitEnabled.value = !builderStackQuery.matches;
+    builderStackQuery.addEventListener("change", handleBuilderStackChange);
+  }
   window.addEventListener("keydown", handleBuilderKeydown);
   window.addEventListener("app:builder-export", handleAppExport);
   window.addEventListener("app:install-option", handleAppInstallOption);
@@ -2608,6 +2623,62 @@ const markProjectSavedFromCurrentState = () => {
 // Section/component YAML comments -- edited through CommentEditModal, stored the same way
 // the importer captures them (config.fieldComments keyed by domain/path, config.headerComment).
 const commentEditRequest = ref(null); // { key, title, scope: "field" | "header" }
+
+// Aufteilung Konfiguration/Vorschau. Der Wert ist die Breite der Konfigurationsspalte
+// in Prozent; unter dem Mobile-Breakpoint stapelt das Grid ohnehin, dort darf kein
+// Inline-Style stehen (der wuerde die Media-Query schlagen).
+const BUILDER_SPLIT_STORAGE_KEY = "vebBuilderSplitRatio";
+const BUILDER_SPLIT_DEFAULT = 45;
+const BUILDER_SPLIT_MIN = 25;
+const BUILDER_SPLIT_MAX = 75;
+const BUILDER_STACK_QUERY = "(max-width: 960px)";
+
+const clampBuilderSplit = (value) =>
+  Math.max(BUILDER_SPLIT_MIN, Math.min(BUILDER_SPLIT_MAX, value));
+
+const builderGridRef = ref(null);
+const builderSplit = ref(BUILDER_SPLIT_DEFAULT);
+const isBuilderSplitEnabled = ref(true);
+
+const builderGridStyle = computed(() =>
+  isBuilderSplitEnabled.value
+    ? { gridTemplateColumns: `${builderSplit.value}% 8px minmax(0, 1fr)` }
+    : undefined
+);
+
+const handleBuilderSplitMove = (clientX) => {
+  const root = builderGridRef.value;
+  if (!root) return;
+  const rect = root.getBoundingClientRect();
+  if (!rect.width) return;
+  builderSplit.value = clampBuilderSplit(((clientX - rect.left) / rect.width) * 100);
+};
+
+const persistBuilderSplit = () => {
+  try {
+    localStorage.setItem(BUILDER_SPLIT_STORAGE_KEY, String(Math.round(builderSplit.value)));
+  } catch (error) {
+    console.error("Failed to store builder split", error);
+  }
+};
+
+const resetBuilderSplit = () => {
+  builderSplit.value = BUILDER_SPLIT_DEFAULT;
+  persistBuilderSplit();
+};
+
+const restoreBuilderSplit = () => {
+  try {
+    const stored = Number(localStorage.getItem(BUILDER_SPLIT_STORAGE_KEY));
+    if (Number.isFinite(stored) && stored > 0) builderSplit.value = clampBuilderSplit(stored);
+  } catch {
+    // localStorage gesperrt (privates Fenster) -- Default bleibt stehen.
+  }
+};
+let builderStackQuery = null;
+const handleBuilderStackChange = (event) => {
+  isBuilderSplitEnabled.value = !event.matches;
+};
 
 // Jede Sektionskarte traegt ihren eigenen Kommentar-Button. Der Key ist der
 // Top-Level-YAML-Key, den useBuilderYamlPreview fuer die Sektion emittiert.
@@ -4270,6 +4341,8 @@ onBeforeUnmount(() => {
   }
   Array.from(tabPulseTimers.values()).forEach((timer) => clearTimeout(timer));
   tabPulseTimers.clear();
+  builderStackQuery?.removeEventListener("change", handleBuilderStackChange);
+  builderStackQuery = null;
   window.removeEventListener("keydown", handleBuilderKeydown);
   window.removeEventListener("app:builder-export", handleAppExport);
   window.removeEventListener("app:install-option", handleAppInstallOption);
