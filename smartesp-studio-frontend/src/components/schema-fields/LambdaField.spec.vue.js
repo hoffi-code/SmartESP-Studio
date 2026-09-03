@@ -161,11 +161,16 @@ describe("LambdaField", () => {
     await typeAt(wrapper, "id(temp).", "id(temp).".length);
 
     const options = wrapper.findAll(".lambda-field__completion-option");
-    expect(options.map((option) => option.text())).toEqual(["has_state()", "publish_state(x)", "state"]);
+    expect(options.map((option) => option.text())).toEqual([
+      "get_state_class()",
+      "has_state()",
+      "publish_state(x)",
+      "state"
+    ]);
     // Member options carry no domain badge -- the domain is already implied by context.
     expect(wrapper.find(".lambda-field__completion-domain").exists()).toBe(false);
 
-    await options[2].trigger("mousedown");
+    await options[3].trigger("mousedown");
     expect(text.value).toBe("id(temp).state");
     expect(wrapper.find(".lambda-field__completion").exists()).toBe(false);
   });
@@ -189,6 +194,7 @@ describe("LambdaField", () => {
 
     await typeAt(wrapper, "id(temp).", "id(temp).".length);
     expect(wrapper.findAll(".lambda-field__completion-option").map((o) => o.text())).toEqual([
+      "get_state_class()",
       "has_state()",
       "publish_state(x)",
       "state"
@@ -250,11 +256,29 @@ describe("LambdaField", () => {
     await wrapper.get(".lambda-field__toolbar button").trigger("click");
     expect(wrapper.findAll(".lambda-field__palette-section-title").map((title) => title.text())).toEqual([
       "Snippets",
+      "Scope variables",
       "Logging",
       "Strings",
+      "Math",
       "Time",
       "Core"
     ]);
+  });
+
+  it("inserts a scope variable from the palette", async () => {
+    const { wrapper, text } = mountBound({ initial: "return ;" });
+    const textarea = wrapper.get("textarea");
+    textarea.element.setSelectionRange(7, 7);
+
+    await wrapper.get(".lambda-field__toolbar button").trigger("click");
+    await wrapper.get(".lambda-field__palette-search").setValue("iteration");
+
+    const items = wrapper.findAll(".lambda-field__snippet");
+    expect(items).toHaveLength(1);
+    expect(items[0].text()).toContain("Iteration index");
+
+    await items[0].trigger("mousedown");
+    expect(text.value).toBe("return iteration;");
   });
 
   it("puts a Suggested section with the referenced entity's members first", async () => {
@@ -316,5 +340,100 @@ describe("LambdaField", () => {
     const overlay = wrapper.get(".lambda-field__highlight").element;
     expect(overlay.scrollTop).toBe(24);
     expect(overlay.scrollLeft).toBe(12);
+  });
+
+  it("shows one gutter line per source line", () => {
+    const wrapper = mountField({ modelValue: "a\nb\nc" });
+    expect(wrapper.findAll(".lambda-field__gutter-lines span").map((s) => s.text())).toEqual([
+      "1",
+      "2",
+      "3"
+    ]);
+  });
+
+  it("shows a single gutter line for empty content", () => {
+    const wrapper = mountField({ modelValue: "" });
+    expect(wrapper.findAll(".lambda-field__gutter-lines span").map((s) => s.text())).toEqual(["1"]);
+  });
+
+  it("marks the gutter line and draws an error marker for the first warning", () => {
+    const wrapper = mountField({
+      modelValue: "auto a = 1;\nreturn (id(temp).state;",
+      idIndex: [{ id: "temp", idLower: "temp", domain: "sensor" }]
+    });
+    const errorLine = wrapper.find(".lambda-field__gutter-line--error");
+    expect(errorLine.exists()).toBe(true);
+    expect(errorLine.text()).toBe("2");
+    expect(wrapper.find(".lambda-field__error-line").exists()).toBe(true);
+  });
+
+  it("has no error marker on clean code", () => {
+    const wrapper = mountField({
+      modelValue: "return id(temp).state;",
+      idIndex: [{ id: "temp", idLower: "temp", domain: "sensor" }]
+    });
+    expect(wrapper.find(".lambda-field__gutter-line--error").exists()).toBe(false);
+    expect(wrapper.find(".lambda-field__error-line").exists()).toBe(false);
+  });
+
+  // Teil B des Lambda-Plans: BuilderView.vue provides "lambdaBuildErrors" (a ref of
+  // resolveLambdaBuildErrorTargets() entries); LambdaField matches by its own
+  // contextScopeId/encodedFieldPath props, mirroring how the YAML-preview click-through
+  // resolves the same identity.
+  const mountWithBuildErrors = (entries, props = {}) =>
+    mount(LambdaField, {
+      props: {
+        inputId: "l1",
+        modelValue: "return id(temp).turn__on_typo();",
+        contextScopeId: "component:sensor1",
+        encodedFieldPath: "lambda",
+        ...props
+      },
+      global: { provide: { lambdaBuildErrors: ref(entries) } }
+    });
+
+  it("shows a blocking notice for a matching compile error", () => {
+    const wrapper = mountWithBuildErrors([
+      { scopeId: "component:sensor1", encodedPath: "lambda", message: "no member named 'turn__on_typo'", line: 1 }
+    ]);
+    const notice = wrapper.find(".lambda-field__build-error");
+    expect(notice.exists()).toBe(true);
+    expect(notice.text()).toBe("Build error at line 1: no member named 'turn__on_typo'");
+    const errorLine = wrapper.find(".lambda-field__gutter-line--error");
+    expect(errorLine.exists()).toBe(true);
+    expect(errorLine.text()).toBe("1");
+  });
+
+  it("falls back to a generic message for a message-less config error", () => {
+    const wrapper = mountWithBuildErrors([
+      { scopeId: "component:sensor1", encodedPath: "lambda", message: "", line: 1 }
+    ]);
+    expect(wrapper.get(".lambda-field__build-error").text()).toBe(
+      "Configuration error at line 1 — see the validation console for details."
+    );
+  });
+
+  it("ignores a build error targeting a different field", () => {
+    const wrapper = mountWithBuildErrors([
+      { scopeId: "component:sensor1", encodedPath: "other_lambda", message: "boom", line: 1 }
+    ]);
+    expect(wrapper.find(".lambda-field__build-error").exists()).toBe(false);
+  });
+
+  it("prefers the backend error's line over a lint warning's when both are present", () => {
+    const wrapper = mountWithBuildErrors(
+      [{ scopeId: "component:sensor1", encodedPath: "lambda", message: "boom", line: 1 }],
+      { modelValue: "auto a = 1;\nreturn (id(temp).state;" }
+    );
+    expect(wrapper.get(".lambda-field__gutter-line--error").text()).toBe("1");
+  });
+
+  it("keeps the gutter scroll in sync with the textarea", async () => {
+    const wrapper = mountField({ modelValue: "a\nb\nc" });
+    const textarea = wrapper.get("textarea");
+    textarea.element.scrollTop = 24;
+    await textarea.trigger("scroll");
+    const gutterLines = wrapper.get(".lambda-field__gutter-lines").element;
+    expect(gutterLines.style.transform).toBe("translateY(-24px)");
   });
 });

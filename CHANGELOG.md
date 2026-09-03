@@ -34,6 +34,31 @@ markiert.
   Suchfeld oben, darunter „Suggested" (Domain-Member der zuletzt referenzierten
   ID, falls vorhanden), die bestehenden Snippets und die Globalfunktionen
   (Logging/Strings/Zeit/Core) nach Kategorie gruppiert.
+- **Lambda-Editor: Zeilennummern-Gutter + Fehlerzeile** – links neben dem
+  Lambda-Feld zeigt eine Gutter-Spalte Zeilennummern, die erste Lint-Warnung
+  markiert ihre Zeile im Gutter und als hinterlegte Zeile im Editor.
+- **Lambda-Lint erkennt mehrzeilige Lücken** – ein unterminiertes `/* …`
+  ohne schließendes `*/` wird jetzt als Warnung gemeldet statt stillschweigend
+  den Rest des Lambda-Bodies zu verschlucken. `id(`- und `id(x).`-Vorschläge
+  funktionieren jetzt auch über Zeilenumbrüche/Whitespace hinweg.
+- **Mehr Katalog-Einträge + neue Math-Kategorie** – `sensor.get_state_class()`,
+  `light.set_effect(...)`/`set_color_temperature(...)`, `climate.set_fan_mode(...)`
+  sowie `round()`/`std::min`/`std::max` als neue Kategorie „Math" in der
+  Lambda-Palette.
+- **Lambda-Scope-Variablen in der Palette** – neue Sektion mit den impliziten
+  Variablen, die ESPHome in bestimmten Lambda-Typen automatisch bereitstellt
+  (`x` in Filter-/Modbus-Write-Lambdas, `address` bei Modbus-Write, `iteration`
+  in `repeat:`-Actions).
+- **„Prüfen" kompiliert jetzt echtes C++** – der Prüfen-Job ruft nach `esphome
+  config` zusätzlich `esphome compile`, damit Fehler in `lambda:`-Blöcken
+  (Tippfehler, falsche Member-Aufrufe, …) auffliegen statt erst beim Install.
+- **Build-Fehler am Lambda-Feld** – schlägt ein „Prüfen"-Lauf fehl, ordnet die
+  App die Fehlermeldung (Compile-Fehler dank ESPHomes `#line`-Direktiven
+  zuverlässig, YAML-/Schema-Fehler best effort) dem betroffenen `lambda:`-Feld
+  zu und zeigt sie dort blockierend an – zusätzlich zu den bestehenden,
+  nicht-blockierenden Lint-Warnungen. Greift nur beim gespeicherten Stand;
+  bei ungespeicherten Änderungen seit dem Prüfen-Start unterbleibt die
+  Zuordnung bewusst.
 
 ## [0.3.0] – 2026-09-02
 

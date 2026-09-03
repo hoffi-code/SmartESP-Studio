@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { LAMBDA_GLOBAL_FUNCTIONS } from "./lambdaGlobalFunctions";
 import { LAMBDA_MEMBER_CATALOG } from "./lambdaMemberCatalog";
 import { buildLambdaPaletteSections, filterLambdaPaletteSections } from "./lambdaPaletteSections";
+import { LAMBDA_SCOPE_VARIABLES } from "./lambdaScopeVariables";
 import { LAMBDA_SNIPPETS } from "./lambdaSnippets";
 
 describe("buildLambdaPaletteSections", () => {
@@ -27,12 +28,19 @@ describe("buildLambdaPaletteSections", () => {
     expect(snippets.items).toEqual(LAMBDA_SNIPPETS);
   });
 
+  it("always includes the scope variables section unchanged", () => {
+    const sections = buildLambdaPaletteSections();
+    const scope = sections.find((section) => section.id === "scope");
+    expect(scope.items).toEqual(LAMBDA_SCOPE_VARIABLES);
+  });
+
   it("groups global functions by category in the fixed reading order", () => {
     const sections = buildLambdaPaletteSections();
     const categorySections = sections.filter((section) => section.id.startsWith("category:"));
     expect(categorySections.map((section) => section.id)).toEqual([
       "category:logging",
       "category:strings",
+      "category:math",
       "category:time",
       "category:core"
     ]);

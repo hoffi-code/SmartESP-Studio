@@ -40,6 +40,19 @@ describe("lintLambda", () => {
     ]);
   });
 
+  it("reports an unterminated block comment instead of silently swallowing the rest", () => {
+    expect(lintLambda("/* oops", index)).toEqual([
+      { code: "unclosedComment", token: "/*", line: 1, column: 1 }
+    ]);
+  });
+
+  it("masks everything after an unterminated block comment, no bogus follow-up warnings", () => {
+    const text = "return 1;\n/* oops\nid(ghost)(";
+    expect(lintLambda(text, index)).toEqual([
+      { code: "unclosedComment", token: "/*", line: 2, column: 1 }
+    ]);
+  });
+
   it("reports unknown ids only", () => {
     expect(lintLambda("return id(temp).state + id(outside).state;", index)).toEqual([
       { code: "unknownId", id: "outside", line: 1, column: 25 }

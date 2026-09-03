@@ -97,11 +97,14 @@
     "colorNone": "Hex-Wert oder RGB-Komponenten eingeben."
   },
   "lambda": {
+    "buildError": "Build-Fehler in Zeile {line}: {message}",
+    "buildErrorGeneric": "Konfigurationsfehler in Zeile {line} — Details in der Prüfen-Konsole.",
     "warn": {
       "unclosed": "Zeile {line}: „{token}“ wird nie geschlossen.",
       "unexpected": "Zeile {line}: „{token}“ ohne passende öffnende Klammer.",
       "unclosedString": "Zeile {line}: Zeichenkette ab {token} ist nicht beendet.",
-      "unknownId": "Zeile {line}: keine Komponente mit der ID „{id}“ in dieser Konfiguration."
+      "unknownId": "Zeile {line}: keine Komponente mit der ID „{id}“ in dieser Konfiguration.",
+      "unclosedComment": "Zeile {line}: Blockkommentar ab {token} wird nie geschlossen."
     },
     "snippets": {
       "idState": "Zustand einer Komponente",

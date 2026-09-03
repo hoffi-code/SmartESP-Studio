@@ -97,11 +97,14 @@
     "colorNone": "Enter a hex value or RGB components."
   },
   "lambda": {
+    "buildError": "Build error at line {line}: {message}",
+    "buildErrorGeneric": "Configuration error at line {line} — see the validation console for details.",
     "warn": {
       "unclosed": "Line {line}: “{token}” is never closed.",
       "unexpected": "Line {line}: “{token}” without a matching opening bracket.",
       "unclosedString": "Line {line}: string starting with {token} is not terminated.",
-      "unknownId": "Line {line}: no component with id “{id}” in this configuration."
+      "unknownId": "Line {line}: no component with id “{id}” in this configuration.",
+      "unclosedComment": "Line {line}: block comment starting with {token} is never closed."
     },
     "snippets": {
       "idState": "State of a component",
@@ -117,13 +120,15 @@
       "snippetsTitle": "Snippets",
       "suggested": "Suggested",
       "searchPlaceholder": "Search functions",
-      "empty": "No matches."
+      "empty": "No matches.",
+      "scopeTitle": "Scope variables"
     },
     "categories": {
       "logging": "Logging",
       "strings": "Strings",
       "time": "Time",
-      "core": "Core"
+      "core": "Core",
+      "math": "Math"
     },
     "globals": {
       "log_d": {
@@ -169,6 +174,18 @@
       "lvgl_label": {
         "label": "Set LVGL label text",
         "hint": "Updates the text of an LVGL label widget."
+      },
+      "round": {
+        "label": "Round to nearest integer",
+        "hint": "std::round-style rounding, from <cmath>."
+      },
+      "std_min": {
+        "label": "Smaller of two values",
+        "hint": "std::min from <algorithm> -- works under both frameworks."
+      },
+      "std_max": {
+        "label": "Larger of two values",
+        "hint": "std::max from <algorithm> -- works under both frameworks."
       }
     },
     "members": {
@@ -184,6 +201,10 @@
         "publish_state": {
           "label": "Publish a value",
           "hint": "Pushes a new reading into the sensor's state machine."
+        },
+        "get_state_class": {
+          "label": "Get state class",
+          "hint": "Returns the configured state class (measurement, total, ...)."
         }
       },
       "binary_sensor": {
@@ -252,6 +273,14 @@
         "make_call": {
           "label": "Set brightness",
           "hint": "Builds and performs a light call with a new brightness."
+        },
+        "set_effect": {
+          "label": "Set effect",
+          "hint": "Builds and performs a light call that switches to a named effect."
+        },
+        "set_color_temperature": {
+          "label": "Set color temperature",
+          "hint": "Builds and performs a light call with a new color temperature."
         }
       },
       "cover": {
@@ -288,6 +317,10 @@
         "set_mode": {
           "label": "Set mode and target",
           "hint": "Builds and performs a climate call."
+        },
+        "set_fan_mode": {
+          "label": "Set fan mode",
+          "hint": "Builds and performs a climate call with a new fan mode."
         }
       },
       "fan": {
@@ -381,6 +414,20 @@
           "label": "Trigger",
           "hint": "Fires the event with the given event type."
         }
+      }
+    },
+    "scope": {
+      "x": {
+        "label": "Filter/write value (x)",
+        "hint": "Implicit input value in sensor/binary_sensor filter lambdas and Modbus write lambdas."
+      },
+      "address": {
+        "label": "Register address",
+        "hint": "Implicit address variable in a Modbus server write lambda."
+      },
+      "iteration": {
+        "label": "Iteration index",
+        "hint": "Implicit 0-based counter inside a repeat: action's lambda."
       }
     }
   }

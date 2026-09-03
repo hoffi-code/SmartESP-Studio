@@ -799,7 +799,6 @@ const parseOptionToken = (rawValue, options) => {
 };
 
 const selectOptionToken = (index) => `${OPTION_TOKEN_PREFIX}${index}`;
-const selectListOptionToken = (index) => `${OPTION_TOKEN_PREFIX}${index}`;
 
 const onSelect = (event) => {
   const value = parseOptionToken(event.target.value, selectOptions.value);

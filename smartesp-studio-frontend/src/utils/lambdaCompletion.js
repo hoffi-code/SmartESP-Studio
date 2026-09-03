@@ -2,7 +2,7 @@
 // Optionen dafuer. Bewusst nur dieser eine Trigger -- kein generelles C++-Completion.
 
 const IDENT = /[A-Za-z0-9_]/;
-const SPACE = /[ \t]/;
+const SPACE = /[ \t\n]/;
 
 export const findIdCompletionContext = (source, caret) => {
   const text = String(source ?? "");

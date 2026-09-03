@@ -63,6 +63,10 @@ export const useInstallConsoleFlow = (options) => {
   let compileLogFlushHandle = null;
   let compileLogScrollHandle = null;
   const compileLogQueue = [];
+  // Raw (unescaped) log text, mirrors compileLogLines but kept plain so a finished
+  // "validate" job can hand it to lambdaBuildErrors' regex parsers -- the console's
+  // own compileLogLines entries are already HTML-escaped for rendering.
+  const compileRawLogBuffer = [];
 
   const canInstall = computed(() => Boolean(options.canInstall?.value ?? options.canInstall?.() ?? false));
   const canValidate = computed(() => {
@@ -157,7 +161,7 @@ export const useInstallConsoleFlow = (options) => {
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;")
-      .replace(/\"/g, "&quot;")
+      .replace(/"/g, "&quot;")
       .replace(/'/g, "&#39;");
 
   const isAsciiTableLine = (line) => {
@@ -248,6 +252,10 @@ export const useInstallConsoleFlow = (options) => {
   const queueCompileLogLines = (lines) => {
     if (!Array.isArray(lines) || !lines.length) return;
     compileLogQueue.push(...lines);
+    compileRawLogBuffer.push(...lines.map((line) => String(line ?? "")));
+    if (compileRawLogBuffer.length > compileMaxLogLines) {
+      compileRawLogBuffer.splice(0, compileRawLogBuffer.length - compileMaxLogLines);
+    }
     if (!compileLogFlushHandle) {
       compileLogFlushHandle = requestAnimationFrame(flushCompileLogQueue);
     }
@@ -273,6 +281,7 @@ export const useInstallConsoleFlow = (options) => {
     clearCompileLogQueue();
     compileLogLines.value = [];
     compileLogSeq.value = 0;
+    compileRawLogBuffer.length = 0;
   };
 
   const stopCompileStatusPoll = () => {
@@ -728,6 +737,13 @@ export const useInstallConsoleFlow = (options) => {
       yaml: compileYamlName.value || getYamlName(),
       host: compileDeviceHost.value || getDeviceHost()
     };
+
+    if (finishedAction === "validate" && typeof options.onValidateFinished === "function") {
+      options.onValidateFinished({
+        success: finalState === "success",
+        logText: compileRawLogBuffer.join("\n")
+      });
+    }
 
     if (finalState !== "success") {
       if (finishedAction === "compile") {

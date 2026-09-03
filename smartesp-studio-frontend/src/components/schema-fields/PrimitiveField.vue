@@ -79,6 +79,8 @@
       :rows="textAreaRows"
       :language="isYamlField ? 'yaml' : 'cpp'"
       :id-index="idIndex"
+      :context-scope-id="contextScopeId"
+      :encoded-field-path="encodedFieldFocusPath"
       @update:model-value="(lambdaValue) => emit('update', { path: fieldPath, value: wrapInputValue(lambdaValue) })"
     />
 

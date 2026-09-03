@@ -38,37 +38,52 @@
       </div>
     </div>
     <div class="lambda-field__editor">
-      <pre ref="highlightRef" class="lambda-field__highlight hljs" aria-hidden="true" v-html="highlighted"></pre>
-      <textarea
-        :id="inputId"
-        ref="textareaRef"
-        class="lambda-textarea lambda-field__input"
-        :value="modelValue"
-        :rows="rows"
-        wrap="off"
-        spellcheck="false"
-        autocomplete="off"
-        autocapitalize="off"
-        @input="onInput"
-        @scroll="syncScroll"
-        @keydown="onKeydown"
-        @keyup="refreshCompletion"
-        @click="refreshCompletion"
-        @blur="scheduleCompletionClose"
-      ></textarea>
-      <div v-if="completionOpen" class="id-ref-list lambda-field__completion">
-        <button
-          v-for="(option, optionIndex) in completionOptions"
-          :key="option.id"
-          type="button"
-          class="id-ref-option lambda-field__completion-option"
-          :class="{ 'is-active': optionIndex === activeOption }"
-          @mousedown.prevent="pickCompletion(option)"
-        >
-          <span>{{ option.insert }}</span>
-          <span v-if="option.secondary" class="lambda-field__completion-domain">{{ option.secondary }}</span>
-        </button>
+      <div class="lambda-field__gutter" aria-hidden="true">
+        <div class="lambda-field__gutter-lines" :style="gutterStyle">
+          <span
+            v-for="lineNumber in editorLineNumbers"
+            :key="lineNumber"
+            :class="{ 'lambda-field__gutter-line--error': lineNumber === firstWarningLine }"
+          >{{ lineNumber }}</span>
+        </div>
       </div>
+      <div class="lambda-field__editor-body">
+        <div v-if="errorLineStyle" class="lambda-field__error-line" :style="errorLineStyle"></div>
+        <pre ref="highlightRef" class="lambda-field__highlight hljs" aria-hidden="true" v-html="highlighted"></pre>
+        <textarea
+          :id="inputId"
+          ref="textareaRef"
+          class="lambda-textarea lambda-field__input"
+          :value="modelValue"
+          :rows="rows"
+          wrap="off"
+          spellcheck="false"
+          autocomplete="off"
+          autocapitalize="off"
+          @input="onInput"
+          @scroll="syncScroll"
+          @keydown="onKeydown"
+          @keyup="refreshCompletion"
+          @click="refreshCompletion"
+          @blur="scheduleCompletionClose"
+        ></textarea>
+        <div v-if="completionOpen" class="id-ref-list lambda-field__completion">
+          <button
+            v-for="(option, optionIndex) in completionOptions"
+            :key="option.id"
+            type="button"
+            class="id-ref-option lambda-field__completion-option"
+            :class="{ 'is-active': optionIndex === activeOption }"
+            @mousedown.prevent="pickCompletion(option)"
+          >
+            <span>{{ option.insert }}</span>
+            <span v-if="option.secondary" class="lambda-field__completion-domain">{{ option.secondary }}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div v-if="buildError" class="notice notice--block notice--error lambda-field__build-error">
+      {{ buildErrorText }}
     </div>
     <ul v-if="warnings.length" class="notice notice--warning lambda-field__warnings">
       <li v-for="(warning, warningIndex) in warnings" :key="warningIndex">
@@ -79,7 +94,7 @@
 </template>
 
 <script setup>
-import { computed, nextTick, onMounted, ref, watch } from "vue";
+import { computed, inject, nextTick, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 import { highlightCppToHtml } from "../../utils/cppSyntaxHighlight";
@@ -104,7 +119,9 @@ const props = defineProps({
   inputId: { type: String, required: true },
   rows: { type: Number, default: 1 },
   language: { type: String, default: "cpp" },
-  idIndex: { type: Array, default: () => [] }
+  idIndex: { type: Array, default: () => [] },
+  contextScopeId: { type: String, default: "" },
+  encodedFieldPath: { type: String, default: "" }
 });
 
 const emit = defineEmits(["update:model-value"]);
@@ -114,6 +131,21 @@ const { t } = useI18n();
 const textareaRef = ref(null);
 const highlightRef = ref(null);
 const highlighted = ref("");
+
+// Feste Metriken, damit die Fehlerzeile pixelgenau ueber der passenden Code-Zeile
+// sitzt -- muss zu .lambda-field__highlight/.lambda-field__input passen
+// (font: 400 13px/1.5, padding: 6px 10px).
+const LAMBDA_LINE_HEIGHT = 19.5;
+const LAMBDA_VERTICAL_PADDING = 6;
+
+const editorScrollTop = ref(0);
+
+const editorLineNumbers = computed(() => {
+  const lineCount = Math.max(1, String(props.modelValue || "").split(/\r\n|\r|\n/).length);
+  return Array.from({ length: lineCount }, (_, index) => index + 1);
+});
+
+const gutterStyle = computed(() => ({ transform: `translateY(${-editorScrollTop.value}px)` }));
 
 // The highlighter resolves asynchronously (lazy hljs import); a stale run must not
 // overwrite the markup of a newer keystroke.
@@ -134,6 +166,7 @@ const syncScroll = () => {
   if (!editor || !overlay) return;
   overlay.scrollTop = editor.scrollTop;
   overlay.scrollLeft = editor.scrollLeft;
+  editorScrollTop.value = editor.scrollTop;
 };
 
 const onInput = (event) => {
@@ -247,11 +280,13 @@ const paletteSections = computed(() =>
 const paletteSectionTitle = (sectionId) => {
   if (sectionId === "suggested") return t("builder.lambda.palette.suggested");
   if (sectionId === "snippets") return t("builder.lambda.palette.snippetsTitle");
+  if (sectionId === "scope") return t("builder.lambda.palette.scopeTitle");
   return t(`builder.lambda.categories.${sectionId.replace("category:", "")}`);
 };
 
 const paletteItemLabel = (sectionId, itemId) => {
   if (sectionId === "snippets") return t(`builder.lambda.snippets.${itemId}`);
+  if (sectionId === "scope") return t(`builder.lambda.scope.${itemId}.label`);
   if (sectionId === "suggested") {
     return t(`builder.lambda.members.${paletteSuggestedDomain.value}.${itemId}.label`);
   }
@@ -260,6 +295,7 @@ const paletteItemLabel = (sectionId, itemId) => {
 
 const paletteItemHint = (sectionId, itemId) => {
   if (sectionId === "snippets") return "";
+  if (sectionId === "scope") return t(`builder.lambda.scope.${itemId}.hint`);
   if (sectionId === "suggested") {
     return t(`builder.lambda.members.${paletteSuggestedDomain.value}.${itemId}.hint`);
   }
@@ -318,6 +354,40 @@ const warnings = computed(() =>
   props.language === "yaml" ? [] : lintLambda(props.modelValue, props.idIndex)
 );
 
+// Vom "Pruefen"-Job durchgereichte Backend-Fehler (Teil B des Lambda-Plans,
+// resolveLambdaBuildErrorTargets in lambdaBuildErrors.js), bereitgestellt von
+// BuilderView.vue als provide("lambdaBuildErrors", ref<Array>). Kein Match, wenn
+// niemand provided (z. B. isolierte Tests) -- injizierter Default ist dann leer.
+const lambdaBuildErrors = inject("lambdaBuildErrors", ref([]));
+
+const buildError = computed(() => {
+  if (!props.contextScopeId || !props.encodedFieldPath) return null;
+  return (
+    lambdaBuildErrors.value.find(
+      (entry) => entry.scopeId === props.contextScopeId && entry.encodedPath === props.encodedFieldPath
+    ) || null
+  );
+});
+
+const buildErrorText = computed(() => {
+  const error = buildError.value;
+  if (!error) return "";
+  return error.message
+    ? t("builder.lambda.buildError", { line: error.line, message: error.message })
+    : t("builder.lambda.buildErrorGeneric", { line: error.line });
+});
+
+// Erste Warnung wird im Gutter/als Fehlerzeile hervorgehoben -- ein Backend-Fehler
+// ist die verlaesslichere Quelle und gewinnt, wenn beide vorliegen.
+const firstWarningLine = computed(() => buildError.value?.line || warnings.value[0]?.line || 0);
+
+const errorLineStyle = computed(() => {
+  const line = firstWarningLine.value;
+  if (!line) return null;
+  const top = LAMBDA_VERTICAL_PADDING + (line - 1) * LAMBDA_LINE_HEIGHT - editorScrollTop.value;
+  return { top: `${top}px`, height: `${LAMBDA_LINE_HEIGHT}px` };
+});
+
 const warningText = (warning) =>
   t(`builder.lambda.warn.${warning.code}`, {
     token: warning.token || "",
@@ -330,6 +400,55 @@ const warningText = (warning) =>
 <style scoped>
 .lambda-field__editor {
   position: relative;
+  display: flex;
+}
+
+.lambda-field__gutter {
+  position: relative;
+  flex: 0 0 auto;
+  width: 2.75em;
+  overflow: hidden;
+  border: 1px solid var(--accent-line);
+  border-right: none;
+  border-radius: 4px 0 0 4px;
+  background: #eef2f6;
+  pointer-events: none;
+}
+
+.lambda-field__gutter-lines {
+  padding: 6px 6px 6px 0;
+  display: grid;
+  grid-auto-rows: 19.5px;
+  color: #94a3b8;
+  font: 400 13px/1.5 "Courier New", Courier, monospace;
+  text-align: right;
+  user-select: none;
+  will-change: transform;
+}
+
+.lambda-field__gutter-lines span {
+  height: 19.5px;
+}
+
+.lambda-field__gutter-line--error {
+  color: #dc2626;
+  font-weight: 700;
+}
+
+.lambda-field__editor-body {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.lambda-field__error-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  pointer-events: none;
+  border-left: 3px solid #ef4444;
+  background: rgba(239, 68, 68, 0.12);
 }
 
 .lambda-field__highlight,
@@ -337,7 +456,7 @@ const warningText = (warning) =>
   box-sizing: border-box;
   margin: 0;
   border: 1px solid transparent;
-  border-radius: 4px;
+  border-radius: 0 4px 4px 0;
   padding: 6px 10px;
   font: 400 13px/1.5 "Courier New", Courier, monospace;
   font-variant-ligatures: none;

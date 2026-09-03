@@ -1,14 +1,17 @@
 import { LAMBDA_GLOBAL_FUNCTIONS } from "./lambdaGlobalFunctions";
 import { LAMBDA_MEMBER_CATALOG } from "./lambdaMemberCatalog";
+import { LAMBDA_SCOPE_VARIABLES } from "./lambdaScopeVariables";
 import { LAMBDA_SNIPPETS } from "./lambdaSnippets";
 
-const CATEGORY_ORDER = ["logging", "strings", "time", "core"];
+const CATEGORY_ORDER = ["logging", "strings", "math", "time", "core"];
 
 // buildLambdaPaletteSections({ suggestedDomain }) -> [{ id, items: [{ id, insert }] }]
 // "suggested" only when suggestedDomain resolves to a non-empty member catalog entry;
-// "snippets" wraps LAMBDA_SNIPPETS verbatim, always present; category sections group
+// "snippets" wraps LAMBDA_SNIPPETS verbatim, always present; "scope" wraps
+// LAMBDA_SCOPE_VARIABLES verbatim, always present (not yet bound to the field's
+// actual lambda context -- see lambdaScopeVariables.js); category sections group
 // LAMBDA_GLOBAL_FUNCTIONS in a fixed reading order rather than alpha-sorted keys --
-// four known categories, fixed reads better than alpha for a list this short.
+// few known categories, fixed reads better than alpha for a list this short.
 export const buildLambdaPaletteSections = ({ suggestedDomain = "" } = {}) => {
   const sections = [];
 
@@ -18,6 +21,7 @@ export const buildLambdaPaletteSections = ({ suggestedDomain = "" } = {}) => {
   }
 
   sections.push({ id: "snippets", items: LAMBDA_SNIPPETS });
+  sections.push({ id: "scope", items: LAMBDA_SCOPE_VARIABLES });
 
   CATEGORY_ORDER.forEach((category) => {
     const items = LAMBDA_GLOBAL_FUNCTIONS.filter((entry) => entry.category === category);

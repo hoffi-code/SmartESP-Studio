@@ -5,10 +5,13 @@
 // hier lieber nur das lesende state-Member als ein erfundener Befehl.
 // id = C++-Token (dient auch als Praefix-Matchmuster), insert = Text ab dem Punkt.
 export const LAMBDA_MEMBER_CATALOG = {
+  // Konfidenz bei get_state_class mittel: Accessor existiert, der Enum-
+  // Rueckgabewert (state_class::STATE_CLASS_*) wird hier nicht modelliert.
   sensor: [
     { id: "state", insert: "state" },
     { id: "has_state", insert: "has_state()" },
-    { id: "publish_state", insert: "publish_state(x)" }
+    { id: "publish_state", insert: "publish_state(x)" },
+    { id: "get_state_class", insert: "get_state_class()" }
   ],
   binary_sensor: [
     { id: "state", insert: "state" },
@@ -31,7 +34,9 @@ export const LAMBDA_MEMBER_CATALOG = {
     { id: "get_brightness", insert: "current_values.get_brightness()" },
     { id: "turn_on", insert: "turn_on().perform()" },
     { id: "turn_off", insert: "turn_off().perform()" },
-    { id: "make_call", insert: "make_call().set_brightness(x).set_state(true).perform()" }
+    { id: "make_call", insert: "make_call().set_brightness(x).set_state(true).perform()" },
+    { id: "set_effect", insert: 'make_call().set_effect("Effect Name").perform()' },
+    { id: "set_color_temperature", insert: "make_call().set_color_temperature(x).perform()" }
   ],
   cover: [
     { id: "position", insert: "position" },
@@ -39,13 +44,14 @@ export const LAMBDA_MEMBER_CATALOG = {
     { id: "open", insert: "make_call().set_command_open().perform()" },
     { id: "set_position", insert: "make_call().set_position(x).perform()" }
   ],
-  // Konfidenz mittel: Feldnamen sicher, exakte ClimateMode-Literale ("HEAT" u.a.)
-  // vor Nutzung gegen die Zielversion pruefen.
+  // Konfidenz mittel: Feldnamen sicher, exakte ClimateMode-/FanMode-Literale
+  // ("HEAT"/"MEDIUM" u.a.) vor Nutzung gegen die Zielversion pruefen.
   climate: [
     { id: "current_temperature", insert: "current_temperature" },
     { id: "target_temperature", insert: "target_temperature" },
     { id: "mode", insert: "mode" },
-    { id: "set_mode", insert: 'make_call().set_mode("HEAT").set_target_temperature(x).perform()' }
+    { id: "set_mode", insert: 'make_call().set_mode("HEAT").set_target_temperature(x).perform()' },
+    { id: "set_fan_mode", insert: 'make_call().set_fan_mode("MEDIUM").perform()' }
   ],
   // Konfidenz mittel: manche ESPHome-Versionen nutzen speed_level statt speed.
   fan: [

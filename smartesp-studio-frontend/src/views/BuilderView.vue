@@ -622,6 +622,7 @@ import { loadGpioData, resolveGpioKey } from "../utils/gpioData";
 import { loadSchemaByPath } from "../utils/schemaLoader";
 import { LVGL_WIDGETS } from "../utils/lvglWidgets";
 import { resolveDirtyState } from "../utils/builderDirtyState";
+import { resolveLambdaBuildErrorTargets } from "../utils/lambdaBuildErrors";
 import {
   buildGpioUsageIndex,
   isObjectArrayLikeField
@@ -783,7 +784,6 @@ const {
   importSummaryModalMessage,
   importSummaryModalOpen,
   importSummaryModalRows,
-  isComponentCatalogLoading,
   isComponentCatalogReady,
   isComponentPickerOpen,
   isComponentsImporting,
@@ -1599,6 +1599,13 @@ const mdiIcons = ref([]);
 
 provide("mdiIcons", mdiIcons);
 
+// Backend build errors from the last failed "validate" job, resolved to the
+// {scopeId, encodedPath} identity a LambdaField compares itself against --
+// see resolveLambdaBuildErrorTargets in lambdaBuildErrors.js and the
+// onValidateFinished callback below.
+const lambdaBuildErrorTargets = ref([]);
+provide("lambdaBuildErrors", lambdaBuildErrorTargets);
+
 // asset_ref fields: list of uploaded filenames per kind + a way to open the manager.
 provide("assetRefProvider", (kind) =>
   (kind === "fonts" ? displayFonts.value : displayImages.value).map((asset) => asset.file)
@@ -2322,8 +2329,6 @@ const safeStringify = (value) => {
   );
 };
 
-const jsonPreview = computed(() => safeStringify(config.value));
-
 const { yamlPreviewDocument, yamlPreview, previewTabs } = useBuilderYamlPreview({
   config,
   substitutionsCoreSchema,
@@ -2437,7 +2442,7 @@ const activateYamlOriginScope = (origin) => {
   }
   if (scopeId.startsWith("tab:Busses:")) {
     activeTab.value = "Busses";
-    const [, , key, index] = scopeId.split(":");
+    const [, , key] = scopeId.split(":");
     if (key) activeBussesKey.value = key;
     return;
   }
@@ -3144,6 +3149,20 @@ const installFlow = useInstallConsoleFlow({
   onInstallSuccess: async (payload) => {
     await persistDeploymentAfterInstallSuccess(payload);
   },
+  onValidateFinished: ({ success, logText }) => {
+    // Dirty-Gate: der Job validiert die gespeicherte Datei (esphome.py:240), kein
+    // Auto-Save davor. Bei ungespeicherten Aenderungen seit dem Start passen
+    // Zeilennummern aus dem Backend nicht mehr zur Live-Vorschau -- lieber keine
+    // (potenziell falsche) Feld-Zuordnung als eine falsche.
+    if (success || !isProjectSaved.value) {
+      lambdaBuildErrorTargets.value = [];
+      return;
+    }
+    lambdaBuildErrorTargets.value = resolveLambdaBuildErrorTargets(logText, {
+      yamlName: projectFilename.value,
+      lines: yamlPreviewDocument.value.lines || []
+    });
+  },
   preferLongPoll: !isLocalHostname(window.location.hostname || "")
 });
 
@@ -3230,6 +3249,7 @@ const handleAppValidate = () => {
     formErrorsModalOpen.value = true;
     return;
   }
+  lambdaBuildErrorTargets.value = [];
   startValidate();
 };
 
@@ -3300,6 +3320,7 @@ watch(
       });
       if (action === "dirty") {
         config.value.isSaved = false;
+        lambdaBuildErrorTargets.value = [];
       } else if (action === "rebaseline") {
         persistedConfigFingerprint.value = buildConfigFingerprint(config.value);
       }
@@ -3515,7 +3536,7 @@ const loadConfig = () => {
     config.value.ui.modeLevel = activeModeLevel.value;
     persistedConfigFingerprint.value = isProjectSaved.value ? buildConfigFingerprint(config.value) : "";
     isHydrating.value = false;
-  } catch (error) {
+  } catch {
     sourceProjectFilename.value = "";
     persistedConfigFingerprint.value = "";
     isHydrating.value = false;
