@@ -1,19 +1,58 @@
 // Simuliert die ESPHome-Filterketten (base_filters.json / base_binary_sensor_filters.json)
-// rein in JS. Diese Runde (P2) deckt die zeitlosen Filtertypen ab; P4 ergaenzt die
-// zeitbasierten (debounce/throttle/settle/sliding_window/timeout/heartbeat/delayed_on(_off)/
-// autorepeat) um die virtuelle Uhr aus useVirtualClock.js.
+// rein in JS. P2 deckte die zeitlosen Filtertypen ab; diese Runde (P4) ergaenzt die
+// wirklich zeitbasierten (echtes duration-Feld im Schema): debounce, throttle,
+// throttle_average, throttle_with_priority, timeout, heartbeat (Sensor), delayed_on,
+// delayed_off, delayed_on_off, settle, timeout (Binary-Sensor).
+//
+// Korrektur gegenueber der urspruenglichen Planung: sliding_window_moving_average gehoert
+// NICHT hierher. window_size/send_every/send_first_at sind im Schema "type": "number", keine
+// Dauer -- ESPHome zaehlt dort Aufrufe, nicht Zeit. Es ist bereits in P2 bei max/median/min/
+// quantile korrekt zeitlos behandelt (send_every/send_first_at werden dort bewusst
+// ignoriert -- jeder Aufruf emittiert, das ist die dokumentierte Vereinfachung).
 //
 // Rueckgabewert je Filter: ein neuer Wert (Kette laeuft weiter), FILTER_DROP (Kette stoppt,
-// kein neuer Wert wird publiziert -- z.B. clamp mit ignore_out_of_range, filter_out,
-// skip_initial), oder FILTER_MANUAL (lambda -- kein Interpreter im Projekt, siehe
-// lambdaLint.js-Kommentar "kein C++-Parser"; die UI bietet dafuer einen manuellen Fallback).
+// kein neuer Wert wird publiziert), FILTER_MANUAL (lambda -- kein Interpreter im Projekt,
+// siehe lambdaLint.js-Kommentar "kein C++-Parser"; die UI bietet dafuer einen manuellen
+// Fallback), oder FILTER_PENDING (der Filter wird spaeter -- ueber die Uhr -- selbst
+// publizieren; die aktuelle Kette liefert fuer DIESEN Aufruf keinen Wert).
 //
-// runtimeState ist ein pro Filter-INSTANZ (nicht Filtertyp) gehaltenes Objekt, das der
-// Aufrufer (useSimulation.js) erzeugt und ueber mehrere Werte hinweg wiederverwendet --
-// noetig fuer delta (letzter Wert), skip_initial (Zaehler), max/median/min/quantile (Puffer).
+// Zeitbasierte Filter brauchen dafuer ctx.clock (eine useVirtualClock-Instanz) und
+// ctx.filterIndex (von runFilterChain injiziert). Sie planen ueber clock.scheduleAt() ihre
+// eigene Fortsetzung; wer das Ereignis abholt (Treiber in P6/useSimulation.js) fuehrt die
+// Kette ab filterIndex+1 mit dem geplanten Wert fort. Zwei Ereignis-Arten:
+//   "filter-resume"         -- einmalig, Kette geht ab dem NAECHSTEN Filter weiter
+//                               (debounce, delayed_on/_off/_on_off, sensor/binary timeout).
+//   "filter-heartbeat"      -- periodisch, der Treiber ruft beim Feuern denselben Filter
+//                               erneut auf (heartbeat, throttle_average) statt nur
+//                               fortzusetzen, damit er sich selbst neu einplant.
+// Ohne ctx.clock (z.B. ein isolierter Aufruf ohne Uhr-Anbindung) verhaelt sich ein
+// zeitbasierter Filter als reiner Passthrough -- besser ein unveraendert durchgereichter
+// Wert als eine stumm verschluckte Kette.
 
 export const FILTER_DROP = Symbol("simulation-filter-drop");
 export const FILTER_MANUAL = { manual: true };
+export const FILTER_PENDING = Symbol("simulation-filter-pending");
+
+const DURATION_UNIT_MS = { ms: 1, s: 1000, sec: 1000, min: 60000, h: 3600000, hr: 3600000, d: 86400000 };
+
+// ESPHome-Dauerangaben: Zahl + Einheit ("500ms", "5s", "2min"), eine nackte Zahl ist ms.
+const parseDuration = (raw, fallbackMs = 0) => {
+  if (typeof raw === "number") return raw;
+  const text = String(raw || "").trim();
+  if (!text) return fallbackMs;
+  const match = /^(-?[\d.]+)\s*([a-zA-Z]*)$/.exec(text);
+  if (!match) return fallbackMs;
+  const amount = Number(match[1]);
+  if (!Number.isFinite(amount)) return fallbackMs;
+  const unit = match[2].toLowerCase() || "ms";
+  const factor = DURATION_UNIT_MS[unit];
+  return factor ? amount * factor : fallbackMs;
+};
+
+const cancelPending = (state, ctx) => {
+  if (state.pendingId !== undefined && ctx.clock) ctx.clock.cancel(state.pendingId);
+  state.pendingId = undefined;
+};
 
 const toNumber = (value, fallback = 0) => {
   const parsed = Number(value);
@@ -229,13 +268,175 @@ const SENSOR_FILTERS = {
   to_ntc_resistance: (value, config) =>
     ntcResistanceFromTemperature(toNumber(value), toNumber(config.a), toNumber(config.b), toNumber(config.c)),
   to_ntc_temperature: (value, config) =>
-    ntcTemperatureFromResistance(toNumber(value), toNumber(config.a), toNumber(config.b), toNumber(config.c))
+    ntcTemperatureFromResistance(toNumber(value), toNumber(config.a), toNumber(config.b), toNumber(config.c)),
+
+  // Publiziert erst, wenn der Wert fuer duration stabil geblieben ist -- jeder neue Wert
+  // verwirft die laufende Wartezeit und startet neu (klassisches Debounce).
+  debounce: (value, config, state, ctx) => {
+    if (!ctx.clock) return toNumber(value);
+    cancelPending(state, ctx);
+    const durationMs = parseDuration(config.value);
+    state.pendingId = ctx.clock.scheduleAt(ctx.clock.currentTick.value + durationMs, "filter-resume", {
+      filterIndex: ctx.filterIndex,
+      value: toNumber(value)
+    });
+    return FILTER_PENDING;
+  },
+
+  // Reine Ratenbegrenzung: laesst hoechstens einen Wert pro duration durch, keine
+  // Planung noetig -- ein einfaches Sperrfenster reicht.
+  throttle: (value, config, state, ctx) => {
+    const now = ctx.clock ? ctx.clock.currentTick.value : 0;
+    const durationMs = parseDuration(config.value);
+    if (state.nextAllowedAt !== undefined && now < state.nextAllowedAt) return FILTER_DROP;
+    state.nextAllowedAt = now + durationMs;
+    return toNumber(value);
+  },
+
+  // Sammelt Werte, publiziert periodisch den Mittelwert seit der letzten Emission.
+  // Periodisch = "filter-heartbeat"-Ereignis-Art: der Treiber ruft den Filter beim Feuern
+  // erneut auf, damit er sich selbst neu einplant (siehe Dateikopf).
+  throttle_average: (value, config, state, ctx) => {
+    state.sum = (state.sum || 0) + toNumber(value);
+    state.count = (state.count || 0) + 1;
+    if (!ctx.clock) return FILTER_PENDING;
+    if (state.pendingId === undefined) {
+      const durationMs = parseDuration(config.value);
+      state.pendingId = ctx.clock.scheduleAt(ctx.clock.currentTick.value + durationMs, "filter-heartbeat", {
+        filterIndex: ctx.filterIndex
+      });
+    }
+    return FILTER_PENDING;
+  },
+
+  // Wie throttle, aber priorisierte Werte (config.value) umgehen die Sperre sofort und
+  // setzen selbst ein neues Sperrfenster.
+  throttle_with_priority: (value, config, state, ctx) => {
+    const now = ctx.clock ? ctx.clock.currentTick.value : 0;
+    const durationMs = parseDuration(config.timeout);
+    const numeric = toNumber(value);
+    const priorityValues = (Array.isArray(config.value) ? config.value : []).map((entry) => toNumber(entry));
+    if (priorityValues.includes(numeric)) {
+      state.nextAllowedAt = now + durationMs;
+      return numeric;
+    }
+    if (state.nextAllowedAt !== undefined && now < state.nextAllowedAt) return FILTER_DROP;
+    state.nextAllowedAt = now + durationMs;
+    return numeric;
+  },
+
+  // Publiziert den aktuellen Wert sofort weiter UND legt in festen Abstaenden (period) den
+  // zuletzt gesehenen Wert erneut auf -- "optimistic" schaltet die sofortige Publikation ab.
+  heartbeat: (value, config, state, ctx) => {
+    state.lastValue = toNumber(value);
+    const optimistic = isTruthy(config.optimistic);
+    if (!ctx.clock) return optimistic ? state.lastValue : FILTER_PENDING;
+    if (state.pendingId === undefined) {
+      const periodMs = parseDuration(config.period);
+      state.pendingId = ctx.clock.scheduleAt(ctx.clock.currentTick.value + periodMs, "filter-heartbeat", {
+        filterIndex: ctx.filterIndex
+      });
+    }
+    return optimistic ? state.lastValue : FILTER_PENDING;
+  },
+
+  // "Wird kein neuer Wert innerhalb von timeout publiziert, sende einen Ersatzwert" -- der
+  // aktuelle Wert geht sofort durch, der Ersatzwert wird nur faellig, wenn bis dahin kein
+  // neuer Aufruf die Planung verwirft (cancelPending oben im naechsten Aufruf).
+  timeout: (value, config, state, ctx) => {
+    if (!ctx.clock) return toNumber(value);
+    cancelPending(state, ctx);
+    const durationMs = parseDuration(config.timeout);
+    const replacement = config.value !== undefined && config.value !== "" ? toNumber(config.value) : 0;
+    state.pendingId = ctx.clock.scheduleAt(ctx.clock.currentTick.value + durationMs, "filter-resume", {
+      filterIndex: ctx.filterIndex,
+      value: replacement
+    });
+    return toNumber(value);
+  }
 };
 
 // Binary-Sensor-Filter, zeitlos.
 const BINARY_SENSOR_FILTERS = {
   invert: (value) => !isTruthy(value),
-  lambda: () => FILTER_MANUAL
+  lambda: () => FILTER_MANUAL,
+
+  // Nur der ON-Uebergang wird verzoegert (muss `duration` stabil ON bleiben); OFF geht
+  // immer sofort durch und verwirft eine noch laufende ON-Verzoegerung.
+  delayed_on: (value, config, state, ctx) => {
+    if (!isTruthy(value)) {
+      cancelPending(state, ctx);
+      return false;
+    }
+    if (!ctx.clock) return true;
+    cancelPending(state, ctx);
+    const durationMs = parseDuration(config.value);
+    state.pendingId = ctx.clock.scheduleAt(ctx.clock.currentTick.value + durationMs, "filter-resume", {
+      filterIndex: ctx.filterIndex,
+      value: true
+    });
+    return FILTER_PENDING;
+  },
+
+  // Spiegelbild von delayed_on: nur der OFF-Uebergang wird verzoegert.
+  delayed_off: (value, config, state, ctx) => {
+    if (isTruthy(value)) {
+      cancelPending(state, ctx);
+      return true;
+    }
+    if (!ctx.clock) return false;
+    cancelPending(state, ctx);
+    const durationMs = parseDuration(config.value);
+    state.pendingId = ctx.clock.scheduleAt(ctx.clock.currentTick.value + durationMs, "filter-resume", {
+      filterIndex: ctx.filterIndex,
+      value: false
+    });
+    return FILTER_PENDING;
+  },
+
+  // Beide Richtungen verzoegert, je eigene Dauer (time_on/time_off, 0 = sofort).
+  delayed_on_off: (value, config, state, ctx) => {
+    const truthy = isTruthy(value);
+    const durationMs = parseDuration(truthy ? config.time_on : config.time_off);
+    if (!ctx.clock || durationMs <= 0) {
+      cancelPending(state, ctx);
+      return truthy;
+    }
+    cancelPending(state, ctx);
+    state.pendingId = ctx.clock.scheduleAt(ctx.clock.currentTick.value + durationMs, "filter-resume", {
+      filterIndex: ctx.filterIndex,
+      value: truthy
+    });
+    return FILTER_PENDING;
+  },
+
+  // Publiziert sofort, ignoriert danach jede Aenderung fuer duration -- kein Timer noetig,
+  // reines Sperrfenster wie throttle.
+  settle: (value, config, state, ctx) => {
+    const now = ctx.clock ? ctx.clock.currentTick.value : 0;
+    const durationMs = parseDuration(config.value);
+    if (state.ignoreUntil !== undefined && now < state.ignoreUntil) return FILTER_DROP;
+    state.ignoreUntil = now + durationMs;
+    return isTruthy(value);
+  },
+
+  // Kein Interpreter fuer die genaue Puls-Choreografie mehrerer Timings -- der Rohwert geht
+  // unveraendert durch, statt eine falsche Naeherung stumm vorzugaukeln.
+  autorepeat: (value) => isTruthy(value),
+
+  // "Setzt den binary_sensor nach timeout zurueck" -- bleibt der Wert ON, wird nach
+  // Ablauf zwangsweise OFF publiziert, sofern kein neuer Wert die Planung verwirft.
+  timeout: (value, config, state, ctx) => {
+    cancelPending(state, ctx);
+    const truthy = isTruthy(value);
+    if (!truthy || !ctx.clock) return truthy;
+    const durationMs = parseDuration(config.value);
+    state.pendingId = ctx.clock.scheduleAt(ctx.clock.currentTick.value + durationMs, "filter-resume", {
+      filterIndex: ctx.filterIndex,
+      value: false
+    });
+    return true;
+  }
 };
 
 export const applySensorFilter = (filterEntry, value, state, ctx) => {
@@ -244,23 +445,29 @@ export const applySensorFilter = (filterEntry, value, state, ctx) => {
   return handler(value, filterEntry.config || {}, state, ctx);
 };
 
-export const applyBinarySensorFilter = (filterEntry, value, state) => {
+export const applyBinarySensorFilter = (filterEntry, value, state, ctx) => {
   const handler = BINARY_SENSOR_FILTERS[filterEntry?.type];
   if (!handler) return value;
-  return handler(value, filterEntry.config || {}, state);
+  return handler(value, filterEntry.config || {}, state, ctx);
 };
 
 // runtimeStateByIndex: {[filterIndex]: {}} vom Aufrufer gehalten, ueber mehrere
-// runFilterChain-Aufrufe hinweg wiederverwendet (fuer delta/skip_initial/Fenster-Puffer).
-export const runFilterChain = (filters, rawValue, runtimeStateByIndex, applyOne = applySensorFilter) => {
+// runFilterChain-Aufrufe hinweg wiederverwendet (fuer delta/skip_initial/Fenster-Puffer/
+// zeitbasierte Filter). ctx.clock (optional, useVirtualClock-Instanz) aktiviert die
+// zeitbasierten Filter aus P4; ohne clock verhalten sie sich als Passthrough.
+// startIndex setzt fort, statt von vorne zu beginnen -- der Treiber (P6) nutzt das, um nach
+// einem gefeuerten "filter-resume"-Ereignis ab filterIndex+1 weiterzumachen.
+export const runFilterChain = (filters, rawValue, runtimeStateByIndex, ctx = {}, startIndex = 0, applyOne = applySensorFilter) => {
   let value = rawValue;
-  for (let index = 0; index < (filters || []).length; index += 1) {
-    if (value === FILTER_DROP || value === FILTER_MANUAL) return value;
+  for (let index = startIndex; index < (filters || []).length; index += 1) {
+    if (value === FILTER_DROP || value === FILTER_MANUAL || value === FILTER_PENDING) return value;
     runtimeStateByIndex[index] = runtimeStateByIndex[index] || {};
-    value = applyOne(filters[index], value, runtimeStateByIndex[index], {
-      runChain: (nestedFilters, nestedValue, nestedState) =>
-        runFilterChain(nestedFilters, nestedValue, nestedState, applyOne)
-    });
+    const filterCtx = {
+      ...ctx,
+      filterIndex: index,
+      runChain: (nestedFilters, nestedValue, nestedState) => runFilterChain(nestedFilters, nestedValue, nestedState, ctx, 0, applyOne)
+    };
+    value = applyOne(filters[index], value, runtimeStateByIndex[index], filterCtx);
   }
   return value;
 };

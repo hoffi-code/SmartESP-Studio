@@ -1,8 +1,17 @@
 import { describe, expect, it } from "vitest";
 
-import { FILTER_DROP, FILTER_MANUAL, applyBinarySensorFilter, applySensorFilter, runFilterChain } from "./simulationFilters";
+import { useVirtualClock } from "../composables/builder/useVirtualClock";
+import {
+  FILTER_DROP,
+  FILTER_MANUAL,
+  FILTER_PENDING,
+  applyBinarySensorFilter,
+  applySensorFilter,
+  runFilterChain
+} from "./simulationFilters";
 
 const sensorFilter = (type, config = {}) => ({ type, config });
+const binaryFilter = (type, config = {}) => ({ type, config });
 
 describe("applySensorFilter - arithmetic", () => {
   it("offset adds the constant", () => {
@@ -163,5 +172,180 @@ describe("runFilterChain", () => {
     const state = {};
     expect(runFilterChain(filters, 1, state)).toBe(FILTER_DROP);
     expect(runFilterChain(filters, 2, state)).toBe(2);
+  });
+});
+
+describe("without a clock, time-based filters degrade to a passthrough", () => {
+  it("debounce, throttle_average and delayed_on all just pass the value through", () => {
+    expect(applySensorFilter(sensorFilter("debounce", { value: "5s" }), 10, {}, {})).toBe(10);
+    expect(applySensorFilter(sensorFilter("throttle_average", { value: "5s" }), 10, {}, {})).toBe(FILTER_PENDING);
+    expect(applyBinarySensorFilter(binaryFilter("delayed_on", { value: "5s" }), true, {}, {})).toBe(true);
+  });
+});
+
+describe("time-based sensor filters (wired to a virtual clock)", () => {
+  it("debounce waits for the value to settle, cancelling a superseded timer", () => {
+    const clock = useVirtualClock();
+    const state = {};
+    const ctx = { clock, filterIndex: 0 };
+    expect(applySensorFilter(sensorFilter("debounce", { value: "5s" }), 10, state, ctx)).toBe(FILTER_PENDING);
+
+    clock.currentTick.value = 3000; // a new value arrives before the 5s settle time
+    expect(applySensorFilter(sensorFilter("debounce", { value: "5s" }), 12, state, ctx)).toBe(FILTER_PENDING);
+    expect(clock.drainDue(4999)).toEqual([]); // the first timer was cancelled, nothing fires here
+
+    clock.currentTick.value = 8000; // 5s after the second value
+    const due = clock.drainDue();
+    expect(due).toHaveLength(1);
+    expect(due[0]).toMatchObject({ kind: "filter-resume", payload: { filterIndex: 0, value: 12 } });
+  });
+
+  it("throttle rate-limits without scheduling anything", () => {
+    const clock = useVirtualClock();
+    const state = {};
+    const ctx = { clock };
+    const filter = sensorFilter("throttle", { value: "1s" });
+    expect(applySensorFilter(filter, 1, state, ctx)).toBe(1);
+    clock.currentTick.value = 500;
+    expect(applySensorFilter(filter, 2, state, ctx)).toBe(FILTER_DROP);
+    clock.currentTick.value = 1000;
+    expect(applySensorFilter(filter, 3, state, ctx)).toBe(3);
+  });
+
+  it("throttle_with_priority lets priority values bypass an active throttle window", () => {
+    const clock = useVirtualClock();
+    const state = {};
+    const ctx = { clock };
+    const filter = sensorFilter("throttle_with_priority", { timeout: "1s", value: [99] });
+    expect(applySensorFilter(filter, 1, state, ctx)).toBe(1);
+    clock.currentTick.value = 200;
+    expect(applySensorFilter(filter, 2, state, ctx)).toBe(FILTER_DROP);
+    expect(applySensorFilter(filter, 99, state, ctx)).toBe(99); // priority value ignores the window
+  });
+
+  it("throttle_average accumulates and schedules a single periodic emission", () => {
+    const clock = useVirtualClock();
+    const state = {};
+    const ctx = { clock, filterIndex: 2 };
+    const filter = sensorFilter("throttle_average", { value: "10s" });
+    applySensorFilter(filter, 10, state, ctx);
+    applySensorFilter(filter, 20, state, ctx);
+    expect(state.sum).toBe(30);
+    expect(state.count).toBe(2);
+
+    clock.currentTick.value = 10000;
+    const due = clock.drainDue();
+    expect(due).toHaveLength(1);
+    expect(due[0]).toMatchObject({ kind: "filter-heartbeat", payload: { filterIndex: 2 } });
+  });
+
+  it("heartbeat withholds the immediate value by default and schedules the first period", () => {
+    const clock = useVirtualClock();
+    const state = {};
+    const ctx = { clock, filterIndex: 0 };
+    const filter = sensorFilter("heartbeat", { period: "1min" });
+    expect(applySensorFilter(filter, 5, state, ctx)).toBe(FILTER_PENDING);
+    clock.currentTick.value = 60000;
+    expect(clock.drainDue()).toHaveLength(1);
+  });
+
+  it("heartbeat also publishes immediately when optimistic is set", () => {
+    const clock = useVirtualClock();
+    const state = {};
+    const ctx = { clock, filterIndex: 0 };
+    const filter = sensorFilter("heartbeat", { period: "1min", optimistic: true });
+    expect(applySensorFilter(filter, 5, state, ctx)).toBe(5);
+  });
+
+  it("timeout passes the value through immediately and schedules a replacement", () => {
+    const clock = useVirtualClock();
+    const state = {};
+    const ctx = { clock, filterIndex: 1 };
+    const filter = sensorFilter("timeout", { timeout: "30s", value: "0" });
+    expect(applySensorFilter(filter, 21.5, state, ctx)).toBe(21.5);
+    clock.currentTick.value = 30000;
+    const due = clock.drainDue();
+    expect(due[0]).toMatchObject({ kind: "filter-resume", payload: { filterIndex: 1, value: 0 } });
+  });
+});
+
+describe("time-based binary-sensor filters (wired to a virtual clock)", () => {
+  it("delayed_on holds an ON transition and passes OFF through immediately", () => {
+    const clock = useVirtualClock();
+    const state = {};
+    const ctx = { clock, filterIndex: 0 };
+    const filter = binaryFilter("delayed_on", { value: "2s" });
+    expect(applyBinarySensorFilter(filter, true, state, ctx)).toBe(FILTER_PENDING);
+    clock.currentTick.value = 2000;
+    expect(clock.drainDue()[0]).toMatchObject({ payload: { filterIndex: 0, value: true } });
+
+    expect(applyBinarySensorFilter(filter, false, state, ctx)).toBe(false);
+    clock.currentTick.value = 4000;
+    expect(clock.drainDue()).toEqual([]); // pending ON timer was cancelled by the OFF value
+  });
+
+  it("delayed_off mirrors delayed_on for the OFF transition", () => {
+    const clock = useVirtualClock();
+    const state = {};
+    const ctx = { clock, filterIndex: 0 };
+    const filter = binaryFilter("delayed_off", { value: "2s" });
+    expect(applyBinarySensorFilter(filter, true, state, ctx)).toBe(true);
+    expect(applyBinarySensorFilter(filter, false, state, ctx)).toBe(FILTER_PENDING);
+    clock.currentTick.value = 2000;
+    expect(clock.drainDue()[0]).toMatchObject({ payload: { filterIndex: 0, value: false } });
+  });
+
+  it("delayed_on_off uses time_on/time_off independently, 0 meaning immediate", () => {
+    const clock = useVirtualClock();
+    const state = {};
+    const ctx = { clock, filterIndex: 0 };
+    const filter = binaryFilter("delayed_on_off", { time_on: "1s", time_off: "0s" });
+    expect(applyBinarySensorFilter(filter, true, state, ctx)).toBe(FILTER_PENDING);
+    expect(applyBinarySensorFilter(filter, false, state, ctx)).toBe(false); // time_off 0 -> immediate
+  });
+
+  it("settle publishes immediately then ignores changes for the settle window", () => {
+    const clock = useVirtualClock();
+    const state = {};
+    const ctx = { clock };
+    const filter = binaryFilter("settle", { value: "1s" });
+    expect(applyBinarySensorFilter(filter, true, state, ctx)).toBe(true);
+    clock.currentTick.value = 500;
+    expect(applyBinarySensorFilter(filter, false, state, ctx)).toBe(FILTER_DROP);
+    clock.currentTick.value = 1000;
+    expect(applyBinarySensorFilter(filter, false, state, ctx)).toBe(false);
+  });
+
+  it("binary timeout force-resets an ON value after the timeout unless replaced sooner", () => {
+    const clock = useVirtualClock();
+    const state = {};
+    const ctx = { clock, filterIndex: 0 };
+    const filter = binaryFilter("timeout", { value: "5s" });
+    expect(applyBinarySensorFilter(filter, true, state, ctx)).toBe(true);
+    clock.currentTick.value = 5000;
+    expect(clock.drainDue()[0]).toMatchObject({ payload: { filterIndex: 0, value: false } });
+  });
+
+  it("autorepeat passes the raw value through -- no interpreter for the pulse choreography", () => {
+    expect(applyBinarySensorFilter(binaryFilter("autorepeat", { timings: [] }), true, {}, {})).toBe(true);
+  });
+});
+
+describe("runFilterChain with a resumed chain (startIndex)", () => {
+  it("without a clock, a time-based filter degrades to passthrough and the chain runs through", () => {
+    const filters = [sensorFilter("debounce", { value: "1s" }), sensorFilter("multiply", { value: 2 })];
+    const state = {};
+    expect(runFilterChain(filters, 10, state)).toBe(20);
+  });
+
+  it("resumes at filterIndex + 1 with the scheduled value", () => {
+    const filters = [sensorFilter("debounce", { value: "1s" }), sensorFilter("multiply", { value: 2 })];
+    const clock = useVirtualClock();
+    const state = {};
+    expect(runFilterChain(filters, 10, state, { clock })).toBe(FILTER_PENDING);
+    clock.currentTick.value = 1000;
+    const [event] = clock.drainDue();
+    const result = runFilterChain(filters, event.payload.value, state, { clock }, event.payload.filterIndex + 1);
+    expect(result).toBe(20); // (debounced 10) * 2
   });
 });
