@@ -10,7 +10,6 @@
     "lvgl": "LVGL"
   },
   "comment": {
-    "barLabel": "Kommentar:",
     "modalTitleDefault": "Kommentar",
     "componentTitle": "Kommentar – {domain}:",
     "headerTitle": "Datei-Kopf-Kommentar",
@@ -19,9 +18,6 @@
     "placeholder": "z. B. I2C-Bus für das Display",
     "buttonAdd": "Kommentar",
     "buttonEdit": "Kommentar bearbeiten",
-    "headerAdd": "+ Kopf-Kommentar",
-    "headerEdit": "Kopf-Kommentar",
-    "sectionPick": "Sektions-Kommentar…",
     "sectionTitle": "Kommentar – {section}:"
   },
   "componentPicker": {

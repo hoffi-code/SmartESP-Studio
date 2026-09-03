@@ -1508,37 +1508,6 @@ button:disabled {
   padding-left: 8px;
 }
 
-.config-comment-bar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 8px 0;
-}
-
-.config-comment-bar__label {
-  color: var(--muted, #64748b);
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.config-comment-bar button {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.config-comment-bar button img {
-  width: 16px;
-  height: 16px;
-}
-
-.config-comment-bar select {
-  height: 28px;
-  font-size: 12px;
-  padding: 0 6px;
-}
-
 .config-title-select {
   display: inline-block;
   width: auto;

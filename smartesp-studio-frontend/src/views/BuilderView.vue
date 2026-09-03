@@ -230,33 +230,6 @@
               <option value="Advanced">{{ t('builder.modeLevel.advanced') }}</option>
             </select>
           </div>
-          <div class="config-comment-bar">
-            <span class="config-comment-bar__label">{{ t('builder.comment.barLabel') }}</span>
-            <button
-              type="button"
-              class="secondary compact"
-              @click="openCommentEditor({ scope: 'header', title: t('builder.comment.headerTitle') })"
-            >
-              <img src="https://cdn.jsdelivr.net/npm/@mdi/svg/svg/comment-text-outline.svg" alt="" />
-              <span>{{ config.headerComment ? t('builder.comment.headerEdit') : t('builder.comment.headerAdd') }}</span>
-            </button>
-            <select
-              v-if="sectionCommentKeys.length"
-              v-model="sectionCommentKey"
-              :aria-label="t('builder.comment.sectionPick')"
-            >
-              <option value="">{{ t('builder.comment.sectionPick') }}</option>
-              <option v-for="key in sectionCommentKeys" :key="key" :value="key">{{ key }}</option>
-            </select>
-            <button
-              type="button"
-              class="secondary compact"
-              :disabled="!sectionCommentKey"
-              @click="openCommentEditor({ key: sectionCommentKey, title: t('builder.comment.sectionTitle', { section: sectionCommentKey }) })"
-            >
-              {{ sectionCommentHasComment ? t('builder.comment.buttonEdit') : t('builder.comment.buttonAdd') }}
-            </button>
-          </div>
           <div class="config-scroll">
         <BuilderCoreTab
           v-if="activeTab === 'Core'"
@@ -2635,22 +2608,6 @@ const markProjectSavedFromCurrentState = () => {
 // Section/component YAML comments -- edited through CommentEditModal, stored the same way
 // the importer captures them (config.fieldComments keyed by domain/path, config.headerComment).
 const commentEditRequest = ref(null); // { key, title, scope: "field" | "header" }
-
-// The comment bar in the config panel lets the user attach a comment to any top-level
-// YAML section. The keys are read off the whole preview document (not a single preview
-// tab); useBuilderYamlPreview still routes the comment above the matching section.
-const sectionCommentKey = ref("");
-const sectionCommentKeys = computed(() => {
-  const keys = new Set();
-  (yamlPreviewDocument.value.lines || []).forEach((line) => {
-    const match = String(line?.text || "").match(/^([a-z0-9_]+):\s*(#.*)?$/);
-    if (match) keys.add(match[1]);
-  });
-  return [...keys];
-});
-const sectionCommentHasComment = computed(() =>
-  Boolean(sectionCommentKey.value && config.value.fieldComments?.[sectionCommentKey.value])
-);
 
 // Jede Sektionskarte traegt ihren eigenen Kommentar-Button. Der Key ist der
 // Top-Level-YAML-Key, den useBuilderYamlPreview fuer die Sektion emittiert.
