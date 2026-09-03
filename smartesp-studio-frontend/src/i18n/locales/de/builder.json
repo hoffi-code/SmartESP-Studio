@@ -102,6 +102,16 @@
       "unexpected": "Zeile {line}: „{token}“ ohne passende öffnende Klammer.",
       "unclosedString": "Zeile {line}: Zeichenkette ab {token} ist nicht beendet.",
       "unknownId": "Zeile {line}: keine Komponente mit der ID „{id}“ in dieser Konfiguration."
+    },
+    "snippets": {
+      "title": "Baustein einfügen",
+      "idState": "Zustand einer Komponente",
+      "idPosition": "Position eines Covers oder Ventils",
+      "toString": "Zahl als Text",
+      "sprintf": "Formatierter Text",
+      "log": "Log-Zeile",
+      "return": "Wert zurückgeben",
+      "lvglLabel": "Text eines LVGL-Labels setzen"
     }
   }
 }

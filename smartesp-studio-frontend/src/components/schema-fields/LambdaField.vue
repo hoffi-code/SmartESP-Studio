@@ -1,5 +1,28 @@
 <template>
   <div class="lambda-field">
+    <div v-if="showSnippets" class="lambda-field__toolbar">
+      <button
+        type="button"
+        class="secondary compact"
+        :title="t('builder.lambda.snippets.title')"
+        @mousedown.prevent
+        @click="snippetsOpen = !snippetsOpen"
+      >
+        +
+      </button>
+      <div v-if="snippetsOpen" class="id-ref-list lambda-field__snippets">
+        <button
+          v-for="snippet in snippets"
+          :key="snippet.id"
+          type="button"
+          class="id-ref-option lambda-field__snippet"
+          @mousedown.prevent="pickSnippet(snippet)"
+        >
+          <span>{{ t(`builder.lambda.snippets.${snippet.id}`) }}</span>
+          <code>{{ snippet.insert }}</code>
+        </button>
+      </div>
+    </div>
     <div class="lambda-field__editor">
       <pre ref="highlightRef" class="lambda-field__highlight hljs" aria-hidden="true" v-html="highlighted"></pre>
       <textarea
@@ -52,6 +75,7 @@ import {
   findIdCompletionContext
 } from "../../utils/lambdaCompletion";
 import { lintLambda } from "../../utils/lambdaLint";
+import { LAMBDA_SNIPPETS, insertSnippet } from "../../utils/lambdaSnippets";
 import { escapeHtml, highlightYamlToHtml } from "../../utils/yamlSyntaxHighlight";
 
 const props = defineProps({
@@ -126,6 +150,28 @@ const pickCompletion = async (option) => {
   if (!editor || !completion.value) return;
   const { text, caret } = applyIdCompletion(editor.value, completion.value, option.id);
   completion.value = null;
+  emit("update:model-value", text);
+  await nextTick();
+  const current = textareaRef.value;
+  if (!current) return;
+  current.focus();
+  current.setSelectionRange(caret, caret);
+};
+
+const snippets = LAMBDA_SNIPPETS;
+const snippetsOpen = ref(false);
+const showSnippets = computed(() => props.language !== "yaml");
+
+const pickSnippet = async (snippet) => {
+  const editor = textareaRef.value;
+  if (!editor) return;
+  const { text, caret } = insertSnippet(
+    editor.value,
+    editor.selectionStart ?? editor.value.length,
+    editor.selectionEnd ?? editor.value.length,
+    snippet.insert
+  );
+  snippetsOpen.value = false;
   emit("update:model-value", text);
   await nextTick();
   const current = textareaRef.value;
@@ -218,6 +264,31 @@ const warningText = (warning) =>
   color: transparent;
   caret-color: var(--navy);
   overflow: auto;
+}
+
+.lambda-field__toolbar {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 4px;
+}
+
+.lambda-field__snippets {
+  left: auto;
+  min-width: 260px;
+  max-height: 220px;
+}
+
+.lambda-field__snippet {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.lambda-field__snippet code {
+  color: #64748b;
+  font-size: 11px;
+  white-space: nowrap;
 }
 
 .lambda-field__completion-option {

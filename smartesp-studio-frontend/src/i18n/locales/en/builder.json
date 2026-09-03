@@ -102,6 +102,16 @@
       "unexpected": "Line {line}: “{token}” without a matching opening bracket.",
       "unclosedString": "Line {line}: string starting with {token} is not terminated.",
       "unknownId": "Line {line}: no component with id “{id}” in this configuration."
+    },
+    "snippets": {
+      "title": "Insert a snippet",
+      "idState": "State of a component",
+      "idPosition": "Position of a cover or valve",
+      "toString": "Number as text",
+      "sprintf": "Formatted text",
+      "log": "Log line",
+      "return": "Return a value",
+      "lvglLabel": "Set the text of an LVGL label"
     }
   }
 }

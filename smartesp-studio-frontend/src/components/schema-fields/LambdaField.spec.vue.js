@@ -153,6 +153,25 @@ describe("LambdaField", () => {
     expect(yaml.wrapper.find(".lambda-field__completion").exists()).toBe(false);
   });
 
+  it("inserts a snippet at the caret", async () => {
+    const { wrapper, text } = mountBound({ initial: "return ;" });
+    const textarea = wrapper.get("textarea");
+    textarea.element.setSelectionRange(7, 7);
+
+    await wrapper.get(".lambda-field__toolbar button").trigger("click");
+    const entries = wrapper.findAll(".lambda-field__snippet");
+    expect(entries.length).toBeGreaterThan(3);
+
+    await entries[0].trigger("mousedown");
+    expect(text.value).toBe("return id(x).state;");
+    expect(wrapper.find(".lambda-field__snippets").exists()).toBe(false);
+  });
+
+  it("offers no snippets on yaml fields", () => {
+    const { wrapper } = mountBound({ language: "yaml" });
+    expect(wrapper.find(".lambda-field__toolbar").exists()).toBe(false);
+  });
+
   it("keeps the overlay scroll in sync with the textarea", async () => {
     const wrapper = mountField({ modelValue: "a\nb\nc" });
     const textarea = wrapper.get("textarea");
