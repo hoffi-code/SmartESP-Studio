@@ -1,42 +1,5 @@
 <template>
   <div class="lambda-field">
-    <div v-if="showPalette" class="lambda-field__toolbar">
-      <button
-        type="button"
-        class="secondary compact"
-        :title="t('builder.lambda.palette.title')"
-        @mousedown.prevent
-        @click="togglePalette"
-      >
-        +
-      </button>
-      <div v-if="paletteOpen" class="id-ref-list lambda-field__palette">
-        <input
-          v-model="paletteQuery"
-          type="text"
-          class="lambda-field__palette-search"
-          :placeholder="t('builder.lambda.palette.searchPlaceholder')"
-          @keydown.stop
-        />
-        <template v-for="section in filteredPaletteSections" :key="section.id">
-          <div class="lambda-field__palette-section-title">{{ paletteSectionTitle(section.id) }}</div>
-          <button
-            v-for="item in section.items"
-            :key="`${section.id}:${item.id}`"
-            type="button"
-            class="id-ref-option lambda-field__snippet"
-            :title="paletteItemHint(section.id, item.id)"
-            @mousedown.prevent="pickSnippet(item)"
-          >
-            <span>{{ paletteItemLabel(section.id, item.id) }}</span>
-            <code>{{ item.insert }}</code>
-          </button>
-        </template>
-        <div v-if="!filteredPaletteSections.length" class="lambda-field__palette-empty">
-          {{ t("builder.lambda.palette.empty") }}
-        </div>
-      </div>
-    </div>
     <div class="lambda-field__editor">
       <div class="lambda-field__gutter" aria-hidden="true">
         <div class="lambda-field__gutter-lines" :style="gutterStyle">
@@ -79,6 +42,43 @@
             <span>{{ option.insert }}</span>
             <span v-if="option.secondary" class="lambda-field__completion-domain">{{ option.secondary }}</span>
           </button>
+        </div>
+      </div>
+      <div v-if="showPalette" class="lambda-field__toolbar">
+        <button
+          type="button"
+          class="secondary compact"
+          :title="t('builder.lambda.palette.title')"
+          @mousedown.prevent
+          @click="togglePalette"
+        >
+          +
+        </button>
+        <div v-if="paletteOpen" class="id-ref-list lambda-field__palette">
+          <input
+            v-model="paletteQuery"
+            type="text"
+            class="lambda-field__palette-search"
+            :placeholder="t('builder.lambda.palette.searchPlaceholder')"
+            @keydown.stop
+          />
+          <template v-for="section in filteredPaletteSections" :key="section.id">
+            <div class="lambda-field__palette-section-title">{{ paletteSectionTitle(section.id) }}</div>
+            <button
+              v-for="item in section.items"
+              :key="`${section.id}:${item.id}`"
+              type="button"
+              class="id-ref-option lambda-field__snippet"
+              :title="paletteItemHint(section.id, item.id)"
+              @mousedown.prevent="pickSnippet(item)"
+            >
+              <span>{{ paletteItemLabel(section.id, item.id) }}</span>
+              <code>{{ item.insert }}</code>
+            </button>
+          </template>
+          <div v-if="!filteredPaletteSections.length" class="lambda-field__palette-empty">
+            {{ t("builder.lambda.palette.empty") }}
+          </div>
         </div>
       </div>
     </div>
@@ -496,15 +496,19 @@ const warningText = (warning) =>
 }
 
 .lambda-field__toolbar {
+  /* Positionierungskontext der Palette -- sitzt rechts neben dem Editor. */
   position: relative;
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 4px;
+  flex: 0 0 auto;
+  align-self: flex-start;
+  margin-left: 4px;
 }
 
 .lambda-field__palette {
+  /* Klappt nach links ueber den Editor auf, sonst ragt sie aus der Karte. */
   left: auto;
+  right: 0;
   min-width: 320px;
+  max-width: min(420px, 80vw);
   max-height: 320px;
   overflow-y: auto;
 }

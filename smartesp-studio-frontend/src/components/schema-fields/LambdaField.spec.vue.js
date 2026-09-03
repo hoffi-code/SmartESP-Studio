@@ -251,6 +251,13 @@ describe("LambdaField", () => {
     expect(wrapper.find(".lambda-field__toolbar").exists()).toBe(false);
   });
 
+  // Die Palette haengt per position:absolute an der Toolbar; liegt die nicht mehr
+  // in der Editor-Flexzeile, klappt sie an der falschen Stelle auf.
+  it("keeps the palette button inside the editor row", () => {
+    const { wrapper } = mountBound();
+    expect(wrapper.find(".lambda-field__editor > .lambda-field__toolbar").exists()).toBe(true);
+  });
+
   it("shows the palette grouped by category without a suggested section", async () => {
     const { wrapper } = mountBound();
     await wrapper.get(".lambda-field__toolbar button").trigger("click");
