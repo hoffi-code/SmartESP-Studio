@@ -101,7 +101,8 @@
       "unclosed": "Zeile {line}: „{token}“ wird nie geschlossen.",
       "unexpected": "Zeile {line}: „{token}“ ohne passende öffnende Klammer.",
       "unclosedString": "Zeile {line}: Zeichenkette ab {token} ist nicht beendet.",
-      "unknownId": "Zeile {line}: keine Komponente mit der ID „{id}“ in dieser Konfiguration."
+      "unknownId": "Zeile {line}: keine Komponente mit der ID „{id}“ in dieser Konfiguration.",
+      "unclosedComment": "Zeile {line}: Blockkommentar ab {token} wird nie geschlossen."
     },
     "snippets": {
       "idState": "Zustand einer Komponente",

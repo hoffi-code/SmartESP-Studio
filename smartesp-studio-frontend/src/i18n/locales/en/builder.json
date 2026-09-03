@@ -101,7 +101,8 @@
       "unclosed": "Line {line}: “{token}” is never closed.",
       "unexpected": "Line {line}: “{token}” without a matching opening bracket.",
       "unclosedString": "Line {line}: string starting with {token} is not terminated.",
-      "unknownId": "Line {line}: no component with id “{id}” in this configuration."
+      "unknownId": "Line {line}: no component with id “{id}” in this configuration.",
+      "unclosedComment": "Line {line}: block comment starting with {token} is never closed."
     },
     "snippets": {
       "idState": "State of a component",

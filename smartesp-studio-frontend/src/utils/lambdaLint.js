@@ -40,6 +40,9 @@ const scan = (text) => {
       const end = text.indexOf("*/", index + 2);
       const stop = end === -1 ? text.length : end + 2;
       for (let i = index; i < stop; i += 1) masked.push(text[i] === "\n" ? "\n" : " ");
+      if (end === -1) {
+        warnings.push({ code: "unclosedComment", token: "/*", ...positionAt(text, index) });
+      }
       index = stop;
       continue;
     }
