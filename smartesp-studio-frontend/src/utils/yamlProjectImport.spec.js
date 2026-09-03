@@ -1,3 +1,4 @@
+import { load } from "js-yaml";
 import { describe, expect, it } from "vitest";
 import { extractLeadingHeaderComment, importYamlToProjectConfig } from "./yamlProjectImport";
 
@@ -278,5 +279,68 @@ describe("importYamlToProjectConfig - lvgl", () => {
     const yamlText = ["esphome:", "  name: test"].join("\n");
     const result = await importYamlToProjectConfig({ yamlText });
     expect(result.projectData.lvgl).toBeNull();
+  });
+});
+
+describe("importYamlToProjectConfig - yaml fields", () => {
+  const apiSchema = {
+    fields: [
+      { key: "enabled", type: "boolean" },
+      { key: "encryption", type: "object", fields: [{ key: "key", type: "text" }] },
+      { key: "actions", type: "yaml" }
+    ]
+  };
+  const loadGeneralSchema = async (path) => (path === "general/protocols/api.json" ? apiSchema : null);
+
+  // Regression: yaml-Felder waren write-only. Der Wert kommt geparst an, fiel durch die
+  // Primitiv-Pruefung und landete als type_mismatch bei den verworfenen Keys -- api.actions
+  // wurde im Import-Dialog rot markiert und ging verloren. Verglichen wird strukturell
+  // (reparsed), nicht als exakter String -- js-yamls dump() formatiert nicht zwangslaeufig
+  // byteidentisch zum Original (Quoting/Block-Stil), inhaltlich muss es aber gleich bleiben.
+  it("imports api.actions into the raw yaml field", async () => {
+    const yamlText = [
+      "esphome:",
+      "  name: esptaster",
+      "",
+      "api:",
+      "  encryption:",
+      '    key: "abc="',
+      "  actions:",
+      "    - action: sync_button_states",
+      "      variables:",
+      "        plug1_on: bool",
+      "        plug2_on: bool",
+      "      then:",
+      "        - lambda: |-",
+      "            id(smartplug_no1_state).publish_state(plug1_on);",
+      "            id(smartplug_no2_state).publish_state(plug2_on);"
+    ].join("\n");
+
+    const result = await importYamlToProjectConfig({ yamlText, loadGeneralSchema });
+
+    const imported = result.projectData.protocolsCore.api.actions;
+    expect(typeof imported).toBe("string");
+    expect(load(imported)).toEqual([
+      {
+        action: "sync_button_states",
+        variables: { plug1_on: "bool", plug2_on: "bool" },
+        then: [
+          {
+            lambda:
+              "id(smartplug_no1_state).publish_state(plug1_on);\n" +
+              "id(smartplug_no2_state).publish_state(plug2_on);"
+          }
+        ]
+      }
+    ]);
+
+    const apiSection = result.sections.find((section) => section.key === "api");
+    expect(apiSection.droppedKeys || []).not.toContain("api.actions");
+  });
+
+  it("skips an empty yaml field instead of storing an empty string", async () => {
+    const yamlText = ["esphome:", "  name: t", "", "api:", "  actions:"].join("\n");
+    const result = await importYamlToProjectConfig({ yamlText, loadGeneralSchema });
+    expect(result.projectData.protocolsCore.api.actions).toBeUndefined();
   });
 });

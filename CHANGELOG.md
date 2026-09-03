@@ -8,6 +8,15 @@ markiert.
 
 ## [Unreleased]
 
+### Fixed
+
+- **`yaml`-Felder ließen sich nicht importieren** – Werte wie `api.actions`
+  (benutzerdefinierte API-Actions) kamen beim Import als geparster Baum an,
+  fielen durch die Primitiv-Prüfung des generischen Feld-Mappers und landeten
+  rot markiert bei den nicht importierten Keys. Der Wert wird jetzt vor der
+  Übernahme wieder als YAML-Text serialisiert – exakt die Form, die der
+  Generator beim Export ohnehin erwartet.
+
 ### Added
 
 - **Lambda-Felder mit Syntax-Highlight und Kurz-Check** – C++-Lambdas (und die
