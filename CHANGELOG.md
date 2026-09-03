@@ -8,6 +8,25 @@ markiert.
 
 ## [Unreleased]
 
+### Added
+
+- **Simulation (Teil 1) – Frontend-Simulation ohne Gerät** – neuer Tab
+  „Simulation": Sensoren/Actuators lassen sich manuell setzen (Toggle-Pillen,
+  Slider, Text-/Chip-Eingaben je Entity-Domain, struct-Domains wie
+  light/cover/fan/climate/valve mit kompakten Steuerelementen je Feld),
+  Filterketten (`sensor`/`binary_sensor` Filter, inkl. zeitbasierter wie
+  debounce/throttle/heartbeat/timeout) laufen dagegen, passende `on_*`-Trigger
+  feuern automatisch und ihre Action-Ketten (inkl. `delay`/`if`/`while`/
+  `repeat`/`script.execute`) werden ausgeführt. Eine virtuelle Uhr (Play/
+  Pause/1x-2x-5x-10x/Reset) treibt `interval:` und alle Zeit-Abhängigkeiten.
+  Lambda-Actions/-Bedingungen/-Filter und `on_time` bekommen einen manuellen
+  Auslöser statt automatisch ausgewertet zu werden (kein C++-Interpreter im
+  Projekt). Ein Ablauf-Log zeigt Trigger → Action als Pfeilkette mit
+  Zeitstempel. LVGL-Widgets (label/bar/slider/switch/checkbox/arc/meter)
+  und Display-Text-Elemente lassen sich per `bind_id`/`dynamicId` an eine
+  Entity binden und zeigen den simulierten Wert live in der Vorschau
+  (`bind_id` ist ein Studio-only Feld, nie im exportierten YAML).
+
 ### Fixed
 
 - **Deklarierte Action-Variablen fehlten in der Lambda-Palette** – Variablen aus
