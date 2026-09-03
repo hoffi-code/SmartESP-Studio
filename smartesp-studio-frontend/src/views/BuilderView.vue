@@ -430,6 +430,7 @@
           :section-comment-has-comment="sectionHasComment('Automation')"
           :automation-tabs="automationTabs"
           :active-automation-key="activeAutomationKey"
+          :automation-entries="automationEntries"
           :automation-detail-id="automationDetailId"
           :automation-detail-config="automationDetailConfig"
           :automation-detail-scope-id="automationDetailScopeId"
@@ -447,6 +448,7 @@
           :should-show-mode-upgrade="shouldShowModeUpgrade('automation')"
           :mode-upgrade-button-label="modeUpgradeButtonLabel"
           @update:active-automation-key="activeAutomationKey = $event"
+          @jump-to-automation="jumpToAutomation"
           @update-automation-detail="handleAutomationDetailUpdate"
           @open-section-comment="openSectionCommentEditor"
           @open-secrets="openSecretsModal"
@@ -608,6 +610,7 @@ import IdDefinitionModal from "../components/builder/IdDefinitionModal.vue";
 import BuilderComponentPicker from "../components/builder/BuilderComponentPicker.vue";
 import PaneResizer from "../components/PaneResizer.vue";
 import BuilderCoreTab from "../components/builder/BuilderCoreTab.vue";
+import { collectAutomationEntries } from "../utils/automationOverview";
 import LvglBuilder from "../components/lvgl/LvglBuilder.vue";
 import BuilderBussesTab from "../components/builder/BuilderBussesTab.vue";
 import BuilderModalHost from "../components/builder/BuilderModalHost.vue";
@@ -1438,10 +1441,67 @@ const automationDefinitions = [
     schemaId: "general/automation/interval"
   }
 ];
-const activeAutomationKey = ref(automationDefinitions[0]?.key || "");
-const automationTabs = computed(() =>
-  automationDefinitions.map((entry) => ({ key: entry.key, label: entry.label }))
-);
+const activeAutomationKey = ref("__overview__");
+const AUTOMATION_OVERVIEW_KEY = "__overview__";
+const automationTabs = computed(() => [
+  { key: AUTOMATION_OVERVIEW_KEY, label: t("builder.automationOverview.tab") },
+  ...automationDefinitions.map((entry) => ({ key: entry.key, label: entry.label }))
+]);
+
+// Quellen fuer die Automations-Uebersicht: alle Komponenten plus die Top-Level-Sektionen,
+// die ueberhaupt Trigger kennen koennen. scopeId und modeLevel sind dieselben wie in der
+// YAML-Vorschau, damit der Sprung ins Feld ueber handleYamlLineClick laeuft.
+const automationSources = computed(() => {
+  const sources = [];
+
+  config.value.components.forEach((entry, index) => {
+    const componentId = componentIdFromEntry(entry);
+    const schema = componentSchemas.value?.[componentId];
+    if (!schema) return;
+    sources.push({
+      kind: "component",
+      label: componentEntryLabel(entry) || componentId,
+      scopeId: `component:${index}`,
+      schema,
+      value: entry?.config || {}
+    });
+  });
+
+  const section = (kind, label, scopeId, schema, value) => {
+    if (schema) sources.push({ kind, label, scopeId, schema, value: value || {} });
+  };
+
+  section("section", "esphome", esphomeCoreScopeId, esphomeCoreSchema.value, esphomeCoreConfig.value);
+  // Transport- und Netzwerk-Schema lesen beide aus networkCoreConfig (siehe BuilderNetworkTab).
+  section("section", "wifi", networkDetailScopeId, networkDetailSchema.value, networkCoreConfig.value);
+  section("section", "network", networkOtaScopeId, networkCoreSchema.value, networkCoreConfig.value);
+
+  protocolDefinitions.forEach((entry) => {
+    section("section", entry.key, `tab:Protocols:${entry.key}`,
+      protocolsSchemas.value?.[entry.key], protocolsCoreConfig.value?.[entry.key]);
+  });
+  otherDefinitions.forEach((entry) => {
+    section("section", entry.key, `tab:System:${entry.key}`,
+      otherSchemas.value?.[entry.key], systemConfig.value?.[entry.key]);
+  });
+  automationDefinitions.forEach((entry) => {
+    section("section", entry.key, `tab:Automation:${entry.key}`,
+      automationSchemas.value?.[entry.key], automationCoreConfig.value);
+  });
+  bussesDefinitions.forEach((entry) => {
+    section("section", entry.key, `tab:Busses:${entry.key}`,
+      bussesSchemas.value?.[entry.key], bussesCoreConfig.value?.[entry.key]);
+  });
+
+  return sources;
+});
+
+const automationEntries = computed(() => collectAutomationEntries({ sources: automationSources.value }));
+
+const jumpToAutomation = (entry) => {
+  if (!entry?.origin?.scopeId) return;
+  handleYamlLineClick({ origin: entry.origin });
+};
 const automationDetailId = computed(() => {
   const entry = automationDefinitions.find((item) => item.key === activeAutomationKey.value);
   return entry?.schemaId || "";

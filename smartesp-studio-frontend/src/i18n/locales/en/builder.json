@@ -9,6 +9,13 @@
     "automation": "Automation",
     "lvgl": "LVGL"
   },
+  "automationOverview": {
+    "tab": "Overview",
+    "empty": "No automations in this project yet.",
+    "edit": "Edit",
+    "kindComponent": "Component",
+    "kindSection": "Section"
+  },
   "split": {
     "resize": "Resize configuration and preview"
   },
