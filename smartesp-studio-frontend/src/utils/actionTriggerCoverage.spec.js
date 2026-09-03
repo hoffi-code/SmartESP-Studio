@@ -73,4 +73,24 @@ describe("action trigger coverage", () => {
     const item = byKey(deepSleep, "deep_sleep")?.item;
     expectActionList((item?.fields || []).find((field) => field.key === "on_wake"), "deep_sleep.on_wake");
   });
+
+  // api.actions war bisher ein rohes yaml-Textfeld -- diese Runde deckt die Umstellung
+  // auf ein echtes, picker-getriebenes Action-System ab.
+  it("wires api.actions as a structured user-defined action list", () => {
+    const api = readJson("schemas/general/protocols/api.json");
+    const actions = byKey(api, "actions");
+    expect(actions.type).toBe("list");
+    const itemFields = actions.item?.fields || [];
+    expect(itemFields.map((field) => field.key)).toEqual(["action", "variables", "then", "supports_response"]);
+    expect(itemFields.find((field) => field.key === "action").required).toBe(true);
+    expect(itemFields.find((field) => field.key === "variables").type).toBe("variable_map");
+    expectActionList(itemFields.find((field) => field.key === "then"), "api.actions.then");
+  });
+
+  it("wires esp-now triggers as action lists instead of raw yaml", () => {
+    const espNow = readJson("schemas/general/protocols/esp-now.json");
+    expectWrappedTrigger(byKey(espNow, "on_receive"), "espnow.on_receive", ["address"]);
+    expectWrappedTrigger(byKey(espNow, "on_broadcast"), "espnow.on_broadcast", ["address"]);
+    expectActionList(byKey(espNow, "on_unknown_peer"), "espnow.on_unknown_peer");
+  });
 });

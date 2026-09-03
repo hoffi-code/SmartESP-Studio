@@ -70,15 +70,54 @@
     },
     {
       "key": "actions",
-      "type": "yaml",
+      "type": "list",
       "required": false,
       "lvl": "normal",
       "dependsOn": {
         "key": "enabled",
         "value": true
       },
-      "placeholder": "- logger.log: \"Hello\"",
-      "helpUrl": "https://esphome.io/components/api/#actions"
+      "helpUrl": "https://esphome.io/components/api/#actions",
+      "item": {
+        "type": "object",
+        "fields": [
+          {
+            "key": "action",
+            "type": "text",
+            "required": true,
+            "placeholder": "sync_button_states"
+          },
+          {
+            "key": "variables",
+            "type": "variable_map",
+            "required": false,
+            "default": []
+          },
+          {
+            "key": "then",
+            "type": "list",
+            "required": true,
+            "listStyle": "compact",
+            "item": {
+              "type": "object",
+              "fields": [],
+              "extends": "base_actions.json"
+            }
+          },
+          {
+            "key": "supports_response",
+            "type": "select",
+            "required": false,
+            "lvl": "advanced",
+            "options": [
+              "none",
+              "optional",
+              "only",
+              "status"
+            ]
+          }
+        ]
+      }
     },
     {
       "key": "port",

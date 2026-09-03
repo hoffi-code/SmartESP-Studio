@@ -850,6 +850,25 @@ export const renderYamlObject = (objectValue, schemaFields, indent, lines, rootV
       return;
     }
 
+    // Dynamische Name-Typ-Zuordnung (z.B. api.actions[].variables). Die Typ-Tokens
+    // (bool/int/float/string/...[]) sind ESPHome-Enum-Werte, deshalb unquotiert.
+    if (field.type === "variable_map") {
+      const entries = (Array.isArray(value) ? value : []).filter((entry) => entry?.name);
+      if (!entries.length) {
+        if (field.required || alwaysEmit) {
+          lines.push(`${" ".repeat(indent)}${key}:`);
+        }
+        markNewLines(lines, lineStart, fieldOrigin);
+        return;
+      }
+      lines.push(`${" ".repeat(indent)}${key}:`);
+      entries.forEach((entry) => {
+        lines.push(`${" ".repeat(indent + 2)}${entry.name}: ${entry.type || "string"}`);
+      });
+      markNewLines(lines, lineStart, fieldOrigin);
+      return;
+    }
+
     if (shouldSuppressDefaultValue(field, value)) {
       return;
     }

@@ -165,6 +165,7 @@
     :is-asset-ref-field="isAssetRefField"
     :is-gpio-field="isGpioField"
     :is-color-field="isColorField"
+    :is-variable-map-field="isVariableMapField"
     :field-path="fieldPath"
     :wrap-input-value="wrapInputValue"
     :show-inline-action="showInlineAction"
@@ -368,6 +369,7 @@ const isIdRefField = computed(() => props.field.type === "id_ref");
 const isAssetRefField = computed(() => props.field.type === "asset_ref");
 const isGpioField = computed(() => props.field.type === "gpio");
 const isColorField = computed(() => props.field.type === "color");
+const isVariableMapField = computed(() => props.field.type === "variable_map");
 const isAutoField = computed(() =>
   Boolean(
     (props.field.type === "ssid" && props.field.settings?.autoPath) ||

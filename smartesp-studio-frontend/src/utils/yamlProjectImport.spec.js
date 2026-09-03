@@ -1,6 +1,7 @@
 import { load } from "js-yaml";
 import { describe, expect, it } from "vitest";
 import { extractLeadingHeaderComment, importYamlToProjectConfig } from "./yamlProjectImport";
+import { buildSchemaYaml } from "./schemaYaml";
 
 describe("extractLeadingHeaderComment", () => {
   it("captures a leading comment block before the first key", () => {
@@ -283,6 +284,10 @@ describe("importYamlToProjectConfig - lvgl", () => {
 });
 
 describe("importYamlToProjectConfig - yaml fields", () => {
+  // api.actions ist inzwischen ein strukturiertes list-Feld (siehe Describe-Block weiter
+  // unten) -- dieses Fixture-Schema haelt absichtlich noch die alte Form, um den
+  // generischen "yaml"-Fallback selbst zu testen. Der bleibt fuer andere Felder in Benutzung
+  // (z.B. pages, custom_command), die noch keinen strukturierten Picker haben.
   const apiSchema = {
     fields: [
       { key: "enabled", type: "boolean" },
@@ -297,7 +302,7 @@ describe("importYamlToProjectConfig - yaml fields", () => {
   // wurde im Import-Dialog rot markiert und ging verloren. Verglichen wird strukturell
   // (reparsed), nicht als exakter String -- js-yamls dump() formatiert nicht zwangslaeufig
   // byteidentisch zum Original (Quoting/Block-Stil), inhaltlich muss es aber gleich bleiben.
-  it("imports api.actions into the raw yaml field", async () => {
+  it("imports a yaml-typed field into raw text", async () => {
     const yamlText = [
       "esphome:",
       "  name: esptaster",
@@ -342,5 +347,192 @@ describe("importYamlToProjectConfig - yaml fields", () => {
     const yamlText = ["esphome:", "  name: t", "", "api:", "  actions:"].join("\n");
     const result = await importYamlToProjectConfig({ yamlText, loadGeneralSchema });
     expect(result.projectData.protocolsCore.api.actions).toBeUndefined();
+  });
+});
+
+// Mirrors the real general/protocols/api.json field shape (action/variables/then).
+describe("importYamlToProjectConfig - structured api.actions", () => {
+  const apiSchema = {
+    fields: [
+      { key: "enabled", type: "boolean" },
+      { key: "encryption", type: "object", fields: [{ key: "key", type: "text" }] },
+      {
+        key: "actions",
+        type: "list",
+        item: {
+          type: "object",
+          fields: [
+            { key: "action", type: "text", required: true },
+            { key: "variables", type: "variable_map", required: false },
+            {
+              key: "then",
+              type: "list",
+              required: true,
+              item: { type: "object", fields: [], extends: "base_actions.json" }
+            }
+          ]
+        }
+      }
+    ]
+  };
+  const loadGeneralSchema = async (path) => (path === "general/protocols/api.json" ? apiSchema : null);
+  const loadActionCatalog = async () => [{ id: "lambda", schemaUrl: "actions/lambda.json" }];
+  const loadActionDefinition = async () => ({ fields: [{ key: "value", type: "lambda", required: true }] });
+
+  // Die Struktur aus dem Nutzer-Report: eine HA-Action mit zwei bool-Variablen und einem
+  // mehrzeiligen Lambda-Body. Vorher landete der ganze actions:-Block rot markiert im
+  // Import-Dialog (siehe describe-Block oben); jetzt wird jedes Feld einzeln erkannt.
+  it("imports action/variables/then into their structured shape", async () => {
+    const yamlText = [
+      "esphome:",
+      "  name: esptaster",
+      "",
+      "api:",
+      "  encryption:",
+      '    key: "abc="',
+      "  actions:",
+      "    - action: sync_button_states",
+      "      variables:",
+      "        plug1_on: bool",
+      "        plug2_on: bool",
+      "      then:",
+      "        - lambda: |-",
+      "            id(smartplug_no1_state).publish_state(plug1_on);",
+      "            id(smartplug_no2_state).publish_state(plug2_on);"
+    ].join("\n");
+
+    const result = await importYamlToProjectConfig({
+      yamlText,
+      loadGeneralSchema,
+      loadActionCatalog,
+      loadActionDefinition
+    });
+
+    const [action] = result.projectData.protocolsCore.api.actions;
+    expect(action.action).toBe("sync_button_states");
+    expect(action.variables).toEqual([
+      { name: "plug1_on", type: "bool" },
+      { name: "plug2_on", type: "bool" }
+    ]);
+    expect(action.then).toHaveLength(1);
+    expect(action.then[0]).toMatchObject({ type: "lambda", config: { value: expect.stringContaining("plug1_on") } });
+
+    const apiSection = result.sections.find((section) => section.key === "api");
+    expect(apiSection.droppedKeys || []).not.toContain("api.actions");
+  });
+
+  // Export-Seite des Round-Trips: aus dem importierten Zustand muss wieder YAML werden,
+  // die semantisch dem Original entspricht (unquotierte Typ-Tokens, block-scalar lambda).
+  it("re-emits the imported action unchanged", async () => {
+    const yamlText = [
+      "esphome:",
+      "  name: esptaster",
+      "",
+      "api:",
+      "  actions:",
+      "    - action: sync_button_states",
+      "      variables:",
+      "        plug1_on: bool",
+      "        plug2_on: bool",
+      "      then:",
+      "        - lambda: |-",
+      "            id(smartplug_no1_state).publish_state(plug1_on);",
+      "            id(smartplug_no2_state).publish_state(plug2_on);"
+    ].join("\n");
+
+    const result = await importYamlToProjectConfig({
+      yamlText,
+      loadGeneralSchema,
+      loadActionCatalog,
+      loadActionDefinition
+    });
+    const emitted = buildSchemaYaml(result.projectData.protocolsCore.api, apiSchema.fields, 0).join("\n");
+
+    // enabled: true wird vom generischen boolean-Feld-Default mitemittiert -- kein Teil
+    // der eigentlichen Behauptung hier, deshalb nur der actions:-Teil geprueft.
+    expect(emitted.split("\n").slice(1).join("\n")).toBe(
+      [
+        "actions:",
+        '  - action: "sync_button_states"',
+        "    variables:",
+        "      plug1_on: bool",
+        "      plug2_on: bool",
+        "    then:",
+        "      - lambda: |-",
+        "          id(smartplug_no1_state).publish_state(plug1_on);",
+        "          id(smartplug_no2_state).publish_state(plug2_on);"
+      ].join("\n")
+    );
+  });
+});
+
+// Mirrors the real general/protocols/esp-now.json trigger shape (address + then / plain).
+describe("importYamlToProjectConfig - structured espnow triggers", () => {
+  const actionListField = (key) => ({
+    key,
+    type: "list",
+    item: { type: "object", fields: [], extends: "base_actions.json" },
+    wrapThen: true
+  });
+  const wrappedWithAddress = (key) => ({
+    key,
+    type: "list",
+    item: {
+      type: "object",
+      fields: [
+        { key: "address", type: "text", required: false },
+        { key: "then", type: "list", required: true, item: { type: "object", fields: [], extends: "base_actions.json" } }
+      ]
+    }
+  });
+  const espnowSchema = {
+    fields: [
+      { key: "enabled", type: "boolean" },
+      wrappedWithAddress("on_receive"),
+      actionListField("on_unknown_peer"),
+      wrappedWithAddress("on_broadcast")
+    ]
+  };
+  const loadGeneralSchema = async (path) => (path === "general/protocols/esp-now.json" ? espnowSchema : null);
+  const loadActionCatalog = async () => [{ id: "logger.log", schemaUrl: "actions/logger/log.json" }];
+  const loadActionDefinition = async () => ({ fields: [{ key: "format", type: "text", required: true }] });
+
+  // Vorher rohe yaml-Textfelder (Placeholder "- logger.log: ..."); jetzt echte Action-Listen
+  // wie jeder andere Trigger im Projekt.
+  it("imports on_receive with its address filter and on_unknown_peer as a plain trigger", async () => {
+    const yamlText = [
+      "esphome:",
+      "  name: test",
+      "",
+      "espnow:",
+      "  on_receive:",
+      "    - address: 11:22:33:44:55:66",
+      "      then:",
+      '        - logger.log: "ESP-NOW received"',
+      "  on_unknown_peer:",
+      '    - logger.log: "Unknown peer"'
+    ].join("\n");
+
+    const result = await importYamlToProjectConfig({ yamlText, loadGeneralSchema, loadActionCatalog, loadActionDefinition });
+
+    const espnow = result.projectData.protocolsCore.espnow;
+    expect(espnow.on_receive).toHaveLength(1);
+    expect(espnow.on_receive[0].address).toBe("11:22:33:44:55:66");
+    expect(espnow.on_receive[0].then[0]).toMatchObject({ type: "logger.log" });
+    expect(espnow.on_unknown_peer[0]).toMatchObject({ type: "logger.log" });
+
+    const emitted = buildSchemaYaml(espnow, espnowSchema.fields, 0).join("\n");
+    expect(emitted).toBe(
+      [
+        "enabled: true",
+        "on_receive:",
+        '  - address: "11:22:33:44:55:66"',
+        "    then:",
+        '      - logger.log: "ESP-NOW received"',
+        "on_unknown_peer:",
+        "  - then:",
+        '      - logger.log: "Unknown peer"'
+      ].join("\n")
+    );
   });
 });

@@ -3,6 +3,13 @@
     "noMatch": "No matching identifiers available",
     "create": "Define a new one"
   },
+  "variableMap": {
+    "empty": "No variables yet.",
+    "nameLabel": "Variable name",
+    "namePlaceholder": "plug1_on",
+    "typeLabel": "Type",
+    "add": "+ Variable"
+  },
   "assetRef": {
     "manage": "Manage assets"
   },
