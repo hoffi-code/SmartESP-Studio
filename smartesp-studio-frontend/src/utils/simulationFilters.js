@@ -29,25 +29,11 @@
 // zeitbasierter Filter als reiner Passthrough -- besser ein unveraendert durchgereichter
 // Wert als eine stumm verschluckte Kette.
 
+import { parseDuration } from "./simulationDuration";
+
 export const FILTER_DROP = Symbol("simulation-filter-drop");
 export const FILTER_MANUAL = { manual: true };
 export const FILTER_PENDING = Symbol("simulation-filter-pending");
-
-const DURATION_UNIT_MS = { ms: 1, s: 1000, sec: 1000, min: 60000, h: 3600000, hr: 3600000, d: 86400000 };
-
-// ESPHome-Dauerangaben: Zahl + Einheit ("500ms", "5s", "2min"), eine nackte Zahl ist ms.
-const parseDuration = (raw, fallbackMs = 0) => {
-  if (typeof raw === "number") return raw;
-  const text = String(raw || "").trim();
-  if (!text) return fallbackMs;
-  const match = /^(-?[\d.]+)\s*([a-zA-Z]*)$/.exec(text);
-  if (!match) return fallbackMs;
-  const amount = Number(match[1]);
-  if (!Number.isFinite(amount)) return fallbackMs;
-  const unit = match[2].toLowerCase() || "ms";
-  const factor = DURATION_UNIT_MS[unit];
-  return factor ? amount * factor : fallbackMs;
-};
 
 const cancelPending = (state, ctx) => {
   if (state.pendingId !== undefined && ctx.clock) ctx.clock.cancel(state.pendingId);
