@@ -34,6 +34,13 @@ markiert.
   Suchfeld oben, darunter „Suggested" (Domain-Member der zuletzt referenzierten
   ID, falls vorhanden), die bestehenden Snippets und die Globalfunktionen
   (Logging/Strings/Zeit/Core) nach Kategorie gruppiert.
+- **Lambda-Editor: Zeilennummern-Gutter + Fehlerzeile** – links neben dem
+  Lambda-Feld zeigt eine Gutter-Spalte Zeilennummern, die erste Lint-Warnung
+  markiert ihre Zeile im Gutter und als hinterlegte Zeile im Editor.
+- **Lambda-Lint erkennt mehrzeilige Lücken** – ein unterminiertes `/* …`
+  ohne schließendes `*/` wird jetzt als Warnung gemeldet statt stillschweigend
+  den Rest des Lambda-Bodies zu verschlucken. `id(`- und `id(x).`-Vorschläge
+  funktionieren jetzt auch über Zeilenumbrüche/Whitespace hinweg.
 
 ## [0.3.0] – 2026-09-02
 
