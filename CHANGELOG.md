@@ -59,6 +59,10 @@ markiert.
   nicht-blockierenden Lint-Warnungen. Greift nur beim gespeicherten Stand;
   bei ungespeicherten Änderungen seit dem Prüfen-Start unterbleibt die
   Zuordnung bewusst.
+- **Configuration- und Vorschau-Bereich in der Breite verstellbar** – zwischen
+  den beiden Spalten sitzt ein Griff; die Aufteilung ist auf 25–75 % geklemmt,
+  ein Doppelklick setzt sie zurück, und sie bleibt über einen Reload hinweg
+  gespeichert. Unter 960 px stapeln die Bereiche weiterhin ohne Griff.
 
 ### Changed
 
