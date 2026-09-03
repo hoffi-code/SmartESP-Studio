@@ -56,6 +56,41 @@
       "lvl": "advanced"
     },
     {
+      "key": "on_page_change",
+      "type": "list",
+      "required": false,
+      "lvl": "advanced",
+      "helpUrl": "https://esphome.io/components/display/#display-automation",
+      "item": {
+        "type": "object",
+        "fields": [
+          {
+            "key": "from",
+            "type": "text",
+            "required": false,
+            "placeholder": "page1"
+          },
+          {
+            "key": "to",
+            "type": "text",
+            "required": false,
+            "placeholder": "page2"
+          },
+          {
+            "key": "then",
+            "type": "list",
+            "required": true,
+            "listStyle": "compact",
+            "item": {
+              "type": "object",
+              "fields": [],
+              "extends": "base_actions.json"
+            }
+          }
+        ]
+      }
+    },
+    {
       "key": "custom_config",
       "type": "raw_yaml",
       "required": false,

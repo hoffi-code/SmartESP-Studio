@@ -35,8 +35,13 @@
           {{ tab.label }}
         </button>
       </div>
+      <BuilderAutomationOverview
+        v-if="activeAutomationKey === OVERVIEW_KEY"
+        :entries="automationEntries"
+        @jump="emit('jump-to-automation', $event)"
+      />
       <SchemaRenderer
-        v-if="automationDetailId"
+        v-if="activeAutomationKey !== OVERVIEW_KEY && automationDetailId"
         :component-id="automationDetailId"
         :component-config="automationDetailConfig"
         :root-value="config"
@@ -57,7 +62,7 @@
         @mode-upgrade-availability="emit('mode-upgrade-availability', $event)"
       />
       <div
-        v-if="showGeneratedEntries"
+        v-if="activeAutomationKey !== OVERVIEW_KEY && showGeneratedEntries"
         class="schema-group"
       >
         <div
@@ -94,10 +99,17 @@ import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import SchemaRenderer from "../SchemaRenderer.vue";
 import SectionCommentButton from "./SectionCommentButton.vue";
+import BuilderAutomationOverview from "./BuilderAutomationOverview.vue";
 
 const { t } = useI18n();
 
+const OVERVIEW_KEY = "__overview__";
+
 const props = defineProps({
+  automationEntries: {
+    type: Array,
+    default: () => []
+  },
   sectionCommentKey: {
     type: String,
     default: ""
@@ -130,6 +142,7 @@ const props = defineProps({
 const emit = defineEmits([
   "mode-upgrade-availability",
   "open-secrets",
+  "jump-to-automation",
   "open-section-comment",
   "promote-mode-level",
   "update-automation-detail",
