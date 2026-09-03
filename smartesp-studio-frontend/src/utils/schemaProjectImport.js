@@ -1,3 +1,5 @@
+import { dump } from "js-yaml";
+
 import { mapYamlActionsToActionConfig } from "./schemaActionImport";
 import { mapYamlConditionsToConditionConfig } from "./schemaConditionImport";
 import { mapYamlFiltersToFilterConfig } from "./schemaFilterImport";
@@ -338,6 +340,25 @@ const mapFieldValue = ({ yamlValue, field, path, skipPlatform, filterCatalogs, a
   }
 
   const report = emptyReport();
+
+  // yaml-Felder halten den Block als Text (renderYamlObject schreibt ihn beim Export mit
+  // +2 Einrueckung unter den Key zurueck). Beim Import kommt er als geparster Baum an und
+  // muss deshalb wieder serialisiert werden -- ohne das fiel er unten durch die
+  // Primitiv-Pruefung und landete als type_mismatch bei den nicht importierten Keys.
+  if (field?.type === "yaml") {
+    const raw = typeof yamlValue === "string"
+      ? yamlValue
+      : yamlValue === undefined || yamlValue === null
+        ? ""
+        : dump(yamlValue, { lineWidth: -1, noRefs: true });
+    const text = String(raw).trimEnd();
+    if (!text) {
+      report.unmappedKeys.push(path);
+      return { value: undefined, report };
+    }
+    report.mappedKeys.push(path);
+    return { value: text, report };
+  }
 
   // ESPHome accepts a plain YAML map here as sugar for the untemplated case (e.g.
   // `homeassistant.action.data: { entity_id: ... }`) alongside the templated lambda string --
