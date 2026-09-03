@@ -8,6 +8,20 @@ markiert.
 
 ## [Unreleased]
 
+### Added
+
+- **API-Actions vollständig im Builder definierbar** – `api: actions:`
+  (benutzerdefinierte, von Home Assistant aufrufbare Actions) war bisher ein
+  rohes YAML-Textfeld. Jetzt eine echte Liste: Action-Name, eine frei editierbare
+  Name-Typ-Zuordnung für `variables:` (neues Feld `variable_map`,
+  bool/int/float/string/…[]), der Action-Picker für `then:` und optional
+  `supports_response`. Dieselbe Umstellung für die drei `esp-now:`-Trigger
+  (`on_receive`, `on_broadcast` mit Adress-Filter, `on_unknown_peer`).
+  **Breaking:** bestehende Projekte, die unter `api.actions` oder den
+  `esp-now`-Triggern rohen YAML-Text gespeichert hatten, müssen die Sektion neu
+  aus der YAML-Datei importieren – der Text wird beim Speichern nicht mehr
+  automatisch übernommen.
+
 ### Fixed
 
 - **`yaml`-Felder ließen sich nicht importieren** – Werte wie `api.actions`
