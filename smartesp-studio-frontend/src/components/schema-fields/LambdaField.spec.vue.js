@@ -132,6 +132,69 @@ describe("LambdaField", () => {
     expect(wrapper.find(".lambda-field__completion").exists()).toBe(false);
   });
 
+  // Regression: das keyup hinter dem keydown hat den Kontext neu berechnet und dabei
+  // activeOption auf 0 zurueckgesetzt -- die Pfeilnavigation war damit wirkungslos.
+  it("keeps the highlighted entry when keyup follows the arrow key", async () => {
+    const { wrapper, text } = mountBound({
+      idIndex: [
+        { id: "temp", idLower: "temp", domain: "sensor" },
+        { id: "term", idLower: "term", domain: "sensor" }
+      ]
+    });
+    const textarea = await typeAt(wrapper, "id(", 3);
+
+    await textarea.trigger("keydown", { key: "ArrowDown" });
+    await textarea.trigger("keyup", { key: "ArrowDown" });
+    const options = wrapper.findAll(".lambda-field__completion-option");
+    expect(options[1].classes()).toContain("is-active");
+
+    await textarea.trigger("keydown", { key: "Enter" });
+    expect(text.value).toBe("id(term)");
+  });
+
+  it("resets the highlight once the typed context changes", async () => {
+    const { wrapper } = mountBound({
+      idIndex: [
+        { id: "temp", idLower: "temp", domain: "sensor" },
+        { id: "term", idLower: "term", domain: "sensor" }
+      ]
+    });
+    const textarea = await typeAt(wrapper, "id(", 3);
+    await textarea.trigger("keydown", { key: "ArrowDown" });
+    expect(wrapper.findAll(".lambda-field__completion-option")[1].classes()).toContain("is-active");
+
+    await typeAt(wrapper, "id(te", 5);
+    expect(wrapper.findAll(".lambda-field__completion-option")[0].classes()).toContain("is-active");
+  });
+
+  it("scrolls the highlighted entry into view", async () => {
+    const scrollIntoView = vi.fn();
+    Element.prototype.scrollIntoView = scrollIntoView;
+    const { wrapper } = mountBound({
+      idIndex: [
+        { id: "temp", idLower: "temp", domain: "sensor" },
+        { id: "term", idLower: "term", domain: "sensor" }
+      ]
+    });
+    const textarea = await typeAt(wrapper, "id(", 3);
+    await textarea.trigger("keydown", { key: "ArrowDown" });
+    await wrapper.vm.$nextTick();
+
+    expect(scrollIntoView).toHaveBeenCalledWith({ block: "nearest" });
+  });
+
+  // Ohne mousedown.prevent am Container blurt ein Griff an die Scrollbar die Textarea.
+  it("keeps the list open on mousedown into the panel itself", async () => {
+    const { wrapper } = mountBound({
+      idIndex: [{ id: "temp", idLower: "temp", domain: "sensor" }]
+    });
+    await typeAt(wrapper, "id(", 3);
+
+    const panel = wrapper.get(".lambda-field__completion");
+    await panel.trigger("mousedown");
+    expect(wrapper.find(".lambda-field__completion").exists()).toBe(true);
+  });
+
   it("reuses an existing closing parenthesis", async () => {
     const { wrapper, text } = mountBound({
       idIndex: [{ id: "temp", idLower: "temp", domain: "sensor" }],

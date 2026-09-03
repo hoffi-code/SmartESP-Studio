@@ -30,10 +30,17 @@
           @click="refreshCompletion"
           @blur="scheduleCompletionClose"
         ></textarea>
-        <div v-if="completionOpen" class="id-ref-list lambda-field__completion">
+        <!-- mousedown.prevent auch am Container: sonst blurt ein Griff an die eigene
+             Scrollbar die Textarea und scheduleCompletionClose raeumt die Liste weg. -->
+        <div
+          v-if="completionOpen"
+          class="id-ref-list lambda-field__completion"
+          @mousedown.prevent
+        >
           <button
             v-for="(option, optionIndex) in completionOptions"
             :key="option.id"
+            :ref="(el) => { if (el) optionRefs[optionIndex] = el; }"
             type="button"
             class="id-ref-option lambda-field__completion-option"
             :class="{ 'is-active': optionIndex === activeOption }"
@@ -180,6 +187,7 @@ const onInput = (event) => {
 // handled by the same dropdown/keyboard/mouse plumbing below.
 const completion = ref(null);
 const activeOption = ref(0);
+const optionRefs = ref([]);
 
 const completionOptions = computed(() => {
   if (!completion.value) return [];
@@ -198,30 +206,43 @@ const completionOptions = computed(() => {
 });
 const completionOpen = computed(() => Boolean(completion.value) && completionOptions.value.length > 0);
 
-function refreshCompletion() {
-  const editor = textareaRef.value;
-  if (!editor || props.language === "yaml") {
-    completion.value = null;
-    return;
-  }
+const findCompletionContext = (editor) => {
   const caret = editor.selectionStart ?? 0;
   const idContext = findIdCompletionContext(editor.value, caret);
-  if (idContext) {
-    completion.value = { kind: "id", ...idContext };
-    activeOption.value = 0;
-    paletteOpen.value = false;
-    return;
-  }
+  if (idContext) return { kind: "id", ...idContext };
   const memberContext = findMemberCompletionContext(editor.value, caret);
-  if (memberContext) {
-    const domain = props.idIndex.find((entry) => entry.id === memberContext.entityId)?.domain || "";
-    completion.value = { kind: "member", domain, ...memberContext };
-    paletteOpen.value = false;
+  if (!memberContext) return null;
+  const domain = props.idIndex.find((entry) => entry.id === memberContext.entityId)?.domain || "";
+  return { kind: "member", domain, ...memberContext };
+};
+
+const completionSignature = (context) =>
+  context ? `${context.kind}|${context.start}|${context.query}` : "";
+
+function refreshCompletion() {
+  const editor = textareaRef.value;
+  const next = editor && props.language !== "yaml" ? findCompletionContext(editor) : null;
+  // Nur bei echtem Kontextwechsel zurueck auf den ersten Vorschlag. Das keyup nach
+  // jedem ArrowDown liefert denselben Kontext -- ein blinder Reset wuerde die gerade
+  // getroffene Auswahl sofort wieder aufheben.
+  if (completionSignature(next) !== completionSignature(completion.value)) {
     activeOption.value = 0;
-    return;
   }
-  completion.value = null;
+  completion.value = next;
+  if (next) paletteOpen.value = false;
 }
+
+// Schrumpft die Trefferliste (weitergetippt), darf der Index nicht ins Leere zeigen.
+watch(completionOptions, (options) => {
+  optionRefs.value = [];
+  if (activeOption.value >= options.length) activeOption.value = 0;
+});
+
+watch(activeOption, async () => {
+  await nextTick();
+  // jsdom kennt scrollIntoView nicht -- optionaler Aufruf, damit die Specs tragen.
+  optionRefs.value[activeOption.value]?.scrollIntoView?.({ block: "nearest" });
+});
 
 const scheduleCompletionClose = () => {
   window.setTimeout(() => {
@@ -337,7 +358,7 @@ const onKeydown = (event) => {
     activeOption.value = (activeOption.value - 1 + options.length) % options.length;
   } else if (event.key === "Enter" || event.key === "Tab") {
     event.preventDefault();
-    pickCompletion(options[activeOption.value]);
+    pickCompletion(options[activeOption.value] ?? options[0]);
   } else if (event.key === "Escape") {
     // Sonst schliesst Esc das umgebende Modal statt der Vorschlagsliste.
     event.preventDefault();
