@@ -41,6 +41,14 @@ markiert.
   ohne schließendes `*/` wird jetzt als Warnung gemeldet statt stillschweigend
   den Rest des Lambda-Bodies zu verschlucken. `id(`- und `id(x).`-Vorschläge
   funktionieren jetzt auch über Zeilenumbrüche/Whitespace hinweg.
+- **Mehr Katalog-Einträge + neue Math-Kategorie** – `sensor.get_state_class()`,
+  `light.set_effect(...)`/`set_color_temperature(...)`, `climate.set_fan_mode(...)`
+  sowie `round()`/`std::min`/`std::max` als neue Kategorie „Math" in der
+  Lambda-Palette.
+- **Lambda-Scope-Variablen in der Palette** – neue Sektion mit den impliziten
+  Variablen, die ESPHome in bestimmten Lambda-Typen automatisch bereitstellt
+  (`x` in Filter-/Modbus-Write-Lambdas, `address` bei Modbus-Write, `iteration`
+  in `repeat:`-Actions).
 
 ## [0.3.0] – 2026-09-02
 
