@@ -1131,9 +1131,9 @@ button:disabled {
 
 .builder-grid {
   display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  grid-template-columns: minmax(0, 0.9fr) 8px minmax(0, 1.1fr);
   grid-template-rows: minmax(0, 1fr);
-  grid-template-areas: "left right";
+  grid-template-areas: "left split right";
   gap: 12px;
   min-height: 0;
   height: 100%;
@@ -1148,6 +1148,10 @@ button:disabled {
 
 .builder-grid > .builder-panel:last-child {
   grid-area: left;
+}
+
+.builder-grid > .pane-resizer {
+  grid-area: split;
 }
 
 .builder-panel {
@@ -2579,6 +2583,10 @@ button.btn-add {
     grid-template-columns: 1fr;
     grid-template-areas: "left";
     height: auto;
+  }
+
+  .builder-grid > .pane-resizer {
+    display: none;
   }
 
   .builder-panel {
