@@ -15,6 +15,13 @@ markiert.
   `hljs`-Overlay mit synchronisiertem Scroll. Darunter listet ein
   nicht-blockierender Check unbalancierte Klammern/Anführungszeichen und
   `id(...)`-Referenzen, für die es in der Konfiguration keine Komponente gibt.
+- **`id(...)`-Vorschläge im Lambda** – steht der Cursor in einem offenen
+  `id(`-Aufruf, blendet das Feld die passenden IDs aus dem Projekt ein (Domain
+  als Zusatz). Pfeiltasten navigieren, Enter/Tab übernimmt samt schließender
+  Klammer, Esc schließt nur die Liste.
+- **Snippet-Palette am Lambda-Feld** – ein „+"-Button über dem Editor fügt
+  gängige Bausteine (`id(x).state`, `str_sprintf(...)`, `ESP_LOGD(...)`,
+  `lv_label_set_text(...)`, …) an der Cursorposition ein.
 
 ## [0.3.0] – 2026-09-02
 
