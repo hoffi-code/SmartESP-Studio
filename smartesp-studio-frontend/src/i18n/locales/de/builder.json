@@ -95,5 +95,23 @@
     "fontNone": "Zum Vorschauen eine Font-Quelle wählen.",
     "fontUnrenderable": "Lokale / Web-Fonts lassen sich im Browser nicht vorschauen.",
     "colorNone": "Hex-Wert oder RGB-Komponenten eingeben."
+  },
+  "lambda": {
+    "warn": {
+      "unclosed": "Zeile {line}: „{token}“ wird nie geschlossen.",
+      "unexpected": "Zeile {line}: „{token}“ ohne passende öffnende Klammer.",
+      "unclosedString": "Zeile {line}: Zeichenkette ab {token} ist nicht beendet.",
+      "unknownId": "Zeile {line}: keine Komponente mit der ID „{id}“ in dieser Konfiguration."
+    },
+    "snippets": {
+      "title": "Baustein einfügen",
+      "idState": "Zustand einer Komponente",
+      "idPosition": "Position eines Covers oder Ventils",
+      "toString": "Zahl als Text",
+      "sprintf": "Formatierter Text",
+      "log": "Log-Zeile",
+      "return": "Wert zurückgeben",
+      "lvglLabel": "Text eines LVGL-Labels setzen"
+    }
   }
 }
