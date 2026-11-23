@@ -1,0 +1,13 @@
+{
+  "extraKnownMarketplaces": {
+    "homelab-root": {
+      "source": {
+        "source": "directory",
+        "path": "D:/AI-Workspace/Projects"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "homelab@homelab-root": true
+  }
+}
